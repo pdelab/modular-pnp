@@ -42,7 +42,7 @@ int main()
 
 	// read domain parameters
 	domain_param domain_par;
-	char domain_param_filename[] = "./params/voltage_benchmark/domain_params.dat";
+	char domain_param_filename[] = "./problems/voltage_benchmark/domain_params.dat";
   domain_param_input(domain_param_filename, &domain_par);
   printf("Successfully read-in domain parameters\n");
   if ( strcmp(domain_par.mesh_file,"none")==0 ) {
@@ -137,7 +137,7 @@ int main()
 
 	// read Newton solver parameters
 	newton_param newton_par;
-	char newton_param_filename[] = "./params/voltage_benchmark/newton_params.dat";
+	char newton_param_filename[] = "./problems/voltage_benchmark/newton_params.dat";
   newton_param_input(newton_param_filename, &newton_par);
   printf("Successfully read-in Newton solver parameters\n");
   printf("\tNewton Maximum iterations: %d\n",newton_par.max_it);
