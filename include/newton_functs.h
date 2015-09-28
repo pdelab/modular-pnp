@@ -3,8 +3,11 @@
  *  \note Only define macros and data structures, no function decorations.
  */
 
-#include "newton.h"
+#include <iostream>
+#include <fstream>
+#include <string.h>
 #include <dolfin.h>
+#include "newton.h"
 extern "C"
 {
 #include "fasp.h"
@@ -39,7 +42,8 @@ void domain_param_input (const char *filenm,
 void domain_build (domain_param *domain_par,
 				   dolfin::Mesh *mesh,
 				   dolfin::MeshFunction<size_t> *subdomains,
-				   dolfin::MeshFunction<size_t> *surfaces);
+				   dolfin::MeshFunction<size_t> *surfaces,
+				   dolfin::File *mesh_output);
 
 /*---------------------------------*/
 /*--        End of File          --*/

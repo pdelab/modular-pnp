@@ -61,7 +61,9 @@ int main()
   dolfin::MeshFunction<std::size_t> subdomains;
   dolfin::MeshFunction<std::size_t> surfaces;
   dolfin::File meshOut(domain_par.mesh_output);
+
   domain_build(&domain_par, &mesh, &subdomains, &surfaces, &meshOut);
+  // meshOut << mesh; meshOut << subdomains; meshOut << surfaces;
 
 	// adaptivity?
 
