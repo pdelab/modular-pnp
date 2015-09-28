@@ -1,0 +1,37 @@
+# Copyright (C) 2014 CCMA@PSU Maximilian Metti
+#
+#   Define bilinear and linear forms for the linearized
+#   Poisson-Nernst-Planck equations with no-flux/homogeneous
+#   or Dirichlet boundary conditions
+#
+# Compile this form with FFC: ffc -O -l dolfin voltage_benchmark.ufl.
+
+##  Finite element space
+CG = FiniteElement("Lagrange", tetrahedron, 1)
+V  = MixedElement([CG,CG,CG])        # Solution Space
+
+##  Trial and test functions
+(Cat, An, Phi) = TrialFunction(V)
+(cat, an, phi) = TestFunction(V)
+
+##  Previous Iterates
+CatCat  = Coefficient(CG)
+AnAn    = Coefficient(CG)
+EsEs    = Coefficient(CG)
+
+##  Coefficients
+eps   = Constant(tetrahedron)
+D_cat = Constant(tetrahedron)
+q_cat = Constant(tetrahedron)
+D_an  = Constant(tetrahedron)
+q_an    = Constant(tetrahedron)
+
+##  Bilinear form
+a = ( D_cat*exp(CatCat)*(inner(grad(Cat),grad(cat))  + Cat*(inner(grad(CatCat)+q_cat*grad(EsEs),grad(cat))) + q_cat*(inner(grad(Phi),grad(cat)))) )*dx \
+  + (  D_an*exp(AnAn)  *(inner(grad(An),grad(an))    +  An*(inner(grad(AnAn)  + q_an*grad(EsEs),grad(an)))  +  q_an*(inner(grad(Phi),grad(an))))  )*dx \
+  + ( eps*inner(grad(Phi),grad(phi)) )*dx            - ( ( q_cat*exp(CatCat)*Cat + q_an*exp(AnAn)*An )*phi )*dx
+
+##  Nonlinear residual
+L = - ( D_cat*exp(CatCat)*( inner(grad(CatCat),grad(cat)) + q_cat*(inner(grad(EsEs),grad(cat)))) )*dx \
+    - (  D_an*exp(AnAn)  *( inner(grad(AnAn),  grad(an))  +  q_an*(inner(grad(EsEs),grad(an))))  )*dx \
+    - ( eps*inner(grad(EsEs),grad(phi)) )*dx + ( ( q_cat*exp(CatCat) + q_an*exp(AnAn) )*phi )*dx

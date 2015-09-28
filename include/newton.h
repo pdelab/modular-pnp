@@ -1,0 +1,75 @@
+/*! \file newton_solver.h
+ *  \brief Main header file for (quasi-)Newton solvers
+ *  \note Only define macros and data structures, no function decorations.
+ */
+
+extern "C"
+{
+#include "fasp.h"
+#include "fasp_functs.h"
+}
+#ifndef __NEWTON_HEADER__		/*--- allow multiple inclusions ---*/
+#define __NEWTON_HEADER__       /**< indicate newton.h has been included before */
+
+/*----------------------*/
+/*-- Input parameters --*/
+/*----------------------*/
+
+/**
+ * \struct newton_param
+ * \brief Parameters for a Newton solver
+ */
+typedef struct {
+
+    //! maximal iteration count
+    INT max_it;
+
+    //! a posteriori error tolerance
+    REAL adapt_tol;
+
+    //! Tolerance for nonlinear residual
+    REAL tol;
+
+    //! backtracking update damp factor 
+    REAL damp_factor;
+
+} newton_param; /**< Parameters for Newton Solver */
+
+/**
+ * \struct domain_param
+ * \brief Parameters for a Newton solver
+ */
+typedef struct {
+
+	//! dimension length along x-direction
+    REAL length_x;
+    //! dimension length along y-direction
+    REAL length_y;
+    //! dimension length along z-direction
+    REAL length_z;
+    //! dimension length along time direction
+    REAL length_time;
+
+    //! number of vertices along x-direction
+    INT grid_x;
+    //! number of vertices along y-direction
+    INT grid_y;
+    //! number of vertices along z-direction
+    INT grid_z;
+    //! number of vertices along time direction
+    INT grid_time;
+
+    //! string specifying location of mesh file
+    char mesh_file[128];
+    //! string specifying location of subdomain file
+    char subdomain_file[128];
+    //! string specifying location of surface file
+    char surface_file[128];
+
+} domain_param; /**< Parameters for constructing domain */
+
+#endif /* end if for __NEWTON_HEADER__ */
+
+/*---------------------------------*/
+/*--        End of File          --*/
+/*---------------------------------*/
