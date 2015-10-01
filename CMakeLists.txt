@@ -1,31 +1,3 @@
-This repository contains a modularized version of Penn State's CCMA
-Newton solver for the Poisson-Nernst-Planck system
-
-
-TO COMPILE A SPECIFIC PROBLEM:
-In order to compile the code, copy the desired main.cpp file to ./main.cpp
-from the appropriate directory in ./problems/
-and then run ``make`` followed by executing the ``PNP'' file
-
-e.g.
-cp ./problems/voltage_benchmark/main.cpp ./main.cpp
-make
-./PNP
-
-
-
-
-TO CONFIGURE THE LIBRARY:
-CMake is used to link the required files and libraries.
-To ensure proper linking, create a CMakeLists.txt file in the current directory
-and run ``cmake .'' to build the appropriate files.
-
-
-
-An example CMakeLists.txt file is below:
-
-## Begin CMakeLists.txt
-
 # Require CMake 2.8
 cmake_minimum_required(VERSION 2.8)
 
@@ -78,4 +50,3 @@ set(FASP4NS_LIB ${FASP4NS_DIR}/lib/libfasp4ns.a)
 target_link_libraries(test_reading ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 target_link_libraries(test_ftof ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 
-## End CMakeLists.txt

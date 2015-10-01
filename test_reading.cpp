@@ -1,7 +1,6 @@
-/*! \file pnp.h
+/*! \file test_reading.h
  *
- *  \brief Main file for PNP solver using Newton-Raphson and AMG methods.
- *		   Based on FASP and FEniCS 1.5 packages
+ *  \brief Main to test the reading functions
  *
  *  \note Currently initializes the problem based on specification
  */
