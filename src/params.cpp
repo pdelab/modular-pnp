@@ -63,7 +63,7 @@ SHORT newton_param_check (newton_param *inparam)
 
 /**
  * \fn void newton_param_input (const char *filenm,
-                      	 		newton_param *inparam)
+ *                    	 		newton_param *inparam)
  *
  * \brief Read in parameters for Newton solver
  *
@@ -170,6 +170,20 @@ void newton_param_input (const char *filenm,
     fasp_chkerr(status,"newton_param_input");
 }
 
+/**
+ * \fn void print_newton_param (newton_param *inparam)
+ * \brief Print Newton solver params
+ * \param inparam  Input parameters
+ */
+void print_newton_param (newton_param *inparam)
+{
+  printf("Successfully read-in Newton solver parameters\n");
+  printf("\tNewton Maximum iterations: \t%d\n",inparam->max_it);
+  printf("\tNewton tolerance:          \t%e\n",inparam->tol);
+  printf("\tNewton damping factor:     \t%f\n",inparam->damp_factor);
+  printf("\n");
+}
+
 
 /**
  * \fn SHORT domain_param_input_init (domain_param *inparam)
@@ -231,7 +245,7 @@ SHORT domain_param_check (domain_param *inparam)
 
 /**
  * \fn void domain_param_input (const char *filenm,
-                                domain_param *inparam)
+ *                              domain_param *inparam)
  *
  * \brief Read in parameters for domain solver
  *
@@ -424,6 +438,251 @@ void domain_param_input (const char *filenm,
     
     // if meet unexpected input, stop the program
     fasp_chkerr(status,"domain_param_input");
+}
+
+/**
+ * \fn void print_domain_param (domain_param *inparam)
+ * \brief Print domain params
+ * \param inparam  Input parameters
+ */
+void print_domain_param (domain_param *inparam)
+{
+  printf("Successfully read-in domain parameters\n");
+  if ( strcmp(inparam->mesh_file,"none")==0 ) {
+    printf("\tDomain: %f x %f x %f\n",  inparam->length_x,inparam->length_y,inparam->length_z);
+    printf("\tGrid:   %d x %d x %d\n\n",inparam->grid_x,inparam->grid_y,inparam->grid_z);
+    fflush(stdout);
+  } else {
+    printf("\tMesh file:      %s\n",  inparam->mesh_file);
+    printf("\tSubdomain file: %s\n",  inparam->subdomain_file);
+    printf("\tSurface file:   %s\n\n",inparam->surface_file);
+    fflush(stdout);
+  }
+}
+
+
+
+/**
+ * \fn SHORT coeff_param_input_init (coeff_param *inparam)
+ *
+ * \brief Initialize coeff input parameters
+ *
+ * \param inparam   Input parameters
+ *
+ * \return          FASP_SUCCESS if successed; otherwise, error information.
+ */
+SHORT coeff_param_input_init (coeff_param *inparam)
+{
+    SHORT status = FASP_SUCCESS;
+
+    inparam->temperature = 3.0e+2;
+
+    inparam->relative_permittivity = 1.0;
+    
+    inparam->cation_diffusivity = 1.0;
+    inparam->cation_mobility = 1.0;
+    inparam->cation_valency = 1.0;
+
+    inparam->anion_diffusivity = 1.0;
+    inparam->anion_mobility = 1.0;
+    inparam->anion_valency = -1.0;
+
+    return status;
+}
+
+/**
+ * \fn SHORT coeff_param_check (coeff_param *inparam)
+ *
+ * \brief Simple check on coeff input parameters
+ *
+ * \param inparam   Input parameters
+ *
+ * \return          FASP_SUCCESS if successed; otherwise, error information.
+ */
+SHORT coeff_param_check (coeff_param *inparam)
+{
+    SHORT status = FASP_SUCCESS;
+
+    if ( inparam->temperature < 0.0
+        || inparam->relative_permittivity < 0.0
+        || inparam->cation_diffusivity < 0.0
+        || inparam->cation_mobility < 0.0
+        || inparam->anion_diffusivity < 0.0
+        || inparam->anion_mobility < 0.0
+        ) status = ERROR_INPUT_PAR;
+    
+    return status;
+}
+
+
+/**
+ * \fn void coeff_param_input (const char *filenm,
+ *                             coeff_param *inparam)
+ *
+ * \brief Read in parameters for coeff solver
+ *
+ * \param filenm    File name for input parameters
+ * \param inparam   Input parameters
+ */
+void coeff_param_input (const char *filenm,
+                        coeff_param *inparam)
+{
+    char     buffer[500]; // Note: max number of char for each line!
+    int      val;
+    SHORT    status = FASP_SUCCESS;
+    
+    // set default input parameters
+    coeff_param_input_init(inparam);
+
+    // if input file is not specified, use the default values
+    if (filenm==NULL) return;
+    
+    FILE *fp = fopen(filenm,"r");
+    if (fp==NULL) {
+        printf("### ERROR: Could not open file %s...\n", filenm);
+        fasp_chkerr(ERROR_OPEN_FILE, "coeff_param_input");
+
+    }
+
+    while ( status == FASP_SUCCESS ) {
+        double  dbuff;
+        char   *fgetsPtr;
+        
+        val = fscanf(fp,"%s",buffer);
+        if (val==EOF) break;
+        if (val!=1){ status = ERROR_INPUT_PAR; break; }
+        if (buffer[0]=='[' || buffer[0]=='%' || buffer[0]=='|') {
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+            continue;
+        }
+        
+        // match keyword and scan for value
+        if (strcmp(buffer,"temperature")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%lf",&dbuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->temperature = dbuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
+        else if (strcmp(buffer,"relative_permittivity")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%lf",&dbuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->relative_permittivity = dbuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
+        else if (strcmp(buffer,"cation_diffusivity")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%lf",&dbuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->cation_diffusivity = dbuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
+        else if (strcmp(buffer,"cation_mobility")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%lf",&dbuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->cation_mobility = dbuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
+        else if (strcmp(buffer,"cation_valency")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%lf",&dbuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->cation_valency = dbuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
+        else if (strcmp(buffer,"anion_diffusivity")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%lf",&dbuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->anion_diffusivity = dbuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
+        else if (strcmp(buffer,"anion_mobility")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%lf",&dbuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->anion_mobility = dbuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
+        else if (strcmp(buffer,"anion_valency")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%lf",&dbuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->anion_valency = dbuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
+        else {
+            printf("### WARNING: Unknown input keyword %s!\n", buffer);
+            fgets(buffer,500,fp); // skip rest of line
+        }
+        
+        
+    }
+
+    fclose(fp);
+
+    // sanity checks
+    status = coeff_param_check(inparam);
+    
+#if DEBUG_MODE > 1
+    printf("### DEBUG: Reading input status = %d\n", status);
+#endif
+    
+    // if meet unexpected input, stop the program
+    fasp_chkerr(status,"coeff_param_input");
+}
+
+/**
+ * \fn void print_coeff_param (coeff_param *inparam)
+ * \brief Print coeff params
+ * \param inparam  Input parameters
+ */
+void print_coeff_param (coeff_param *inparam)
+{
+  printf("Successfully read-in PDE coefficients\n");
+  printf("\ttemperature:           \t%15.4e\n",inparam->temperature);
+  printf("\trelative permittivity: \t%15.4e\n",inparam->relative_permittivity);
+  printf("\tcation diffusivity:    \t%15.4e\n",inparam->cation_diffusivity);
+  printf("\tcation mobility:       \t%15.4e\n",inparam->cation_mobility);
+  printf("\tcation valency:        \t%15.4e\n",inparam->cation_valency);
+  printf("\tanion diffusivity:     \t%15.4e\n",inparam->anion_diffusivity);
+  printf("\tanion mobility:        \t%15.4e\n",inparam->anion_mobility);
+  printf("\tanion valency:         \t%15.4e\n",inparam->anion_valency);
+  printf("\n");
 }
 
 /*---------------------------------*/

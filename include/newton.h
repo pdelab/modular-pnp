@@ -41,7 +41,7 @@ typedef struct {
 
 /**
  * \struct domain_param
- * \brief Parameters for a Newton solver
+ * \brief Parameters for constructing the mesh
  */
 typedef struct {
 
@@ -73,6 +73,39 @@ typedef struct {
     char surface_file[128];
 
 } domain_param; /**< Parameters for constructing domain */
+
+
+/**
+ * \struct coeff_param
+ * \brief Coefficients for the PDE
+ */
+typedef struct {
+
+    //! temperature
+    REAL temperature;
+
+    //! relative permittivity coefficient
+    REAL relative_permittivity;
+
+    //! cation diffusivity coefficient
+    REAL cation_diffusivity;
+
+    //! cation diffusivity coefficient
+    REAL cation_mobility;
+
+    //! cation diffusivity coefficient
+    REAL cation_valency;
+
+    //! anion diffusivity coefficient
+    REAL anion_diffusivity;
+
+    //! anion diffusivity coefficient
+    REAL anion_mobility;
+
+    //! anion diffusivity coefficient
+    REAL anion_valency;
+
+} coeff_param; /**< Parameters for setting PDE coefficients */
 
 #endif /* end if for __NEWTON_HEADER__ */
 

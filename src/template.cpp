@@ -44,17 +44,7 @@ int main()
 	domain_param domain_par;
 	char domain_param_filename[] = "./problems/voltage_benchmark/domain_params.dat";
   domain_param_input(domain_param_filename, &domain_par);
-  printf("Successfully read-in domain parameters\n");
-  if ( strcmp(domain_par.mesh_file,"none")==0 ) {
-    printf("\tDomain: %f x %f x %f\n",  domain_par.length_x,domain_par.length_y,domain_par.length_z);
-    printf("\tGrid:   %d x %d x %d\n\n",domain_par.grid_x,domain_par.grid_y,domain_par.grid_z);
-    fflush(stdout);
-  } else {
-    printf("\tMesh file:      %s\n",  domain_par.mesh_file);
-    printf("\tSubdomain file: %s\n",  domain_par.subdomain_file);
-    printf("\tSurface file:   %s\n\n",domain_par.surface_file);
-    fflush(stdout);
-  }
+  print_domain_param(&domain_par);
 
 	// build mesh
   dolfin::Mesh mesh;
@@ -71,6 +61,10 @@ int main()
    */
 
   // read coefficients and boundary values
+  coeff_param coeff_par;
+  char coeff_param_filename[] = "./problems/voltage_benchmark/coeff_params.dat";
+  coeff_param_input(coeff_param_filename, &coeff_par);
+  print_coeff_param(&coeff_par);
 
 	// dimensional analysis
 
@@ -100,11 +94,7 @@ int main()
 	newton_param newton_par;
 	char newton_param_filename[] = "./problems/voltage_benchmark/newton_params.dat";
   newton_param_input(newton_param_filename, &newton_par);
-  printf("Successfully read-in Newton solver parameters\n");
-  printf("\tNewton Maximum iterations: %d\n",newton_par.max_it);
-  printf("\tNewton tolerance: %e\n",newton_par.tol);
-  printf("\tNewton damping factor: %f\n",newton_par.damp_factor);
-  printf("\n");
+  print_newton_param(&newton_par);
 
 	// compute initial nonlinear residual
 
