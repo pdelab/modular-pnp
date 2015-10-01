@@ -37,13 +37,8 @@ void domain_build (domain_param *domain_par,
 				           dolfin::MeshFunction<size_t> *surfaces,
                    dolfin::File *mesh_output)
 {
-
-  printf("Constructing the mesh and subregions\n"); fflush(stdout);
-
 	// no mesh provided: use length and grid parameters
 	if ( strcmp(domain_par->mesh_file,"none")==0 ) {
-      printf("\tDomain: %f x %f x %f\n",domain_par->length_x,domain_par->length_y,domain_par->length_z);
-      printf("\tGrid: %d x %d x %d\n",domain_par->grid_x,domain_par->grid_y,domain_par->grid_z);
       fflush(stdout);
 
       // mesh
@@ -69,8 +64,6 @@ void domain_build (domain_param *domain_par,
       dolfin::FacetFunction<std::size_t> surfaces_object(*mesh);
       surfaces_object.set_all(1);
       *surfaces = surfaces_object;
-
-      printf("\tConstructed the mesh\n"); fflush(stdout);
     } 
     else { // read in mesh from specified files
       printf("### ERROR: Reading in meshes is currently unsupported: %s...\n\n", domain_par->mesh_file);

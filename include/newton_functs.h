@@ -30,12 +30,27 @@ SHORT newton_param_check (newton_param *inparam);
 void newton_param_input (const char *filenm,
                       	 newton_param *inparam);
 
+void print_newton_param (newton_param *inparam);
+
+
 SHORT domain_param_input_init (domain_param *inparam);
 
 SHORT domain_param_check (domain_param *inparam);
 
 void domain_param_input (const char *filenm,
                       	 domain_param *inparam);
+
+void print_domain_param (domain_param *inparam);
+
+
+SHORT coeff_param_input_init (coeff_param *inparam);
+
+SHORT coeff_param_check (coeff_param *inparam);
+
+void coeff_param_input (const char *filenm,
+                      	 coeff_param *inparam);
+
+void print_coeff_param (coeff_param *inparam);
 
 /*------------- In file: domains.cpp --------------*/
 
