@@ -3,9 +3,11 @@
 % domain and mesh          %
 %--------------------------%
 
+mesh_output    = ./output/mesh.pvd
+
 mesh_file      = none  %./mesh/gramA_channel.xml
-surface_file   = ./mesh/gramA_channel_facet_region.xml
-subdomain_file = ./mesh/gramA_channel_physical_region.xml
+surface_file   = none  %./mesh/gramA_channel_facet_region.xml
+subdomain_file = none  %./mesh/gramA_channel_physical_region.xml
 
 length_x     = 5.0     % nm = 1.0e-9 m
 length_y     = 5.0     % nm = 1.0e-9 m

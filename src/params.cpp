@@ -1,7 +1,7 @@
-/*! \file newton.c
+/*! \file params.cpp
  *
- * \brief Newton-Raphson method as an iterative solver (main file).
- *        Functionality for backtracking line search.
+ * \brief Contains files for reading in *.dat parameter files
+ *        and conversion to structs defined in ./../include/newton.h
  */
 
 #include <stdio.h>
@@ -16,7 +16,6 @@ extern "C"
 /*---------------------------------*/
 /*--      Public Functions       --*/
 /*---------------------------------*/
-
 
 /**
  * \fn SHORT newton_param_input_init (newton_param *inparam)
@@ -195,6 +194,7 @@ SHORT domain_param_input_init (domain_param *inparam)
     inparam->grid_z = 10;
     inparam->grid_time = 0;
 
+    strcpy(inparam->mesh_output,"./output/mesh.pvd");
     strcpy(inparam->mesh_file,"none");
     strcpy(inparam->subdomain_file,"none");
     strcpy(inparam->surface_file,"none");
@@ -359,6 +359,17 @@ void domain_param_input (const char *filenm,
             if (val!=1) { status = ERROR_INPUT_PAR; break; }
             inparam->grid_time = ibuff;
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
+        else if (strcmp(buffer,"mesh_output")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%s",sbuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            strncpy(inparam->mesh_output,sbuff,128);
+            fgets(buffer,500,fp); // skip rest of line
         }
 
         else if (strcmp(buffer,"mesh_file")==0) {

@@ -3,6 +3,10 @@
  *  \note Only define macros and data structures, no function decorations.
  */
 
+#include <iostream>
+#include <fstream>
+#include <string.h>
+#include <dolfin.h>
 extern "C"
 {
 #include "fasp.h"
@@ -59,6 +63,8 @@ typedef struct {
     //! number of vertices along time direction
     INT grid_time;
 
+    //! string specifying location of mesh output file
+    char mesh_output[128];
     //! string specifying location of mesh file
     char mesh_file[128];
     //! string specifying location of subdomain file
