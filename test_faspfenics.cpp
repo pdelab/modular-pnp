@@ -1,4 +1,4 @@
-/*! \file test_ftof.cpp
+/*! \file test_faspfenics.cpp
  *
  *  \brief Main to test FASP/FENICS interface using the Poisson problem
  *
@@ -8,7 +8,7 @@
 #include <fstream>
 #include <string>
 #include <dolfin.h>
-#include "problems/poisson/Poisson.h"
+#include "problems/test_faspfenics/Poisson.h"
 #include "fasp_to_fenics.h"
 
 using namespace dolfin;

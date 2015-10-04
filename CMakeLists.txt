@@ -40,13 +40,18 @@ set(FASP4NS_INCLUDE_DIR ${FASP4NS_DIR}/include)
 include_directories(${DOLFIN_INCLUDE_DIRS} ${FASP_INCLUDE_DIR} ${FASP4NS_INCLUDE_DIR} ./include)
 include_directories(SYSTEM ${DOLFIN_3RD_PARTY_INCLUDE_DIRS})
 
+# Local library
+set(SRC_DIR ./src/fasp_to_fenics.cpp ./src/params.cpp ./src/domains.cpp)
+set(SRC_INCLUDE_DIR ./include/fasp_to_fenics.h ./include/params.h ./include/domains.h)
+
 # Executable
-add_executable(test_reading test_reading.cpp ./src/params.cpp ./src/domains.cpp)
-add_executable(test_ftof test_ftof.cpp ./src/fasp_to_fenics.cpp)
+add_executable(test_reading test_reading.cpp ${SRC_DIR})
+add_executable(test_ftof test_faspfenics.cpp ${SRC_DIR})
 
 # Target libraries
 set(FASP_LIB ${FASP_DIR}/lib/libfasp.a)
 set(FASP4NS_LIB ${FASP4NS_DIR}/lib/libfasp4ns.a)
+
 target_link_libraries(test_reading ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 target_link_libraries(test_ftof ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 
