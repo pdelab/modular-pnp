@@ -30,9 +30,14 @@ add_definitions(${DOLFIN_CXX_DEFINITIONS})
 # Compiler flags
 set(CMAKE_CXX_FLAGS "${DOLFIN_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
 
-# Set FASP directories
+# Set FASP directories and libraries
 set(FASP_DIR /usr/local/faspsolver)     # must be set for each new build
 set(FASP4NS_DIR /usr/local/fasp4ns)     # must be set for each new build
+set(FASP_LIB ${FASP_DIR}/lib/libfasp.a)
+set(FASP4NS_LIB ${FASP4NS_DIR}/lib/libfasp4ns.a)
+
+# Local src files and include
+set(SRC_DIR ./src/fasp_to_fenics.cpp ./src/params.cpp ./src/domains.cpp)
 
 # Include directories
 set(FASP_INCLUDE_DIR ${FASP_DIR}/base/include)
@@ -40,18 +45,11 @@ set(FASP4NS_INCLUDE_DIR ${FASP4NS_DIR}/include)
 include_directories(${DOLFIN_INCLUDE_DIRS} ${FASP_INCLUDE_DIR} ${FASP4NS_INCLUDE_DIR} ./include)
 include_directories(SYSTEM ${DOLFIN_3RD_PARTY_INCLUDE_DIRS})
 
-# Local src files and include
-set(SRC_DIR ./src/fasp_to_fenics.cpp ./src/params.cpp ./src/domains.cpp)
-set(SRC_INCLUDE_DIR ./include)
-
 # Executables
 add_executable(test_reading ./problems/test_reading/test_reading.cpp ${SRC_DIR})
 add_executable(test_faspfenics ./problems/test_faspfenics/test_faspfenics.cpp ${SRC_DIR})
 
-# Target libraries
-set(FASP_LIB ${FASP_DIR}/lib/libfasp.a)
-set(FASP4NS_LIB ${FASP4NS_DIR}/lib/libfasp4ns.a)
-
+# Setup targets
 target_link_libraries(test_reading ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 target_link_libraries(test_faspfenics ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 
