@@ -8,7 +8,7 @@
 #include <fstream>
 #include <string>
 #include <dolfin.h>
-#include "problems/test_faspfenics/Poisson.h"
+#include "Poisson.h"
 #include "fasp_to_fenics.h"
 
 using namespace dolfin;
@@ -65,13 +65,13 @@ int main()
   Poisson::BilinearForm a(V, V);
   Poisson::LinearForm L(V);
 
-  EigenMatrix EA; assemble(EA,a);
+  dolfin::EigenMatrix EA; assemble(EA,a);
 
   Source f;
   dUdN g;
   L.f = f;
   L.g = g;
-  EigenVector EV; assemble(EV,L);
+  dolfin::EigenVector EV; assemble(EV,L);
 
   std::cout << "############################################################ \n";
   std::cout << "#### Beginning of test of EigenMatrixTOdCSRmat function #### \n";
