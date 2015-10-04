@@ -11,13 +11,25 @@
 using namespace std;
 using namespace dolfin;
 
-// Link the dolfin::EigenMatrix Mat_A to dCSRmat format from FASP
+/**
+ * \fn dCSRmat EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A)
+ *
+ * \brief Link the dolfin::EigenMatrix mat_A to dCSRmat format from FASP
+ *
+ * \param mat_A     EigenMatrix to be converted
+ *
+ * \return          dCSRmat if conversion successful; otherwise error information.
+ */
 dCSRmat EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A)
 {
   // dimensions of matrix
   int nrows = mat_A->size(0);
   int ncols = mat_A->size(1);
   int nnz = mat_A->nnz();
+  // check for uninitialized EigenMatrix
+  if ( nrows<1 || ncols<1 || nnz<1 ) {
+    fasp_chkerr(ERROR_INPUT_PAR, "EigenMatrix_to_dCSRmat");
+  }
 
   // point to JA array
   int* JA;
@@ -48,11 +60,25 @@ dCSRmat EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A)
   return dCSR_A;
 }
 
-// Link the dolfin::EigenVector Vec_A to dvector format from FASP
-dvector EigenVector_to_dvector(const dolfin::EigenVector* vec_A)
+/**
+ * \fn dvector EigenVector_to_dvector(const dolfin::EigenVector* vec_b)
+ *
+ * \brief Link the dolfin::EigenVector vec_b to dvector format from FASP
+ *
+ * \param mat_A     EigenVector to be converted
+ *
+ * \return          dvector if conversion successful; otherwise error information.
+ */ 
+dvector EigenVector_to_dvector(const dolfin::EigenVector* vec_b)
 {
-  dvector dVec_A;
-  dVec_A.row = vec_A->size();
-  dVec_A.val = (double*) vec_A->data();
-  return dVec_A;
+  // check for uninitialized EigenMatrix
+  int length = (int) vec_b->size();
+  if ( length<1 ) {
+    fasp_chkerr(ERROR_INPUT_PAR, "EigenVector_to_dvector");
+  }
+
+  dvector dVec_b;
+  dVec_b.row = length;
+  dVec_b.val = (double*) vec_b->data();
+  return dVec_b;
 }
