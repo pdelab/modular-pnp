@@ -1,13 +1,13 @@
-/*! \file ftof.h
- *  \brief Main header file for Fast/Fenics interface
+/*! \file fasp_to_fenics.h
+ *  \brief Main header file for FASP/FEniCS interface
  */
 
 
-#ifndef __FTOF_H
-#define __FTOF_H
+#ifndef __FASPTOFENICS_H
+#define __FASPTOFENICS_H
 
+#include <iostream>
 #include <dolfin.h>
-
 extern "C"
 {
 #include "fasp.h"
@@ -21,8 +21,10 @@ extern "C"
 #define FASP_BSR     ON  /** use BSR format in fasp */
 }
 
-void EigenMatrixTOdCSRmat( dCSRmat* dCSR_A, const dolfin::EigenMatrix* mat_A);
+/*------------- In file: fasp_to_fenics.cpp --------------*/
 
-void EigenVectorTOdvector( dvector* dVec_A, const dolfin::EigenVector* Vec_A);
+dCSRmat EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A);
+
+dvector EigenVector_to_dvector(const dolfin::EigenVector* vec_A);
 
 #endif

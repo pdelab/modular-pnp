@@ -1,4 +1,4 @@
-/*! \file test_ftof.cpp
+/*! \file test_faspfenics.cpp
  *
  *  \brief Main to test FASP/FENICS interface using the Poisson problem
  *
@@ -8,8 +8,8 @@
 #include <fstream>
 #include <string>
 #include <dolfin.h>
-#include "problems/poisson/Poisson.h"
-#include "ftof.h"
+#include "Poisson.h"
+#include "fasp_to_fenics.h"
 
 using namespace dolfin;
 //using namespace std;
@@ -65,13 +65,13 @@ int main()
   Poisson::BilinearForm a(V, V);
   Poisson::LinearForm L(V);
 
-  EigenMatrix EA; assemble(EA,a);
+  dolfin::EigenMatrix EA; assemble(EA,a);
 
   Source f;
   dUdN g;
   L.f = f;
   L.g = g;
-  EigenVector EV; assemble(EV,L);
+  dolfin::EigenVector EV; assemble(EV,L);
 
   std::cout << "############################################################ \n";
   std::cout << "#### Beginning of test of EigenMatrixTOdCSRmat function #### \n";
@@ -83,8 +83,7 @@ int main()
   std::cout << s;
 
 
-  dCSRmat bsr_A;
-  EigenMatrixTOdCSRmat( &bsr_A, &EA);
+  dCSRmat bsr_A = EigenMatrix_to_dCSRmat(&EA);
   std::cout << "#### dCSRmat is  \n";
   std::cout << "number number of none zero elements = "<< bsr_A.nnz << "\n";
   std::cout << "number rows ="<< bsr_A.row << "\n";
@@ -115,8 +114,7 @@ int main()
   std::cout << "#### the EigenVector and the dvector should be the same #### \n";
 
   //
-  dvector dV;
-  EigenVectorTOdvector( &dV, &EV);
+  dvector dV = EigenVector_to_dvector(&EV);
   std::string s2=EV.str(true);
   std::cout << "#### Eigen vector is\n";
   std::cout << "Number of cols: \t"<< EV.size() << "\n";
@@ -130,6 +128,8 @@ int main()
 
   std::cout << "#### End of test of EigenVectorTOdVector function       #### \n";
   std::cout << "############################################################ \n";
+
+  free(bsr_A.IA);
 
   return 0;
 }
