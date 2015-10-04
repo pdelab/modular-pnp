@@ -42,17 +42,9 @@ void domain_build (domain_param *domain_par,
       fflush(stdout);
 
       // mesh
-      dolfin::BoxMesh box_mesh(
-        -domain_par->length_x/2,
-        -domain_par->length_y/2,
-        -domain_par->length_z/2,
-        domain_par->length_x/2,
-        domain_par->length_y/2,
-        domain_par->length_z/2,
-        domain_par->grid_x,
-        domain_par->grid_y,
-        domain_par->grid_z
-      );
+      dolfin::Point p0( -domain_par->length_x/2, -domain_par->length_y/2, -domain_par->length_z/2);
+      dolfin::Point p1(  domain_par->length_x/2,  domain_par->length_y/2,  domain_par->length_z/2);
+      dolfin::BoxMesh box_mesh(p0, p1, domain_par->grid_x, domain_par->grid_y, domain_par->grid_z);
       *mesh = box_mesh;
 
       // subdomains

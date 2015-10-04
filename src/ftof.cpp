@@ -6,54 +6,51 @@
 
 #include "ftof.h"
 
+using namespace std;
 using namespace dolfin;
 
 // Link the dolfin::EigenMatrix Mat_A to dCSRmat format from FASP
-void EigenMatrixTOdCSRmat( dCSRmat* dCSR_A, const EigenMatrix* mat_A)
+dCSRmat EigenMatrixTOdCSRmat(const EigenMatrix* mat_A)
 {
-  int i,j,k=0;
+  // dimensions of matrix
   int nrows = mat_A->size(0);
   int ncols = mat_A->size(1);
   int nnz = mat_A->nnz();
-  double* vals;
-  int *JA;
-  int *el_number; // el_number refer the index in val of the first element in each row
-  int *IA;
 
-  el_number= (int *)get<0>(mat_A->data());
-  JA = (int *)get<1>(mat_A->data());
-  vals = (double *)get<2>(mat_A->data());
+  // point to JA array
+  int* JA;
+  JA = (int*) std::get<1>(mat_A->data());
 
-
-  // Consturction of IA
-  IA = (int*)fasp_mem_calloc(nrows+1, sizeof(int));
-  for (i=0;i<nrows;i++)
-  {
-    IA[i]=JA[el_number[i]];
+  // construct IA
+  int* el_number;
+  int* IA;
+  el_number = (int*) std::get<0>(mat_A->data());
+  IA = (int*) fasp_mem_calloc(nrows+1, sizeof(int));
+  for (int i=0; i<nrows; i++)  {
+    IA[i] = JA[el_number[i]];
   }
-  IA [nrows]=nnz;
+  IA[nrows] = nnz;
 
-  dCSR_A->nnz=nnz;
-  dCSR_A->row=nrows;
-  dCSR_A->col=ncols;
+  // point to values array
+  double* vals;
+  vals = (double*) std::get<2>(mat_A->data());
 
-  dCSR_A->IA=IA;
-  dCSR_A->JA=JA;
-  dCSR_A->val=vals;
-
+  // assign to dCSRmat
+  dCSRmat dCSR_A;
+  dCSR_A.nnz=nnz;
+  dCSR_A.row=nrows;
+  dCSR_A.col=ncols;
+  dCSR_A.IA=IA;
+  dCSR_A.JA=JA;
+  dCSR_A.val=vals;
+  return dCSR_A;
 }
 
 // Link the dolfin::EigenVector Vec_A to dvector format from FASP
-void EigenVectorTOdvector( dvector* dVec_A, const EigenVector* Vec_A)
+dvector EigenVectorTOdvector(const EigenVector* vec_A)
 {
-
-  int i,n;
-  double *val;
-
-  n = Vec_A->size();
-  val = (double *)Vec_A->data();
-
-  dVec_A->row=n;
-  dVec_A->val=val;
-
+  dvector dVec_A;
+  dVec_A.row = vec_A->size();
+  dVec_A.val = (double*) vec_A->data();
+  return dVec_A;
 }

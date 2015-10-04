@@ -83,8 +83,7 @@ int main()
   std::cout << s;
 
 
-  dCSRmat bsr_A;
-  EigenMatrixTOdCSRmat( &bsr_A, &EA);
+  dCSRmat bsr_A = EigenMatrixTOdCSRmat(&EA);
   std::cout << "#### dCSRmat is  \n";
   std::cout << "number number of none zero elements = "<< bsr_A.nnz << "\n";
   std::cout << "number rows ="<< bsr_A.row << "\n";
@@ -115,8 +114,7 @@ int main()
   std::cout << "#### the EigenVector and the dvector should be the same #### \n";
 
   //
-  dvector dV;
-  EigenVectorTOdvector( &dV, &EV);
+  dvector dV = EigenVectorTOdvector(&EV);
   std::string s2=EV.str(true);
   std::cout << "#### Eigen vector is\n";
   std::cout << "Number of cols: \t"<< EV.size() << "\n";
