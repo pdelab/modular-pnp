@@ -129,5 +129,7 @@ int main()
   std::cout << "#### End of test of EigenVectorTOdVector function       #### \n";
   std::cout << "############################################################ \n";
 
+  free(bsr_A.IA);
+
   return 0;
 }
