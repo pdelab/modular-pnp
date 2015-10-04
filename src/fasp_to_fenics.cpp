@@ -1,16 +1,18 @@
-/*! \file ftof.cpp
+/*! \file fasp_to_fenics.cpp
  *
  * \brief Contains functions to transfer EigenMatrix and EigenVector to FASP
  *  or to tranfer FASP to Fenics
  */
 
-#include "ftof.h"
+#include <iostream>
+#include <dolfin.h>
+#include "fasp_to_fenics.h"
 
 using namespace std;
 using namespace dolfin;
 
 // Link the dolfin::EigenMatrix Mat_A to dCSRmat format from FASP
-dCSRmat EigenMatrixTOdCSRmat(const EigenMatrix* mat_A)
+dCSRmat EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A)
 {
   // dimensions of matrix
   int nrows = mat_A->size(0);
@@ -47,7 +49,7 @@ dCSRmat EigenMatrixTOdCSRmat(const EigenMatrix* mat_A)
 }
 
 // Link the dolfin::EigenVector Vec_A to dvector format from FASP
-dvector EigenVectorTOdvector(const EigenVector* vec_A)
+dvector EigenVector_to_dvector(const dolfin::EigenVector* vec_A)
 {
   dvector dVec_A;
   dVec_A.row = vec_A->size();

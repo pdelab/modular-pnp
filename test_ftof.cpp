@@ -9,7 +9,7 @@
 #include <string>
 #include <dolfin.h>
 #include "problems/poisson/Poisson.h"
-#include "ftof.h"
+#include "fasp_to_fenics.h"
 
 using namespace dolfin;
 //using namespace std;
@@ -83,7 +83,7 @@ int main()
   std::cout << s;
 
 
-  dCSRmat bsr_A = EigenMatrixTOdCSRmat(&EA);
+  dCSRmat bsr_A = EigenMatrix_to_dCSRmat(&EA);
   std::cout << "#### dCSRmat is  \n";
   std::cout << "number number of none zero elements = "<< bsr_A.nnz << "\n";
   std::cout << "number rows ="<< bsr_A.row << "\n";
@@ -114,7 +114,7 @@ int main()
   std::cout << "#### the EigenVector and the dvector should be the same #### \n";
 
   //
-  dvector dV = EigenVectorTOdvector(&EV);
+  dvector dV = EigenVector_to_dvector(&EV);
   std::string s2=EV.str(true);
   std::cout << "#### Eigen vector is\n";
   std::cout << "Number of cols: \t"<< EV.size() << "\n";

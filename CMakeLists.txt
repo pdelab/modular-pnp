@@ -42,7 +42,7 @@ include_directories(SYSTEM ${DOLFIN_3RD_PARTY_INCLUDE_DIRS})
 
 # Executable
 add_executable(test_reading test_reading.cpp ./src/params.cpp ./src/domains.cpp)
-add_executable(test_ftof test_ftof.cpp ./src/ftof.cpp)
+add_executable(test_ftof test_ftof.cpp ./src/fasp_to_fenics.cpp)
 
 # Target libraries
 set(FASP_LIB ${FASP_DIR}/lib/libfasp.a)
