@@ -6,14 +6,18 @@
 % correct units!  
 % Please, make sure to do so...
 
-temperature           =  3.0000e+2     % K
+ref_voltage           =  1.0000e+0			% V
+ref_density           = -1.0000e+0		 	% 1 / m^3
+																				% use negative to measure in mM = mol / m^3
 
-relative_permittivity =  8.0000e+1     % no units
+temperature           =  3.0000e+2			% K
 
-cation_diffusivity    =  1.0000e-0     % m / sec^2
-cation_mobility       =  1.0000e-0     % (k_B*T/e_chrg) * m / sec^2
-cation_valency        =  1.0000e-0     % e_chrg
+relative_permittivity =  8.0000e+1			% no units
 
-anion_diffusivity     =  1.0000e-0     % m / sec^2
-anion_mobility        =  1.0000e-0     % (k_B*T/e_chrg) * m / sec^2
-anion_valency         = -1.0000e-0     % e_chrg
+cation_diffusivity    =  1.4000e-9			% m / sec^2
+cation_mobility       =  1.4000e-9			% (e_c/k_B*T) * m / sec^2
+cation_valency        =  1.0000e+0			% e_c
+
+anion_diffusivity     =  1.2000e-9			% m / sec^2
+anion_mobility        =  1.2000e-9			% (e_c/k_B*T) * m / sec^2
+anion_valency         = -1.0000e+0			% e_c

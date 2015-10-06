@@ -52,6 +52,10 @@ void coeff_param_input (const char *filenm,
 
 void print_coeff_param (coeff_param *inparam);
 
+void non_dimesionalize_coefficients (domain_param *domain,
+                                     coeff_param *coeffs,
+                                     coeff_param *non_dim_coeffs);
+
 /*------------- In file: domains.cpp --------------*/
 
 void domain_build (domain_param *domain_par,
