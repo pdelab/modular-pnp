@@ -17,5 +17,6 @@ beta = Coefficient(VG)
 gamma = Coefficient(CG)
 f = Coefficient(CG)
 
-a = ( inner( alpha*exp(eta)*(grad(u)+beta*u), grad(v) ) + gamma*u*v )*dx
+a = ( inner( alpha*exp(eta)*(grad(u)+beta*u), grad(v) ) \
+    + gamma*exp(eta)*u*v )*dx
 L = f*v*dx
