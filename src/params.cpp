@@ -711,19 +711,19 @@ void coeff_param_input (const char *filenm,
  */
 void print_coeff_param (coeff_param *inparam)
 {
-  REAL n_avo = 6.02214129e+23 ;     // Avogadro's number 1 / mol
-  REAL ref_density = (inparam->ref_density > 0.0)? inparam->ref_density : -(n_avo*inparam->ref_density);
-
   printf("Successfully read-in PDE coefficients\n");
   printf("\treference voltage:     \t%15.4e V\n",inparam->ref_voltage);
-  printf("\treference density:     \t%15.4e 1 / m^3\n",ref_density);
+  if (inparam->ref_density > 0.0)
+    printf("\treference density:     \t%15.4e 1 / m^3\n",inparam->ref_density);
+  else
+    printf("\treference density:     \t%15.4e mM\n",-inparam->ref_density);
   printf("\ttemperature:           \t%15.4e K\n",inparam->temperature);
   printf("\trelative permittivity: \t%15.4e\n",inparam->relative_permittivity);
   printf("\tcation diffusivity:    \t%15.4e m / s^2\n",inparam->cation_diffusivity);
-  printf("\tcation mobility:       \t%15.4e e_c * m / s^2 * k_B*T\n",inparam->cation_mobility);
+  printf("\tcation mobility:       \t%15.4e (e_c/k_B*T) * m / s^2 \n",inparam->cation_mobility);
   printf("\tcation valency:        \t%15.4e e_c\n",inparam->cation_valency);
   printf("\tanion diffusivity:     \t%15.4e m / s^2\n",inparam->anion_diffusivity);
-  printf("\tanion mobility:        \t%15.4e e_c * m / s^2 * k_B*T\n",inparam->anion_mobility);
+  printf("\tanion mobility:        \t%15.4e (e_c/k_B*T) * m / s^2 \n",inparam->anion_mobility);
   printf("\tanion valency:         \t%15.4e e_c\n",inparam->anion_valency);
   printf("\n");
 }
@@ -747,14 +747,17 @@ void non_dimesionalize_coefficients (domain_param *domain,
 
   // solution scale
   non_dim_coeffs->ref_voltage = boltzmann * coeffs->temperature * coeffs->ref_voltage / e_chrg;
-  non_dim_coeffs->ref_density = (coeffs->ref_density > 0.0)? coeffs->ref_density : -(n_avo * coeffs->ref_density);
+  non_dim_coeffs->ref_density = (coeffs->ref_density > 0.0)? 
+    coeffs->ref_density : -(n_avo * coeffs->ref_density);
 
   // length scale
   REAL ref_length = domain->ref_length;
-  REAL debye_length = sqrt( (boltzmann * eps_0 * coeffs->relative_permittivity * coeffs->temperature) / non_dim_coeffs->ref_density ) / e_chrg;
+  REAL debye_length = sqrt( (boltzmann * eps_0 * coeffs->relative_permittivity * coeffs->temperature)
+    / non_dim_coeffs->ref_density ) / e_chrg;
 
   // pde coefficients
-  REAL diffusivity_ref = (coeffs->cation_diffusivity > coeffs->anion_diffusivity)? coeffs->cation_diffusivity : coeffs->anion_diffusivity;
+  REAL diffusivity_ref = (coeffs->cation_diffusivity > coeffs->anion_diffusivity)?
+    coeffs->cation_diffusivity : coeffs->anion_diffusivity;
   non_dim_coeffs->relative_permittivity = debye_length * debye_length / (ref_length * ref_length);
   non_dim_coeffs->cation_diffusivity    = coeffs->cation_diffusivity / diffusivity_ref;
   non_dim_coeffs->cation_mobility       = coeffs->cation_mobility / diffusivity_ref;
@@ -769,8 +772,10 @@ void non_dimesionalize_coefficients (domain_param *domain,
   fasp_chkerr(status,"non_dimesionalize_coefficients");
 
   printf("Dimensional analysis\n");
-  printf("\treference voltage:     \t%15.4e\n",non_dim_coeffs->ref_voltage);
-  printf("\treference density:     \t%15.4e\n",non_dim_coeffs->ref_density);
+  printf("\treference length:      \t%15.4e m\n",ref_length);
+  printf("\treference length:      \t%15.4e m\n",debye_length);
+  printf("\treference voltage:     \t%15.4e V\n",non_dim_coeffs->ref_voltage);
+  printf("\treference density:     \t%15.4e 1 / m^3\n",non_dim_coeffs->ref_density);
   printf("\tpermittivity:          \t%15.4e\n",non_dim_coeffs->relative_permittivity);
   printf("\tcation diffusivity:    \t%15.4e\n",non_dim_coeffs->cation_diffusivity);
   printf("\tcation mobility:       \t%15.4e\n",non_dim_coeffs->cation_mobility);
