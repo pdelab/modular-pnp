@@ -1548,6 +1548,7 @@ public:
   }
 
   /// Tabulate the tensor for the contribution from a local cell
+  /// Modified to compute EAFE bilinear form for log-convection-reaction equations
   virtual void tabulate_tensor(double*  A,
                                const double * const *  w,
                                const double*  vertex_coordinates,
