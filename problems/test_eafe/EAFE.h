@@ -1689,25 +1689,26 @@ public:
         F6 += FE0[ip][r]*w[2][r];   // evaluate beta
       } // end loop over 'r'
       
-      // Number of operations to compute ip constants: 55
+      /// Are I[0:5] necessary???
+      // Number of operations to compute ip constants: 10
       double I[10];
-      // Number of operations: 4
-      I[0] = F5*G[0]*W24[ip]*std::exp(F1);  // Poissonify: eafe_F5=1, eafe_F1=0
+      // Number of operations: 1
+      I[0] = G[0]*W24[ip];  // Poissonify from F5*G[0]*W24[ip]*std::exp(F1);
       
-      // Number of operations: 4
-      I[1] = F5*G[1]*W24[ip]*std::exp(F1);  // Poissonify: eafe_F5=1, eafe_F1=0
+      // Number of operations: 1
+      I[1] = G[1]*W24[ip];  // Poissonify from F5*G[1]*W24[ip]*std::exp(F1);
       
-      // Number of operations: 4
-      I[2] = F5*G[2]*W24[ip]*std::exp(F1);  // Poissonify: eafe_F5=1, eafe_F1=0
+      // Number of operations: 1
+      I[2] = G[2]*W24[ip];  // Poissonify from F5*G[2]*W24[ip]*std::exp(F1);
       
-      // Number of operations: 4
-      I[3] = F5*G[3]*W24[ip]*std::exp(F1);  // Poissonify: eafe_F5=1, eafe_F1=0
+      // Number of operations: 1
+      I[3] = G[3]*W24[ip];  // Poissonify from F5*G[3]*W24[ip]*std::exp(F1);
       
-      // Number of operations: 4
-      I[4] = F5*G[4]*W24[ip]*std::exp(F1);  // Poissonify: eafe_F5=1, eafe_F1=0
+      // Number of operations: 1
+      I[4] = G[4]*W24[ip];  // Poissonify from F5*G[4]*W24[ip]*std::exp(F1);
       
-      // Number of operations: 4
-      I[5] = F5*G[5]*W24[ip]*std::exp(F1);  // Poissonify: eafe_F5=1, eafe_F1=0
+      // Number of operations: 1
+      I[5] = G[5]*W24[ip];  // Poissonify from F5*G[5]*W24[ip]*std::exp(F1);
       
       /*
       /// Precompute for inner(grad(beta)*u,grad(v))*dx
@@ -1722,9 +1723,19 @@ public:
       */
       
       // Number of operations: 4
-      I[9] = F0*W24[ip]*det*std::exp(F1); // mass lump
+      I[9] = F0*W24[ip]*det*std::exp(F1);
       
       /// Diffusion term: construct local FE0_D001 with EAFE weights
+      // // Replace this entire double loop with: EAFE loop
+      // for (unsigned int r = 0; r < 4; r++)
+      // {
+      //   for (unsigned int s = 0; s < 4; s++)
+      //   {
+      //     /// on edge E = < x_r , x_s >
+      //     // compute alpha_E and B( (+/-)inner(grad(eta+beta),v)/ alpha_E )
+      //   } // end loop over 's'
+      // } // end loop over 'r'
+
       // Number of operations for primary indices: 108
       for (unsigned int j = 0; j < 2; j++)
       {
