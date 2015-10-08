@@ -1773,11 +1773,8 @@ public:
       // Number of operations for primary indices: 48
       for (unsigned int j = 0; j < 4; j++)
       {
-        for (unsigned int k = 0; k < 4; k++)
-        {
-          // Number of operations to compute entry: 3
-          A[j*4 + k] += FE0[ip][j]*FE0[ip][k]*I[9];
-        } // end loop over 'k'
+        unsigned int k = j;
+        A[j*4 + k] += FE0[ip][k]*I[9];
       } // end loop over 'j'
     } // end loop over 'ip'
   }

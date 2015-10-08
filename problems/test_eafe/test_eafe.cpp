@@ -62,7 +62,9 @@ int main()
 
   // Create mesh and function space
   printf("Create mesh\n"); fflush(stdout);
-  dolfin::UnitCubeMesh mesh(10, 10, 10);
+  unsigned int mesh_size = 10;
+  bool print_matrices = (mesh_size<5)? true : false;
+  dolfin::UnitCubeMesh mesh(mesh_size, mesh_size, mesh_size);
   Convection::FunctionSpace CG(mesh);
 
   // Define boundary condition
@@ -127,6 +129,27 @@ int main()
   dolfin::File file_eafe("./problems/test_eafe/output/EAFEConvection.pvd");
   file_eafe << u_eafe;
 
+  /// Print stiffness matrices
+  if (print_matrices) {
+    dolfin::EigenMatrix A; 
+    assemble(A,a); A.compress();
+    std::cout << "There are " << A.nnz() << " nonzero entries in the standard formulation\n";
+
+    dolfin::EigenMatrix A_eafe; 
+    assemble(A_eafe,a_eafe); A_eafe.compress();
+    std::cout << "There are " << A_eafe.nnz() << " nonzero entries in the EAFE formulation\n\n";
+
+    std::cout << "The standard stiffness matrix is:\n";  
+    std::string A_string = A.str(true);
+    std::cout << A_string << "\n\n";
+
+    std::cout << "The EAFE stiffness matrix is:\n";  
+    std::string A_eafe_string = A_eafe.str(true);  
+    std::cout << A_eafe_string;
+    printf("\n");
+  }
+
+  // exit successfully
   printf("Done\n"); fflush(stdout);
   return 0;
 }
