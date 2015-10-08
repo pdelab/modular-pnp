@@ -21,8 +21,8 @@
 //   restrict_keyword:               ''
 //   split:                          False
 
-#ifndef __CONVECTION_REACTION_H
-#define __CONVECTION_REACTION_H
+#ifndef __EAFE_H
+#define __EAFE_H
 
 #include <cmath>
 #include <stdexcept>
@@ -31,18 +31,18 @@
 
 /// This class defines the interface for a finite element.
 
-class convection_reaction_finite_element_0: public ufc::finite_element
+class EAFE_finite_element_0: public ufc::finite_element
 {
 public:
 
   /// Constructor
-  convection_reaction_finite_element_0() : ufc::finite_element()
+  EAFE_finite_element_0() : ufc::finite_element()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~convection_reaction_finite_element_0()
+  virtual ~EAFE_finite_element_0()
   {
     // Do nothing
   }
@@ -1249,7 +1249,7 @@ public:
   /// Create a new class instance
   virtual ufc::finite_element* create() const
   {
-    return new convection_reaction_finite_element_0();
+    return new EAFE_finite_element_0();
   }
 
 };
@@ -1257,18 +1257,18 @@ public:
 /// This class defines the interface for a local-to-global mapping of
 /// degrees of freedom (dofs).
 
-class convection_reaction_dofmap_0: public ufc::dofmap
+class EAFE_dofmap_0: public ufc::dofmap
 {
 public:
 
   /// Constructor
-  convection_reaction_dofmap_0() : ufc::dofmap()
+  EAFE_dofmap_0() : ufc::dofmap()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~convection_reaction_dofmap_0()
+  virtual ~EAFE_dofmap_0()
   {
     // Do nothing
   }
@@ -1515,7 +1515,7 @@ public:
   /// Create a new class instance
   virtual ufc::dofmap* create() const
   {
-    return new convection_reaction_dofmap_0();
+    return new EAFE_dofmap_0();
   }
 
 };
@@ -1524,18 +1524,18 @@ public:
 /// tensor corresponding to the local contribution to a form from
 /// the integral over a cell.
 
-class convection_reaction_cell_integral_0_otherwise: public ufc::cell_integral
+class EAFE_cell_integral_0_otherwise: public ufc::cell_integral
 {
 public:
 
   /// Constructor
-  convection_reaction_cell_integral_0_otherwise() : ufc::cell_integral()
+  EAFE_cell_integral_0_otherwise() : ufc::cell_integral()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~convection_reaction_cell_integral_0_otherwise()
+  virtual ~EAFE_cell_integral_0_otherwise()
   {
     // Do nothing
   }
@@ -1667,7 +1667,10 @@ public:
       double F3 = 0.0;
       double F4 = 0.0;
       double F5 = 0.0;
+      double F6 = 0.0;
       
+      /*
+      /// Evaluate grad(beta)
       // Total number of operations to compute function values = 12
       for (unsigned int r = 0; r < 2; r++)
       {
@@ -1675,7 +1678,8 @@ public:
         F3 += FE0_D001[ip][r]*w[2][nzc1[r]];  // evaluate grad(beta)
         F4 += FE0_D001[ip][r]*w[2][nzc0[r]];  // evaluate grad(beta)
       } // end loop over 'r'
-      
+      */
+
       // Total number of operations to compute function values = 24
       for (unsigned int r = 0; r < 4; r++)
       {
@@ -1688,36 +1692,39 @@ public:
       // Number of operations to compute ip constants: 55
       double I[10];
       // Number of operations: 4
-      I[0] = F5*G[0]*W24[ip]*std::exp(F1);
+      I[0] = F5*G[0]*W24[ip]*std::exp(F1);  // Poissonify: eafe_F5=1, eafe_F1=0
       
       // Number of operations: 4
-      I[1] = F5*G[1]*W24[ip]*std::exp(F1);
+      I[1] = F5*G[1]*W24[ip]*std::exp(F1);  // Poissonify: eafe_F5=1, eafe_F1=0
       
       // Number of operations: 4
-      I[2] = F5*G[2]*W24[ip]*std::exp(F1);
+      I[2] = F5*G[2]*W24[ip]*std::exp(F1);  // Poissonify: eafe_F5=1, eafe_F1=0
       
       // Number of operations: 4
-      I[3] = F5*G[3]*W24[ip]*std::exp(F1);
+      I[3] = F5*G[3]*W24[ip]*std::exp(F1);  // Poissonify: eafe_F5=1, eafe_F1=0
       
       // Number of operations: 4
-      I[4] = F5*G[4]*W24[ip]*std::exp(F1);
+      I[4] = F5*G[4]*W24[ip]*std::exp(F1);  // Poissonify: eafe_F5=1, eafe_F1=0
       
       // Number of operations: 4
-      I[5] = F5*G[5]*W24[ip]*std::exp(F1);
+      I[5] = F5*G[5]*W24[ip]*std::exp(F1);  // Poissonify: eafe_F5=1, eafe_F1=0
+      
+      /*
+      /// Precompute for inner(grad(beta)*u,grad(v))*dx
+      // Number of operations: 9
+      I[6] = F5*W24[ip]*std::exp(F1)*(F2*G[2] + F3*G[1] + F4*G[0]); // set to 0
       
       // Number of operations: 9
-      I[6] = F5*W24[ip]*std::exp(F1)*(F2*G[2] + F3*G[1] + F4*G[0]);
+      I[7] = F5*W24[ip]*std::exp(F1)*(F2*G[4] + F3*G[3] + F4*G[1]); // set to 0
       
       // Number of operations: 9
-      I[7] = F5*W24[ip]*std::exp(F1)*(F2*G[4] + F3*G[3] + F4*G[1]);
-      
-      // Number of operations: 9
-      I[8] = F5*W24[ip]*std::exp(F1)*(F2*G[5] + F3*G[4] + F4*G[2]);
+      I[8] = F5*W24[ip]*std::exp(F1)*(F2*G[5] + F3*G[4] + F4*G[2]); // set to 0
+      */
       
       // Number of operations: 4
-      I[9] = F0*W24[ip]*det*std::exp(F1);
+      I[9] = F0*W24[ip]*det*std::exp(F1); // mass lump
       
-      /// Diffusion term
+      /// Diffusion term: construct local FE0_D001 with EAFE weights
       // Number of operations for primary indices: 108
       for (unsigned int j = 0; j < 2; j++)
       {
@@ -1744,7 +1751,8 @@ public:
         } // end loop over 'k'
       } // end loop over 'j'
       
-      /// Advection term
+      /*
+      /// Advection term: delete by setting eafe_FE0[ip][k] = 0
       // Number of operations for primary indices: 72
       for (unsigned int j = 0; j < 2; j++)
       {
@@ -1758,8 +1766,10 @@ public:
           A[nzc2[j]*4 + k] += FE0[ip][k]*FE0_D001[ip][j]*I[8];
         } // end loop over 'k'
       } // end loop over 'j'
+      */
       
-      /// Reaction term: use mass lumping
+      /// Reaction term: use mass lumping 
+      /// Set: eafe_FE0[ip][j]= (j==k)? 1 : 0; // Is this correct lumping?
       // Number of operations for primary indices: 48
       for (unsigned int j = 0; j < 4; j++)
       {
@@ -1778,18 +1788,18 @@ public:
 /// tensor corresponding to the local contribution to a form from
 /// the integral over a cell.
 
-class convection_reaction_cell_integral_1_otherwise: public ufc::cell_integral
+class EAFE_cell_integral_1_otherwise: public ufc::cell_integral
 {
 public:
 
   /// Constructor
-  convection_reaction_cell_integral_1_otherwise() : ufc::cell_integral()
+  EAFE_cell_integral_1_otherwise() : ufc::cell_integral()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~convection_reaction_cell_integral_1_otherwise()
+  virtual ~EAFE_cell_integral_1_otherwise()
   {
     // Do nothing
   }
@@ -1854,18 +1864,18 @@ public:
 /// sequence of basis functions of Vj and w1, w2, ..., wn are given
 /// fixed functions (coefficients).
 
-class convection_reaction_form_0: public ufc::form
+class EAFE_form_0: public ufc::form
 {
 public:
 
   /// Constructor
-  convection_reaction_form_0() : ufc::form()
+  EAFE_form_0() : ufc::form()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~convection_reaction_form_0()
+  virtual ~EAFE_form_0()
   {
     // Do nothing
   }
@@ -1904,32 +1914,32 @@ public:
     {
     case 0:
       {
-        return new convection_reaction_finite_element_0();
+        return new EAFE_finite_element_0();
         break;
       }
     case 1:
       {
-        return new convection_reaction_finite_element_0();
+        return new EAFE_finite_element_0();
         break;
       }
     case 2:
       {
-        return new convection_reaction_finite_element_0();
+        return new EAFE_finite_element_0();
         break;
       }
     case 3:
       {
-        return new convection_reaction_finite_element_0();
+        return new EAFE_finite_element_0();
         break;
       }
     case 4:
       {
-        return new convection_reaction_finite_element_0();
+        return new EAFE_finite_element_0();
         break;
       }
     case 5:
       {
-        return new convection_reaction_finite_element_0();
+        return new EAFE_finite_element_0();
         break;
       }
     }
@@ -1944,32 +1954,32 @@ public:
     {
     case 0:
       {
-        return new convection_reaction_dofmap_0();
+        return new EAFE_dofmap_0();
         break;
       }
     case 1:
       {
-        return new convection_reaction_dofmap_0();
+        return new EAFE_dofmap_0();
         break;
       }
     case 2:
       {
-        return new convection_reaction_dofmap_0();
+        return new EAFE_dofmap_0();
         break;
       }
     case 3:
       {
-        return new convection_reaction_dofmap_0();
+        return new EAFE_dofmap_0();
         break;
       }
     case 4:
       {
-        return new convection_reaction_dofmap_0();
+        return new EAFE_dofmap_0();
         break;
       }
     case 5:
       {
-        return new convection_reaction_dofmap_0();
+        return new EAFE_dofmap_0();
         break;
       }
     }
@@ -2074,7 +2084,7 @@ public:
   /// Create a new cell integral on everywhere else
   virtual ufc::cell_integral* create_default_cell_integral() const
   {
-    return new convection_reaction_cell_integral_0_otherwise();
+    return new EAFE_cell_integral_0_otherwise();
   }
 
   /// Create a new exterior facet integral on everywhere else
@@ -2118,18 +2128,18 @@ public:
 /// sequence of basis functions of Vj and w1, w2, ..., wn are given
 /// fixed functions (coefficients).
 
-class convection_reaction_form_1: public ufc::form
+class EAFE_form_1: public ufc::form
 {
 public:
 
   /// Constructor
-  convection_reaction_form_1() : ufc::form()
+  EAFE_form_1() : ufc::form()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~convection_reaction_form_1()
+  virtual ~EAFE_form_1()
   {
     // Do nothing
   }
@@ -2168,12 +2178,12 @@ public:
     {
     case 0:
       {
-        return new convection_reaction_finite_element_0();
+        return new EAFE_finite_element_0();
         break;
       }
     case 1:
       {
-        return new convection_reaction_finite_element_0();
+        return new EAFE_finite_element_0();
         break;
       }
     }
@@ -2188,12 +2198,12 @@ public:
     {
     case 0:
       {
-        return new convection_reaction_dofmap_0();
+        return new EAFE_dofmap_0();
         break;
       }
     case 1:
       {
-        return new convection_reaction_dofmap_0();
+        return new EAFE_dofmap_0();
         break;
       }
     }
@@ -2298,7 +2308,7 @@ public:
   /// Create a new cell integral on everywhere else
   virtual ufc::cell_integral* create_default_cell_integral() const
   {
-    return new convection_reaction_cell_integral_1_otherwise();
+    return new EAFE_cell_integral_1_otherwise();
   }
 
   /// Create a new exterior facet integral on everywhere else
@@ -2343,7 +2353,7 @@ public:
 #include <dolfin/adaptivity/ErrorControl.h>
 #include <dolfin/adaptivity/GoalFunctional.h>
 
-namespace convection_reaction
+namespace EAFE
 {
 
 class CoefficientSpace_alpha: public dolfin::FunctionSpace
@@ -2355,8 +2365,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_alpha(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh)))
   {
     // Do nothing
   }
@@ -2364,8 +2374,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_alpha(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh)))
   {
     // Do nothing
   }
@@ -2375,8 +2385,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_alpha(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -2385,8 +2395,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_alpha(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -2402,8 +2412,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_beta(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh)))
   {
     // Do nothing
   }
@@ -2411,8 +2421,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_beta(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh)))
   {
     // Do nothing
   }
@@ -2422,8 +2432,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_beta(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -2432,8 +2442,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_beta(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -2449,8 +2459,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_eta(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh)))
   {
     // Do nothing
   }
@@ -2458,8 +2468,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_eta(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh)))
   {
     // Do nothing
   }
@@ -2469,8 +2479,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_eta(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -2479,8 +2489,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_eta(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -2496,8 +2506,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_f(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh)))
   {
     // Do nothing
   }
@@ -2505,8 +2515,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_f(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh)))
   {
     // Do nothing
   }
@@ -2516,8 +2526,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_f(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -2526,8 +2536,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_f(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -2543,8 +2553,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_gamma(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh)))
   {
     // Do nothing
   }
@@ -2552,8 +2562,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_gamma(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh)))
   {
     // Do nothing
   }
@@ -2563,8 +2573,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_gamma(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -2573,8 +2583,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_gamma(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -2590,8 +2600,8 @@ public:
   // Create standard function space (reference version)
   Form_a_FunctionSpace_0(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh)))
   {
     // Do nothing
   }
@@ -2599,8 +2609,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_a_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh)))
   {
     // Do nothing
   }
@@ -2610,8 +2620,8 @@ public:
   // Create standard function space (reference version)
   Form_a_FunctionSpace_0(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -2620,8 +2630,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_a_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -2637,8 +2647,8 @@ public:
   // Create standard function space (reference version)
   Form_a_FunctionSpace_1(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh)))
   {
     // Do nothing
   }
@@ -2646,8 +2656,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_a_FunctionSpace_1(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh)))
   {
     // Do nothing
   }
@@ -2657,8 +2667,8 @@ public:
   // Create standard function space (reference version)
   Form_a_FunctionSpace_1(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -2667,8 +2677,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_a_FunctionSpace_1(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -2694,7 +2704,7 @@ public:
     _function_spaces[0] = reference_to_no_delete_pointer(V0);
     _function_spaces[1] = reference_to_no_delete_pointer(V1);
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new convection_reaction_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_0());
   }
 
   // Constructor
@@ -2709,7 +2719,7 @@ public:
     this->beta = beta;
     this->gamma = gamma;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new convection_reaction_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_0());
   }
 
   // Constructor
@@ -2724,7 +2734,7 @@ public:
     this->beta = *beta;
     this->gamma = *gamma;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new convection_reaction_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_0());
   }
 
   // Constructor
@@ -2734,7 +2744,7 @@ public:
     _function_spaces[0] = V0;
     _function_spaces[1] = V1;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new convection_reaction_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_0());
   }
 
   // Constructor
@@ -2749,7 +2759,7 @@ public:
     this->beta = beta;
     this->gamma = gamma;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new convection_reaction_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_0());
   }
 
   // Constructor
@@ -2764,7 +2774,7 @@ public:
     this->beta = *beta;
     this->gamma = *gamma;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new convection_reaction_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_0());
   }
 
   // Destructor
@@ -2834,8 +2844,8 @@ public:
   // Create standard function space (reference version)
   Form_L_FunctionSpace_0(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh)))
   {
     // Do nothing
   }
@@ -2843,8 +2853,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_L_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh)))
   {
     // Do nothing
   }
@@ -2854,8 +2864,8 @@ public:
   // Create standard function space (reference version)
   Form_L_FunctionSpace_0(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -2864,8 +2874,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_L_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new convection_reaction_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new convection_reaction_dofmap_0()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -2884,7 +2894,7 @@ public:
   {
     _function_spaces[0] = reference_to_no_delete_pointer(V0);
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new convection_reaction_form_1());
+    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_1());
   }
 
   // Constructor
@@ -2895,7 +2905,7 @@ public:
 
     this->f = f;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new convection_reaction_form_1());
+    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_1());
   }
 
   // Constructor
@@ -2906,7 +2916,7 @@ public:
 
     this->f = *f;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new convection_reaction_form_1());
+    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_1());
   }
 
   // Constructor
@@ -2915,7 +2925,7 @@ public:
   {
     _function_spaces[0] = V0;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new convection_reaction_form_1());
+    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_1());
   }
 
   // Constructor
@@ -2926,7 +2936,7 @@ public:
 
     this->f = f;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new convection_reaction_form_1());
+    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_1());
   }
 
   // Constructor
@@ -2937,7 +2947,7 @@ public:
 
     this->f = *f;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new convection_reaction_form_1());
+    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_1());
   }
 
   // Destructor
