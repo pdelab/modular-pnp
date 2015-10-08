@@ -1768,9 +1768,8 @@ public:
       } // end loop over 'j'
       */
       
-      /// Reaction term: use mass lumping 
-      /// Set: eafe_FE0[ip][j]= (j==k)? 1 : 0; // Is this correct lumping?
-      // Number of operations for primary indices: 48
+      /// Reaction term: mass lumping
+      // Number of operations for primary indices: 8
       for (unsigned int j = 0; j < 4; j++)
       {
         unsigned int k = j;
