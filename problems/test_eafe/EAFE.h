@@ -1554,6 +1554,9 @@ public:
                                const double*  vertex_coordinates,
                                int cell_orientation) const
   {
+    // Bernoulli coefficient matrix
+    double B[16];
+
     // Compute Jacobian
     double J[9];
     compute_jacobian_tetrahedron_3d(J, vertex_coordinates);
@@ -1642,6 +1645,7 @@ public:
     for (unsigned int r = 0; r < 16; r++)
     {
       A[r] = 0.0;
+      B[r] = 0.0;
     } // end loop over 'r'
     // Number of operations to compute geometry constants: 36.
     double G[6];
@@ -1725,17 +1729,7 @@ public:
       // Number of operations: 4
       I[9] = F0*W24[ip]*det*std::exp(F1);
       
-      /// Diffusion term: construct local FE0_D001 with EAFE weights
-      // // Replace this entire double loop with: EAFE loop
-      // for (unsigned int r = 0; r < 4; r++)
-      // {
-      //   for (unsigned int s = 0; s < 4; s++)
-      //   {
-      //     /// on edge E = < x_r , x_s >
-      //     // compute alpha_E and B( (+/-)inner(grad(eta+beta),v)/ alpha_E )
-      //   } // end loop over 's'
-      // } // end loop over 'r'
-
+      /// Construct local Poisson stiffness matrix
       // Number of operations for primary indices: 108
       for (unsigned int j = 0; j < 2; j++)
       {
@@ -1761,7 +1755,42 @@ public:
           A[nzc2[j]*4 + nzc2[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[5];
         } // end loop over 'k'
       } // end loop over 'j'
-      
+
+      /// Diffusion term (continued): create EAFE-weights for matrix
+      // Replace this entire double loop with: EAFE loop
+      for (unsigned int r = 0; r < 4; r++)
+      {
+        for (unsigned int s = 0; s < 4; s++)
+        {
+          /// on edge E = < x_r , x_s >
+          double alpha_E = 0.5*(w[1][r]+w[1][s]);
+          double eta_r = w[0][r];
+          double eta_s = w[0][s];
+          alpha_E *= (std::fabs(eta_s-eta_r)<DOLFIN_EPS)? std::exp(eta_r)
+            : (eta_s-eta_r)/(std::exp(-eta_s)-std::exp(-eta_r));
+
+          double beta_r = w[2][r];
+          double beta_s = w[2][s];
+          double d_eafe = (beta_s-beta_r)/alpha_E;
+          double bernoulli = (std::fabs(d_eafe)<DOLFIN_EPS)? 1.0 - 0.5*d_eafe
+            :  d_eafe / (std::exp(d_eafe)-1.0);
+
+          B[r*4 + s] = alpha_E*bernoulli;
+        } // end loop over 's'
+      } // end loop over 'r'
+
+      /// direct product
+      for (unsigned int r = 0; r < 4; r++)
+        for (unsigned int s = 0; s < 4; s++)
+          A[r*4 + s] *= B[r*4 + s];
+
+      /// ensure column sum is zero
+      for (unsigned int r = 0; r < 4; r++)
+      {
+        A[4*r+r] = 0.0;
+        A[r*4+r] = -A[0*4+r] -A[1*4+r] -A[2*4+r] -A[3*4+r];
+      } // end loop over 'r'
+
       /*
       /// Advection term: delete by setting eafe_FE0[ip][k] = 0
       // Number of operations for primary indices: 72
@@ -1783,8 +1812,7 @@ public:
       // Number of operations for primary indices: 8
       for (unsigned int j = 0; j < 4; j++)
       {
-        unsigned int k = j;
-        A[j*4 + k] += FE0[ip][k]*I[9];
+        A[j*4 + j] += FE0[ip][j]*I[9];
       } // end loop over 'j'
     } // end loop over 'ip'
   }

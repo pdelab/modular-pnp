@@ -32,15 +32,6 @@ class Advection : public Expression
   }
 };
 
-// Normal derivative (Neumann boundary condition)
-class dUdN : public Expression
-{
-  void eval(Array<double>& values, const Array<double>& x) const
-  {
-    values[0] = sin(5*x[0]);
-  }
-};
-
 // Sub domain for Dirichlet boundary condition
 class DirichletBoundary : public SubDomain
 {
@@ -75,7 +66,7 @@ int main()
 
   // Define analytic expressions
   printf("Define analytic expressions\n"); fflush(stdout);
-  dolfin::Constant alpha(0.0);
+  dolfin::Constant alpha(1.0e-5);
   
   Advection betaExpression;
   dolfin::Function beta(CG);
@@ -84,6 +75,8 @@ int main()
   dolfin::Constant gamma(1.0);
   dolfin::Constant eta(0.0);
   dolfin::Constant f(1.0);
+
+
 
   /// Standard convection problem
   printf("Solve convection problem using standard formulation\n"); fflush(stdout);
@@ -106,13 +99,12 @@ int main()
   printf("\tSave solution in VTK format\n"); fflush(stdout);
   dolfin::File file("./problems/test_eafe/output/Convection.pvd");
   file << u;
-  printf("\n");
+
 
 
   /// EAFE convection problem
   printf("Solve convection problem using EAFE formulation\n"); fflush(stdout);
   // Define variational forms
-  printf("\tDefine variational forms\n"); fflush(stdout);
   EAFE::BilinearForm a_eafe(CG,CG);
   a_eafe.alpha = alpha;
   a_eafe.beta = beta;
@@ -128,6 +120,8 @@ int main()
   printf("\tSave solution in VTK format\n"); fflush(stdout);
   dolfin::File file_eafe("./problems/test_eafe/output/EAFEConvection.pvd");
   file_eafe << u_eafe;
+
+
 
   /// Print stiffness matrices
   if (print_matrices) {
