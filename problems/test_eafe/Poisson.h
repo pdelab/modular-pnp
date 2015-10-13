@@ -21,8 +21,8 @@
 //   restrict_keyword:               ''
 //   split:                          False
 
-#ifndef __EAFE_H
-#define __EAFE_H
+#ifndef __POISSON_H
+#define __POISSON_H
 
 #include <cmath>
 #include <stdexcept>
@@ -31,18 +31,18 @@
 
 /// This class defines the interface for a finite element.
 
-class EAFE_finite_element_0: public ufc::finite_element
+class poisson_finite_element_0: public ufc::finite_element
 {
 public:
 
   /// Constructor
-  EAFE_finite_element_0() : ufc::finite_element()
+  poisson_finite_element_0() : ufc::finite_element()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~EAFE_finite_element_0()
+  virtual ~poisson_finite_element_0()
   {
     // Do nothing
   }
@@ -1249,7 +1249,7 @@ public:
   /// Create a new class instance
   virtual ufc::finite_element* create() const
   {
-    return new EAFE_finite_element_0();
+    return new poisson_finite_element_0();
   }
 
 };
@@ -1257,18 +1257,18 @@ public:
 /// This class defines the interface for a local-to-global mapping of
 /// degrees of freedom (dofs).
 
-class EAFE_dofmap_0: public ufc::dofmap
+class poisson_dofmap_0: public ufc::dofmap
 {
 public:
 
   /// Constructor
-  EAFE_dofmap_0() : ufc::dofmap()
+  poisson_dofmap_0() : ufc::dofmap()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~EAFE_dofmap_0()
+  virtual ~poisson_dofmap_0()
   {
     // Do nothing
   }
@@ -1515,7 +1515,7 @@ public:
   /// Create a new class instance
   virtual ufc::dofmap* create() const
   {
-    return new EAFE_dofmap_0();
+    return new poisson_dofmap_0();
   }
 
 };
@@ -1524,18 +1524,18 @@ public:
 /// tensor corresponding to the local contribution to a form from
 /// the integral over a cell.
 
-class EAFE_cell_integral_0_otherwise: public ufc::cell_integral
+class poisson_cell_integral_0_otherwise: public ufc::cell_integral
 {
 public:
 
   /// Constructor
-  EAFE_cell_integral_0_otherwise() : ufc::cell_integral()
+  poisson_cell_integral_0_otherwise() : ufc::cell_integral()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~EAFE_cell_integral_0_otherwise()
+  virtual ~poisson_cell_integral_0_otherwise()
   {
     // Do nothing
   }
@@ -1543,24 +1543,25 @@ public:
   /// Tabulate which form coefficients are used by this integral
   virtual const std::vector<bool> & enabled_coefficients() const
   {
-    static const std::vector<bool> enabled({true, true, true, true});
+    static const std::vector<bool> enabled({});
     return enabled;
   }
 
   /// Tabulate the tensor for the contribution from a local cell
-  /// Modified to compute EAFE bilinear form for log-convection-reaction equations
   virtual void tabulate_tensor(double*  A,
                                const double * const *  w,
                                const double*  vertex_coordinates,
                                int cell_orientation) const
   {
-    // Bernoulli coefficient matrix
-    double bern[16];
-
+    // Number of operations (multiply-add pairs) for Jacobian data:      3
+    // Number of operations (multiply-add pairs) for geometry tensor:    27
+    // Number of operations (multiply-add pairs) for tensor contraction: 28
+    // Total number of operations (multiply-add pairs):                  58
+    
     // Compute Jacobian
     double J[9];
     compute_jacobian_tetrahedron_3d(J, vertex_coordinates);
-
+    
     // Compute Jacobian inverse and determinant
     double K[9];
     double detJ;
@@ -1569,95 +1570,6 @@ public:
     // Set scale factor
     const double det = std::abs(detJ);
     
-    // Compute cell volume
-    
-    
-    // Compute circumradius
-    
-    
-    // Array of quadrature weights.
-    static const double W24[24] = {0.00665379170969465, 0.00665379170969465, 0.00665379170969465, 0.00665379170969465, 0.00167953517588678, 0.00167953517588678, 0.00167953517588678, 0.00167953517588678, 0.0092261969239424, 0.0092261969239424, 0.0092261969239424, 0.0092261969239424, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428};
-    // Quadrature points on the UFC reference element: (0.356191386222545, 0.214602871259152, 0.214602871259152), (0.214602871259152, 0.214602871259152, 0.214602871259152), (0.214602871259152, 0.214602871259152, 0.356191386222545), (0.214602871259152, 0.356191386222545, 0.214602871259152), (0.877978124396166, 0.0406739585346113, 0.0406739585346113), (0.0406739585346113, 0.0406739585346113, 0.0406739585346113), (0.0406739585346113, 0.0406739585346113, 0.877978124396166), (0.0406739585346113, 0.877978124396166, 0.0406739585346113), (0.0329863295731731, 0.322337890142276, 0.322337890142276), (0.322337890142276, 0.322337890142276, 0.322337890142276), (0.322337890142276, 0.322337890142276, 0.0329863295731731), (0.322337890142276, 0.0329863295731731, 0.322337890142276), (0.269672331458316, 0.0636610018750175, 0.0636610018750175), (0.0636610018750175, 0.269672331458316, 0.0636610018750175), (0.0636610018750175, 0.0636610018750175, 0.269672331458316), (0.603005664791649, 0.0636610018750175, 0.0636610018750175), (0.0636610018750175, 0.603005664791649, 0.0636610018750175), (0.0636610018750175, 0.0636610018750175, 0.603005664791649), (0.0636610018750175, 0.269672331458316, 0.603005664791649), (0.269672331458316, 0.603005664791649, 0.0636610018750175), (0.603005664791649, 0.0636610018750175, 0.269672331458316), (0.0636610018750175, 0.603005664791649, 0.269672331458316), (0.269672331458316, 0.0636610018750175, 0.603005664791649), (0.603005664791649, 0.269672331458316, 0.0636610018750175)
-    
-    // Values of basis functions at quadrature points.
-    static const double FE0[24][4] = \
-    {{0.214602871259152, 0.356191386222545, 0.214602871259152, 0.214602871259152},
-    {0.356191386222545, 0.214602871259152, 0.214602871259152, 0.214602871259152},
-    {0.214602871259152, 0.214602871259152, 0.214602871259152, 0.356191386222545},
-    {0.214602871259152, 0.214602871259152, 0.356191386222545, 0.214602871259152},
-    {0.0406739585346115, 0.877978124396166, 0.0406739585346114, 0.0406739585346113},
-    {0.877978124396166, 0.0406739585346112, 0.0406739585346114, 0.0406739585346113},
-    {0.0406739585346115, 0.0406739585346113, 0.0406739585346113, 0.877978124396166},
-    {0.0406739585346115, 0.0406739585346113, 0.877978124396166, 0.0406739585346113},
-    {0.322337890142276, 0.0329863295731731, 0.322337890142276, 0.322337890142276},
-    {0.0329863295731729, 0.322337890142276, 0.322337890142276, 0.322337890142276},
-    {0.322337890142276, 0.322337890142276, 0.322337890142276, 0.0329863295731731},
-    {0.322337890142276, 0.322337890142276, 0.0329863295731731, 0.322337890142276},
-    {0.603005664791649, 0.269672331458316, 0.0636610018750175, 0.0636610018750175},
-    {0.603005664791649, 0.0636610018750174, 0.269672331458316, 0.0636610018750175},
-    {0.603005664791649, 0.0636610018750175, 0.0636610018750175, 0.269672331458316},
-    {0.269672331458316, 0.603005664791649, 0.0636610018750175, 0.0636610018750175},
-    {0.269672331458316, 0.0636610018750175, 0.603005664791649, 0.0636610018750175},
-    {0.269672331458316, 0.0636610018750175, 0.0636610018750175, 0.603005664791649},
-    {0.0636610018750176, 0.0636610018750175, 0.269672331458316, 0.603005664791649},
-    {0.0636610018750176, 0.269672331458316, 0.603005664791649, 0.0636610018750175},
-    {0.0636610018750177, 0.603005664791649, 0.0636610018750175, 0.269672331458316},
-    {0.0636610018750176, 0.0636610018750175, 0.603005664791649, 0.269672331458316},
-    {0.0636610018750177, 0.269672331458316, 0.0636610018750175, 0.603005664791649},
-    {0.0636610018750177, 0.603005664791649, 0.269672331458316, 0.0636610018750175}};
-    
-    static const double FE0_D001[24][2] = \
-    {{-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc0[2] = {0, 3};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc1[2] = {0, 2};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc2[2] = {0, 1};
-    
-    // Reset values in the element tensor.
-    for (unsigned int r = 0; r < 16; r++)
-    {
-      A[r] = 0.0;
-      bern[r] = 0.0;
-    } // end loop over 'r'
-
-    // Number of operations to compute geometry constants: 36.
-    double G[6];
-    G[0] = det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[1] = det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[2] = det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[3] = det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[4] = det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[5] = det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-
-    // Compute Poisson matrix
     // Compute geometry tensor
     const double G0_0_0 = det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
     const double G0_0_1 = det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
@@ -1686,165 +1598,6 @@ public:
     A[13] = 0.166666666666667*G0_2_0;
     A[14] = 0.166666666666667*G0_2_1;
     A[15] = 0.166666666666667*G0_2_2;
-
-    /// Diffusion term (continued): create EAFE-weights for matrix
-    // Replace this entire double loop with: EAFE loop
-    for (unsigned int r = 0; r < 4; r++)
-    {
-      for (unsigned int s = 0; s < 4; s++)
-      {
-        /// on edge E = < x_r , x_s >
-        double alpha_E = 0.5*(w[1][r]+w[1][s]);
-        double eta_r = w[0][r];
-        double eta_s = w[0][s];
-        alpha_E *= (std::fabs(eta_s-eta_r)<DOLFIN_EPS)? std::exp(eta_r)
-          : (eta_s-eta_r)/(std::exp(-eta_s)-std::exp(-eta_r));
-
-        double beta_r = w[2][r];
-        double beta_s = w[2][s];
-        double d_eafe = (beta_s-beta_r)/alpha_E;
-        double bernoulli = (std::fabs(d_eafe)<DOLFIN_EPS)? 1.0 - 0.5*d_eafe
-          :  d_eafe / (std::exp(d_eafe)-1.0);
-
-        bern[r*4 + s] = (r==s)? 0.0 : alpha_E*bernoulli;
-      } // end loop over 's'
-    } // end loop over 'r'
-
-    /// direct product
-    for (unsigned int r = 0; r < 4; r++)
-      for (unsigned int s = 0; s < 4; s++)
-        A[r*4 + s] *= bern[r*4 + s];
-
-    /// ensure column sum is zero
-    for (unsigned int r = 0; r < 4; r++)
-    {
-      A[r*4 + r] = -A[0*4+r] -A[1*4+r] -A[2*4+r] -A[3*4+r];
-    } // end loop over 'r'
-    
-    // Compute element tensor using UFL quadrature representation
-    // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
-    
-    // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 7656
-    for (unsigned int ip = 0; ip < 24; ip++)
-    {
-      
-      // Coefficient declarations.
-      double F0 = 0.0;
-      double F1 = 0.0;
-      double F2 = 0.0;
-      double F3 = 0.0;
-      double F4 = 0.0;
-      double F5 = 0.0;
-      double F6 = 0.0;
-      
-      /*
-      /// Evaluate grad(beta)
-      // Total number of operations to compute function values = 12
-      for (unsigned int r = 0; r < 2; r++)
-      {
-        F2 += FE0_D001[ip][r]*w[2][nzc2[r]];  // evaluate grad(beta)
-        F3 += FE0_D001[ip][r]*w[2][nzc1[r]];  // evaluate grad(beta)
-        F4 += FE0_D001[ip][r]*w[2][nzc0[r]];  // evaluate grad(beta)
-      } // end loop over 'r'
-      */
-
-      // Total number of operations to compute function values = 24
-      for (unsigned int r = 0; r < 4; r++)
-      {
-        F0 += FE0[ip][r]*w[3][r];   // evaluate gamma
-        F1 += FE0[ip][r]*w[0][r];   // evaluate eta
-        F5 += FE0[ip][r]*w[1][r];   // evaluate alpha
-        F6 += FE0[ip][r]*w[2][r];   // evaluate beta
-      } // end loop over 'r'
-      
-      /// Are I[0:5] necessary???
-      // Number of operations to compute ip constants: 10
-      double I[10];
-      // Number of operations: 1
-      I[0] = G[0]*W24[ip];  // Poissonify from F5*G[0]*W24[ip]*std::exp(F1);
-      
-      // Number of operations: 1
-      I[1] = G[1]*W24[ip];  // Poissonify from F5*G[1]*W24[ip]*std::exp(F1);
-      
-      // Number of operations: 1
-      I[2] = G[2]*W24[ip];  // Poissonify from F5*G[2]*W24[ip]*std::exp(F1);
-      
-      // Number of operations: 1
-      I[3] = G[3]*W24[ip];  // Poissonify from F5*G[3]*W24[ip]*std::exp(F1);
-      
-      // Number of operations: 1
-      I[4] = G[4]*W24[ip];  // Poissonify from F5*G[4]*W24[ip]*std::exp(F1);
-      
-      // Number of operations: 1
-      I[5] = G[5]*W24[ip];  // Poissonify from F5*G[5]*W24[ip]*std::exp(F1);
-      
-      /*
-      /// Precompute for inner(grad(beta)*u,grad(v))*dx
-      // Number of operations: 9
-      I[6] = F5*W24[ip]*std::exp(F1)*(F2*G[2] + F3*G[1] + F4*G[0]); // set to 0
-      
-      // Number of operations: 9
-      I[7] = F5*W24[ip]*std::exp(F1)*(F2*G[4] + F3*G[3] + F4*G[1]); // set to 0
-      
-      // Number of operations: 9
-      I[8] = F5*W24[ip]*std::exp(F1)*(F2*G[5] + F3*G[4] + F4*G[2]); // set to 0
-      */
-      
-      // Number of operations: 4
-      I[9] = F0*W24[ip]*det*std::exp(F1);
-      
-      /// Construct local Poisson stiffness matrix
-      // Number of operations for primary indices: 108
-      // for (unsigned int j = 0; j < 4; j++)
-      // {
-      //   for (unsigned int k = 0; k < 2; k++)
-      //   {
-      //     // Number of operations to compute entry: 3
-      //     A_local[nzc0[j]*4 + nzc0[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[0];
-      //     // Number of operations to compute entry: 3
-      //     A_local[nzc0[j]*4 + nzc1[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[1];
-      //     // Number of operations to compute entry: 3
-      //     A_local[nzc0[j]*4 + nzc2[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[2];
-      //     // Number of operations to compute entry: 3
-      //     A_local[nzc1[j]*4 + nzc0[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[1];
-      //     // Number of operations to compute entry: 3
-      //     A_local[nzc1[j]*4 + nzc1[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[3];
-      //     // Number of operations to compute entry: 3
-      //     A_local[nzc1[j]*4 + nzc2[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[4];
-      //     // Number of operations to compute entry: 3
-      //     A_local[nzc2[j]*4 + nzc0[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[2];
-      //     // Number of operations to compute entry: 3
-      //     A_local[nzc2[j]*4 + nzc1[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[4];
-      //     // Number of operations to compute entry: 3
-      //     A_local[nzc2[j]*4 + nzc2[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[5];
-      //   } // end loop over 'k'
-      // } // end loop over 'j'
-
-      /*
-      /// Advection term: delete by setting eafe_FE0[ip][k] = 0
-      // Number of operations for primary indices: 72
-      for (unsigned int j = 0; j < 2; j++)
-      {
-        for (unsigned int k = 0; k < 4; k++)
-        {
-          // Number of operations to compute entry: 3
-          A[nzc0[j]*4 + k] += FE0[ip][k]*FE0_D001[ip][j]*I[6];
-          // Number of operations to compute entry: 3
-          A[nzc1[j]*4 + k] += FE0[ip][k]*FE0_D001[ip][j]*I[7];
-          // Number of operations to compute entry: 3
-          A[nzc2[j]*4 + k] += FE0[ip][k]*FE0_D001[ip][j]*I[8];
-        } // end loop over 'k'
-      } // end loop over 'j'
-      */
-      
-      /// Reaction term: mass lumping
-      // Number of operations for primary indices: 8
-      for (unsigned int j = 0; j < 4; j++)
-      {
-        A[j*4 + j] += FE0[ip][j]*I[9];
-      } // end loop over 'j'
-    } // end loop over 'ip'
   }
 
 };
@@ -1853,18 +1606,18 @@ public:
 /// tensor corresponding to the local contribution to a form from
 /// the integral over a cell.
 
-class EAFE_cell_integral_1_otherwise: public ufc::cell_integral
+class poisson_cell_integral_1_otherwise: public ufc::cell_integral
 {
 public:
 
   /// Constructor
-  EAFE_cell_integral_1_otherwise() : ufc::cell_integral()
+  poisson_cell_integral_1_otherwise() : ufc::cell_integral()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~EAFE_cell_integral_1_otherwise()
+  virtual ~poisson_cell_integral_1_otherwise()
   {
     // Do nothing
   }
@@ -1929,18 +1682,18 @@ public:
 /// sequence of basis functions of Vj and w1, w2, ..., wn are given
 /// fixed functions (coefficients).
 
-class EAFE_form_0: public ufc::form
+class poisson_form_0: public ufc::form
 {
 public:
 
   /// Constructor
-  EAFE_form_0() : ufc::form()
+  poisson_form_0() : ufc::form()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~EAFE_form_0()
+  virtual ~poisson_form_0()
   {
     // Do nothing
   }
@@ -1948,7 +1701,7 @@ public:
   /// Return a string identifying the form
   virtual const char* signature() const
   {
-    return "be2fbf9bc776ee5db20e2acded5b6fd2950980192e4c2c012210b23fe3357fb8e32fcfbe13880797a250e5bad7da46823ac2c9d7ed588827e8ec43f065157de7";
+    return "0a1c8620c3fe3a9b075cccbf6831c3b71c838dae9d8115e7ca3bceb16e94994307b7af22c58a3329d1bc1bd249fd11fd8a0f9c8d23c6d43589322d9fc76fa890";
   }
 
 
@@ -1961,13 +1714,13 @@ public:
   /// Return the number of coefficients (n)
   virtual std::size_t num_coefficients() const
   {
-    return 4;
+    return 0;
   }
 
   /// Return original coefficient position for each coefficient (0 <= i < n)
   virtual std::size_t original_coefficient_position(std::size_t i) const
   {
-    static const std::vector<std::size_t> position({0, 1, 2, 3});
+    static const std::vector<std::size_t> position({});
     return position[i];
   }
 
@@ -1979,32 +1732,12 @@ public:
     {
     case 0:
       {
-        return new EAFE_finite_element_0();
+        return new poisson_finite_element_0();
         break;
       }
     case 1:
       {
-        return new EAFE_finite_element_0();
-        break;
-      }
-    case 2:
-      {
-        return new EAFE_finite_element_0();
-        break;
-      }
-    case 3:
-      {
-        return new EAFE_finite_element_0();
-        break;
-      }
-    case 4:
-      {
-        return new EAFE_finite_element_0();
-        break;
-      }
-    case 5:
-      {
-        return new EAFE_finite_element_0();
+        return new poisson_finite_element_0();
         break;
       }
     }
@@ -2019,32 +1752,12 @@ public:
     {
     case 0:
       {
-        return new EAFE_dofmap_0();
+        return new poisson_dofmap_0();
         break;
       }
     case 1:
       {
-        return new EAFE_dofmap_0();
-        break;
-      }
-    case 2:
-      {
-        return new EAFE_dofmap_0();
-        break;
-      }
-    case 3:
-      {
-        return new EAFE_dofmap_0();
-        break;
-      }
-    case 4:
-      {
-        return new EAFE_dofmap_0();
-        break;
-      }
-    case 5:
-      {
-        return new EAFE_dofmap_0();
+        return new poisson_dofmap_0();
         break;
       }
     }
@@ -2149,7 +1862,7 @@ public:
   /// Create a new cell integral on everywhere else
   virtual ufc::cell_integral* create_default_cell_integral() const
   {
-    return new EAFE_cell_integral_0_otherwise();
+    return new poisson_cell_integral_0_otherwise();
   }
 
   /// Create a new exterior facet integral on everywhere else
@@ -2193,18 +1906,18 @@ public:
 /// sequence of basis functions of Vj and w1, w2, ..., wn are given
 /// fixed functions (coefficients).
 
-class EAFE_form_1: public ufc::form
+class poisson_form_1: public ufc::form
 {
 public:
 
   /// Constructor
-  EAFE_form_1() : ufc::form()
+  poisson_form_1() : ufc::form()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~EAFE_form_1()
+  virtual ~poisson_form_1()
   {
     // Do nothing
   }
@@ -2243,12 +1956,12 @@ public:
     {
     case 0:
       {
-        return new EAFE_finite_element_0();
+        return new poisson_finite_element_0();
         break;
       }
     case 1:
       {
-        return new EAFE_finite_element_0();
+        return new poisson_finite_element_0();
         break;
       }
     }
@@ -2263,12 +1976,12 @@ public:
     {
     case 0:
       {
-        return new EAFE_dofmap_0();
+        return new poisson_dofmap_0();
         break;
       }
     case 1:
       {
-        return new EAFE_dofmap_0();
+        return new poisson_dofmap_0();
         break;
       }
     }
@@ -2373,7 +2086,7 @@ public:
   /// Create a new cell integral on everywhere else
   virtual ufc::cell_integral* create_default_cell_integral() const
   {
-    return new EAFE_cell_integral_1_otherwise();
+    return new poisson_cell_integral_1_otherwise();
   }
 
   /// Create a new exterior facet integral on everywhere else
@@ -2418,149 +2131,8 @@ public:
 #include <dolfin/adaptivity/ErrorControl.h>
 #include <dolfin/adaptivity/GoalFunctional.h>
 
-namespace EAFE
+namespace Poisson
 {
-
-class CoefficientSpace_alpha: public dolfin::FunctionSpace
-{
-public:
-
-  //--- Constructors for standard function space, 2 different versions ---
-
-  // Create standard function space (reference version)
-  CoefficientSpace_alpha(const dolfin::Mesh& mesh):
-    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh)))
-  {
-    // Do nothing
-  }
-
-  // Create standard function space (shared pointer version)
-  CoefficientSpace_alpha(std::shared_ptr<const dolfin::Mesh> mesh):
-    dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh)))
-  {
-    // Do nothing
-  }
-
-  //--- Constructors for constrained function space, 2 different versions ---
-
-  // Create standard function space (reference version)
-  CoefficientSpace_alpha(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
-    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh,
-                              dolfin::reference_to_no_delete_pointer(constrained_domain))))
-  {
-    // Do nothing
-  }
-
-  // Create standard function space (shared pointer version)
-  CoefficientSpace_alpha(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
-    dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh, constrained_domain)))
-  {
-    // Do nothing
-  }
-
-};
-
-class CoefficientSpace_beta: public dolfin::FunctionSpace
-{
-public:
-
-  //--- Constructors for standard function space, 2 different versions ---
-
-  // Create standard function space (reference version)
-  CoefficientSpace_beta(const dolfin::Mesh& mesh):
-    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh)))
-  {
-    // Do nothing
-  }
-
-  // Create standard function space (shared pointer version)
-  CoefficientSpace_beta(std::shared_ptr<const dolfin::Mesh> mesh):
-    dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh)))
-  {
-    // Do nothing
-  }
-
-  //--- Constructors for constrained function space, 2 different versions ---
-
-  // Create standard function space (reference version)
-  CoefficientSpace_beta(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
-    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh,
-                              dolfin::reference_to_no_delete_pointer(constrained_domain))))
-  {
-    // Do nothing
-  }
-
-  // Create standard function space (shared pointer version)
-  CoefficientSpace_beta(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
-    dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh, constrained_domain)))
-  {
-    // Do nothing
-  }
-
-};
-
-class CoefficientSpace_eta: public dolfin::FunctionSpace
-{
-public:
-
-  //--- Constructors for standard function space, 2 different versions ---
-
-  // Create standard function space (reference version)
-  CoefficientSpace_eta(const dolfin::Mesh& mesh):
-    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh)))
-  {
-    // Do nothing
-  }
-
-  // Create standard function space (shared pointer version)
-  CoefficientSpace_eta(std::shared_ptr<const dolfin::Mesh> mesh):
-    dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh)))
-  {
-    // Do nothing
-  }
-
-  //--- Constructors for constrained function space, 2 different versions ---
-
-  // Create standard function space (reference version)
-  CoefficientSpace_eta(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
-    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh,
-                              dolfin::reference_to_no_delete_pointer(constrained_domain))))
-  {
-    // Do nothing
-  }
-
-  // Create standard function space (shared pointer version)
-  CoefficientSpace_eta(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
-    dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh, constrained_domain)))
-  {
-    // Do nothing
-  }
-
-};
 
 class CoefficientSpace_f: public dolfin::FunctionSpace
 {
@@ -2571,8 +2143,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_f(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new poisson_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new poisson_dofmap_0()), mesh)))
   {
     // Do nothing
   }
@@ -2580,8 +2152,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_f(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new poisson_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new poisson_dofmap_0()), *mesh)))
   {
     // Do nothing
   }
@@ -2591,8 +2163,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_f(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new poisson_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new poisson_dofmap_0()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -2601,55 +2173,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_f(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh, constrained_domain)))
-  {
-    // Do nothing
-  }
-
-};
-
-class CoefficientSpace_gamma: public dolfin::FunctionSpace
-{
-public:
-
-  //--- Constructors for standard function space, 2 different versions ---
-
-  // Create standard function space (reference version)
-  CoefficientSpace_gamma(const dolfin::Mesh& mesh):
-    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh)))
-  {
-    // Do nothing
-  }
-
-  // Create standard function space (shared pointer version)
-  CoefficientSpace_gamma(std::shared_ptr<const dolfin::Mesh> mesh):
-    dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh)))
-  {
-    // Do nothing
-  }
-
-  //--- Constructors for constrained function space, 2 different versions ---
-
-  // Create standard function space (reference version)
-  CoefficientSpace_gamma(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
-    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh,
-                              dolfin::reference_to_no_delete_pointer(constrained_domain))))
-  {
-    // Do nothing
-  }
-
-  // Create standard function space (shared pointer version)
-  CoefficientSpace_gamma(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
-    dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new poisson_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new poisson_dofmap_0()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -2665,8 +2190,8 @@ public:
   // Create standard function space (reference version)
   Form_a_FunctionSpace_0(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new poisson_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new poisson_dofmap_0()), mesh)))
   {
     // Do nothing
   }
@@ -2674,8 +2199,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_a_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new poisson_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new poisson_dofmap_0()), *mesh)))
   {
     // Do nothing
   }
@@ -2685,8 +2210,8 @@ public:
   // Create standard function space (reference version)
   Form_a_FunctionSpace_0(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new poisson_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new poisson_dofmap_0()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -2695,8 +2220,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_a_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new poisson_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new poisson_dofmap_0()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -2712,8 +2237,8 @@ public:
   // Create standard function space (reference version)
   Form_a_FunctionSpace_1(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new poisson_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new poisson_dofmap_0()), mesh)))
   {
     // Do nothing
   }
@@ -2721,8 +2246,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_a_FunctionSpace_1(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new poisson_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new poisson_dofmap_0()), *mesh)))
   {
     // Do nothing
   }
@@ -2732,8 +2257,8 @@ public:
   // Create standard function space (reference version)
   Form_a_FunctionSpace_1(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new poisson_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new poisson_dofmap_0()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -2742,21 +2267,13 @@ public:
   // Create standard function space (shared pointer version)
   Form_a_FunctionSpace_1(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new poisson_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new poisson_dofmap_0()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
 
 };
-
-typedef CoefficientSpace_eta Form_a_FunctionSpace_2;
-
-typedef CoefficientSpace_alpha Form_a_FunctionSpace_3;
-
-typedef CoefficientSpace_beta Form_a_FunctionSpace_4;
-
-typedef CoefficientSpace_gamma Form_a_FunctionSpace_5;
 
 class Form_a: public dolfin::Form
 {
@@ -2764,82 +2281,22 @@ public:
 
   // Constructor
   Form_a(const dolfin::FunctionSpace& V1, const dolfin::FunctionSpace& V0):
-    dolfin::Form(2, 4), eta(*this, 0), alpha(*this, 1), beta(*this, 2), gamma(*this, 3)
+    dolfin::Form(2, 0)
   {
     _function_spaces[0] = reference_to_no_delete_pointer(V0);
     _function_spaces[1] = reference_to_no_delete_pointer(V1);
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_0());
-  }
-
-  // Constructor
-  Form_a(const dolfin::FunctionSpace& V1, const dolfin::FunctionSpace& V0, const dolfin::GenericFunction& eta, const dolfin::GenericFunction& alpha, const dolfin::GenericFunction& beta, const dolfin::GenericFunction& gamma):
-    dolfin::Form(2, 4), eta(*this, 0), alpha(*this, 1), beta(*this, 2), gamma(*this, 3)
-  {
-    _function_spaces[0] = reference_to_no_delete_pointer(V0);
-    _function_spaces[1] = reference_to_no_delete_pointer(V1);
-
-    this->eta = eta;
-    this->alpha = alpha;
-    this->beta = beta;
-    this->gamma = gamma;
-
-    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_0());
-  }
-
-  // Constructor
-  Form_a(const dolfin::FunctionSpace& V1, const dolfin::FunctionSpace& V0, std::shared_ptr<const dolfin::GenericFunction> eta, std::shared_ptr<const dolfin::GenericFunction> alpha, std::shared_ptr<const dolfin::GenericFunction> beta, std::shared_ptr<const dolfin::GenericFunction> gamma):
-    dolfin::Form(2, 4), eta(*this, 0), alpha(*this, 1), beta(*this, 2), gamma(*this, 3)
-  {
-    _function_spaces[0] = reference_to_no_delete_pointer(V0);
-    _function_spaces[1] = reference_to_no_delete_pointer(V1);
-
-    this->eta = *eta;
-    this->alpha = *alpha;
-    this->beta = *beta;
-    this->gamma = *gamma;
-
-    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new poisson_form_0());
   }
 
   // Constructor
   Form_a(std::shared_ptr<const dolfin::FunctionSpace> V1, std::shared_ptr<const dolfin::FunctionSpace> V0):
-    dolfin::Form(2, 4), eta(*this, 0), alpha(*this, 1), beta(*this, 2), gamma(*this, 3)
+    dolfin::Form(2, 0)
   {
     _function_spaces[0] = V0;
     _function_spaces[1] = V1;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_0());
-  }
-
-  // Constructor
-  Form_a(std::shared_ptr<const dolfin::FunctionSpace> V1, std::shared_ptr<const dolfin::FunctionSpace> V0, const dolfin::GenericFunction& eta, const dolfin::GenericFunction& alpha, const dolfin::GenericFunction& beta, const dolfin::GenericFunction& gamma):
-    dolfin::Form(2, 4), eta(*this, 0), alpha(*this, 1), beta(*this, 2), gamma(*this, 3)
-  {
-    _function_spaces[0] = V0;
-    _function_spaces[1] = V1;
-
-    this->eta = eta;
-    this->alpha = alpha;
-    this->beta = beta;
-    this->gamma = gamma;
-
-    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_0());
-  }
-
-  // Constructor
-  Form_a(std::shared_ptr<const dolfin::FunctionSpace> V1, std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> eta, std::shared_ptr<const dolfin::GenericFunction> alpha, std::shared_ptr<const dolfin::GenericFunction> beta, std::shared_ptr<const dolfin::GenericFunction> gamma):
-    dolfin::Form(2, 4), eta(*this, 0), alpha(*this, 1), beta(*this, 2), gamma(*this, 3)
-  {
-    _function_spaces[0] = V0;
-    _function_spaces[1] = V1;
-
-    this->eta = *eta;
-    this->alpha = *alpha;
-    this->beta = *beta;
-    this->gamma = *gamma;
-
-    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new poisson_form_0());
   }
 
   // Destructor
@@ -2849,55 +2306,28 @@ public:
   /// Return the number of the coefficient with this name
   virtual std::size_t coefficient_number(const std::string& name) const
   {
-    if (name == "eta")
-      return 0;
-    else if (name == "alpha")
-      return 1;
-    else if (name == "beta")
-      return 2;
-    else if (name == "gamma")
-      return 3;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
-                         "Invalid coefficient");
+                         "There are no coefficients");
     return 0;
   }
 
   /// Return the name of the coefficient with this number
   virtual std::string coefficient_name(std::size_t i) const
   {
-    switch (i)
-    {
-    case 0:
-      return "eta";
-    case 1:
-      return "alpha";
-    case 2:
-      return "beta";
-    case 3:
-      return "gamma";
-    }
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
-                         "Invalid coefficient");
+                         "There are no coefficients");
     return "unnamed";
   }
 
   // Typedefs
   typedef Form_a_FunctionSpace_0 TestSpace;
   typedef Form_a_FunctionSpace_1 TrialSpace;
-  typedef Form_a_FunctionSpace_2 CoefficientSpace_eta;
-  typedef Form_a_FunctionSpace_3 CoefficientSpace_alpha;
-  typedef Form_a_FunctionSpace_4 CoefficientSpace_beta;
-  typedef Form_a_FunctionSpace_5 CoefficientSpace_gamma;
 
   // Coefficients
-  dolfin::CoefficientAssigner eta;
-  dolfin::CoefficientAssigner alpha;
-  dolfin::CoefficientAssigner beta;
-  dolfin::CoefficientAssigner gamma;
 };
 
 class Form_L_FunctionSpace_0: public dolfin::FunctionSpace
@@ -2909,8 +2339,8 @@ public:
   // Create standard function space (reference version)
   Form_L_FunctionSpace_0(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new poisson_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new poisson_dofmap_0()), mesh)))
   {
     // Do nothing
   }
@@ -2918,8 +2348,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_L_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new poisson_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new poisson_dofmap_0()), *mesh)))
   {
     // Do nothing
   }
@@ -2929,8 +2359,8 @@ public:
   // Create standard function space (reference version)
   Form_L_FunctionSpace_0(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new poisson_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new poisson_dofmap_0()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -2939,8 +2369,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_L_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new EAFE_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new EAFE_dofmap_0()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new poisson_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new poisson_dofmap_0()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -2959,7 +2389,7 @@ public:
   {
     _function_spaces[0] = reference_to_no_delete_pointer(V0);
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_1());
+    _ufc_form = std::shared_ptr<const ufc::form>(new poisson_form_1());
   }
 
   // Constructor
@@ -2970,7 +2400,7 @@ public:
 
     this->f = f;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_1());
+    _ufc_form = std::shared_ptr<const ufc::form>(new poisson_form_1());
   }
 
   // Constructor
@@ -2981,7 +2411,7 @@ public:
 
     this->f = *f;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_1());
+    _ufc_form = std::shared_ptr<const ufc::form>(new poisson_form_1());
   }
 
   // Constructor
@@ -2990,7 +2420,7 @@ public:
   {
     _function_spaces[0] = V0;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_1());
+    _ufc_form = std::shared_ptr<const ufc::form>(new poisson_form_1());
   }
 
   // Constructor
@@ -3001,7 +2431,7 @@ public:
 
     this->f = f;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_1());
+    _ufc_form = std::shared_ptr<const ufc::form>(new poisson_form_1());
   }
 
   // Constructor
@@ -3012,7 +2442,7 @@ public:
 
     this->f = *f;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new EAFE_form_1());
+    _ufc_form = std::shared_ptr<const ufc::form>(new poisson_form_1());
   }
 
   // Destructor
