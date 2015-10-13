@@ -28,7 +28,7 @@ class Advection : public Expression
   void eval(Array<double>& values, const Array<double>& x) const
   {
     double x0 = x[0];
-    values[0] = 1.0e+8*x0;
+    values[0] = 1.0e+0*x0;
   }
 };
 
@@ -70,13 +70,13 @@ int main()
 
   // Define analytic expressions
   printf("Define analytic expressions\n"); fflush(stdout);
-  dolfin::Constant alpha(1.0e-8);
+  dolfin::Constant alpha(1.0e-0);
   
   Advection betaExpression;
   dolfin::Function beta(CG);
   beta.interpolate(betaExpression);
 
-  dolfin::Constant gamma(0.0);
+  dolfin::Constant gamma(1.0);
   dolfin::Constant eta(0.0);
   dolfin::Constant f(1.0);
 

@@ -1657,7 +1657,7 @@ public:
     G[4] = det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
     G[5] = det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
 
-    // Compute Poisson matrix
+    /// Compute Poisson matrix
     // Compute geometry tensor
     const double G0_0_0 = det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
     const double G0_0_1 = det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
@@ -1668,8 +1668,6 @@ public:
     const double G0_2_0 = det*(K[6]*K[0] + K[7]*K[1] + K[8]*K[2]);
     const double G0_2_1 = det*(K[6]*K[3] + K[7]*K[4] + K[8]*K[5]);
     const double G0_2_2 = det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    
-    // Compute element tensor
     A[0] = 0.166666666666667*G0_0_0 + 0.166666666666667*G0_0_1 + 0.166666666666667*G0_0_2 + 0.166666666666667*G0_1_0 + 0.166666666666667*G0_1_1 + 0.166666666666667*G0_1_2 + 0.166666666666667*G0_2_0 + 0.166666666666667*G0_2_1 + 0.166666666666667*G0_2_2;
     A[1] = -0.166666666666667*G0_0_0 - 0.166666666666667*G0_1_0 - 0.166666666666667*G0_2_0;
     A[2] = -0.166666666666667*G0_0_1 - 0.166666666666667*G0_1_1 - 0.166666666666667*G0_2_1;
@@ -1687,26 +1685,22 @@ public:
     A[14] = 0.166666666666667*G0_2_1;
     A[15] = 0.166666666666667*G0_2_2;
 
-    /// Diffusion term (continued): create EAFE-weights for matrix
-    // Replace this entire double loop with: EAFE loop
+    /// Compute EAFE-weights for matrix
     for (unsigned int r = 0; r < 4; r++)
     {
       for (unsigned int s = 0; s < 4; s++)
       {
-        /// on edge E = < x_r , x_s >
-        double alpha_E = 0.5*(w[1][r]+w[1][s]);
-        double eta_r = w[0][r];
-        double eta_s = w[0][s];
-        alpha_E *= (std::fabs(eta_s-eta_r)<DOLFIN_EPS)? std::exp(eta_r)
-          : (eta_s-eta_r)/(std::exp(-eta_s)-std::exp(-eta_r));
+        // Compute harmonic average on edge E = < x_r , x_s >
+        double fermi_r = w[0][r] - w[2][r];
+        double fermi_s = w[0][s] - w[2][s];
+        double d_eafe = fermi_s-fermi_r;
 
-        double beta_r = w[2][r];
-        double beta_s = w[2][s];
-        double d_eafe = (beta_s-beta_r)/alpha_E;
-        double bernoulli = (std::fabs(d_eafe)<DOLFIN_EPS)? 1.0 - 0.5*d_eafe
+        double alpha_E = 0.5*(w[1][r]+w[1][s])*std::exp(fermi_s);
+        alpha_E *= (std::fabs(d_eafe)<DOLFIN_EPS)? 1.0 - 0.5*d_eafe
           :  d_eafe / (std::exp(d_eafe)-1.0);
 
-        bern[r*4 + s] = (r==s)? 0.0 : alpha_E*bernoulli;
+        double beta_s = w[2][s];
+        bern[r*4 + s] = (r==s)? 0.0 : alpha_E * std::exp(beta_s);
       } // end loop over 's'
     } // end loop over 'r'
 
@@ -1732,117 +1726,22 @@ public:
       // Coefficient declarations.
       double F0 = 0.0;
       double F1 = 0.0;
-      double F2 = 0.0;
-      double F3 = 0.0;
-      double F4 = 0.0;
-      double F5 = 0.0;
-      double F6 = 0.0;
-      
-      /*
-      /// Evaluate grad(beta)
-      // Total number of operations to compute function values = 12
-      for (unsigned int r = 0; r < 2; r++)
-      {
-        F2 += FE0_D001[ip][r]*w[2][nzc2[r]];  // evaluate grad(beta)
-        F3 += FE0_D001[ip][r]*w[2][nzc1[r]];  // evaluate grad(beta)
-        F4 += FE0_D001[ip][r]*w[2][nzc0[r]];  // evaluate grad(beta)
-      } // end loop over 'r'
-      */
 
       // Total number of operations to compute function values = 24
       for (unsigned int r = 0; r < 4; r++)
       {
         F0 += FE0[ip][r]*w[3][r];   // evaluate gamma
         F1 += FE0[ip][r]*w[0][r];   // evaluate eta
-        F5 += FE0[ip][r]*w[1][r];   // evaluate alpha
-        F6 += FE0[ip][r]*w[2][r];   // evaluate beta
       } // end loop over 'r'
-      
-      /// Are I[0:5] necessary???
-      // Number of operations to compute ip constants: 10
-      double I[10];
-      // Number of operations: 1
-      I[0] = G[0]*W24[ip];  // Poissonify from F5*G[0]*W24[ip]*std::exp(F1);
-      
-      // Number of operations: 1
-      I[1] = G[1]*W24[ip];  // Poissonify from F5*G[1]*W24[ip]*std::exp(F1);
-      
-      // Number of operations: 1
-      I[2] = G[2]*W24[ip];  // Poissonify from F5*G[2]*W24[ip]*std::exp(F1);
-      
-      // Number of operations: 1
-      I[3] = G[3]*W24[ip];  // Poissonify from F5*G[3]*W24[ip]*std::exp(F1);
-      
-      // Number of operations: 1
-      I[4] = G[4]*W24[ip];  // Poissonify from F5*G[4]*W24[ip]*std::exp(F1);
-      
-      // Number of operations: 1
-      I[5] = G[5]*W24[ip];  // Poissonify from F5*G[5]*W24[ip]*std::exp(F1);
-      
-      /*
-      /// Precompute for inner(grad(beta)*u,grad(v))*dx
-      // Number of operations: 9
-      I[6] = F5*W24[ip]*std::exp(F1)*(F2*G[2] + F3*G[1] + F4*G[0]); // set to 0
-      
-      // Number of operations: 9
-      I[7] = F5*W24[ip]*std::exp(F1)*(F2*G[4] + F3*G[3] + F4*G[1]); // set to 0
-      
-      // Number of operations: 9
-      I[8] = F5*W24[ip]*std::exp(F1)*(F2*G[5] + F3*G[4] + F4*G[2]); // set to 0
-      */
-      
+            
       // Number of operations: 4
-      I[9] = F0*W24[ip]*det*std::exp(F1);
-      
-      /// Construct local Poisson stiffness matrix
-      // Number of operations for primary indices: 108
-      // for (unsigned int j = 0; j < 4; j++)
-      // {
-      //   for (unsigned int k = 0; k < 2; k++)
-      //   {
-      //     // Number of operations to compute entry: 3
-      //     A_local[nzc0[j]*4 + nzc0[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[0];
-      //     // Number of operations to compute entry: 3
-      //     A_local[nzc0[j]*4 + nzc1[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[1];
-      //     // Number of operations to compute entry: 3
-      //     A_local[nzc0[j]*4 + nzc2[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[2];
-      //     // Number of operations to compute entry: 3
-      //     A_local[nzc1[j]*4 + nzc0[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[1];
-      //     // Number of operations to compute entry: 3
-      //     A_local[nzc1[j]*4 + nzc1[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[3];
-      //     // Number of operations to compute entry: 3
-      //     A_local[nzc1[j]*4 + nzc2[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[4];
-      //     // Number of operations to compute entry: 3
-      //     A_local[nzc2[j]*4 + nzc0[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[2];
-      //     // Number of operations to compute entry: 3
-      //     A_local[nzc2[j]*4 + nzc1[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[4];
-      //     // Number of operations to compute entry: 3
-      //     A_local[nzc2[j]*4 + nzc2[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[5];
-      //   } // end loop over 'k'
-      // } // end loop over 'j'
-
-      /*
-      /// Advection term: delete by setting eafe_FE0[ip][k] = 0
-      // Number of operations for primary indices: 72
-      for (unsigned int j = 0; j < 2; j++)
-      {
-        for (unsigned int k = 0; k < 4; k++)
-        {
-          // Number of operations to compute entry: 3
-          A[nzc0[j]*4 + k] += FE0[ip][k]*FE0_D001[ip][j]*I[6];
-          // Number of operations to compute entry: 3
-          A[nzc1[j]*4 + k] += FE0[ip][k]*FE0_D001[ip][j]*I[7];
-          // Number of operations to compute entry: 3
-          A[nzc2[j]*4 + k] += FE0[ip][k]*FE0_D001[ip][j]*I[8];
-        } // end loop over 'k'
-      } // end loop over 'j'
-      */
+      double reaction = F0*W24[ip]*det*std::exp(F1);
       
       /// Reaction term: mass lumping
       // Number of operations for primary indices: 8
       for (unsigned int j = 0; j < 4; j++)
       {
-        A[j*4 + j] += FE0[ip][j]*I[9];
+        A[j*4 + j] += FE0[ip][j]*reaction;
       } // end loop over 'j'
     } // end loop over 'ip'
   }
