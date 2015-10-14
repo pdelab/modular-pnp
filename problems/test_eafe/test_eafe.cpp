@@ -49,6 +49,14 @@ private:
   double A, E, G, BX, BY, BZ;
 };
 
+class Solution : public Expression
+{
+  void eval(Array<double>& values, const Array<double>& x) const
+  {
+    values[0] = x[0]*x[1]*(x[0]-1.0)*(x[1]-1.0);
+  }
+};
+
 // Sub domain for Dirichlet boundary condition
 class DirichletBoundary : public SubDomain
 {
@@ -243,10 +251,20 @@ int main()
     f.interpolate(unity);
   }
   // Save solution in VTK format
-  printf("\tSave RHS in VTK format\n\n"); fflush(stdout);
+  printf("\tSave RHS in VTK format\n"); fflush(stdout);
   dolfin::File fileRHS("./problems/test_eafe/output/RHS.pvd");
   fileRHS << f;
 
+  // Save analytic solution in VTK format
+  if (test_problem>0.0) {
+    printf("\tSave true solution in VTK format\n");
+    Solution trueSolution;
+    dolfin::Function solution(CG);
+    solution.interpolate(trueSolution);
+    dolfin::File fileSolution("./problems/test_eafe/output/solution.pvd");
+    fileSolution << solution;
+  }
+  printf("\n"); fflush(stdout);
 
 
 
