@@ -12,14 +12,6 @@
 #include "EAFE.h"
 using namespace dolfin;
 
-// class Advection : public Expression
-// {
-//   void eval(Array<double>& values, const Array<double>& x) const
-//   {
-//     values[0] = 1.0e+0*x[0] + 1.0e+0*x[1] + 1.0e+0*x[2];
-//   }
-// };
-
 class Advection : public Expression
 {
 public:
@@ -202,10 +194,18 @@ int main()
   a.eta = eta;
   L.f = f;
 
-  // Compute solution
-  printf("\tCompute solution\n\t"); fflush(stdout);
+  // Compute solution via linear solver
+  printf("\tCompute solution\n"); fflush(stdout);
+  dolfin::EigenMatrix A;
+  dolfin::Vector b; 
+  dolfin::Vector u_vector;
+  assemble(A,a); bc.apply(A); A.compress();
+  assemble(b,L); bc.apply(b);
+  solve(A, u_vector, b, "bicgstab");
+
+  // convert to Function
   dolfin::Function u(CG);
-  solve(a == L, u, bc);
+  *(u.vector()) = u_vector;
 
   // Save solution in VTK format
   printf("\tSave solution in VTK format\n"); fflush(stdout);
@@ -224,9 +224,15 @@ int main()
   a_eafe.eta = eta;
 
   // Compute solution
-  printf("\tCompute solution\n\t"); fflush(stdout);
+  printf("\tCompute solution\n"); fflush(stdout);
+  dolfin::EigenMatrix A_eafe;
+  dolfin::Vector u_eafe_vector;
+  assemble(A_eafe,a_eafe); bc.apply(A_eafe); A_eafe.compress();
+  solve(A_eafe, u_eafe_vector, b, "bicgstab");
+
+  // convert to Function
   dolfin::Function u_eafe(CG);
-  solve(a_eafe == L, u_eafe, bc);
+  *(u_eafe.vector()) = u_eafe_vector;
 
   // Save solution in VTK format
   printf("\tSave solution in VTK format\n"); fflush(stdout);
@@ -237,12 +243,7 @@ int main()
 
   /// Print stiffness matrices
   if (print_matrices) {
-    dolfin::EigenMatrix A; 
-    assemble(A,a); A.compress();
     std::cout << "There are " << A.nnz() << " nonzero entries in the standard formulation\n";
-
-    dolfin::EigenMatrix A_eafe; 
-    assemble(A_eafe,a_eafe); A_eafe.compress();
     std::cout << "There are " << A_eafe.nnz() << " nonzero entries in the EAFE formulation\n\n";
 
     std::cout << "The standard stiffness matrix is:\n";  

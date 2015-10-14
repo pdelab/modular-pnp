@@ -1,6 +1,6 @@
-alpha_double = 1.0
-eta_double   = 0.0
-gamma_double = 0.0
-b_x_double   = 4.0
-b_y_double   = 0.0
-b_z_double   = 0.0
+alpha_double = 1.0e-2
+eta_double   = 0.0e+0
+gamma_double = 0.0e-0
+b_x_double   = 1.0e+2
+b_y_double   = 0.0e+0
+b_z_double   = 0.0e+0
