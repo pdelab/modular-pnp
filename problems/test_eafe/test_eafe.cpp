@@ -15,13 +15,38 @@ using namespace dolfin;
 class Advection : public Expression
 {
 public:
-    Advection(double b_x, double b_y, double b_z): Expression(),BX(b_x),BY(b_y),BZ(b_z) {}
-    void eval(Array<double>& values, const Array<double>& x) const
-    {
-        values[0] = BX*x[0] + BY*x[1] + BZ*x[2];
-    }
+  Advection(double b_x, double b_y, double b_z): Expression(),BX(b_x),BY(b_y),BZ(b_z) {}
+  void eval(Array<double>& values, const Array<double>& x) const
+  {
+   values[0] = BX*x[0] + BY*x[1] + BZ*x[2];
+  }
 private:
-    double BX, BY, BZ;
+  double BX, BY, BZ;
+};
+
+class testRHS : public Expression
+{
+public:
+  testRHS(double alpha, double eta, double gamma, double b_x, double b_y, double b_z): Expression(),A(alpha),E(eta),G(gamma),BX(b_x),BY(b_y),BZ(b_z) {}
+  void eval(Array<double>& values, const Array<double>& x) const
+  {
+    // u = x*y*(x-1)*(y-1)
+    // u_x = y*(y-1)*(2*x-1), u_y = x*(x-1)*(2*y-1), u_z = 0
+    // u_xx = 2*y*(y-1), u_yy = 2*x*(x-1), u_zz = 0
+
+    // diffusion = -alpha*exp(eta)*(u_xx + u_yy + u_zz)
+    double diffusion = -2.0*A*std::exp(E)*( x[1]*(x[1]-1.0) + x[0]*(x[0]-1.0) );
+    
+    // advection = -alpha*exp(eta)*(b_x*u_x + b_y*u_y + b_z*u_z)
+    double advection = -A*std::exp(E)*( BX*x[1]*(x[1]-1.0)*(2.0*x[0]-1.0) + BY*x[0]*(x[0]-1.0)*(2.0*x[1]-1.0) );
+
+    // reaction = gamma*exp(eta)*u
+    double reaction = G*std::exp(E)*x[0]*x[1]*(x[0]-1.0)*(x[1]-1.0);
+
+    values[0] = diffusion + advection + reaction;
+  }
+private:
+  double A, E, G, BX, BY, BZ;
 };
 
 // Sub domain for Dirichlet boundary condition
@@ -42,13 +67,15 @@ int main()
 {
   // state problem
   printf("Solving the linear PDE:\n");
-  printf("\t-div( alpha*exp(eta)*( grad(u) + <b_x,b_y,b_z>*u ) ) + gamma*exp(eta)u = 1\n");
+  printf("\t-div( alpha*exp(eta)*( grad(u) + <b_x,b_y,b_z>*u ) ) + gamma*exp(eta)u = f\n");
   printf("\n"); fflush(stdout);
 
   // read in coefficients
   char filenm[] = "./problems/test_eafe/coefficients.dat";
   char buffer[100];
   int val;
+  int mesh_size;
+  double test_problem;
   double alpha_double, eta_double, gamma_double, b_x_double, b_y_double, b_z_double;
   FILE *fp = fopen(filenm,"r");
   if (fp==NULL) {
@@ -56,8 +83,9 @@ int main()
   }
   bool state = true;
   while ( state ) {
-    double  dbuff;
-    char   *fgetsPtr;
+    int ibuff;
+    double dbuff;
+    char *fgetsPtr;
     
     val = fscanf(fp,"%s",buffer);
     if (val==EOF) break;
@@ -68,7 +96,29 @@ int main()
     }
     
     // match keyword and scan for value
-    if (strcmp(buffer,"alpha_double")==0) {
+    if (strcmp(buffer,"mesh_size")==0) {
+      val = fscanf(fp,"%s",buffer);
+      if (val!=1 || strcmp(buffer,"=")!=0) {
+          state = false; break;
+      }
+      val = fscanf(fp,"%d",&ibuff);
+      if (val!=1) { state = false; break; }
+      mesh_size = ibuff;
+      fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+    }
+
+    else if (strcmp(buffer,"test_problem")==0) {
+      val = fscanf(fp,"%s",buffer);
+      if (val!=1 || strcmp(buffer,"=")!=0) {
+          state = false; break;
+      }
+      val = fscanf(fp,"%lf",&dbuff);
+      if (val!=1) { state = false; break; }
+      test_problem = dbuff;
+      fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+    }
+
+    else if (strcmp(buffer,"alpha_double")==0) {
       val = fscanf(fp,"%s",buffer);
       if (val!=1 || strcmp(buffer,"=")!=0) {
           state = false; break;
@@ -141,6 +191,10 @@ int main()
   }
   fclose(fp);
 
+  if (test_problem>0.0)
+    printf("Solving the test problem with u = x*y*(x-1)*(y-1)\n");
+  else
+    printf("Solving the problem with f = 1.\n");
   printf("Coefficients read in are:\n");
   printf("\talpha: \t%e\n",alpha_double);
   printf("\teta:   \t%e\n",eta_double);
@@ -156,8 +210,7 @@ int main()
   parameters["allow_extrapolation"] = true;
 
   // Create mesh and function space
-  printf("Create mesh\n"); fflush(stdout);
-  unsigned int mesh_size = 10;
+  printf("Create mesh %d x %d x %d\n",mesh_size,mesh_size,mesh_size); fflush(stdout);
   bool print_matrices = (mesh_size<5)? true : false;
   dolfin::UnitCubeMesh mesh(mesh_size, mesh_size, mesh_size);
   Convection::FunctionSpace CG(mesh);
@@ -178,7 +231,22 @@ int main()
 
   dolfin::Constant gamma(gamma_double);
   dolfin::Constant eta(eta_double);
-  dolfin::Constant f(1.0);
+
+  // set RHS
+  dolfin::Function f(CG);
+  if (test_problem>0.0) {
+    testRHS f_rhs(alpha_double,eta_double,gamma_double,b_x_double,b_y_double,b_z_double);
+    f.interpolate(f_rhs);
+  }
+  else {
+    dolfin::Constant unity(1.0);
+    f.interpolate(unity);
+  }
+  // Save solution in VTK format
+  printf("\tSave RHS in VTK format\n\n"); fflush(stdout);
+  dolfin::File fileRHS("./problems/test_eafe/output/RHS.pvd");
+  fileRHS << f;
+
 
 
 
@@ -208,7 +276,7 @@ int main()
   *(u.vector()) = u_vector;
 
   // Save solution in VTK format
-  printf("\tSave solution in VTK format\n"); fflush(stdout);
+  printf("\tSave solution in VTK format\n\n"); fflush(stdout);
   dolfin::File file("./problems/test_eafe/output/Convection.pvd");
   file << u;
 
@@ -217,6 +285,7 @@ int main()
   /// EAFE convection problem
   printf("Solve convection problem using EAFE formulation\n"); fflush(stdout);
   // Define variational forms
+  printf("\tDefine variational forms\n"); fflush(stdout);
   EAFE::BilinearForm a_eafe(CG,CG);
   a_eafe.alpha = alpha;
   a_eafe.beta = beta;
@@ -235,7 +304,7 @@ int main()
   *(u_eafe.vector()) = u_eafe_vector;
 
   // Save solution in VTK format
-  printf("\tSave solution in VTK format\n"); fflush(stdout);
+  printf("\tSave solution in VTK format\n\n"); fflush(stdout);
   dolfin::File file_eafe("./problems/test_eafe/output/EAFEConvection.pvd");
   file_eafe << u_eafe;
 

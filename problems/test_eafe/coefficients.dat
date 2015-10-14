@@ -1,6 +1,9 @@
+test_problem = +1.0    % +1 for true, -1 for false
+mesh_size    = 15      % make a mesh (mesh_size x mesh_size x mesh_size)
+
 alpha_double = 1.0e-2
 eta_double   = 0.0e+0
-gamma_double = 0.0e-0
+gamma_double = 1.0e-0
 b_x_double   = 1.0e+2
-b_y_double   = 0.0e+0
+b_y_double   = 1.0e+2
 b_z_double   = 0.0e+0
