@@ -18,7 +18,17 @@ XBoundaries::XBoundaries(double _Lx)
 // Return 1 if on the boundaries x=-Lx or x=Lx, 0 otherwise
 bool XBoundaries::inside(const Array<double>& x, bool on_boundary) const
 {
-  return on_boundary && (x[0] < -Lx+DOLFIN_EPS || x[0] > Lx-DOLFIN_EPS); //(is that ok ?)
+  return on_boundary && (x[0] < -Lx+5*DOLFIN_EPS or x[0] > Lx-5*DOLFIN_EPS); //(is that ok ?)
+}
+
+YBoundaries::YBoundaries(double _Ly)
+{
+  Ly=_Ly;
+}
+// Return 1 if on the boundaries x=-Lx or x=Lx, 0 otherwise
+bool YBoundaries::inside(const Array<double>& x, bool on_boundary) const
+{
+  return on_boundary && (x[2] < -Ly+5*DOLFIN_EPS or x[1] > Ly-5*DOLFIN_EPS); //(is that ok ?)
 }
 
 ZBoundaries::ZBoundaries(double _Lz)
@@ -28,7 +38,7 @@ ZBoundaries::ZBoundaries(double _Lz)
 // Return 1 if on the boundaries z=-Lz or z=Lz, 0 otherwise
 bool ZBoundaries::inside(const Array<double>& x, bool on_boundary) const
 {
-  return ( on_boundary && (x[2] < -Lz + DOLFIN_EPS or x[2] > Lz - DOLFIN_EPS) );
+  return ( on_boundary && (x[2] < -Lz + 5*DOLFIN_EPS or x[2] > Lz - 5*DOLFIN_EPS) );
 }
 
 dielectricChannel::dielectricChannel(double _Lz)
@@ -79,14 +89,4 @@ void Voltage::eval(Array<double>& values, const Array<double>& x) const
 {
   values[0]  = ext_voltage*(x[bc_direction]+bc_distance/2.0)/(bc_distance);
   values[0] -= int_voltage*(x[bc_direction]-bc_distance/2.0)/(bc_distance);
-}
-
-
-//  Dirichlet boundary condition
-DirichletBoCo::DirichletBoCo() : Expression(3) {}
-void DirichletBoCo::eval(Array<double>& values, const Array<double>& x) const
-{
-  values[0] = 0.0;
-  values[1] = 0.0;
-  values[2] = 0.0;
 }

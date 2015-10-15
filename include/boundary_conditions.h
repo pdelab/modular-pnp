@@ -22,9 +22,16 @@
 /////////////////////////////////////////////////////////////////////////////
 
 class XBoundaries: public dolfin::SubDomain {
-double Lx;
+  double Lx;
 public:
   XBoundaries(double _Lx);
+  bool inside(const dolfin::Array<double>& x, bool on_boundary) const;
+};
+
+class YBoundaries: public dolfin::SubDomain {
+  double Ly;
+public:
+  YBoundaries(double _Ly);
   bool inside(const dolfin::Array<double>& x, bool on_boundary) const;
 };
 
@@ -69,14 +76,6 @@ public:
 private:
     double ext_voltage, int_voltage, bc_distance;
     int bc_direction;
-};
-
-//  Dirichlet boundary condition
-class DirichletBoCo: public dolfin::Expression
-{
-public:
-  DirichletBoCo() ;
-  void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const;
 };
 
 
