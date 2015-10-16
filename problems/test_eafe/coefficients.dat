@@ -1,9 +1,11 @@
-test_problem = +1.0    % +1 for true, -1 for false
-mesh_size    = 15      % make a mesh (mesh_size x mesh_size x mesh_size)
+test_problem = 0    % 0: rhs=1
+					% 1: u=x*y*(x-1)*(y-1)
+					% 2: use variable coefficients
+mesh_size    = 30   % make a mesh (mesh_size x mesh_size x mesh_size)
 
-alpha_double = 1.0e-2
+alpha_double = 1.0e-1
 eta_double   = 0.0e+0
-gamma_double = 1.0e-0
+gamma_double = 0.0e-0
 b_x_double   = 1.0e+2
 b_y_double   = 1.0e+2
 b_z_double   = 0.0e+0

@@ -49,6 +49,35 @@ private:
   double A, E, G, BX, BY, BZ;
 };
 
+// Sub domain for Dirichlet boundary condition
+class DirichletBoundary : public SubDomain
+{
+public:
+  DirichletBoundary(unsigned int test): SubDomain(),TEST(test) {}
+  bool inside(const Array<double>& x, bool on_boundary) const
+  {
+    if (TEST==2) {  // from EAFE paper
+      return on_boundary and (
+        (x[0] < 0.25+DOLFIN_EPS and x[1] < 0.00+DOLFIN_EPS)
+        or (x[0] < 0.00+DOLFIN_EPS and x[1] < 0.25+DOLFIN_EPS)
+        or (x[0] > 0.75-DOLFIN_EPS and x[1] > 1.00-DOLFIN_EPS)
+        or (x[0] > 1.00-DOLFIN_EPS and x[1] > 0.75-DOLFIN_EPS)
+      );
+    }
+    else {  // x and y boundaries
+      return on_boundary and (
+        x[0] < DOLFIN_EPS 
+        or x[0] > 1.0 - DOLFIN_EPS
+        or x[1] < DOLFIN_EPS 
+        or x[1] > 1.0 - DOLFIN_EPS
+      );
+    }
+  }
+private:
+  unsigned int TEST;
+};
+
+/*** test_problem == 1 ***/
 class Solution : public Expression
 {
   void eval(Array<double>& values, const Array<double>& x) const
@@ -57,17 +86,38 @@ class Solution : public Expression
   }
 };
 
-// Sub domain for Dirichlet boundary condition
-class DirichletBoundary : public SubDomain
+/*** test_problem == 2 ***/
+class AdvectionFromPaper : public Expression
 {
-  bool inside(const Array<double>& x, bool on_boundary) const
+public:
+  AdvectionFromPaper(double alpha, double eta): Expression(), A(alpha), E(eta) {}
+  void eval(Array<double>& values, const Array<double>& x) const
   {
-    return on_boundary and (
-      x[0] < DOLFIN_EPS 
-      or x[0] > 1.0 - DOLFIN_EPS
-      or x[1] < DOLFIN_EPS 
-      or x[1] > 1.0 - DOLFIN_EPS
-    );
+    double rho = std::sqrt(x[0]*x[0]+x[1]*x[1]);
+    if ( rho + x[0] < 0.55) {
+      values[0] = 0;
+    }
+    else if ( rho + x[0] < 0.65) {
+      values[0] = 2.0*(rho-0.55) / (A*std::exp(E));
+    }
+    else {
+      values[0] = 0.2 / (A*std::exp(E));
+    }
+  }
+private:
+  double A, E;
+};
+
+class BCFromPaper : public Expression
+{
+  void eval(Array<double>& values, const Array<double>& x) const
+  {
+    if ( x[0] < 0.5) {
+      values[0] = 0;
+    }
+    else {
+      values[0] = 2.1;
+    }
   }
 };
 
@@ -82,8 +132,7 @@ int main()
   char filenm[] = "./problems/test_eafe/coefficients.dat";
   char buffer[100];
   int val;
-  int mesh_size;
-  double test_problem;
+  int mesh_size, test_problem;
   double alpha_double, eta_double, gamma_double, b_x_double, b_y_double, b_z_double;
   FILE *fp = fopen(filenm,"r");
   if (fp==NULL) {
@@ -120,9 +169,9 @@ int main()
       if (val!=1 || strcmp(buffer,"=")!=0) {
           state = false; break;
       }
-      val = fscanf(fp,"%lf",&dbuff);
+      val = fscanf(fp,"%d",&ibuff);
       if (val!=1) { state = false; break; }
-      test_problem = dbuff;
+      test_problem = ibuff;
       fgetsPtr = fgets(buffer,500,fp); // skip rest of line
     }
 
@@ -199,8 +248,10 @@ int main()
   }
   fclose(fp);
 
-  if (test_problem>0.0)
+  if (test_problem==1)
     printf("Solving the test problem with u = x*y*(x-1)*(y-1)\n");
+  else if (test_problem==2)
+    printf("Solving the test problem from the EAFE paper\n");
   else
     printf("Solving the problem with f = 1.\n");
   printf("Coefficients read in are:\n");
@@ -225,26 +276,52 @@ int main()
 
   // Define boundary condition
   printf("Define boundary condition\n"); fflush(stdout);
-  dolfin::Constant u0(0.0);
-  DirichletBoundary boundary;
+  dolfin::Function u0(CG);
+  DirichletBoundary boundary(test_problem);
+  if (test_problem==2) {
+    BCFromPaper u0FromPaper;
+    u0.interpolate(u0FromPaper);
+  }
+  else {
+    dolfin::Constant zero(0.0);
+    u0.interpolate(zero);
+  }
   dolfin::DirichletBC bc(CG, u0, boundary);
+
+  printf("\tSave mesh in VTK format\n"); fflush(stdout);
+  dolfin::FacetFunction<std::size_t> markedMesh(mesh);
+  markedMesh.set_all(1);
+  boundary.mark(markedMesh,2);
+  dolfin::File fileMesh("./problems/test_eafe/output/mesh.pvd");
+  fileMesh << markedMesh;
+
 
   // Define analytic expressions
   printf("Define analytic expressions\n"); fflush(stdout);
   dolfin::Constant alpha(alpha_double);
   
-  Advection betaExpression(b_x_double,b_y_double,b_z_double);
   dolfin::Function beta(CG);
-  beta.interpolate(betaExpression);
+  if (test_problem==2) {
+    AdvectionFromPaper betaFromPaper(alpha_double,eta_double);
+    beta.interpolate(betaFromPaper);
+  }
+  else {
+    Advection betaExpression(b_x_double,b_y_double,b_z_double);
+    beta.interpolate(betaExpression);
+  }
 
   dolfin::Constant gamma(gamma_double);
   dolfin::Constant eta(eta_double);
 
   // set RHS
   dolfin::Function f(CG);
-  if (test_problem>0.0) {
+  if (test_problem==1) {
     testRHS f_rhs(alpha_double,eta_double,gamma_double,b_x_double,b_y_double,b_z_double);
     f.interpolate(f_rhs);
+  }
+  else if (test_problem==2) {
+    dolfin::Constant zero(0.0);
+    f.interpolate(zero);
   }
   else {
     dolfin::Constant unity(1.0);
@@ -256,7 +333,7 @@ int main()
   fileRHS << f;
 
   // Save analytic solution in VTK format
-  if (test_problem>0.0) {
+  if (test_problem==1) {
     printf("\tSave true solution in VTK format\n");
     Solution trueSolution;
     dolfin::Function solution(CG);
@@ -280,26 +357,6 @@ int main()
   a.eta = eta;
   L.f = f;
 
-  // Compute solution via linear solver
-  printf("\tCompute solution\n"); fflush(stdout);
-  dolfin::EigenMatrix A;
-  dolfin::Vector b; 
-  dolfin::Vector u_vector;
-  assemble(A,a); bc.apply(A); A.compress();
-  assemble(b,L); bc.apply(b);
-  solve(A, u_vector, b, "bicgstab");
-
-  // convert to Function
-  dolfin::Function u(CG);
-  *(u.vector()) = u_vector;
-
-  // Save solution in VTK format
-  printf("\tSave solution in VTK format\n\n"); fflush(stdout);
-  dolfin::File file("./problems/test_eafe/output/Convection.pvd");
-  file << u;
-
-
-
   /// EAFE convection problem
   printf("Solve convection problem using EAFE formulation\n"); fflush(stdout);
   // Define variational forms
@@ -309,27 +366,47 @@ int main()
   a_eafe.beta = beta;
   a_eafe.gamma = gamma;
   a_eafe.eta = eta;
+  printf("\n");
 
-  // Compute solution
-  printf("\tCompute solution\n"); fflush(stdout);
+
+  /// Solve for solutions
+  // Compute standard solution via linear solver
+  printf("Compute solutions\n"); fflush(stdout);
+  dolfin::Vector b;
+  assemble(b,L); bc.apply(b);
+
+  // Compute EAFE solution via linear solver
+  printf("\tEAFE formulation\n"); fflush(stdout);
   dolfin::EigenMatrix A_eafe;
   dolfin::Vector u_eafe_vector;
   assemble(A_eafe,a_eafe); bc.apply(A_eafe); A_eafe.compress();
   solve(A_eafe, u_eafe_vector, b, "bicgstab");
-
   // convert to Function
   dolfin::Function u_eafe(CG);
   *(u_eafe.vector()) = u_eafe_vector;
-
   // Save solution in VTK format
-  printf("\tSave solution in VTK format\n\n"); fflush(stdout);
+  printf("\tSave EAFE solution in VTK format\n"); fflush(stdout);
   dolfin::File file_eafe("./problems/test_eafe/output/EAFEConvection.pvd");
   file_eafe << u_eafe;
 
+  printf("\tStandard formulation\n"); fflush(stdout);
+  dolfin::EigenMatrix A;
+  dolfin::Vector u_vector;
+  assemble(A,a); bc.apply(A); A.compress();
+  solve(A, u_vector, b, "bicgstab");
+  // convert to Function
+  dolfin::Function u(CG);
+  *(u.vector()) = u_vector;
+  // Save solution in VTK format
+  printf("\tSave standard solution in VTK format\n"); fflush(stdout);
+  dolfin::File file("./problems/test_eafe/output/Convection.pvd");
+  file << u;
+  printf("\n");
 
 
   /// Print stiffness matrices
   if (print_matrices) {
+    printf("Printing stiffness matrices\n"); fflush(stdout);
     std::cout << "There are " << A.nnz() << " nonzero entries in the standard formulation\n";
     std::cout << "There are " << A_eafe.nnz() << " nonzero entries in the EAFE formulation\n\n";
 
