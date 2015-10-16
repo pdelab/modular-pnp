@@ -147,7 +147,21 @@ int main()
   std::string s3=EGV.str(true);
   std::cout << s3 << "\n";
 
-  assign(F.vector(),EGV.vec())
+  // Asign does not work
+  // F.assign(EGV.vec())
+
+  //  Try by hand
+  std::vector<double> values(F.vector()->local_size(), 0);
+  std::shared_ptr<const GenericDofMap> dofmap = V.dofmap();
+  for (CellIterator c(mesh); !c.end(); ++c)
+  {
+    values[(dofmap->cell_dofs(c->index()))[0]] = EGV.data()[(dofmap->cell_dofs(c->index()))[0]];
+  }
+  F.vector()->set_local(values);
+
+  std::string s4=F.vector()->str(true);
+  std::cout << "#### Function vector is\n";
+  std::cout << s4 << "\n";
 
   std::cout << "#### End of test of Copy_dvector_to_EigenVector function       #### \n";
   std::cout << "############################################################## \n";
