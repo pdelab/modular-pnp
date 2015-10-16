@@ -56,6 +56,8 @@ int main()
   UnitSquareMesh mesh(3, 3);
   Poisson::FunctionSpace V(mesh);
 
+  Function F(V);
+
   // Define boundary condition
   Constant u0(0.0);
   DirichletBoundary boundary;
@@ -128,6 +130,27 @@ int main()
 
   std::cout << "#### End of test of EigenVectorTOdVector function       #### \n";
   std::cout << "############################################################ \n";
+  std::cout << "############################################################### \n";
+  std::cout << "#### Beginning of test of Copy_dvector_to_EigenVector function  #### \n";
+  std::cout << "#### the EigenVector and the dvector should be the same    #### \n";
+
+  EigenVector EGV = Copy_dvector_to_EigenVector(&dV);
+
+  std::cout << "#### dVector vector is \n";
+  for (i=0;i< dV.row  ;i++)
+  {
+    std::cout <<dV.val[i] << "\t";
+  }
+  std::cout << "\n";
+  std::cout << "#### Eigen vector is\n";
+  std::cout << "Number of cols: \t"<< EGV.size() << "\n";
+  std::string s3=EGV.str(true);
+  std::cout << s3 << "\n";
+
+  assign(F.vector(),EGV.vec())
+
+  std::cout << "#### End of test of Copy_dvector_to_EigenVector function       #### \n";
+  std::cout << "############################################################## \n";
 
   free(bsr_A.IA);
 

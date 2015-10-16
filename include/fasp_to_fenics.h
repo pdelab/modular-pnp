@@ -27,4 +27,6 @@ dCSRmat EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A);
 
 dvector EigenVector_to_dvector(const dolfin::EigenVector* vec_A);
 
+dolfin::EigenVector Copy_dvector_to_EigenVector(const dvector* vec_b);
+
 #endif

@@ -65,10 +65,10 @@ dCSRmat EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A)
  *
  * \brief Link the dolfin::EigenVector vec_b to dvector format from FASP
  *
- * \param mat_A     EigenVector to be converted
+ * \param vec_b     EigenVector to be converted
  *
  * \return          dvector if conversion successful; otherwise error information.
- */ 
+ */
 dvector EigenVector_to_dvector(const dolfin::EigenVector* vec_b)
 {
   // check for uninitialized EigenMatrix
@@ -81,4 +81,31 @@ dvector EigenVector_to_dvector(const dolfin::EigenVector* vec_b)
   dVec_b.row = length;
   dVec_b.val = (double*) vec_b->data();
   return dVec_b;
+}
+
+/**
+ * \fn void dvector_to_EigenVector(dolfin::vector* VecSolu, const dvector* vec_b)
+ *
+ * \brief Link the dolfin::vector vec_b to dvector format from FASP
+ *
+ * \param
+ *        VecSolu  dolfin::function (output)
+ *        vec_b    dvector to be converted
+ *
+ * \return         dolinf::vector if conversion successful; otherwise error information.
+ */
+EigenVector Copy_dvector_to_EigenVector(const dvector* vec_b)
+{
+  // check for uninitialized EigenMatrix
+  int length = vec_b->row;
+  if ( length<1 ) {
+    fasp_chkerr(ERROR_INPUT_PAR, "EigenVector_to_dvector");
+  }
+  // Get the array
+  EigenVector EGVec(length);
+  double * array = EGVec.data();
+  for(std::size_t i=0; i<length; ++i) {
+      array[i] = vec_b->val[i];
+  }
+  return EGVec;
 }
