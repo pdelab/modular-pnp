@@ -29,4 +29,6 @@ dvector EigenVector_to_dvector(const dolfin::EigenVector* vec_A);
 
 dolfin::EigenVector Copy_dvector_to_EigenVector(const dvector* vec_b);
 
+void Copy_dvector_to_Function(dolfin::Function* F, const dvector* vec_b);
+
 #endif

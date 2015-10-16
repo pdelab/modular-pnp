@@ -84,9 +84,9 @@ dvector EigenVector_to_dvector(const dolfin::EigenVector* vec_b)
 }
 
 /**
- * \fn void dvector_to_EigenVector(dolfin::vector* VecSolu, const dvector* vec_b)
+ * \fn EigenVector Copy_dvector_to_EigenVector(dolfin::vector* VecSolu, const dvector* vec_b)
  *
- * \brief Link the dolfin::vector vec_b to dvector format from FASP
+ * \brief Copy the dvector vec_b to dolfing::EigenVector
  *
  * \param
  *        VecSolu  dolfin::function (output)
@@ -99,7 +99,7 @@ EigenVector Copy_dvector_to_EigenVector(const dvector* vec_b)
   // check for uninitialized EigenMatrix
   int length = vec_b->row;
   if ( length<1 ) {
-    fasp_chkerr(ERROR_INPUT_PAR, "EigenVector_to_dvector");
+    fasp_chkerr(ERROR_INPUT_PAR, "Copy_dvector_to_EigenVector");
   }
   // Get the array
   EigenVector EGVec(length);
@@ -108,4 +108,34 @@ EigenVector Copy_dvector_to_EigenVector(const dvector* vec_b)
       array[i] = vec_b->val[i];
   }
   return EGVec;
+}
+
+/**
+ * \fn void Copy_dvector_to_Function(Function* F, const dvector* vec_b)
+ *
+ * \brief Link copy to dvector vec_b to dolfin::Function.vector()
+ *
+ * \param
+ *        F        dolfin::Function*  (output)
+ *        vec_b    dvector to be converted
+ *
+ * \return         void
+ */
+void Copy_dvector_to_Function(Function* F, const dvector* vec_b)
+{
+  // check for uninitialized EigenMatrix
+  int length = vec_b->row;
+  if ( length<1 ) {
+    fasp_chkerr(ERROR_INPUT_PAR, "Copy_dvector_to_Function");
+  }
+  if (F->vector()->size() != length) {
+    fasp_chkerr(ERROR_INPUT_PAR, "Copy_dvector_to_Function");
+  }
+
+  std::vector<double> values(F->vector()->local_size(), 0);
+  for (int i=0;i<length;i++)
+  {
+    values[i]=vec_b->val[i];
+  }
+  F->vector()->set_local(values);
 }

@@ -130,9 +130,9 @@ int main()
 
   std::cout << "#### End of test of EigenVectorTOdVector function       #### \n";
   std::cout << "############################################################ \n";
-  std::cout << "############################################################### \n";
+  std::cout << "#################################################################### \n";
   std::cout << "#### Beginning of test of Copy_dvector_to_EigenVector function  #### \n";
-  std::cout << "#### the EigenVector and the dvector should be the same    #### \n";
+  std::cout << "#### the EigenVector and the dvector should be the same        #### \n";
 
   EigenVector EGV = Copy_dvector_to_EigenVector(&dV);
 
@@ -147,23 +147,27 @@ int main()
   std::string s3=EGV.str(true);
   std::cout << s3 << "\n";
 
-  // Asign does not work
-  // F.assign(EGV.vec())
+  std::cout << "#### End of test of Copy_dvector_to_EigenVector function       #### \n";
+  std::cout << "############################################################## \n";
 
-  //  Try by hand
-  std::vector<double> values(F.vector()->local_size(), 0);
-  std::shared_ptr<const GenericDofMap> dofmap = V.dofmap();
-  for (CellIterator c(mesh); !c.end(); ++c)
+  std::cout << "#################################################################### \n";
+  std::cout << "#### Beginning of test of Copy_dvector_to_Function function  #### \n";
+  std::cout << "#### the dvector and the Function.vector() should be the same        #### \n";
+
+  std::cout << "#### dVector vector is \n";
+  for (i=0;i< dV.row  ;i++)
   {
-    values[(dofmap->cell_dofs(c->index()))[0]] = EGV.data()[(dofmap->cell_dofs(c->index()))[0]];
+    std::cout <<dV.val[i] << "\t";
   }
-  F.vector()->set_local(values);
+  std::cout << "\n";
+
+  Copy_dvector_to_Function(&F, &dV);
 
   std::string s4=F.vector()->str(true);
-  std::cout << "#### Function vector is\n";
+  std::cout << "#### Function.vector() is\n";
   std::cout << s4 << "\n";
 
-  std::cout << "#### End of test of Copy_dvector_to_EigenVector function       #### \n";
+  std::cout << "#### End of test of Copy_dvector_to_Function function       #### \n";
   std::cout << "############################################################## \n";
 
   free(bsr_A.IA);
