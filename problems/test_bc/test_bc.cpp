@@ -15,30 +15,6 @@
 using namespace dolfin;
 //using namespace std;
 
-// Source term (right-hand side)
-class Source : public Expression
-{
-  void eval(Array<double>& values, const Array<double>& x) const
-  {
-    double dx = x[0] - 0.5;
-    double dy = x[1] - 0.5;
-    values[0] = 10*exp(-(dx*dx + dy*dy) / 0.02);
-    values[1] = 10*exp(-(dx*dx + dy*dy) / 0.02);
-    values[2] = 10*exp(-(dx*dx + dy*dy) / 0.02);
-  }
-};
-
-// Normal derivative (Neumann boundary condition)
-class dUdN : public Expression
-{
-  void eval(Array<double>& values, const Array<double>& x) const
-  {
-    values[0] = sin(5*x[0]);
-    values[1] = sin(5*x[1]);
-    values[2] = sin(5*x[2]);
-  }
-};
-
 int main()
 {
 
@@ -52,42 +28,58 @@ int main()
 
   Poisson::FunctionSpace V(mesh);
 
-  // Define boundary condition
-  Constant ux(0.0);
-  XBoundaries bdary_x(10.0);
-  DirichletBC bc1(V, ux, bdary_x);
 
-  Constant uy(2.0);
-  YBoundaries bdary_y(10.0);
-  DirichletBC bc2(V, uy, bdary_y);
+  // ##############################################################################
+  // ### First test to see if the boundary conditions works
+  // ##############################################################################
+  // dolfin::MeshFunction boundary_parts;
+  dolfin::MeshFunction<size_t> boundary_parts(mesh, mesh.topology().dim()-1);
+  boundary_parts.set_all(0);
 
-  Constant uz(4.0);
-  ZBoundaries bdary_z(10.0);
-  DirichletBC bc3(V, uz, bdary_z);
 
-  std::vector<const DirichletBC*> bcs;
-  bcs.push_back(&bc1);
-  bcs.push_back(&bc2);
-  bcs.push_back(&bc3);
+  XBoundaries bdary_x(-10.0);
+  bdary_x.mark(boundary_parts, 1);
+  XBoundaries bdary_x2(10.0);
+  bdary_x.mark(boundary_parts, 2);
 
-  // Define variational forms
-  Poisson::BilinearForm a(V, V);
-  Poisson::LinearForm L(V);
+  YBoundaries bdary_y(-10.0);
+  bdary_y.mark(boundary_parts, 3);
+  YBoundaries bdary_y2(10.0);
+  bdary_y2.mark(boundary_parts, 4);
 
-  dolfin::EigenMatrix EA; assemble(EA,a);
+  ZBoundaries bdary_z(-10.0);
+  bdary_z.mark(boundary_parts, 5);
+  ZBoundaries bdary_z2(10.0);
+  bdary_z2.mark(boundary_parts, 6);
 
-  Source f;
-  L.f = f;
-  dolfin::EigenVector EV; assemble(EV,L);
+  File file("output/boundary_parts.pvd");
+  file << boundary_parts;
+  // ##############################################################################
+  // ##############################################################################
 
-  // Compute solution
+
+  // ##############################################################################
+  // ### Second test to see if the boundary conditions works
+  // ##############################################################################
+
   Function u(V);
-  solve(a == L,u, bcs);
+  u.interpolate(Constant(0.0));
 
-  // Save solution in VTK format
-  File file("output/poisson.pvd");
-  file << u;
+  double bc_array[6]={10,-10,10,-10,10,-10};
+  int bc_coor[6]={0,0,1,1,2,2};
+  double bc_value[6]={1,2,3,4,5,6};
 
+  std::vector< DirichletBC*> bcs;
+  bcs=BC_VEC_VAL(6,V,bc_array,bc_coor,bc_value);
+
+  bcs[0]->apply(u.vector());
+
+  File fileU("output/solu_u.pvd");
+  fileU << u;
+
+
+  // ##############################################################################
+  // ##############################################################################
 
   return 0;
 }

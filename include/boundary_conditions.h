@@ -22,22 +22,22 @@
 /////////////////////////////////////////////////////////////////////////////
 
 class XBoundaries: public dolfin::SubDomain {
-  double Lx;
 public:
+  double Lx;
   XBoundaries(double _Lx);
   bool inside(const dolfin::Array<double>& x, bool on_boundary) const;
 };
 
 class YBoundaries: public dolfin::SubDomain {
-  double Ly;
 public:
+  double Ly;
   YBoundaries(double _Ly);
   bool inside(const dolfin::Array<double>& x, bool on_boundary) const;
 };
 
 class ZBoundaries: public dolfin::SubDomain {
-double Lz;
 public:
+  double Lz;
   ZBoundaries(double _Lz);
   bool inside(const dolfin::Array<double>& x, bool on_boundary) const;
 };
@@ -78,5 +78,6 @@ private:
     int bc_direction;
 };
 
+std::vector<dolfin::DirichletBC*> BC_VEC_VAL(int  N, dolfin::FunctionSpace V, double* bc_array,int * bc_coor,double *bc_value);
 
 #endif
