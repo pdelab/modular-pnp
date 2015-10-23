@@ -423,11 +423,14 @@ int main()
 
   /// solve using FASP
   printf("\tEAFE/FASP formulation\n"); fflush(stdout);
-  dCSRmat adaptA_fasp = EigenMatrix_to_dCSRmat(&A);
-  fasp_dcoo_write("A_fasp.dat", &adaptA_fasp);
+  dCSRmat adaptA_fasp;
+  EigenMatrix_to_dCSRmat(&A, &adaptA_fasp);
+  // fasp_dcoo_write("A_fasp.dat", &adaptA_fasp);
   
-  dvector adaptb_fasp = EigenVector_to_dvector(&b);
-  dvector adaptsoluvec = EigenVector_to_dvector(&u_vector) ;
+  dvector adaptb_fasp;
+  EigenVector_to_dvector(&b, &adaptb_fasp);
+  dvector adaptsoluvec;
+  EigenVector_to_dvector(&u_vector, &adaptsoluvec) ;
   fasp_dvec_alloc(adaptb_fasp.row, &adaptsoluvec);
   fasp_dvec_set(adaptb_fasp.row, &adaptsoluvec, 0.0);
   printf("\t...initialize solver parameters\n"); fflush(stdout);
@@ -442,7 +445,7 @@ int main()
   INT status = FASP_SUCCESS;
   status = fasp_solver_dcsr_krylov(&adaptA_fasp, &adaptb_fasp, &adaptsoluvec, &itpar);
   dolfin::Function u_fasp(CG);
-  // Copy_dvector_to_Function(&u_fasp, &adaptsoluvec);
+  copy_dvector_to_Function(&adaptsoluvec, &u_fasp);
   printf("\tSave EAFE/FASP solution in VTK format\n"); fflush(stdout);
   dolfin::File file_FASP("./problems/test_eafe/output/FASPConvection.pvd");
   file_FASP << u_fasp;
