@@ -23,12 +23,12 @@ extern "C"
 
 /*------------- In file: fasp_to_fenics.cpp --------------*/
 
-dCSRmat EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A);
+void EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A, dCSRmat* dCSR_A);
 
-dvector EigenVector_to_dvector(const dolfin::EigenVector* vec_A);
+void EigenVector_to_dvector(const dolfin::EigenVector* vec_b, dvector* dVec_b);
 
-dolfin::EigenVector Copy_dvector_to_EigenVector(const dvector* vec_b);
+void copy_dvector_to_EigenVector(const dvector* vec_b, dolfin::EigenVector* EGVec);
 
-void Copy_dvector_to_Function(dolfin::Function* F, const dvector* vec_b);
+void copy_dvector_to_Function(const dvector* vec_b, dolfin::Function* F);
 
 #endif
