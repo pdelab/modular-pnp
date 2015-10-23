@@ -85,7 +85,8 @@ int main()
   std::cout << s;
 
 
-  dCSRmat bsr_A = EigenMatrix_to_dCSRmat(&EA);
+  dCSRmat bsr_A;
+  EigenMatrix_to_dCSRmat(&EA, &bsr_A);
   std::cout << "#### dCSRmat is  \n";
   std::cout << "number number of none zero elements = "<< bsr_A.nnz << "\n";
   std::cout << "number rows ="<< bsr_A.row << "\n";
@@ -116,7 +117,8 @@ int main()
   std::cout << "#### the EigenVector and the dvector should be the same #### \n";
 
   //
-  dvector dV = EigenVector_to_dvector(&EV);
+  dvector dV;
+  EigenVector_to_dvector(&EV, &dV);
   std::string s2=EV.str(true);
   std::cout << "#### Eigen vector is\n";
   std::cout << "Number of cols: \t"<< EV.size() << "\n";
@@ -131,10 +133,11 @@ int main()
   std::cout << "#### End of test of EigenVectorTOdVector function       #### \n";
   std::cout << "############################################################ \n";
   std::cout << "#################################################################### \n";
-  std::cout << "#### Beginning of test of Copy_dvector_to_EigenVector function  #### \n";
+  std::cout << "#### Beginning of test of copy_dvector_to_EigenVector function  #### \n";
   std::cout << "#### the EigenVector and the dvector should be the same        #### \n";
 
-  EigenVector EGV = Copy_dvector_to_EigenVector(&dV);
+  dolfin::EigenVector EGV(EV);
+  copy_dvector_to_EigenVector(&dV, &EGV);
 
   std::cout << "#### dVector vector is \n";
   for (i=0;i< dV.row  ;i++)
@@ -147,27 +150,27 @@ int main()
   std::string s3=EGV.str(true);
   std::cout << s3 << "\n";
 
-  std::cout << "#### End of test of Copy_dvector_to_EigenVector function       #### \n";
+  std::cout << "#### End of test of copy_dvector_to_EigenVector function       #### \n";
   std::cout << "############################################################## \n";
 
   std::cout << "#################################################################### \n";
-  std::cout << "#### Beginning of test of Copy_dvector_to_Function function  #### \n";
+  std::cout << "#### Beginning of test of copy_dvector_to_Function function  #### \n";
   std::cout << "#### the dvector and the Function.vector() should be the same        #### \n";
 
   std::cout << "#### dVector vector is \n";
-  for (i=0;i< dV.row  ;i++)
+  for (i=0; i < dV.row; i++)
   {
     std::cout <<dV.val[i] << "\t";
   }
   std::cout << "\n";
 
-  Copy_dvector_to_Function(&F, &dV);
+  copy_dvector_to_Function(&dV, &F);
 
   std::string s4=F.vector()->str(true);
   std::cout << "#### Function.vector() is\n";
   std::cout << s4 << "\n";
 
-  std::cout << "#### End of test of Copy_dvector_to_Function function       #### \n";
+  std::cout << "#### End of test of copy_dvector_to_Function function       #### \n";
   std::cout << "############################################################## \n";
 
   free(bsr_A.IA);

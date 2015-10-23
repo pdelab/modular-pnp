@@ -12,15 +12,13 @@ using namespace std;
 using namespace dolfin;
 
 /**
- * \fn dCSRmat EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A)
+ * \fn void EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A, dCSRmat dCSR_A)
  *
  * \brief Link the dolfin::EigenMatrix mat_A to dCSRmat format from FASP
  *
  * \param mat_A     EigenMatrix to be converted
- *
- * \return          dCSRmat if conversion successful; otherwise error information.
  */
-dCSRmat EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A)
+void EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A, dCSRmat* dCSR_A)
 {
   // dimensions of matrix
   int nrows = mat_A->size(0);
@@ -50,26 +48,22 @@ dCSRmat EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A)
   vals = (double*) std::get<2>(mat_A->data());
 
   // assign to dCSRmat
-  dCSRmat dCSR_A;
-  dCSR_A.nnz=nnz;
-  dCSR_A.row=nrows;
-  dCSR_A.col=ncols;
-  dCSR_A.IA=IA;
-  dCSR_A.JA=JA;
-  dCSR_A.val=vals;
-  return dCSR_A;
+  dCSR_A->nnz = nnz;
+  dCSR_A->row = nrows;
+  dCSR_A->col = ncols;
+  dCSR_A->IA = IA;
+  dCSR_A->JA = JA;
+  dCSR_A->val = vals;
 }
 
 /**
- * \fn dvector EigenVector_to_dvector(const dolfin::EigenVector* vec_b)
+ * \fn void EigenVector_to_dvector(const dolfin::EigenVector* vec_b, dvector* dVec_b)
  *
  * \brief Link the dolfin::EigenVector vec_b to dvector format from FASP
  *
  * \param vec_b     EigenVector to be converted
- *
- * \return          dvector if conversion successful; otherwise error information.
  */
-dvector EigenVector_to_dvector(const dolfin::EigenVector* vec_b)
+void EigenVector_to_dvector(const dolfin::EigenVector* vec_b, dvector* dVec_b)
 {
   // check for uninitialized EigenMatrix
   int length = (int) vec_b->size();
@@ -77,65 +71,58 @@ dvector EigenVector_to_dvector(const dolfin::EigenVector* vec_b)
     fasp_chkerr(ERROR_INPUT_PAR, "EigenVector_to_dvector");
   }
 
-  dvector dVec_b;
-  dVec_b.row = length;
-  dVec_b.val = (double*) vec_b->data();
-  return dVec_b;
+  dVec_b->row = length;
+  dVec_b->val = (double*) vec_b->data();
 }
 
 /**
- * \fn EigenVector Copy_dvector_to_EigenVector(dolfin::vector* VecSolu, const dvector* vec_b)
+ * \fn void copy_dvector_to_EigenVector(const dvector* vec_b, dolfin::EigenVector* EGVec)
  *
- * \brief Copy the dvector vec_b to dolfing::EigenVector
+ * \brief Copy the dvector vec_b to dolfin::EigenVector
  *
- * \param
- *        VecSolu  dolfin::function (output)
- *        vec_b    dvector to be converted
- *
- * \return         dolinf::vector if conversion successful; otherwise error information.
+ * \param VecSolu  dolfin::function (output)
+ * \param vec_b    dvector to be converted
  */
-EigenVector Copy_dvector_to_EigenVector(const dvector* vec_b)
+void copy_dvector_to_EigenVector(const dvector* vec_b, dolfin::EigenVector* EGVec)
 {
-  // check for uninitialized EigenMatrix
+  // check for uninitialized dvector
   int length = vec_b->row;
   if ( length<1 ) {
-    fasp_chkerr(ERROR_INPUT_PAR, "Copy_dvector_to_EigenVector");
+    fasp_chkerr(ERROR_INPUT_PAR, "copy_dvector_to_EigenVector");
   }
+
+  printf("%d is the length\n", length); fflush(stdout);
   // Get the array
-  EigenVector EGVec(length);
-  double * array = EGVec.data();
-  for(std::size_t i=0; i<length; ++i) {
+  double* array = EGVec->data();
+  for(std::size_t i=0; i < length; ++i)
+  {
       array[i] = vec_b->val[i];
   }
-  return EGVec;
 }
 
 /**
- * \fn void Copy_dvector_to_Function(Function* F, const dvector* vec_b)
+ * \fn void copy_dvector_to_Function(doflin::Function* F, const dvector* vec_b)
  *
  * \brief Link copy to dvector vec_b to dolfin::Function.vector()
  *
- * \param
- *        F        dolfin::Function*  (output)
- *        vec_b    dvector to be converted
- *
- * \return         void
+ * \param vec_b    dvector to be converted
+ * \param F        dolfin::Function*  (output)
  */
-void Copy_dvector_to_Function(Function* F, const dvector* vec_b)
+void copy_dvector_to_Function(const dvector* vec_b, dolfin::Function* F)
 {
   // check for uninitialized EigenMatrix
   int length = vec_b->row;
-  if ( length<1 ) {
-    fasp_chkerr(ERROR_INPUT_PAR, "Copy_dvector_to_Function");
+  if ( length < 1 ) {
+    fasp_chkerr(ERROR_INPUT_PAR, "copy_dvector_to_Function");
   }
   if (F->vector()->size() != length) {
-    fasp_chkerr(ERROR_INPUT_PAR, "Copy_dvector_to_Function");
+    fasp_chkerr(ERROR_INPUT_PAR, "copy_dvector_to_Function");
   }
 
   std::vector<double> values(F->vector()->local_size(), 0);
-  for (int i=0;i<length;i++)
+  for (int i=0; i < length; i++)
   {
-    values[i]=vec_b->val[i];
+    values[i] = vec_b->val[i];
   }
   F->vector()->set_local(values);
 }
