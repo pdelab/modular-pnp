@@ -10,7 +10,19 @@
 #include <dolfin.h>
 #include "Convection.h"
 #include "EAFE.h"
+#include "fasp_to_fenics.h"
+extern "C"
+{
+#include "fasp.h"
+#include "fasp_functs.h"
+  INT fasp_solver_dcsr_krylov (dCSRmat *A,
+   dvector *b,
+   dvector *x,
+   itsolver_param *itparam);
+#define FASP_BSR     ON  /** use BSR format in fasp */
+}
 using namespace dolfin;
+// using namespace std;
 
 class Advection : public Expression
 {
@@ -269,9 +281,13 @@ int main()
   parameters["allow_extrapolation"] = true;
 
   // Create mesh and function space
-  printf("Create mesh %d x %d x %d\n",mesh_size,mesh_size,mesh_size); fflush(stdout);
+  printf("Create mesh %d x %d x 3\n",mesh_size,mesh_size); fflush(stdout);
   bool print_matrices = (mesh_size<5)? true : false;
-  dolfin::UnitCubeMesh mesh(mesh_size, mesh_size, mesh_size);
+  dolfin::Point p0( 0.0, 0.0, 0.0);
+  dolfin::Point p1( 1.0, 1.0, 3.0/((double)mesh_size) );
+  dolfin::BoxMesh mesh(p0, p1, mesh_size, mesh_size, 3);
+
+  // dolfin::UnitCubeMesh mesh(mesh_size, mesh_size, mesh_size);
   Convection::FunctionSpace CG(mesh);
 
   // Define boundary condition
@@ -372,13 +388,13 @@ int main()
   /// Solve for solutions
   // Compute standard solution via linear solver
   printf("Compute solutions\n"); fflush(stdout);
-  dolfin::Vector b;
+  dolfin::EigenVector b;
   assemble(b,L); bc.apply(b);
 
   // Compute EAFE solution via linear solver
   printf("\tEAFE formulation\n"); fflush(stdout);
   dolfin::EigenMatrix A_eafe;
-  dolfin::Vector u_eafe_vector;
+  dolfin::EigenVector u_eafe_vector;
   assemble(A_eafe,a_eafe); bc.apply(A_eafe); A_eafe.compress();
   solve(A_eafe, u_eafe_vector, b, "bicgstab");
   // convert to Function
@@ -391,8 +407,9 @@ int main()
 
   printf("\tStandard formulation\n"); fflush(stdout);
   dolfin::EigenMatrix A;
-  dolfin::Vector u_vector;
-  assemble(A,a); bc.apply(A); A.compress();
+  dolfin::EigenVector u_vector;
+  assemble(A,a); bc.apply(A);
+  // A.compress();
   solve(A, u_vector, b, "bicgstab");
   // convert to Function
   dolfin::Function u(CG);
@@ -403,6 +420,33 @@ int main()
   file << u;
   printf("\n");
 
+
+  /// solve using FASP
+  printf("\tEAFE/FASP formulation\n"); fflush(stdout);
+  dCSRmat adaptA_fasp = EigenMatrix_to_dCSRmat(&A);
+  fasp_dcoo_write("A_fasp.dat", &adaptA_fasp);
+  
+  dvector adaptb_fasp = EigenVector_to_dvector(&b);
+  dvector adaptsoluvec = EigenVector_to_dvector(&u_vector) ;
+  fasp_dvec_alloc(adaptb_fasp.row, &adaptsoluvec);
+  fasp_dvec_set(adaptb_fasp.row, &adaptsoluvec, 0.0);
+  printf("\t...initialize solver parameters\n"); fflush(stdout);
+  // initialize solver parameters
+  input_param inpar;  // parameters from input files
+  itsolver_param itpar;  // parameters for itsolver
+  AMG_param amgpar; // parameters for AMG
+  ILU_param ilupar; // parameters for ILU
+  char inputfile[] = "./problems/test_eafe/bsr.dat";
+  fasp_param_input(inputfile, &inpar);
+  fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
+  INT status = FASP_SUCCESS;
+  status = fasp_solver_dcsr_krylov(&adaptA_fasp, &adaptb_fasp, &adaptsoluvec, &itpar);
+  dolfin::Function u_fasp(CG);
+  // Copy_dvector_to_Function(&u_fasp, &adaptsoluvec);
+  printf("\tSave EAFE/FASP solution in VTK format\n"); fflush(stdout);
+  dolfin::File file_FASP("./problems/test_eafe/output/FASPConvection.pvd");
+  file_FASP << u_fasp;
+  printf("\n");
 
   /// Print stiffness matrices
   if (print_matrices) {

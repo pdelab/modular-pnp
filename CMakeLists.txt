@@ -53,5 +53,5 @@ add_executable(test_eafe ./problems/test_eafe/test_eafe.cpp ${SRC_DIR})
 # Setup targets
 target_link_libraries(test_reading ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 target_link_libraries(test_faspfenics ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
-target_link_libraries(test_eafe ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
-
+# target_link_libraries(test_eafe ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
+target_link_libraries(test_eafe ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} "/opt/local/lib/gcc49/gcc/x86_64-apple-darwin14/4.9.3/libgcc.a" "/opt/local/lib/gcc49/libquadmath.a" "/opt/local/lib/gcc49/libgfortran.a")
