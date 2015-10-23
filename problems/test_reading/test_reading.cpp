@@ -60,10 +60,11 @@ int main()
    */
 
   // read coefficients and boundary values
-  coeff_param coeff_par;
+  coeff_param coeff_par, non_dim_coeff_par;
   char coeff_param_filename[] = "./problems/test_reading/coeff_params.dat";
   coeff_param_input(coeff_param_filename, &coeff_par);
   print_coeff_param(&coeff_par);
+  non_dimesionalize_coefficients(&domain_par, &coeff_par, &non_dim_coeff_par);
 
 	// dimensional analysis
 

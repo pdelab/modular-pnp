@@ -44,7 +44,8 @@ typedef struct {
  * \brief Parameters for constructing the mesh
  */
 typedef struct {
-
+    //! reference length for domain
+    REAL ref_length;
 	//! dimension length along x-direction
     REAL length_x;
     //! dimension length along y-direction
@@ -80,6 +81,11 @@ typedef struct {
  * \brief Coefficients for the PDE
  */
 typedef struct {
+    //! reference scale for voltage
+    REAL ref_voltage;
+
+    //! reference scale for charge density
+    REAL ref_density;
 
     //! temperature
     REAL temperature;
