@@ -33,15 +33,8 @@ void EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A, dCSRmat* dCSR_A)
   int* JA;
   JA = (int*) std::get<1>(mat_A->data());
 
-  // construct IA
-  int* el_number;
-  int* IA;
-  el_number = (int*) std::get<0>(mat_A->data());
-  IA = (int*) fasp_mem_calloc(nrows+1, sizeof(int));
-  for (int i=0; i<nrows; i++)  {
-    IA[i] = JA[el_number[i]];
-  }
-  IA[nrows] = nnz;
+  int *IA;
+  IA = (int*) std::get<0>(mat_A->data());
 
   // point to values array
   double* vals;
