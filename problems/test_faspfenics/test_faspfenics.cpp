@@ -136,7 +136,7 @@ int main()
   std::cout << "#### Beginning of test of copy_dvector_to_EigenVector function  #### \n";
   std::cout << "#### the EigenVector and the dvector should be the same        #### \n";
 
-  dolfin::EigenVector EGV(EV);
+  dolfin::EigenVector EGV(EV.size());
   copy_dvector_to_EigenVector(&dV, &EGV);
 
   std::cout << "#### dVector vector is \n";
