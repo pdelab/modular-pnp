@@ -424,7 +424,7 @@ int main()
   /// solve using FASP
   printf("\tEAFE/FASP formulation\n"); fflush(stdout);
   dCSRmat adaptA_fasp;
-  EigenMatrix_to_dCSRmat(&A, &adaptA_fasp);
+  EigenMatrix_to_dCSRmat(&A_eafe, &adaptA_fasp);
   // fasp_dcoo_write("A_fasp.dat", &adaptA_fasp);
   
   dvector adaptb_fasp;
