@@ -10,6 +10,7 @@
 #include <dolfin.h>
 #include "Convection.h"
 #include "EAFE.h"
+#include "L2Error.h"
 #include "fasp_to_fenics.h"
 extern "C"
 {
@@ -513,6 +514,34 @@ int main()
   dolfin::File file_FASP("./problems/test_eafe/output/FASPConvection.pvd");
   file_FASP << u_fasp;
   printf("\n");
+
+
+  /// Compare to analytic solution for test_problem == 3
+  if (test_problem==3) {
+    printf("Compute the L2 error of the computed solutions\n"); fflush(stdout);
+    double error_norm = 0.0;
+    SolutionGiven trueSolution;
+    dolfin::Function solution(CG);
+    solution.interpolate(trueSolution);
+
+    *(u.vector()) -= *(solution.vector());
+    L2Error::Functional error(mesh,u);
+    error_norm = assemble(error);
+    printf("\tStandard FE computed solution:\t%e\n", error_norm);
+
+    *(u_eafe.vector()) -= *(solution.vector());
+    L2Error::Functional error_eafe(mesh,u_eafe);
+    error_norm = assemble(error_eafe);
+    printf("\tEAFE computed solution:\t%e\n", error_norm);
+
+    *(u_fasp.vector()) -= *(solution.vector());
+    L2Error::Functional error_fasp(mesh,u_fasp);
+    error_norm = assemble(error_fasp);
+    printf("\tFASP computed solution:\t%e\n", error_norm);
+
+    printf("\n"); fflush(stdout);
+  }
+
 
   /// Print stiffness matrices
   if (print_matrices) {
