@@ -1,0 +1,6 @@
+mesh_size    = 20   % make a mesh (mesh_size x mesh_size x mesh_size)
+FineMesh_size    = 40 % careful has to be greater that mesh_size
+
+phi_x_double   = 2.0e+0
+phi_y_double   = 2.0e+0
+phi_z_double   = 0.0e+0
