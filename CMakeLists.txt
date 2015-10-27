@@ -48,8 +48,10 @@ include_directories(SYSTEM ${DOLFIN_3RD_PARTY_INCLUDE_DIRS})
 # Executables
 add_executable(test_reading ./problems/test_reading/test_reading.cpp ${SRC_DIR})
 add_executable(test_faspfenics ./problems/test_faspfenics/test_faspfenics.cpp ${SRC_DIR})
+add_executable(test_eafe ./problems/test_eafe/test_eafe.cpp ${SRC_DIR})
 
 # Setup targets
 target_link_libraries(test_reading ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 target_link_libraries(test_faspfenics ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
+target_link_libraries(test_eafe ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 
