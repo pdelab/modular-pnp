@@ -90,35 +90,3 @@ void Voltage::eval(Array<double>& values, const Array<double>& x) const
   values[0]  = ext_voltage*(x[bc_direction]+bc_distance/2.0)/(bc_distance);
   values[0] -= int_voltage*(x[bc_direction]-bc_distance/2.0)/(bc_distance);
 }
-
-
-std::vector<DirichletBC*> BC_VEC_VAL(int  N, dolfin::FunctionSpace V, double* bc_array,int * bc_coor,double *bc_value)
-{
-  std::vector<DirichletBC*> bcs(N);
-  //DirichletBC bc;
-  XBoundaries XB(0.0);
-  YBoundaries YB(0.0);
-  ZBoundaries ZB(0.0);
-  Constant uC(0.0);
-  int i;
-  for (i=0;i<N;i++)
-  {
-    if (bc_coor[i]==0){
-      uC=Constant(bc_value[i]);
-      XB.Lx=bc_array[i];
-      *(bcs[i])=DirichletBC(V, uC, XB);
-    }
-    if (bc_coor[i]==1){
-      uC=Constant(bc_value[i]);
-      YB.Ly=bc_array[i];
-      *(bcs[i])=DirichletBC(V, uC, YB);
-    }
-    if (bc_coor[i]==2){
-      uC=Constant(bc_value[i]);
-      ZB.Lz=bc_array[i];
-      *(bcs[i])=DirichletBC(V, uC, ZB);
-    }
-  }
-
-  return bcs;
-}

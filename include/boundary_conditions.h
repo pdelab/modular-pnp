@@ -78,6 +78,4 @@ private:
     int bc_direction;
 };
 
-std::vector<dolfin::DirichletBC*> BC_VEC_VAL(int  N, dolfin::FunctionSpace V, double* bc_array,int * bc_coor,double *bc_value);
-
 #endif

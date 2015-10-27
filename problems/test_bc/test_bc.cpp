@@ -52,34 +52,11 @@ int main()
   ZBoundaries bdary_z2(10.0);
   bdary_z2.mark(boundary_parts, 6);
 
-  File file("output/boundary_parts.pvd");
+  File file("problems/test_bc/output/boundary_parts.pvd");
   file << boundary_parts;
   // ##############################################################################
   // ##############################################################################
 
-
-  // ##############################################################################
-  // ### Second test to see if the boundary conditions works
-  // ##############################################################################
-
-  Function u(V);
-  u.interpolate(Constant(0.0));
-
-  double bc_array[6]={10,-10,10,-10,10,-10};
-  int bc_coor[6]={0,0,1,1,2,2};
-  double bc_value[6]={1,2,3,4,5,6};
-
-  std::vector< DirichletBC*> bcs;
-  bcs=BC_VEC_VAL(6,V,bc_array,bc_coor,bc_value);
-
-  bcs[0]->apply(u.vector());
-
-  File fileU("output/solu_u.pvd");
-  fileU << u;
-
-
-  // ##############################################################################
-  // ##############################################################################
 
   return 0;
 }
