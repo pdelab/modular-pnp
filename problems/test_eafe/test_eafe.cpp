@@ -24,6 +24,10 @@ extern "C"
 using namespace dolfin;
 // using namespace std;
 
+double u_L = 0.0;
+double u_R = 0.0;
+double beta_scale = 1.0e+1;
+
 class Advection : public Expression
 {
 public:
@@ -130,6 +134,34 @@ class BCFromPaper : public Expression
     else {
       values[0] = 2.1;
     }
+  }
+};
+
+/*** test_problem == 3 ***/
+class AdvectionGiven : public Expression
+{
+public:
+  AdvectionGiven (double alpha): Expression(), A(alpha) {}
+  void eval(Array<double>& values, const Array<double>& x) const
+  {
+    values[0] = beta_scale*x[0];
+  }
+private:
+  double A;
+};
+
+class SolutionGiven : public Expression
+{
+  void eval(Array<double>& values, const Array<double>& x) const
+  {
+    // homogenous BC component
+    double b = beta_scale*x[0];
+    values[0] = -0.5*std::exp(-b)*(x[0]-0.0)*(x[0]-1.0);
+
+    // dirichlet component
+    double b_L = beta_scale*0.0;
+    double b_R = beta_scale*1.0;
+    values[0] += ( u_L*std::exp(b_L-b)*(1.0-x[0]) + u_R*std::exp(b_R-b)*(x[0]-0.0) );
   }
 };
 
@@ -264,6 +296,12 @@ int main()
     printf("Solving the test problem with u = x*y*(x-1)*(y-1)\n");
   else if (test_problem==2)
     printf("Solving the test problem from the EAFE paper\n");
+  else if (test_problem==3) {
+    printf("Solving the test problem with f = 1 for a known solution, given b\n");
+    printf("\tImposing alpha = 1, eta = b, gamma = 0\n");
+    alpha_double = 1.0;
+    gamma_double = 0.0;
+  }
   else
     printf("Solving the problem with f = 1.\n");
   printf("Coefficients read in are:\n");
@@ -298,6 +336,10 @@ int main()
     BCFromPaper u0FromPaper;
     u0.interpolate(u0FromPaper);
   }
+  if (test_problem==3) {
+    SolutionGiven uGiven;
+    u0.interpolate(uGiven);
+  }
   else {
     dolfin::Constant zero(0.0);
     u0.interpolate(zero);
@@ -315,19 +357,31 @@ int main()
   // Define analytic expressions
   printf("Define analytic expressions\n"); fflush(stdout);
   dolfin::Constant alpha(alpha_double);
+  dolfin::Constant gamma(gamma_double);
   
   dolfin::Function beta(CG);
   if (test_problem==2) {
     AdvectionFromPaper betaFromPaper(alpha_double,eta_double);
     beta.interpolate(betaFromPaper);
   }
+  if (test_problem==3) {
+    AdvectionGiven betaGiven(alpha_double);
+    beta.interpolate(betaGiven);
+  }
   else {
     Advection betaExpression(b_x_double,b_y_double,b_z_double);
     beta.interpolate(betaExpression);
   }
 
-  dolfin::Constant gamma(gamma_double);
-  dolfin::Constant eta(eta_double);
+  dolfin::Function eta(CG);
+  if (test_problem==3) {
+    AdvectionGiven etaGiven(alpha_double);
+    eta.interpolate(etaGiven);
+  }
+  else {
+    dolfin::Constant etaExpression(eta_double);
+    eta.interpolate(etaExpression);
+  }
 
   // set RHS
   dolfin::Function f(CG);
@@ -343,6 +397,7 @@ int main()
     dolfin::Constant unity(1.0);
     f.interpolate(unity);
   }
+
   // Save solution in VTK format
   printf("\tSave RHS in VTK format\n"); fflush(stdout);
   dolfin::File fileRHS("./problems/test_eafe/output/RHS.pvd");
@@ -352,6 +407,14 @@ int main()
   if (test_problem==1) {
     printf("\tSave true solution in VTK format\n");
     Solution trueSolution;
+    dolfin::Function solution(CG);
+    solution.interpolate(trueSolution);
+    dolfin::File fileSolution("./problems/test_eafe/output/solution.pvd");
+    fileSolution << solution;
+  }
+  else if (test_problem==3) {
+    printf("\tSave true solution in VTK format\n");
+    SolutionGiven trueSolution;
     dolfin::Function solution(CG);
     solution.interpolate(trueSolution);
     dolfin::File fileSolution("./problems/test_eafe/output/solution.pvd");
