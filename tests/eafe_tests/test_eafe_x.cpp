@@ -76,19 +76,16 @@ int main()
   // Define analytic expressions
   SolutionGiven_x analytic_solution_x;
   AdvectionGiven_x betaGiven_x;
-
   // Define boundary condition
   dolfin::Function solution_x(CG);  
   solution_x.interpolate(analytic_solution_x);
   DirichletBoundary_x boundary_x;
   dolfin::DirichletBC bc_x(CG, solution_x, boundary_x);
-
   // Define analytic expressions
   dolfin::Constant unity(1.0);
   dolfin::Function beta(CG);
   beta.interpolate(betaGiven_x);
   dolfin::Constant zero(0.0);
-
   // Standard convection problem
   EAFE::BilinearForm a_x(CG,CG);
   Convection::LinearForm L(CG);
@@ -97,8 +94,7 @@ int main()
   a_x.gamma = zero;
   a_x.eta = beta;
   L.f = unity;
-
-  /// Solve for solution
+  /// Setup linear algebra objects
   dolfin::EigenMatrix A_x;
   dolfin::EigenVector u_vector;
   dolfin::EigenVector b_x;
@@ -106,8 +102,7 @@ int main()
   bc_x.apply(A_x);
   assemble(b_x,L);
   bc_x.apply(b_x);
-
-  /// solve using FASP
+  /// Solve using FASP
   dCSRmat adaptA_fasp;
   dvector adaptsoluvec;
   dvector adaptb_fasp;
@@ -115,7 +110,6 @@ int main()
   EigenVector_to_dvector(&b_x, &adaptb_fasp);
   fasp_dvec_alloc(adaptb_fasp.row, &adaptsoluvec);
   fasp_dvec_set(adaptb_fasp.row, &adaptsoluvec, 0.0);
-
   // setup solver
   input_param inpar;
   itsolver_param itpar;
@@ -153,7 +147,6 @@ int main()
     printf("passed EAFE test on x\n");
     fflush(stdout);
   }
-
-
+  
   return 0;
 }
