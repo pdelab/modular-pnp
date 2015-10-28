@@ -173,7 +173,5 @@ int main()
   std::cout << "#### End of test of copy_dvector_to_Function function       #### \n";
   std::cout << "############################################################## \n";
 
-  free(bsr_A.IA);
-
   return 0;
 }
