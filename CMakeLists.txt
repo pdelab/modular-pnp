@@ -50,7 +50,7 @@ add_executable(aux_reading ./aux/test_reading/test_reading.cpp ${SRC_DIR})
 add_executable(aux_faspfenics ./aux/test_faspfenics/test_faspfenics.cpp ${SRC_DIR})
 add_executable(aux_eafe ./aux/test_eafe/test_eafe.cpp ${SRC_DIR})
 
-add_executable(test_eafe ./tests/eafe_tests/test_eafe_x.cpp ${SRC_DIR})
+add_executable(test_eafe ./tests/eafe_tests/test_eafe.cpp ${SRC_DIR})
 
 # Setup targets
 target_link_libraries(aux_reading ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
