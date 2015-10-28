@@ -1,0 +1,12 @@
+test_problem = 3    % 0: rhs=1
+                    % 1: u=x*y*(x-1)*(y-1)
+                    % 2: use variable coefficients
+                    % 3: use given expression for b
+mesh_size    = 10   % make a mesh (mesh_size x mesh_size x mesh_size)
+
+alpha_double = 1.0e-0
+eta_double   = 0.0e+0
+gamma_double = 0.0e-0
+b_x_double   = 0.0e+2
+b_y_double   = 0.0e+0
+b_z_double   = 0.0e+0
