@@ -500,10 +500,10 @@ int main()
   fasp_dvec_set(adaptb_fasp.row, &adaptsoluvec, 0.0);
   printf("\t...initialize solver parameters\n"); fflush(stdout);
   // initialize solver parameters
-  input_param inpar;  // parameters from input files
-  itsolver_param itpar;  // parameters for itsolver
-  AMG_param amgpar; // parameters for AMG
-  ILU_param ilupar; // parameters for ILU
+  input_param inpar;
+  itsolver_param itpar;
+  AMG_param amgpar;
+  ILU_param ilupar;
   char inputfile[] = "./aux/test_eafe/bsr.dat";
   fasp_param_input(inputfile, &inpar);
   fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
