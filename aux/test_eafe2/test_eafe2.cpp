@@ -100,7 +100,7 @@ int main()
   printf("\n"); fflush(stdout);
 
   // read in coefficients
-  char filenm[] = "./problems/test_eafe2/coefficients.dat";
+  char filenm[] = "./aux/test_eafe2/coefficients.dat";
   char buffer[100];
   int val;
   int mesh_size, FineMesh_size;

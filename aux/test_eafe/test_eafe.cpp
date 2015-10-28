@@ -1,4 +1,4 @@
-/*! \file test_faspfenics.cpp
+/*! \file test_eafe.cpp
  *
  *  \brief Main to test EAFE functionality on linear convection reaction problem
  *
@@ -19,7 +19,8 @@ extern "C"
   INT fasp_solver_dcsr_krylov (dCSRmat *A,
    dvector *b,
    dvector *x,
-   itsolver_param *itparam);
+   itsolver_param *itparam
+  );
 #define FASP_BSR     ON  /** use BSR format in fasp */
 }
 using namespace dolfin;
@@ -174,7 +175,7 @@ int main()
   printf("\n"); fflush(stdout);
 
   // read in coefficients
-  char filenm[] = "./problems/test_eafe/coefficients.dat";
+  char filenm[] = "./aux/test_eafe/coefficients.dat";
   char buffer[100];
   int val;
   int mesh_size, test_problem;
@@ -351,7 +352,7 @@ int main()
   dolfin::FacetFunction<std::size_t> markedMesh(mesh);
   markedMesh.set_all(1);
   boundary.mark(markedMesh,2);
-  dolfin::File fileMesh("./problems/test_eafe/output/mesh.pvd");
+  dolfin::File fileMesh("./aux/test_eafe/output/mesh.pvd");
   fileMesh << markedMesh;
 
 
@@ -401,7 +402,7 @@ int main()
 
   // Save solution in VTK format
   printf("\tSave RHS in VTK format\n"); fflush(stdout);
-  dolfin::File fileRHS("./problems/test_eafe/output/RHS.pvd");
+  dolfin::File fileRHS("./aux/test_eafe/output/RHS.pvd");
   fileRHS << f;
 
   // Save analytic solution in VTK format
@@ -410,7 +411,7 @@ int main()
     Solution trueSolution;
     dolfin::Function solution(CG);
     solution.interpolate(trueSolution);
-    dolfin::File fileSolution("./problems/test_eafe/output/solution.pvd");
+    dolfin::File fileSolution("./aux/test_eafe/output/solution.pvd");
     fileSolution << solution;
   }
   else if (test_problem==3) {
@@ -418,7 +419,7 @@ int main()
     SolutionGiven trueSolution;
     dolfin::Function solution(CG);
     solution.interpolate(trueSolution);
-    dolfin::File fileSolution("./problems/test_eafe/output/solution.pvd");
+    dolfin::File fileSolution("./aux/test_eafe/output/solution.pvd");
     fileSolution << solution;
   }
   printf("\n"); fflush(stdout);
@@ -466,7 +467,7 @@ int main()
   *(u_eafe.vector()) = u_eafe_vector;
   // Save solution in VTK format
   printf("\tSave EAFE solution in VTK format\n"); fflush(stdout);
-  dolfin::File file_eafe("./problems/test_eafe/output/EAFEConvection.pvd");
+  dolfin::File file_eafe("./aux/test_eafe/output/EAFEConvection.pvd");
   file_eafe << u_eafe;
 
   printf("\tStandard formulation\n"); fflush(stdout);
@@ -480,7 +481,7 @@ int main()
   *(u.vector()) = u_vector;
   // Save solution in VTK format
   printf("\tSave standard solution in VTK format\n"); fflush(stdout);
-  dolfin::File file("./problems/test_eafe/output/Convection.pvd");
+  dolfin::File file("./aux/test_eafe/output/Convection.pvd");
   file << u;
   printf("\n");
 
@@ -503,7 +504,7 @@ int main()
   itsolver_param itpar;  // parameters for itsolver
   AMG_param amgpar; // parameters for AMG
   ILU_param ilupar; // parameters for ILU
-  char inputfile[] = "./problems/test_eafe/bsr.dat";
+  char inputfile[] = "./aux/test_eafe/bsr.dat";
   fasp_param_input(inputfile, &inpar);
   fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
   INT status = FASP_SUCCESS;
@@ -511,7 +512,7 @@ int main()
   dolfin::Function u_fasp(CG);
   copy_dvector_to_Function(&adaptsoluvec, &u_fasp);
   printf("\tSave EAFE/FASP solution in VTK format\n"); fflush(stdout);
-  dolfin::File file_FASP("./problems/test_eafe/output/FASPConvection.pvd");
+  dolfin::File file_FASP("./aux/test_eafe/output/FASPConvection.pvd");
   file_FASP << u_fasp;
   printf("\n");
 
