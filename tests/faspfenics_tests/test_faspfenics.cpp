@@ -12,7 +12,7 @@
 #include "fasp_to_fenics.h"
 
 using namespace dolfin;
-//using namespace std;
+bool DEBUG = false;
 
 // Source term (right-hand side)
 class Source : public Expression
@@ -47,6 +47,7 @@ int main()
 {
 
   int i;
+  int BIG_FLAG=0;
 
   // Need to use Eigen for linear algebra
   parameters["linear_algebra_backend"] = "Eigen"; // or uBLAS
@@ -79,126 +80,153 @@ int main()
 
   dCSRmat dcsr_A;
   EigenMatrix_to_dCSRmat(&EA, &dcsr_A);
-  std::cout << "Test of EigenMatrix_to_dCSRmat\n";
+  if (DEBUG) std::cout << "Test of EigenMatrix_to_dCSRmat\n";
   if (dcsr_A.nnz-EA.nnz()==0){
-    std::cout << "\tNumber or non-zeros...Success\n";
+    if (DEBUG) std::cout << "\tNumber or non-zeros...Success\n";
   }
   else{
-    std::cout << "\tNumber or non-zeros...Failure\n";
+    if (DEBUG) std::cout << "\tNumber or non-zeros...Failure\n";
+    BIG_FLAG=1;
   }
   if (dcsr_A.row-EA.size(0)==0){
-    std::cout << "\tNumber or rows...Success\n";
+    if (DEBUG) std::cout << "\tNumber or rows...Success\n";
   }
   else{
-    std::cout << "\tNumber or rows...Failure\n";
+    if (DEBUG) std::cout << "\tNumber or rows...Failure\n";
+    BIG_FLAG=1;
   }
   if (dcsr_A.col-EA.size(1)==0){
-    std::cout << "\tNumber or columes...Success\n";
+    if (DEBUG) std::cout << "\tNumber or columes...Success\n";
   }
   else{
-    std::cout << "\tNumber or columes...Failure\n";
+    if (DEBUG) std::cout << "\tNumber or columes...Failure\n";
+    BIG_FLAG=1;
   }
   int *IA = (int*) std::get<0>(EA.data());
   int* JA= (int*) std::get<1>(EA.data());
   double* vals= (double*) std::get<2>(EA.data());
 
   if (dcsr_A.IA-IA==0){
-    std::cout << "\tIA...Success\n";
+    if (DEBUG) std::cout << "\tIA...Success\n";
   }
   else{
-    std::cout << "\tIA...Failure\n";
+    if (DEBUG) std::cout << "\tIA...Failure\n";
+    BIG_FLAG=1;
   }
   if (dcsr_A.JA-JA==0){
-    std::cout << "\tJA...Success\n";
+    if (DEBUG) std::cout << "\tJA...Success\n";
   }
   else{
-    std::cout << "\tJA...Failure\n";
+    if (DEBUG) std::cout << "\tJA...Failure\n";
+    BIG_FLAG=1;
   }
   if (dcsr_A.val-vals==0){
-    std::cout << "\tValues...Success\n";
+    if (DEBUG) std::cout << "\tValues...Success\n";
   }
   else{
-    std::cout << "\tValues...Failure\n";
+    if (DEBUG) std::cout << "\tValues...Failure\n";
+    BIG_FLAG=1;
   }
 
   dvector d_vec;
   EigenVector_to_dvector(&EV,&d_vec);
-  std::cout << "Test of EigenVector_to_dvector\n";
+  if (DEBUG) std::cout << "Test of EigenVector_to_dvector\n";
 
   if (d_vec.row-EV.size()==0){
-    std::cout << "\tRow...Success\n";
+    if (DEBUG) std::cout << "\tRow...Success\n";
   }
   else{
-    std::cout << "\tRow...Failure\n";
+    if (DEBUG) std::cout << "\tRow...Failure\n";
+    BIG_FLAG=1;
   }
   if (d_vec.val-EV.data()==0){
-    std::cout << "\tValues...Success\n";
+    if (DEBUG) std::cout << "\tValues...Success\n";
   }
   else{
-    std::cout << "\tValues...Failure\n";
+    if (DEBUG) std::cout << "\tValues...Failure\n";
+    BIG_FLAG=1;
   }
 
   EigenVector EV2(d_vec.row);
   copy_dvector_to_EigenVector(&d_vec, &EV2);
-  std::cout << "Test of copy_dvector_to_EigenVector\n";
+  if (DEBUG) std::cout << "Test of copy_dvector_to_EigenVector\n";
   if (d_vec.row-EV2.size()==0){
-    std::cout << "\tRow...Success\n";
+    if (DEBUG) std::cout << "\tRow...Success\n";
   }
   else{
-    std::cout << "\tRow...Failure\n";
+    if (DEBUG) std::cout << "\tRow...Failure\n";
+    BIG_FLAG=1;
   }
   int flag=0;
-  for (int i=0;i<5;i++)
+  for (i=0;i<5;i++)
   {
     if (std::fabs(d_vec.val[i]-EV2.data()[i])>1E-6){ flag=1;}
   }
   if (flag==0){
-    std::cout << "\tValues...Success\n";
+    if (DEBUG) std::cout << "\tValues...Success\n";
   }
   else{
-    std::cout << "\tValues...Failure\n";
+    if (DEBUG) std::cout << "\tValues...Failure\n";
+    BIG_FLAG=1;
   }
   EV2.data()[0]=EV2.data()[0]-5.0;
   if (std::fabs(d_vec.val[0]-EV2.data()[0])>1E-6){
-    std::cout << "\tHard Copy...Sucess\n";
+    if (DEBUG) std::cout << "\tHard Copy...Sucess\n";
   }
   else{
-    std::cout << "\tHard Copy...Failure\n";
+    if (DEBUG) std::cout << "\tHard Copy...Failure\n";
+    BIG_FLAG=1;
   }
 
   dolfin::Function F(V);
   copy_dvector_to_Function(&d_vec, &F);
-  std::cout << "Test of copy_dvector_to_Function\n";
+  if (DEBUG) std::cout << "Test of copy_dvector_to_Function\n";
   if (d_vec.row-F.vector()->size()==0){
-    std::cout << "\tRow...Success\n";
+    if (DEBUG) std::cout << "\tRow...Success\n";
   }
   else{
-    std::cout << "\tRow...Failure\n";
+    if (DEBUG) std::cout << "\tRow...Failure\n";
+    BIG_FLAG=1;
   }
   int flag2=0;
   std::vector<double> val3(F.vector()->local_size(), 0);
   F.vector()->get_local(val3);
-  for (int i=0;i<5;i++)
+  for (i=0;i<5;i++)
   {
     if (std::fabs(d_vec.val[i]-val3[i])>1E-6){ flag2=1;}
   }
   if (flag2==0){
-    std::cout << "\tValues...Success\n";
+    if (DEBUG) std::cout << "\tValues...Success\n";
   }
   else{
-    std::cout << "\tValues...Failure\n";
+    if (DEBUG) std::cout << "\tValues...Failure\n";
+    BIG_FLAG=1;
   }
   d_vec.val[0]=d_vec.val[0]-5.0;
   if (std::fabs(d_vec.val[0]-val3[0])>1E-6){
-    std::cout << "\tHard Copy...Sucess\n";
+    if (DEBUG) std::cout << "\tHard Copy...Sucess\n";
   }
   else{
-    std::cout << "\tHard Copy...Failure\n";
+    if (DEBUG) std::cout << "\tHard Copy...Failure\n";
+    BIG_FLAG=1;
   }
 
-  std::cout << "############################################################## \n";
-  std::cout << "#### End of the test                                      #### \n";
-  std::cout << "############################################################## \n";
+  if (BIG_FLAG==0){
+    std::cout << "####\n";
+    std::cout << "#### Success! the fasp fenics interface is working\n";
+    std::cout << "####\n";
+  }
+  else {
+    std::cout << "####\n";
+    std::cout << "#### ERROR...the fasp fenics interface is not working\n";
+    std::cout << "####\n";
+  }
+
+
+
+  std::cout << "############################################################ \n";
+  std::cout << "#### End of the test                                    #### \n";
+  std::cout << "############################################################ \n";
 
   return 0;
 }
