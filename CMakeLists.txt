@@ -50,14 +50,14 @@ add_executable(aux_test_reading ./aux/test_reading/aux_test_reading.cpp ${SRC_DI
 add_executable(aux_test_faspfenics ./aux/test_faspfenics/aux_test_faspfenics.cpp ${SRC_DIR})
 add_executable(aux_test_eafe ./aux/test_eafe/aux_test_eafe.cpp ${SRC_DIR})
 add_executable(aux_test_eafe2 ./aux/test_eafe2/aux_test_eafe2.cpp ${SRC_DIR})
-add_executable(test_bc ./problems/test_bc/test_bc.cpp ${SRC_DIR})
+add_executable(aux_test_bc ./aux/test_bc/aux_test_bc.cpp ${SRC_DIR})
 
 add_executable(test_eafe ./tests/eafe_tests/test_eafe.cpp ${SRC_DIR})
 
 # Setup targets
 target_link_libraries(aux_test_reading ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 target_link_libraries(aux_test_faspfenics ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
-target_link_libraries(test_bc ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
+target_link_libraries(aux_test_bc ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 #### REGULAR TARGET
 target_link_libraries(aux_test_eafe ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 target_link_libraries(aux_test_eafe2 ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})

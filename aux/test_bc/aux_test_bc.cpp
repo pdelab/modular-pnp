@@ -52,7 +52,7 @@ int main()
   ZBoundaries bdary_z2(10.0);
   bdary_z2.mark(boundary_parts, 6);
 
-  File file("problems/test_bc/output/boundary_parts.pvd");
+  File file("aux/test_bc/output/boundary_parts.pvd");
   file << boundary_parts;
   // ##############################################################################
   // ##############################################################################
