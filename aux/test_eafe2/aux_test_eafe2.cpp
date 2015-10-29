@@ -225,7 +225,7 @@ int main()
   dolfin::FacetFunction<std::size_t> markedMesh(mesh);
   markedMesh.set_all(1);
   boundary.mark(markedMesh,2);
-  dolfin::File fileMesh("./problems/test_eafe/output/mesh.pvd");
+  dolfin::File fileMesh("./aux/test_eafe2/output/mesh.pvd");
   fileMesh << markedMesh;
 
 
@@ -248,7 +248,7 @@ int main()
 
   // Save solution in VTK format
   printf("\tSave RHS in VTK format\n"); fflush(stdout);
-  dolfin::File fileRHS("./problems/test_eafe2/output/RHS.pvd");
+  dolfin::File fileRHS("./aux/test_eafe2/output/RHS.pvd");
   fileRHS << f;
 
 
@@ -294,7 +294,7 @@ int main()
   *(u_eafe.vector()) = u_eafe_vector;
   // Save solution in VTK format
   printf("\tSave EAFE solution in VTK format\n"); fflush(stdout);
-  dolfin::File file_eafe("./problems/test_eafe2/output/EAFEConvection.pvd");
+  dolfin::File file_eafe("./aux/test_eafe2/output/EAFEConvection.pvd");
   file_eafe << u_eafe;
 
   printf("\tTestcase formulation\n"); fflush(stdout);
@@ -310,7 +310,7 @@ int main()
   *(u.vector()) = u_vector;
   // Save solution in VTK format
   printf("\tSave standard solution in VTK format\n"); fflush(stdout);
-  dolfin::File file("./problems/test_eafe2/output/Convection.pvd");
+  dolfin::File file("./aux/test_eafe2/output/Convection.pvd");
   file << u;
   printf("\n");
 
@@ -321,7 +321,7 @@ int main()
   diff=u_eafe-Proj;
   // diff.abs();
   printf("\tSave the difference in VTK format\n"); fflush(stdout);
-  dolfin::File file2("./problems/test_eafe2/output/diff.pvd");
+  dolfin::File file2("./aux/test_eafe2/output/diff.pvd");
   file2 << diff;
   double n = norm(*(diff.vector()),"l1");
   printf("\tThe L2 error is %f\n",n); fflush(stdout);
