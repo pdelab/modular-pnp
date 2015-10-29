@@ -198,6 +198,7 @@ SHORT domain_param_input_init (domain_param *inparam)
 {
     SHORT status = FASP_SUCCESS;
 
+    inparam->ref_length = 1.0;
     inparam->length_x = 1.0;
     inparam->length_y = 1.0;
     inparam->length_z = 1.0;
@@ -229,7 +230,8 @@ SHORT domain_param_check (domain_param *inparam)
 {
     SHORT status = FASP_SUCCESS;
 
-    if ( inparam->length_x < 0.0
+    if ( inparam->ref_length < 0.0
+        || inparam->length_x < 0.0
         || inparam->length_y < 0.0
         || inparam->length_z < 0.0
         || inparam->length_time < 0.0
@@ -287,7 +289,18 @@ void domain_param_input (const char *filenm,
         }
         
         // match keyword and scan for value
-        if (strcmp(buffer,"length_x")==0) {
+        if (strcmp(buffer,"ref_length")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%lf",&dbuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->ref_length = dbuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
+        else if (strcmp(buffer,"length_x")==0) {
             val = fscanf(fp,"%s",buffer);
             if (val!=1 || strcmp(buffer,"=")!=0) {
                 status = ERROR_INPUT_PAR; break;
@@ -449,10 +462,12 @@ void print_domain_param (domain_param *inparam)
 {
   printf("Successfully read-in domain parameters\n");
   if ( strcmp(inparam->mesh_file,"none")==0 ) {
+    printf("\tThe reference length is %e meters\n",inparam->ref_length);
     printf("\tDomain: %f x %f x %f\n",  inparam->length_x,inparam->length_y,inparam->length_z);
     printf("\tGrid:   %d x %d x %d\n\n",inparam->grid_x,inparam->grid_y,inparam->grid_z);
     fflush(stdout);
   } else {
+    printf("\tThe reference length is %e meters\n",inparam->ref_length);
     printf("\tMesh file:      %s\n",  inparam->mesh_file);
     printf("\tSubdomain file: %s\n",  inparam->subdomain_file);
     printf("\tSurface file:   %s\n\n",inparam->surface_file);
@@ -497,13 +512,14 @@ SHORT coeff_param_input_init (coeff_param *inparam)
  *
  * \param inparam   Input parameters
  *
- * \return          FASP_SUCCESS if successed; otherwise, error information.
+ * \return          FASP_SUCCESS if success; otherwise, error information.
  */
 SHORT coeff_param_check (coeff_param *inparam)
 {
     SHORT status = FASP_SUCCESS;
 
-    if ( inparam->temperature < 0.0
+    if ( inparam->ref_voltage < 0.0
+        || inparam->temperature < 0.0
         || inparam->relative_permittivity < 0.0
         || inparam->cation_diffusivity < 0.0
         || inparam->cation_mobility < 0.0
@@ -557,7 +573,29 @@ void coeff_param_input (const char *filenm,
         }
         
         // match keyword and scan for value
-        if (strcmp(buffer,"temperature")==0) {
+        if (strcmp(buffer,"ref_voltage")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%lf",&dbuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->ref_voltage = dbuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
+        else if (strcmp(buffer,"ref_density")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%lf",&dbuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->ref_density = dbuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
+        else if (strcmp(buffer,"temperature")==0) {
             val = fscanf(fp,"%s",buffer);
             if (val!=1 || strcmp(buffer,"=")!=0) {
                 status = ERROR_INPUT_PAR; break;
@@ -674,14 +712,75 @@ void coeff_param_input (const char *filenm,
 void print_coeff_param (coeff_param *inparam)
 {
   printf("Successfully read-in PDE coefficients\n");
-  printf("\ttemperature:           \t%15.4e\n",inparam->temperature);
+  printf("\treference voltage:     \t%15.4e V\n",inparam->ref_voltage);
+  if (inparam->ref_density > 0.0)
+    printf("\treference density:     \t%15.4e 1 / m^3\n",inparam->ref_density);
+  else
+    printf("\treference density:     \t%15.4e mM\n",-inparam->ref_density);
+  printf("\ttemperature:           \t%15.4e K\n",inparam->temperature);
   printf("\trelative permittivity: \t%15.4e\n",inparam->relative_permittivity);
-  printf("\tcation diffusivity:    \t%15.4e\n",inparam->cation_diffusivity);
-  printf("\tcation mobility:       \t%15.4e\n",inparam->cation_mobility);
-  printf("\tcation valency:        \t%15.4e\n",inparam->cation_valency);
-  printf("\tanion diffusivity:     \t%15.4e\n",inparam->anion_diffusivity);
-  printf("\tanion mobility:        \t%15.4e\n",inparam->anion_mobility);
-  printf("\tanion valency:         \t%15.4e\n",inparam->anion_valency);
+  printf("\tcation diffusivity:    \t%15.4e m / s^2\n",inparam->cation_diffusivity);
+  printf("\tcation mobility:       \t%15.4e (e_c/k_B*T) * m / s^2 \n",inparam->cation_mobility);
+  printf("\tcation valency:        \t%15.4e e_c\n",inparam->cation_valency);
+  printf("\tanion diffusivity:     \t%15.4e m / s^2\n",inparam->anion_diffusivity);
+  printf("\tanion mobility:        \t%15.4e (e_c/k_B*T) * m / s^2 \n",inparam->anion_mobility);
+  printf("\tanion valency:         \t%15.4e e_c\n",inparam->anion_valency);
+  printf("\n");
+}
+
+/**
+ * \fn void non_dimesionalize_coefficients (domain_param *domain,
+ *                                          coeff_param *coeffs,
+ *                                          coeff_param *non_dim_coeffs)
+ * \brief Print coeff params
+ * \param inparam  Input parameters
+ */
+void non_dimesionalize_coefficients (domain_param *domain,
+                                     coeff_param *coeffs,
+                                     coeff_param *non_dim_coeffs)
+{
+  // physical constants
+  REAL boltzmann = 1.38064880e-23 ; // Boltzmann Constant (m^2 kg / s^2 K)
+  REAL eps_0 = 8.85418782e-12 ;     // Vacuum Permittivity (s^4 A^2 / m^3 kg)
+  REAL e_chrg = 1.60217657e-19 ;    // Elementary Positive Charge (A s)
+  REAL n_avo = 6.02214129e+23 ;     // Avogadro's number 1 / mol
+
+  // solution scale
+  non_dim_coeffs->ref_voltage = boltzmann * coeffs->temperature * coeffs->ref_voltage / e_chrg;
+  non_dim_coeffs->ref_density = (coeffs->ref_density > 0.0)? 
+    coeffs->ref_density : -(n_avo * coeffs->ref_density);
+
+  // length scale
+  REAL ref_length = domain->ref_length;
+  REAL debye_length = sqrt( (boltzmann * eps_0 * coeffs->relative_permittivity * coeffs->temperature)
+    / non_dim_coeffs->ref_density ) / e_chrg;
+
+  // pde coefficients
+  REAL diffusivity_ref = (coeffs->cation_diffusivity > coeffs->anion_diffusivity)?
+    coeffs->cation_diffusivity : coeffs->anion_diffusivity;
+  non_dim_coeffs->relative_permittivity = debye_length * debye_length / (ref_length * ref_length);
+  non_dim_coeffs->cation_diffusivity    = coeffs->cation_diffusivity / diffusivity_ref;
+  non_dim_coeffs->cation_mobility       = coeffs->cation_mobility / diffusivity_ref;
+  non_dim_coeffs->cation_valency        = coeffs->cation_valency;
+  non_dim_coeffs->anion_diffusivity     = coeffs->anion_diffusivity / diffusivity_ref;
+  non_dim_coeffs->anion_mobility        = coeffs->anion_mobility / diffusivity_ref;
+  non_dim_coeffs->anion_valency         = coeffs->anion_valency;
+
+  // if met unexpected input, stop the program
+  SHORT status = FASP_SUCCESS;
+  status = coeff_param_check(non_dim_coeffs);
+  fasp_chkerr(status,"non_dimesionalize_coefficients");
+
+  printf("Dimensional analysis\n");
+  printf("\treference length:      \t%15.4e m\n",ref_length);
+  printf("\treference length:      \t%15.4e m\n",debye_length);
+  printf("\treference voltage:     \t%15.4e V\n",non_dim_coeffs->ref_voltage);
+  printf("\treference density:     \t%15.4e 1 / m^3\n",non_dim_coeffs->ref_density);
+  printf("\tpermittivity:          \t%15.4e\n",non_dim_coeffs->relative_permittivity);
+  printf("\tcation diffusivity:    \t%15.4e\n",non_dim_coeffs->cation_diffusivity);
+  printf("\tcation mobility:       \t%15.4e\n",non_dim_coeffs->cation_mobility);
+  printf("\tanion diffusivity:     \t%15.4e\n",non_dim_coeffs->anion_diffusivity);
+  printf("\tanion mobility:        \t%15.4e\n",non_dim_coeffs->anion_mobility);
   printf("\n");
 }
 

@@ -41,7 +41,7 @@ int main()
 
 	// read domain parameters
 	domain_param domain_par;
-	char domain_param_filename[] = "./problems/test_reading/domain_params.dat";
+	char domain_param_filename[] = "./aux/test_reading/domain_params.dat";
   domain_param_input(domain_param_filename, &domain_par);
   print_domain_param(&domain_par);
 
@@ -60,10 +60,11 @@ int main()
    */
 
   // read coefficients and boundary values
-  coeff_param coeff_par;
-  char coeff_param_filename[] = "./problems/test_reading/coeff_params.dat";
+  coeff_param coeff_par, non_dim_coeff_par;
+  char coeff_param_filename[] = "./aux/test_reading/coeff_params.dat";
   coeff_param_input(coeff_param_filename, &coeff_par);
   print_coeff_param(&coeff_par);
+  non_dimesionalize_coefficients(&domain_par, &coeff_par, &non_dim_coeff_par);
 
 	// dimensional analysis
 
@@ -91,7 +92,7 @@ int main()
 
 	// read Newton solver parameters
 	newton_param newton_par;
-	char newton_param_filename[] = "./problems/test_reading/newton_params.dat";
+	char newton_param_filename[] = "./aux/test_reading/newton_params.dat";
   newton_param_input(newton_param_filename, &newton_par);
   print_newton_param(&newton_par);
 
