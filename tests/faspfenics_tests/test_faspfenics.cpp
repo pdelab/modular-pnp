@@ -43,11 +43,17 @@ class DirichletBoundary : public SubDomain
   }
 };
 
-int main()
+int main(int argc, char** argv)
 {
 
   int i;
   int BIG_FLAG=0;
+
+  if (argc >1)
+  {
+    if (std::string(argv[1])=="DEBUG") DEBUG = true;
+  }
+
 
   // Need to use Eigen for linear algebra
   parameters["linear_algebra_backend"] = "Eigen"; // or uBLAS
@@ -75,9 +81,9 @@ int main()
   dolfin::EigenVector EV; assemble(EV,L);
 
   if (DEBUG) {
-    std::cout << "############################################################ \n";
-    std::cout << "#### Test of the interface between FASP and FENiCS      #### \n";
-    std::cout << "############################################################ \n";
+    std::cout << "################################################################# \n";
+    std::cout << "#### Test of the interface FASP and FENiCS with DEBUG=TRUE   #### \n";
+    std::cout << "################################################################# \n";
   }
 
   // test EigenMatrix_to_dCSRmat
@@ -228,9 +234,9 @@ int main()
 
 
   if (DEBUG) {
-    std::cout << "############################################################ \n";
-    std::cout << "#### End of the test                                    #### \n";
-    std::cout << "############################################################ \n";
+    std::cout << "################################################################# \n";
+    std::cout << "#### End of the test of the fasp fenics interface            #### \n";
+    std::cout << "################################################################# \n";
   }
 
   return 0;
