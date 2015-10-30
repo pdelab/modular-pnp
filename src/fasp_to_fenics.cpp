@@ -83,8 +83,11 @@ void copy_dvector_to_EigenVector(const dvector* vec_b, dolfin::EigenVector* EGVe
   if ( length<1 ) {
     fasp_chkerr(ERROR_INPUT_PAR, "copy_dvector_to_EigenVector");
   }
+  if ( length!=EGVec->size() ) {
+    fasp_chkerr(ERROR_INPUT_PAR, "copy_dvector_to_EigenVector");
+  }
 
-  printf("%d is the length\n", length); fflush(stdout);
+  //printf("%d is the length\n", length); fflush(stdout);
   // Get the array
   double* array = EGVec->data();
   for(std::size_t i=0; i < length; ++i)

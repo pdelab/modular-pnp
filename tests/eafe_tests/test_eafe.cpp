@@ -96,10 +96,15 @@ class AdvectionGiven_y : public Expression
   }
 };
 
-int main()
+int main(int argc, char** argv)
 {
   parameters["linear_algebra_backend"] = "Eigen"; // or uBLAS
   parameters["allow_extrapolation"] = true;
+
+  if (argc >1)
+  {
+    if (std::string(argv[1])=="DEBUG") DEBUG = true;
+  }
 
   // Create mesh and function space
   int mesh_size = 100;
@@ -129,6 +134,9 @@ int main()
    * Unit test: test EAFE on a problem for the x-coordinate
    */
   if (DEBUG) {
+    std::cout << "################################################################# \n";
+    std::cout << "#### Test of EAFE.h with DEBUG=TRUE                          #### \n";
+    std::cout << "################################################################# \n";
     printf("Solving the unit test for EAFE in the x-coordinate\n");
   }
   // Define analytic expressions
@@ -150,7 +158,7 @@ int main()
   /// Setup linear algebra objects
   dolfin::EigenMatrix A_x;
   dolfin::EigenVector b_x;
-  assemble(A_x,a_x); 
+  assemble(A_x,a_x);
   bc_x.apply(A_x);
   assemble(b_x,L_x);
   bc_x.apply(b_x);
@@ -228,7 +236,7 @@ int main()
   /// Setup linear algebra objects
   dolfin::EigenMatrix A_y;
   dolfin::EigenVector b_y;
-  assemble(A_y,a_y); 
+  assemble(A_y,a_y);
   bc_y.apply(A_y);
   assemble(b_y,L_y);
   bc_y.apply(b_y);
@@ -274,6 +282,12 @@ int main()
     printf("Success... ");
     printf("passed EAFE test on y\n");
     fflush(stdout);
+  }
+
+  if (DEBUG) {
+    std::cout << "################################################################# \n";
+    std::cout << "#### End of the test of EAFE                                 #### \n";
+    std::cout << "################################################################# \n";
   }
 
   return 0;

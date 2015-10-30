@@ -54,7 +54,7 @@ public:
 
     // diffusion = -alpha*exp(eta)*(u_xx + u_yy + u_zz)
     double diffusion = -2.0*A*std::exp(E)*( x[1]*(x[1]-1.0) + x[0]*(x[0]-1.0) );
-    
+
     // advection = -alpha*exp(eta)*(b_x*u_x + b_y*u_y + b_z*u_z)
     double advection = -A*std::exp(E)*( BX*x[1]*(x[1]-1.0)*(2.0*x[0]-1.0) + BY*x[0]*(x[0]-1.0)*(2.0*x[1]-1.0) );
 
@@ -84,9 +84,9 @@ public:
     }
     else {  // x and y boundaries
       return on_boundary and (
-        x[0] < DOLFIN_EPS 
+        x[0] < DOLFIN_EPS
         or x[0] > 1.0 - DOLFIN_EPS
-        or x[1] < DOLFIN_EPS 
+        or x[1] < DOLFIN_EPS
         or x[1] > 1.0 - DOLFIN_EPS
       );
     }
@@ -189,7 +189,7 @@ int main()
     int ibuff;
     double dbuff;
     char *fgetsPtr;
-    
+
     val = fscanf(fp,"%s",buffer);
     if (val==EOF) break;
     if (val!=1){ state = false; break; }
@@ -197,7 +197,7 @@ int main()
         fgetsPtr = fgets(buffer,500,fp); // skip rest of line
         continue;
     }
-    
+
     // match keyword and scan for value
     if (strcmp(buffer,"mesh_size")==0) {
       val = fscanf(fp,"%s",buffer);
@@ -231,7 +231,7 @@ int main()
       alpha_double = dbuff;
       fgetsPtr = fgets(buffer,500,fp); // skip rest of line
     }
-    
+
     else if (strcmp(buffer,"eta_double")==0) {
       val = fscanf(fp,"%s",buffer);
       if (val!=1 || strcmp(buffer,"=")!=0) {
@@ -290,7 +290,7 @@ int main()
     else {
         state = true;
         printf(" Bad read-in: %s property unknown \n", buffer); fflush(stdout);
-    }  
+    }
   }
   fclose(fp);
 
@@ -360,7 +360,7 @@ int main()
   printf("Define analytic expressions\n"); fflush(stdout);
   dolfin::Constant alpha(alpha_double);
   dolfin::Constant gamma(gamma_double);
-  
+
   dolfin::Function beta(CG);
   if (test_problem==2) {
     AdvectionFromPaper betaFromPaper(alpha_double,eta_double);
@@ -491,11 +491,10 @@ int main()
   dCSRmat adaptA_fasp;
   EigenMatrix_to_dCSRmat(&A_eafe, &adaptA_fasp);
   // fasp_dcoo_write("A_fasp.dat", &adaptA_fasp);
-  
+
   dvector adaptb_fasp;
   EigenVector_to_dvector(&b, &adaptb_fasp);
   dvector adaptsoluvec;
-  EigenVector_to_dvector(&u_vector, &adaptsoluvec) ;
   fasp_dvec_alloc(adaptb_fasp.row, &adaptsoluvec);
   fasp_dvec_set(adaptb_fasp.row, &adaptsoluvec, 0.0);
   printf("\t...initialize solver parameters\n"); fflush(stdout);
@@ -515,6 +514,7 @@ int main()
   dolfin::File file_FASP("./aux/test_eafe/output/FASPConvection.pvd");
   file_FASP << u_fasp;
   printf("\n");
+  fasp_dvec_free(&adaptsoluvec);
 
 
   /// Compare to analytic solution for test_problem == 3
@@ -550,12 +550,12 @@ int main()
     std::cout << "There are " << A.nnz() << " nonzero entries in the standard formulation\n";
     std::cout << "There are " << A_eafe.nnz() << " nonzero entries in the EAFE formulation\n\n";
 
-    std::cout << "The standard stiffness matrix is:\n";  
+    std::cout << "The standard stiffness matrix is:\n";
     std::string A_string = A.str(true);
     std::cout << A_string << "\n\n";
 
-    std::cout << "The EAFE stiffness matrix is:\n";  
-    std::string A_eafe_string = A_eafe.str(true);  
+    std::cout << "The EAFE stiffness matrix is:\n";
+    std::string A_eafe_string = A_eafe.str(true);
     std::cout << A_eafe_string;
     printf("\n");
   }
