@@ -74,10 +74,13 @@ int main()
   L.g = g;
   dolfin::EigenVector EV; assemble(EV,L);
 
-  std::cout << "############################################################ \n";
-  std::cout << "#### Test of the interface between FASP and FENiCS      #### \n";
-  std::cout << "############################################################ \n";
+  if (DEBUG) {
+    std::cout << "############################################################ \n";
+    std::cout << "#### Test of the interface between FASP and FENiCS      #### \n";
+    std::cout << "############################################################ \n";
+  }
 
+  // test EigenMatrix_to_dCSRmat
   dCSRmat dcsr_A;
   EigenMatrix_to_dCSRmat(&EA, &dcsr_A);
   if (DEBUG) std::cout << "Test of EigenMatrix_to_dCSRmat\n";
@@ -96,15 +99,15 @@ int main()
     BIG_FLAG=1;
   }
   if (dcsr_A.col-EA.size(1)==0){
-    if (DEBUG) std::cout << "\tNumber or columes...Success\n";
+    if (DEBUG) std::cout << "\tNumber or columns...Success\n";
   }
   else{
-    if (DEBUG) std::cout << "\tNumber or columes...Failure\n";
+    if (DEBUG) std::cout << "\tNumber or columns...Failure\n";
     BIG_FLAG=1;
   }
-  int *IA = (int*) std::get<0>(EA.data());
-  int* JA= (int*) std::get<1>(EA.data());
-  double* vals= (double*) std::get<2>(EA.data());
+  int* IA = (int*) std::get<0>(EA.data());
+  int* JA = (int*) std::get<1>(EA.data());
+  double* vals = (double*) std::get<2>(EA.data());
 
   if (dcsr_A.IA-IA==0){
     if (DEBUG) std::cout << "\tIA...Success\n";
@@ -128,6 +131,7 @@ int main()
     BIG_FLAG=1;
   }
 
+  // test EigenVector_to_dvector
   dvector d_vec;
   EigenVector_to_dvector(&EV,&d_vec);
   if (DEBUG) std::cout << "Test of EigenVector_to_dvector\n";
@@ -147,6 +151,7 @@ int main()
     BIG_FLAG=1;
   }
 
+  // test copy_dvector_to_EigenVector
   EigenVector EV2(d_vec.row);
   copy_dvector_to_EigenVector(&d_vec, &EV2);
   if (DEBUG) std::cout << "Test of copy_dvector_to_EigenVector\n";
@@ -178,6 +183,7 @@ int main()
     BIG_FLAG=1;
   }
 
+  // test copy_dvector_to_Function
   dolfin::Function F(V);
   copy_dvector_to_Function(&d_vec, &F);
   if (DEBUG) std::cout << "Test of copy_dvector_to_Function\n";
@@ -212,9 +218,7 @@ int main()
   }
 
   if (BIG_FLAG==0){
-    std::cout << "####\n";
-    std::cout << "#### Success! the fasp fenics interface is working\n";
-    std::cout << "####\n";
+    std::cout << "Success... the fasp fenics interface is working\n";
   }
   else {
     std::cout << "####\n";
@@ -223,10 +227,11 @@ int main()
   }
 
 
-
-  std::cout << "############################################################ \n";
-  std::cout << "#### End of the test                                    #### \n";
-  std::cout << "############################################################ \n";
+  if (DEBUG) {
+    std::cout << "############################################################ \n";
+    std::cout << "#### End of the test                                    #### \n";
+    std::cout << "############################################################ \n";
+  }
 
   return 0;
 }
