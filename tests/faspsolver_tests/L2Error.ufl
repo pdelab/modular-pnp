@@ -4,7 +4,7 @@
 #
 # Compile this form with FFC: ffc -O -l dolfin L2Error.ufl.
 
-CG = FiniteElement("CG", tetrahedron, 1)
+CG = FiniteElement("Lagrange", triangle, 1)
 
 error = Coefficient(CG)
 
