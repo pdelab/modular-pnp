@@ -208,20 +208,103 @@ int main(int argc, char** argv)
   *(Error1.vector())-=*(solu_ex.vector());
   *(Error2.vector())-=*(solu_ex.vector());
   *(Error3.vector())-=*(solu_ex.vector());
-
   L2Error::Form_M L2error1(mesh,Error1);
   error_norm1 = assemble(L2error1);
-  if (DEBUG) printf("FASP/Exact Solution L2 Error is:\t%e\n", error_norm1);
-
   L2Error::Form_M L2error2(mesh,Error2);
   error_norm2 = assemble(L2error2);
-  if (DEBUG) printf("FASP/FENiCS L2 Error is:\t%e\n", error_norm2);
-
   L2Error::Form_M L2error3(mesh,Error3);
   error_norm3 = assemble(L2error3);
-  if (DEBUG) printf("FENiCS/Exact Soltuion L2 Error is:\t%e\n", error_norm3);
 
-  if ((error_norm1 < 1E-7) && (error_norm1 < 1E-7))
+
+  // On the 100x100 mesh
+  UnitSquareMesh mesh1(150, 150);
+  Poisson::FunctionSpace V1(mesh1);
+  FacetFunction<std::size_t> markers1(mesh1, 1);
+  markers1.set_all(0);
+  N1B.mark(markers1, 1);
+  N2B.mark(markers1, 2);
+  DirichletBC bc1(V1, u0, boundary);
+  Poisson::BilinearForm a1(V1, V1);
+  Poisson::LinearForm L1(V1);
+  L1.ds = markers1;
+  L1.f = f;
+  L1.g1 = g1;
+  L1.g2 = g2;
+  EigenMatrix A1;
+  assemble(A1,a1); bc1.apply(A1);
+  EigenVector b1;
+  assemble(b1,L1); bc1.apply(b1);
+  dCSRmat A1_fasp;
+  dvector b1_fasp;
+  dvector Solu1_fasp;
+  EigenVector_to_dvector(&b1,&b1_fasp);
+  EigenMatrix_to_dCSRmat(&A1,&A1_fasp);
+  fasp_dvec_alloc(b1_fasp.row, &Solu1_fasp);
+  fasp_dvec_set(b1_fasp.row, &Solu1_fasp, 0.0);
+  status = fasp_solver_dcsr_krylov(&A1_fasp, &b1_fasp, &Solu1_fasp, &itpar);
+  dolfin::Function solu1_ex(V1);
+  solu1_ex.interpolate(ExactSolu);
+  dolfin::Function Error4(V1);
+  copy_dvector_to_Function(&Solu1_fasp,&Error4);
+  *(Error4.vector())-=*(solu1_ex.vector());
+  double error_norm4 = 0.0;
+  L2Error::Form_M L2error4(mesh1,Error4);
+  error_norm4 = assemble(L2error4);
+
+  // On the 300x300 mesh
+  UnitSquareMesh mesh3(250, 250);
+  Poisson::FunctionSpace V3(mesh3);
+  FacetFunction<std::size_t> markers3(mesh3, 1);
+  markers3.set_all(0);
+  N1B.mark(markers3, 1);
+  N2B.mark(markers3, 2);
+  DirichletBC bc3(V3, u0, boundary);
+  Poisson::BilinearForm a3(V3, V3);
+  Poisson::LinearForm L3(V3);
+  L3.ds = markers3;
+  L3.f = f;
+  L3.g1 = g1;
+  L3.g2 = g2;
+  EigenMatrix A3;
+  assemble(A3,a3); bc3.apply(A3);
+  EigenVector b3;
+  assemble(b3,L3); bc3.apply(b3);
+  dCSRmat A3_fasp;
+  dvector b3_fasp;
+  dvector Solu3_fasp;
+  EigenVector_to_dvector(&b3,&b3_fasp);
+  EigenMatrix_to_dCSRmat(&A3,&A3_fasp);
+  fasp_dvec_alloc(b3_fasp.row, &Solu3_fasp);
+  fasp_dvec_set(b3_fasp.row, &Solu3_fasp, 0.0);
+  status = fasp_solver_dcsr_krylov(&A3_fasp, &b3_fasp, &Solu3_fasp, &itpar);
+  dolfin::Function solu3_ex(V3);
+  solu3_ex.interpolate(ExactSolu);
+  dolfin::Function Error5(V3);
+  copy_dvector_to_Function(&Solu3_fasp,&Error5);
+  *(Error5.vector())-=*(solu3_ex.vector());
+  double error_norm5 = 0.0;
+  L2Error::Form_M L2error5(mesh3,Error5);
+  error_norm5 = assemble(L2error5);
+
+
+  if (DEBUG){
+    printf("On the 150x150 mesh:\n");
+    printf("\tFASP/Exact Solution L2 Error is:\t%e\n", error_norm4);
+    printf("On the 200x200 mesh:\n");
+    printf("\tFASP/Exact Solution L2 Error is:\t%e\n", error_norm1);
+    printf("\tFASP/FENiCS L2 Error is:\t\t%e\n", error_norm2);
+    printf("\tFENiCS/Exact Soltuion L2 Error is:\t%e\n", error_norm3);
+    printf("On the 300x300 mesh:\n");
+    printf("\tFASP/Exact Solution L2 Error is:\t%e\n", error_norm5);
+    printf("The slopes for the FASP/Exact Solution L2 Error are:\n");
+    printf("\t%e\n", std::fabs(log(error_norm4)-log(error_norm1)/(log(150.0)-log(200.0))));
+    printf("\t%e\n", std::fabs(log(error_norm5)-log(error_norm1)/(log(250.0)-log(200.0))));
+  }
+
+
+
+
+  if ((error_norm1 < 1E-7) && (error_norm2 < 1E-7) && (error_norm1 < error_norm4) && (error_norm5 < error_norm1))
   {
     std::cout << "Success... the fasp solver is working\n";
   }
