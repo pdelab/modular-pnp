@@ -24,7 +24,8 @@ int main()
    * First test to see if the boundary conditions works
    */
   // initialize mesh
-  printf("Initializing mesh: \n");
+  printf("Test subdomains: \n");
+  printf("\tInitializing mesh: \n");
   double lower_x = -1.0e+1, upper_x =  1.0e+1;
   double lower_y = -1.0e+1, upper_y =  1.0e+1;
   double lower_z = -5.0e+0, upper_z =  5.0e+0;
@@ -150,11 +151,18 @@ int main()
   /**
    * Initialize analytic expression for log-charges and voltages
    */
-  // test x-direction
-
-  // test y-direction
-
-  // test z-direction
+  printf("Test initial expressions: \n");
+  Poisson::FunctionSpace CG(mesh);
+  LogCharge charge_x_expr(std::exp(1.0), std::exp(10.0), lower_x, upper_x, 0);
+  Voltage voltage_x_expr(-1.0, 1.0, lower_x, upper_x, 0);
+  dolfin::Function charge_x(CG);
+  dolfin::Function voltage_x(CG);
+  charge_x.interpolate(charge_x_expr);
+  voltage_x.interpolate(voltage_x_expr);
+  File charge_x_file("aux/test_bc/output/charge_x.pvd");
+  File voltage_x_file("aux/test_bc/output/voltage_x.pvd");
+  charge_x_file << charge_x;
+  voltage_x_file << voltage_x;
 
 
   return 0;

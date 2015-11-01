@@ -69,8 +69,8 @@ LogCharge::LogCharge(double lower_val, double upper_val,
 // evaluate LogCharge Expression
 void LogCharge::eval(Array<double>& values, const Array<double>& x) const
 {
-  values[0]  = log(_lower_val) * (_upper - x[_bc_coord]) / (_upper - _lower);
-  values[0] -= log(_upper_val) * (x[_bc_coord] - _lower) / (_upper - _lower);
+  values[0]  = std::log(_lower_val) * (_upper - x[_bc_coord]) / (_upper - _lower);
+  values[0] += std::log(_upper_val) * (x[_bc_coord] - _lower) / (_upper - _lower);
 }
 //  constructor
 Voltage::Voltage(double lower_val, double upper_val,
@@ -86,5 +86,5 @@ Voltage::Voltage(double lower_val, double upper_val,
 void Voltage::eval(Array<double>& values, const Array<double>& x) const
 {
   values[0]  = _lower_val * (_upper - x[_bc_coord]) / (_upper - _lower);
-  values[0] -= _upper_val * (x[_bc_coord] - _lower) / (_upper - _lower);
+  values[0] += _upper_val * (x[_bc_coord] - _lower) / (_upper - _lower);
 }
