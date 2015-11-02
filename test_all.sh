@@ -19,11 +19,11 @@ echo "Running unit tests..."
 
 if [ "$1"=="DEBUG" ]; then
 	./test_eafe $1
-  ./test_faspfenics $1
+  	./test_faspfenics $1
 	./test_bc $1
 else
 	./test_eafe
-  ./test_faspfenics
+  	./test_faspfenics
 	./test_bc
 fi
 

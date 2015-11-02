@@ -92,6 +92,9 @@ int main(int argc, char** argv)
    */
   // initialize mesh
   if (DEBUG) {
+    std::cout << "################################################################# \n";
+    std::cout << "#### Test of boundary_condtions.cpp                          #### \n";
+    std::cout << "################################################################# \n";
     printf("Test subdomains: \n");
     printf("\tInitializing mesh: \n");
     printf("\t[%7.2e, %7.2e] x [%7.2e, %7.2e] x [%7.2e, %7.2e]\n",
@@ -118,7 +121,8 @@ int main(int argc, char** argv)
   bdry_z.mark(boundary_parts, 3);
   if (DEBUG) {
     printf("\toutput boundaries\n");
-    File meshfile("tests/test_bc/output/boundary_parts.pvd");
+    File meshfile("tests/bc_tests/output/boundary_parts.pvd");
+    boundary_parts.rename("boundaries (x=1, y=2, z=3)", "boundaries");
     meshfile << boundary_parts;
   }
   // test some points in boundary
@@ -274,7 +278,7 @@ int main(int argc, char** argv)
    */
   if (DEBUG) printf("Test initial expressions: \n");
   Poisson::FunctionSpace CG(mesh);
-  
+
   if (DEBUG) printf("\talong x-coordinate \n");
   LogCharge charge_x_expr(std::exp(1.0), std::exp(10.0), lower_x, upper_x, 0);
   Voltage voltage_x_expr(-1.0, 1.0, lower_x, upper_x, 0);
@@ -378,22 +382,27 @@ int main(int argc, char** argv)
   }
 
   if (DEBUG) {
-    File charge_x_file("tests/test_bc/output/charge_x.pvd");
-    File voltage_x_file("tests/test_bc/output/voltage_x.pvd");
+    File charge_x_file("tests/bc_tests/output/charge_x.pvd");
+    File voltage_x_file("tests/bc_tests/output/voltage_x.pvd");
     charge_x_file << charge_x;
     voltage_x_file << voltage_x;
-  
-    File charge_y_file("tests/test_bc/output/charge_y.pvd");
-    File voltage_y_file("tests/test_bc/output/voltage_y.pvd");
+
+    File charge_y_file("tests/bc_tests/output/charge_y.pvd");
+    File voltage_y_file("tests/bc_tests/output/voltage_y.pvd");
     charge_y_file << charge_y;
     voltage_y_file << voltage_y;
-    
-    File charge_z_file("tests/test_bc/output/charge_z.pvd");
-    File voltage_z_file("tests/test_bc/output/voltage_z.pvd");
+
+    File charge_z_file("tests/bc_tests/output/charge_z.pvd");
+    File voltage_z_file("tests/bc_tests/output/voltage_z.pvd");
     charge_z_file << charge_z;
     voltage_z_file << voltage_z;
   }
 
   printf("Success... passed initializing BC interpolation\n");
+  if (DEBUG){
+    std::cout << "################################################################# \n";
+    std::cout << "#### End of test of boundary_condtions.cpp                   #### \n";
+    std::cout << "################################################################# \n";
+  }
   return 0;
 }
