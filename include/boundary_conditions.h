@@ -17,65 +17,63 @@
 #include <ufc.h>
 
 
-/////////////////////////////////////////////////////////////////////////////
-///  Sub Domains
-/////////////////////////////////////////////////////////////////////////////
+/*------- In file: boundary_conditions.cpp -------*/
 
-class XBoundaries: public dolfin::SubDomain {
+class XBoundaries : public dolfin::SubDomain {
 public:
-  double Lx;
-  XBoundaries(double _Lx);
+  // constructor
+  XBoundaries(double lower, double upper);
+  // check if a point is in Xboundaries
   bool inside(const dolfin::Array<double>& x, bool on_boundary) const;
+private:
+  double _lower, _upper;
 };
 
-class YBoundaries: public dolfin::SubDomain {
+class YBoundaries : public dolfin::SubDomain {
 public:
-  double Ly;
-  YBoundaries(double _Ly);
+  // constructor
+  YBoundaries(double lower, double upper);
+  // check if a point is in Yboundaries
   bool inside(const dolfin::Array<double>& x, bool on_boundary) const;
+private:
+  double _lower, _upper;
 };
 
-class ZBoundaries: public dolfin::SubDomain {
+class ZBoundaries : public dolfin::SubDomain {
 public:
-  double Lz;
-  ZBoundaries(double _Lz);
+  // constructor
+  ZBoundaries(double lower, double upper);
+  // check if a point is in Zboundaries
   bool inside(const dolfin::Array<double>& x, bool on_boundary) const;
+private:
+  double _lower, _upper;
 };
 
-class dielectricChannel : public dolfin::SubDomain
-{
-  double Lz;
-public:
-    dielectricChannel(double _Lz);
-    bool inside(const dolfin::Array<double>& x, bool on_boundary) const;
-};
-/////////////////////////////////////////////////////////////////////////////
-///  Boundary Conditions
-/////////////////////////////////////////////////////////////////////////////
-
+/// Initialize expressions
 class LogCharge : public dolfin::Expression
 {
 public:
-    LogCharge(double ext_bulk, double int_bulk, double bc_dist, int bc_dir);
-    void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const;
+  // constructor
+  LogCharge(double lower_val, double upper_val,
+    double lower, double upper, int bc_coord);
+  // evaluate LogCarge
+  void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const;
 private:
-    double ext_contact, int_contact, bc_distance;
-    int bc_direction;
+  double _lower_val, _upper_val, _upper, _lower;
+  int _bc_coord;
 };
 
-//  Voltage
 class Voltage : public dolfin::Expression
 {
-    double ext_volt;
-    double int_volt;
-    double bc_dist;
-    int bc_dir;
 public:
-    Voltage(double ext_volt, double int_volt, double bc_dist, int bc_dir);
-    void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const;
+  // constructor
+  Voltage(double lower_val, double upper_val,
+    double lower, double upper, int bc_coord);
+  // evaluate Voltage
+  void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const;
 private:
-    double ext_voltage, int_voltage, bc_distance;
-    int bc_direction;
+  double _lower_val, _upper_val, _upper, _lower;
+  int _bc_coord;
 };
 
 #endif
