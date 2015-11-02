@@ -12,6 +12,7 @@ echo "Building tests..."
 
 make test_eafe
 make test_faspfenics
+make test_faspsolver
 
 echo
 echo "Running unit tests..."
@@ -19,9 +20,11 @@ echo "Running unit tests..."
 if [ "$1"=="DEBUG" ]; then
 	./test_eafe $1
 	./test_faspfenics $1
+	./test_faspsolver $1
 else
 	./test_eafe
 	./test_faspfenics
+	./test_faspsolver
 fi
 
 

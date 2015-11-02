@@ -294,7 +294,7 @@ int main(int argc, char** argv)
     printf("\tFASP/Exact Solution L2 Error is:\t%e\n", error_norm1);
     printf("\tFASP/FENiCS L2 Error is:\t\t%e\n", error_norm2);
     printf("\tFENiCS/Exact Soltuion L2 Error is:\t%e\n", error_norm3);
-    printf("On the 300x300 mesh:\n");
+    printf("On the 250x250 mesh:\n");
     printf("\tFASP/Exact Solution L2 Error is:\t%e\n", error_norm5);
     printf("The slopes for the FASP/Exact Solution L2 Error are:\n");
     printf("\t%e\n", std::fabs(log(error_norm4)-log(error_norm1)/(log(150.0)-log(200.0))));
@@ -309,7 +309,13 @@ int main(int argc, char** argv)
     std::cout << "Success... the fasp solver is working\n";
   }
   else {
-    std::cout << "ERROR...the fasp solver is not working\n";
+    printf("***\tERROR IN FASP SOLVER TEST\n");
+    printf("***\n***\n***\n");
+    printf("***\tFASP SOLVER TEST:\n");
+    printf("***\tThe computed solution is wrong\n");
+    printf("***\n***\n***\n");
+    printf("***\tERROR IN FASP SOLVER TEST\n");
+    fflush(stdout);
   }
 
   // state problem
