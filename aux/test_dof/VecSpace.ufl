@@ -9,7 +9,15 @@
 CG = FiniteElement("Lagrange", tetrahedron, 1)
 V  = MixedElement([CG,CG,CG])        # Solution Space
 
-u = TrialFunction(V)
-v = TestFunction(V)
+(u1,u2,u3) = TrialFunction(V)
+(v1,v2,v3)  = TestFunction(V)
 
-a   = inner(u,v)*dx
+f1 = Coefficient(CG)
+f2 = Coefficient(CG)
+f3 = Coefficient(CG)
+Ep1 = Constant(tetrahedron)
+Ep2 = Constant(tetrahedron)
+Ep3 = Constant(tetrahedron)
+
+a   = Ep1*inner(grad(u2), grad(v2))*dx+Ep2*inner(grad(u2), grad(v2))*dx+Ep3*inner(grad(u2), grad(v2))*dx
+L =  Ep1*f1*v1*dx+Ep2*f2*v2*dx+ Ep3*f3*v3*dx

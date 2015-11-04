@@ -15,6 +15,7 @@
 #include "boundary_conditions.h"
 #include "newton.h"
 #include "newton_functs.h"
+#include "funcspace_to_vecspace.h"
 extern "C"
 {
 #include "fasp.h"
@@ -27,7 +28,7 @@ extern "C"
 #define FASP_BSR     ON  /** use BSR format in fasp */
 }
 using namespace dolfin;
-// using namespace std;
+double pi=DOLFIN_PI;
 
 
 class BigExp : public Expression
@@ -40,6 +41,31 @@ public:
     values[0] = 1.0;
     values[1] = 2.0;
     values[2] = 3.0;
+  }
+};
+
+// Exact solution
+class Solution : public Expression
+{
+  void eval(Array<double>& values, const Array<double>& x) const
+  {
+    values[0] = sin(2*pi*x[0]);
+  }
+};
+// Source term (right-hand side)
+class Source : public Expression
+{
+  void eval(Array<double>& values, const Array<double>& x) const
+  {
+    values[0] =  4*pow(pi,2)*sin(2*pi*x[0]);
+  }
+};
+// Sub domain for Dirichlet boundary condition
+class DirichletBoundary : public SubDomain
+{
+  bool inside(const Array<double>& x, bool on_boundary) const
+  {
+    return x[0] < -1.0+DOLFIN_EPS or x[0] > 1.0 -DOLFIN_EPS && on_boundary;
   }
 };
 
@@ -56,7 +82,7 @@ int main()
 
   // read domain parameters
   domain_param domain_par;
-  char domain_param_filename[] = "./benchmarks/PNP/domain_params.dat";
+  char domain_param_filename[] = "./aux/test_dof/domain_params.dat";
   domain_param_input(domain_param_filename, &domain_par);
   print_domain_param(&domain_par);
 
@@ -78,8 +104,6 @@ int main()
   Constant C1(1.0);
   initFunc.interpolate(BigFunc);
 
-
-
   // coordinates
   //    when  n=number of vertex, and 0<= k<n :
   //        x=coord[3*k],  y=coord[3*k+1],  z=coord[3*k+2]
@@ -90,9 +114,9 @@ int main()
   int n_vert = coord.size()/d;
   printf("\tNumber of vertices = %d\n",n_vert);
   int k = 0;
-  std::cout <<"\t x ,y z at 0"<< coord[3*k]<< ", " <<coord[3*k+1]<< ", " << coord[3*k+2] << std::endl;
+  std::cout <<"\t x ,y z at 0 : "<< coord[3*k]<< ", " <<coord[3*k+1]<< ", " << coord[3*k+2] << std::endl;
   k = n_vert-1;
-  std::cout <<"\t x ,y z at #vert"<< coord[3*k]<< ", " <<coord[3*k+1]<< ", " << coord[3*k+2] << std::endl;
+  std::cout <<"\t x ,y z at #vert : "<< coord[3*k]<< ", " <<coord[3*k+1]<< ", " << coord[3*k+2] << std::endl;
   printf("\n"); fflush(stdout);
 
   // Function on MixedSpace is 3k=Component 1, 3k+1=Component 2, 3k+2=Component 3
@@ -162,10 +186,79 @@ int main()
   std::cout <<"\t\tdof_coord : "<< dof0_coord[3*v_d0[k]]<< ", " << dof0_coord[3*v_d0[k]+1]<< ", " << dof0_coord[3*v_d0[k]+2] << std::endl;
   std::cout <<"\tdof to vertex:"<< std::endl;
   k=5;
-  std::cout <<"\t\tcoord : "<< coord[3*d_v0[k]+0]<< ", " <<coord[3*d_v0[k]+1]<< ", " << coord[3*d_v0[k]+2] << std::endl;
   std::cout <<"\t\tdof_coord : "<<dof0_coord[3*k]<< ", " << dof0_coord[3*k+1]<< ", " << dof0_coord[3*k+2] << std::endl;
+  std::cout <<"\t\tcoord : "<< coord[3*d_v0[k]+0]<< ", " <<coord[3*d_v0[k]+1]<< ", " << coord[3*d_v0[k]+2] << std::endl;
 
   printf("\n"); fflush(stdout);
+
+
+  // Solve
+  FacetFunction<std::size_t> markers(mesh, 1);
+
+  // Define boundary condition
+  Constant u0(0.0);
+  DirichletBoundary boundary;
+  DirichletBC bc(V0, u0, boundary);
+  Space::BilinearForm a(V0, V0);
+  Space::LinearForm L(V0);
+  Source f;
+  L.f = f;
+  // Assembl Matrix and RHS
+  EigenMatrix A;
+  assemble(A,a); bc.apply(A);
+  EigenVector b;
+  assemble(b,L); bc.apply(b);
+  EigenVector Solu_vec;
+  solve(A, Solu_vec, b, "cg");
+  Solution ExactSolu;
+  dolfin::Function solu_ex(V0);
+  dolfin::Function solu(V0);
+  solu_ex.interpolate(ExactSolu);
+  dolfin::File file1("./aux/test_dof/output/ExactSolu_V0.pvd");
+  file1 << solu_ex;
+  *(solu.vector())=Solu_vec;
+  dolfin::File file2("./aux/test_dof/output/Solu_V0.pvd");
+  file2 << solu;
+
+  // Define boundary condition
+  Constant u02(0.0,0.0,0.0);
+  DirichletBC bc2(V, u02, boundary);
+  VecSpace::BilinearForm a2(V, V);
+  VecSpace::LinearForm L2(V);
+  Source f2;
+  Constant f1(1.0);
+  Constant f3(1.0);
+  L2.f1 = f1;
+  L2.f2 = f2;
+  L2.f3 = f3;
+  Constant Ep1(1.0);
+  Constant Ep2(1.0);
+  Constant Ep3(1.0);
+  a2.Ep1 = Ep1;
+  a2.Ep2 = Ep2;
+  a2.Ep3 = Ep3;
+  L2.Ep1 = Ep1;
+  L2.Ep2 = Ep2;
+  L2.Ep3 = Ep3;
+  // Assembl Matrix and RHS
+  EigenMatrix A2;
+  assemble(A2,a2); bc2.apply(A2);
+  EigenVector b2;
+  assemble(b2,L2); bc2.apply(b2);
+  EigenVector Solu_vec2;
+
+  add_matrix(0, &V, &V0, &A2, &A);
+
+  solve(A2, Solu_vec2, b2, "cg");
+  // Solution ExactSolu2;
+  // dolfin::Function solu_ex2(V);
+  dolfin::Function solu2(V);
+  // solu_ex2[1].interpolate(ExactSolu2);
+  // dolfin::File file3("./aux/test_dof/output/ExactSolu_V.pvd");
+  // file3 << solu_ex2[1];
+  *(solu2.vector())=Solu_vec2;
+  dolfin::File file4("./aux/test_dof/output/Solu_V.pvd");
+  file4 << solu2[1];
 
 
   printf("\n-----------------------------------------------------------    "); fflush(stdout);

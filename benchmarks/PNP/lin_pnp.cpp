@@ -15,6 +15,7 @@
 #include "linear_pnp.h"
 #include "newton.h"
 #include "newton_functs.h"
+#include "funcspace_to_vecspace.h"
 extern "C"
 {
 #include "fasp.h"
@@ -64,7 +65,6 @@ int main()
   // Need to use Eigen for linear algebra
   parameters["linear_algebra_backend"] = "Eigen";
   parameters["allow_extrapolation"] = true;
-  // parameters["reorder_dofs_serial"] = false;
 
   // read domain parameters
   domain_param domain_par;
@@ -150,8 +150,8 @@ int main()
   assemble(b_an,L_an);
   printf("done\n");
 
-  // Mapping of the dof
-  printf("Mapping of the dof...\n");
+  // Dimensions of the problems
+  printf("Print of sizes...\n");
   int n = V.dim();
   int d = mesh.geometry().dim();
   int n_cat = V_cat.dim();
@@ -168,9 +168,8 @@ int main()
   printf("\tb_an size = %ld\n",b_an.size());
   printf("\tdone\n"); fflush(stdout);
 
-
-
-
+  add_matrix(0, &V, &V_cat, &A_pnp, &A_cat);
+  add_matrix(1, &V, &V_an, &A_pnp, &A_an);
 
 
   printf("\n-----------------------------------------------------------    "); fflush(stdout);

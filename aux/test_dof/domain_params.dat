@@ -10,7 +10,7 @@ surface_file   = none  %./mesh/gramA_channel_facet_region.xml
 subdomain_file = none  %./mesh/gramA_channel_physical_region.xml
 
 ref_length   = 1.0e-9  % meters
-length_x     = 10.0     % ref_length = nm = 1.0e-9 m
+length_x     = 2.0    % ref_length = nm = 1.0e-9 m
 length_y     = 20.0     % ref_length = nm = 1.0e-9 m
 length_z     = 5.0     % ref_length = nm = 1.0e-9 m
 
