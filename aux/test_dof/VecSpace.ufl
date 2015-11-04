@@ -19,5 +19,5 @@ Ep1 = Constant(tetrahedron)
 Ep2 = Constant(tetrahedron)
 Ep3 = Constant(tetrahedron)
 
-a   = Ep1*inner(grad(u2), grad(v2))*dx+Ep2*inner(grad(u2), grad(v2))*dx+Ep3*inner(grad(u2), grad(v2))*dx
+a   = Ep1*inner(grad(u1), grad(v1))*dx+Ep2*inner(grad(u2), grad(v2))*dx+Ep3*inner(grad(u3), grad(v3))*dx
 L =  Ep1*f1*v1*dx+Ep2*f2*v2*dx+ Ep3*f3*v3*dx

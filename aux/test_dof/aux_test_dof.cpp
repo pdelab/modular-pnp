@@ -228,9 +228,9 @@ int main()
   Source f2;
   Constant f1(1.0);
   Constant f3(1.0);
-  L2.f1 = f1;
+  L2.f1 = f2;
   L2.f2 = f2;
-  L2.f3 = f3;
+  L2.f3 = f2;
   Constant Ep1(1.0);
   Constant Ep2(1.0);
   Constant Ep3(1.0);
@@ -247,18 +247,23 @@ int main()
   assemble(b2,L2); bc2.apply(b2);
   EigenVector Solu_vec2;
 
+  printf("\tA2 size = %ld x %ld\n",A2.size(0),A2.size(1));
+  printf("\tA size = %ld x %ld\n",A.size(0),A.size(1));
+  printf("\tV dim = %ld \n",V.dim());
+  printf("\tV0 dim = %ld \n",V0.dim());
+
   add_matrix(0, &V, &V0, &A2, &A);
 
-  solve(A2, Solu_vec2, b2, "cg");
+  // solve(A2, Solu_vec2, b2, "cg");
   // Solution ExactSolu2;
   // dolfin::Function solu_ex2(V);
   dolfin::Function solu2(V);
   // solu_ex2[1].interpolate(ExactSolu2);
   // dolfin::File file3("./aux/test_dof/output/ExactSolu_V.pvd");
   // file3 << solu_ex2[1];
-  *(solu2.vector())=Solu_vec2;
-  dolfin::File file4("./aux/test_dof/output/Solu_V.pvd");
-  file4 << solu2[1];
+  // *(solu2.vector())=Solu_vec2;
+  // dolfin::File file4("./aux/test_dof/output/Solu_V.pvd");
+  // file4 << solu2[1];
 
 
   printf("\n-----------------------------------------------------------    "); fflush(stdout);
