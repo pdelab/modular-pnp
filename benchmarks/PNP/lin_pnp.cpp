@@ -64,6 +64,7 @@ int main()
   // Need to use Eigen for linear algebra
   parameters["linear_algebra_backend"] = "Eigen";
   parameters["allow_extrapolation"] = true;
+  // parameters["reorder_dofs_serial"] = false;
 
   // read domain parameters
   domain_param domain_par;
@@ -121,20 +122,32 @@ int main()
 
   // EAFE Formulation for Anion and Cation
   printf("EAFE formluation...");
-  FunctionSpace V_cat = SubSpace(V,0);
-  FunctionSpace V_an = SubSpace(V,1);
+  EAFE::FunctionSpace V_cat(mesh);
+  EAFE::FunctionSpace V_an(mesh);
   EAFE::BilinearForm a_cat(V_cat,V_cat);
   EAFE::LinearForm L_cat(V_cat);
   EAFE::BilinearForm a_an(V_an,V_an);
   EAFE::LinearForm L_an(V_an);
-  a_cat.eta  = initCat;
-  a_cat.beta = initPHI;
+  Function initCat_cat(V_cat); Function Phi_cat(V_cat);
+  initCat_cat.interpolate(Cation); Phi_cat.interpolate(Phi);
+  Function initAn_an(V_an); Function Phi_an(V_an);
+  initAn_an.interpolate(Anion); Phi_an.interpolate(Phi);
+  a_cat.eta  = initCat_cat;
+  a_cat.beta = Phi_cat;
   a_cat.alpha = C1;
   a_cat.gamma = C1;
   L_cat.f= C1;
-  EigenVector b_cat;
+  EigenMatrix A_cat; EigenVector b_cat;
   assemble(b_cat,L_cat);
-
+  assemble(A_cat,a_cat);
+  a_an.eta  = initAn_an;
+  a_an.beta = Phi_an;
+  a_an.alpha = C1;
+  a_an.gamma = C1;
+  L_an.f= C1;
+  EigenMatrix A_an; EigenVector b_an;
+  assemble(A_an,a_an);
+  assemble(b_an,L_an);
   printf("done\n");
 
   // Mapping of the dof
@@ -147,8 +160,12 @@ int main()
   printf("\tV number of DOF = %d\n",n);
   printf("\tV_cat number of DOF = %d\n",n_cat);
   printf("\tV_an number of DOF = %d\n",n_an);
-  printf("\tb_pnp size = %d\n",b_pnp.size());
-  printf("\tb_an size = %d\n",b_cat.size());
+  printf("\tA_pnp size = %ld x %ld\n",A_pnp.size(0),A_pnp.size(1));
+  printf("\tA_cat size = %ld x %ld\n",A_cat.size(0),A_cat.size(1));
+  printf("\tA_an size = %ld x %ld\n",A_an.size(0),A_an.size(1));
+  printf("\tb_pnp size = %ld\n",b_pnp.size());
+  printf("\tb_an size = %ld\n",b_cat.size());
+  printf("\tb_an size = %ld\n",b_an.size());
   printf("\tdone\n"); fflush(stdout);
 
 

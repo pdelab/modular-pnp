@@ -21,8 +21,8 @@
 //   restrict_keyword:               ''
 //   split:                          False
 
-#ifndef __FESPACE_H
-#define __FESPACE_H
+#ifndef __VECSPACE_H
+#define __VECSPACE_H
 
 #include <cmath>
 #include <stdexcept>
@@ -31,18 +31,18 @@
 
 /// This class defines the interface for a finite element.
 
-class fespace_finite_element_0: public ufc::finite_element
+class vecspace_finite_element_0: public ufc::finite_element
 {
 public:
 
   /// Constructor
-  fespace_finite_element_0() : ufc::finite_element()
+  vecspace_finite_element_0() : ufc::finite_element()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~fespace_finite_element_0()
+  virtual ~vecspace_finite_element_0()
   {
     // Do nothing
   }
@@ -1249,25 +1249,25 @@ public:
   /// Create a new class instance
   virtual ufc::finite_element* create() const
   {
-    return new fespace_finite_element_0();
+    return new vecspace_finite_element_0();
   }
 
 };
 
 /// This class defines the interface for a finite element.
 
-class fespace_finite_element_1: public ufc::finite_element
+class vecspace_finite_element_1: public ufc::finite_element
 {
 public:
 
   /// Constructor
-  fespace_finite_element_1() : ufc::finite_element()
+  vecspace_finite_element_1() : ufc::finite_element()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~fespace_finite_element_1()
+  virtual ~vecspace_finite_element_1()
   {
     // Do nothing
   }
@@ -4104,17 +4104,17 @@ public:
     {
     case 0:
       {
-        return new fespace_finite_element_0();
+        return new vecspace_finite_element_0();
         break;
       }
     case 1:
       {
-        return new fespace_finite_element_0();
+        return new vecspace_finite_element_0();
         break;
       }
     case 2:
       {
-        return new fespace_finite_element_0();
+        return new vecspace_finite_element_0();
         break;
       }
     }
@@ -4125,7 +4125,7 @@ public:
   /// Create a new class instance
   virtual ufc::finite_element* create() const
   {
-    return new fespace_finite_element_1();
+    return new vecspace_finite_element_1();
   }
 
 };
@@ -4133,18 +4133,18 @@ public:
 /// This class defines the interface for a local-to-global mapping of
 /// degrees of freedom (dofs).
 
-class fespace_dofmap_0: public ufc::dofmap
+class vecspace_dofmap_0: public ufc::dofmap
 {
 public:
 
   /// Constructor
-  fespace_dofmap_0() : ufc::dofmap()
+  vecspace_dofmap_0() : ufc::dofmap()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~fespace_dofmap_0()
+  virtual ~vecspace_dofmap_0()
   {
     // Do nothing
   }
@@ -4391,7 +4391,7 @@ public:
   /// Create a new class instance
   virtual ufc::dofmap* create() const
   {
-    return new fespace_dofmap_0();
+    return new vecspace_dofmap_0();
   }
 
 };
@@ -4399,18 +4399,18 @@ public:
 /// This class defines the interface for a local-to-global mapping of
 /// degrees of freedom (dofs).
 
-class fespace_dofmap_1: public ufc::dofmap
+class vecspace_dofmap_1: public ufc::dofmap
 {
 public:
 
   /// Constructor
-  fespace_dofmap_1() : ufc::dofmap()
+  vecspace_dofmap_1() : ufc::dofmap()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~fespace_dofmap_1()
+  virtual ~vecspace_dofmap_1()
   {
     // Do nothing
   }
@@ -4723,17 +4723,17 @@ public:
     {
     case 0:
       {
-        return new fespace_dofmap_0();
+        return new vecspace_dofmap_0();
         break;
       }
     case 1:
       {
-        return new fespace_dofmap_0();
+        return new vecspace_dofmap_0();
         break;
       }
     case 2:
       {
-        return new fespace_dofmap_0();
+        return new vecspace_dofmap_0();
         break;
       }
     }
@@ -4744,7 +4744,7 @@ public:
   /// Create a new class instance
   virtual ufc::dofmap* create() const
   {
-    return new fespace_dofmap_1();
+    return new vecspace_dofmap_1();
   }
 
 };
@@ -4753,18 +4753,18 @@ public:
 /// tensor corresponding to the local contribution to a form from
 /// the integral over a cell.
 
-class fespace_cell_integral_0_otherwise: public ufc::cell_integral
+class vecspace_cell_integral_0_otherwise: public ufc::cell_integral
 {
 public:
 
   /// Constructor
-  fespace_cell_integral_0_otherwise() : ufc::cell_integral()
+  vecspace_cell_integral_0_otherwise() : ufc::cell_integral()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~fespace_cell_integral_0_otherwise()
+  virtual ~vecspace_cell_integral_0_otherwise()
   {
     // Do nothing
   }
@@ -4966,18 +4966,18 @@ public:
 /// sequence of basis functions of Vj and w1, w2, ..., wn are given
 /// fixed functions (coefficients).
 
-class fespace_form_0: public ufc::form
+class vecspace_form_0: public ufc::form
 {
 public:
 
   /// Constructor
-  fespace_form_0() : ufc::form()
+  vecspace_form_0() : ufc::form()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~fespace_form_0()
+  virtual ~vecspace_form_0()
   {
     // Do nothing
   }
@@ -5016,12 +5016,12 @@ public:
     {
     case 0:
       {
-        return new fespace_finite_element_1();
+        return new vecspace_finite_element_1();
         break;
       }
     case 1:
       {
-        return new fespace_finite_element_1();
+        return new vecspace_finite_element_1();
         break;
       }
     }
@@ -5036,12 +5036,12 @@ public:
     {
     case 0:
       {
-        return new fespace_dofmap_1();
+        return new vecspace_dofmap_1();
         break;
       }
     case 1:
       {
-        return new fespace_dofmap_1();
+        return new vecspace_dofmap_1();
         break;
       }
     }
@@ -5146,7 +5146,7 @@ public:
   /// Create a new cell integral on everywhere else
   virtual ufc::cell_integral* create_default_cell_integral() const
   {
-    return new fespace_cell_integral_0_otherwise();
+    return new vecspace_cell_integral_0_otherwise();
   }
 
   /// Create a new exterior facet integral on everywhere else
@@ -5191,7 +5191,7 @@ public:
 #include <dolfin/adaptivity/ErrorControl.h>
 #include <dolfin/adaptivity/GoalFunctional.h>
 
-namespace FESpace
+namespace VecSpace
 {
 
 class Form_a_FunctionSpace_0: public dolfin::FunctionSpace
@@ -5203,8 +5203,8 @@ public:
   // Create standard function space (reference version)
   Form_a_FunctionSpace_0(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new fespace_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new fespace_dofmap_1()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new vecspace_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new vecspace_dofmap_1()), mesh)))
   {
     // Do nothing
   }
@@ -5212,8 +5212,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_a_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new fespace_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new fespace_dofmap_1()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new vecspace_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new vecspace_dofmap_1()), *mesh)))
   {
     // Do nothing
   }
@@ -5223,8 +5223,8 @@ public:
   // Create standard function space (reference version)
   Form_a_FunctionSpace_0(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new fespace_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new fespace_dofmap_1()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new vecspace_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new vecspace_dofmap_1()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -5233,8 +5233,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_a_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new fespace_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new fespace_dofmap_1()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new vecspace_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new vecspace_dofmap_1()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -5250,8 +5250,8 @@ public:
   // Create standard function space (reference version)
   Form_a_FunctionSpace_1(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new fespace_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new fespace_dofmap_1()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new vecspace_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new vecspace_dofmap_1()), mesh)))
   {
     // Do nothing
   }
@@ -5259,8 +5259,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_a_FunctionSpace_1(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new fespace_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new fespace_dofmap_1()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new vecspace_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new vecspace_dofmap_1()), *mesh)))
   {
     // Do nothing
   }
@@ -5270,8 +5270,8 @@ public:
   // Create standard function space (reference version)
   Form_a_FunctionSpace_1(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new fespace_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new fespace_dofmap_1()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new vecspace_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new vecspace_dofmap_1()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -5280,8 +5280,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_a_FunctionSpace_1(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new fespace_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new fespace_dofmap_1()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new vecspace_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new vecspace_dofmap_1()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -5299,7 +5299,7 @@ public:
     _function_spaces[0] = reference_to_no_delete_pointer(V0);
     _function_spaces[1] = reference_to_no_delete_pointer(V1);
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new fespace_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new vecspace_form_0());
   }
 
   // Constructor
@@ -5309,7 +5309,7 @@ public:
     _function_spaces[0] = V0;
     _function_spaces[1] = V1;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new fespace_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new vecspace_form_0());
   }
 
   // Destructor

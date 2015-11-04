@@ -9,7 +9,8 @@
 #include <iostream>
 #include <string>
 #include <dolfin.h>
-#include "FESpace.h"
+#include "VecSpace.h"
+#include "Space.h"
 #include "fasp_to_fenics.h"
 #include "boundary_conditions.h"
 #include "newton.h"
@@ -69,7 +70,7 @@ int main()
 
 
   // Function space for PNP (Cation,Anion,Phi)
-  FESpace::FunctionSpace V(mesh);
+  VecSpace::FunctionSpace V(mesh);
 
   // Test on init function
   Function initFunc(V);
@@ -97,7 +98,7 @@ int main()
   // Function on MixedSpace is 3k=Component 1, 3k+1=Component 2, 3k+2=Component 3
   // values[3k+l] = values at of the component l at the dof
   // with 0<=k<number of vertex or (number of dof)/3
-  printf("Function values\n");
+  printf("Function values (Vector Space)\n");
   std::vector<double> values(initFunc.vector()->local_size(), 0);
   initFunc.vector()->get_local(values);
   std::cout <<"\tFirst component should be 1 ="<<  values[0] << std::endl;
@@ -106,50 +107,65 @@ int main()
   std::cout <<"\tFirst component should be 1 ="<<  values[3] << std::endl;
   printf("\n"); fflush(stdout);
 
-  // Maping of the dofs
-  printf("Coordinates the dofs\n");
-  std::shared_ptr<const GenericDofMap> dof = V.dofmap();
-  std::vector<double> dof_x = dof->tabulate_all_coordinates(mesh);
-  // dof_x[9k+3l+0]= x of componant l
-  // dof_x[9k+3l+1]= y of componant l
-  // dof_x[9k+3l+2]= z of componant l
+  // Coordinates of the dofs for Vector Space (u1,u2,u3)
+  printf("Coordinates the dofs (Vector Space)\n");
+  std::vector<double> dof_coord= V.dofmap()->tabulate_all_coordinates(mesh);
+  // dof_coord[9k+3l+0]= x of componant l
+  // dof_coord[9k+3l+1]= y of componant l
+  // dof_coord[9k+3l+2]= z of componant l
   // for l=0,1,2 and 0<=k<number of vertices or (number of dof)/3
-  std::cout << "\t(x,y,z) of component 0 (dof=1)=" << dof_x[0] << ", " << dof_x[1] << ", " << dof_x[2]  << std::endl;
-  std::cout << "\t(x,y,z) of component 1 (dof=2)=" << dof_x[3] << ", " << dof_x[4] << ", " << dof_x[5]  << std::endl;
-  std::cout << "\t(x,y,z) of component 2 (dof=3)=" << dof_x[6] << ", " << dof_x[7] << ", " << dof_x[8]  << std::endl;
+  std::cout << "\t(x,y,z) of component 0 (dof=1) = " << dof_coord[0] << ", " << dof_coord[1] << ", " << dof_coord[2]  << std::endl;
+  std::cout << "\t(x,y,z) of component 1 (dof=2) = " << dof_coord[3] << ", " << dof_coord[4] << ", " << dof_coord[5]  << std::endl;
+  std::cout << "\t(x,y,z) of component 2 (dof=3) = " << dof_coord[6] << ", " << dof_coord[7] << ", " << dof_coord[8]  << std::endl;
+  printf("\n"); fflush(stdout);
 
-  printf("Mapping dofs<-->Vertices\n");
+  // Maping of the dofs for Vector Space (u1,u2,u3)
+  printf("Mapping dofs<-->Vertices (Vector Space)\n");
   int nn = V.dofmap()->num_entity_dofs(0);
-  //V->dofmap()->dof_to_vertex_map(mesh).
   std::vector<dolfin::la_index> v_d = vertex_to_dof_map(V);
   std::vector<long unsigned int> d_v = dof_to_vertex_map(V);
   k=10;
   std::cout <<"\tvextex to dof:"<< std::endl;
-  std::cout <<"\t\tcoord "<< coord[3*10/nn]<< ", " <<coord[3*10/nn+1]<< ", " << coord[3*10/nn+2] << std::endl;
-  std::cout <<"\t\tdof_x "<< dof_x[v_d[10]]<< ", " << dof_x[v_d[10]+1]<< ", " << dof_x[v_d[10]+2] << std::endl;
+  std::cout <<"\t\tcoord : "<< coord[3*k]<< ", " <<coord[3*k+1]<< ", " << coord[3*k+2] << std::endl;
+  std::cout <<"\t\tdof_coord (u) : "<< dof_coord[3*v_d[3*k]]<< ", " << dof_coord[3*v_d[3*k]+1]<< ", " << dof_coord[3*v_d[3*k]+2] << std::endl;
+  std::cout <<"\t\tdof_coord (v) : "<< dof_coord[3*v_d[3*k]+3+3]<< ", " << dof_coord[3*v_d[3*k]+3+1]<< ", " << dof_coord[3*v_d[3*k]+3+2] << std::endl;
+  std::cout <<"\t\tdof_coord (w) : "<< dof_coord[3*v_d[3*k]+6+3]<< ", " << dof_coord[3*v_d[3*k]+6+1]<< ", " << dof_coord[3*v_d[3*k]+6+2] << std::endl;
   std::cout <<"\tdof to vertex:"<< std::endl;
-  std::cout <<"\t\tdof_x "<< dof_x[11]<< ", " << dof_x[11+1]<< ", " << dof_x[11+2] << std::endl;
-  // std::cout << d_v[10] << " " << nn << " " << d_v[10]/nn << std::endl ;
-  std::cout <<"\t\tcoord "<< coord[d_v[10]/nn] << ", " <<coord[d_v[10]/nn+1]<< ", " << coord[d_v[10]/nn+2] << std::endl;
+  // Conclusion coord=3k+a=> dof=3*v_d[3*k]+3l+a (a=0,1,2; l=0,1,2)
+  k=2;
+  std::cout <<"\t\tdof_coord (u) : "<< dof_coord[9*k]<< ", " << dof_coord[9*k+1]<< ", " << dof_coord[9*k+2] << std::endl;
+  std::cout <<"\t\tdof_coord (v) : "<< dof_coord[9*k+3]<< ", " << dof_coord[9*k+3+1]<< ", " << dof_coord[9*k+3+2] << std::endl;
+  std::cout <<"\t\tdof_coord (w) : "<< dof_coord[9*k+6]<< ", " << dof_coord[9*k+6+1]<< ", " << dof_coord[9*k+6+2] << std::endl;
+  std::cout <<"\t\tcoord "<< coord[d_v[3*k]] << ", " <<coord[d_v[3*k]+1]<< ", " << coord[d_v[3*k]+2] << std::endl;
+  // Conclusion dof=9k+3k+a => vertex=d_v[(9k+3k+a)/3] (a=0,1,2; l=0,1,2; k< number of vertex)
   printf("\n"); fflush(stdout);
 
-  // di_dx = dof_x.tolist()
-  // print di_dx[10], di_dx[125+10]
-  // vertex_x = mesh.coordinates().reshape((-1, d))
-  // vi_vx = vertex_x.tolist()
-  // print vi_vx[10]
-  //
-  // coor = mesh.coordinates()
-  // print np.size(coor[:,0]), np.size(coor[0,:])
-  // print coor[int(d_v[10])/nn]
-  // print di_dx[v_d[10]], coor[10/nn]
-
-  // printf("\t %f\n",mesh.coordinates()[0]);
+  // Coordinates of dof for Function Space
+  Space::FunctionSpace V0(mesh);
+  printf("Coordinates the dofs (Function Space)\n");
+  std::vector<double> dof0_coord = V0.dofmap()->tabulate_all_coordinates(mesh);
+  //  dof0_coord[3k+0]= x
+  //  dof0_coord[3k+1]= y
+  //  dof0_coord[3k+2]= z
+  // for 0<=k<number of vertices or (number of dof)
+  k=20;
+  std::cout << "\t(x,y,z) = " <<  dof0_coord[3*k] << ", " <<  dof0_coord[3*k+1] << ", " <<  dof0_coord[3*k+2]  << std::endl;
   printf("\n"); fflush(stdout);
 
+  // Maping of the dofs for Function Space u
+  printf("Mapping dofs<-->Vertices (Function Space)\n");
+  std::vector<dolfin::la_index> v_d0 = vertex_to_dof_map(V0);
+  std::vector<long unsigned int> d_v0 = dof_to_vertex_map(V0);
+  std::cout <<"\tvextex to dof:"<< std::endl;
+  k=5;
+  std::cout <<"\t\tcoord : "<< coord[3*k+0]<< ", " <<coord[3*k+1]<< ", " << coord[3*k+2] << std::endl;
+  std::cout <<"\t\tdof_coord : "<< dof0_coord[3*v_d0[k]]<< ", " << dof0_coord[3*v_d0[k]+1]<< ", " << dof0_coord[3*v_d0[k]+2] << std::endl;
+  std::cout <<"\tdof to vertex:"<< std::endl;
+  k=5;
+  std::cout <<"\t\tcoord : "<< coord[3*d_v0[k]+0]<< ", " <<coord[3*d_v0[k]+1]<< ", " << coord[3*d_v0[k]+2] << std::endl;
+  std::cout <<"\t\tdof_coord : "<<dof0_coord[3*k]<< ", " << dof0_coord[3*k+1]<< ", " << dof0_coord[3*k+2] << std::endl;
 
-
-
+  printf("\n"); fflush(stdout);
 
 
   printf("\n-----------------------------------------------------------    "); fflush(stdout);
