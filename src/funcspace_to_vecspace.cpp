@@ -51,17 +51,16 @@ void add_matrix(int l, dolfin::FunctionSpace *V, dolfin::FunctionSpace *V_l, dol
       j=JA_l[k];
       // el=A_l[i,j]
       el=vals_l[k];
-      // dof i = Vertex d_v0[i] (on V_cat)
-      // Vertex d_v0[i] = dof 3*v_d[3*d_v0[i]] (on V)
-      // A_pnp[ dof 3*v_d[3*d_v0[i]] , dof 3*v_d[3*d_v0[j]] ] += A_cat[i,j]
-      ii=3*v_d[3*d_v_l[i]]+3*l;
-      jj=3*v_d[3*d_v_l[j]]+3*l;
+      // dof i = Vertex d_v_l[i] (on V_l)
+      // Vertex d_v_l[i] = dof v_d[3*d_v_l[i]]+l (on V)
+      // A[ v_d[3*d_v_l[i]] , v_d[3*d_v_l[i]] ] += A_l[i,j]
+      ii=v_d[3*d_v_l[i]]+l;
+      jj=v_d[3*d_v_l[j]]+l;
       for (kk=IA[ii];kk<IA[ii+1];kk++)
       {
         jj_temp=JA[kk];
         if (jj_temp==jj)
         {
-          // printf("Found one\n");
           vals[kk]+=el;
         }
       }

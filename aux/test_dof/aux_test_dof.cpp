@@ -52,6 +52,18 @@ class Solution : public Expression
     values[0] = sin(2*pi*x[0]);
   }
 };
+class Solution2 : public Expression
+{
+public:
+  Solution2() : Expression(3) {}
+
+  void eval(Array<double>& values, const Array<double>& x) const
+  {
+    values[0] = sin(2*pi*x[0]);
+    values[1] = sin(2*pi*x[0]);
+    values[2] = sin(2*pi*x[0]);
+  }
+};
 // Source term (right-hand side)
 class Source : public Expression
 {
@@ -219,6 +231,9 @@ int main()
   *(solu.vector())=Solu_vec;
   dolfin::File file2("./aux/test_dof/output/Solu_V0.pvd");
   file2 << solu;
+  *(solu.vector())-=*(solu_ex.vector());
+  dolfin::File file2b("./aux/test_dof/output/Error_V0.pvd");
+  file2b << solu;
 
   // Define boundary condition
   Constant u02(0.0,0.0,0.0);
@@ -232,14 +247,13 @@ int main()
   L2.f2 = f2;
   L2.f3 = f2;
   Constant Ep1(1.0);
-  Constant Ep2(1.0);
-  Constant Ep3(1.0);
+  Constant Ep2(2.0);
   a2.Ep1 = Ep1;
-  a2.Ep2 = Ep2;
-  a2.Ep3 = Ep3;
-  L2.Ep1 = Ep1;
-  L2.Ep2 = Ep2;
-  L2.Ep3 = Ep3;
+  a2.Ep2 = Ep1;
+  a2.Ep3 = Ep1;
+  L2.Ep1 = Ep2;
+  L2.Ep2 = Ep1;
+  L2.Ep3 = Ep2;
   // Assembl Matrix and RHS
   EigenMatrix A2;
   assemble(A2,a2); bc2.apply(A2);
@@ -251,19 +265,37 @@ int main()
   printf("\tA size = %ld x %ld\n",A.size(0),A.size(1));
   printf("\tV dim = %ld \n",V.dim());
   printf("\tV0 dim = %ld \n",V0.dim());
+  printf("\tA nnz = %ld \n",A2.nnz());
+  printf("\tA0 nnz = %ld \n",A.nnz());
 
   add_matrix(0, &V, &V0, &A2, &A);
+  add_matrix(2, &V, &V0, &A2, &A);
 
-  // solve(A2, Solu_vec2, b2, "cg");
-  // Solution ExactSolu2;
-  // dolfin::Function solu_ex2(V);
+  solve(A2, Solu_vec2, b2, "cg");
+  Solution2 ExactSolu2;
+  dolfin::Function solu_ex2(V);
   dolfin::Function solu2(V);
-  // solu_ex2[1].interpolate(ExactSolu2);
-  // dolfin::File file3("./aux/test_dof/output/ExactSolu_V.pvd");
-  // file3 << solu_ex2[1];
-  // *(solu2.vector())=Solu_vec2;
-  // dolfin::File file4("./aux/test_dof/output/Solu_V.pvd");
-  // file4 << solu2[1];
+  solu_ex2.interpolate(ExactSolu2);
+  dolfin::File file3a("./aux/test_dof/output/ExactSolu1_V.pvd");
+  file3a << solu_ex2[0];
+  dolfin::File file3b("./aux/test_dof/output/ExactSolu0_V.pvd");
+  file3b << solu_ex2[1];
+  dolfin::File file3c("./aux/test_dof/output/ExactSolu2_V.pvd");
+  file3c << solu_ex2[2];
+  *(solu2.vector())=Solu_vec2;
+  dolfin::File file4("./aux/test_dof/output/Solu0_V.pvd");
+  file4 << solu2[0];
+  dolfin::File file5("./aux/test_dof/output/Solu1_V.pvd");
+  file5 << solu2[1];
+  dolfin::File file6("./aux/test_dof/output/Solu2_V.pvd");
+  file6 << solu2[2];
+  *(solu2.vector())-=*(solu_ex2.vector());
+  dolfin::File file4b("./aux/test_dof/output/Error0_V.pvd");
+  file4b << solu2[0];
+  dolfin::File file5b("./aux/test_dof/output/Error1_V.pvd");
+  file5b << solu2[1];
+  dolfin::File file6b("./aux/test_dof/output/Error2_V.pvd");
+  file6b << solu2[2];
 
 
   printf("\n-----------------------------------------------------------    "); fflush(stdout);

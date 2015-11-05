@@ -166,10 +166,28 @@ int main()
   printf("\tb_pnp size = %ld\n",b_pnp.size());
   printf("\tb_an size = %ld\n",b_cat.size());
   printf("\tb_an size = %ld\n",b_an.size());
-  printf("\tdone\n"); fflush(stdout);
+  fflush(stdout);
 
   add_matrix(0, &V, &V_cat, &A_pnp, &A_cat);
   add_matrix(1, &V, &V_an, &A_pnp, &A_an);
+
+  // Convert to fasp
+  dCSRmat A_fasp;
+  dvector b_fasp;
+  dvector Solu_fasp;
+  EigenVector_to_dvector(&b_pnp,&b_fasp);
+  EigenMatrix_to_dCSRmat(&A_pnp,&A_fasp);
+  fasp_dvec_alloc(b_fasp.row, &Solu_fasp);
+  fasp_dvec_set(b_fasp.row, &Solu_fasp, 0.0);
+  input_param inpar;
+  itsolver_param itpar;
+  AMG_param amgpar;
+  ILU_param ilupar;
+  char inputfile[] = "./benchmarks/PNP/bsr.dat";
+  fasp_param_input(inputfile, &inpar);
+  fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
+  INT status = FASP_SUCCESS;
+  status = fasp_solver_dcsr_krylov(&A_fasp, &b_fasp, &Solu_fasp, &itpar);
 
 
   printf("\n-----------------------------------------------------------    "); fflush(stdout);
