@@ -31,29 +31,6 @@ using namespace dolfin;
 // using namespace std;
 
 
-class CationExp : public Expression
-{
-  void eval(Array<double>& values, const Array<double>& x) const
-  {
-    values[0] = 1.0;
-  }
-};
-class AnionExp : public Expression
-{
-  void eval(Array<double>& values, const Array<double>& x) const
-  {
-    values[0] = 2.0;
-  }
-};
-class PhiExp : public Expression
-{
-  void eval(Array<double>& values, const Array<double>& x) const
-  {
-    values[0] = 3.0;
-  }
-};
-
-
 int main()
 {
 
@@ -87,18 +64,52 @@ int main()
   non_dimesionalize_coefficients(&domain_par, &coeff_par, &non_dim_coeff_par);
 
 
-  // Function space for PNP (Cation,Anion,Phi)
+  //*************************************************************
+  //  Analytic Expressions
+  //*************************************************************
+  printf("\n Initializing analytic expressions\n"); fflush(stdout);
+
+  // Reference values
+  double k_B    = 1.38064880e-23;     // Boltzmann Constant (m^2 kg / s^2 K)
+  double e_chrg = 1.60217657e-19 ;    // Elementary Positive Charge (A s = C)
+  double p_ref  = 1.0e+0;             // ionic reference density (mol / m^3)
+
+  double temperature=coeff_par.temperature;
+  double int_voltage = 0.0 / (k_B*temperature/e_chrg);      // dim'less internal contact voltage
+  double ext_voltage = 0.0 / (k_B*temperature/e_chrg);      // dim'less external contact voltage
+  double int_cat_bulk = 6.6e+9 / p_ref;                             // dim'less internal contact cation
+  double ext_cat_bulk = 6.6e+9  / p_ref;                             // dim'less external contact cation
+  double int_an_bulk  = 1.5e+22 / p_ref;                             // dim'less internal contact anion
+  double ext_an_bulk  = 1.5e+22  / p_ref;                             // dim'less external contact anion
+
+  // Log-ion boundary interpolant
+  printf("   Interpolating contact values for charge carriers \n"); fflush(stdout);
+  LogCharge Cation(ext_cat_bulk, int_cat_bulk,-domain_par.length_x/2.0,domain_par.length_x/2.0, 0);
+  LogCharge Anion(ext_an_bulk, int_an_bulk,-domain_par.length_x/2.0, domain_par.length_x/2.0, 0);
+
+  // Electric potential boundary interpolant
+  printf("   Interpolating voltage drop\n"); fflush(stdout);
+  Voltage volt(ext_voltage, ext_voltage,-domain_par.length_x/2.0, domain_par.length_x/2.0, 0);
+
+  //*************************************************************
+  //*************************************************************
+
+  // Function space for PNP (Cation=log(Concentration of positive charges),Anion=log(Concentration of negative charges),Phi=Voltage)
   linear_pnp::FunctionSpace V(mesh);
 
   // Test on init function
   Function initFunc(V);
   Constant C1(1.0);
-  CationExp Cation;
-  AnionExp Anion;
-  PhiExp Phi;
   Function initCat(initFunc[0]); initCat.interpolate(Cation);
   Function initAn(initFunc[1]);  initAn.interpolate(Anion);
-  Function initPHI(initFunc[2]); initPHI.interpolate(Phi);
+  Function initPHI(initFunc[2]); initPHI.interpolate(volt);
+
+  Constant Eps(non_dim_coeff_par.relative_permittivity);
+  Constant Dp(non_dim_coeff_par.cation_diffusivity);
+  Constant Dn(non_dim_coeff_par.anion_diffusivity);
+  Constant qn(non_dim_coeff_par.cation_mobility);
+  Constant qp(non_dim_coeff_par.anion_mobility);
+  Constant fix(1.5E22);
 
   // PNP Formulation
   printf("Linearized PNP formluation...");
@@ -109,11 +120,11 @@ int main()
   a_pnp.EsEs    = initPHI; L_pnp.EsEs    = initPHI;
   a_pnp.CatDiff = initCat;
   a_pnp.AnDiff  = initAn;
-  a_pnp.eps = C1; L_pnp.eps = C1;
-  a_pnp.Dp  = C1; L_pnp.Dp  = C1;
-  a_pnp.qp  = C1; L_pnp.qp  = C1;
-  a_pnp.Dn  = C1; L_pnp.Dn  = C1;
-  a_pnp.qn  = C1; L_pnp.qn  = C1;
+  a_pnp.eps = Eps; L_pnp.eps = Eps;
+  a_pnp.Dp  = Dp ; L_pnp.Dp  = Dp;
+  a_pnp.qp  = qp ; L_pnp.qp  = qp;
+  a_pnp.Dn  =Dn; L_pnp.Dn  = Dn;
+  a_pnp.qn  = qn; L_pnp.qn  = qn;
   L_pnp.fix = C1;
   EigenMatrix A_pnp;
   EigenVector b_pnp;
@@ -129,9 +140,9 @@ int main()
   EAFE::BilinearForm a_an(V_an,V_an);
   EAFE::LinearForm L_an(V_an);
   Function initCat_cat(V_cat); Function Phi_cat(V_cat);
-  initCat_cat.interpolate(Cation); Phi_cat.interpolate(Phi);
+  initCat_cat.interpolate(Cation); Phi_cat.interpolate(volt);
   Function initAn_an(V_an); Function Phi_an(V_an);
-  initAn_an.interpolate(Anion); Phi_an.interpolate(Phi);
+  initAn_an.interpolate(Anion); Phi_an.interpolate(volt);
   a_cat.eta  = initCat_cat;
   a_cat.beta = Phi_cat;
   a_cat.alpha = C1;
