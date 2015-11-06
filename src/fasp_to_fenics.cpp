@@ -122,3 +122,74 @@ void copy_dvector_to_Function(const dvector* vec_b, dolfin::Function* F)
   }
   F->vector()->set_local(values);
 }
+
+/**
+ * \fn void get_dofs(dolfin::Function* vector_function, unsigned int* dof_array, unsigned int component)
+ *
+ * \brief get indices for degrees of freedom of a specified component of a vector function
+ *
+ * \param vector_function    vector-function to be have DoFs extracted by component
+ * \param dof_array          array to store dofs
+ * \param compenent          desired component of vector-function to be extracted
+ */
+void get_dofs(dolfin::Function* vector_function, ivector* dof_array, unsigned int component)
+{
+  dolfin::FunctionSpace W( *(vector_function->function_space()) );
+  std::vector<dolfin::la_index> gidx_fn;
+  const dolfin::la_index n0 = W.dofmap()->ownership_range().first;
+  const dolfin::la_index n1 = W.dofmap()->ownership_range().second;
+  const dolfin::la_index num_dofs = n1 - n0;
+  std::vector<std::size_t> comp(1);
+  comp[0] = component;
+  std::shared_ptr<GenericDofMap> dofmap_fn  = W.dofmap()->extract_sub_dofmap(comp, *(W.mesh()));
+
+  for ( CellIterator cell(*(W.mesh())); !cell.end(); ++cell)
+  {
+    ArrayView<const dolfin::la_index> cell_dofs_fn  = dofmap_fn->cell_dofs(cell->index());
+    for (std::size_t i = 0; i < cell_dofs_fn.size(); ++i)
+    {
+      const std::size_t dof = cell_dofs_fn[i];
+      if (dof >= n0 && dof < n1)
+        gidx_fn.push_back(dof);
+    }
+  }
+  std::sort(gidx_fn.begin(), gidx_fn.end());
+  // Remove duplicates
+  gidx_fn.erase(std::unique(gidx_fn.begin(), gidx_fn.end()), gidx_fn.end());
+
+  fasp_ivec_alloc(gidx_fn.size(), dof_array);
+  for(std::size_t i=0; i<dof_array->row; i++)
+    dof_array->val[i] = gidx_fn[i];
+}
+
+/**
+ * \fn void copy_dvector_to_vector_function(const dvector* vector, dolfin::Function* F, ivector* vector_dofs, ivector* function_dofs)
+ *
+ * \brief Copy components of a vector to a Function corresponding to a set of DoFs
+ */
+void copy_dvector_to_vector_function(const dvector* vector, dolfin::Function* F, ivector* vector_dofs, ivector* function_dofs)
+{
+  // check for uninitialized vector
+  int length = vector->row;
+  if ( length < 1 ) {
+    fasp_chkerr(ERROR_INPUT_PAR, "copy_dvector_to_vector_function");
+  }
+  if (F->vector()->size() != length) {
+    fasp_chkerr(ERROR_INPUT_PAR, "copy_dvector_to_vector_function");
+  }
+
+  // check for uninitialized or mismatching DoF arrays
+  int dof_length = vector_dofs->row;
+  if ( dof_length < 1 ) {
+    fasp_chkerr(ERROR_INPUT_PAR, "copy_dvector_to_vector_function");
+  }
+  if (function_dofs->row != dof_length) {
+    fasp_chkerr(ERROR_INPUT_PAR, "copy_dvector_to_vector_function");
+  }
+
+  // copy vector components to function
+  std::vector<double> values(F->vector()->local_size(), 0);
+  for (int i=0; i < dof_length; i++)
+    values[function_dofs->val[i]] = vector->val[vector_dofs->val[i]];
+  F->vector()->set_local(values);
+}

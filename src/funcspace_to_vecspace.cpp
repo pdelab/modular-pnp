@@ -12,7 +12,7 @@ using namespace std;
 using namespace dolfin;
 
 /**
- * \fnvoid add_matrix(int l, dolfin::FunctionSpace *V, dolfin::FunctionSpace *V_l, dolfin::EigenMatrix *A, dolfin::EigenMatrix *A_l)
+ * \fn void add_matrix(int l, dolfin::FunctionSpace *V, dolfin::FunctionSpace *V_l, dolfin::EigenMatrix *A, dolfin::EigenMatrix *A_l)
  *
  * \brief add A_l to A for l=0,1,2 is the lth component
  *

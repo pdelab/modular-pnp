@@ -59,7 +59,7 @@ add_executable(test_faspfenics ./tests/faspfenics_tests/test_faspfenics.cpp ${SR
 add_executable(test_faspsolver ./tests/faspsolver_tests/test_faspsolver.cpp ${SRC_DIR})
 add_executable(test_bc ./tests/bc_tests/test_bc.cpp ${SRC_DIR})
 
-add_executable(lin_pnp ./benchmarks/PNP/lin_pnp.cpp ${SRC_DIR})
+add_executable(lin_pnp ./benchmarks/linear_PNP/lin_pnp.cpp ${SRC_DIR})
 
 # Setup targets
 ## AUX TESTs
@@ -88,3 +88,4 @@ target_link_libraries(lin_pnp ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} 
 # target_link_libraries(test_faspfenics ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} "/opt/local/lib/gcc49/gcc/x86_64-apple-darwin14/4.9.3/libgcc.a" "/opt/local/lib/gcc49/libquadmath.a" "/opt/local/lib/gcc49/libgfortran.a")
 # target_link_libraries(test_faspsolver ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} "/opt/local/lib/gcc49/gcc/x86_64-apple-darwin14/4.9.3/libgcc.a" "/opt/local/lib/gcc49/libquadmath.a" "/opt/local/lib/gcc49/libgfortran.a")
 # target_link_libraries(test_bc ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} "/opt/local/lib/gcc49/gcc/x86_64-apple-darwin14/4.9.3/libgcc.a" "/opt/local/lib/gcc49/libquadmath.a" "/opt/local/lib/gcc49/libgfortran.a")
+# target_link_libraries(lin_pnp ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} "/opt/local/lib/gcc49/gcc/x86_64-apple-darwin14/4.9.3/libgcc.a" "/opt/local/lib/gcc49/libquadmath.a" "/opt/local/lib/gcc49/libgfortran.a")
