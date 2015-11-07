@@ -1,6 +1,6 @@
-/*! \file test_eafe.cpp
+/*! \file lin_pnp.cpp
  *
- *  \brief Main to test EAFE functionality on linear convection reaction problem
+ *  \brief Setup and solve the linearized PNP equation using FASP
  *
  *  \note Currently initializes the problem based on specification
  */
@@ -288,6 +288,11 @@ int main()
   printf("\tcation l2 error is:     %e\n", cationError);
   printf("\tanion l2 error is:      %e\n", anionError);
   printf("\tpotential l2 error is:  %e\n", potentialError);
+
+  // print error
+  cationFile << cationSolution;
+  anionFile << anionSolution;
+  potentialFile << potentialSolution;
 
   printf("\n-----------------------------------------------------------    "); fflush(stdout);
   printf("\n End                                                           "); fflush(stdout);
