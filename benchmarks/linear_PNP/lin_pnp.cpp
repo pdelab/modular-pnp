@@ -42,7 +42,7 @@ class analyticCationExpression : public Expression
   {
     values[0]  = lower_cation_val * (5.0 - x[0]) / 10.0;
     values[0] += upper_cation_val * (x[0] + 5.0) / 10.0;
-    values[0] += 0.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
+    values[0] += 2.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
     values[0]  = std::log(values[0]);
   }
 };
@@ -53,7 +53,7 @@ class analyticAnionExpression : public Expression
   {
     values[0]  = lower_anion_val * (5.0 - x[0]) / 10.0;
     values[0] += upper_anion_val * (x[0] + 5.0) / 10.0;
-    values[0] += 0.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
+    values[0] += 1.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
     values[0]  = std::log(values[0]);
   }
 };
@@ -64,7 +64,7 @@ class analyticPotentialExpression : public Expression
   {
     values[0]  = lower_potential_val * (5.0 - x[0]) / 10.0;
     values[0] += upper_potential_val * (x[0] + 5.0) / 10.0;
-    values[0] += 0.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
+    values[0] += -2.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
   }
 };
 
@@ -184,6 +184,7 @@ int main()
   EigenMatrix A_pnp;
   EigenVector b_pnp;
   dCSRmat A_fasp;
+  dBSRmat A_fasp_bsr;
   dvector b_fasp, solu_fasp;
 
   // Setup FASP solver
@@ -195,17 +196,13 @@ int main()
   char inputfile[] = "./benchmarks/linear_PNP/bsr.dat";
   fasp_param_input(inputfile, &inpar);
   fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
-  //ivector cation_fasp_dofs; map_dofs_for_fasp(&cation_dofs, &cation_fasp_dofs);
-  //ivector anion_fasp_dofs; map_dofs_for_fasp(&anion_dofs, &anion_fasp_dofs);
-  //ivector potential_fasp_dofs; map_dofs_for_fasp(&potential_dofs, &potential_fasp_dofs);
   INT status = FASP_SUCCESS;
-
 
   //*************************************************************
   //  Initialize Newton solver
   //*************************************************************
   // Setup newton parameters and compute initial residual
-  // printf("\tnewton solver...\n"); fflush(stdout);
+  printf("\tnewton solver setup...\n"); fflush(stdout);
   Function solutionUpdate(V);
   unsigned int newton_iteration = 0;
 
@@ -241,9 +238,10 @@ int main()
   printf("\tconvert to FASP and solve...\n"); fflush(stdout);
   EigenVector_to_dvector(&b_pnp,&b_fasp);
   EigenMatrix_to_dCSRmat(&A_pnp,&A_fasp);
+  A_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
   fasp_dvec_alloc(b_fasp.row, &solu_fasp);
   fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
-  status = fasp_solver_dcsr_krylov(&A_fasp, &b_fasp, &solu_fasp, &itpar);
+  status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &solu_fasp, &itpar, &amgpar);
 
   // map solu_fasp into solutionUpdate
   printf("\tconvert FASP solution to function...\n"); fflush(stdout);
