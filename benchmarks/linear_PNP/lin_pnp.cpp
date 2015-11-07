@@ -42,7 +42,8 @@ class analyticCationExpression : public Expression
   {
     values[0]  = lower_cation_val * (5.0 - x[0]) / 10.0;
     values[0] += upper_cation_val * (x[0] + 5.0) / 10.0;
-    values[0] += 2.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
+    values[0] += 0.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
+    values[0]  = std::log(values[0]);
   }
 };
 
@@ -52,7 +53,8 @@ class analyticAnionExpression : public Expression
   {
     values[0]  = lower_anion_val * (5.0 - x[0]) / 10.0;
     values[0] += upper_anion_val * (x[0] + 5.0) / 10.0;
-    values[0] += 2.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
+    values[0] += 0.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
+    values[0]  = std::log(values[0]);
   }
 };
 
@@ -205,6 +207,7 @@ int main()
   // Setup newton parameters and compute initial residual
   // printf("\tnewton solver...\n"); fflush(stdout);
   Function solutionUpdate(V);
+  unsigned int newton_iteration = 0;
 
   // compute initial residual and Jacobian
   printf("\tconstruct linear system...\n"); fflush(stdout);
@@ -212,12 +215,17 @@ int main()
   a_pnp.AnAn = anionSolution;
   a_pnp.EsEs = potentialSolution;
   assemble(A_pnp, a_pnp);
+  bc.apply(A_pnp);
 
   L_pnp.CatCat = cationSolution;
   L_pnp.AnAn = anionSolution;
   L_pnp.EsEs = potentialSolution;
   assemble(b_pnp, L_pnp);
-  //compute_residual(b_pnp);
+  bc.apply(b_pnp);
+  double initial_residual = b_pnp.norm("l2");
+  double relative_residual = 1.0;
+  printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
+
 
   printf("\tinitialized succesfully!\n\n"); fflush(stdout);
 
@@ -227,6 +235,8 @@ int main()
   //  Solve : this will be inside Newton loop
   //*************************************************************
   printf("Solve the system\n"); fflush(stdout);
+  newton_iteration++;
+
   // Convert to fasp
   printf("\tconvert to FASP and solve...\n"); fflush(stdout);
   EigenVector_to_dvector(&b_pnp,&b_fasp);
@@ -243,13 +253,43 @@ int main()
 
   // update solution and reset solutionUpdate
   printf("\tupdate solution...\n"); fflush(stdout);
-  *(solutionFunction.vector()) += *(solutionUpdate.vector());
+  Function update(V);
+  dolfin::Function cat(update[0]); cat.interpolate(solutionUpdate[0]);
+  dolfin::Function an(update[1]); an.interpolate(solutionUpdate[1]);
+  dolfin::Function pot(update[2]); pot.interpolate(solutionUpdate[2]);
+  *(cationSolution.vector()) += *(cat.vector());
+  *(anionSolution.vector()) += *(an.vector());
+  *(potentialSolution.vector()) += *(pot.vector());
+
+  // compute residual
+  L_pnp.CatCat = cationSolution;
+  L_pnp.AnAn = anionSolution;
+  L_pnp.EsEs = potentialSolution;
+  assemble(b_pnp, L_pnp);
+  bc.apply(b_pnp);
+  relative_residual = b_pnp.norm("l2") / initial_residual;
+  if (newton_iteration == 1)
+    printf("\trelative nonlinear residual after 1 iteration has l2-norm of %e\n", relative_residual);
+  else
+    printf("\trelative nonlinear residual after %d iterations has l2-norm of %e\n", newton_iteration, relative_residual);
 
   // write computed solution to file
   printf("\tsolved successfully!\n"); fflush(stdout);
   cationFile << cationSolution;
   anionFile << anionSolution;
   potentialFile << potentialSolution;
+
+  // compute solution error
+  printf("\nCompute the error\n"); fflush(stdout);
+  *(cationSolution.vector()) -= *(analyticCation.vector());
+  *(anionSolution.vector()) -= *(analyticAnion.vector());
+  *(potentialSolution.vector()) -= *(analyticPotential.vector());
+  double cationError = cationSolution.vector()->norm("l2");
+  double anionError = anionSolution.vector()->norm("l2");
+  double potentialError = potentialSolution.vector()->norm("l2");
+  printf("\tcation l2 error is:     %e\n", cationError);
+  printf("\tanion l2 error is:      %e\n", anionError);
+  printf("\tpotential l2 error is:  %e\n", potentialError);
 
   printf("\n-----------------------------------------------------------    "); fflush(stdout);
   printf("\n End                                                           "); fflush(stdout);

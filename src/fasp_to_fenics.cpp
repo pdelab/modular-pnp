@@ -186,10 +186,7 @@ void copy_dvector_to_vector_function(const dvector* vector, dolfin::Function* F,
   if (function_dofs->row != dof_length) {
     fasp_chkerr(ERROR_INPUT_PAR, "copy_dvector_to_vector_function");
   }
-
-  // copy vector components to function
-  std::vector<double> values(F->vector()->local_size(), 0);
+  // convert vector to double*
   for (int i=0; i < dof_length; i++)
-    values[function_dofs->val[i]] = vector->val[vector_dofs->val[i]];
-  F->vector()->set_local(values);
+    F->vector()->setitem(function_dofs->val[i], vector->val[vector_dofs->val[i]]);
 }
