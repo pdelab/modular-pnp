@@ -302,8 +302,6 @@ int main(int argc, char** argv)
   }
 
 
-
-
   if ((error_norm1 < 1E-7) && (error_norm2 < 1E-7) && (error_norm1 < error_norm4) && (error_norm5 < error_norm1))
   {
     std::cout << "Success... the fasp solver is working\n";
