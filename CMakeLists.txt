@@ -61,8 +61,6 @@ add_executable(test_bc ./tests/bc_tests/test_bc.cpp ${SRC_DIR})
 add_executable(test_add_matrix ./tests/matrices_tests/test_add_matrix.cpp ${SRC_DIR})
 add_executable(test_replace_matrix ./tests/matrices_tests/test_replace_matrix.cpp ${SRC_DIR})
 
-add_executable(lin_pnp ./benchmarks/PNP/lin_pnp.cpp ${SRC_DIR})
-
 # Setup targets
 ## AUX TESTs
 target_link_libraries(aux_test_reading ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
