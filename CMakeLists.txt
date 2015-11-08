@@ -58,6 +58,8 @@ add_executable(test_eafe ./tests/eafe_tests/test_eafe.cpp ${SRC_DIR})
 add_executable(test_faspfenics ./tests/faspfenics_tests/test_faspfenics.cpp ${SRC_DIR})
 add_executable(test_faspsolver ./tests/faspsolver_tests/test_faspsolver.cpp ${SRC_DIR})
 add_executable(test_bc ./tests/bc_tests/test_bc.cpp ${SRC_DIR})
+add_executable(test_add_matrix ./tests/matrices_tests/test_add_matrix.cpp ${SRC_DIR})
+add_executable(test_replace_matrix ./tests/matrices_tests/test_replace_matrix.cpp ${SRC_DIR})
 
 add_executable(lin_pnp ./benchmarks/PNP/lin_pnp.cpp ${SRC_DIR})
 
@@ -74,6 +76,8 @@ target_link_libraries(test_eafe ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES
 target_link_libraries(test_faspfenics ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 target_link_libraries(test_faspsolver ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 target_link_libraries(test_bc ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
+target_link_libraries(test_add_matrix ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
+target_link_libraries(test_replace_matrix ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 ## BENCHMARKS
 target_link_libraries(lin_pnp ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 
