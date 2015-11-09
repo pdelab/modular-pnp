@@ -240,9 +240,9 @@ int main()
   a_pnp.CatCat = cationSolution;
   a_pnp.AnAn = anionSolution;
   a_pnp.EsEs = potentialSolution;
-  a_cat.eta =CatCatFunction;
+  a_cat.eta = CatCatFunction;
   a_cat.beta = CatBetaFunction;
-  a_an.eta =AnAnFunction;
+  a_an.eta = AnAnFunction;
   a_an.beta = AnBetaFunction;
   assemble(A_pnp, a_pnp);
   assemble(A_cat, a_cat);
