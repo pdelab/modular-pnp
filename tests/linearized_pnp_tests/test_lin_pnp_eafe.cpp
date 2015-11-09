@@ -1,4 +1,4 @@
-/*! \file lin_pnp.cpp
+/*! \file test_lin_pnp.cpp
  *
  *  \brief Setup and solve the linearized PNP equation using FASP
  *
@@ -29,6 +29,8 @@ extern "C"
 }
 using namespace dolfin;
 // using namespace std;
+
+bool DEBUG = false;
 
 double lower_cation_val = 0.1;  // 1 / m^3
 double upper_cation_val = 1.0;  // 1 / m^3
@@ -69,15 +71,19 @@ class analyticPotentialExpression : public Expression
   }
 };
 
-
-int main()
+int main(int argc, char** argv)
 {
+  if (argc >1)
+  {
+    if (std::string(argv[1])=="DEBUG") DEBUG = true;
+  }
 
-  printf("\n-----------------------------------------------------------    "); fflush(stdout);
-  printf("\n Solving the linearized Poisson-Nernst-Planck system           "); fflush(stdout);
-  printf("\n of a single cation and anion                                  "); fflush(stdout);
-  printf("\n-----------------------------------------------------------\n\n"); fflush(stdout);
-
+  // state problem
+  if (DEBUG) {
+    std::cout << "################################################################# \n";
+    std::cout << "#### Test of the FASP Solver with DEBUG=TRUE                 #### \n";
+    std::cout << "################################################################# \n";
+  }
   // Need to use Eigen for linear algebra
   parameters["linear_algebra_backend"] = "Eigen";
   parameters["allow_extrapolation"] = true;
@@ -85,16 +91,16 @@ int main()
   //*************************************************************
   //  Initialization
   //*************************************************************
-  printf("Initialize the problem\n"); fflush(stdout);
+  if (DEBUG) printf("Initialize the problem\n");
   // read domain parameters
-  printf("\tdomain...\n"); fflush(stdout);
+  if (DEBUG) printf("\tdomain...\n");
   domain_param domain_par;
-  char domain_param_filename[] = "./benchmarks/linear_PNP/domain_params.dat";
+  char domain_param_filename[] = "./tests/linearized_pnp_tests/domain_params.dat";
   domain_param_input(domain_param_filename, &domain_par);
   // print_domain_param(&domain_par);
 
   // build mesh
-  printf("\tmesh...\n"); fflush(stdout);
+  if (DEBUG) printf("\tmesh...\n");
   dolfin::Mesh mesh;
   dolfin::MeshFunction<std::size_t> subdomains;
   dolfin::MeshFunction<std::size_t> surfaces;
@@ -102,19 +108,14 @@ int main()
   domain_build(&domain_par, &mesh, &subdomains, &surfaces, &meshOut);
 
   // read coefficients and boundary values
-  printf("\tcoefficients...\n"); fflush(stdout);
+  if (DEBUG) printf("\tcoefficients...\n");
   coeff_param coeff_par;
-  char coeff_param_filename[] = "./benchmarks/linear_PNP/coeff_params.dat";
+  char coeff_param_filename[] = "./tests/linearized_pnp_tests/coeff_params.dat";
   coeff_param_input(coeff_param_filename, &coeff_par);
   // print_coeff_param(&coeff_par);
 
-  // open files for outputting solutions
-  File cationFile("./benchmarks/linear_PNP/output/cation.pvd");
-  File anionFile("./benchmarks/linear_PNP/output/anion.pvd");
-  File potentialFile("./benchmarks/linear_PNP/output/potential.pvd");
-
   // Initialize variational forms
-  printf("\tvariational forms...\n"); fflush(stdout);
+  if (DEBUG) printf("\tvariational forms...\n");
   linear_pnp::FunctionSpace V(mesh);
   linear_pnp::BilinearForm a_pnp(V,V);
   linear_pnp::LinearForm L_pnp(V);
@@ -156,15 +157,16 @@ int main()
   L_pnp.anion = analyticAnion;
   L_pnp.potential = analyticPotential;
 
+
   // Set Dirichlet boundaries
-  printf("\tboundary conditions...\n"); fflush(stdout);
+  if (DEBUG) printf("\tboundary conditions...\n");
   unsigned int dirichlet_coord = 0;
   Constant zero_vec(0.0, 0.0, 0.0);
   SymmBoundaries boundary(dirichlet_coord, -domain_par.length_x/2.0, domain_par.length_x/2.0);
   dolfin::DirichletBC bc(V, zero_vec, boundary);
 
   // Initialize analytic expressions
-  printf("\tanalytic expressions...\n"); fflush(stdout);
+  if (DEBUG) printf("\tanalytic expressions...\n");
   LogCharge Cation(lower_cation_val, upper_cation_val, -domain_par.length_x/2.0, domain_par.length_x/2.0, dirichlet_coord);
   LogCharge Anion(lower_anion_val, upper_anion_val, -domain_par.length_x/2.0, domain_par.length_x/2.0, dirichlet_coord);
   Voltage Volt(lower_potential_val, upper_potential_val, -domain_par.length_x/2.0, domain_par.length_x/2.0, dirichlet_coord);
@@ -186,11 +188,6 @@ int main()
   Function potentialSolution(solutionFunction[2]);
   potentialSolution.interpolate(Volt);
 
-  // print to file
-  cationFile << cationSolution;
-  anionFile << anionSolution;
-  potentialFile << potentialSolution;
-
   // Interpolate analytic expressions for EAFE
   Function CatCatFunction(V_cat);
   CatCatFunction.interpolate(Cation);
@@ -206,7 +203,7 @@ int main()
   *(AnBetaFunction.vector())+=*(AnAnFunction.vector());
 
   // initialize linear system
-  printf("\tlinear algebraic objects...\n"); fflush(stdout);
+  if (DEBUG) printf("\tlinear algebraic objects...\n");
   EigenMatrix A_pnp;
   EigenMatrix A_cat;
   EigenMatrix A_an;
@@ -216,12 +213,12 @@ int main()
   dvector b_fasp, solu_fasp;
 
   // Setup FASP solver
-  printf("\tsetup FASP solver...\n"); fflush(stdout);
+  if (DEBUG) printf("\tsetup FASP solver...\n");
   input_param inpar;
   itsolver_param itpar;
   AMG_param amgpar;
   ILU_param ilupar;
-  char inputfile[] = "./benchmarks/linear_PNP/bsr.dat";
+  char inputfile[] = "./tests/linearized_pnp_tests/bsr.dat";
   fasp_param_input(inputfile, &inpar);
   fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
   INT status = FASP_SUCCESS;
@@ -230,12 +227,12 @@ int main()
   //  Initialize Newton solver
   //*************************************************************
   // Setup newton parameters and compute initial residual
-  printf("\tnewton solver setup...\n"); fflush(stdout);
+  if (DEBUG) printf("\tnewton solver setup...\n");
   Function solutionUpdate(V);
   unsigned int newton_iteration = 0;
 
   // compute initial residual and Jacobian
-  printf("\tconstruct linear system...\n"); fflush(stdout);
+  if (DEBUG) printf("\tconstruct linear system...\n");
   a_pnp.CatCat = cationSolution;
   a_pnp.AnAn = anionSolution;
   a_pnp.EsEs = potentialSolution;
@@ -247,7 +244,7 @@ int main()
   assemble(A_cat, a_cat);
   assemble(A_an, a_an);
   replace_matrix(3,0, &V, &V_cat, &A_pnp, &A_cat);
-  replace_matrix(3,1, &V, &V_an , &A_pnp, &A_an );
+  // replace_matrix(3,1, &V, &V_an , &A_pnp, &A_an );
   bc.apply(A_pnp);
 
   L_pnp.CatCat = cationSolution;
@@ -257,21 +254,21 @@ int main()
   bc.apply(b_pnp);
   double initial_residual = b_pnp.norm("l2");
   double relative_residual = 1.0;
-  printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
+  if (DEBUG) printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
 
 
-  printf("\tinitialized succesfully!\n\n"); fflush(stdout);
+  if (DEBUG) printf("\tinitialized succesfully!\n\n");
 
 
 
   //*************************************************************
   //  Solve : this will be inside Newton loop
   //*************************************************************
-  printf("Solve the system\n"); fflush(stdout);
+  if (DEBUG) printf("Solve the system\n");
   newton_iteration++;
 
   // Convert to fasp
-  printf("\tconvert to FASP and solve...\n"); fflush(stdout);
+  if (DEBUG) printf("\tconvert to FASP and solve...\n");
   EigenVector_to_dvector(&b_pnp,&b_fasp);
   EigenMatrix_to_dCSRmat(&A_pnp,&A_fasp);
   A_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
@@ -280,13 +277,13 @@ int main()
   status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &solu_fasp, &itpar, &amgpar);
 
   // map solu_fasp into solutionUpdate
-  printf("\tconvert FASP solution to function...\n"); fflush(stdout);
+  if (DEBUG) printf("\tconvert FASP solution to function...\n");
   copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &cation_dofs, &cation_dofs);
   copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &anion_dofs, &anion_dofs);
   copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &potential_dofs, &potential_dofs);
 
   // update solution and reset solutionUpdate
-  printf("\tupdate solution...\n"); fflush(stdout);
+  if (DEBUG) printf("\tupdate solution...\n");
   Function update(V);
   dolfin::Function cat(update[0]); cat.interpolate(solutionUpdate[0]);
   dolfin::Function an(update[1]); an.interpolate(solutionUpdate[1]);
@@ -302,37 +299,49 @@ int main()
   assemble(b_pnp, L_pnp);
   bc.apply(b_pnp);
   relative_residual = b_pnp.norm("l2") / initial_residual;
-  if (newton_iteration == 1)
-    printf("\trelative nonlinear residual after 1 iteration has l2-norm of %e\n", relative_residual);
-  else
-    printf("\trelative nonlinear residual after %d iterations has l2-norm of %e\n", newton_iteration, relative_residual);
-
-  // write computed solution to file
-  printf("\tsolved successfully!\n"); fflush(stdout);
-  cationFile << cationSolution;
-  anionFile << anionSolution;
-  potentialFile << potentialSolution;
+  if (DEBUG) {
+    if (newton_iteration == 1)
+      printf("\trelative nonlinear residual after 1 iteration has l2-norm of %e\n", relative_residual);
+    else
+      printf("\trelative nonlinear residual after %d iterations has l2-norm of %e\n", newton_iteration, relative_residual);
+    printf("\tsolved successfully!\n");
+  }
 
   // compute solution error
-  printf("\nCompute the error\n"); fflush(stdout);
+  if (DEBUG) printf("\nCompute the error\n");
   *(cationSolution.vector()) -= *(analyticCation.vector());
   *(anionSolution.vector()) -= *(analyticAnion.vector());
   *(potentialSolution.vector()) -= *(analyticPotential.vector());
   double cationError = cationSolution.vector()->norm("l2");
   double anionError = anionSolution.vector()->norm("l2");
   double potentialError = potentialSolution.vector()->norm("l2");
-  printf("\tcation l2 error is:     %e\n", cationError);
-  printf("\tanion l2 error is:      %e\n", anionError);
-  printf("\tpotential l2 error is:  %e\n", potentialError);
+  if (DEBUG) {
+    printf("\tcation l2 error is:     %e\n", cationError);
+    printf("\tanion l2 error is:      %e\n", anionError);
+    printf("\tpotential l2 error is:  %e\n", potentialError);
+  }
 
-  // print error
-  cationFile << cationSolution;
-  anionFile << anionSolution;
-  potentialFile << potentialSolution;
+  if ( (cationError < 1E-7) && (anionError < 1E-7) && (potentialError < 1E-7) )
+    std::cout << "Success... the linearized pnp solver is working\n";
+  else {
+    printf("***\tERROR IN LINEARIZED PNP SOLVER TEST\n");
+    printf("***\n***\n***\n");
+    printf("***\tLINEARIZED PNP SOLVER TEST:\n");
+    printf("***\tThe computed solution is wrong\n");
+    printf("***\n***\n***\n");
+    printf("***\tERROR IN LINEARIZED PNP SOLVER TEST\n");
+    fflush(stdout);
+  }
 
-  printf("\n-----------------------------------------------------------    "); fflush(stdout);
-  printf("\n End                                                           "); fflush(stdout);
-  printf("\n-----------------------------------------------------------\n\n"); fflush(stdout);
+  // state problem
+  if (DEBUG) {
+    std::cout << "################################################################# \n";
+    std::cout << "#### End of test for LINEARIZED PNP Solver with DEBUG=TRUE   #### \n";
+    std::cout << "################################################################# \n";
+  }
+
+  return 0;
+
 
   return 0;
 }
