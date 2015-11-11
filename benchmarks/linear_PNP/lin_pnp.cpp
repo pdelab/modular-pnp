@@ -9,12 +9,12 @@
 #include <iostream>
 #include <string>
 #include <dolfin.h>
-#include "newton_functs.h"
 #include "EAFE.h"
 #include "fasp_to_fenics.h"
 #include "boundary_conditions.h"
 #include "linear_pnp.h"
 #include "newton.h"
+#include "newton_functs.h"
 extern "C"
 {
 #include "fasp.h"
@@ -202,13 +202,7 @@ int main()
   unsigned int newton_iteration = 0;
 
   // compute initial residual and Jacobian
-  printf("\tconstruct linear system...\n"); fflush(stdout);
-  a_pnp.CatCat = cationSolution;
-  a_pnp.AnAn = anionSolution;
-  a_pnp.EsEs = potentialSolution;
-  assemble(A_pnp, a_pnp);
-  bc.apply(A_pnp);
-
+  printf("\tconstruct residual...\n"); fflush(stdout);
   L_pnp.CatCat = cationSolution;
   L_pnp.AnAn = anionSolution;
   L_pnp.EsEs = potentialSolution;
@@ -217,7 +211,6 @@ int main()
   double initial_residual = b_pnp.norm("l2");
   double relative_residual = 1.0;
   printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
-
 
   printf("\tinitialized succesfully!\n\n"); fflush(stdout);
 
@@ -228,6 +221,14 @@ int main()
   //*************************************************************
   printf("Solve the system\n"); fflush(stdout);
   newton_iteration++;
+
+  // Construct stiffness matrix
+  printf("\tconstruct stiffness matrix...\n"); fflush(stdout);
+  a_pnp.CatCat = cationSolution;
+  a_pnp.AnAn = anionSolution;
+  a_pnp.EsEs = potentialSolution;
+  assemble(A_pnp, a_pnp);
+  bc.apply(A_pnp);
 
   // Convert to fasp
   printf("\tconvert to FASP and solve...\n"); fflush(stdout);
@@ -246,17 +247,9 @@ int main()
 
   // update solution and reset solutionUpdate
   printf("\tupdate solution...\n"); fflush(stdout);
-  Function update(V);
-
   update_solution(&cationSolution, &solutionUpdate[0]);
-  // dolfin::Function cat(update[0]); cat.interpolate(solutionUpdate[0]);
-  // *(cationSolution.vector()) += *(cat.vector());
-
-  dolfin::Function an(update[1]); an.interpolate(solutionUpdate[1]);
-  *(anionSolution.vector()) += *(an.vector());
-
-  dolfin::Function pot(update[2]); pot.interpolate(solutionUpdate[2]);
-  *(potentialSolution.vector()) += *(pot.vector());
+  update_solution(&anionSolution, &solutionUpdate[1]);
+  update_solution(&potentialSolution, &solutionUpdate[2]);
 
   // compute residual
   L_pnp.CatCat = cationSolution;
