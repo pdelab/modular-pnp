@@ -17,6 +17,7 @@ make test_bc
 make test_add_matrix
 make test_replace_matrix
 make test_replace_matrix2
+make test_lin_pnp
 
 echo
 echo "Running unit tests..."
@@ -29,6 +30,7 @@ if [ "$1"=="DEBUG" ]; then
 	./test_add_matrix $1
 	./test_replace_matrix $1
 	./test_replace_matrix2 $1
+	./test_lin_pnp $1
 else
 	./test_eafe
 	./test_faspfenics
@@ -37,6 +39,7 @@ else
 	./test_add_matrix
 	./test_replace_matrix
 	./test_replace_matrix2
+	./test_lin_pnp
 fi
 
 

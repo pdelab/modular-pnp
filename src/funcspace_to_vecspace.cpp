@@ -11,7 +11,7 @@ using namespace std;
 using namespace dolfin;
 
 /**
- * \fnvoid add_matrix(int l, dolfin::FunctionSpace *V, dolfin::FunctionSpace *V_l, dolfin::EigenMatrix *A, dolfin::EigenMatrix *A_l)
+ * \fn void add_matrix(int l, dolfin::FunctionSpace *V, dolfin::FunctionSpace *V_l, dolfin::EigenMatrix *A, dolfin::EigenMatrix *A_l)
  *
  * \brief add A_l the coeffcients of the matrix A_l to the matrix A when A[i,j] exists
  *    A_l =  is the matrix of the l^th component

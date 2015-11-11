@@ -51,6 +51,21 @@ bool ZBoundaries::inside(const Array<double>& x, bool on_boundary) const
     || std::fabs(x[2] - _upper) < 5.0*DOLFIN_EPS
   );
 }
+// constructor
+SymmBoundaries::SymmBoundaries(unsigned int coord, double lower, double upper)
+{
+  _coord = coord;
+  _lower = lower;
+  _upper = upper;
+}
+// Return 1 if on the z-boundary
+bool SymmBoundaries::inside(const Array<double>& x, bool on_boundary) const
+{
+  return on_boundary && (
+    std::fabs(x[_coord] - _lower) < 5.0*DOLFIN_EPS
+    || std::fabs(x[_coord] - _upper) < 5.0*DOLFIN_EPS
+  );
+}
 
 /**
  * Initial expressions for functions satisfying

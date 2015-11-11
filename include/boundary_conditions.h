@@ -49,6 +49,17 @@ private:
   double _lower, _upper;
 };
 
+class SymmBoundaries : public dolfin::SubDomain {
+public:
+  // constructor
+  SymmBoundaries(unsigned int coord, double lower, double upper);
+  // check if a point is in Zboundaries
+  bool inside(const dolfin::Array<double>& x, bool on_boundary) const;
+private:
+  unsigned int _coord;
+  double _lower, _upper;
+};
+
 /// Initialize expressions
 class LogCharge : public dolfin::Expression
 {

@@ -61,6 +61,8 @@ add_executable(test_bc ./tests/bc_tests/test_bc.cpp ${SRC_DIR})
 add_executable(test_add_matrix ./tests/matrices_tests/test_add_matrix.cpp ${SRC_DIR})
 add_executable(test_replace_matrix ./tests/matrices_tests/test_replace_matrix.cpp ${SRC_DIR})
 add_executable(test_replace_matrix2 ./tests/matrices_tests/test_replace_matrix2.cpp ${SRC_DIR})
+add_executable(test_lin_pnp ./tests/linearized_pnp_tests/test_lin_pnp.cpp ${SRC_DIR})
+add_executable(lin_pnp ./benchmarks/linear_PNP/lin_pnp.cpp ${SRC_DIR})
 
 # Setup targets
 ## AUX TESTs
@@ -78,7 +80,9 @@ target_link_libraries(test_bc ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} 
 target_link_libraries(test_add_matrix ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 target_link_libraries(test_replace_matrix ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 target_link_libraries(test_replace_matrix2 ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
-
+target_link_libraries(test_lin_pnp ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
+## BENCHMARKS
+target_link_libraries(lin_pnp ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 
 
 #### WEIRD OSX TARGET
@@ -94,3 +98,5 @@ target_link_libraries(test_replace_matrix2 ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PART
 # target_link_libraries(test_add_matrix ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} "/opt/local/lib/gcc49/gcc/x86_64-apple-darwin14/4.9.3/libgcc.a" "/opt/local/lib/gcc49/libquadmath.a" "/opt/local/lib/gcc49/libgfortran.a")
 # target_link_libraries(test_replace_matrix ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} "/opt/local/lib/gcc49/gcc/x86_64-apple-darwin14/4.9.3/libgcc.a" "/opt/local/lib/gcc49/libquadmath.a" "/opt/local/lib/gcc49/libgfortran.a")
 # target_link_libraries(test_replace_matrix2 ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} "/opt/local/lib/gcc49/gcc/x86_64-apple-darwin14/4.9.3/libgcc.a" "/opt/local/lib/gcc49/libquadmath.a" "/opt/local/lib/gcc49/libgfortran.a")
+# target_link_libraries(test_lin_pnp ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} "/opt/local/lib/gcc49/gcc/x86_64-apple-darwin14/4.9.3/libgcc.a" "/opt/local/lib/gcc49/libquadmath.a" "/opt/local/lib/gcc49/libgfortran.a")
+# target_link_libraries(lin_pnp ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} "/opt/local/lib/gcc49/gcc/x86_64-apple-darwin14/4.9.3/libgcc.a" "/opt/local/lib/gcc49/libquadmath.a" "/opt/local/lib/gcc49/libgfortran.a")
