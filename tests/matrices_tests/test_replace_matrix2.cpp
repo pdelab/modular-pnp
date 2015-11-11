@@ -59,7 +59,7 @@ class Solution1 : public Expression
 {
   void eval(Array<double>& values, const Array<double>& x) const
   {
-    values[0] = sin(2*pi*x[0])*sin(2*pi*x[1])*sin(2*pi*x[2]);
+    values[0] = sin(2.0*pi*x[0])*sin(2.0*pi*x[1])*sin(2.0*pi*x[2]);
   }
 };
 class Solution2 : public Expression
@@ -69,8 +69,8 @@ public:
 
   void eval(Array<double>& values, const Array<double>& x) const
   {
-    values[0] = sin(2*pi*x[0])*sin(2*pi*x[1])*sin(2*pi*x[2]);
-    values[1] = sin(2*pi*x[0])*sin(2*pi*x[1])*sin(2*pi*x[2]);
+    values[0] = sin(2.0*pi*x[0])*sin(2.0*pi*x[1])*sin(2.0*pi*x[2]);
+    values[1] = sin(2.0*pi*x[0])*sin(2.0*pi*x[1])*sin(2.0*pi*x[2]);
   }
 };
 class Solution3 : public Expression
@@ -80,9 +80,9 @@ public:
 
   void eval(Array<double>& values, const Array<double>& x) const
   {
-    values[0] = sin(2*pi*x[0])*sin(2*pi*x[1])*sin(2*pi*x[2]);
-    values[1] = sin(2*pi*x[0])*sin(2*pi*x[1])*sin(2*pi*x[2]);
-    values[2] = sin(2*pi*x[0])*sin(2*pi*x[1])*sin(2*pi*x[2]);
+    values[0] = sin(2.0*pi*x[0])*sin(2.0*pi*x[1])*sin(2.0*pi*x[2]);
+    values[1] = sin(2.0*pi*x[0])*sin(2.0*pi*x[1])*sin(2.0*pi*x[2]);
+    values[2] = sin(2.0*pi*x[0])*sin(2.0*pi*x[1])*sin(2.0*pi*x[2]);
   }
 };
 // Source term (right-hand side)
@@ -90,7 +90,7 @@ class Source: public Expression
 {
   void eval(Array<double>& values, const Array<double>& x) const
   {
-    values[0] = 3*4*pow(pi,2)*sin(2*pi*x[0])*sin(2*pi*x[1])*sin(2*pi*x[2]);
+    values[0] = 3.0*4.0*pow(pi,2)*sin(2.0*pi*x[0])*sin(2.0*pi*x[1])*sin(2.0*pi*x[2]);
   }
 };
 // Source term (right-hand side)
@@ -98,7 +98,7 @@ class Source_b : public Expression
 {
   void eval(Array<double>& values, const Array<double>& x) const
   {
-    values[0] = -4*pi*sin(2*pi*x[1])*sin(2*pi*x[2])*(cos(2*pi*x[0])-3*pi*x[0]*sin(2*pi*x[0]));
+    values[0] = -4.0*pi*sin(2*pi*x[1])*sin(2*pi*x[2])*(cos(2*pi*x[0])-3*pi*x[0]*sin(2*pi*x[0]));
   }
 };
 // Sub domain for Dirichlet boundary condition
@@ -318,7 +318,7 @@ int main(int argc, char** argv)
   double EPS = 1E-5;
   if ( (std::fabs(error_norm2_1-error_norm1) < EPS) && (std::fabs(error_norm3_1-error_norm1) < EPS)  )
  {
-   std::cout << "Success...replace_matrix (test 2) is working\n";
+   std::cout << "Success... replace_matrix (test 2) is working\n";
  }
  else {
    printf("***\tERROR IN REPLACE_MATRIX TEST 2\n");
@@ -326,12 +326,12 @@ int main(int argc, char** argv)
    printf("***\tSOLVER TEST:\n");
    printf("***\tThe computed solution is wrong\n");
    printf("***\n***\n***\n");
-   printf("***\tERROR IN REPLACE_MATRIXTEST 2\n");
+   printf("***\tERROR IN REPLACE_MATRIX TEST 2\n");
    fflush(stdout);
  }
   if (DEBUG) {
     std::cout << "################################################################# \n";
-    std::cout << "#### End of the test of replace_matrix2 with DEBUG=TRUE       #### \n";
+    std::cout << "#### End of the test of replace_matrix2 with DEBUG=TRUE      #### \n";
     std::cout << "################################################################# \n";
   }
 

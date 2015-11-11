@@ -31,7 +31,7 @@ void add_matrix(int nc, int l, dolfin::FunctionSpace *V, dolfin::FunctionSpace *
   int flag=0;
 
   // Test of dimensions
-  if ( (V->dim()!=nc*V_l->dim()) || (ncols!=nc*ncols_l) || (nrows!=nc*nrows_l) || (nrows!=nrows) || (nrows!=V->dim())){
+  if ( (V->dim()!=nc*V_l->dim()) || (ncols!=nc*ncols_l) || (nrows!=nc*nrows_l) || (nrows!=ncols) || (nrows!=V->dim())){
     printf("add_matrix ERROR: dimensions do not match\n");
   }
 
@@ -104,7 +104,7 @@ void replace_matrix(int nc, int l, dolfin::FunctionSpace *V, dolfin::FunctionSpa
   int flag=0;
 
   // Test of dimensions
-  if ( (V->dim()!=nc*V_l->dim()) || (ncols!=nc*ncols_l) || (nrows!=nc*nrows_l) || (nrows!=nrows) || (nrows!=V->dim())){
+  if ( (V->dim()!=nc*V_l->dim()) || (ncols!=nc*ncols_l) || (nrows!=nc*nrows_l) || (nrows!=ncols) || (nrows!=V->dim())){
     printf("replace_matrix ERROR: dimensions do not match\n");
   }
 
