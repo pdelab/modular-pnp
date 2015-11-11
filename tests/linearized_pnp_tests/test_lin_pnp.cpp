@@ -199,7 +199,7 @@ int main(int argc, char** argv)
   //*************************************************************
   // Setup newton parameters and compute initial residual
   if (DEBUG) printf("\tnewton solver setup...\n");
-  Function solutionUpdate(V);
+  dolfin::Function solutionUpdate(V);
   unsigned int newton_iteration = 0;
 
   // compute initial residual and Jacobian
@@ -247,7 +247,7 @@ int main(int argc, char** argv)
 
   // update solution and reset solutionUpdate
   if (DEBUG) printf("\tupdate solution...\n");
-  Function update(V);
+  dolfin::Function update(V);
   dolfin::Function cat(update[0]); cat.interpolate(solutionUpdate[0]);
   dolfin::Function an(update[1]); an.interpolate(solutionUpdate[1]);
   dolfin::Function pot(update[2]); pot.interpolate(solutionUpdate[2]);

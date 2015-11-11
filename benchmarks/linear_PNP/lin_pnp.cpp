@@ -9,21 +9,16 @@
 #include <iostream>
 #include <string>
 #include <dolfin.h>
+#include "newton_functs.h"
 #include "EAFE.h"
 #include "fasp_to_fenics.h"
 #include "boundary_conditions.h"
 #include "linear_pnp.h"
 #include "newton.h"
-#include "newton_functs.h"
 extern "C"
 {
 #include "fasp.h"
 #include "fasp_functs.h"
-  INT fasp_solver_dcsr_krylov (dCSRmat *A,
-   dvector *b,
-   dvector *x,
-   itsolver_param *itparam
-  );
 #define FASP_BSR     ON  /** use BSR format in fasp */
 }
 using namespace dolfin;
@@ -252,11 +247,15 @@ int main()
   // update solution and reset solutionUpdate
   printf("\tupdate solution...\n"); fflush(stdout);
   Function update(V);
-  dolfin::Function cat(update[0]); cat.interpolate(solutionUpdate[0]);
+
+  update_solution(&cationSolution, &solutionUpdate[0]);
+  // dolfin::Function cat(update[0]); cat.interpolate(solutionUpdate[0]);
+  // *(cationSolution.vector()) += *(cat.vector());
+
   dolfin::Function an(update[1]); an.interpolate(solutionUpdate[1]);
-  dolfin::Function pot(update[2]); pot.interpolate(solutionUpdate[2]);
-  *(cationSolution.vector()) += *(cat.vector());
   *(anionSolution.vector()) += *(an.vector());
+
+  dolfin::Function pot(update[2]); pot.interpolate(solutionUpdate[2]);
   *(potentialSolution.vector()) += *(pot.vector());
 
   // compute residual
