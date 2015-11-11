@@ -244,7 +244,7 @@ int main(int argc, char** argv)
   assemble(A_cat, a_cat);
   assemble(A_an, a_an);
   replace_matrix(3,0, &V, &V_cat, &A_pnp, &A_cat);
-  // replace_matrix(3,1, &V, &V_an , &A_pnp, &A_an );
+  replace_matrix(3,1, &V, &V_an , &A_pnp, &A_an );
   bc.apply(A_pnp);
 
   L_pnp.CatCat = cationSolution;
