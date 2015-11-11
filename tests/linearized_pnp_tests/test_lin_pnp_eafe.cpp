@@ -81,7 +81,7 @@ int main(int argc, char** argv)
   // state problem
   if (DEBUG) {
     std::cout << "################################################################# \n";
-    std::cout << "#### Test of the FASP Solver with DEBUG=TRUE                 #### \n";
+    std::cout << "#### Test for LIN PNP EAFE Solver with DEBUG=TRUE            #### \n";
     std::cout << "################################################################# \n";
   }
   // Need to use Eigen for linear algebra
@@ -321,22 +321,22 @@ int main(int argc, char** argv)
     printf("\tpotential l2 error is:  %e\n", potentialError);
   }
 
-  if ( (cationError < 1E-7) && (anionError < 1E-7) && (potentialError < 1E-7) )
-    std::cout << "Success... the linearized pnp solver is working\n";
+  if ( (cationError < 1E-2) && (anionError < 1E-2) && (potentialError < 1E-2) )
+    std::cout << "Success... the linearized pnp (with eafe) solver is working\n";
   else {
-    printf("***\tERROR IN LINEARIZED PNP SOLVER TEST\n");
+    printf("***\tERROR IN LINEARIZED PNP (with eafe) SOLVER TEST\n");
     printf("***\n***\n***\n");
-    printf("***\tLINEARIZED PNP SOLVER TEST:\n");
+    printf("***\tLINEARIZED PNP (with eafe) SOLVER TEST:\n");
     printf("***\tThe computed solution is wrong\n");
     printf("***\n***\n***\n");
-    printf("***\tERROR IN LINEARIZED PNP SOLVER TEST\n");
+    printf("***\tERROR IN LINEARIZED PNP (with eafe) SOLVER TEST\n");
     fflush(stdout);
   }
 
   // state problem
   if (DEBUG) {
     std::cout << "################################################################# \n";
-    std::cout << "#### End of test for LINEARIZED PNP Solver with DEBUG=TRUE   #### \n";
+    std::cout << "#### End of test for LIN PNP EAFE Solver with DEBUG=TRUE    #### \n";
     std::cout << "################################################################# \n";
   }
 
