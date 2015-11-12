@@ -3,7 +3,7 @@
 % domain and mesh          %
 %--------------------------%
 
-mesh_output    = ./tests/linearized_pnp_tests/output/mesh.pvd
+mesh_output    = ./benchmarks/PNP/output/mesh.pvd
 
 mesh_file      = none  %./mesh/gramA_channel.xml
 surface_file   = none  %./mesh/gramA_channel_facet_region.xml
