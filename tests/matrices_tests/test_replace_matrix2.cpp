@@ -119,7 +119,7 @@ int main(int argc, char** argv)
   }
   if (DEBUG) {
     std::cout << "################################################################# \n";
-    std::cout << "#### The test of replace_matrix2 with DEBUG=TRUE              #### \n";
+    std::cout << "#### The test of replace_matrix2 with DEBUG=TRUE             #### \n";
     std::cout << "################################################################# \n\n";
   }
 

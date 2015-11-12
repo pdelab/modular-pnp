@@ -37,7 +37,7 @@ set(FASP_LIB ${FASP_DIR}/lib/libfasp.a)
 set(FASP4NS_LIB ${FASP4NS_DIR}/lib/libfasp4ns.a)
 
 # Local src files and include
-set(SRC_DIR ./src/fasp_to_fenics.cpp ./src/params.cpp ./src/domains.cpp ./src/boundary_conditions.cpp ./src/funcspace_to_vecspace.cpp)
+set(SRC_DIR ./src/fasp_to_fenics.cpp ./src/params.cpp ./src/domains.cpp ./src/boundary_conditions.cpp ./src/funcspace_to_vecspace.cpp ./src/newton_functs.cpp)
 
 # Include directories
 set(FASP_INCLUDE_DIR ${FASP_DIR}/base/include)
