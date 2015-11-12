@@ -216,3 +216,69 @@ void copy_dvector_to_vector_function(const dvector* vector, dolfin::Function* F,
   for (int i=0; i < dof_length; i++)
     F->vector()->setitem(function_dofs->val[i], vector->val[vector_dofs->val[i]]);
 }
+
+void solve_dcsr_fasp(const Form& a, const Form& L, EigenVector* Solution, const DirichletBC bc, itsolver_param itpar)
+{
+  std::vector<const DirichletBC*> bcs = {&bc};
+  solve_dcsr_fasp(a, L, Solution, bcs, itpar);
+}
+
+void solve_dcsr_fasp(const Form& a, const Form& L, EigenVector* Solution, std::vector<const DirichletBC*> bcs, itsolver_param itpar)
+{
+  int i;
+
+  if (Solution->size()<=0) printf("ERROR wrong size of EigenVector\n");
+
+  EigenMatrix A;
+  assemble(A,a);
+  EigenVector b;
+  assemble(b,L);
+  for (i=0;i<bcs.size();i++)
+  {
+    bcs[i]->apply(b);
+    bcs[i]->apply(A);
+  }
+  dCSRmat A_fasp;
+  dvector b_fasp;
+  dvector Solu_fasp;
+  EigenVector_to_dvector(&b,&b_fasp);
+  EigenMatrix_to_dCSRmat(&A,&A_fasp);
+  EigenVector_to_dvector(Solution,&Solu_fasp);
+  INT status = FASP_SUCCESS;
+  status = fasp_solver_dcsr_krylov(&A_fasp, &b_fasp, &Solu_fasp, &itpar);
+
+}
+
+void solve_dbsr_fasp(int block, const Form& a, const Form& L, EigenVector* Solution,  DirichletBC bc, itsolver_param itpar, AMG_param amgpar)
+{
+  std::vector<const DirichletBC*> bcs = {&bc};
+  solve_dbsr_fasp(block, a, L, Solution, bcs, itpar, amgpar);
+}
+
+void solve_dbsr_fasp(int block, const Form& a, const Form& L, EigenVector* Solution, std::vector<const DirichletBC*> bcs, itsolver_param itpar, AMG_param amgpar)
+{
+  int i;
+
+  if (Solution->size()<=0) printf("ERROR wrong size of EigenVector\n");
+
+  EigenMatrix A;
+  assemble(A,a);
+  EigenVector b;
+  assemble(b,L);
+  for (i=0;i<bcs.size();i++)
+  {
+    bcs[i]->apply(b);
+    bcs[i]->apply(A);
+  }
+  dCSRmat A_fasp;
+  dBSRmat A_fasp_bsr;
+  dvector b_fasp;
+  dvector Solu_fasp;
+  EigenVector_to_dvector(&b,&b_fasp);
+  EigenMatrix_to_dCSRmat(&A,&A_fasp);
+  A_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, block);
+  EigenVector_to_dvector(Solution,&Solu_fasp);
+  INT status = FASP_SUCCESS;
+  status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &Solu_fasp, &itpar, &amgpar);
+
+}

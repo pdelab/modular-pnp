@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <dolfin.h>
+// #include "LinearVariationalProblem.h"
 extern "C"
 {
 #include "fasp.h"
@@ -34,5 +35,13 @@ void copy_dvector_to_Function(const dvector* vec_b, dolfin::Function* F);
 void get_dofs(dolfin::Function* vector_function, ivector* dof_array, unsigned int component);
 
 void copy_dvector_to_vector_function(const dvector* vector, dolfin::Function* F, ivector* vector_dofs, ivector* function_dofs);
+
+void solve_dcsr_fasp(const dolfin::Form& a, const dolfin::Form& L, dolfin::EigenVector* Solution, const dolfin::DirichletBC bc, itsolver_param itpar);
+
+void solve_dcsr_fasp(const dolfin::Form& a, const dolfin::Form& L, dolfin::EigenVector* Solution, std::vector<const dolfin::DirichletBC*> bcs, itsolver_param itpar);
+
+void solve_dbsr_fasp(int block, const dolfin::Form& a, const dolfin::Form& L, dolfin::EigenVector* Solution, dolfin::DirichletBC bc, itsolver_param itpar, AMG_param amgpar);
+
+void solve_dbsr_fasp(int block, const dolfin::Form& a, const dolfin::Form& L, dolfin::EigenVector* Solution, std::vector<const dolfin::DirichletBC*> bcs, itsolver_param itpar, AMG_param amgpar);
 
 #endif
