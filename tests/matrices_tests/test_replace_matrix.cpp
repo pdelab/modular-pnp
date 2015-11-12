@@ -50,7 +50,7 @@ class Solution1 : public Expression
 {
   void eval(Array<double>& values, const Array<double>& x) const
   {
-    values[0] = sin(2*pi*x[0])*sin(2*pi*x[1])*sin(2*pi*x[2]);
+    values[0] = sin(2.0*pi*x[0])*sin(2.0*pi*x[1])*sin(2.0*pi*x[2]);
   }
 };
 class Solution2 : public Expression
@@ -60,8 +60,8 @@ public:
 
   void eval(Array<double>& values, const Array<double>& x) const
   {
-    values[0] = sin(2*pi*x[0])*sin(2*pi*x[1])*sin(2*pi*x[2]);
-    values[1] = sin(2*pi*x[0])*sin(2*pi*x[1])*sin(2*pi*x[2]);
+    values[0] = sin(2.0*pi*x[0])*sin(2.0*pi*x[1])*sin(2.0*pi*x[2]);
+    values[1] = sin(2.0*pi*x[0])*sin(2.0*pi*x[1])*sin(2.0*pi*x[2]);
   }
 };
 class Solution3 : public Expression
@@ -71,9 +71,9 @@ public:
 
   void eval(Array<double>& values, const Array<double>& x) const
   {
-    values[0] = sin(2*pi*x[0])*sin(2*pi*x[1])*sin(2*pi*x[2]);
-    values[1] = sin(2*pi*x[0])*sin(2*pi*x[1])*sin(2*pi*x[2]);
-    values[2] = sin(2*pi*x[0])*sin(2*pi*x[1])*sin(2*pi*x[2]);
+    values[0] = sin(2.0*pi*x[0])*sin(2.0*pi*x[1])*sin(2.0*pi*x[2]);
+    values[1] = sin(2.0*pi*x[0])*sin(2.0*pi*x[1])*sin(2.0*pi*x[2]);
+    values[2] = sin(2.0*pi*x[0])*sin(2.0*pi*x[1])*sin(2.0*pi*x[2]);
   }
 };
 // Source term (right-hand side)
@@ -81,7 +81,7 @@ class Source : public Expression
 {
   void eval(Array<double>& values, const Array<double>& x) const
   {
-    values[0] =  3*4*pow(pi,2)*sin(2*pi*x[0])*sin(2*pi*x[1])*sin(2*pi*x[2]);
+    values[0] =  3.0*4.0*pow(pi,2)*sin(2.0*pi*x[0])*sin(2.0*pi*x[1])*sin(2.0*pi*x[2]);
   }
 };
 // Sub domain for Dirichlet boundary condition
@@ -272,7 +272,7 @@ int main(int argc, char** argv)
   if ( (std::fabs(error_norm2_1-error_norm1) < EPS) && (std::fabs(error_norm2_2-error_norm1) < EPS) &&
        (std::fabs(error_norm3_1-error_norm1) < EPS) && (std::fabs(error_norm3_2-error_norm1) < EPS) && (std::fabs(error_norm3_3-error_norm1) < EPS)  )
  {
-   std::cout << "Success...replace_matrix is working\n";
+   std::cout << "Success... replace_matrix is working\n";
  }
  else {
    printf("***\tERROR IN REPLACE_MATRIX TEST\n");
@@ -280,7 +280,7 @@ int main(int argc, char** argv)
    printf("***\tSOLVER TEST:\n");
    printf("***\tThe computed solution is wrong\n");
    printf("***\n***\n***\n");
-   printf("***\tERROR IN REPLACE_MATRIXTEST\n");
+   printf("***\tERROR IN REPLACE_MATRIX TEST\n");
    fflush(stdout);
  }
   if (DEBUG) {

@@ -31,7 +31,7 @@ void add_matrix(int nc, int l, dolfin::FunctionSpace *V, dolfin::FunctionSpace *
   int flag=0;
 
   // Test of dimensions
-  if ( (V->dim()!=nc*V_l->dim()) || (ncols!=nc*ncols_l) || (nrows!=nc*nrows_l) || (nrows!=nrows) || (nrows!=V->dim())){
+  if ( (V->dim()!=nc*V_l->dim()) || (ncols!=nc*ncols_l) || (nrows!=nc*nrows_l) || (nrows!=ncols) || (nrows!=V->dim())){
     printf("add_matrix ERROR: dimensions do not match\n");
   }
 
@@ -104,8 +104,8 @@ void replace_matrix(int nc, int l, dolfin::FunctionSpace *V, dolfin::FunctionSpa
   int flag=0;
 
   // Test of dimensions
-  if ( (V->dim()!=nc*V_l->dim()) || (ncols!=nc*ncols_l) || (nrows!=nc*nrows_l) || (nrows!=nrows) || (nrows!=V->dim())){
-    printf("add_matrix ERROR: dimensions do not match\n");
+  if ( (V->dim()!=nc*V_l->dim()) || (ncols!=nc*ncols_l) || (nrows!=nc*nrows_l) || (nrows!=ncols) || (nrows!=V->dim())){
+    printf("replace_matrix ERROR: dimensions do not match\n");
   }
 
   // pointers to JA/IA/Values of the EigenMatrices
@@ -138,7 +138,7 @@ void replace_matrix(int nc, int l, dolfin::FunctionSpace *V, dolfin::FunctionSpa
       // A[ v_d[nc*d_v_l[i]] , v_d[nc*d_v_l[i]] ] += A_l[i,j]
       ii=v_d[nc*d_v_l[i]]+l;  // row index for A
       jj=v_d[nc*d_v_l[j]]+l;  // colum index for A
-      if ( (ii>nrows) || (jj>ncols) ) printf("add_matrix ERROR: vertex/dof are wrong\n");
+      if ( (ii>nrows) || (jj>ncols) ) printf("replace_matrix ERROR: vertex/dof are wrong\n");
       flag=0;
       for (kk=IA[ii];kk<IA[ii+1];kk++)
       {
@@ -150,7 +150,7 @@ void replace_matrix(int nc, int l, dolfin::FunctionSpace *V, dolfin::FunctionSpa
           break;
         }
       }
-      if (flag==0) printf("add_matrix ERROR: could not find the columns -> use add_matrix2\n");
+      if (flag==0) printf("replace_matrix ERROR: could not find the columns -> use add_matrix2\n");
     }
   }
 
