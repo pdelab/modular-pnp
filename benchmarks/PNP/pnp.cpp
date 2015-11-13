@@ -157,10 +157,10 @@ int main()
   // Interpolate analytic expressions
   Function solutionFunction(V);
   Function cationSolution(solutionFunction[0]);
-  Constant C11(0.0);
-  cationSolution.interpolate(C11);
+  // Constant C11(0.1);
+  cationSolution.interpolate(Cation);
   Function anionSolution(solutionFunction[1]);
-  anionSolution.interpolate(C11);
+  anionSolution.interpolate(Anion);
   ivector cation_dofs;
   ivector anion_dofs;
   ivector potential_dofs;
@@ -202,6 +202,9 @@ int main()
   // Setup newton parameters and compute initial residual
   printf("\tnewton solver setup...\n"); fflush(stdout);
   Function solutionUpdate(V);
+  Function dcat(solutionUpdate[0]);
+  Function dan(solutionUpdate[1]);
+  Function dphi(solutionUpdate[2]);
   unsigned int newton_iteration = 0;
 
   // compute initial residual and Jacobian
@@ -253,9 +256,13 @@ int main()
 
       // update solution and reset solutionUpdate
       printf("\tupdate solution...\n"); fflush(stdout);
-      update_solution(&cationSolution, &solutionUpdate[0]);
-      update_solution(&anionSolution, &solutionUpdate[1]);
-      update_solution(&potentialSolution, &solutionUpdate[2]);
+      update_solution(&dcat, &solutionUpdate[0]);
+      update_solution(&dan, &solutionUpdate[1]);
+      update_solution(&dphi, &solutionUpdate[2]);
+
+      *(cationSolution.vector())+=*(dcat.vector());
+      *(anionSolution.vector())+=*(dan.vector());
+      *(potentialSolution.vector())+=*(dphi.vector());
 
       // compute residual
       L_pnp.CatCat = cationSolution;
