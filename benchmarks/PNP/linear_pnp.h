@@ -5434,7 +5434,7 @@ public:
     G[16] = det*w[7][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
     G[17] = det*w[7][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
     G[18] =  - det*w[5][0];
-    G[19] =  - det*w[7][0];
+    G[19] = det*w[7][0];
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
@@ -5906,9 +5906,9 @@ public:
     G[34] = det*w[7][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
     G[35] =  - det*w[7][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
     G[36] =  - det*w[5][0];
-    G[37] =  - det*w[7][0];
+    G[37] = det*w[7][0];
     G[38] = det*w[5][0];
-    G[39] = det*w[7][0];
+    G[39] =  - det*w[7][0];
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
@@ -6081,7 +6081,7 @@ public:
   /// Return a string identifying the form
   virtual const char* signature() const
   {
-    return "7e6fa378ad563d19e92f7c8ebf995256afcc98fbf0d88e9fe3284ad53878b2b5d2f080a8a87421bf192ff22a13421189680792039a3e7de7581d508fca6a650d";
+    return "46decba2d284ce43bd18b8fb83bdc1b6e0369481beb179949fa0e4870f5fba411642538cab0d2eb477f32763907c71dfa1224bdb029d6eef5664a872a0970942";
   }
 
 
@@ -6385,7 +6385,7 @@ public:
   /// Return a string identifying the form
   virtual const char* signature() const
   {
-    return "4f1fe7bdaaa8304bedb7694b9fdfe0951aad0e96d30ef8b4984f5047981d98a7c92b6f971f8ba0ed163f11086ca75b8faaaac9f192bb77ea403f8f3d50906508";
+    return "712f0218f73370f3ac57488a914535b4e3323460094a4f9c2efc32dbaecee18b62e254ef5848ff8d4fe744758a81396c7787a7024fc67cb210233330756ee964";
   }
 
 

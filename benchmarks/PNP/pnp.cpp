@@ -136,6 +136,9 @@ int main()
   analyticCation.interpolate(cationExpression);
   analyticAnion.interpolate(anionExpression);
   analyticPotential.interpolate(potentialExpression);
+  // analyticCation.interpolate(zero);
+  // analyticAnion.interpolate(zero);
+  // analyticPotential.interpolate(zero);
   L_pnp.cation = analyticCation;
   L_pnp.anion = analyticAnion;
   L_pnp.potential = analyticPotential;
@@ -155,11 +158,7 @@ int main()
 
   // Interpolate analytic expressions
   Function solutionFunction(V);
-  Function cationSolution(solutionFunction[0]);
-  // Constant C11(0.1);
-  cationSolution.interpolate(cationExpression);
-  Function anionSolution(solutionFunction[1]);
-  anionSolution.interpolate(anionExpression);
+
   ivector cation_dofs;
   ivector anion_dofs;
   ivector potential_dofs;
@@ -168,9 +167,18 @@ int main()
   get_dofs(&solutionFunction, &potential_dofs, 2);
 
   // Solve for consistent voltage : not yet implemented
-  Function potentialSolution(solutionFunction[2]);
-  potentialSolution.interpolate(potentialExpression);
 
+  Function cationSolution(solutionFunction[0]);
+  Function anionSolution(solutionFunction[1]);
+  Function potentialSolution(solutionFunction[2]);
+
+  // cationSolution.interpolate(Cation);
+  // anionSolution.interpolate(Anion);
+  // potentialSolution.interpolate(Volt);
+
+  cationSolution.interpolate(cationExpression);
+  anionSolution.interpolate(anionExpression);
+  potentialSolution.interpolate(potentialExpression);
   *(cationSolution.vector())+=1E-1;
   *(anionSolution.vector())+=1E-1;
   *(potentialSolution.vector())+=1E-1;
