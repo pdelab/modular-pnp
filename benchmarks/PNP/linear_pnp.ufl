@@ -36,15 +36,11 @@ a   = ( Dp*exp(CatCat) * ( inner(grad(Cat),grad(cat)) + inner(grad(CatCat)+qp*gr
     + ( eps * inner(grad(Phi),grad(phi)) )*dx \
     + ( -(qp*exp(CatCat)*Cat + qn*exp(AnAn)*An)*phi )*dx
 
-L   = ( Dp*exp(CatCat)* (inner(grad(cation),grad(cat)) + inner(grad(CatCat)+qp*grad(EsEs),grad(cat))*cation) )*dx \
-    + ( qp*Dp*exp(CatCat) * inner(grad(potential),grad(cat)) )*dx \
-    + ( Dn*exp(AnAn)* (inner(grad(anion),grad(an)) + inner(grad(AnAn)+qn*grad(EsEs), grad(an))*anion) )*dx \
-    + ( qn*Dn*exp(AnAn) * inner(grad(potential),grad(an)) )*dx \
+L   = ( Dp*exp(cation)* (inner(grad(cation),grad(cat)) + qp*inner(grad(potential),grad(cat))) )*dx \
+    + ( Dn*exp(anion)* (inner(grad(anion),grad(an)) + qn*inner(grad(potential), grad(an))) )*dx \
     + ( eps * inner(grad(potential),grad(phi)) )*dx \
-    + ( -(qp*exp(CatCat)*cation + qn*exp(AnAn)*anion)*phi )*dx \
-    - ( Dp*exp(CatCat)* (inner(grad(CatCat),grad(cat)) + inner(grad(CatCat)+qp*grad(EsEs),grad(cat))*CatCat) )*dx \
-    - ( qp*Dp*exp(CatCat) * inner(grad(EsEs),grad(cat)) )*dx \
-    - ( Dn*exp(AnAn)* (inner(grad(AnAn),grad(an)) + inner(grad(AnAn)+qn*grad(EsEs), grad(an))*AnAn) )*dx \
-    - ( qn*Dn*exp(AnAn) * inner(grad(EsEs),grad(an)) )*dx \
+    + ( -(qp*exp(cation) + qn*exp(anion))*phi )*dx \
+    - ( Dp*exp(CatCat)* (inner(grad(CatCat),grad(cat)) + qp*inner(grad(EsEs),grad(cat))) )*dx \
+    - ( Dn*exp(AnAn  )* (inner(grad(AnAn  ),grad(an )) + qn*inner(grad(EsEs), grad(an))) )*dx \
     - ( eps * inner(grad(EsEs),grad(phi)) )*dx \
-    - ( -(qp*exp(CatCat)*CatCat + qn*exp(AnAn)*AnAn)*phi )*dx
+    - ( -(qp*exp(CatCat) + qn*exp(AnAn))*phi )*dx

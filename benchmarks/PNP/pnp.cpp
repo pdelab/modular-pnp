@@ -136,10 +136,9 @@ int main()
   analyticCation.interpolate(cationExpression);
   analyticAnion.interpolate(anionExpression);
   analyticPotential.interpolate(potentialExpression);
-  Constant C00(0.0);
-  L_pnp.cation = C00;//analyticCation;
-  L_pnp.anion = C00;//analyticAnion;
-  L_pnp.potential = C00;//analyticPotential;
+  L_pnp.cation = analyticCation;
+  L_pnp.anion = analyticAnion;
+  L_pnp.potential = analyticPotential;
 
   // Set Dirichlet boundaries
   printf("\tboundary conditions...\n"); fflush(stdout);
@@ -158,9 +157,9 @@ int main()
   Function solutionFunction(V);
   Function cationSolution(solutionFunction[0]);
   // Constant C11(0.1);
-  cationSolution.interpolate(Cation);
+  cationSolution.interpolate(cationExpression);
   Function anionSolution(solutionFunction[1]);
-  anionSolution.interpolate(Anion);
+  anionSolution.interpolate(anionExpression);
   ivector cation_dofs;
   ivector anion_dofs;
   ivector potential_dofs;
@@ -170,7 +169,11 @@ int main()
 
   // Solve for consistent voltage : not yet implemented
   Function potentialSolution(solutionFunction[2]);
-  potentialSolution.interpolate(Volt);
+  potentialSolution.interpolate(potentialExpression);
+
+  *(cationSolution.vector())+=1E-1;
+  *(anionSolution.vector())+=1E-1;
+  *(potentialSolution.vector())+=1E-1;
 
   // print to file
   cationFile << cationSolution;
@@ -205,6 +208,9 @@ int main()
   Function dcat(solutionUpdate[0]);
   Function dan(solutionUpdate[1]);
   Function dphi(solutionUpdate[2]);
+  dcat.interpolate(zero);
+  dan.interpolate(zero);
+  dphi.interpolate(zero);
   unsigned int newton_iteration = 0;
 
   // compute initial residual and Jacobian
@@ -220,12 +226,12 @@ int main()
 
   printf("\tinitialized succesfully!\n\n"); fflush(stdout);
 
-
+  fasp_dvec_alloc(b_pnp.size(), &solu_fasp);
 
   //*************************************************************
   //  Solve : this will be inside Newton loop
   //*************************************************************
-  double tol=1E-6;
+  double tol=1E-8;
   while (relative_residual>tol)
   {
       printf("Solve the system\n"); fflush(stdout);
@@ -244,7 +250,6 @@ int main()
       EigenVector_to_dvector(&b_pnp,&b_fasp);
       EigenMatrix_to_dCSRmat(&A_pnp,&A_fasp);
       A_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
-      fasp_dvec_alloc(b_fasp.row, &solu_fasp);
       fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
       status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &solu_fasp, &itpar, &amgpar);
 
@@ -270,7 +275,7 @@ int main()
       L_pnp.EsEs = potentialSolution;
       assemble(b_pnp, L_pnp);
       bc.apply(b_pnp);
-      relative_residual = b_pnp.norm("l2") / initial_residual;
+      relative_residual = b_pnp.norm("l2") ;// initial_residual;
       if (newton_iteration == 1)
         printf("\trelative nonlinear residual after 1 iteration has l2-norm of %e\n", relative_residual);
       else
@@ -283,25 +288,25 @@ int main()
       potentialFile << potentialSolution;
 
       // compute solution error
-      // printf("\nCompute the error\n"); fflush(stdout);
-      // Function Error1(analyticCation);
-      // Function Error2(analyticAnion);
-      // Function Error3(analyticPotential);
-      // *(Error1.vector())-=*(cationSolution.vector());
-      // *(Error2.vector())-=*(anionSolution.vector());
-      // *(Error3.vector())-=*(potentialSolution.vector());
-      // double cationError = 0.0;
-      // double anionError = 0.0;
-      // double potentialError = 0.0;
-      // L2Error::Form_M L2error1(mesh,Error1);
-      // cationError = assemble(L2error1);
-      // L2Error::Form_M L2error2(mesh,Error2);
-      // anionError = assemble(L2error2);
-      // L2Error::Form_M L2error3(mesh,Error3);
-      // potentialError = assemble(L2error3);
-      // printf("\tcation l2 error is:     %e\n", cationError);
-      // printf("\tanion l2 error is:      %e\n", anionError);
-      // printf("\tpotential l2 error is:  %e\n", potentialError);
+      printf("\nCompute the error\n"); fflush(stdout);
+      Function Error1(analyticCation);
+      Function Error2(analyticAnion);
+      Function Error3(analyticPotential);
+      *(Error1.vector())-=*(cationSolution.vector());
+      *(Error2.vector())-=*(anionSolution.vector());
+      *(Error3.vector())-=*(potentialSolution.vector());
+      double cationError = 0.0;
+      double anionError = 0.0;
+      double potentialError = 0.0;
+      L2Error::Form_M L2error1(mesh,Error1);
+      cationError = assemble(L2error1);
+      L2Error::Form_M L2error2(mesh,Error2);
+      anionError = assemble(L2error2);
+      L2Error::Form_M L2error3(mesh,Error3);
+      potentialError = assemble(L2error3);
+      printf("\tcation l2 error is:     %e\n", cationError);
+      printf("\tanion l2 error is:      %e\n", anionError);
+      printf("\tpotential l2 error is:  %e\n", potentialError);
 
       // print error
       // cationFile << cationSolution;
