@@ -191,9 +191,9 @@ int main()
   cationSolution.interpolate(cationExpression);
   anionSolution.interpolate(anionExpression);
   potentialSolution.interpolate(potentialExpression);
-  *(cationSolution.vector())+=1E-1;
-  *(anionSolution.vector())+=1E-1;
-  *(potentialSolution.vector())+=1E-1;
+  *(cationSolution.vector())*=0.8;
+  *(anionSolution.vector())*=0.8;
+  *(potentialSolution.vector())*=0.8;
 
   // print to file
   cationFile << cationSolution;
@@ -308,13 +308,17 @@ int main()
 
       // update solution and reset solutionUpdate
       printf("\tupdate solution...\n"); fflush(stdout);
-      update_solution(&dcat, &solutionUpdate[0]);
-      update_solution(&dan, &solutionUpdate[1]);
-      update_solution(&dphi, &solutionUpdate[2]);
+      update_solution(&cationSolution, &solutionUpdate[0]);
+      update_solution(&anionSolution, &solutionUpdate[1]);
+      update_solution(&potentialSolution, &solutionUpdate[2]);
 
-      *(cationSolution.vector())+=*(dcat.vector());
-      *(anionSolution.vector())+=*(dan.vector());
-      *(potentialSolution.vector())+=*(dphi.vector());
+      // dcat.interpolate(solutionUpdate[0]);
+      // dan.interpolate(solutionUpdate[1]);
+      // dphi.interpolate(solutionUpdate[2]);
+      //
+      // *(cationSolution.vector())+=*(dcat.vector());
+      // *(anionSolution.vector())+=*(dan.vector());
+      // *(potentialSolution.vector())+=*(dphi.vector());
 
       CatCatFunction.interpolate(cationSolution);
       CatBetaFunction.interpolate(potentialSolution);
