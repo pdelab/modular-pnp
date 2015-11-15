@@ -143,6 +143,13 @@ int main()
   L_pnp.anion = analyticAnion;
   L_pnp.potential = analyticPotential;
 
+  File EXcationFile("./benchmarks/PNP/output/Ex_cation.pvd");
+  File EXanionFile("./benchmarks/PNP/output/Ex_anion.pvd");
+  File EXpotentialFile("./benchmarks/PNP/output/Ex_potential.pvd");
+  EXcationFile << analyticCation;
+  EXanionFile << analyticAnion;
+  EXpotentialFile << analyticPotential;
+
   // Set Dirichlet boundaries
   printf("\tboundary conditions...\n"); fflush(stdout);
   unsigned int dirichlet_coord = 0;

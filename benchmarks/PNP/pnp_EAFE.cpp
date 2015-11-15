@@ -155,6 +155,13 @@ int main()
   L_pnp.anion = analyticAnion;
   L_pnp.potential = analyticPotential;
 
+  File EXcationFile("./benchmarks/PNP/output/Ex_cation.pvd");
+  File EXanionFile("./benchmarks/PNP/output/Ex_anion.pvd");
+  File EXpotentialFile("./benchmarks/PNP/output/Ex_potential.pvd");
+  EXcationFile << analyticCation;
+  EXanionFile << analyticAnion;
+  EXpotentialFile << analyticPotential;
+
   // Set Dirichlet boundaries
   printf("\tboundary conditions...\n"); fflush(stdout);
   unsigned int dirichlet_coord = 0;
@@ -191,9 +198,9 @@ int main()
   cationSolution.interpolate(cationExpression);
   anionSolution.interpolate(anionExpression);
   potentialSolution.interpolate(potentialExpression);
-  *(cationSolution.vector())*=0.8;
-  *(anionSolution.vector())*=0.8;
-  *(potentialSolution.vector())*=0.8;
+  *(cationSolution.vector())*=1.5;
+  *(anionSolution.vector())*=1.5;
+  *(potentialSolution.vector())*=1.5;
 
   // print to file
   cationFile << cationSolution;
@@ -270,7 +277,7 @@ int main()
   //*************************************************************
   //  Solve : this will be inside Newton loop
   //*************************************************************
-  double tol=1E-8;
+  double tol=1E-6;
   while (relative_residual>tol)
   {
       printf("Solve the system\n"); fflush(stdout);
