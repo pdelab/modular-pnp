@@ -13,7 +13,7 @@
 #include "funcspace_to_vecspace.h"
 #include "fasp_to_fenics.h"
 #include "boundary_conditions.h"
-#include "linear_pnp.h"
+#include "linear_pnp2.h"
 #include "newton.h"
 #include "newton_functs.h"
 #include "L2Error.h"
@@ -37,9 +37,7 @@ class analyticCationExpression : public Expression
 {
   void eval(Array<double>& values, const Array<double>& x) const
   {
-    values[0]  = lower_cation_val * (5.0 - x[0]) / 10.0;
-    values[0] += upper_cation_val * (x[0] + 5.0) / 10.0;
-    values[0] += 2.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
+    values[0]  = -9.0/20.0*x[0]+11.0/20.0;
     values[0]  = std::log(values[0]);
   }
 };
@@ -48,10 +46,8 @@ class analyticAnionExpression : public Expression
 {
   void eval(Array<double>& values, const Array<double>& x) const
   {
-    values[0]  = lower_anion_val * (5.0 - x[0]) / 10.0;
-    values[0] += upper_anion_val * (x[0] + 5.0) / 10.0;
-    values[0] += 1.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
-    values[0]  =std::log(values[0]);
+    values[0]  = 9.0/20.0*x[0]+11.0/20.0;
+    values[0]  = std::log(values[0]);
   }
 };
 
@@ -59,10 +55,7 @@ class analyticPotentialExpression : public Expression
 {
   void eval(Array<double>& values, const Array<double>& x) const
   {
-    values[0]  = lower_potential_val * (5.0 - x[0]) / 10.0;
-    values[0] += upper_potential_val * (x[0] + 5.0) / 10.0;
-    values[0] += -2.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
-    values[0] *= 10.0;
+    values[0]  =-x[0];
   }
 };
 
@@ -86,7 +79,7 @@ int main()
   // read domain parameters
   printf("\tdomain...\n"); fflush(stdout);
   domain_param domain_par;
-  char domain_param_filename[] = "./benchmarks/PNP/domain_params.dat";
+  char domain_param_filename[] = "./benchmarks/PNP/domain_params2.dat";
   domain_param_input(domain_param_filename, &domain_par);
   // print_domain_param(&domain_par);
 
@@ -112,9 +105,9 @@ int main()
 
   // Initialize variational forms
   printf("\tvariational forms...\n"); fflush(stdout);
-  linear_pnp::FunctionSpace V(mesh);
-  linear_pnp::BilinearForm a_pnp(V,V);
-  linear_pnp::LinearForm L_pnp(V);
+  linear_pnp2::FunctionSpace V(mesh);
+  linear_pnp2::BilinearForm a_pnp(V,V);
+  linear_pnp2::LinearForm L_pnp(V);
   Constant eps(coeff_par.relative_permittivity);
   Constant Dp(coeff_par.cation_diffusivity);
   Constant Dn(coeff_par.anion_diffusivity);
@@ -152,9 +145,6 @@ int main()
   // analyticCation.interpolate(zero);
   // analyticAnion.interpolate(zero);
   // analyticPotential.interpolate(zero);
-  L_pnp.cation = analyticCation;
-  L_pnp.anion = analyticAnion;
-  L_pnp.potential = analyticPotential;
 
   File EXcationFile("./benchmarks/PNP/output/Ex_cation.pvd");
   File EXanionFile("./benchmarks/PNP/output/Ex_anion.pvd");
@@ -192,17 +182,13 @@ int main()
   Function anionSolution(solutionFunction[1]);
   Function potentialSolution(solutionFunction[2]);
 
-  cationSolution.interpolate(Cation);
-  anionSolution.interpolate(Anion);
-  potentialSolution.interpolate(Volt);
-  *(potentialSolution.vector())*=10.0;
+  // cationSolution.interpolate(Cation);
+  // anionSolution.interpolate(Anion);
+  // potentialSolution.interpolate(Volt);
 
-  // cationSolution.interpolate(cationExpression);
-  // anionSolution.interpolate(anionExpression);
-  // potentialSolution.interpolate(potentialExpression);
-  // *(cationSolution.vector())*=1.5;
-  // *(anionSolution.vector())*=1.5;
-  // *(potentialSolution.vector())*=1.5;
+  cationSolution.interpolate(cationExpression);
+  anionSolution.interpolate(anionExpression);
+  potentialSolution.interpolate(potentialExpression);
 
   // print to file
   cationFile << cationSolution;
@@ -279,7 +265,7 @@ int main()
   //*************************************************************
   //  Solve : this will be inside Newton loop
   //*************************************************************
-  double tol=1E-8;
+  double tol=1E-6;
   while (relative_residual>tol)
   {
       printf("Solve the system\n"); fflush(stdout);
@@ -358,25 +344,25 @@ int main()
       potentialFile << potentialSolution;
 
       // compute solution error
-      printf("\nCompute the error\n"); fflush(stdout);
-      Function Error1(analyticCation);
-      Function Error2(analyticAnion);
-      Function Error3(analyticPotential);
-      *(Error1.vector())-=*(cationSolution.vector());
-      *(Error2.vector())-=*(anionSolution.vector());
-      *(Error3.vector())-=*(potentialSolution.vector());
-      double cationError = 0.0;
-      double anionError = 0.0;
-      double potentialError = 0.0;
-      L2Error::Form_M L2error1(mesh,Error1);
-      cationError = assemble(L2error1);
-      L2Error::Form_M L2error2(mesh,Error2);
-      anionError = assemble(L2error2);
-      L2Error::Form_M L2error3(mesh,Error3);
-      potentialError = assemble(L2error3);
-      printf("\tcation l2 error is:     %e\n", cationError);
-      printf("\tanion l2 error is:      %e\n", anionError);
-      printf("\tpotential l2 error is:  %e\n", potentialError);
+      // printf("\nCompute the error\n"); fflush(stdout);
+      // Function Error1(analyticCation);
+      // Function Error2(analyticAnion);
+      // Function Error3(analyticPotential);
+      // *(Error1.vector())-=*(cationSolution.vector());
+      // *(Error2.vector())-=*(anionSolution.vector());
+      // *(Error3.vector())-=*(potentialSolution.vector());
+      // double cationError = 0.0;
+      // double anionError = 0.0;
+      // double potentialError = 0.0;
+      // L2Error::Form_M L2error1(mesh,Error1);
+      // cationError = assemble(L2error1);
+      // L2Error::Form_M L2error2(mesh,Error2);
+      // anionError = assemble(L2error2);
+      // L2Error::Form_M L2error3(mesh,Error3);
+      // potentialError = assemble(L2error3);
+      // printf("\tcation l2 error is:     %e\n", cationError);
+      // printf("\tanion l2 error is:      %e\n", anionError);
+      // printf("\tpotential l2 error is:  %e\n", potentialError);
 
       // print error
       // cationFile << cationSolution;
