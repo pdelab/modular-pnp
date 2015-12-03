@@ -159,14 +159,14 @@ int main(int argc, char** argv)
   if (DEBUG) printf("done\n"); fflush(stdout);
 
   /// FASP Solver
-  dCSRmat A_fasp;
-  dvector b_fasp;
-  dvector Solu_fasp;
-  EigenVector_to_dvector(&b,&b_fasp);
-  EigenMatrix_to_dCSRmat(&A,&A_fasp);
-  fasp_dvec_alloc(b_fasp.row, &Solu_fasp);
-  fasp_dvec_set(b_fasp.row, &Solu_fasp, 0.0);
-  if (DEBUG) printf("Solve the Poisson's equation using FASP..."); fflush(stdout);
+  // dCSRmat A_fasp;
+  // dvector b_fasp;
+  // dvector Solu_fasp;
+  // EigenVector_to_dvector(&b,&b_fasp);
+  // EigenMatrix_to_dCSRmat(&A,&A_fasp);
+  // fasp_dvec_alloc(b_fasp.row, &Solu_fasp);
+  // fasp_dvec_set(b_fasp.row, &Solu_fasp, 0.0);
+  // if (DEBUG) printf("Solve the Poisson's equation using FASP..."); fflush(stdout);
   input_param inpar;
   itsolver_param itpar;
   AMG_param amgpar;
@@ -175,7 +175,10 @@ int main(int argc, char** argv)
   fasp_param_input(inputfile, &inpar);
   fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
   INT status = FASP_SUCCESS;
-  status = fasp_solver_dcsr_krylov(&A_fasp, &b_fasp, &Solu_fasp, &itpar);
+  // status = fasp_solver_dcsr_krylov(&A_fasp, &b_fasp, &Solu_fasp, &itpar);
+  EigenVector EigenSolu(V.dim());
+  EigenSolu.zero();
+  solve_dcsr_fasp(a, L, &EigenSolu, bc, itpar);
   if (DEBUG)  printf("done\n"); fflush(stdout);
 
   Solution ExactSolu;
@@ -188,8 +191,8 @@ int main(int argc, char** argv)
   double error_norm1 = 0.0;
   double error_norm2 = 0.0;
   double error_norm3 = 0.0;
-  copy_dvector_to_Function(&Solu_fasp,&Error1);
-  copy_dvector_to_Function(&Solu_fasp,&Error2);
+  *(Error1.vector())=EigenSolu;
+  *(Error2.vector())=EigenSolu;
   *(Error3.vector())=Solu_vec;
 
   if (DEBUG){

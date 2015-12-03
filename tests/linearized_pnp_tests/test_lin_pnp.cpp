@@ -165,24 +165,10 @@ int main(int argc, char** argv)
   cationSolution.interpolate(Cation);
   Function anionSolution(solutionFunction[1]);
   anionSolution.interpolate(Anion);
-  ivector cation_dofs;
-  ivector anion_dofs;
-  ivector potential_dofs;
-  get_dofs(&solutionFunction, &cation_dofs, 0);
-  get_dofs(&solutionFunction, &anion_dofs, 1);
-  get_dofs(&solutionFunction, &potential_dofs, 2);
 
   // Solve for consistent voltage : not yet implemented
   Function potentialSolution(solutionFunction[2]);
   potentialSolution.interpolate(Volt);
-
-  // initialize linear system
-  if (DEBUG) printf("\tlinear algebraic objects...\n");
-  EigenMatrix A_pnp;
-  EigenVector b_pnp;
-  dCSRmat A_fasp;
-  dBSRmat A_fasp_bsr;
-  dvector b_fasp, solu_fasp;
 
   // Setup FASP solver
   if (DEBUG) printf("\tsetup FASP solver...\n");
@@ -208,6 +194,7 @@ int main(int argc, char** argv)
   L_pnp.CatCat = cationSolution;
   L_pnp.AnAn = anionSolution;
   L_pnp.EsEs = potentialSolution;
+  EigenVector b_pnp;
   assemble(b_pnp, L_pnp);
   bc.apply(b_pnp);
   double initial_residual = b_pnp.norm("l2");
@@ -228,26 +215,18 @@ int main(int argc, char** argv)
   a_pnp.CatCat = cationSolution;
   a_pnp.AnAn = anionSolution;
   a_pnp.EsEs = potentialSolution;
-  assemble(A_pnp, a_pnp);
-  bc.apply(A_pnp);
+  // assemble(A_pnp, a_pnp);
+  // bc.apply(A_pnp);
 
   // Convert to fasp
   if (DEBUG) printf("\tconvert to FASP and solve...\n");
-  EigenVector_to_dvector(&b_pnp,&b_fasp);
-  EigenMatrix_to_dCSRmat(&A_pnp,&A_fasp);
-  A_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
-  fasp_dvec_alloc(b_fasp.row, &solu_fasp);
-  fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
-  status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &solu_fasp, &itpar, &amgpar);
-
-  // map solu_fasp into solutionUpdate
-  if (DEBUG) printf("\tconvert FASP solution to function...\n");
-  copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &cation_dofs, &cation_dofs);
-  copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &anion_dofs, &anion_dofs);
-  copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &potential_dofs, &potential_dofs);
+  EigenVector EigenSolu(V.dim());
+  EigenSolu.zero();
+  solve_dbsr_fasp(3, a_pnp, L_pnp, &EigenSolu, bc, itpar,amgpar);
 
   // update solution and reset solutionUpdate
   if (DEBUG) printf("\tupdate solution...\n");
+  *(solutionUpdate.vector())=EigenSolu;
   update_solution(&cationSolution, &solutionUpdate[0]);
   update_solution(&anionSolution, &solutionUpdate[1]);
   update_solution(&potentialSolution, &solutionUpdate[2]);
