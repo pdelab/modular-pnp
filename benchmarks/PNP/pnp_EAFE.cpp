@@ -13,7 +13,7 @@
 #include "funcspace_to_vecspace.h"
 #include "fasp_to_fenics.h"
 #include "boundary_conditions.h"
-#include "linear_pnp.h"
+#include "pnp_and_source.h"
 #include "newton.h"
 #include "newton_functs.h"
 #include "L2Error.h"
@@ -192,17 +192,17 @@ int main()
   Function anionSolution(solutionFunction[1]);
   Function potentialSolution(solutionFunction[2]);
 
-  // cationSolution.interpolate(Cation);
-  // anionSolution.interpolate(Anion);
-  // potentialSolution.interpolate(Volt);
+  cationSolution.interpolate(Cation);
+  anionSolution.interpolate(Anion);
+  potentialSolution.interpolate(Volt);
   // *(potentialSolution.vector())*=10.0;
 
-  cationSolution.interpolate(cationExpression);
-  anionSolution.interpolate(anionExpression);
-  potentialSolution.interpolate(potentialExpression);
-  *(cationSolution.vector())*=1.1;
-  *(anionSolution.vector())*=1.1;
-  *(potentialSolution.vector())*=1.1;
+  // cationSolution.interpolate(cationExpression);
+  // anionSolution.interpolate(anionExpression);
+  // potentialSolution.interpolate(potentialExpression);
+  // *(cationSolution.vector())*=1.1;
+  // *(anionSolution.vector())*=1.1;
+  // *(potentialSolution.vector())*=1.1;
 
   // print to file
   cationFile << cationSolution;

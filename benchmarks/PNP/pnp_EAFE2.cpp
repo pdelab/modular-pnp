@@ -13,7 +13,7 @@
 #include "funcspace_to_vecspace.h"
 #include "fasp_to_fenics.h"
 #include "boundary_conditions.h"
-#include "linear_pnp2.h"
+#include "pnp.h"
 #include "newton.h"
 #include "newton_functs.h"
 #include "L2Error.h"
@@ -55,7 +55,7 @@ class analyticPotentialExpression : public Expression
 {
   void eval(Array<double>& values, const Array<double>& x) const
   {
-    values[0]  =-x[0]*10.0;
+    values[0]  =-x[0];
   }
 };
 
@@ -94,7 +94,7 @@ int main()
   // read coefficients and boundary values
   printf("\tcoefficients...\n"); fflush(stdout);
   coeff_param coeff_par;
-  char coeff_param_filename[] = "./benchmarks/PNP/coeff_params.dat";
+  char coeff_param_filename[] = "./benchmarks/PNP/coeff_params2.dat";
   coeff_param_input(coeff_param_filename, &coeff_par);
   // print_coeff_param(&coeff_par);
 
@@ -308,13 +308,6 @@ int main()
       update_solution(&anionSolution, &solutionUpdate[1],lambda);
       update_solution(&potentialSolution, &solutionUpdate[2],lambda);
 
-      // dcat.interpolate(solutionUpdate[0]);
-      // dan.interpolate(solutionUpdate[1]);
-      // dphi.interpolate(solutionUpdate[2]);
-      //
-      // *(cationSolution.vector())+=*(dcat.vector());
-      // *(anionSolution.vector())+=*(dan.vector());
-      // *(potentialSolution.vector())+=*(dphi.vector());
 
       CatCatFunction.interpolate(cationSolution);
       CatBetaFunction.interpolate(potentialSolution);

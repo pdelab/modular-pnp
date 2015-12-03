@@ -12,7 +12,7 @@
 #include "EAFE.h"
 #include "fasp_to_fenics.h"
 #include "boundary_conditions.h"
-#include "linear_pnp.h"
+#include "pnp_and_source.h"
 #include "newton.h"
 #include "newton_functs.h"
 #include "L2Error.h"
@@ -179,16 +179,9 @@ int main()
   Function anionSolution(solutionFunction[1]);
   Function potentialSolution(solutionFunction[2]);
 
-  // cationSolution.interpolate(Cation);
-  // anionSolution.interpolate(Anion);
-  // potentialSolution.interpolate(Volt);
-
-  cationSolution.interpolate(cationExpression);
-  anionSolution.interpolate(anionExpression);
-  potentialSolution.interpolate(potentialExpression);
-  *(cationSolution.vector())*=1.1;
-  *(anionSolution.vector())*=1.1;
-  *(potentialSolution.vector())*=1.1;
+  cationSolution.interpolate(Cation);
+  anionSolution.interpolate(Anion);
+  potentialSolution.interpolate(Volt);
 
   // print to file
   cationFile << cationSolution;
@@ -220,12 +213,6 @@ int main()
   // Setup newton parameters and compute initial residual
   printf("\tnewton solver setup...\n"); fflush(stdout);
   Function solutionUpdate(V);
-  Function dcat(solutionUpdate[0]);
-  Function dan(solutionUpdate[1]);
-  Function dphi(solutionUpdate[2]);
-  dcat.interpolate(zero);
-  dan.interpolate(zero);
-  dphi.interpolate(zero);
   unsigned int newton_iteration = 0;
 
   // compute initial residual and Jacobian
@@ -279,14 +266,6 @@ int main()
       update_solution(&cationSolution, &solutionUpdate[0]);
       update_solution(&anionSolution, &solutionUpdate[1]);
       update_solution(&potentialSolution, &solutionUpdate[2]);
-
-      // dcat.interpolate(solutionUpdate[0]);
-      // dan.interpolate(solutionUpdate[1]);
-      // dphi.interpolate(solutionUpdate[2]);
-      //
-      // *(cationSolution.vector())+=*(dcat.vector());
-      // *(anionSolution.vector())+=*(dan.vector());
-      // *(potentialSolution.vector())+=*(dphi.vector());
 
       // compute residual
       L_pnp.CatCat = cationSolution;
