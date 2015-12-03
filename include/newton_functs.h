@@ -21,6 +21,8 @@ extern "C"
 
 void update_solution (dolfin::Function* iterate, dolfin::Function* update);
 
+void update_solution_pnp(dolfin::Function* iterate, dolfin::Function* update, double& relative_residual, const dolfin::Form& L, const dolfin::DirichletBC bc, dolfin::EigenVector* b );
+
 /*------------- In file: params.cpp --------------*/
 
 SHORT newton_param_input_init (newton_param *inparam);
