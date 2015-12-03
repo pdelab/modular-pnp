@@ -116,8 +116,8 @@ int main()
   Constant eps(coeff_par.relative_permittivity);
   Constant Dp(coeff_par.cation_diffusivity);
   Constant Dn(coeff_par.anion_diffusivity);
-  Constant qn(coeff_par.cation_mobility);
-  Constant qp(coeff_par.anion_mobility);
+  Constant qp(coeff_par.cation_valency);
+  Constant qn(coeff_par.anion_valency);
   Constant zero(0.0);
   a_pnp.eps = eps; L_pnp.eps = eps;
   a_pnp.Dp = Dp; L_pnp.Dp = Dp;

@@ -14,6 +14,6 @@ length_x     = 10.0    % DO NOT CHANGE WITHOUT MODIFYING lin_pnp.cpp
 length_y     = 10.0
 length_z     = 1.0
 
-grid_x       = 300
-grid_y       = 300
+grid_x       = 100
+grid_y       = 100
 grid_z       = 3

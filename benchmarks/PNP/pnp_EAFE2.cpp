@@ -55,7 +55,7 @@ class analyticPotentialExpression : public Expression
 {
   void eval(Array<double>& values, const Array<double>& x) const
   {
-    values[0]  =-x[0];
+    values[0]  =-x[0]*10.0;
   }
 };
 
@@ -111,8 +111,8 @@ int main()
   Constant eps(coeff_par.relative_permittivity);
   Constant Dp(coeff_par.cation_diffusivity);
   Constant Dn(coeff_par.anion_diffusivity);
-  Constant qn(coeff_par.cation_mobility);
-  Constant qp(coeff_par.anion_mobility);
+  Constant qp(coeff_par.cation_valency);
+  Constant qn(coeff_par.anion_valency);
   Constant zero(0.0);
   a_pnp.eps = eps; L_pnp.eps = eps;
   a_pnp.Dp = Dp; L_pnp.Dp = Dp;
@@ -249,6 +249,7 @@ int main()
 
   // compute initial residual and Jacobian
   printf("\tconstruct residual...\n"); fflush(stdout);
+  double lambda=1.0;
   L_pnp.CatCat = cationSolution;
   L_pnp.AnAn = anionSolution;
   L_pnp.EsEs = potentialSolution;
@@ -303,9 +304,9 @@ int main()
 
       // update solution and reset solutionUpdate
       printf("\tupdate solution...\n"); fflush(stdout);
-      update_solution(&cationSolution, &solutionUpdate[0]);
-      update_solution(&anionSolution, &solutionUpdate[1]);
-      update_solution(&potentialSolution, &solutionUpdate[2]);
+      update_solution(&cationSolution, &solutionUpdate[0],lambda);
+      update_solution(&anionSolution, &solutionUpdate[1],lambda);
+      update_solution(&potentialSolution, &solutionUpdate[2],lambda);
 
       // dcat.interpolate(solutionUpdate[0]);
       // dan.interpolate(solutionUpdate[1]);
@@ -331,7 +332,7 @@ int main()
       L_pnp.EsEs = potentialSolution;
       assemble(b_pnp, L_pnp);
       bc.apply(b_pnp);
-      relative_residual = b_pnp.norm("l2");/// initial_residual;
+      relative_residual = b_pnp.norm("l2")/initial_residual;
       if (newton_iteration == 1)
         printf("\trelative nonlinear residual after 1 iteration has l2-norm of %e\n", relative_residual);
       else

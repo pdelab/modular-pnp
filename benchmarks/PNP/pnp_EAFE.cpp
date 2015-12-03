@@ -62,7 +62,7 @@ class analyticPotentialExpression : public Expression
     values[0]  = lower_potential_val * (5.0 - x[0]) / 10.0;
     values[0] += upper_potential_val * (x[0] + 5.0) / 10.0;
     values[0] += -2.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
-    values[0] *= 10.0;
+    // values[0] *= 10.0;
   }
 };
 
@@ -118,8 +118,8 @@ int main()
   Constant eps(coeff_par.relative_permittivity);
   Constant Dp(coeff_par.cation_diffusivity);
   Constant Dn(coeff_par.anion_diffusivity);
-  Constant qn(coeff_par.cation_mobility);
-  Constant qp(coeff_par.anion_mobility);
+  Constant qp(coeff_par.cation_valency);
+  Constant qn(coeff_par.anion_valency);
   Constant zero(0.0);
   a_pnp.eps = eps; L_pnp.eps = eps;
   a_pnp.Dp = Dp; L_pnp.Dp = Dp;
@@ -192,17 +192,17 @@ int main()
   Function anionSolution(solutionFunction[1]);
   Function potentialSolution(solutionFunction[2]);
 
-  cationSolution.interpolate(Cation);
-  anionSolution.interpolate(Anion);
-  potentialSolution.interpolate(Volt);
-  *(potentialSolution.vector())*=10.0;
+  // cationSolution.interpolate(Cation);
+  // anionSolution.interpolate(Anion);
+  // potentialSolution.interpolate(Volt);
+  // *(potentialSolution.vector())*=10.0;
 
-  // cationSolution.interpolate(cationExpression);
-  // anionSolution.interpolate(anionExpression);
-  // potentialSolution.interpolate(potentialExpression);
-  // *(cationSolution.vector())*=1.5;
-  // *(anionSolution.vector())*=1.5;
-  // *(potentialSolution.vector())*=1.5;
+  cationSolution.interpolate(cationExpression);
+  anionSolution.interpolate(anionExpression);
+  potentialSolution.interpolate(potentialExpression);
+  *(cationSolution.vector())*=1.1;
+  *(anionSolution.vector())*=1.1;
+  *(potentialSolution.vector())*=1.1;
 
   // print to file
   cationFile << cationSolution;
