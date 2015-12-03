@@ -15,6 +15,7 @@
 #include "linear_pnp.h"
 #include "newton.h"
 #include "newton_functs.h"
+#include "L2Error.h"
 extern "C"
 {
 #include "fasp.h"
@@ -274,9 +275,15 @@ int main()
   *(cationSolution.vector()) -= *(analyticCation.vector());
   *(anionSolution.vector()) -= *(analyticAnion.vector());
   *(potentialSolution.vector()) -= *(analyticPotential.vector());
-  double cationError = cationSolution.vector()->norm("l2");
-  double anionError = anionSolution.vector()->norm("l2");
-  double potentialError = potentialSolution.vector()->norm("l2");
+  double cationError = 0.0;
+  double anionError = 0.0;
+  double potentialError = 0.0;
+  L2Error::Form_M L2error1(mesh,cationSolution);
+  cationError = assemble(L2error1);
+  L2Error::Form_M L2error2(mesh,anionSolution);
+  anionError = assemble(L2error2);
+  L2Error::Form_M L2error3(mesh,potentialSolution);
+  potentialError = assemble(L2error3);
   printf("\tcation l2 error is:     %e\n", cationError);
   printf("\tanion l2 error is:      %e\n", anionError);
   printf("\tpotential l2 error is:  %e\n", potentialError);

@@ -10,6 +10,7 @@
 #include <string>
 #include <dolfin.h>
 #include "EAFE.h"
+#include "funcspace_to_vecspace.h"
 #include "fasp_to_fenics.h"
 #include "boundary_conditions.h"
 #include "linear_pnp.h"
@@ -81,7 +82,7 @@ int main(int argc, char** argv)
   // state problem
   if (DEBUG) {
     std::cout << "################################################################# \n";
-    std::cout << "#### Test of the FASP Solver with DEBUG=TRUE                 #### \n";
+    std::cout << "#### Test for LIN PNP EAFE Solver with DEBUG=TRUE            #### \n";
     std::cout << "################################################################# \n";
   }
   // Need to use Eigen for linear algebra
@@ -131,6 +132,16 @@ int main(int argc, char** argv)
   a_pnp.qp = qp; L_pnp.qp = qp;
   a_pnp.qn = qn; L_pnp.qn = qn;
 
+  //EAFE Formulation
+  EAFE::FunctionSpace V_cat(mesh);
+  EAFE::BilinearForm a_cat(V_cat,V_cat);
+  a_cat.alpha = Dp;
+  a_cat.gamma = zero;
+  EAFE::FunctionSpace V_an(mesh);
+  EAFE::BilinearForm a_an(V_an,V_an);
+  a_an.alpha = Dn;
+  a_an.gamma = zero;
+
   // analytic solution
   Function analyticSolutionFunction(V);
   Function analyticCation(analyticSolutionFunction[0]);
@@ -145,6 +156,7 @@ int main(int argc, char** argv)
   L_pnp.cation = analyticCation;
   L_pnp.anion = analyticAnion;
   L_pnp.potential = analyticPotential;
+
 
   // Set Dirichlet boundaries
   if (DEBUG) printf("\tboundary conditions...\n");
@@ -176,9 +188,26 @@ int main(int argc, char** argv)
   Function potentialSolution(solutionFunction[2]);
   potentialSolution.interpolate(Volt);
 
+  // Interpolate analytic expressions for EAFE
+  if (DEBUG) printf("\tcompute analytic expressions for EAFE...\n");
+  Function CatCatFunction(V_cat);
+  CatCatFunction.interpolate(Cation);
+  Function CatBetaFunction(V_cat);
+  CatBetaFunction.interpolate(Volt);
+  *(CatBetaFunction.vector()) *= coeff_par.cation_valency;
+  *(CatBetaFunction.vector()) += *(CatCatFunction.vector());
+  Function AnAnFunction(V_an);
+  AnAnFunction.interpolate(Anion);
+  Function AnBetaFunction(V_an);
+  AnBetaFunction.interpolate(Volt);
+  *(AnBetaFunction.vector()) *= coeff_par.anion_valency;
+  *(AnBetaFunction.vector()) += *(AnAnFunction.vector());
+
   // initialize linear system
   if (DEBUG) printf("\tlinear algebraic objects...\n");
   EigenMatrix A_pnp;
+  EigenMatrix A_cat;
+  EigenMatrix A_an;
   EigenVector b_pnp;
   dCSRmat A_fasp;
   dBSRmat A_fasp_bsr;
@@ -200,11 +229,27 @@ int main(int argc, char** argv)
   //*************************************************************
   // Setup newton parameters and compute initial residual
   if (DEBUG) printf("\tnewton solver setup...\n");
-  dolfin::Function solutionUpdate(V);
+  Function solutionUpdate(V);
   unsigned int newton_iteration = 0;
 
   // compute initial residual and Jacobian
-  if (DEBUG) printf("\tconstruct residual...\n");
+  if (DEBUG) printf("\tconstruct linear system...\n");
+  a_pnp.CatCat = cationSolution;
+  a_pnp.AnAn = anionSolution;
+  a_pnp.EsEs = potentialSolution;
+  assemble(A_pnp, a_pnp);
+
+  if (DEBUG) printf("\tmake EAFE modification...\n");
+  a_cat.eta = CatCatFunction;
+  a_cat.beta = CatBetaFunction;
+  a_an.eta = AnAnFunction;
+  a_an.beta = AnBetaFunction;
+  assemble(A_cat, a_cat);
+  assemble(A_an, a_an);
+  replace_matrix(3,0, &V, &V_cat, &A_pnp, &A_cat);
+  replace_matrix(3,1, &V, &V_an , &A_pnp, &A_an );
+  bc.apply(A_pnp);
+
   L_pnp.CatCat = cationSolution;
   L_pnp.AnAn = anionSolution;
   L_pnp.EsEs = potentialSolution;
@@ -213,6 +258,8 @@ int main(int argc, char** argv)
   double initial_residual = b_pnp.norm("l2");
   double relative_residual = 1.0;
   if (DEBUG) printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
+
+
   if (DEBUG) printf("\tinitialized succesfully!\n\n");
 
 
@@ -222,14 +269,6 @@ int main(int argc, char** argv)
   //*************************************************************
   if (DEBUG) printf("Solve the system\n");
   newton_iteration++;
-
-  // Construct stiffness matrix
-  if (DEBUG) printf("\tconstruct stiffness matrix...\n"); fflush(stdout);
-  a_pnp.CatCat = cationSolution;
-  a_pnp.AnAn = anionSolution;
-  a_pnp.EsEs = potentialSolution;
-  assemble(A_pnp, a_pnp);
-  bc.apply(A_pnp);
 
   // Convert to fasp
   if (DEBUG) printf("\tconvert to FASP and solve...\n");
@@ -287,22 +326,22 @@ int main(int argc, char** argv)
     printf("\tpotential l2 error is:  %e\n", potentialError);
   }
 
-  if ( (cationError < 1E-15) && (anionError < 1E-15) && (potentialError < 1E-15) )
-    std::cout << "Success... the linearized pnp solver is working\n";
+  if ( (cationError < 1E-4) && (anionError < 1E-4) && (potentialError < 1E-4) )
+    std::cout << "Success... the linearized pnp (with eafe) solver is working\n";
   else {
-    printf("***\tERROR IN LINEARIZED PNP SOLVER TEST\n");
+    printf("***\tERROR IN LINEARIZED PNP (with eafe) SOLVER TEST\n");
     printf("***\n***\n***\n");
-    printf("***\tLINEARIZED PNP SOLVER TEST:\n");
+    printf("***\tLINEARIZED PNP (with eafe) SOLVER TEST:\n");
     printf("***\tThe computed solution is wrong\n");
     printf("***\n***\n***\n");
-    printf("***\tERROR IN LINEARIZED PNP SOLVER TEST\n");
+    printf("***\tERROR IN LINEARIZED PNP (with eafe) SOLVER TEST\n");
     fflush(stdout);
   }
 
   // state problem
   if (DEBUG) {
     std::cout << "################################################################# \n";
-    std::cout << "#### End of test for LINEARIZED PNP Solver with DEBUG=TRUE   #### \n";
+    std::cout << "#### End of test for LIN PNP EAFE Solver with DEBUG=TRUE    #### \n";
     std::cout << "################################################################# \n";
   }
 
