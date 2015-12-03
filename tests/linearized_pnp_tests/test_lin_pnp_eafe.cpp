@@ -123,8 +123,8 @@ int main(int argc, char** argv)
   Constant eps(coeff_par.relative_permittivity);
   Constant Dp(coeff_par.cation_diffusivity);
   Constant Dn(coeff_par.anion_diffusivity);
-  Constant qn(coeff_par.cation_mobility);
-  Constant qp(coeff_par.anion_mobility);
+  Constant qp(coeff_par.cation_valency);
+  Constant qn(coeff_par.anion_valency);
   Constant zero(0.0);
   a_pnp.eps = eps; L_pnp.eps = eps;
   a_pnp.Dp = Dp; L_pnp.Dp = Dp;
@@ -133,15 +133,14 @@ int main(int argc, char** argv)
   a_pnp.qn = qn; L_pnp.qn = qn;
 
   //EAFE Formulation
-  Constant gamma(0.0);
   EAFE::FunctionSpace V_cat(mesh);
   EAFE::BilinearForm a_cat(V_cat,V_cat);
   a_cat.alpha = Dp;
-  a_cat.gamma = gamma;
+  a_cat.gamma = zero;
   EAFE::FunctionSpace V_an(mesh);
   EAFE::BilinearForm a_an(V_an,V_an);
   a_an.alpha = Dn;
-  a_an.gamma = gamma;
+  a_an.gamma = zero;
 
   // analytic solution
   Function analyticSolutionFunction(V);
@@ -190,18 +189,19 @@ int main(int argc, char** argv)
   potentialSolution.interpolate(Volt);
 
   // Interpolate analytic expressions for EAFE
+  if (DEBUG) printf("\tcompute analytic expressions for EAFE...\n");
   Function CatCatFunction(V_cat);
   CatCatFunction.interpolate(Cation);
   Function CatBetaFunction(V_cat);
   CatBetaFunction.interpolate(Volt);
-  *(CatBetaFunction.vector())*=coeff_par.cation_mobility;
-  *(CatBetaFunction.vector())+=*(CatCatFunction.vector());
+  *(CatBetaFunction.vector()) *= coeff_par.cation_valency;
+  *(CatBetaFunction.vector()) += *(CatCatFunction.vector());
   Function AnAnFunction(V_an);
   AnAnFunction.interpolate(Anion);
   Function AnBetaFunction(V_an);
   AnBetaFunction.interpolate(Volt);
-  *(AnBetaFunction.vector())*=coeff_par.anion_mobility;
-  *(AnBetaFunction.vector())+=*(AnAnFunction.vector());
+  *(AnBetaFunction.vector()) *= coeff_par.anion_valency;
+  *(AnBetaFunction.vector()) += *(AnAnFunction.vector());
 
   // initialize linear system
   if (DEBUG) printf("\tlinear algebraic objects...\n");
@@ -237,11 +237,13 @@ int main(int argc, char** argv)
   a_pnp.CatCat = cationSolution;
   a_pnp.AnAn = anionSolution;
   a_pnp.EsEs = potentialSolution;
+  assemble(A_pnp, a_pnp);
+
+  if (DEBUG) printf("\tmake EAFE modification...\n");
   a_cat.eta = CatCatFunction;
   a_cat.beta = CatBetaFunction;
   a_an.eta = AnAnFunction;
   a_an.beta = AnBetaFunction;
-  assemble(A_pnp, a_pnp);
   assemble(A_cat, a_cat);
   assemble(A_an, a_an);
   replace_matrix(3,0, &V, &V_cat, &A_pnp, &A_cat);
@@ -285,13 +287,9 @@ int main(int argc, char** argv)
 
   // update solution and reset solutionUpdate
   if (DEBUG) printf("\tupdate solution...\n");
-  Function update(V);
-  dolfin::Function cat(update[0]); cat.interpolate(solutionUpdate[0]);
-  dolfin::Function an(update[1]); an.interpolate(solutionUpdate[1]);
-  dolfin::Function pot(update[2]); pot.interpolate(solutionUpdate[2]);
-  *(cationSolution.vector()) += *(cat.vector());
-  *(anionSolution.vector()) += *(an.vector());
-  *(potentialSolution.vector()) += *(pot.vector());
+  update_solution(&cationSolution, &solutionUpdate[0]);
+  update_solution(&anionSolution, &solutionUpdate[1]);
+  update_solution(&potentialSolution, &solutionUpdate[2]);
 
   // compute residual
   L_pnp.CatCat = cationSolution;
@@ -328,7 +326,7 @@ int main(int argc, char** argv)
     printf("\tpotential l2 error is:  %e\n", potentialError);
   }
 
-  if ( (cationError < 1E-4) && (anionError < 1E-5) && (potentialError < 1E-5) )
+  if ( (cationError < 1E-4) && (anionError < 1E-4) && (potentialError < 1E-4) )
     std::cout << "Success... the linearized pnp (with eafe) solver is working\n";
   else {
     printf("***\tERROR IN LINEARIZED PNP (with eafe) SOLVER TEST\n");
