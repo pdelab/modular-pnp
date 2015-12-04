@@ -105,9 +105,9 @@ int main()
 
   // Initialize variational forms
   printf("\tvariational forms...\n"); fflush(stdout);
-  linear_pnp2::FunctionSpace V(mesh);
-  linear_pnp2::BilinearForm a_pnp(V,V);
-  linear_pnp2::LinearForm L_pnp(V);
+  pnp::FunctionSpace V(mesh);
+  pnp::BilinearForm a_pnp(V,V);
+  pnp::LinearForm L_pnp(V);
   Constant eps(coeff_par.relative_permittivity);
   Constant Dp(coeff_par.cation_diffusivity);
   Constant Dn(coeff_par.anion_diffusivity);
