@@ -34,8 +34,7 @@ using namespace dolfin;
 void domain_build (domain_param *domain_par,
 				           dolfin::Mesh *mesh,
 				           dolfin::MeshFunction<size_t> *subdomains,
-				           dolfin::MeshFunction<size_t> *surfaces,
-                   dolfin::File *mesh_output)
+				           dolfin::MeshFunction<size_t> *surfaces)
 {
 	// no mesh provided: use length and grid parameters
 	if ( strcmp(domain_par->mesh_file,"none")==0 ) {
@@ -73,11 +72,6 @@ void domain_build (domain_param *domain_par,
       dolfin::MeshFunction<std::size_t>  surfaces_object(*mesh, domain_par->surface_file);
       *surfaces = surfaces_object;
     }*/
-
-    *mesh_output << *mesh;
-    *mesh_output << *subdomains;
-    *mesh_output << *surfaces;
-
 }
 
 /*---------------------------------*/
