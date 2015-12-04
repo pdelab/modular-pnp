@@ -18,6 +18,7 @@ make test_add_matrix
 make test_replace_matrix
 make test_replace_matrix2
 make test_lin_pnp
+make test_lin_pnp_eafe
 make test_pnp
 make test_pnp_eafe
 
@@ -33,6 +34,7 @@ if [ "$1"=="DEBUG" ]; then
 	./test_replace_matrix $1
 	./test_replace_matrix2 $1
 	./test_lin_pnp $1
+	./test_lin_pnp_eafe $1
 	./test_pnp $1
 	./test_pnp_eafe $1
 else
@@ -44,6 +46,7 @@ else
 	./test_replace_matrix
 	./test_replace_matrix2
 	./test_lin_pnp
+	./test_lin_pnp_eafe
 	./test_pnp
 	./test_pnp_eafe
 fi

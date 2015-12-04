@@ -15,6 +15,7 @@
 #include "linear_pnp.h"
 #include "newton.h"
 #include "newton_functs.h"
+#include "L2Error.h"
 extern "C"
 {
 #include "fasp.h"
@@ -103,8 +104,7 @@ int main(int argc, char** argv)
   dolfin::Mesh mesh;
   dolfin::MeshFunction<std::size_t> subdomains;
   dolfin::MeshFunction<std::size_t> surfaces;
-  dolfin::File meshOut(domain_par.mesh_output);
-  domain_build(&domain_par, &mesh, &subdomains, &surfaces, &meshOut);
+  domain_build(&domain_par, &mesh, &subdomains, &surfaces);
 
   // read coefficients and boundary values
   if (DEBUG) printf("\tcoefficients...\n");
@@ -121,8 +121,8 @@ int main(int argc, char** argv)
   Constant eps(coeff_par.relative_permittivity);
   Constant Dp(coeff_par.cation_diffusivity);
   Constant Dn(coeff_par.anion_diffusivity);
-  Constant qn(coeff_par.cation_mobility);
-  Constant qp(coeff_par.anion_mobility);
+  Constant qp(coeff_par.cation_valency);
+  Constant qn(coeff_par.anion_valency);
   Constant zero(0.0);
   a_pnp.eps = eps; L_pnp.eps = eps;
   a_pnp.Dp = Dp; L_pnp.Dp = Dp;
@@ -271,16 +271,22 @@ int main(int argc, char** argv)
   *(cationSolution.vector()) -= *(analyticCation.vector());
   *(anionSolution.vector()) -= *(analyticAnion.vector());
   *(potentialSolution.vector()) -= *(analyticPotential.vector());
-  double cationError = cationSolution.vector()->norm("l2");
-  double anionError = anionSolution.vector()->norm("l2");
-  double potentialError = potentialSolution.vector()->norm("l2");
+  double cationError = 0.0;
+  double anionError = 0.0;
+  double potentialError = 0.0;
+  L2Error::Form_M L2error1(mesh,cationSolution);
+  cationError = assemble(L2error1);
+  L2Error::Form_M L2error2(mesh,anionSolution);
+  anionError = assemble(L2error2);
+  L2Error::Form_M L2error3(mesh,potentialSolution);
+  potentialError = assemble(L2error3);
   if (DEBUG) {
     printf("\tcation l2 error is:     %e\n", cationError);
     printf("\tanion l2 error is:      %e\n", anionError);
     printf("\tpotential l2 error is:  %e\n", potentialError);
   }
 
-  if ( (cationError < 1E-7) && (anionError < 1E-7) && (potentialError < 1E-7) )
+  if ( (cationError < 1E-15) && (anionError < 1E-15) && (potentialError < 1E-15) )
     std::cout << "Success... the linearized pnp solver is working\n";
   else {
     printf("***\tERROR IN LINEARIZED PNP SOLVER TEST\n");
