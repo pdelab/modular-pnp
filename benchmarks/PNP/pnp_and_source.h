@@ -21,8 +21,8 @@
 //   restrict_keyword:               ''
 //   split:                          False
 
-#ifndef __LINEAR_PNP_H
-#define __LINEAR_PNP_H
+#ifndef __PNP_AND_SOURCE_H
+#define __PNP_AND_SOURCE_H
 
 #include <cmath>
 #include <stdexcept>
@@ -31,18 +31,18 @@
 
 /// This class defines the interface for a finite element.
 
-class linear_pnp_finite_element_0: public ufc::finite_element
+class pnp_and_source_finite_element_0: public ufc::finite_element
 {
 public:
 
   /// Constructor
-  linear_pnp_finite_element_0() : ufc::finite_element()
+  pnp_and_source_finite_element_0() : ufc::finite_element()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~linear_pnp_finite_element_0()
+  virtual ~pnp_and_source_finite_element_0()
   {
     // Do nothing
   }
@@ -325,25 +325,25 @@ public:
   /// Create a new class instance
   virtual ufc::finite_element* create() const
   {
-    return new linear_pnp_finite_element_0();
+    return new pnp_and_source_finite_element_0();
   }
 
 };
 
 /// This class defines the interface for a finite element.
 
-class linear_pnp_finite_element_1: public ufc::finite_element
+class pnp_and_source_finite_element_1: public ufc::finite_element
 {
 public:
 
   /// Constructor
-  linear_pnp_finite_element_1() : ufc::finite_element()
+  pnp_and_source_finite_element_1() : ufc::finite_element()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~linear_pnp_finite_element_1()
+  virtual ~pnp_and_source_finite_element_1()
   {
     // Do nothing
   }
@@ -1550,25 +1550,25 @@ public:
   /// Create a new class instance
   virtual ufc::finite_element* create() const
   {
-    return new linear_pnp_finite_element_1();
+    return new pnp_and_source_finite_element_1();
   }
 
 };
 
 /// This class defines the interface for a finite element.
 
-class linear_pnp_finite_element_2: public ufc::finite_element
+class pnp_and_source_finite_element_2: public ufc::finite_element
 {
 public:
 
   /// Constructor
-  linear_pnp_finite_element_2() : ufc::finite_element()
+  pnp_and_source_finite_element_2() : ufc::finite_element()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~linear_pnp_finite_element_2()
+  virtual ~pnp_and_source_finite_element_2()
   {
     // Do nothing
   }
@@ -4405,17 +4405,17 @@ public:
     {
     case 0:
       {
-        return new linear_pnp_finite_element_1();
+        return new pnp_and_source_finite_element_1();
         break;
       }
     case 1:
       {
-        return new linear_pnp_finite_element_1();
+        return new pnp_and_source_finite_element_1();
         break;
       }
     case 2:
       {
-        return new linear_pnp_finite_element_1();
+        return new pnp_and_source_finite_element_1();
         break;
       }
     }
@@ -4426,7 +4426,7 @@ public:
   /// Create a new class instance
   virtual ufc::finite_element* create() const
   {
-    return new linear_pnp_finite_element_2();
+    return new pnp_and_source_finite_element_2();
   }
 
 };
@@ -4434,18 +4434,18 @@ public:
 /// This class defines the interface for a local-to-global mapping of
 /// degrees of freedom (dofs).
 
-class linear_pnp_dofmap_0: public ufc::dofmap
+class pnp_and_source_dofmap_0: public ufc::dofmap
 {
 public:
 
   /// Constructor
-  linear_pnp_dofmap_0() : ufc::dofmap()
+  pnp_and_source_dofmap_0() : ufc::dofmap()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~linear_pnp_dofmap_0()
+  virtual ~pnp_and_source_dofmap_0()
   {
     // Do nothing
   }
@@ -4649,7 +4649,7 @@ public:
   /// Create a new class instance
   virtual ufc::dofmap* create() const
   {
-    return new linear_pnp_dofmap_0();
+    return new pnp_and_source_dofmap_0();
   }
 
 };
@@ -4657,18 +4657,18 @@ public:
 /// This class defines the interface for a local-to-global mapping of
 /// degrees of freedom (dofs).
 
-class linear_pnp_dofmap_1: public ufc::dofmap
+class pnp_and_source_dofmap_1: public ufc::dofmap
 {
 public:
 
   /// Constructor
-  linear_pnp_dofmap_1() : ufc::dofmap()
+  pnp_and_source_dofmap_1() : ufc::dofmap()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~linear_pnp_dofmap_1()
+  virtual ~pnp_and_source_dofmap_1()
   {
     // Do nothing
   }
@@ -4915,7 +4915,7 @@ public:
   /// Create a new class instance
   virtual ufc::dofmap* create() const
   {
-    return new linear_pnp_dofmap_1();
+    return new pnp_and_source_dofmap_1();
   }
 
 };
@@ -4923,18 +4923,18 @@ public:
 /// This class defines the interface for a local-to-global mapping of
 /// degrees of freedom (dofs).
 
-class linear_pnp_dofmap_2: public ufc::dofmap
+class pnp_and_source_dofmap_2: public ufc::dofmap
 {
 public:
 
   /// Constructor
-  linear_pnp_dofmap_2() : ufc::dofmap()
+  pnp_and_source_dofmap_2() : ufc::dofmap()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~linear_pnp_dofmap_2()
+  virtual ~pnp_and_source_dofmap_2()
   {
     // Do nothing
   }
@@ -5247,17 +5247,17 @@ public:
     {
     case 0:
       {
-        return new linear_pnp_dofmap_1();
+        return new pnp_and_source_dofmap_1();
         break;
       }
     case 1:
       {
-        return new linear_pnp_dofmap_1();
+        return new pnp_and_source_dofmap_1();
         break;
       }
     case 2:
       {
-        return new linear_pnp_dofmap_1();
+        return new pnp_and_source_dofmap_1();
         break;
       }
     }
@@ -5268,7 +5268,7 @@ public:
   /// Create a new class instance
   virtual ufc::dofmap* create() const
   {
-    return new linear_pnp_dofmap_2();
+    return new pnp_and_source_dofmap_2();
   }
 
 };
@@ -5277,18 +5277,18 @@ public:
 /// tensor corresponding to the local contribution to a form from
 /// the integral over a cell.
 
-class linear_pnp_cell_integral_0_otherwise: public ufc::cell_integral
+class pnp_and_source_cell_integral_0_otherwise: public ufc::cell_integral
 {
 public:
 
   /// Constructor
-  linear_pnp_cell_integral_0_otherwise() : ufc::cell_integral()
+  pnp_and_source_cell_integral_0_otherwise() : ufc::cell_integral()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~linear_pnp_cell_integral_0_otherwise()
+  virtual ~pnp_and_source_cell_integral_0_otherwise()
   {
     // Do nothing
   }
@@ -5434,7 +5434,7 @@ public:
     G[16] = det*w[7][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
     G[17] = det*w[7][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
     G[18] =  - det*w[5][0];
-    G[19] = det*w[7][0];
+    G[19] =  - det*w[7][0];
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
@@ -5739,18 +5739,18 @@ public:
 /// tensor corresponding to the local contribution to a form from
 /// the integral over a cell.
 
-class linear_pnp_cell_integral_1_otherwise: public ufc::cell_integral
+class pnp_and_source_cell_integral_1_otherwise: public ufc::cell_integral
 {
 public:
 
   /// Constructor
-  linear_pnp_cell_integral_1_otherwise() : ufc::cell_integral()
+  pnp_and_source_cell_integral_1_otherwise() : ufc::cell_integral()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~linear_pnp_cell_integral_1_otherwise()
+  virtual ~pnp_and_source_cell_integral_1_otherwise()
   {
     // Do nothing
   }
@@ -5906,9 +5906,9 @@ public:
     G[34] = det*w[7][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
     G[35] =  - det*w[7][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
     G[36] =  - det*w[5][0];
-    G[37] = det*w[7][0];
+    G[37] =  - det*w[7][0];
     G[38] = det*w[5][0];
-    G[39] =  - det*w[7][0];
+    G[39] = det*w[7][0];
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
@@ -6062,18 +6062,18 @@ public:
 /// sequence of basis functions of Vj and w1, w2, ..., wn are given
 /// fixed functions (coefficients).
 
-class linear_pnp_form_0: public ufc::form
+class pnp_and_source_form_0: public ufc::form
 {
 public:
 
   /// Constructor
-  linear_pnp_form_0() : ufc::form()
+  pnp_and_source_form_0() : ufc::form()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~linear_pnp_form_0()
+  virtual ~pnp_and_source_form_0()
   {
     // Do nothing
   }
@@ -6081,7 +6081,7 @@ public:
   /// Return a string identifying the form
   virtual const char* signature() const
   {
-    return "46decba2d284ce43bd18b8fb83bdc1b6e0369481beb179949fa0e4870f5fba411642538cab0d2eb477f32763907c71dfa1224bdb029d6eef5664a872a0970942";
+    return "7e6fa378ad563d19e92f7c8ebf995256afcc98fbf0d88e9fe3284ad53878b2b5d2f080a8a87421bf192ff22a13421189680792039a3e7de7581d508fca6a650d";
   }
 
 
@@ -6112,52 +6112,52 @@ public:
     {
     case 0:
       {
-        return new linear_pnp_finite_element_2();
+        return new pnp_and_source_finite_element_2();
         break;
       }
     case 1:
       {
-        return new linear_pnp_finite_element_2();
+        return new pnp_and_source_finite_element_2();
         break;
       }
     case 2:
       {
-        return new linear_pnp_finite_element_1();
+        return new pnp_and_source_finite_element_1();
         break;
       }
     case 3:
       {
-        return new linear_pnp_finite_element_1();
+        return new pnp_and_source_finite_element_1();
         break;
       }
     case 4:
       {
-        return new linear_pnp_finite_element_1();
+        return new pnp_and_source_finite_element_1();
         break;
       }
     case 5:
       {
-        return new linear_pnp_finite_element_1();
+        return new pnp_and_source_finite_element_1();
         break;
       }
     case 6:
       {
-        return new linear_pnp_finite_element_1();
+        return new pnp_and_source_finite_element_1();
         break;
       }
     case 7:
       {
-        return new linear_pnp_finite_element_0();
+        return new pnp_and_source_finite_element_0();
         break;
       }
     case 8:
       {
-        return new linear_pnp_finite_element_1();
+        return new pnp_and_source_finite_element_1();
         break;
       }
     case 9:
       {
-        return new linear_pnp_finite_element_0();
+        return new pnp_and_source_finite_element_0();
         break;
       }
     }
@@ -6172,52 +6172,52 @@ public:
     {
     case 0:
       {
-        return new linear_pnp_dofmap_2();
+        return new pnp_and_source_dofmap_2();
         break;
       }
     case 1:
       {
-        return new linear_pnp_dofmap_2();
+        return new pnp_and_source_dofmap_2();
         break;
       }
     case 2:
       {
-        return new linear_pnp_dofmap_1();
+        return new pnp_and_source_dofmap_1();
         break;
       }
     case 3:
       {
-        return new linear_pnp_dofmap_1();
+        return new pnp_and_source_dofmap_1();
         break;
       }
     case 4:
       {
-        return new linear_pnp_dofmap_1();
+        return new pnp_and_source_dofmap_1();
         break;
       }
     case 5:
       {
-        return new linear_pnp_dofmap_1();
+        return new pnp_and_source_dofmap_1();
         break;
       }
     case 6:
       {
-        return new linear_pnp_dofmap_1();
+        return new pnp_and_source_dofmap_1();
         break;
       }
     case 7:
       {
-        return new linear_pnp_dofmap_0();
+        return new pnp_and_source_dofmap_0();
         break;
       }
     case 8:
       {
-        return new linear_pnp_dofmap_1();
+        return new pnp_and_source_dofmap_1();
         break;
       }
     case 9:
       {
-        return new linear_pnp_dofmap_0();
+        return new pnp_and_source_dofmap_0();
         break;
       }
     }
@@ -6322,7 +6322,7 @@ public:
   /// Create a new cell integral on everywhere else
   virtual ufc::cell_integral* create_default_cell_integral() const
   {
-    return new linear_pnp_cell_integral_0_otherwise();
+    return new pnp_and_source_cell_integral_0_otherwise();
   }
 
   /// Create a new exterior facet integral on everywhere else
@@ -6366,18 +6366,18 @@ public:
 /// sequence of basis functions of Vj and w1, w2, ..., wn are given
 /// fixed functions (coefficients).
 
-class linear_pnp_form_1: public ufc::form
+class pnp_and_source_form_1: public ufc::form
 {
 public:
 
   /// Constructor
-  linear_pnp_form_1() : ufc::form()
+  pnp_and_source_form_1() : ufc::form()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~linear_pnp_form_1()
+  virtual ~pnp_and_source_form_1()
   {
     // Do nothing
   }
@@ -6385,7 +6385,7 @@ public:
   /// Return a string identifying the form
   virtual const char* signature() const
   {
-    return "712f0218f73370f3ac57488a914535b4e3323460094a4f9c2efc32dbaecee18b62e254ef5848ff8d4fe744758a81396c7787a7024fc67cb210233330756ee964";
+    return "4f1fe7bdaaa8304bedb7694b9fdfe0951aad0e96d30ef8b4984f5047981d98a7c92b6f971f8ba0ed163f11086ca75b8faaaac9f192bb77ea403f8f3d50906508";
   }
 
 
@@ -6416,62 +6416,62 @@ public:
     {
     case 0:
       {
-        return new linear_pnp_finite_element_2();
+        return new pnp_and_source_finite_element_2();
         break;
       }
     case 1:
       {
-        return new linear_pnp_finite_element_1();
+        return new pnp_and_source_finite_element_1();
         break;
       }
     case 2:
       {
-        return new linear_pnp_finite_element_1();
+        return new pnp_and_source_finite_element_1();
         break;
       }
     case 3:
       {
-        return new linear_pnp_finite_element_1();
+        return new pnp_and_source_finite_element_1();
         break;
       }
     case 4:
       {
-        return new linear_pnp_finite_element_1();
+        return new pnp_and_source_finite_element_1();
         break;
       }
     case 5:
       {
-        return new linear_pnp_finite_element_1();
+        return new pnp_and_source_finite_element_1();
         break;
       }
     case 6:
       {
-        return new linear_pnp_finite_element_0();
+        return new pnp_and_source_finite_element_0();
         break;
       }
     case 7:
       {
-        return new linear_pnp_finite_element_1();
+        return new pnp_and_source_finite_element_1();
         break;
       }
     case 8:
       {
-        return new linear_pnp_finite_element_0();
+        return new pnp_and_source_finite_element_0();
         break;
       }
     case 9:
       {
-        return new linear_pnp_finite_element_1();
+        return new pnp_and_source_finite_element_1();
         break;
       }
     case 10:
       {
-        return new linear_pnp_finite_element_1();
+        return new pnp_and_source_finite_element_1();
         break;
       }
     case 11:
       {
-        return new linear_pnp_finite_element_1();
+        return new pnp_and_source_finite_element_1();
         break;
       }
     }
@@ -6486,62 +6486,62 @@ public:
     {
     case 0:
       {
-        return new linear_pnp_dofmap_2();
+        return new pnp_and_source_dofmap_2();
         break;
       }
     case 1:
       {
-        return new linear_pnp_dofmap_1();
+        return new pnp_and_source_dofmap_1();
         break;
       }
     case 2:
       {
-        return new linear_pnp_dofmap_1();
+        return new pnp_and_source_dofmap_1();
         break;
       }
     case 3:
       {
-        return new linear_pnp_dofmap_1();
+        return new pnp_and_source_dofmap_1();
         break;
       }
     case 4:
       {
-        return new linear_pnp_dofmap_1();
+        return new pnp_and_source_dofmap_1();
         break;
       }
     case 5:
       {
-        return new linear_pnp_dofmap_1();
+        return new pnp_and_source_dofmap_1();
         break;
       }
     case 6:
       {
-        return new linear_pnp_dofmap_0();
+        return new pnp_and_source_dofmap_0();
         break;
       }
     case 7:
       {
-        return new linear_pnp_dofmap_1();
+        return new pnp_and_source_dofmap_1();
         break;
       }
     case 8:
       {
-        return new linear_pnp_dofmap_0();
+        return new pnp_and_source_dofmap_0();
         break;
       }
     case 9:
       {
-        return new linear_pnp_dofmap_1();
+        return new pnp_and_source_dofmap_1();
         break;
       }
     case 10:
       {
-        return new linear_pnp_dofmap_1();
+        return new pnp_and_source_dofmap_1();
         break;
       }
     case 11:
       {
-        return new linear_pnp_dofmap_1();
+        return new pnp_and_source_dofmap_1();
         break;
       }
     }
@@ -6646,7 +6646,7 @@ public:
   /// Create a new cell integral on everywhere else
   virtual ufc::cell_integral* create_default_cell_integral() const
   {
-    return new linear_pnp_cell_integral_1_otherwise();
+    return new pnp_and_source_cell_integral_1_otherwise();
   }
 
   /// Create a new exterior facet integral on everywhere else
@@ -6691,7 +6691,7 @@ public:
 #include <dolfin/adaptivity/ErrorControl.h>
 #include <dolfin/adaptivity/GoalFunctional.h>
 
-namespace linear_pnp
+namespace pnp_and_source
 {
 
 class CoefficientSpace_AnAn: public dolfin::FunctionSpace
@@ -6703,8 +6703,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_AnAn(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), mesh)))
   {
     // Do nothing
   }
@@ -6712,8 +6712,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_AnAn(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), *mesh)))
   {
     // Do nothing
   }
@@ -6723,8 +6723,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_AnAn(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -6733,8 +6733,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_AnAn(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -6750,8 +6750,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_CatCat(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), mesh)))
   {
     // Do nothing
   }
@@ -6759,8 +6759,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_CatCat(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), *mesh)))
   {
     // Do nothing
   }
@@ -6770,8 +6770,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_CatCat(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -6780,8 +6780,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_CatCat(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -6797,8 +6797,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_Dn(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), mesh)))
   {
     // Do nothing
   }
@@ -6806,8 +6806,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_Dn(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), *mesh)))
   {
     // Do nothing
   }
@@ -6817,8 +6817,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_Dn(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -6827,8 +6827,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_Dn(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -6844,8 +6844,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_Dp(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), mesh)))
   {
     // Do nothing
   }
@@ -6853,8 +6853,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_Dp(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), *mesh)))
   {
     // Do nothing
   }
@@ -6864,8 +6864,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_Dp(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -6874,8 +6874,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_Dp(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -6891,8 +6891,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_EsEs(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), mesh)))
   {
     // Do nothing
   }
@@ -6900,8 +6900,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_EsEs(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), *mesh)))
   {
     // Do nothing
   }
@@ -6911,8 +6911,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_EsEs(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -6921,8 +6921,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_EsEs(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -6938,8 +6938,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_anion(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), mesh)))
   {
     // Do nothing
   }
@@ -6947,8 +6947,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_anion(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), *mesh)))
   {
     // Do nothing
   }
@@ -6958,8 +6958,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_anion(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -6968,8 +6968,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_anion(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -6985,8 +6985,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_cation(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), mesh)))
   {
     // Do nothing
   }
@@ -6994,8 +6994,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_cation(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), *mesh)))
   {
     // Do nothing
   }
@@ -7005,8 +7005,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_cation(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -7015,8 +7015,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_cation(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -7032,8 +7032,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_eps(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), mesh)))
   {
     // Do nothing
   }
@@ -7041,8 +7041,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_eps(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), *mesh)))
   {
     // Do nothing
   }
@@ -7052,8 +7052,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_eps(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -7062,8 +7062,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_eps(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -7079,8 +7079,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_potential(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), mesh)))
   {
     // Do nothing
   }
@@ -7088,8 +7088,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_potential(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), *mesh)))
   {
     // Do nothing
   }
@@ -7099,8 +7099,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_potential(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -7109,8 +7109,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_potential(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_1()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_1()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -7126,8 +7126,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_qn(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_0()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_0()), mesh)))
   {
     // Do nothing
   }
@@ -7135,8 +7135,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_qn(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_0()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_0()), *mesh)))
   {
     // Do nothing
   }
@@ -7146,8 +7146,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_qn(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_0()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_0()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -7156,8 +7156,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_qn(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_0()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_0()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -7173,8 +7173,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_qp(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_0()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_0()), mesh)))
   {
     // Do nothing
   }
@@ -7182,8 +7182,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_qp(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_0()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_0()), *mesh)))
   {
     // Do nothing
   }
@@ -7193,8 +7193,8 @@ public:
   // Create standard function space (reference version)
   CoefficientSpace_qp(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_0()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_0()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -7203,8 +7203,8 @@ public:
   // Create standard function space (shared pointer version)
   CoefficientSpace_qp(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_0()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_0()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -7220,8 +7220,8 @@ public:
   // Create standard function space (reference version)
   Form_a_FunctionSpace_0(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_2()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_2()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_2()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_2()), mesh)))
   {
     // Do nothing
   }
@@ -7229,8 +7229,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_a_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_2()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_2()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_2()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_2()), *mesh)))
   {
     // Do nothing
   }
@@ -7240,8 +7240,8 @@ public:
   // Create standard function space (reference version)
   Form_a_FunctionSpace_0(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_2()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_2()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_2()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_2()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -7250,8 +7250,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_a_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_2()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_2()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_2()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_2()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -7267,8 +7267,8 @@ public:
   // Create standard function space (reference version)
   Form_a_FunctionSpace_1(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_2()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_2()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_2()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_2()), mesh)))
   {
     // Do nothing
   }
@@ -7276,8 +7276,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_a_FunctionSpace_1(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_2()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_2()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_2()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_2()), *mesh)))
   {
     // Do nothing
   }
@@ -7287,8 +7287,8 @@ public:
   // Create standard function space (reference version)
   Form_a_FunctionSpace_1(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_2()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_2()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_2()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_2()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -7297,8 +7297,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_a_FunctionSpace_1(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_2()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_2()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_2()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_2()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -7332,7 +7332,7 @@ public:
     _function_spaces[0] = reference_to_no_delete_pointer(V0);
     _function_spaces[1] = reference_to_no_delete_pointer(V1);
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new linear_pnp_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new pnp_and_source_form_0());
   }
 
   // Constructor
@@ -7351,7 +7351,7 @@ public:
     this->Dn = Dn;
     this->qn = qn;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new linear_pnp_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new pnp_and_source_form_0());
   }
 
   // Constructor
@@ -7370,7 +7370,7 @@ public:
     this->Dn = *Dn;
     this->qn = *qn;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new linear_pnp_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new pnp_and_source_form_0());
   }
 
   // Constructor
@@ -7380,7 +7380,7 @@ public:
     _function_spaces[0] = V0;
     _function_spaces[1] = V1;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new linear_pnp_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new pnp_and_source_form_0());
   }
 
   // Constructor
@@ -7399,7 +7399,7 @@ public:
     this->Dn = Dn;
     this->qn = qn;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new linear_pnp_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new pnp_and_source_form_0());
   }
 
   // Constructor
@@ -7418,7 +7418,7 @@ public:
     this->Dn = *Dn;
     this->qn = *qn;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new linear_pnp_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new pnp_and_source_form_0());
   }
 
   // Destructor
@@ -7512,8 +7512,8 @@ public:
   // Create standard function space (reference version)
   Form_L_FunctionSpace_0(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_2()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_2()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_2()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_2()), mesh)))
   {
     // Do nothing
   }
@@ -7521,8 +7521,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_L_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_2()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_2()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_2()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_2()), *mesh)))
   {
     // Do nothing
   }
@@ -7532,8 +7532,8 @@ public:
   // Create standard function space (reference version)
   Form_L_FunctionSpace_0(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_2()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_2()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_2()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_2()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
@@ -7542,8 +7542,8 @@ public:
   // Create standard function space (shared pointer version)
   Form_L_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new linear_pnp_finite_element_2()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new linear_pnp_dofmap_2()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_and_source_finite_element_2()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_and_source_dofmap_2()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -7582,7 +7582,7 @@ public:
   {
     _function_spaces[0] = reference_to_no_delete_pointer(V0);
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new linear_pnp_form_1());
+    _ufc_form = std::shared_ptr<const ufc::form>(new pnp_and_source_form_1());
   }
 
   // Constructor
@@ -7603,7 +7603,7 @@ public:
     this->anion = anion;
     this->potential = potential;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new linear_pnp_form_1());
+    _ufc_form = std::shared_ptr<const ufc::form>(new pnp_and_source_form_1());
   }
 
   // Constructor
@@ -7624,7 +7624,7 @@ public:
     this->anion = *anion;
     this->potential = *potential;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new linear_pnp_form_1());
+    _ufc_form = std::shared_ptr<const ufc::form>(new pnp_and_source_form_1());
   }
 
   // Constructor
@@ -7633,7 +7633,7 @@ public:
   {
     _function_spaces[0] = V0;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new linear_pnp_form_1());
+    _ufc_form = std::shared_ptr<const ufc::form>(new pnp_and_source_form_1());
   }
 
   // Constructor
@@ -7654,7 +7654,7 @@ public:
     this->anion = anion;
     this->potential = potential;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new linear_pnp_form_1());
+    _ufc_form = std::shared_ptr<const ufc::form>(new pnp_and_source_form_1());
   }
 
   // Constructor
@@ -7675,7 +7675,7 @@ public:
     this->anion = *anion;
     this->potential = *potential;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new linear_pnp_form_1());
+    _ufc_form = std::shared_ptr<const ufc::form>(new pnp_and_source_form_1());
   }
 
   // Destructor

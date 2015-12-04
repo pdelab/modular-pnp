@@ -34,9 +34,9 @@ a   = ( Dp*exp(CatCat) * ( inner(grad(Cat),grad(cat)) + inner(grad(CatCat)+qp*gr
     + ( Dn*exp(AnAn) * ( inner(grad(An),grad(an)) + inner(grad(AnAn)+qn*grad(EsEs), grad(an)) * An ) )*dx \
     + ( qn*Dn*exp(AnAn) * inner(grad(Phi),grad(an)) )*dx \
     + ( eps * inner(grad(Phi),grad(phi)) )*dx \
-    + ( (-qp*exp(CatCat)*Cat + qn*exp(AnAn)*An)*phi )*dx
+    + ( -(qp*exp(CatCat)*Cat + qn*exp(AnAn)*An)*phi )*dx
 
 L   = - ( Dp*exp(CatCat)* (inner(grad(CatCat),grad(cat)) + qp*inner(grad(EsEs),grad(cat))) )*dx \
     - ( Dn*exp(AnAn  )* (inner(grad(AnAn  ),grad(an )) + qn*inner(grad(EsEs), grad(an))) )*dx \
     - ( eps * inner(grad(EsEs),grad(phi)) )*dx \
-    - ( (-qp*exp(CatCat) + qn*exp(AnAn))*phi )*dx
+    - ( -(qp*exp(CatCat) + qn*exp(AnAn))*phi )*dx
