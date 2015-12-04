@@ -60,8 +60,7 @@ void non_dimesionalize_coefficients (domain_param *domain,
 void domain_build (domain_param *domain_par,
            dolfin::Mesh *mesh,
            dolfin::MeshFunction<size_t> *subdomains,
-           dolfin::MeshFunction<size_t> *surfaces,
-           dolfin::File *mesh_output);
+           dolfin::MeshFunction<size_t> *surfaces);
 
 #endif /* end if for __NEWTONFUNCTS_HEADER__ */
 
