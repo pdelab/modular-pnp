@@ -31,7 +31,40 @@ double upper_cation_val = 1.0;  // 1 / m^3
 double lower_anion_val = 1.0;  // 1 / m^3
 double upper_anion_val = 0.1;  // 1 / m^3
 double lower_potential_val = -1.0;  // V
-double upper_potential_val = 1.0;  // V
+double upper_potential_val = 1.0;  //
+double DampFactor = 0.5;
+int maxDamps= 10;
+
+void update_solution_pnp(dolfin::Function& iterate0, dolfin::Function& iterate1, dolfin::Function& iterate2, \
+    dolfin::Function& update, double& relative_residual, pnp_and_source::LinearForm & L, const dolfin::DirichletBC bc, dolfin::EigenVector& b )
+{
+    double new_residual=0.0;
+    int i=1;
+    dolfin::Function _iterate0(iterate0); dolfin::Function _iterate1(iterate1); dolfin::Function _iterate2(iterate2);
+    dolfin::Function update0(update[0]); dolfin::Function update1(update[1]); dolfin::Function update2(update[2]);
+    *(_iterate0.vector()) += *(update0.vector()); *(_iterate1.vector()) += *(update1.vector()); *(_iterate2.vector()) += *(update2.vector());
+    L.CatCat = _iterate0;
+    L.AnAn   = _iterate1;
+    L.EsEs   = _iterate2;
+    assemble(b, L);
+    bc.apply(b);
+    new_residual = b.norm("l2");
+    while ( (new_residual>relative_residual) and (i<maxDamps) )
+    {
+      *(_iterate0.vector()) = *(iterate0.vector()); *(_iterate1.vector()) = *(iterate1.vector()); *(_iterate2.vector()) = *(iterate2.vector());
+      *(update0.vector()) *= DampFactor; *(update1.vector()) *= DampFactor; *(update2.vector()) *= DampFactor;
+      *(_iterate0.vector()) += *(update0.vector()); *(_iterate1.vector()) += *(update1.vector()); *(_iterate2.vector()) += *(update2.vector());
+      i++;
+      L.CatCat = _iterate0;
+      L.AnAn   = _iterate1;
+      L.EsEs   = _iterate2;
+      assemble(b, L);
+      bc.apply(b);
+      new_residual = b.norm("l2");
+    }
+    *(iterate0.vector()) = *(_iterate0.vector()); *(iterate1.vector()) = *(_iterate1.vector()); *(iterate2.vector()) = *(_iterate2.vector());
+    relative_residual = new_residual;
+}
 
 class analyticCationExpression : public Expression
 {
@@ -95,7 +128,7 @@ int main()
   dolfin::MeshFunction<std::size_t> subdomains;
   dolfin::MeshFunction<std::size_t> surfaces;
   dolfin::File meshOut(domain_par.mesh_output);
-  domain_build(&domain_par, &mesh, &subdomains, &surfaces, &meshOut);
+  domain_build(&domain_par, &mesh, &subdomains, &surfaces);
 
   // read coefficients and boundary values
   printf("\tcoefficients...\n"); fflush(stdout);
@@ -227,16 +260,6 @@ int main()
   // Setup newton parameters and compute initial residual
   printf("\tNewton solver setup...\n"); fflush(stdout);
   Function solutionUpdate(V);
-  Function dcat(solutionUpdate[0]);
-  Function dan(solutionUpdate[1]);
-  Function dphi(solutionUpdate[2]);
-  Function dcat_cat(V_cat);
-  Function dan_an(V_an);
-  dcat.interpolate(zero);
-  dan.interpolate(zero);
-  dphi.interpolate(zero);
-  dcat_cat.interpolate(zero);
-  dan_an.interpolate(zero);
   unsigned int newton_iteration = 0;
 
   // compute initial residual and Jacobian
@@ -310,17 +333,27 @@ int main()
 
     // update solution and reset solutionUpdate
     printf("\tupdate solution...\n"); fflush(stdout);
-    update_solution(&cationSolution, &solutionUpdate[0]);
-    update_solution(&anionSolution, &solutionUpdate[1]);
-    update_solution(&potentialSolution, &solutionUpdate[2]);
-
+    // *****************************************************
+    // Option 1:
+    // *****************************************************
+    // update_solution(&cationSolution, &solutionUpdate[0]);
+    // update_solution(&anionSolution, &solutionUpdate[1]);
+    // update_solution(&potentialSolution, &solutionUpdate[2]);
     // compute residual
-    L_pnp.CatCat = cationSolution;
-    L_pnp.AnAn = anionSolution;
-    L_pnp.EsEs = potentialSolution;
-    assemble(b_pnp, L_pnp);
-    bc.apply(b_pnp);
-    relative_residual = b_pnp.norm("l2");/// initial_residual;
+    // L_pnp.CatCat = cationSolution;
+    // L_pnp.AnAn = anionSolution;
+    // L_pnp.EsEs = potentialSolution;
+    // assemble(b_pnp, L_pnp);
+    // bc.apply(b_pnp);
+    // relative_residual = b_pnp.norm("l2");/// initial_residual;
+    // *****************************************************
+    // *****************************************************
+    // Option 2:
+    // *****************************************************
+    update_solution_pnp(cationSolution, anionSolution, potentialSolution, solutionUpdate, relative_residual, L_pnp, bc, b_pnp );
+    // *****************************************************
+    // *****************************************************
+
     if (newton_iteration == 1)
       printf("\trelative nonlinear residual after 1 iteration has l2-norm of %e\n", relative_residual);
     else
