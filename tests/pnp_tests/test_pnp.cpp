@@ -1,4 +1,4 @@
-/*! \file lin_pnp.cpp
+/*! \file test_pnp.cpp
  *
  *  \brief Setup and solve the linearized PNP equation using FASP
  *
@@ -93,7 +93,6 @@ int main(int argc, char** argv)
   domain_param domain_par;
   char domain_param_filename[] = "./tests/pnp_tests/domain_params.dat";
   domain_param_input(domain_param_filename, &domain_par);
-  // print_domain_param(&domain_par);
 
   // build mesh
   if (DEBUG) printf("\tmesh...\n"); fflush(stdout);
@@ -101,20 +100,13 @@ int main(int argc, char** argv)
   dolfin::MeshFunction<std::size_t> subdomains;
   dolfin::MeshFunction<std::size_t> surfaces;
   dolfin::File meshOut(domain_par.mesh_output);
-  domain_build(&domain_par, &mesh, &subdomains, &surfaces, &meshOut);
+  domain_build(&domain_par, &mesh, &subdomains, &surfaces);
 
   // read coefficients and boundary values
   if (DEBUG) printf("\tcoefficients...\n"); fflush(stdout);
   coeff_param coeff_par;
   char coeff_param_filename[] = "./tests/pnp_tests/coeff_params.dat";
   coeff_param_input(coeff_param_filename, &coeff_par);
-  // print_coeff_param(&coeff_par);
-
-  // open files for outputting solutions
-  File cationFile("./tests/pnp_tests/output/cation.pvd");
-  File anionFile("./tests/pnp_tests/output/anion.pvd");
-  File potentialFile("./tests/pnp_tests/output/potential.pvd");
-
 
   // Initialize variational forms
   if (DEBUG) printf("\tvariational forms...\n"); fflush(stdout);
@@ -149,15 +141,6 @@ int main(int argc, char** argv)
   L_pnp.anion = analyticAnion;
   L_pnp.potential = analyticPotential;
 
-  File EXcationFile("./tests/pnp_tests/output/Ex_cation.pvd");
-  File EXanionFile("./tests/pnp_tests/output/Ex_anion.pvd");
-  File EXpotentialFile("./tests/pnp_tests/output/Ex_potential.pvd");
-  if (DEBUG) {
-    EXcationFile << analyticCation;
-    EXanionFile << analyticAnion;
-    EXpotentialFile << analyticPotential;
-  }
-
   // Set Dirichlet boundaries
   if (DEBUG) printf("\tboundary conditions...\n"); fflush(stdout);
   unsigned int dirichlet_coord = 0;
@@ -187,13 +170,6 @@ int main(int argc, char** argv)
   // Solve for consistent voltage : not yet implemented
   Function potentialSolution(solutionFunction[2]);
   potentialSolution.interpolate(Volt);
-
-  // print to file
-  if (DEBUG) {
-    cationFile << cationSolution;
-    anionFile << anionSolution;
-    potentialFile << potentialSolution;
-  }
 
   // initialize linear system
   if (DEBUG) printf("\tlinear algebraic objects...\n"); fflush(stdout);
@@ -291,14 +267,6 @@ int main(int argc, char** argv)
         printf("\trelative nonlinear residual after 1 iteration has l2-norm of %e\n", relative_residual);
       else
         printf("\trelative nonlinear residual after %d iterations has l2-norm of %e\n", newton_iteration, relative_residual);
-    }
-
-    // write computed solution to file
-    if (DEBUG){
-      printf("\tsolved linear system successfully!\n"); fflush(stdout);
-      cationFile << cationSolution;
-      anionFile << anionSolution;
-      potentialFile << potentialSolution;
     }
 
     // compute solution error

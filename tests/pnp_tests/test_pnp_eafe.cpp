@@ -1,4 +1,4 @@
-/*! \file lin_pnp.cpp
+/*! \file test_pnp_eafe.cpp
  *
  *  \brief Setup and solve the linearized PNP equation using FASP
  *
@@ -102,19 +102,13 @@ int main(int argc, char** argv)
   dolfin::MeshFunction<std::size_t> subdomains;
   dolfin::MeshFunction<std::size_t> surfaces;
   dolfin::File meshOut(domain_par.mesh_output);
-  domain_build(&domain_par, &mesh, &subdomains, &surfaces, &meshOut);
+  domain_build(&domain_par, &mesh, &subdomains, &surfaces);
 
   // read coefficients and boundary values
   if (DEBUG) printf("\tcoefficients...\n"); fflush(stdout);
   coeff_param coeff_par;
   char coeff_param_filename[] = "./tests/pnp_tests/coeff_params2.dat";
   coeff_param_input(coeff_param_filename, &coeff_par);
-  // print_coeff_param(&coeff_par);
-
-  // open files for outputting solutions
-  File cationFile("./tests/pnp_tests/output/cation.pvd");
-  File anionFile("./tests/pnp_tests/output/anion.pvd");
-  File potentialFile("./tests/pnp_tests/output/potential.pvd");
 
   // Initialize variational forms
   if (DEBUG) printf("\tvariational forms...\n"); fflush(stdout);
@@ -159,15 +153,6 @@ int main(int argc, char** argv)
   L_pnp.anion = analyticAnion;
   L_pnp.potential = analyticPotential;
 
-  File EXcationFile("./tests/pnp_tests/output/Ex_cation.pvd");
-  File EXanionFile("./tests/pnp_tests/output/Ex_anion.pvd");
-  File EXpotentialFile("./tests/pnp_tests/output/Ex_potential.pvd");
-  if (DEBUG) {
-    EXcationFile << analyticCation;
-    EXanionFile << analyticAnion;
-    EXpotentialFile << analyticPotential;
-  }
-
   // Set Dirichlet boundaries
   if (DEBUG) printf("\tboundary conditions...\n"); fflush(stdout);
   unsigned int dirichlet_coord = 0;
@@ -198,12 +183,6 @@ int main(int argc, char** argv)
   Function potentialSolution(solutionFunction[2]);
   potentialSolution.interpolate(Volt);
 
-  // print to file
-  if (DEBUG) {
-    cationFile << cationSolution;
-    anionFile << anionSolution;
-    potentialFile << potentialSolution;
-  }
   // Initialize functions for EAFE
   Function CatCatFunction(V_cat);
   Function CatBetaFunction(V_cat);
@@ -340,22 +319,14 @@ int main(int argc, char** argv)
         printf("\trelative nonlinear residual after %d iterations has l2-norm of %e\n", newton_iteration, relative_residual);
     }
 
-    // write computed solution to file
-    if (DEBUG) {
-      printf("\tsolved linear system successfully!\n"); fflush(stdout);
-      cationFile << cationSolution;
-      anionFile << anionSolution;
-      potentialFile << potentialSolution;
-    }
-
     // compute solution error
     if (DEBUG) printf("\nCompute the error\n"); fflush(stdout);
     Function Error1(analyticCation);
     Function Error2(analyticAnion);
     Function Error3(analyticPotential);
-    *(Error1.vector())-=*(cationSolution.vector());
-    *(Error2.vector())-=*(anionSolution.vector());
-    *(Error3.vector())-=*(potentialSolution.vector());
+    *(Error1.vector()) -= *(cationSolution.vector());
+    *(Error2.vector()) -= *(anionSolution.vector());
+    *(Error3.vector()) -= *(potentialSolution.vector());
     L2Error::Form_M L2error1(mesh,Error1);
     cationError = assemble(L2error1);
     L2Error::Form_M L2error2(mesh,Error2);
