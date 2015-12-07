@@ -37,12 +37,11 @@ int main(int argc, char** argv)
   newton_param_input (newton_param_file,&newtparam);
   if (DEBUG) print_newton_param(&newtparam);
 
-  double adapt_tol 		= 0.0;
-  double nonlin_tol 		= 1E-8;
-  double nonlin_maxit		= 15;
-  double nonlin_damp_factor	= 0.5;
-  double nonlin_damp_it		= 5;
-
+  double adapt_tol = 0.0;
+  double nonlin_tol = 1E-8;
+  double nonlin_maxit = 15;
+  double nonlin_damp_factor = 0.5;
+  double nonlin_damp_it = 5;
 
   if ( (newtparam.adapt_tol==adapt_tol) && (newtparam.tol==nonlin_tol) && (newtparam.max_it== nonlin_maxit) && (newtparam.damp_factor==nonlin_damp_factor) && (newtparam.damp_it==nonlin_damp_it) )
   {

@@ -56,7 +56,7 @@ SHORT newton_param_check (newton_param *inparam)
         || inparam->adapt_tol<0.0
         || inparam->tol<0.0
         || inparam->damp_factor<0.0
-        || inparam->damp_it<1
+        || inparam->damp_it<0
         ) status = ERROR_INPUT_PAR;
 
     return status;
@@ -156,9 +156,9 @@ void newton_param_input (const char *filenm,
             if (val!=1 || strcmp(buffer,"=")!=0) {
                 status = ERROR_INPUT_PAR; break;
             }
-            val = fscanf(fp,"%lf",&dbuff);
+            val = fscanf(fp,"%d",&ibuff);
             if (val!=1) { status = ERROR_INPUT_PAR; break; }
-            inparam->damp_it = dbuff;
+            inparam->damp_it = ibuff;
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
         }
 
@@ -191,10 +191,10 @@ void newton_param_input (const char *filenm,
 void print_newton_param (newton_param *inparam)
 {
   printf("Successfully read-in Newton solver parameters\n");
-  printf("\tNewton Maximum iterations: \t%d\n",inparam->max_it);
-  printf("\tNewton tolerance:          \t%e\n",inparam->tol);
-  printf("\tNewton damping factor:     \t%f\n",inparam->damp_factor);
-  printf("\tNewton maximum damping iteration:     \t%f\n",inparam->damp_it);
+  printf("\tNewton Maximum iterations:          \t%d\n",inparam->max_it);
+  printf("\tNewton tolerance:                   \t%e\n",inparam->tol);
+  printf("\tNewton damping factor:              \t%f\n",inparam->damp_factor);
+  printf("\tNewton maximum damping iteration:   \t%d\n",inparam->damp_it);
   printf("\n");
 }
 

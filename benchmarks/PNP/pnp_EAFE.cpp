@@ -33,35 +33,73 @@ double upper_anion_val = 0.1;  // 1 / m^3
 double lower_potential_val = -1.0;  // V
 double upper_potential_val = 1.0;  //
 
-void update_solution_pnp(dolfin::Function& iterate0, dolfin::Function& iterate1, dolfin::Function& iterate2, \
-    dolfin::Function& update, double& relative_residual, pnp_and_source::LinearForm & L, const dolfin::DirichletBC bc, dolfin::EigenVector& b, double DampFactor, int maxDamp)
+double update_solution_pnp (
+  dolfin::Function* iterate0,
+  dolfin::Function* iterate1,
+  dolfin::Function* iterate2,
+  dolfin::Function* update0,
+  dolfin::Function* update1,
+  dolfin::Function* update2,
+  double relative_residual,
+  double initial_residual,
+  pnp_and_source::LinearForm* L,
+  const dolfin::DirichletBC* bc,
+  newton_param* params )
 {
-    double new_residual=0.0;
-    int i=1;
-    dolfin::Function _iterate0(iterate0); dolfin::Function _iterate1(iterate1); dolfin::Function _iterate2(iterate2);
-    dolfin::Function update0(update[0]); dolfin::Function update1(update[1]); dolfin::Function update2(update[2]);
-    *(_iterate0.vector()) += *(update0.vector()); *(_iterate1.vector()) += *(update1.vector()); *(_iterate2.vector()) += *(update2.vector());
-    L.CatCat = _iterate0;
-    L.AnAn   = _iterate1;
-    L.EsEs   = _iterate2;
-    assemble(b, L);
-    bc.apply(b);
-    new_residual = b.norm("l2");
-    while ( (new_residual>relative_residual) and (i<maxDamp) )
-    {
-      *(_iterate0.vector()) = *(iterate0.vector()); *(_iterate1.vector()) = *(iterate1.vector()); *(_iterate2.vector()) = *(iterate2.vector());
-      *(update0.vector()) *= DampFactor; *(update1.vector()) *= DampFactor; *(update2.vector()) *= DampFactor;
-      *(_iterate0.vector()) += *(update0.vector()); *(_iterate1.vector()) += *(update1.vector()); *(_iterate2.vector()) += *(update2.vector());
-      i++;
-      L.CatCat = _iterate0;
-      L.AnAn   = _iterate1;
-      L.EsEs   = _iterate2;
-      assemble(b, L);
-      bc.apply(b);
-      new_residual = b.norm("l2");
-    }
-    *(iterate0.vector()) = *(_iterate0.vector()); *(iterate1.vector()) = *(_iterate1.vector()); *(iterate2.vector()) = *(_iterate2.vector());
-    relative_residual = new_residual;
+  // compute residual
+  dolfin::Function _iterate0(*iterate0);
+  dolfin::Function _iterate1(*iterate1);
+  dolfin::Function _iterate2(*iterate2);
+  dolfin::Function _update0(*update0);
+  dolfin::Function _update1(*update1);
+  dolfin::Function _update2(*update2);
+  update_solution(&_iterate0, &_update0);
+  update_solution(&_iterate1, &_update1);
+  update_solution(&_iterate2, &_update2);
+  L->CatCat = _iterate0;
+  L->AnAn = _iterate1;
+  L->EsEs = _iterate2;
+  dolfin::EigenVector b;
+  assemble(b, *L);
+  bc->apply(b);
+  double new_relative_residual = b.norm("l2") / initial_residual;
+
+  // backtrack loop
+  unsigned int damp_iters = 1;
+  printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
+
+  while (
+    new_relative_residual > relative_residual && damp_iters < params->damp_it )
+  {
+    damp_iters++;
+    *(_iterate0.vector()) = *(iterate0->vector());
+    *(_iterate1.vector()) = *(iterate1->vector());
+    *(_iterate2.vector()) = *(iterate2->vector());
+    *(_update0.vector()) *= params->damp_factor;
+    *(_update1.vector()) *= params->damp_factor;
+    *(_update2.vector()) *= params->damp_factor;
+    update_solution(&_iterate0, &_update0);
+    update_solution(&_iterate1, &_update1);
+    update_solution(&_iterate2, &_update2);
+    L->CatCat = _iterate0;
+    L->AnAn = _iterate1;
+    L->EsEs = _iterate2;
+    assemble(b, *L);
+    bc->apply(b);
+    new_relative_residual = b.norm("l2") / initial_residual;
+    printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
+  }
+
+  // check for decrease
+  if ( new_relative_residual > relative_residual )
+    return -new_relative_residual;
+
+  // update iterates
+  printf("\taccepted update after damping %d times\n", damp_iters);
+  *(iterate0->vector()) = *(_iterate0.vector());
+  *(iterate1->vector()) = *(_iterate1.vector());
+  *(iterate2->vector()) = *(_iterate2.vector());
+  return new_relative_residual;
 }
 
 class analyticCationExpression : public Expression
@@ -341,19 +379,43 @@ int main()
     // update_solution(&cationSolution, &solutionUpdate[0]);
     // update_solution(&anionSolution, &solutionUpdate[1]);
     // update_solution(&potentialSolution, &solutionUpdate[2]);
-    // compute residual
+    // // compute residual
     // L_pnp.CatCat = cationSolution;
     // L_pnp.AnAn = anionSolution;
     // L_pnp.EsEs = potentialSolution;
     // assemble(b_pnp, L_pnp);
     // bc.apply(b_pnp);
-    // relative_residual = b_pnp.norm("l2");/// initial_residual;
+    // relative_residual = b_pnp.norm("l2") / initial_residual;
     // *****************************************************
     // *****************************************************
     // Option 2:
     // *****************************************************
-    update_solution_pnp(cationSolution, anionSolution, potentialSolution, solutionUpdate, relative_residual, L_pnp, bc, b_pnp, newtparam.damp_factor, newtparam.damp_it);
-    // *****************************************************
+    relative_residual = update_solution_pnp(
+      &cationSolution,
+      &anionSolution,
+      &potentialSolution,
+      &(solutionUpdate[0]),
+      &(solutionUpdate[1]),
+      &(solutionUpdate[2]),
+      relative_residual,
+      initial_residual,
+      &L_pnp,
+      &bc,
+      &newtparam
+    );
+    if (relative_residual < 0.0) {
+      printf("Newton backtracking failed!\n");
+      printf("\tresidual has not decreased after damping %d times\n", newtparam.damp_it);
+      printf("\tthe relative residual is %e\n", relative_residual);
+      relative_residual *= -1.0;
+    }
+    // compute residual
+    L_pnp.CatCat = cationSolution;
+    L_pnp.AnAn = anionSolution;
+    L_pnp.EsEs = potentialSolution;
+    assemble(b_pnp, L_pnp);
+    bc.apply(b_pnp);
+    relative_residual = b_pnp.norm("l2") / initial_residual;
     // *****************************************************
 
     if (newton_iteration == 1)
@@ -372,9 +434,9 @@ int main()
     Function Error1(analyticCation);
     Function Error2(analyticAnion);
     Function Error3(analyticPotential);
-    *(Error1.vector())-=*(cationSolution.vector());
-    *(Error2.vector())-=*(anionSolution.vector());
-    *(Error3.vector())-=*(potentialSolution.vector());
+    *(Error1.vector()) -= *(cationSolution.vector());
+    *(Error2.vector()) -= *(anionSolution.vector());
+    *(Error3.vector()) -= *(potentialSolution.vector());
     double cationError = 0.0;
     double anionError = 0.0;
     double potentialError = 0.0;

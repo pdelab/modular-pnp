@@ -38,7 +38,7 @@ typedef struct {
     REAL damp_factor;
 
     //! maximal iteration count of backtracking update
-    REAL damp_it;
+    INT damp_it;
 
 } newton_param; /**< Parameters for Newton Solver */
 
