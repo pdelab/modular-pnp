@@ -34,8 +34,11 @@ typedef struct {
     //! Tolerance for nonlinear residual
     REAL tol;
 
-    //! backtracking update damp factor 
+    //! backtracking update damp factor
     REAL damp_factor;
+
+    //! maximal iteration count of backtracking update
+    REAL damp_it;
 
 } newton_param; /**< Parameters for Newton Solver */
 

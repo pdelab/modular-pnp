@@ -32,11 +32,9 @@ double lower_anion_val = 1.0;  // 1 / m^3
 double upper_anion_val = 0.1;  // 1 / m^3
 double lower_potential_val = -1.0;  // V
 double upper_potential_val = 1.0;  //
-double DampFactor = 0.5;
-int maxDamps= 10;
 
 void update_solution_pnp(dolfin::Function& iterate0, dolfin::Function& iterate1, dolfin::Function& iterate2, \
-    dolfin::Function& update, double& relative_residual, pnp_and_source::LinearForm & L, const dolfin::DirichletBC bc, dolfin::EigenVector& b )
+    dolfin::Function& update, double& relative_residual, pnp_and_source::LinearForm & L, const dolfin::DirichletBC bc, dolfin::EigenVector& b, double DampFactor, int maxDamp)
 {
     double new_residual=0.0;
     int i=1;
@@ -49,7 +47,7 @@ void update_solution_pnp(dolfin::Function& iterate0, dolfin::Function& iterate1,
     assemble(b, L);
     bc.apply(b);
     new_residual = b.norm("l2");
-    while ( (new_residual>relative_residual) and (i<maxDamps) )
+    while ( (new_residual>relative_residual) and (i<maxDamp) )
     {
       *(_iterate0.vector()) = *(iterate0.vector()); *(_iterate1.vector()) = *(iterate1.vector()); *(_iterate2.vector()) = *(iterate2.vector());
       *(update0.vector()) *= DampFactor; *(update1.vector()) *= DampFactor; *(update2.vector()) *= DampFactor;
@@ -120,7 +118,7 @@ int main()
   domain_param domain_par;
   char domain_param_filename[] = "./benchmarks/PNP/domain_params.dat";
   domain_param_input(domain_param_filename, &domain_par);
-  // print_domain_param(&domain_par);
+  print_domain_param(&domain_par);
 
   // build mesh
   printf("\tmesh...\n"); fflush(stdout);
@@ -135,7 +133,7 @@ int main()
   coeff_param coeff_par;
   char coeff_param_filename[] = "./benchmarks/PNP/coeff_params.dat";
   coeff_param_input(coeff_param_filename, &coeff_par);
-  // print_coeff_param(&coeff_par);
+  print_coeff_param(&coeff_par);
 
   // open files for outputting solutions
   File cationFile("./benchmarks/PNP/output/cation.pvd");
@@ -260,6 +258,10 @@ int main()
   // Setup newton parameters and compute initial residual
   printf("\tNewton solver setup...\n"); fflush(stdout);
   Function solutionUpdate(V);
+  newton_param newtparam;
+  char newton_param_file[] = "./benchmarks/PNP/newton_param.dat";
+  newton_param_input (newton_param_file,&newtparam);
+  print_newton_param(&newtparam);
   unsigned int newton_iteration = 0;
 
   // compute initial residual and Jacobian
@@ -281,8 +283,8 @@ int main()
   //*************************************************************
   printf("solve the nonlinear system\n"); fflush(stdout);
 
-  double nonlinear_tol = 1E-8;
-  unsigned int max_newton_iters = 15;
+  double nonlinear_tol = newtparam.tol;
+  unsigned int max_newton_iters = newtparam.max_it;
   while (relative_residual > nonlinear_tol && newton_iteration < max_newton_iters)
   {
     printf("\nNewton iteration: %d\n", ++newton_iteration); fflush(stdout);
@@ -350,7 +352,7 @@ int main()
     // *****************************************************
     // Option 2:
     // *****************************************************
-    update_solution_pnp(cationSolution, anionSolution, potentialSolution, solutionUpdate, relative_residual, L_pnp, bc, b_pnp );
+    update_solution_pnp(cationSolution, anionSolution, potentialSolution, solutionUpdate, relative_residual, L_pnp, bc, b_pnp, newtparam.damp_factor, newtparam.damp_it);
     // *****************************************************
     // *****************************************************
 
