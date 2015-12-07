@@ -34,6 +34,75 @@ double upper_anion_val = 0.1;  // 1 / m^3
 double lower_potential_val = -1.0;  // V
 double upper_potential_val = 1.0;  // V
 
+double update_solution_pnp (
+  dolfin::Function* iterate0,
+  dolfin::Function* iterate1,
+  dolfin::Function* iterate2,
+  dolfin::Function* update0,
+  dolfin::Function* update1,
+  dolfin::Function* update2,
+  double relative_residual,
+  double initial_residual,
+  pnp_and_source::LinearForm* L,
+  const dolfin::DirichletBC* bc,
+  newton_param* params )
+{
+  // compute residual
+  dolfin::Function _iterate0(*iterate0);
+  dolfin::Function _iterate1(*iterate1);
+  dolfin::Function _iterate2(*iterate2);
+  dolfin::Function _update0(*update0);
+  dolfin::Function _update1(*update1);
+  dolfin::Function _update2(*update2);
+  update_solution(&_iterate0, &_update0);
+  update_solution(&_iterate1, &_update1);
+  update_solution(&_iterate2, &_update2);
+  L->CatCat = _iterate0;
+  L->AnAn = _iterate1;
+  L->EsEs = _iterate2;
+  dolfin::EigenVector b;
+  assemble(b, *L);
+  bc->apply(b);
+  double new_relative_residual = b.norm("l2") / initial_residual;
+
+  // backtrack loop
+  unsigned int damp_iters = 1;
+  if (DEBUG) printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
+
+  while (
+    new_relative_residual > relative_residual && damp_iters < params->damp_it )
+  {
+    damp_iters++;
+    *(_iterate0.vector()) = *(iterate0->vector());
+    *(_iterate1.vector()) = *(iterate1->vector());
+    *(_iterate2.vector()) = *(iterate2->vector());
+    *(_update0.vector()) *= params->damp_factor;
+    *(_update1.vector()) *= params->damp_factor;
+    *(_update2.vector()) *= params->damp_factor;
+    update_solution(&_iterate0, &_update0);
+    update_solution(&_iterate1, &_update1);
+    update_solution(&_iterate2, &_update2);
+    L->CatCat = _iterate0;
+    L->AnAn = _iterate1;
+    L->EsEs = _iterate2;
+    assemble(b, *L);
+    bc->apply(b);
+    new_relative_residual = b.norm("l2") / initial_residual;
+    if (DEBUG) printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
+  }
+
+  // check for decrease
+  if ( new_relative_residual > relative_residual )
+    return -new_relative_residual;
+
+  // update iterates
+  if (DEBUG) printf("\taccepted update after damping %d times\n", damp_iters);
+  *(iterate0->vector()) = *(_iterate0.vector());
+  *(iterate1->vector()) = *(_iterate1.vector());
+  *(iterate2->vector()) = *(_iterate2.vector());
+  return new_relative_residual;
+}
+
 class analyticCationExpression : public Expression
 {
   void eval(Array<double>& values, const Array<double>& x) const
@@ -214,16 +283,10 @@ int main(int argc, char** argv)
   // Setup newton parameters and compute initial residual
   if (DEBUG) printf("\tNewton solver setup...\n"); fflush(stdout);
   Function solutionUpdate(V);
-  Function dcat(solutionUpdate[0]);
-  Function dan(solutionUpdate[1]);
-  Function dphi(solutionUpdate[2]);
-  Function dcat_cat(V_cat);
-  Function dan_an(V_an);
-  dcat.interpolate(zero);
-  dan.interpolate(zero);
-  dphi.interpolate(zero);
-  dcat_cat.interpolate(zero);
-  dan_an.interpolate(zero);
+  newton_param newtparam;
+  char newton_param_file[] = "./benchmarks/PNP/newton_param.dat";
+  newton_param_input (newton_param_file,&newtparam);
+  if (DEBUG) print_newton_param(&newtparam);
   unsigned int newton_iteration = 0;
 
   // compute initial residual and Jacobian
@@ -248,8 +311,8 @@ int main(int argc, char** argv)
   double anionError = 0.0;
   double potentialError = 0.0;
 
-  double nonlinear_tol = 1E-8;
-  unsigned int max_newton_iters = 13;
+  double nonlinear_tol = newtparam.tol;
+  unsigned int max_newton_iters = newtparam.max_it;
   while (relative_residual > nonlinear_tol && newton_iteration < max_newton_iters)
   {
     newton_iteration++;
@@ -299,11 +362,27 @@ int main(int argc, char** argv)
     copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &anion_dofs, &anion_dofs);
     copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &potential_dofs, &potential_dofs);
 
-    // update solution and reset solutionUpdate
+    // update solution using backtracking and reset solutionUpdate
     if (DEBUG) printf("\tupdate solution...\n"); fflush(stdout);
-    update_solution(&cationSolution, &solutionUpdate[0]);
-    update_solution(&anionSolution, &solutionUpdate[1]);
-    update_solution(&potentialSolution, &solutionUpdate[2]);
+    relative_residual = update_solution_pnp(
+      &cationSolution,
+      &anionSolution,
+      &potentialSolution,
+      &(solutionUpdate[0]),
+      &(solutionUpdate[1]),
+      &(solutionUpdate[2]),
+      relative_residual,
+      initial_residual,
+      &L_pnp,
+      &bc,
+      &newtparam
+    );
+    if (relative_residual < 0.0) {
+      printf("Newton backtracking failed!\n");
+      printf("\tresidual has not decreased after damping %d times\n", newtparam.damp_it);
+      printf("\tthe relative residual is %e\n", relative_residual);
+      relative_residual *= -1.0;
+    }
 
     // compute residual
     L_pnp.CatCat = cationSolution;

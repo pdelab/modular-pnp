@@ -379,13 +379,6 @@ int main()
     // update_solution(&cationSolution, &solutionUpdate[0]);
     // update_solution(&anionSolution, &solutionUpdate[1]);
     // update_solution(&potentialSolution, &solutionUpdate[2]);
-    // // compute residual
-    // L_pnp.CatCat = cationSolution;
-    // L_pnp.AnAn = anionSolution;
-    // L_pnp.EsEs = potentialSolution;
-    // assemble(b_pnp, L_pnp);
-    // bc.apply(b_pnp);
-    // relative_residual = b_pnp.norm("l2") / initial_residual;
     // *****************************************************
     // *****************************************************
     // Option 2:
@@ -409,6 +402,8 @@ int main()
       printf("\tthe relative residual is %e\n", relative_residual);
       relative_residual *= -1.0;
     }
+    // *****************************************************
+
     // compute residual
     L_pnp.CatCat = cationSolution;
     L_pnp.AnAn = anionSolution;
@@ -416,7 +411,6 @@ int main()
     assemble(b_pnp, L_pnp);
     bc.apply(b_pnp);
     relative_residual = b_pnp.norm("l2") / initial_residual;
-    // *****************************************************
 
     if (newton_iteration == 1)
       printf("\trelative nonlinear residual after 1 iteration has l2-norm of %e\n", relative_residual);
