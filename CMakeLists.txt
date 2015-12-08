@@ -64,7 +64,7 @@ add_executable(test_lin_pnp ./tests/linearized_pnp_tests/test_lin_pnp.cpp ${SRC_
 add_executable(test_lin_pnp_eafe ./tests/linearized_pnp_tests/test_lin_pnp_eafe.cpp ${SRC_DIR})
 add_executable(test_pnp ./tests/pnp_tests/test_pnp.cpp ${SRC_DIR})
 add_executable(test_pnp_eafe ./tests/pnp_tests/test_pnp_eafe.cpp ${SRC_DIR})
-add_executable(test_newton_params ./tests/newton_param_tests/test_newton_param.cpp ${SRC_DIR})
+add_executable(test_newton_param ./tests/newton_param_tests/test_newton_param.cpp ${SRC_DIR})
 
 add_executable(lin_pnp_eafe ./benchmarks/linear_PNP/lin_pnp_EAFE.cpp ${SRC_DIR})
 add_executable(lin_pnp ./benchmarks/linear_PNP/lin_pnp.cpp ${SRC_DIR})
@@ -93,7 +93,7 @@ target_link_libraries(test_lin_pnp ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRAR
 target_link_libraries(test_lin_pnp_eafe ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 target_link_libraries(test_pnp ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 target_link_libraries(test_pnp_eafe ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
-target_link_libraries(test_newton_params ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
+target_link_libraries(test_newton_param ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 
 # ## BENCHMARKS
 target_link_libraries(lin_pnp ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
