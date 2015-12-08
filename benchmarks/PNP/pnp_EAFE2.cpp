@@ -325,7 +325,7 @@ int main()
       L_pnp.EsEs = potentialSolution;
       assemble(b_pnp, L_pnp);
       bc.apply(b_pnp);
-      relative_residual = b_pnp.norm("l2")/initial_residual;
+      relative_residual = b_pnp.norm("l2") / initial_residual;
       if (newton_iteration == 1)
         printf("\trelative nonlinear residual after 1 iteration has l2-norm of %e\n", relative_residual);
       else
