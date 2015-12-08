@@ -34,6 +34,7 @@ SHORT newton_param_input_init (newton_param *inparam)
     inparam->adapt_tol = 1.0e+10;
     inparam->tol = 1.0e-4;
     inparam->damp_factor = 1.0;
+    inparam->damp_it = 5;
 
     return status;
 }
@@ -55,8 +56,9 @@ SHORT newton_param_check (newton_param *inparam)
         || inparam->adapt_tol<0.0
         || inparam->tol<0.0
         || inparam->damp_factor<0.0
+        || inparam->damp_it<0
         ) status = ERROR_INPUT_PAR;
-    
+
     return status;
 }
 
@@ -76,13 +78,13 @@ void newton_param_input (const char *filenm,
 	char     buffer[500]; // Note: max number of char for each line!
     int      val;
     SHORT    status = FASP_SUCCESS;
-    
+
     // set default input parameters
     newton_param_input_init(inparam);
 
     // if input file is not specified, use the default values
     if (filenm==NULL) return;
-    
+
     FILE *fp = fopen(filenm,"r");
     if (fp==NULL) {
         printf("### ERROR: Could not open file %s...\n", filenm);
@@ -95,7 +97,7 @@ void newton_param_input (const char *filenm,
         double  dbuff;
         char    sbuff[500];
         char   *fgetsPtr;
-        
+
         val = fscanf(fp,"%s",buffer);
         if (val==EOF) break;
         if (val!=1){ status = ERROR_INPUT_PAR; break; }
@@ -103,7 +105,7 @@ void newton_param_input (const char *filenm,
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
             continue;
         }
-        
+
         // match keyword and scan for value
         if (strcmp(buffer,"adapt_tol")==0) {
             val = fscanf(fp,"%s",buffer);
@@ -126,7 +128,7 @@ void newton_param_input (const char *filenm,
             inparam->tol = dbuff;
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
         }
-        
+
         else if (strcmp(buffer,"nonlin_maxit")==0) {
             val = fscanf(fp,"%s",buffer);
             if (val!=1 || strcmp(buffer,"=")!=0) {
@@ -137,7 +139,7 @@ void newton_param_input (const char *filenm,
             inparam->max_it = ibuff;
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
         }
-        
+
         else if (strcmp(buffer,"nonlin_damp_factor")==0) {
             val = fscanf(fp,"%s",buffer);
             if (val!=1 || strcmp(buffer,"=")!=0) {
@@ -148,24 +150,35 @@ void newton_param_input (const char *filenm,
             inparam->damp_factor = dbuff;
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
         }
-        
+
+        else if (strcmp(buffer,"nonlin_damp_it")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%d",&ibuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->damp_it = ibuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
         else {
             printf("### WARNING: Unknown input keyword %s!\n", buffer);
             fgets(buffer,500,fp); // skip rest of line
         }
-        
-        
+
+
     }
 
     fclose(fp);
 
     // sanity checks
     status = newton_param_check(inparam);
-    
+
 #if DEBUG_MODE > 1
     printf("### DEBUG: Reading input status = %d\n", status);
 #endif
-    
+
     // if meet unexpected input, stop the program
     fasp_chkerr(status,"newton_param_input");
 }
@@ -178,9 +191,10 @@ void newton_param_input (const char *filenm,
 void print_newton_param (newton_param *inparam)
 {
   printf("Successfully read-in Newton solver parameters\n");
-  printf("\tNewton Maximum iterations: \t%d\n",inparam->max_it);
-  printf("\tNewton tolerance:          \t%e\n",inparam->tol);
-  printf("\tNewton damping factor:     \t%f\n",inparam->damp_factor);
+  printf("\tNewton Maximum iterations:          \t%d\n",inparam->max_it);
+  printf("\tNewton tolerance:                   \t%e\n",inparam->tol);
+  printf("\tNewton damping factor:              \t%f\n",inparam->damp_factor);
+  printf("\tNewton maximum damping iteration:   \t%d\n",inparam->damp_it);
   printf("\n");
 }
 
@@ -240,7 +254,7 @@ SHORT domain_param_check (domain_param *inparam)
         || inparam->grid_z < 2
         || inparam->grid_time < 0
         ) status = ERROR_INPUT_PAR;
-    
+
     return status;
 }
 
@@ -260,13 +274,13 @@ void domain_param_input (const char *filenm,
     char     buffer[500]; // Note: max number of char for each line!
     int      val;
     SHORT    status = FASP_SUCCESS;
-    
+
     // set default input parameters
     domain_param_input_init(inparam);
 
     // if input file is not specified, use the default values
     if (filenm==NULL) return;
-    
+
     FILE *fp = fopen(filenm,"r");
     if (fp==NULL) {
         printf("### ERROR: Could not open file %s...\n", filenm);
@@ -279,7 +293,7 @@ void domain_param_input (const char *filenm,
         double  dbuff;
         char    sbuff[500];
         char   *fgetsPtr;
-        
+
         val = fscanf(fp,"%s",buffer);
         if (val==EOF) break;
         if (val!=1){ status = ERROR_INPUT_PAR; break; }
@@ -287,7 +301,7 @@ void domain_param_input (const char *filenm,
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
             continue;
         }
-        
+
         // match keyword and scan for value
         if (strcmp(buffer,"ref_length")==0) {
             val = fscanf(fp,"%s",buffer);
@@ -310,7 +324,7 @@ void domain_param_input (const char *filenm,
             inparam->length_x = dbuff;
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
         }
-        
+
         else if (strcmp(buffer,"length_y")==0) {
             val = fscanf(fp,"%s",buffer);
             if (val!=1 || strcmp(buffer,"=")!=0) {
@@ -332,7 +346,7 @@ void domain_param_input (const char *filenm,
             inparam->length_z = dbuff;
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
         }
-        
+
         else if (strcmp(buffer,"length_time")==0) {
             val = fscanf(fp,"%s",buffer);
             if (val!=1 || strcmp(buffer,"=")!=0) {
@@ -354,7 +368,7 @@ void domain_param_input (const char *filenm,
             inparam->grid_x = ibuff;
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
         }
-        
+
         else if (strcmp(buffer,"grid_y")==0) {
             val = fscanf(fp,"%s",buffer);
             if (val!=1 || strcmp(buffer,"=")!=0) {
@@ -376,7 +390,7 @@ void domain_param_input (const char *filenm,
             inparam->grid_z = ibuff;
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
         }
-        
+
         else if (strcmp(buffer,"grid_time")==0) {
             val = fscanf(fp,"%s",buffer);
             if (val!=1 || strcmp(buffer,"=")!=0) {
@@ -420,7 +434,7 @@ void domain_param_input (const char *filenm,
             strncpy(inparam->subdomain_file,sbuff,128);
             fgets(buffer,500,fp); // skip rest of line
         }
-        
+
         else if (strcmp(buffer,"surface_file")==0) {
             val = fscanf(fp,"%s",buffer);
             if (val!=1 || strcmp(buffer,"=")!=0) {
@@ -436,19 +450,19 @@ void domain_param_input (const char *filenm,
             printf("### WARNING: Unknown input keyword %s!\n", buffer);
             fgets(buffer,500,fp); // skip rest of line
         }
-        
-        
+
+
     }
 
     fclose(fp);
 
     // sanity checks
     status = domain_param_check(inparam);
-    
+
 #if DEBUG_MODE > 1
     printf("### DEBUG: Reading input status = %d\n", status);
 #endif
-    
+
     // if meet unexpected input, stop the program
     fasp_chkerr(status,"domain_param_input");
 }
@@ -493,7 +507,7 @@ SHORT coeff_param_input_init (coeff_param *inparam)
     inparam->temperature = 3.0e+2;
 
     inparam->relative_permittivity = 1.0;
-    
+
     inparam->cation_diffusivity = 1.0;
     inparam->cation_mobility = 1.0;
     inparam->cation_valency = 1.0;
@@ -526,7 +540,7 @@ SHORT coeff_param_check (coeff_param *inparam)
         || inparam->anion_diffusivity < 0.0
         || inparam->anion_mobility < 0.0
         ) status = ERROR_INPUT_PAR;
-    
+
     return status;
 }
 
@@ -546,13 +560,13 @@ void coeff_param_input (const char *filenm,
     char     buffer[500]; // Note: max number of char for each line!
     int      val;
     SHORT    status = FASP_SUCCESS;
-    
+
     // set default input parameters
     coeff_param_input_init(inparam);
 
     // if input file is not specified, use the default values
     if (filenm==NULL) return;
-    
+
     FILE *fp = fopen(filenm,"r");
     if (fp==NULL) {
         printf("### ERROR: Could not open file %s...\n", filenm);
@@ -563,7 +577,7 @@ void coeff_param_input (const char *filenm,
     while ( status == FASP_SUCCESS ) {
         double  dbuff;
         char   *fgetsPtr;
-        
+
         val = fscanf(fp,"%s",buffer);
         if (val==EOF) break;
         if (val!=1){ status = ERROR_INPUT_PAR; break; }
@@ -571,7 +585,7 @@ void coeff_param_input (const char *filenm,
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
             continue;
         }
-        
+
         // match keyword and scan for value
         if (strcmp(buffer,"ref_voltage")==0) {
             val = fscanf(fp,"%s",buffer);
@@ -687,19 +701,19 @@ void coeff_param_input (const char *filenm,
             printf("### WARNING: Unknown input keyword %s!\n", buffer);
             fgets(buffer,500,fp); // skip rest of line
         }
-        
-        
+
+
     }
 
     fclose(fp);
 
     // sanity checks
     status = coeff_param_check(inparam);
-    
+
 #if DEBUG_MODE > 1
     printf("### DEBUG: Reading input status = %d\n", status);
 #endif
-    
+
     // if meet unexpected input, stop the program
     fasp_chkerr(status,"coeff_param_input");
 }
@@ -747,7 +761,7 @@ void non_dimesionalize_coefficients (domain_param *domain,
 
   // solution scale
   non_dim_coeffs->ref_voltage = boltzmann * coeffs->temperature * coeffs->ref_voltage / e_chrg;
-  non_dim_coeffs->ref_density = (coeffs->ref_density > 0.0)? 
+  non_dim_coeffs->ref_density = (coeffs->ref_density > 0.0)?
     coeffs->ref_density : -(n_avo * coeffs->ref_density);
 
   // length scale
