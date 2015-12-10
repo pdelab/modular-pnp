@@ -19,9 +19,9 @@
 #include "L2Error.h"
 extern "C"
 {
-#include "fasp.h"
-#include "fasp_functs.h"
-#define FASP_BSR     ON  /** use BSR format in fasp */
+  #include "fasp.h"
+  #include "fasp_functs.h"
+  #define FASP_BSR     ON  /** use BSR format in fasp */
 }
 using namespace dolfin;
 // using namespace std;
@@ -31,7 +31,7 @@ double upper_cation_val = 1.0;  // 1 / m^3
 double lower_anion_val = 1.0;  // 1 / m^3
 double upper_anion_val = 0.1;  // 1 / m^3
 double lower_potential_val = -1.0;  // V
-double upper_potential_val = 1.0;  //
+double upper_potential_val = 1.0;  // V
 
 double update_solution_pnp (
   dolfin::Function* iterate0,
@@ -165,6 +165,7 @@ int main()
   dolfin::MeshFunction<std::size_t> surfaces;
   dolfin::File meshOut(domain_par.mesh_output);
   domain_build(&domain_par, &mesh0, &subdomains, &surfaces);
+  print_domain_param(&domain_par);
 
   // read coefficients and boundary values
   printf("\tcoefficients...\n"); fflush(stdout);
@@ -210,8 +211,26 @@ int main()
 
   // set adaptivity parameters
   dolfin::Mesh mesh(mesh0);
+  unsigned int num_adapts = 0;
   double entropy_tol = 1.0e-2;
   bool adaptive_convergence = false;
+
+
+  // simple testing
+  printf("\nTesting refinement...\n"); fflush(stdout);
+  meshOut << mesh;
+  bool refined;
+  refined = check_local_entropy (
+    &cation0,
+    &anion0,
+    &volt0,
+    &mesh,
+    entropy_tol
+  );
+  printf("\toutput refinement...\n"); fflush(stdout);
+  meshOut << mesh;
+  meshOut << mesh0;
+  printf("\tdone\n\n"); fflush(stdout);
 
   // adaptivity loop
   // while (!adaptive_convergence)
@@ -285,6 +304,8 @@ int main()
     // solve for voltage
     dolfin::Function potentialSolution(solutionFunction[2]);
     potentialSolution.interpolate(volt0);
+
+    // map dofs
     ivector cation_dofs;
     ivector anion_dofs;
     ivector potential_dofs;
@@ -486,6 +507,7 @@ int main()
     //   printf("\trefining...\n");
     //   while ( check_entropy(local_entropy, local_entropy_tol) ) {
     //     // refine mesh
+    //     num_adapts++;
     //   }
     // }
 

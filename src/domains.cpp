@@ -26,18 +26,18 @@ using namespace dolfin;
  *
  * \brief Compute the L2 norm of the residual vector
  *
- * \param domain_par 	parameters describing mesh
- * \param mesh 		 	mesh to be constructed
- * \param subdomains 	mesh subdomains to be constructed
- * \param surfaces	 	mesh surfaces to be constructed
+ * \param domain_par  parameters describing mesh
+ * \param mesh      mesh to be constructed
+ * \param subdomains  mesh subdomains to be constructed
+ * \param surfaces    mesh surfaces to be constructed
  */
 void domain_build (domain_param *domain_par,
-				           dolfin::Mesh *mesh,
-				           dolfin::MeshFunction<size_t> *subdomains,
-				           dolfin::MeshFunction<size_t> *surfaces)
+                   dolfin::Mesh *mesh,
+                   dolfin::MeshFunction<size_t> *subdomains,
+                   dolfin::MeshFunction<size_t> *surfaces)
 {
-	// no mesh provided: use length and grid parameters
-	if ( strcmp(domain_par->mesh_file,"none")==0 ) {
+  // no mesh provided: use length and grid parameters
+  if ( strcmp(domain_par->mesh_file,"none")==0 ) {
       fflush(stdout);
 
       // mesh
@@ -72,6 +72,37 @@ void domain_build (domain_param *domain_par,
       dolfin::MeshFunction<std::size_t>  surfaces_object(*mesh, domain_par->surface_file);
       *surfaces = surfaces_object;
     }*/
+}
+
+/**
+ * \fn bool check_local_entropy (dolfin::Function *cation,
+ *                               dolfin::Function *anion,
+ *                               dolfin::Function *voltage,
+ *                               dolfin::Mesh *target_mesh,
+ *                               double entropy_tol)
+ *
+ * \brief Check if local entropy is below tolerance and refine
+ *    mesh
+ *
+ * \param cation      cation function
+ * \param anion       anion function
+ * \param voltage     voltage function
+ * \param mesh        ptr to refined mesh
+ * \param entropy_tol mesh surfaces to be constructed
+ */
+bool check_local_entropy (dolfin::Function *cation,
+                          dolfin::Function *anion,
+                          dolfin::Function *voltage,
+                          dolfin::Mesh *target_mesh,
+                          double entropy_tol)
+{
+  // compute mesh from input voltage function and transfer
+  dolfin::Mesh mesh( *(voltage->function_space()->mesh()) );
+  // std::shared_ptr<const Mesh> FunctionSpace::mesh()
+  // *target_mesh = mesh;
+
+  *target_mesh = refine(mesh);
+  return true;
 }
 
 /*---------------------------------*/

@@ -62,6 +62,12 @@ void domain_build (domain_param *domain_par,
            dolfin::MeshFunction<size_t> *subdomains,
            dolfin::MeshFunction<size_t> *surfaces);
 
+bool check_local_entropy (dolfin::Function *cation,
+                          dolfin::Function *anion,
+                          dolfin::Function *voltage,
+                          dolfin::Mesh *target_mesh,
+                          double entropy_tol);
+
 #endif /* end if for __NEWTONFUNCTS_HEADER__ */
 
 /*---------------------------------*/
