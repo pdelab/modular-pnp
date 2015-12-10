@@ -120,7 +120,7 @@ class analyticAnionExpression : public Expression
     values[0]  = lower_anion_val * (5.0 - x[0]) / 10.0;
     values[0] += upper_anion_val * (x[0] + 5.0) / 10.0;
     values[0] += 1.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
-    values[0]  =std::log(values[0]);
+    values[0]  = std::log(values[0]);
   }
 };
 
@@ -130,7 +130,7 @@ class analyticPotentialExpression : public Expression
   {
     values[0]  = lower_potential_val * (5.0 - x[0]) / 10.0;
     values[0] += upper_potential_val * (x[0] + 5.0) / 10.0;
-    values[0] += -200.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
+    values[0] += -20.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
   }
 };
 
@@ -180,6 +180,17 @@ int main()
   char newton_param_file[] = "./benchmarks/PNP/newton_param.dat";
   newton_param_input (newton_param_file,&newtparam);
   print_newton_param(&newtparam);
+
+  // Setup FASP solver
+  printf("\tFASP solver parameters...\n"); fflush(stdout);
+  input_param inpar;
+  itsolver_param itpar;
+  AMG_param amgpar;
+  ILU_param ilupar;
+  char fasp_params[] = "./benchmarks/PNP/bsr.dat";
+  fasp_param_input(fasp_params, &inpar);
+  fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
+  INT status = FASP_SUCCESS;
 
   // open files for outputting solutions
   File cationFile("./benchmarks/PNP/output/cation.pvd");
@@ -346,17 +357,6 @@ int main()
     dCSRmat A_fasp;
     dBSRmat A_fasp_bsr;
     dvector b_fasp, solu_fasp;
-
-    // Setup FASP solver
-    printf("\tsetup FASP solver...\n"); fflush(stdout);
-    input_param inpar;
-    itsolver_param itpar;
-    AMG_param amgpar;
-    ILU_param ilupar;
-    char inputfile[] = "./benchmarks/PNP/bsr.dat";
-    fasp_param_input(inputfile, &inpar);
-    fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
-    INT status = FASP_SUCCESS;
 
     //*************************************************************
     //  Initialize Newton solver

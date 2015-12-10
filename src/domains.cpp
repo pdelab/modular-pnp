@@ -96,13 +96,12 @@ void domain_build (domain_param *domain_par,
  * \return            levels of refinement
  */
 unsigned int check_local_entropy (dolfin::Function *cation,
-                          dolfin::Function *anion,
-                          dolfin::Function *voltage,
-                          dolfin::Mesh *target_mesh,
-                          double entropy_tol)
+                                  dolfin::Function *anion,
+                                  dolfin::Function *voltage,
+                                  dolfin::Mesh *target_mesh,
+                                  double entropy_tol)
 {
   // compute mesh from input voltage function and transfer
-  printf("\tinitialize mesh, spaces, and forms...\n"); fflush(stdout);
   dolfin::Mesh mesh( *(voltage->function_space()->mesh()) );
   gradient_recovery::FunctionSpace gradient_space(mesh);
   gradient_recovery::BilinearForm a(gradient_space,gradient_space);
@@ -111,7 +110,6 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   dolfin::Function anion_entropy(gradient_space);
 
   // compute entropic potentials
-  printf("\tcompute entropy potentials...\n"); fflush(stdout);
   dolfin::Function cation_potential( *(voltage->function_space()) );
   cation_potential.interpolate(*voltage);
   *(cation_potential.vector()) *= +1.0;
@@ -121,31 +119,26 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   *(anion_potential.vector()) *= -1.0;
   *(anion_potential.vector()) += *(anion->vector());
 
-  // setup matrix
-  printf("\tlinear algebraic objects...\n"); fflush(stdout);
+  // setup matrix and rhs
   EigenMatrix A;
   assemble(A,a);
   dCSRmat A_fasp;
   EigenMatrix_to_dCSRmat(&A,&A_fasp);
   dBSRmat adaptA_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
+  EigenVector b;
+  dvector b_fasp, solu_fasp;
 
   // Setup FASP solver
-  printf("\tsetup FASP solver...\n"); fflush(stdout);
   input_param inpar;
   itsolver_param itpar;
   AMG_param amgpar;
   ILU_param ilupar;
-  char inputfile[] = "./benchmarks/PNP/bsr.dat";
-  fasp_param_input(inputfile, &inpar);
+  char fasp_param_file[] = "./src/gradient_recovery_bsr.dat";
+  fasp_param_input(fasp_param_file, &inpar);
   fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
   INT status = FASP_SUCCESS;
 
-  // setup RHS
-  EigenVector b;
-  dvector b_fasp, solu_fasp;
-
   // set form for cation
-  printf("\tset form...\n"); fflush(stdout);
   L.potential = cation_potential;
   assemble(b,L);
   EigenVector_to_dvector(&b,&b_fasp);
@@ -155,10 +148,8 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
   status = fasp_solver_dbsr_krylov_diag(&adaptA_fasp_bsr, &b_fasp, &solu_fasp, &itpar);
   copy_dvector_to_Function(&solu_fasp, &cation_entropy);
-  // solve(a==L, cation_entropy);
 
   // set form for anion
-  printf("\tset form...\n"); fflush(stdout);
   L.potential = anion_potential;
   assemble(b,L);
   EigenVector_to_dvector(&b,&b_fasp);
@@ -167,15 +158,13 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
   status = fasp_solver_dbsr_krylov_diag(&adaptA_fasp_bsr, &b_fasp, &solu_fasp, &itpar);
   copy_dvector_to_Function(&solu_fasp, &anion_entropy);
-  // solve(a==L, anion_entropy);
 
   // output entropy
-  File entropyFile("./benchmarks/PNP/output/entropy.pvd");
-  entropyFile << cation_entropy;
-  entropyFile << anion_entropy;
+  // File entropyFile("./benchmarks/PNP/output/entropy.pvd");
+  // entropyFile << cation_entropy;
+  // entropyFile << anion_entropy;
 
   // compute entropic error
-  printf("\tcompute entropic error...\n"); fflush(stdout);
   poisson_cell_marker::FunctionSpace DG(mesh);
   poisson_cell_marker::LinearForm error_form(DG);
   error_form.cat_entr = cation_entropy;
@@ -186,7 +175,6 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   assemble(error_vector, error_form);
 
   // mark for refinement
-  printf("\tmark for refinement...\n"); fflush(stdout);
   MeshFunction<bool> cell_marker(mesh, 3, false);
   unsigned int marked_elem_count = 0;
   for ( uint errVecInd = 0; errVecInd < error_vector.size(); errVecInd++) {
@@ -195,19 +183,15 @@ unsigned int check_local_entropy (dolfin::Function *cation,
         cell_marker.values()[errVecInd] = true;
     }
   }
-  File marked_elem_file("./benchmarks/PNP/output/marker.pvd");
-  marked_elem_file << cell_marker;
+  // File marked_elem_file("./benchmarks/PNP/output/marker.pvd");
+  // marked_elem_file << cell_marker;
 
   // check for necessary refiments
   if ( marked_elem_count == 0 ) {
-    printf("\tno marked elements!\n"); fflush(stdout);
     *target_mesh = mesh;
     return 0;
   }
   else {
-    printf("\t%d marked elements\n", marked_elem_count); fflush(stdout);
-    printf("\trefining...\n"); fflush(stdout);
-
     // adapt mesh and function space
     std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(refine(mesh, cell_marker)) );
     dolfin::FunctionSpace adapt_function_space( adapt(*(voltage->function_space()), mesh_ptr) );
@@ -220,7 +204,6 @@ unsigned int check_local_entropy (dolfin::Function *cation,
     adapt_anion.interpolate(*anion);
     adapt_voltage.interpolate(*voltage);
 
-    printf("\trecursive call...\n"); fflush(stdout);
     unsigned int num_refines = 0;
     num_refines = check_local_entropy(
       &adapt_cation,
