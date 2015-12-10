@@ -17,6 +17,7 @@
 #include "newton.h"
 #include "newton_functs.h"
 #include "L2Error.h"
+#include "L2Error_3.h"
 extern "C"
 {
   #include "fasp.h"
@@ -358,6 +359,11 @@ int main()
 
     // need to compute functional norm to avoid vector length
     double residual = b_pnp.norm("l2");
+    // L2 norm with mesh: DOES NOT CONVERGES
+    // dolfin::Function L2_b_pnp(V);
+    // *(L2_b_pnp.vector())=b_pnp;
+    // L2Error_3::Form_M L2residual(mesh,L2_b_pnp);
+    // residual = assemble(L2residual);
     if (num_adapts == 0) {
       initial_residual = residual;
       printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
@@ -454,6 +460,10 @@ int main()
       assemble(b_pnp, L_pnp);
       bc.apply(b_pnp);
       relative_residual = b_pnp.norm("l2") / initial_residual;
+      // L2 norm with mesh: DOES NOT CONVERGES
+      // *(L2_b_pnp.vector())=b_pnp;
+      // L2Error_3::Form_M L2residual(mesh,L2_b_pnp);
+      // relative_residual = assemble(L2residual)  / initial_residual;
 
       if (newton_iteration == 1)
         printf("\trelative nonlinear residual after 1 iteration has l2-norm of %e\n", relative_residual);
@@ -523,7 +533,7 @@ int main()
       adaptive_convergence = true;
       break;
     }
-    
+
     // adapt solutions to refined mesh
     if (num_refines == 1) {
       printf("\nAdapting the mesh using one level of local refinement...\n"); fflush(stdout);
@@ -536,7 +546,7 @@ int main()
     anion0 = adapt(anionSolution, mesh_ptr);
     potential0 = adapt(potentialSolution, mesh_ptr);
     mesh = mesh0;
-    mesh.bounding_box_tree()->build(mesh); // to ensure teh building_box_tree is correctly indexed
+    mesh.bounding_box_tree()->build(mesh); // to ensure the building_box_tree is correctly indexed
 
   }
 
