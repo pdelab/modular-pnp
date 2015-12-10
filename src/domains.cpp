@@ -8,6 +8,7 @@
 #include <string.h>
 #include <dolfin.h>
 #include "newton.h"
+#include "gradient_recovery.h"
 extern "C"
 {
 #include "fasp.h"
@@ -97,9 +98,39 @@ bool check_local_entropy (dolfin::Function *cation,
                           double entropy_tol)
 {
   // compute mesh from input voltage function and transfer
+  printf("\tinitialize mesh, spaces, and forms...\n"); fflush(stdout);
   dolfin::Mesh mesh( *(voltage->function_space()->mesh()) );
-  // std::shared_ptr<const Mesh> FunctionSpace::mesh()
-  // *target_mesh = mesh;
+  gradient_recovery::FunctionSpace gradient_space(mesh);
+  gradient_recovery::BilinearForm a(gradient_space,gradient_space);
+  gradient_recovery::LinearForm L(gradient_space);
+  dolfin::Function cation_entropy(gradient_space);
+  dolfin::Function anion_entropy(gradient_space);
+
+  // compute entropic potentials
+  printf("\tcompute entropy potentials...\n"); fflush(stdout);
+  dolfin::Function cation_potential( *(voltage->function_space()) );
+  cation_potential.interpolate(*voltage);
+  *(cation_potential.vector()) *= +1.0;
+  *(cation_potential.vector()) += *(cation->vector());
+  dolfin::Function anion_potential( *(voltage->function_space()) );
+  anion_potential.interpolate(*voltage);
+  *(anion_potential.vector()) *= -1.0;
+  *(anion_potential.vector()) += *(anion->vector());
+
+  // compute entropy
+  printf("\tset form...\n"); fflush(stdout);
+  L.potential = cation_potential;
+  printf("\tsolve for cation entropy...\n"); fflush(stdout);
+  solve(a==L, cation_entropy);
+
+  printf("\tset form...\n"); fflush(stdout);
+  L.potential = anion_potential;
+  printf("\tsolve for anion entropy...\n"); fflush(stdout);
+  solve(a==L, anion_entropy);
+
+  File entropyFile("./benchmarks/PNP/output/entropy.pvd");
+  entropyFile << cation_entropy;
+  entropyFile << anion_entropy;
 
   *target_mesh = refine(mesh);
   return true;

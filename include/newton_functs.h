@@ -11,6 +11,7 @@
 #include <string.h>
 #include <dolfin.h>
 #include "newton.h"
+#include "gradient_recovery.h"
 extern "C"
 {
 #include "fasp.h"
