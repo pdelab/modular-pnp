@@ -1,0 +1,14 @@
+# Compile this form with FFC: ffc -O -l dolfin poisson_cell_marker.ufl.
+
+element = FiniteElement("Lagrange", tetrahedron, 1)
+vector  = VectorElement("Lagrange", tetrahedron, 1)
+DG = FiniteElement("DG", tetrahedron, 0)
+
+v  = TestFunction(DG)
+cat_pot  = Coefficient(element)
+cat_entr = Coefficient(vector)
+an_pot  = Coefficient(element)
+an_entr = Coefficient(vector)
+
+L = inner(grad(cat_pot)-cat_entr, grad(cat_pot)-cat_entr) * v * dx \
+  + inner(grad(an_pot)-an_entr, grad(an_pot)-an_entr) * v * dx

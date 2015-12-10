@@ -12,6 +12,7 @@
 #include <dolfin.h>
 #include "newton.h"
 #include "gradient_recovery.h"
+#include "poisson_cell_marker.h"
 extern "C"
 {
 #include "fasp.h"
@@ -63,11 +64,11 @@ void domain_build (domain_param *domain_par,
            dolfin::MeshFunction<size_t> *subdomains,
            dolfin::MeshFunction<size_t> *surfaces);
 
-bool check_local_entropy (dolfin::Function *cation,
-                          dolfin::Function *anion,
-                          dolfin::Function *voltage,
-                          dolfin::Mesh *target_mesh,
-                          double entropy_tol);
+unsigned int check_local_entropy (dolfin::Function *cation,
+                                  dolfin::Function *anion,
+                                  dolfin::Function *voltage,
+                                  dolfin::Mesh *target_mesh,
+                                  double entropy_tol);
 
 #endif /* end if for __NEWTONFUNCTS_HEADER__ */
 

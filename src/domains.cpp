@@ -9,6 +9,7 @@
 #include <dolfin.h>
 #include "newton.h"
 #include "gradient_recovery.h"
+#include "poisson_cell_marker.h"
 extern "C"
 {
 #include "fasp.h"
@@ -90,8 +91,10 @@ void domain_build (domain_param *domain_par,
  * \param voltage     voltage function
  * \param mesh        ptr to refined mesh
  * \param entropy_tol mesh surfaces to be constructed
+ *
+ * \return            levels of refinement
  */
-bool check_local_entropy (dolfin::Function *cation,
+unsigned int check_local_entropy (dolfin::Function *cation,
                           dolfin::Function *anion,
                           dolfin::Function *voltage,
                           dolfin::Mesh *target_mesh,
@@ -128,12 +131,47 @@ bool check_local_entropy (dolfin::Function *cation,
   printf("\tsolve for anion entropy...\n"); fflush(stdout);
   solve(a==L, anion_entropy);
 
+  // output entropy
   File entropyFile("./benchmarks/PNP/output/entropy.pvd");
   entropyFile << cation_entropy;
   entropyFile << anion_entropy;
 
-  *target_mesh = refine(mesh);
-  return true;
+  // compute entropic error
+  printf("\tcompute entropic error...\n"); fflush(stdout);
+  poisson_cell_marker::FunctionSpace DG(mesh);
+  poisson_cell_marker::LinearForm error_form(DG);
+  error_form.cat_entr = cation_entropy;
+  error_form.cat_pot  = cation_potential;
+  error_form.an_entr = anion_entropy;
+  error_form.an_pot  = anion_potential;
+  dolfin::EigenVector error_vector;
+  assemble(error_vector, error_form);
+
+  // mark for refinement
+  printf("\tmark for refinement...\n"); fflush(stdout);
+  MeshFunction<bool> cell_marker(mesh, 3, false);
+  unsigned int marked_elem_count = 0;
+  for ( uint errVecInd = 0; errVecInd < error_vector.size(); errVecInd++) {
+    if ( error_vector[errVecInd] > entropy_tol ) {
+        marked_elem_count++;
+        cell_marker.values()[errVecInd] = true;
+    }
+  }
+  File marked_elem_file("./benchmarks/PNP/output/marker.pvd");
+  marked_elem_file << cell_marker;
+
+  // check for necessary refiments
+  if ( marked_elem_count == 0 ) {
+    printf("\tno marked elements!\n"); fflush(stdout);
+    *target_mesh = mesh;
+    return 0;
+  }
+  else {
+    printf("\t%d marked elements\n", marked_elem_count); fflush(stdout);
+    printf("\trefining...\n"); fflush(stdout);
+    *target_mesh = refine(mesh, cell_marker);
+    return 1;
+  }
 }
 
 /*---------------------------------*/

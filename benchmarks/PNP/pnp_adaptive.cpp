@@ -202,12 +202,22 @@ int main()
   printf("\tinterpolate analytic expressions onto initial mesh...\n"); fflush(stdout);
   pnp_and_source::FunctionSpace V0(mesh0);
   dolfin::Function solutionFunction0(V0);
+
+  // analytic solution
+  analyticCationExpression cationExpression0;
+  analyticAnionExpression anionExpression0;
+  analyticPotentialExpression potentialExpression0;
+
+
   dolfin::Function cation0(solutionFunction0[0]);
-  cation0.interpolate(Cation);
+  // cation0.interpolate(Cation);
+  cation0.interpolate(cationExpression0);
   dolfin::Function anion0(solutionFunction0[1]);
-  anion0.interpolate(Anion);
+  // anion0.interpolate(Anion);
+  anion0.interpolate(anionExpression0);
   dolfin::Function volt0(solutionFunction0[2]);
-  volt0.interpolate(Volt);
+  // volt0.interpolate(Volt);
+  volt0.interpolate(potentialExpression0);
 
   // set adaptivity parameters
   dolfin::Mesh mesh(mesh0);
@@ -220,8 +230,8 @@ int main()
   printf("\nTesting refinement...\n"); fflush(stdout);
   meshOut << mesh;
   potentialFile << volt0;
-  bool refined;
-  refined = check_local_entropy (
+  unsigned int num_refines;
+  num_refines = check_local_entropy (
     &cation0,
     &anion0,
     &volt0,
@@ -233,6 +243,8 @@ int main()
   meshOut << mesh0;
   potentialFile << volt0;
   printf("\tdone\n\n"); fflush(stdout);
+
+  return 0;
 
   // adaptivity loop
   // while (!adaptive_convergence)
