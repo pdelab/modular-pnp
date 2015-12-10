@@ -13,6 +13,7 @@
 #include "newton.h"
 #include "gradient_recovery.h"
 #include "poisson_cell_marker.h"
+#include "fasp_to_fenics.h"
 extern "C"
 {
 #include "fasp.h"

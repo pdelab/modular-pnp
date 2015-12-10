@@ -10,6 +10,7 @@
 #include "newton.h"
 #include "gradient_recovery.h"
 #include "poisson_cell_marker.h"
+#include "fasp_to_fenics.h"
 extern "C"
 {
 #include "fasp.h"
@@ -120,16 +121,53 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   *(anion_potential.vector()) *= -1.0;
   *(anion_potential.vector()) += *(anion->vector());
 
-  // compute entropy
+  // setup matrix
+  printf("\tlinear algebraic objects...\n"); fflush(stdout);
+  EigenMatrix A;
+  assemble(A,a);
+  dCSRmat A_fasp;
+  EigenMatrix_to_dCSRmat(&A,&A_fasp);
+  dBSRmat adaptA_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
+
+  // Setup FASP solver
+  printf("\tsetup FASP solver...\n"); fflush(stdout);
+  input_param inpar;
+  itsolver_param itpar;
+  AMG_param amgpar;
+  ILU_param ilupar;
+  char inputfile[] = "./benchmarks/PNP/bsr.dat";
+  fasp_param_input(inputfile, &inpar);
+  fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
+  INT status = FASP_SUCCESS;
+
+  // setup RHS
+  EigenVector b;
+  dvector b_fasp, solu_fasp;
+
+  // set form for cation
   printf("\tset form...\n"); fflush(stdout);
   L.potential = cation_potential;
-  printf("\tsolve for cation entropy...\n"); fflush(stdout);
-  solve(a==L, cation_entropy);
+  assemble(b,L);
+  EigenVector_to_dvector(&b,&b_fasp);
+  fasp_dvec_alloc(b.size(), &solu_fasp);
 
+  // solve for cation entropy
+  fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
+  status = fasp_solver_dbsr_krylov_diag(&adaptA_fasp_bsr, &b_fasp, &solu_fasp, &itpar);
+  copy_dvector_to_Function(&solu_fasp, &cation_entropy);
+  // solve(a==L, cation_entropy);
+
+  // set form for anion
   printf("\tset form...\n"); fflush(stdout);
   L.potential = anion_potential;
-  printf("\tsolve for anion entropy...\n"); fflush(stdout);
-  solve(a==L, anion_entropy);
+  assemble(b,L);
+  EigenVector_to_dvector(&b,&b_fasp);
+
+  // solve for anion entropy
+  fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
+  status = fasp_solver_dbsr_krylov_diag(&adaptA_fasp_bsr, &b_fasp, &solu_fasp, &itpar);
+  copy_dvector_to_Function(&solu_fasp, &anion_entropy);
+  // solve(a==L, anion_entropy);
 
   // output entropy
   File entropyFile("./benchmarks/PNP/output/entropy.pvd");
