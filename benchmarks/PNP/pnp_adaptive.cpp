@@ -219,6 +219,7 @@ int main()
   // simple testing
   printf("\nTesting refinement...\n"); fflush(stdout);
   meshOut << mesh;
+  potentialFile << volt0;
   bool refined;
   refined = check_local_entropy (
     &cation0,
@@ -230,6 +231,7 @@ int main()
   printf("\toutput refinement...\n"); fflush(stdout);
   meshOut << mesh;
   meshOut << mesh0;
+  potentialFile << volt0;
   printf("\tdone\n\n"); fflush(stdout);
 
   // adaptivity loop
