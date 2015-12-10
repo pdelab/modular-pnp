@@ -130,7 +130,7 @@ class analyticPotentialExpression : public Expression
   {
     values[0]  = lower_potential_val * (5.0 - x[0]) / 10.0;
     values[0] += upper_potential_val * (x[0] + 5.0) / 10.0;
-    values[0] += -20.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
+    values[0] += -200.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
   }
 };
 
@@ -238,6 +238,7 @@ int main()
     &mesh,
     entropy_tol
   );
+  printf("\trefined %d times...\n", num_refines); fflush(stdout);
   printf("\toutput refinement...\n"); fflush(stdout);
   meshOut << mesh;
   meshOut << mesh0;

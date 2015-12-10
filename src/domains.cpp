@@ -169,8 +169,29 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   else {
     printf("\t%d marked elements\n", marked_elem_count); fflush(stdout);
     printf("\trefining...\n"); fflush(stdout);
-    *target_mesh = refine(mesh, cell_marker);
-    return 1;
+
+    // adapt mesh and function space
+    std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(refine(mesh, cell_marker)) );
+    dolfin::FunctionSpace adapt_function_space( adapt(*(voltage->function_space()), mesh_ptr) );
+
+    // adapt functions
+    dolfin::Function adapt_cation( adapt_function_space );
+    dolfin::Function adapt_anion( adapt_function_space );
+    dolfin::Function adapt_voltage( adapt_function_space );
+    adapt_cation.interpolate(*cation);
+    adapt_anion.interpolate(*anion);
+    adapt_voltage.interpolate(*voltage);
+
+    printf("\trecursive call...\n"); fflush(stdout);
+    unsigned int num_refines = 0;
+    num_refines = check_local_entropy(
+      &adapt_cation,
+      &adapt_anion,
+      &adapt_voltage,
+      target_mesh,
+      entropy_tol
+    );
+    return 1+num_refines;
   }
 }
 
