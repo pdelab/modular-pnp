@@ -180,6 +180,7 @@ int main()
   char newton_param_file[] = "./benchmarks/PNP/newton_param.dat";
   newton_param_input (newton_param_file,&newtparam);
   print_newton_param(&newtparam);
+  double initial_residual, relative_residual = 1.0;
 
   // Setup FASP solver
   printf("\tFASP solver parameters...\n"); fflush(stdout);
@@ -203,7 +204,7 @@ int main()
   LogCharge Cation(lower_cation_val, upper_cation_val, -domain_par.length_x/2.0, domain_par.length_x/2.0, dirichlet_coord);
   LogCharge Anion(lower_anion_val, upper_anion_val, -domain_par.length_x/2.0, domain_par.length_x/2.0, dirichlet_coord);
 
-  // solve for voltage
+  // not ideal implementation: replace by a solve for voltage below
   Voltage Volt(lower_potential_val, upper_potential_val, -domain_par.length_x/2.0, domain_par.length_x/2.0, dirichlet_coord);
 
   //*************************************************************
@@ -221,46 +222,27 @@ int main()
 
 
   dolfin::Function cation0(solutionFunction0[0]);
-  // cation0.interpolate(Cation);
-  cation0.interpolate(cationExpression0);
+  cation0.interpolate(Cation);
+  // cation0.interpolate(cationExpression0);
   dolfin::Function anion0(solutionFunction0[1]);
-  // anion0.interpolate(Anion);
-  anion0.interpolate(anionExpression0);
-  dolfin::Function volt0(solutionFunction0[2]);
-  // volt0.interpolate(Volt);
-  volt0.interpolate(potentialExpression0);
+  anion0.interpolate(Anion);
+  // anion0.interpolate(anionExpression0);
+  dolfin::Function potential0(solutionFunction0[2]);
+  potential0.interpolate(Volt);
+  // potential0.interpolate(potentialExpression0);
 
   // set adaptivity parameters
   dolfin::Mesh mesh(mesh0);
-  unsigned int num_adapts = 0;
-  double entropy_tol = 1.0e-2;
+  double entropy_tol = 1.0e-4;
+  unsigned int num_adapts = 0, max_adapts = 5;
   bool adaptive_convergence = false;
 
-
-  // simple testing
-  printf("\nTesting refinement...\n"); fflush(stdout);
-  meshOut << mesh;
-  potentialFile << volt0;
-  unsigned int num_refines;
-  num_refines = check_local_entropy (
-    &cation0,
-    &anion0,
-    &volt0,
-    &mesh,
-    entropy_tol
-  );
-  printf("\trefined %d times...\n", num_refines); fflush(stdout);
-  printf("\toutput refinement...\n"); fflush(stdout);
-  meshOut << mesh;
-  meshOut << mesh0;
-  potentialFile << volt0;
-  printf("\tdone\n\n"); fflush(stdout);
-
-  return 0;
-
   // adaptivity loop
-  // while (!adaptive_convergence)
+  while (!adaptive_convergence)
   {
+    // output mesh
+    meshOut << mesh;
+
     // Initialize variational forms
     printf("\tvariational forms...\n"); fflush(stdout);
     pnp_and_source::FunctionSpace V(mesh);
@@ -296,12 +278,12 @@ int main()
     analyticCationExpression cationExpression;
     analyticAnionExpression anionExpression;
     analyticPotentialExpression potentialExpression;
-    analyticCation.interpolate(cationExpression);
-    analyticAnion.interpolate(anionExpression);
-    analyticPotential.interpolate(potentialExpression);
-    // analyticCation.interpolate(zero);
-    // analyticAnion.interpolate(zero);
-    // analyticPotential.interpolate(zero);
+    // analyticCation.interpolate(cationExpression);
+    // analyticAnion.interpolate(anionExpression);
+    // analyticPotential.interpolate(potentialExpression);
+    analyticCation.interpolate(zero);
+    analyticAnion.interpolate(zero);
+    analyticPotential.interpolate(zero);
     L_pnp.cation = analyticCation;
     L_pnp.anion = analyticAnion;
     L_pnp.potential = analyticPotential;
@@ -329,7 +311,7 @@ int main()
 
     // solve for voltage
     dolfin::Function potentialSolution(solutionFunction[2]);
-    potentialSolution.interpolate(volt0);
+    potentialSolution.interpolate(potential0);
 
     // map dofs
     ivector cation_dofs;
@@ -373,9 +355,17 @@ int main()
     L_pnp.EsEs = potentialSolution;
     assemble(b_pnp, L_pnp);
     bc.apply(b_pnp);
-    double initial_residual = b_pnp.norm("l2");
-    double relative_residual = 1.0;
-    printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
+
+    // need to compute functional norm to avoid vector length
+    double residual = b_pnp.norm("l2");
+    if (num_adapts == 0) {
+      initial_residual = residual;
+      printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
+    }
+    else {
+      relative_residual = residual / initial_residual;
+      printf("\tadapted relative nonlinear residual is %e\n", relative_residual);
+    }
 
     fasp_dvec_alloc(b_pnp.size(), &solu_fasp);
     printf("\tinitialized succesfully!\n\n"); fflush(stdout);
@@ -512,19 +502,41 @@ int main()
 
     // compute local entropy and refine mesh
     printf("Computing local entropy for refinement\n");
-    // local_entropy = compute_local_entropy(cation0,anion0,volt0)
-    // if ( check_entropy(local_entropy) ) {
-    //   adaptive_convergence = true;
-    //   printf("Local entropy below desired threshold!\n\n");
-    // }
-    // else {
-    //   printf("Local entropy is not globally below desired threshold!\n");
-    //   printf("\trefining...\n");
-    //   while ( check_entropy(local_entropy, local_entropy_tol) ) {
-    //     // refine mesh
-    //     num_adapts++;
-    //   }
-    // }
+    unsigned int num_refines;
+    num_refines = check_local_entropy (
+      &cationSolution,
+      &anionSolution,
+      &potentialSolution,
+      &mesh0,
+      entropy_tol
+    );
+
+    if (num_refines == 0) {
+      // successful solve
+      printf("\n\nSuccessfully distributed entropy below desired entropy in %d adapts!\n\n", num_adapts);
+      adaptive_convergence = true;
+      break;
+    }
+    else if ( ++num_adapts > max_adapts ) {
+      // failed adaptivity
+      printf("\nDid not adapt mesh to entropy in %d adapts...\n", max_adapts);
+      adaptive_convergence = true;
+      break;
+    }
+    
+    // adapt solutions to refined mesh
+    if (num_refines == 1) {
+      printf("\nAdapting the mesh using one level of local refinement...\n"); fflush(stdout);
+    }
+    else {
+      printf("\nAdapting the mesh using %d levels of local refinement...\n", num_refines); fflush(stdout);
+    }
+    std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(mesh0) );
+    cation0 = adapt(cationSolution, mesh_ptr);
+    anion0 = adapt(anionSolution, mesh_ptr);
+    potential0 = adapt(potentialSolution, mesh_ptr);
+    mesh = mesh0;
+    mesh.bounding_box_tree()->build(mesh); // to ensure teh building_box_tree is correctly indexed
 
   }
 
