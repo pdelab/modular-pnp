@@ -21,7 +21,7 @@ make test_lin_pnp
 make test_lin_pnp_eafe
 make test_pnp
 make test_pnp_eafe
-make test_newton_params
+make test_newton_param
 
 echo
 echo "Running unit tests..."
@@ -38,7 +38,7 @@ if [ "$1"=="DEBUG" ]; then
 	./test_lin_pnp_eafe $1
 	./test_pnp $1
 	./test_pnp_eafe $1
-	./test_newton_params $1
+	./test_newton_param $1
 else
 	./test_eafe
 	./test_faspfenics
@@ -51,7 +51,7 @@ else
 	./test_lin_pnp_eafe
 	./test_pnp
 	./test_pnp_eafe
-	./test_newton_params
+	./test_newton_param
 fi
 
 

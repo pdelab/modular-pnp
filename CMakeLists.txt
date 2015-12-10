@@ -64,7 +64,7 @@ add_executable(test_lin_pnp ./tests/linearized_pnp_tests/test_lin_pnp.cpp ${SRC_
 add_executable(test_lin_pnp_eafe ./tests/linearized_pnp_tests/test_lin_pnp_eafe.cpp ${SRC_DIR})
 add_executable(test_pnp ./tests/pnp_tests/test_pnp.cpp ${SRC_DIR})
 add_executable(test_pnp_eafe ./tests/pnp_tests/test_pnp_eafe.cpp ${SRC_DIR})
-add_executable(test_newton_params ./tests/newton_param_tests/test_newton_param.cpp ${SRC_DIR})
+add_executable(test_newton_param ./tests/newton_param_tests/test_newton_param.cpp ${SRC_DIR})
 
 add_executable(lin_pnp_eafe ./benchmarks/linear_PNP/lin_pnp_EAFE.cpp ${SRC_DIR})
 add_executable(lin_pnp ./benchmarks/linear_PNP/lin_pnp.cpp ${SRC_DIR})
@@ -102,7 +102,9 @@ add_executable(newton_poisson ./benchmarks/Newton_Poisson/newton_poisson.cpp ${S
 # target_link_libraries(pnp ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 # target_link_libraries(pnp_eafe ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 # target_link_libraries(pnp_eafe2 ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
+# target_link_libraries(pnp_adapt ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
 # target_link_libraries(newton_poisson ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB})
+
 
 #### WEIRD OSX TARGET
 target_link_libraries(lin_pnp ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} "/opt/local/lib/gcc49/gcc/x86_64-apple-darwin14/4.9.3/libgcc.a" "/opt/local/lib/gcc49/libquadmath.a" "/opt/local/lib/gcc49/libgfortran.a")
