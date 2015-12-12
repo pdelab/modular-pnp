@@ -45,63 +45,7 @@ double update_solution_pnp (
   double initial_residual,
   pnp_and_source::LinearForm* L,
   const dolfin::DirichletBC* bc,
-  newton_param* params )
-{
-  // compute residual
-  dolfin::Function _iterate0(*iterate0);
-  dolfin::Function _iterate1(*iterate1);
-  dolfin::Function _iterate2(*iterate2);
-  dolfin::Function _update0(*update0);
-  dolfin::Function _update1(*update1);
-  dolfin::Function _update2(*update2);
-  update_solution(&_iterate0, &_update0);
-  update_solution(&_iterate1, &_update1);
-  update_solution(&_iterate2, &_update2);
-  L->CatCat = _iterate0;
-  L->AnAn = _iterate1;
-  L->EsEs = _iterate2;
-  dolfin::EigenVector b;
-  assemble(b, *L);
-  bc->apply(b);
-  double new_relative_residual = b.norm("l2") / initial_residual;
-
-  // backtrack loop
-  unsigned int damp_iters = 1;
-  printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
-
-  while (
-    new_relative_residual > relative_residual && damp_iters < params->damp_it )
-  {
-    damp_iters++;
-    *(_iterate0.vector()) = *(iterate0->vector());
-    *(_iterate1.vector()) = *(iterate1->vector());
-    *(_iterate2.vector()) = *(iterate2->vector());
-    *(_update0.vector()) *= params->damp_factor;
-    *(_update1.vector()) *= params->damp_factor;
-    *(_update2.vector()) *= params->damp_factor;
-    update_solution(&_iterate0, &_update0);
-    update_solution(&_iterate1, &_update1);
-    update_solution(&_iterate2, &_update2);
-    L->CatCat = _iterate0;
-    L->AnAn = _iterate1;
-    L->EsEs = _iterate2;
-    assemble(b, *L);
-    bc->apply(b);
-    new_relative_residual = b.norm("l2") / initial_residual;
-    printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
-  }
-
-  // check for decrease
-  if ( new_relative_residual > relative_residual )
-    return -new_relative_residual;
-
-  // update iterates
-  printf("\taccepted update after damping %d times\n", damp_iters);
-  *(iterate0->vector()) = *(_iterate0.vector());
-  *(iterate1->vector()) = *(_iterate1.vector());
-  *(iterate2->vector()) = *(_iterate2.vector());
-  return new_relative_residual;
-}
+  newton_param* params);
 
 class analyticCationExpression : public Expression
 {
@@ -515,7 +459,9 @@ int main()
     unsigned int num_refines;
     num_refines = check_local_entropy (
       &cationSolution,
+      coeff_par.cation_valency,
       &anionSolution,
+      coeff_par.anion_valency,
       &potentialSolution,
       &mesh0,
       entropy_tol
@@ -555,4 +501,73 @@ int main()
   printf("\n-----------------------------------------------------------\n\n"); fflush(stdout);
 
   return 0;
+}
+
+double update_solution_pnp (
+  dolfin::Function* iterate0,
+  dolfin::Function* iterate1,
+  dolfin::Function* iterate2,
+  dolfin::Function* update0,
+  dolfin::Function* update1,
+  dolfin::Function* update2,
+  double relative_residual,
+  double initial_residual,
+  pnp_and_source::LinearForm* L,
+  const dolfin::DirichletBC* bc,
+  newton_param* params )
+{
+  // compute residual
+  dolfin::Function _iterate0(*iterate0);
+  dolfin::Function _iterate1(*iterate1);
+  dolfin::Function _iterate2(*iterate2);
+  dolfin::Function _update0(*update0);
+  dolfin::Function _update1(*update1);
+  dolfin::Function _update2(*update2);
+  update_solution(&_iterate0, &_update0);
+  update_solution(&_iterate1, &_update1);
+  update_solution(&_iterate2, &_update2);
+  L->CatCat = _iterate0;
+  L->AnAn = _iterate1;
+  L->EsEs = _iterate2;
+  dolfin::EigenVector b;
+  assemble(b, *L);
+  bc->apply(b);
+  double new_relative_residual = b.norm("l2") / initial_residual;
+
+  // backtrack loop
+  unsigned int damp_iters = 1;
+  printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
+
+  while (
+    new_relative_residual > relative_residual && damp_iters < params->damp_it )
+  {
+    damp_iters++;
+    *(_iterate0.vector()) = *(iterate0->vector());
+    *(_iterate1.vector()) = *(iterate1->vector());
+    *(_iterate2.vector()) = *(iterate2->vector());
+    *(_update0.vector()) *= params->damp_factor;
+    *(_update1.vector()) *= params->damp_factor;
+    *(_update2.vector()) *= params->damp_factor;
+    update_solution(&_iterate0, &_update0);
+    update_solution(&_iterate1, &_update1);
+    update_solution(&_iterate2, &_update2);
+    L->CatCat = _iterate0;
+    L->AnAn = _iterate1;
+    L->EsEs = _iterate2;
+    assemble(b, *L);
+    bc->apply(b);
+    new_relative_residual = b.norm("l2") / initial_residual;
+    printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
+  }
+
+  // check for decrease
+  if ( new_relative_residual > relative_residual )
+    return -new_relative_residual;
+
+  // update iterates
+  printf("\taccepted update after damping %d times\n", damp_iters);
+  *(iterate0->vector()) = *(_iterate0.vector());
+  *(iterate1->vector()) = *(_iterate1.vector());
+  *(iterate2->vector()) = *(_iterate2.vector());
+  return new_relative_residual;
 }

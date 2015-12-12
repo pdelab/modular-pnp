@@ -45,8 +45,8 @@ set(FASP4NS_INCLUDE_DIR ${FASP4NS_DIR}/include)
 include_directories(${DOLFIN_INCLUDE_DIRS} ${FASP_INCLUDE_DIR} ${FASP4NS_INCLUDE_DIR} ./include)
 include_directories(SYSTEM ${DOLFIN_3RD_PARTY_INCLUDE_DIRS})
 
-# WEIRD OS X TARGET
-#set(OSX_TARGET "/opt/local/lib/gcc49/gcc/x86_64-apple-darwin14/4.9.3/libgcc.a" "/opt/local/lib/gcc49/libquadmath.a" "/opt/local/lib/gcc49/libgfortran.a")
+# Awesome OSX TARGET
+set(OSX_TARGET "/opt/local/lib/gcc49/gcc/x86_64-apple-darwin14/4.9.3/libgcc.a" "/opt/local/lib/gcc49/libquadmath.a" "/opt/local/lib/gcc49/libgfortran.a")
 
 # Executables
 add_executable(aux_test_reading ./aux/test_reading/aux_test_reading.cpp ${SRC_DIR})

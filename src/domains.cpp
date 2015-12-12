@@ -87,16 +87,20 @@ void domain_build (domain_param *domain_par,
  * \brief Check if local entropy is below tolerance and refine
  *    mesh
  *
- * \param cation      cation function
- * \param anion       anion function
- * \param voltage     voltage function
- * \param mesh        ptr to refined mesh
- * \param entropy_tol mesh surfaces to be constructed
+ * \param cation          cation function
+ * \param cation_valency  valency of cation
+ * \param anion           anion function
+ * \param anion_valency  valency of anion
+ * \param voltage         voltage function
+ * \param mesh            ptr to refined mesh
+ * \param entropy_tol     tolerance for local entropy
  *
  * \return            levels of refinement
  */
 unsigned int check_local_entropy (dolfin::Function *cation,
+                                  double cation_valency,
                                   dolfin::Function *anion,
+                                  double anion_valency,
                                   dolfin::Function *voltage,
                                   dolfin::Mesh *target_mesh,
                                   double entropy_tol)
@@ -112,11 +116,11 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   // compute entropic potentials
   dolfin::Function cation_potential( *(voltage->function_space()) );
   cation_potential.interpolate(*voltage);
-  *(cation_potential.vector()) *= +1.0;
+  *(cation_potential.vector()) *= cation_valency;
   *(cation_potential.vector()) += *(cation->vector());
   dolfin::Function anion_potential( *(voltage->function_space()) );
   anion_potential.interpolate(*voltage);
-  *(anion_potential.vector()) *= -1.0;
+  *(anion_potential.vector()) *= anion_valency;
   *(anion_potential.vector()) += *(anion->vector());
 
   // setup matrix and rhs
@@ -175,7 +179,7 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   assemble(error_vector, error_form);
 
   // mark for refinement
-  MeshFunction<bool> cell_marker(mesh, 3, false);
+  MeshFunction<bool> cell_marker(mesh, mesh.topology().dim(), false);
   unsigned int marked_elem_count = 0;
   for ( uint errVecInd = 0; errVecInd < error_vector.size(); errVecInd++) {
     if ( error_vector[errVecInd] > entropy_tol ) {
@@ -207,7 +211,9 @@ unsigned int check_local_entropy (dolfin::Function *cation,
     unsigned int num_refines = 0;
     num_refines = check_local_entropy(
       &adapt_cation,
+      cation_valency,
       &adapt_anion,
+      anion_valency,
       &adapt_voltage,
       target_mesh,
       entropy_tol
