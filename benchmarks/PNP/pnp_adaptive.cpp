@@ -45,7 +45,13 @@ double update_solution_pnp (
   double initial_residual,
   pnp_and_source::LinearForm* L,
   const dolfin::DirichletBC* bc,
-  newton_param* params);
+  newton_param* params
+);
+
+double compute_sobolev_residual (
+  pnp_and_source::LinearForm* L,
+  const dolfin::DirichletBC* bc
+);
 
 class analyticCationExpression : public Expression
 {
@@ -258,6 +264,12 @@ int main()
     dolfin::Function potentialSolution(solutionFunction[2]);
     potentialSolution.interpolate(potential0);
 
+    // write computed solution to file
+    printf("\toutput projected solution to file\n"); fflush(stdout);
+    cationFile << cationSolution;
+    anionFile << anionSolution;
+    potentialFile << potentialSolution;
+
     // map dofs
     ivector cation_dofs;
     ivector anion_dofs;
@@ -265,11 +277,6 @@ int main()
     get_dofs(&solutionFunction, &cation_dofs, 0);
     get_dofs(&solutionFunction, &anion_dofs, 1);
     get_dofs(&solutionFunction, &potential_dofs, 2);
-
-    // print to file
-    cationFile << cationSolution;
-    anionFile << anionSolution;
-    potentialFile << potentialSolution;
 
     // Initialize functions for EAFE
     dolfin::Function CatCatFunction(V_cat);
@@ -293,7 +300,7 @@ int main()
     dolfin::Function solutionUpdate(V);
     unsigned int newton_iteration = 0;
 
-    // compute initial residual and Jacobian
+    // set initial residual
     printf("\tconstruct residual...\n"); fflush(stdout);
     L_pnp.CatCat = cationSolution;
     L_pnp.AnAn = anionSolution;
@@ -302,12 +309,7 @@ int main()
     bc.apply(b_pnp);
 
     // need to compute functional norm to avoid vector length
-    double residual = b_pnp.norm("l2");
-    // L2 norm with mesh: DOES NOT CONVERGES
-    // dolfin::Function L2_b_pnp(V);
-    // *(L2_b_pnp.vector())=b_pnp;
-    // L2Error_3::Form_M L2residual(mesh,L2_b_pnp);
-    // residual = assemble(L2residual);
+    double residual = compute_sobolev_residual(&L_pnp, &bc);
     if (num_adapts == 0) {
       initial_residual = residual;
       printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
@@ -368,6 +370,10 @@ int main()
       A_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
       fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
       status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &solu_fasp, &itpar, &amgpar);
+      if (status < 0)
+        printf("\n### WARNING: Solver failed! Exit status = %d.\n\n", status);
+      else
+        printf("\tsolved linear system successfully!\n");
 
       // map solu_fasp into solutionUpdate
       printf("\tconvert FASP solution to function...\n"); fflush(stdout);
@@ -397,49 +403,48 @@ int main()
         relative_residual *= -1.0;
       }
 
-      // compute residual
+      // update nonlinear residual
       L_pnp.CatCat = cationSolution;
       L_pnp.AnAn = anionSolution;
       L_pnp.EsEs = potentialSolution;
       assemble(b_pnp, L_pnp);
       bc.apply(b_pnp);
-      relative_residual = b_pnp.norm("l2") / initial_residual;
-      // L2 norm with mesh: DOES NOT CONVERGES
-      // *(L2_b_pnp.vector())=b_pnp;
-      // L2Error_3::Form_M L2residual(mesh,L2_b_pnp);
-      // relative_residual = assemble(L2residual)  / initial_residual;
-
       if (newton_iteration == 1)
         printf("\trelative nonlinear residual after 1 iteration has l2-norm of %e\n", relative_residual);
       else
-        printf("\trelative nonlinear residual after %d iterations has l2-norm of %e\n", newton_iteration, relative_residual);
+        printf("\trelative nonlinear residual after %d iterations has l2-norm of %e\n",
+          newton_iteration,
+          relative_residual
+        );
 
       // write computed solution to file
-      printf("\tsolved linear system successfully!\n"); fflush(stdout);
-      cationFile << cationSolution;
-      anionFile << anionSolution;
-      potentialFile << potentialSolution;
+      // printf("\toutput computed solution to file\n"); fflush(stdout);
+      // cationFile << cationSolution;
+      // anionFile << anionSolution;
+      // potentialFile << potentialSolution;
+
+
 
       // compute solution error
-      printf("\nCompute the error\n"); fflush(stdout);
-      dolfin::Function Error1(analyticCation);
-      dolfin::Function Error2(analyticAnion);
-      dolfin::Function Error3(analyticPotential);
-      *(Error1.vector()) -= *(cationSolution.vector());
-      *(Error2.vector()) -= *(anionSolution.vector());
-      *(Error3.vector()) -= *(potentialSolution.vector());
-      double cationError = 0.0;
-      double anionError = 0.0;
-      double potentialError = 0.0;
-      L2Error::Form_M L2error1(mesh,Error1);
-      cationError = assemble(L2error1);
-      L2Error::Form_M L2error2(mesh,Error2);
-      anionError = assemble(L2error2);
-      L2Error::Form_M L2error3(mesh,Error3);
-      potentialError = assemble(L2error3);
-      printf("\tcation l2 error is:     %e\n", cationError);
-      printf("\tanion l2 error is:      %e\n", anionError);
-      printf("\tpotential l2 error is:  %e\n", potentialError);
+      // printf("\nCompute the error\n"); fflush(stdout);
+      // dolfin::Function Error1(analyticCation);
+      // dolfin::Function Error2(analyticAnion);
+      // dolfin::Function Error3(analyticPotential);
+      // *(Error1.vector()) -= *(cationSolution.vector());
+      // *(Error2.vector()) -= *(anionSolution.vector());
+      // *(Error3.vector()) -= *(potentialSolution.vector());
+      // double cationError = 0.0;
+      // double anionError = 0.0;
+      // double potentialError = 0.0;
+      // L2Error::Form_M L2error1(mesh,Error1);
+      // cationError = assemble(L2error1);
+      // L2Error::Form_M L2error2(mesh,Error2);
+      // anionError = assemble(L2error2);
+      // L2Error::Form_M L2error3(mesh,Error3);
+      // potentialError = assemble(L2error3);
+      // printf("\tcation l2 error is:     %e\n", cationError);
+      // printf("\tanion l2 error is:      %e\n", anionError);
+      // printf("\tpotential l2 error is:  %e\n", potentialError);
 
       // print error
       // cationFile << cationSolution;
@@ -453,6 +458,10 @@ int main()
       printf("\nDid not converge in %d Newton iterations...\n", max_newton_iters);
       printf("\tcurrent relative residual is %e > %e\n\n", relative_residual, nonlinear_tol);
     }
+
+    cationFile << cationSolution;
+    anionFile << anionSolution;
+    potentialFile << potentialSolution;
 
     // compute local entropy and refine mesh
     printf("Computing local entropy for refinement\n");
@@ -494,6 +503,31 @@ int main()
     mesh = mesh0;
     mesh.bounding_box_tree()->build(mesh); // to ensure the building_box_tree is correctly indexed
 
+    // write computed solution to file
+    printf("\toutput computed solution to file\n"); fflush(stdout);
+    cationFile << cation0;
+    anionFile << anion0;
+    potentialFile << potential0;
+
+    // make sure the residual does not change from coarse solution: ERROR!!!!!
+    pnp_and_source::FunctionSpace V_adapt(mesh0);
+    pnp_and_source::LinearForm L_adapt(V_adapt);
+    L_adapt.eps = eps;
+    L_adapt.Dp = Dp;
+    L_adapt.Dn = Dn;
+    L_adapt.qp = qp;
+    L_adapt.qn = qn;
+    L_adapt.cation = zero;
+    L_adapt.anion = zero;
+    L_adapt.potential = zero;
+    L_adapt.CatCat = cation0;
+    L_adapt.AnAn = anion0;
+    L_adapt.EsEs = potential0;
+    dolfin::DirichletBC bc_adapt(V_adapt, zero_vec, boundary);
+    double adapt_residual = compute_sobolev_residual(&L_adapt, &bc_adapt);
+    printf("\tcompute residual on new mesh : %e\n", adapt_residual);
+    printf("\tcompute relative residual on new mesh : %e\n", adapt_residual / initial_residual);
+
   }
 
   printf("\n-----------------------------------------------------------    "); fflush(stdout);
@@ -529,13 +563,12 @@ double update_solution_pnp (
   L->CatCat = _iterate0;
   L->AnAn = _iterate1;
   L->EsEs = _iterate2;
-  dolfin::EigenVector b;
-  assemble(b, *L);
-  bc->apply(b);
-  double new_relative_residual = b.norm("l2") / initial_residual;
+
+  double new_relative_residual = compute_sobolev_residual(L, bc);
+  new_relative_residual /= initial_residual;
 
   // backtrack loop
-  unsigned int damp_iters = 1;
+  unsigned int damp_iters = 0;
   printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
 
   while (
@@ -554,9 +587,8 @@ double update_solution_pnp (
     L->CatCat = _iterate0;
     L->AnAn = _iterate1;
     L->EsEs = _iterate2;
-    assemble(b, *L);
-    bc->apply(b);
-    new_relative_residual = b.norm("l2") / initial_residual;
+    new_relative_residual = compute_sobolev_residual(L, bc);
+    new_relative_residual /= initial_residual;
     printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
   }
 
@@ -570,4 +602,24 @@ double update_solution_pnp (
   *(iterate1->vector()) = *(_iterate1.vector());
   *(iterate2->vector()) = *(_iterate2.vector());
   return new_relative_residual;
+}
+
+double compute_sobolev_residual (
+  pnp_and_source::LinearForm* L,
+  const dolfin::DirichletBC* bc)
+{
+  // setup L2-projection for nonlinear residual
+  L2Error_3::FunctionSpace V_res( (L->mesh()) );
+  L2Error_3::BilinearForm a_res(V_res, V_res);
+  dolfin::Function res_proj(V_res);
+
+  // solve for projection of nonlinear residual
+  solve(a_res==(*L), res_proj, *bc);
+  File residualFile("./benchmarks/PNP/output/residual.pvd");
+  residualFile << res_proj;
+
+  // evaluate norm of projected residual
+  L2Error_3::Form_M M_res( (L->mesh()) );
+  M_res.residual = res_proj;
+  return sqrt(assemble(M_res));
 }

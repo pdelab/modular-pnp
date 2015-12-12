@@ -5,8 +5,11 @@
 # Compile this form with FFC: ffc -O -l dolfin L2Error.ufl.
 
 CG = FiniteElement("Lagrange", tetrahedron, 1)
-V=MixedElement([CG,CG,CG])
+V = MixedElement([CG,CG,CG])
 
-u = Coefficient(V)
+(cat_proj, an_proj, pot_proj) = TrialFunction(V)
+(cat, an, pot) = TestFunction(V)
+residual = Coefficient(V)
 
-M = ( u[i]*u[i] )*dx
+a = ( cat_proj*cat + an_proj*an + pot_proj*pot )*dx
+M = ( residual[0]*residual[0] + residual[1]*residual[1] + residual[2]*residual[2] )*dx
