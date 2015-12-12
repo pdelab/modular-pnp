@@ -128,7 +128,7 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   assemble(A,a);
   dCSRmat A_fasp;
   EigenMatrix_to_dCSRmat(&A,&A_fasp);
-  dBSRmat adaptA_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
+  dBSRmat adaptA_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, mesh.topology().dim());
   EigenVector b;
   dvector b_fasp, solu_fasp;
 

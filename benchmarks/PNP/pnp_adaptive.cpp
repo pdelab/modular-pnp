@@ -34,6 +34,14 @@ double upper_anion_val = 0.1;  // 1 / m^3
 double lower_potential_val = -1.0;  // V
 double upper_potential_val = 1.0;  // V
 
+double get_initial_residual (
+  pnp_and_source::LinearForm* L,
+  const dolfin::DirichletBC* bc,
+  dolfin::Function* cation,
+  dolfin::Function* anion,
+  dolfin::Function* potential
+);
+
 double update_solution_pnp (
   dolfin::Function* iterate0,
   dolfin::Function* iterate1,
@@ -46,11 +54,6 @@ double update_solution_pnp (
   pnp_and_source::LinearForm* L,
   const dolfin::DirichletBC* bc,
   newton_param* params
-);
-
-double compute_sobolev_residual (
-  pnp_and_source::LinearForm* L,
-  const dolfin::DirichletBC* bc
 );
 
 class analyticCationExpression : public Expression
@@ -103,38 +106,39 @@ int main()
   //*************************************************************
   printf("Initialize the problem\n"); fflush(stdout);
   // read domain parameters
-  printf("\tdomain...\n"); fflush(stdout);
+  printf("domain...\n"); fflush(stdout);
   domain_param domain_par;
   char domain_param_filename[] = "./benchmarks/PNP/domain_params.dat";
   domain_param_input(domain_param_filename, &domain_par);
   print_domain_param(&domain_par);
 
   // build mesh
-  printf("\tmesh...\n"); fflush(stdout);
-  dolfin::Mesh mesh0;
+  printf("mesh...\n"); fflush(stdout);
+  dolfin::Mesh mesh0, mesh_init;
   dolfin::MeshFunction<std::size_t> subdomains;
   dolfin::MeshFunction<std::size_t> surfaces;
   dolfin::File meshOut(domain_par.mesh_output);
   domain_build(&domain_par, &mesh0, &subdomains, &surfaces);
+  domain_build(&domain_par, &mesh_init, &subdomains, &surfaces);
   print_domain_param(&domain_par);
 
   // read coefficients and boundary values
-  printf("\tcoefficients...\n"); fflush(stdout);
+  printf("coefficients...\n"); fflush(stdout);
   coeff_param coeff_par;
   char coeff_param_filename[] = "./benchmarks/PNP/coeff_params.dat";
   coeff_param_input(coeff_param_filename, &coeff_par);
   print_coeff_param(&coeff_par);
 
   // initialize Newton solver parameters
-  printf("\tNewton solver parameters...\n"); fflush(stdout);
+  printf("Newton solver parameters...\n"); fflush(stdout);
   newton_param newtparam;
   char newton_param_file[] = "./benchmarks/PNP/newton_param.dat";
-  newton_param_input (newton_param_file,&newtparam);
+  newton_param_input (newton_param_file, &newtparam);
   print_newton_param(&newtparam);
   double initial_residual, relative_residual = 1.0;
 
   // Setup FASP solver
-  printf("\tFASP solver parameters...\n"); fflush(stdout);
+  printf("FASP solver parameters...\n"); fflush(stdout);
   input_param inpar;
   itsolver_param itpar;
   AMG_param amgpar;
@@ -149,8 +153,8 @@ int main()
   File anionFile("./benchmarks/PNP/output/anion.pvd");
   File potentialFile("./benchmarks/PNP/output/potential.pvd");
 
-  // Initialize analytic expressions
-  printf("\tanalytic expressions...\n"); fflush(stdout);
+  // Initialize guess
+  printf("intial guess...\n"); fflush(stdout);
   unsigned int dirichlet_coord = 0;
   LogCharge Cation(lower_cation_val, upper_cation_val, -domain_par.length_x/2.0, domain_par.length_x/2.0, dirichlet_coord);
   LogCharge Anion(lower_anion_val, upper_anion_val, -domain_par.length_x/2.0, domain_par.length_x/2.0, dirichlet_coord);
@@ -158,28 +162,35 @@ int main()
   // not ideal implementation: replace by a solve for voltage below
   Voltage Volt(lower_potential_val, upper_potential_val, -domain_par.length_x/2.0, domain_par.length_x/2.0, dirichlet_coord);
 
+  // interpolate
+  pnp_and_source::FunctionSpace V_init(mesh_init);
+  dolfin::Function initialGuessFunction(V_init);
+  dolfin::Function initialCation(initialGuessFunction[0]);
+  dolfin::Function initialAnion(initialGuessFunction[1]);
+  dolfin::Function initialPotential(initialGuessFunction[2]);
+  initialCation.interpolate(Cation);
+  initialAnion.interpolate(Anion);
+  initialPotential.interpolate(Volt);
+
   //*************************************************************
   //  Mesh adaptivity
   //*************************************************************
   // interpolate analytic expressions
-  printf("\tinterpolate analytic expressions onto initial mesh...\n"); fflush(stdout);
+  printf("interpolate analytic expressions onto initial mesh...\n\n"); fflush(stdout);
   pnp_and_source::FunctionSpace V0(mesh0);
+  dolfin::Function initialGuessFunction0(V0);
   dolfin::Function solutionFunction0(V0);
-
-  // analytic solution
   analyticCationExpression cationExpression0;
   analyticAnionExpression anionExpression0;
   analyticPotentialExpression potentialExpression0;
-
-
   dolfin::Function cation0(solutionFunction0[0]);
-  cation0.interpolate(Cation);
-  // cation0.interpolate(cationExpression0);
   dolfin::Function anion0(solutionFunction0[1]);
-  anion0.interpolate(Anion);
-  // anion0.interpolate(anionExpression0);
   dolfin::Function potential0(solutionFunction0[2]);
+  cation0.interpolate(Cation);
+  anion0.interpolate(Anion);
   potential0.interpolate(Volt);
+  // cation0.interpolate(cationExpression0);
+  // anion0.interpolate(anionExpression0);
   // potential0.interpolate(potentialExpression0);
 
   // set adaptivity parameters
@@ -187,6 +198,8 @@ int main()
   double entropy_tol = 1.0e-4;
   unsigned int num_adapts = 0, max_adapts = 5;
   bool adaptive_convergence = false;
+
+  printf("Adaptivity loop\n"); fflush(stdout);
 
   // adaptivity loop
   while (!adaptive_convergence)
@@ -301,31 +314,28 @@ int main()
     unsigned int newton_iteration = 0;
 
     // set initial residual
-    printf("\tconstruct residual...\n"); fflush(stdout);
+    printf("\tupdate initial residual...\n"); fflush(stdout);
+    initial_residual = get_initial_residual(&L_pnp, &bc, &initialCation, &initialAnion, &initialPotential);
+
+    printf("\tcompute relative residual...\n"); fflush(stdout);
     L_pnp.CatCat = cationSolution;
     L_pnp.AnAn = anionSolution;
     L_pnp.EsEs = potentialSolution;
     assemble(b_pnp, L_pnp);
     bc.apply(b_pnp);
-
-    // need to compute functional norm to avoid vector length
-    double residual = compute_sobolev_residual(&L_pnp, &bc);
-    if (num_adapts == 0) {
-      initial_residual = residual;
+    relative_residual = b_pnp.norm("l2") / initial_residual;
+    if (num_adapts == 0)
       printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
-    }
-    else {
-      relative_residual = residual / initial_residual;
+    else
       printf("\tadapted relative nonlinear residual is %e\n", relative_residual);
-    }
 
     fasp_dvec_alloc(b_pnp.size(), &solu_fasp);
-    printf("\tinitialized succesfully!\n\n"); fflush(stdout);
+    printf("\tinitialized succesfully...\n\n"); fflush(stdout);
 
     //*************************************************************
     //  Newton solver
     //*************************************************************
-    printf("solve the nonlinear system\n"); fflush(stdout);
+    printf("Solve the nonlinear system\n"); fflush(stdout);
 
     double nonlinear_tol = newtparam.tol;
     unsigned int max_newton_iters = newtparam.max_it;
@@ -383,7 +393,7 @@ int main()
 
       // update solution and reset solutionUpdate
       printf("\tupdate solution...\n"); fflush(stdout);
-      relative_residual = update_solution_pnp(
+      relative_residual = update_solution_pnp (
         &cationSolution,
         &anionSolution,
         &potentialSolution,
@@ -409,21 +419,19 @@ int main()
       L_pnp.EsEs = potentialSolution;
       assemble(b_pnp, L_pnp);
       bc.apply(b_pnp);
-      if (newton_iteration == 1)
-        printf("\trelative nonlinear residual after 1 iteration has l2-norm of %e\n", relative_residual);
-      else
-        printf("\trelative nonlinear residual after %d iterations has l2-norm of %e\n",
-          newton_iteration,
-          relative_residual
-        );
+      // if (newton_iteration == 1)
+      //   printf("\trelative nonlinear residual after 1 iteration has l2-norm of %e\n", relative_residual);
+      // else
+      //   printf("\trelative nonlinear residual after %d iterations has l2-norm of %e\n",
+      //     newton_iteration,
+      //     relative_residual
+      //   );
 
       // write computed solution to file
       // printf("\toutput computed solution to file\n"); fflush(stdout);
       // cationFile << cationSolution;
       // anionFile << anionSolution;
       // potentialFile << potentialSolution;
-
-
 
       // compute solution error
       // printf("\nCompute the error\n"); fflush(stdout);
@@ -490,43 +498,17 @@ int main()
     }
 
     // adapt solutions to refined mesh
-    if (num_refines == 1) {
-      printf("\nAdapting the mesh using one level of local refinement...\n"); fflush(stdout);
-    }
-    else {
-      printf("\nAdapting the mesh using %d levels of local refinement...\n", num_refines); fflush(stdout);
-    }
+    if (num_refines == 1)
+      printf("\tadapting the mesh using one level of local refinement...\n");
+    else
+      printf("\tadapting the mesh using %d levels of local refinement...\n", num_refines);
+
     std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(mesh0) );
     cation0 = adapt(cationSolution, mesh_ptr);
     anion0 = adapt(anionSolution, mesh_ptr);
     potential0 = adapt(potentialSolution, mesh_ptr);
     mesh = mesh0;
     mesh.bounding_box_tree()->build(mesh); // to ensure the building_box_tree is correctly indexed
-
-    // write computed solution to file
-    printf("\toutput computed solution to file\n"); fflush(stdout);
-    cationFile << cation0;
-    anionFile << anion0;
-    potentialFile << potential0;
-
-    // make sure the residual does not change from coarse solution: ERROR!!!!!
-    pnp_and_source::FunctionSpace V_adapt(mesh0);
-    pnp_and_source::LinearForm L_adapt(V_adapt);
-    L_adapt.eps = eps;
-    L_adapt.Dp = Dp;
-    L_adapt.Dn = Dn;
-    L_adapt.qp = qp;
-    L_adapt.qn = qn;
-    L_adapt.cation = zero;
-    L_adapt.anion = zero;
-    L_adapt.potential = zero;
-    L_adapt.CatCat = cation0;
-    L_adapt.AnAn = anion0;
-    L_adapt.EsEs = potential0;
-    dolfin::DirichletBC bc_adapt(V_adapt, zero_vec, boundary);
-    double adapt_residual = compute_sobolev_residual(&L_adapt, &bc_adapt);
-    printf("\tcompute residual on new mesh : %e\n", adapt_residual);
-    printf("\tcompute relative residual on new mesh : %e\n", adapt_residual / initial_residual);
 
   }
 
@@ -563,9 +545,10 @@ double update_solution_pnp (
   L->CatCat = _iterate0;
   L->AnAn = _iterate1;
   L->EsEs = _iterate2;
-
-  double new_relative_residual = compute_sobolev_residual(L, bc);
-  new_relative_residual /= initial_residual;
+  EigenVector b;
+  assemble(b, *L);
+  bc->apply(b);
+  double new_relative_residual = b.norm("l2") / initial_residual;
 
   // backtrack loop
   unsigned int damp_iters = 0;
@@ -587,8 +570,9 @@ double update_solution_pnp (
     L->CatCat = _iterate0;
     L->AnAn = _iterate1;
     L->EsEs = _iterate2;
-    new_relative_residual = compute_sobolev_residual(L, bc);
-    new_relative_residual /= initial_residual;
+    assemble(b, *L);
+    bc->apply(b);
+    new_relative_residual = b.norm("l2") / initial_residual;
     printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
   }
 
@@ -597,29 +581,32 @@ double update_solution_pnp (
     return -new_relative_residual;
 
   // update iterates
-  printf("\taccepted update after damping %d times\n", damp_iters);
   *(iterate0->vector()) = *(_iterate0.vector());
   *(iterate1->vector()) = *(_iterate1.vector());
   *(iterate2->vector()) = *(_iterate2.vector());
   return new_relative_residual;
 }
 
-double compute_sobolev_residual (
+double get_initial_residual (
   pnp_and_source::LinearForm* L,
-  const dolfin::DirichletBC* bc)
+  const dolfin::DirichletBC* bc,
+  dolfin::Function* cation,
+  dolfin::Function* anion,
+  dolfin::Function* potential)
 {
-  // setup L2-projection for nonlinear residual
-  L2Error_3::FunctionSpace V_res( (L->mesh()) );
-  L2Error_3::BilinearForm a_res(V_res, V_res);
-  dolfin::Function res_proj(V_res);
-
-  // solve for projection of nonlinear residual
-  solve(a_res==(*L), res_proj, *bc);
-  File residualFile("./benchmarks/PNP/output/residual.pvd");
-  residualFile << res_proj;
-
-  // evaluate norm of projected residual
-  L2Error_3::Form_M M_res( (L->mesh()) );
-  M_res.residual = res_proj;
-  return sqrt(assemble(M_res));
+  pnp_and_source::FunctionSpace V( *(cation->function_space()->mesh()) );
+  dolfin::Function adapt_func(V);
+  dolfin::Function adapt_cation(adapt_func[0]);
+  dolfin::Function adapt_anion(adapt_func[1]);
+  dolfin::Function adapt_potential(adapt_func[2]);
+  adapt_cation.interpolate(*cation);
+  adapt_anion.interpolate(*anion);
+  adapt_potential.interpolate(*potential);
+  L->CatCat = adapt_cation;
+  L->AnAn = adapt_anion;
+  L->EsEs = adapt_potential;
+  EigenVector b;
+  assemble(b, *L);
+  bc->apply(b);
+  return b.norm("l2");
 }
