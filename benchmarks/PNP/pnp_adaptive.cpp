@@ -31,8 +31,8 @@ double lower_cation_val = 0.1;  // 1 / m^3
 double upper_cation_val = 1.0;  // 1 / m^3
 double lower_anion_val = 1.0;  // 1 / m^3
 double upper_anion_val = 0.1;  // 1 / m^3
-double lower_potential_val = -1.0;  // V
-double upper_potential_val = 1.0;  // V
+double lower_potential_val = 1.0;  // V
+double upper_potential_val = -1.0;  // V
 
 double get_initial_residual (
   pnp_and_source::LinearForm* L,
@@ -195,13 +195,18 @@ int main()
 
   // set adaptivity parameters
   dolfin::Mesh mesh(mesh0);
-  double entropy_tol = 1.0e-4;
+  double entropy_tol = 1.0e-6;
   unsigned int num_adapts = 0, max_adapts = 5;
   bool adaptive_convergence = false;
 
-  printf("Adaptivity loop\n"); fflush(stdout);
+
+
+
+
+
 
   // adaptivity loop
+  printf("Adaptivity loop\n"); fflush(stdout);
   while (!adaptive_convergence)
   {
     // output mesh
@@ -383,7 +388,7 @@ int main()
       if (status < 0)
         printf("\n### WARNING: Solver failed! Exit status = %d.\n\n", status);
       else
-        printf("\tsolved linear system successfully!\n");
+        printf("\tsolved linear system successfully...\n");
 
       // map solu_fasp into solutionUpdate
       printf("\tconvert FASP solution to function...\n"); fflush(stdout);
@@ -486,7 +491,7 @@ int main()
 
     if (num_refines == 0) {
       // successful solve
-      printf("\n\nSuccessfully distributed entropy below desired entropy in %d adapts!\n\n", num_adapts);
+      printf("\tsuccessfully distributed entropy below desired entropy in %d adapts!\n\n", num_adapts);
       adaptive_convergence = true;
       break;
     }
@@ -552,7 +557,7 @@ double update_solution_pnp (
 
   // backtrack loop
   unsigned int damp_iters = 0;
-  printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
+  printf("\t\trelative residual after damping %d times: %e\n", damp_iters, new_relative_residual);
 
   while (
     new_relative_residual > relative_residual && damp_iters < params->damp_it )
