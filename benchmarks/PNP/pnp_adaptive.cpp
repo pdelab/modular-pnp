@@ -18,6 +18,7 @@
 #include "newton_functs.h"
 #include "L2Error.h"
 #include "L2Error_3.h"
+#include "base_functions.h"
 extern "C"
 {
   #include "fasp.h"
@@ -36,6 +37,7 @@ double upper_potential_val = -1.0;  // V
 
 double get_initial_residual (
   pnp_and_source::LinearForm* L,
+  dolfin::EigenVector* VecBase,
   const dolfin::DirichletBC* bc,
   dolfin::Function* cation,
   dolfin::Function* anion,
@@ -49,6 +51,7 @@ double update_solution_pnp (
   dolfin::Function* update0,
   dolfin::Function* update1,
   dolfin::Function* update2,
+  dolfin::EigenVector* VecBase,
   double relative_residual,
   double initial_residual,
   pnp_and_source::LinearForm* L,
@@ -320,7 +323,9 @@ int main()
 
     // set initial residual
     printf("\tupdate initial residual...\n"); fflush(stdout);
-    initial_residual = get_initial_residual(&L_pnp, &bc, &initialCation, &initialAnion, &initialPotential);
+    base_functions::LinearForm Lbase(V);
+    EigenVector VecBase; assemble(VecBase,Lbase);
+    initial_residual = get_initial_residual(&L_pnp, &VecBase, &bc, &initialCation, &initialAnion, &initialPotential);
 
     printf("\tcompute relative residual...\n"); fflush(stdout);
     L_pnp.CatCat = cationSolution;
@@ -328,7 +333,8 @@ int main()
     L_pnp.EsEs = potentialSolution;
     assemble(b_pnp, L_pnp);
     bc.apply(b_pnp);
-    relative_residual = b_pnp.norm("l2") / initial_residual;
+    divide_vec(&b_pnp,&VecBase);
+    relative_residual = b_pnp.norm("l1") / initial_residual;
     if (num_adapts == 0)
       printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
     else
@@ -405,6 +411,7 @@ int main()
         &(solutionUpdate[0]),
         &(solutionUpdate[1]),
         &(solutionUpdate[2]),
+        &VecBase,
         relative_residual,
         initial_residual,
         &L_pnp,
@@ -531,6 +538,7 @@ double update_solution_pnp (
   dolfin::Function* update0,
   dolfin::Function* update1,
   dolfin::Function* update2,
+  dolfin::EigenVector* VecBase,
   double relative_residual,
   double initial_residual,
   pnp_and_source::LinearForm* L,
@@ -577,7 +585,8 @@ double update_solution_pnp (
     L->EsEs = _iterate2;
     assemble(b, *L);
     bc->apply(b);
-    new_relative_residual = b.norm("l2") / initial_residual;
+    divide_vec(&b,VecBase);
+    new_relative_residual = b.norm("l1") / initial_residual;
     printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
   }
 
@@ -594,6 +603,7 @@ double update_solution_pnp (
 
 double get_initial_residual (
   pnp_and_source::LinearForm* L,
+  EigenVector * VecBase,
   const dolfin::DirichletBC* bc,
   dolfin::Function* cation,
   dolfin::Function* anion,
@@ -613,5 +623,6 @@ double get_initial_residual (
   EigenVector b;
   assemble(b, *L);
   bc->apply(b);
-  return b.norm("l2");
+  divide_vec(&b,VecBase);
+  return b.norm("l1");
 }

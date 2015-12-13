@@ -216,3 +216,14 @@ void copy_dvector_to_vector_function(const dvector* vector, dolfin::Function* F,
   for (int i=0; i < dof_length; i++)
     F->vector()->setitem(function_dofs->val[i], vector->val[vector_dofs->val[i]]);
 }
+
+void divide_vec(EigenVector *vec1, EigenVector *vec2)
+{
+  if (vec1->size()!=vec2->size()) printf("Error in divide_vec\n");
+  double * dvec1 = vec1->data();
+  double * dvec2 = vec2->data();
+  for (int i=0;i<vec1->size();i++)
+  {
+    dvec1[i]=pow(dvec1[i],2)/dvec2[i];
+  }
+}

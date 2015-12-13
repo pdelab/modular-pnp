@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <dolfin.h>
+#include <math.h>
 extern "C"
 {
 #include "fasp.h"
@@ -34,5 +35,7 @@ void copy_dvector_to_Function(const dvector* vec_b, dolfin::Function* F);
 void get_dofs(dolfin::Function* vector_function, ivector* dof_array, unsigned int component);
 
 void copy_dvector_to_vector_function(const dvector* vector, dolfin::Function* F, ivector* vector_dofs, ivector* function_dofs);
+
+void divide_vec(dolfin::EigenVector *vec1, dolfin::EigenVector *vec2);
 
 #endif
