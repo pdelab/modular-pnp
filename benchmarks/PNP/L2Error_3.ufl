@@ -1,0 +1,15 @@
+# Copyright (C) 2015 PSU CCMA
+#
+# Compute the L2 error of a computed solution.
+#
+# Compile this form with FFC: ffc -O -l dolfin L2Error.ufl.
+
+CG = FiniteElement("Lagrange", tetrahedron, 1)
+V = MixedElement([CG,CG,CG])
+
+(cat_proj, an_proj, pot_proj) = TrialFunction(V)
+(cat, an, pot) = TestFunction(V)
+residual = Coefficient(V)
+
+a = ( cat_proj*cat + an_proj*an + pot_proj*pot )*dx
+M = ( residual[0]*residual[0] + residual[1]*residual[1] + residual[2]*residual[2] )*dx

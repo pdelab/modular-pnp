@@ -1,8 +1,9 @@
+pnp_adapt
 .DS_Store
 CMakeFiles/
 CMakeCache.txt
 CMakeLists.txt
-PNP
+output
 cmake_install.cmake
 Makefile
 output/*
