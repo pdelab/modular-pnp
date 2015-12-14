@@ -93,7 +93,7 @@ class analyticPotentialExpression : public Expression
 
 int main(int argc, char** argv)
 {
-  if (argc >1)
+  if (argc > 1)
     if (std::string(argv[1])=="EAFE" || std::string(argv[2])=="EAFE")
       eafe_switch = true;
 
@@ -236,18 +236,6 @@ int main(int argc, char** argv)
     a_pnp.qp = qp; L_pnp.qp = qp;
     a_pnp.qn = qn; L_pnp.qn = qn;
 
-    //EAFE Formulation
-    if (eafe_switch)
-      printf("\tEAFE initializetion...\n");
-    EAFE::FunctionSpace V_cat(mesh);
-    EAFE::BilinearForm a_cat(V_cat,V_cat);
-    a_cat.alpha = Dp;
-    a_cat.gamma = zero;
-    EAFE::FunctionSpace V_an(mesh);
-    EAFE::BilinearForm a_an(V_an,V_an);
-    a_an.alpha = Dn;
-    a_an.gamma = zero;
-
     // analytic solution
     Function analyticSolutionFunction(V);
     Function analyticCation(analyticSolutionFunction[0]);
@@ -305,7 +293,17 @@ int main(int argc, char** argv)
     get_dofs(&solutionFunction, &anion_dofs, 1);
     get_dofs(&solutionFunction, &potential_dofs, 2);
 
-    // Initialize functions for EAFE
+    //EAFE Formulation
+    if (eafe_switch)
+      printf("\tEAFE initialization...\n");
+    EAFE::FunctionSpace V_cat(mesh);
+    EAFE::BilinearForm a_cat(V_cat,V_cat);
+    a_cat.alpha = Dp;
+    a_cat.gamma = zero;
+    EAFE::FunctionSpace V_an(mesh);
+    EAFE::BilinearForm a_an(V_an,V_an);
+    a_an.alpha = Dn;
+    a_an.gamma = zero;
     dolfin::Function CatCatFunction(V_cat);
     dolfin::Function CatBetaFunction(V_cat);
     dolfin::Function AnAnFunction(V_an);
@@ -365,17 +363,18 @@ int main(int argc, char** argv)
       assemble(A_pnp, a_pnp);
 
       // EAFE expressions
-      CatCatFunction.interpolate(cationSolution);
-      CatBetaFunction.interpolate(potentialSolution);
-      *(CatBetaFunction.vector()) *= coeff_par.cation_valency;
-      *(CatBetaFunction.vector()) += *(CatCatFunction.vector());
-      AnAnFunction.interpolate(anionSolution);
-      AnBetaFunction.interpolate(potentialSolution);
-      *(AnBetaFunction.vector()) *= coeff_par.anion_valency;
-      *(AnBetaFunction.vector()) += *(AnAnFunction.vector());
-
-      // Construct EAFE approximations to Jacobian
       if (eafe_switch) {
+        printf("\tcompute EAFE expressions...\n");
+        CatCatFunction.interpolate(cationSolution);
+        CatBetaFunction.interpolate(potentialSolution);
+        *(CatBetaFunction.vector()) *= coeff_par.cation_valency;
+        *(CatBetaFunction.vector()) += *(CatCatFunction.vector());
+        AnAnFunction.interpolate(anionSolution);
+        AnBetaFunction.interpolate(potentialSolution);
+        *(AnBetaFunction.vector()) *= coeff_par.anion_valency;
+        *(AnBetaFunction.vector()) += *(AnAnFunction.vector());
+
+        // Construct EAFE approximations to Jacobian
         printf("\tconstruct EAFE modifications...\n"); fflush(stdout);
         a_cat.eta = CatCatFunction;
         a_cat.beta = CatBetaFunction;
