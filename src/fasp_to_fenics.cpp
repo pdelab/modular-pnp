@@ -221,6 +221,7 @@ void divide_vec(EigenVector *vec1, EigenVector *vec2)
 {
   if (vec1->size()!=vec2->size()){
       printf(" ERROR: in divide_vec(), the vectors have different sizes \n\n Exiting... \n \n"); fflush(stdout);
+      return;
   }
   double * dvec1 = vec1->data();
   double * dvec2 = vec2->data();
