@@ -227,6 +227,6 @@ void divide_vec(EigenVector *vec1, EigenVector *vec2)
   double * dvec2 = vec2->data();
   for (int i=0;i<vec1->size();i++)
   {
-    if(std::fabs(dvec2[i])>1E-14) dvec1[i]=pow(dvec1[i],2)/dvec2[i];
+    if(std::fabs(dvec2[i])>1E-14) dvec1[i]=dvec1[i]/dvec2[i];
   }
 }

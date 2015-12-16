@@ -334,7 +334,7 @@ int main()
     assemble(b_pnp, L_pnp);
     bc.apply(b_pnp);
     divide_vec(&b_pnp,&VecBase);
-    relative_residual = b_pnp.norm("l1") / initial_residual;
+    relative_residual = b_pnp.norm("l2") / initial_residual;
     if (num_adapts == 0)
       printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
     else
@@ -586,7 +586,7 @@ double update_solution_pnp (
     assemble(b, *L);
     bc->apply(b);
     divide_vec(&b,VecBase);
-    new_relative_residual = b.norm("l1") / initial_residual;
+    new_relative_residual = b.norm("l2") / initial_residual;
     printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
   }
 
@@ -624,5 +624,5 @@ double get_initial_residual (
   assemble(b, *L);
   bc->apply(b);
   divide_vec(&b,VecBase);
-  return b.norm("l1");
+  return b.norm("l2");
 }
