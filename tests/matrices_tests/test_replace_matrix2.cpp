@@ -261,35 +261,6 @@ int main(int argc, char** argv)
   copy_dvector_to_Function(&solu2_fasp,&solu2);
   copy_dvector_to_Function(&solu3_fasp,&solu3);
 
-  if (DEBUG){
-    File file1a("./tests/matrices_tests/output_replace2/Solu_V1.pvd");
-    file1a << solu1;
-    File file1b("./tests/matrices_tests/output_replace2/SoluExact_V1.pvd");
-    file1b << solu_ex1;
-
-    File file2a("./tests/matrices_tests/output_replace2/Solu_V2_1.pvd");
-    file2a << solu2[0];
-    File file2b("./tests/matrices_tests/output_replace2/Solu_V2_2.pvd");
-    file2b << solu2[1];
-    File file2c("./tests/matrices_tests/output_replace2/SoluExact_V2_1.pvd");
-    file2c << solu_ex2[0];
-    File file2d("./tests/matrices_tests/output_replace2/SoluExact_V2_2.pvd");
-    file2d << solu_ex2[1];
-
-    File file3a("./tests/matrices_tests/output_replace2/Solu_V3_1.pvd");
-    file3a << solu3[0];
-    File file3b("./tests/matrices_tests/output_replace2/Solu_V3_2.pvd");
-    file3b << solu3[1];
-    File file3c("./tests/matrices_tests/output_replace2/Solu_V3_3.pvd");
-    file3c << solu3[2];
-    File file3d("./tests/matrices_tests/output_replace2/SoluExact_V3_1.pvd");
-    file3d << solu_ex3[0];
-    File file3e("./tests/matrices_tests/output_replace2/SoluExact_V3_2.pvd");
-    file3e << solu_ex3[1];
-    File file3f("./tests/matrices_tests/output_replace2/SoluExact_V3_3.pvd");
-    file3f << solu_ex3[2];
-  }
-
   double error_norm1 = 0.0;
   *(solu_ex1.vector())-=*(solu1.vector());
   L2Error::Form_M L2error1(mesh,solu_ex1);
