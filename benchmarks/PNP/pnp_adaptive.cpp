@@ -94,7 +94,7 @@ class analyticPotentialExpression : public Expression
 int main(int argc, char** argv)
 {
   if (argc > 1)
-    if (std::string(argv[1])=="EAFE" || std::string(argv[2])=="EAFE")
+    if (std::string(argv[1])=="EAFE")
       eafe_switch = true;
 
   printf("\n-----------------------------------------------------------    ");
