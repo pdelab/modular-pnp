@@ -26,6 +26,8 @@ extern "C"
 using namespace dolfin;
 // using namespace std;
 
+bool eafe_switch = false;
+
 double lower_cation_val = 0.1;  // 1 / m^3
 double upper_cation_val = 1.0;  // 1 / m^3
 double lower_anion_val = 1.0;  // 1 / m^3
@@ -135,12 +137,17 @@ class analyticPotentialExpression : public Expression
 };
 
 
-int main()
+int main (int argc, char** argv)
 {
+  if (argc > 1)
+    if (std::string(argv[1])=="EAFE")
+      eafe_switch = true;
 
-  printf("\n-----------------------------------------------------------    "); fflush(stdout);
-  printf("\n Solving the linearized Poisson-Nernst-Planck system           "); fflush(stdout);
-  printf("\n of a single cation and anion                                  "); fflush(stdout);
+  printf("\n-----------------------------------------------------------    ");
+  printf("\n Solving the linearized Poisson-Nernst-Planck system           ");
+  printf("\n of a single cation and anion ");
+  if (eafe_switch)
+    printf("using EAFE approximations \n to the Jacobians");
   printf("\n-----------------------------------------------------------\n\n"); fflush(stdout);
 
   // Need to use Eigen for linear algebra
@@ -194,16 +201,6 @@ int main()
   a_pnp.Dn = Dn; L_pnp.Dn = Dn;
   a_pnp.qp = qp; L_pnp.qp = qp;
   a_pnp.qn = qn; L_pnp.qn = qn;
-
-  //EAFE Formulation
-  EAFE::FunctionSpace V_cat(mesh);
-  EAFE::BilinearForm a_cat(V_cat,V_cat);
-  a_cat.alpha = Dp;
-  a_cat.gamma = zero;
-  EAFE::FunctionSpace V_an(mesh);
-  EAFE::BilinearForm a_an(V_an,V_an);
-  a_an.alpha = Dn;
-  a_an.gamma = zero;
 
   // analytic solution
   Function analyticSolutionFunction(V);
@@ -265,7 +262,17 @@ int main()
   anionFile << anionSolution;
   potentialFile << potentialSolution;
 
-  // Initialize functions for EAFE
+  //EAFE Formulation
+  if (eafe_switch)
+      printf("\tEAFE initialization...\n");
+  EAFE::FunctionSpace V_cat(mesh);
+  EAFE::BilinearForm a_cat(V_cat,V_cat);
+  a_cat.alpha = Dp;
+  a_cat.gamma = zero;
+  EAFE::FunctionSpace V_an(mesh);
+  EAFE::BilinearForm a_an(V_an,V_an);
+  a_an.alpha = Dn;
+  a_an.gamma = zero;
   Function CatCatFunction(V_cat);
   Function CatBetaFunction(V_cat);
   Function AnAnFunction(V_an);
@@ -335,26 +342,31 @@ int main()
     assemble(A_pnp, a_pnp);
 
     // EAFE expressions
-    CatCatFunction.interpolate(cationSolution);
-    CatBetaFunction.interpolate(potentialSolution);
-    *(CatBetaFunction.vector()) *= coeff_par.cation_valency;
-    *(CatBetaFunction.vector()) += *(CatCatFunction.vector());
-    AnAnFunction.interpolate(anionSolution);
-    AnBetaFunction.interpolate(potentialSolution);
-    *(AnBetaFunction.vector()) *= coeff_par.anion_valency;
-    *(AnBetaFunction.vector()) += *(AnAnFunction.vector());
+    if (eafe_switch) {
+      printf("\tcompute EAFE expressions...\n");
+      CatCatFunction.interpolate(cationSolution);
+      CatBetaFunction.interpolate(potentialSolution);
+      *(CatBetaFunction.vector()) *= coeff_par.cation_valency;
+      *(CatBetaFunction.vector()) += *(CatCatFunction.vector());
+      AnAnFunction.interpolate(anionSolution);
+      AnBetaFunction.interpolate(potentialSolution);
+      *(AnBetaFunction.vector()) *= coeff_par.anion_valency;
+      *(AnBetaFunction.vector()) += *(AnAnFunction.vector());
 
-    // Construct EAFE approximations to Jacobian
-    a_cat.eta = CatCatFunction;
-    a_cat.beta = CatBetaFunction;
-    a_an.eta = AnAnFunction;
-    a_an.beta = AnBetaFunction;
-    assemble(A_cat, a_cat);
-    assemble(A_an, a_an);
+      // Construct EAFE approximations to Jacobian
+      printf("\tconstruct EAFE modifications...\n"); fflush(stdout);
+      a_cat.eta = CatCatFunction;
+      a_cat.beta = CatBetaFunction;
+      a_an.eta = AnAnFunction;
+      a_an.beta = AnBetaFunction;
+      assemble(A_cat, a_cat);
+      assemble(A_an, a_an);
 
-    // Modify Jacobian
-    replace_matrix(3,0, &V, &V_cat, &A_pnp, &A_cat);
-    replace_matrix(3,1, &V, &V_an , &A_pnp, &A_an );
+      // Modify Jacobian
+      printf("\treplace Jacobian with EAFE approximations...\n"); fflush(stdout);
+      replace_matrix(3,0, &V, &V_cat, &A_pnp, &A_cat);
+      replace_matrix(3,1, &V, &V_an , &A_pnp, &A_an );
+    }
     bc.apply(A_pnp);
 
     // Convert to fasp
