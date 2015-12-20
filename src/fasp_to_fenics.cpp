@@ -216,3 +216,17 @@ void copy_dvector_to_vector_function(const dvector* vector, dolfin::Function* F,
   for (int i=0; i < dof_length; i++)
     F->vector()->setitem(function_dofs->val[i], vector->val[vector_dofs->val[i]]);
 }
+
+void divide_vec(EigenVector *vec1, EigenVector *vec2)
+{
+  if (vec1->size()!=vec2->size()){
+      printf(" ERROR: in divide_vec(), the vectors have different sizes \n\n Exiting... \n \n"); fflush(stdout);
+      return;
+  }
+  double * dvec1 = vec1->data();
+  double * dvec2 = vec2->data();
+  for (int i=0;i<vec1->size();i++)
+  {
+    if(std::fabs(dvec2[i])>1E-14) dvec1[i]=dvec1[i]/dvec2[i];
+  }
+}
