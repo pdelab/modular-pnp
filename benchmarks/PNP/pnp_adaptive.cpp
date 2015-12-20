@@ -105,7 +105,8 @@ int main(int argc, char** argv)
   printf("\n of a single cation and anion ");
   if (eafe_switch)
     printf("using EAFE approximations \n to the Jacobians");
-  printf("\n-----------------------------------------------------------\n\n"); fflush(stdout);
+  printf("\n-----------------------------------------------------------\n\n");
+  fflush(stdout);
 
   // Need to use Eigen for linear algebra
   parameters["linear_algebra_backend"] = "Eigen";
@@ -331,7 +332,7 @@ int main(int argc, char** argv)
     // set initial residual
     printf("\tupdate initial residual...\n"); fflush(stdout);
     base_functions::LinearForm Lbase(V);
-    EigenVector VecBase; assemble(VecBase,Lbase);
+    EigenVector VecBase; assemble(VecBase, Lbase);
     initial_residual = get_initial_residual(&L_pnp, &VecBase, &bc, &initialCation, &initialAnion, &initialPotential);
 
     printf("\tcompute relative residual...\n"); fflush(stdout);
@@ -340,7 +341,7 @@ int main(int argc, char** argv)
     L_pnp.EsEs = potentialSolution;
     assemble(b_pnp, L_pnp);
     bc.apply(b_pnp);
-    divide_vec(&b_pnp,&VecBase);
+    divide_vec(&b_pnp, &VecBase);
     relative_residual = b_pnp.norm("l2") / initial_residual;
     if (num_adapts == 0)
       printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
@@ -597,7 +598,7 @@ double update_solution_pnp (
     L->EsEs = _iterate2;
     assemble(b, *L);
     bc->apply(b);
-    divide_vec(&b,VecBase);
+    divide_vec(&b, VecBase);
     new_relative_residual = b.norm("l2") / initial_residual;
     printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
   }
