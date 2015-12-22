@@ -36,8 +36,8 @@ double lower_potential_val = -1.0;  // V
 double upper_potential_val = 1.0;  // V
 
 
-double dt = 1.0;
-double tf = 10;
+double dt = 0.1;
+double tf = 10.0;
 
 double get_initial_residual (
   pnp::LinearForm* L,
@@ -54,9 +54,6 @@ double update_solution_pnp (
   dolfin::Function* update0,
   dolfin::Function* update1,
   dolfin::Function* update2,
-  dolfin::Function* Cationt0,
-  dolfin::Function* Aniont0,
-  dolfin::Function* Potentialt0,
   double relative_residual,
   double initial_residual,
   pnp::LinearForm* L,
@@ -306,7 +303,6 @@ int main(int argc, char** argv)
       L_pnp.EsEs = potentialSolution;
       L_pnp.CatCat_t0 = Adapt_CatPrevious_t;
       L_pnp.AnAn_t0 = Adapt_AnPrevious_t;
-      L_pnp.EsEs_t0 = Adapt_EsPrevious_t;
       assemble(b_pnp, L_pnp);
       bc.apply(b_pnp);
       relative_residual = b_pnp.norm("l2") / initial_residual;
@@ -369,8 +365,10 @@ int main(int argc, char** argv)
         EigenVector_to_dvector(&b_pnp,&b_fasp);
         EigenMatrix_to_dCSRmat(&A_pnp,&A_fasp);
         A_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
+        // printf("\ttoto 1 \n"); fflush(stdout);
         fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
         status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &solu_fasp, &itpar, &amgpar);
+        // printf("\ttoto 2 \n"); fflush(stdout);
         if (status < 0)
           printf("\n### WARNING: Solver failed! Exit status = %d.\n\n", status);
         else
@@ -382,6 +380,7 @@ int main(int argc, char** argv)
         copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &anion_dofs, &anion_dofs);
         copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &potential_dofs, &potential_dofs);
 
+
         // update solution and reset solutionUpdate
         printf("\tupdate solution...\n"); fflush(stdout);
         relative_residual = update_solution_pnp (
@@ -391,9 +390,6 @@ int main(int argc, char** argv)
           &(solutionUpdate[0]),
           &(solutionUpdate[1]),
           &(solutionUpdate[2]),
-          &Adapt_CatPrevious_t,
-          &Adapt_AnPrevious_t,
-          &Adapt_EsPrevious_t,
           relative_residual,
           initial_residual,
           &L_pnp,
@@ -413,7 +409,6 @@ int main(int argc, char** argv)
         L_pnp.EsEs = potentialSolution;
         L_pnp.CatCat_t0 = Adapt_CatPrevious_t;
         L_pnp.AnAn_t0 = Adapt_CatPrevious_t;
-        L_pnp.EsEs_t0 = Adapt_EsPrevious_t;
         assemble(b_pnp, L_pnp);
         bc.apply(b_pnp);
         // if (newton_iteration == 1)
@@ -434,7 +429,7 @@ int main(int argc, char** argv)
       if (relative_residual < nonlinear_tol)
         printf("\nSuccessfully solved the system below desired residual in %d steps!\n\n", newton_iteration);
       else {
-        printf("\nDid not converge in %d Newton iterations at t=%f...\n", max_newton_iters,t);
+        printf("\nDid not converge in %d Newton iterations at t=%e...\n", max_newton_iters,t);
         printf("\tcurrent relative residual is %e > %e\n\n", relative_residual, nonlinear_tol);
       }
 
@@ -463,15 +458,18 @@ int main(int argc, char** argv)
             *(Adapt_CatPrevious_t.vector()) -= *(cationSolution.vector());
             *(Adapt_AnPrevious_t.vector()) -= *(anionSolution.vector());
             *(Adapt_EsPrevious_t.vector()) -= *(potentialSolution.vector());
-            L2Error::Form_M L2error1(mesh,cationSolution);
+            *(Adapt_CatPrevious_t.vector()) /= dt;
+            *(Adapt_AnPrevious_t.vector()) /= dt;
+            *(Adapt_EsPrevious_t.vector()) /= dt;
+            L2Error::Form_M L2error1(mesh,Adapt_CatPrevious_t);
             cationError = assemble(L2error1);
-            L2Error::Form_M L2error2(mesh,anionSolution);
+            L2Error::Form_M L2error2(mesh,Adapt_AnPrevious_t);
             anionError = assemble(L2error2);
-            L2Error::Form_M L2error3(mesh,potentialSolution);
+            L2Error::Form_M L2error3(mesh,Adapt_EsPrevious_t);
             potentialError = assemble(L2error3);
             printf("***********************************************\n");
             printf("***********************************************\n");
-            printf("Difference at t=%f...\n",t);
+            printf("Difference at t=%e...\n",t);
             printf("\tcation l2 error is:     %e\n", cationError);
             printf("\tanion l2 error is:      %e\n", anionError);
             printf("\tpotential l2 error is:  %e\n", potentialError);
@@ -480,6 +478,7 @@ int main(int argc, char** argv)
             CatPrevious_t.interpolate(cationSolution);
             AnPrevious_t.interpolate(anionSolution);
             EsPrevious_t.interpolate(potentialSolution);
+            fasp_dvec_free(&solu_fasp);
         }
 
         break;
@@ -521,9 +520,6 @@ double update_solution_pnp (
   dolfin::Function* update0,
   dolfin::Function* update1,
   dolfin::Function* update2,
-  dolfin::Function* Cationt0,
-  dolfin::Function* Aniont0,
-  dolfin::Function* Potentialt0,
   double relative_residual,
   double initial_residual,
   pnp::LinearForm* L,
@@ -540,12 +536,10 @@ double update_solution_pnp (
   update_solution(&_iterate0, &_update0);
   update_solution(&_iterate1, &_update1);
   update_solution(&_iterate2, &_update2);
+  dolfin::Constant C_dt(dt);
   L->CatCat = _iterate0;
   L->AnAn = _iterate1;
   L->EsEs = _iterate2;
-  L->CatCat_t0 =  *Cationt0;
-  L->AnAn_t0 = *Aniont0;
-  L->EsEs_t0 = *Potentialt0;
   EigenVector b;
   assemble(b, *L);
   bc->apply(b);
@@ -608,7 +602,6 @@ double get_initial_residual (
   L->EsEs = adapt_potential;
   L->CatCat_t0 = adapt_cation;
   L->AnAn_t0 = adapt_anion;
-  L->EsEs_t0 = adapt_potential;
   EigenVector b;
   assemble(b, *L);
   bc->apply(b);

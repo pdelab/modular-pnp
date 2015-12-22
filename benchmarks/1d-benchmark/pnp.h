@@ -5413,34 +5413,40 @@ public:
     {
       A[r] = 0.0;
     } // end loop over 'r'
-    // Number of operations to compute geometry constants: 142.
-    double G[20];
+    // Number of operations to compute geometry constants: 176.
+    double G[26];
     G[0] = det*w[8][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
     G[1] = det*w[7][0]*w[8][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
     G[2] = det*w[7][0]*w[8][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
     G[3] = det*w[7][0]*w[8][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
     G[4] = det*w[8][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
     G[5] = det*w[8][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[6] = det*w[8][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[7] = det*w[8][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[8] = det*w[8][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[9] = det*w[5][0]*w[8][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[10] = det*w[5][0]*w[8][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[11] = det*w[5][0]*w[8][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[12] = det*w[5][0]*w[8][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[13] = det*w[5][0]*w[8][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[14] = det*w[5][0]*w[8][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[15] = det*w[7][0]*w[8][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[16] = det*w[7][0]*w[8][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[17] = det*w[7][0]*w[8][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[18] =  - det*w[5][0]*w[8][0];
-    G[19] =  - det*w[7][0]*w[8][0];
+    G[6] = det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[7] = det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[8] = det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[9] = det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[10] = det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[11] = det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[12] = det*w[5][0]*w[8][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[13] = det*w[5][0]*w[8][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[14] = det*w[5][0]*w[8][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[15] = det*w[8][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[16] = det*w[8][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[17] = det*w[5][0]*w[8][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[18] = det*w[5][0]*w[8][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[19] = det*w[8][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[20] = det*w[5][0]*w[8][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[21] = det*w[7][0]*w[8][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[22] = det*w[7][0]*w[8][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[23] = det*w[7][0]*w[8][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[24] =  - det*w[5][0];
+    G[25] =  - det*w[7][0];
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
     
     // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 18315
+    // Number of operations to compute element tensor for following IP loop = 17430
     for (unsigned int ip = 0; ip < 15; ip++)
     {
       
@@ -5459,7 +5465,6 @@ public:
       double F11 = 0.0;
       double F12 = 0.0;
       double F13 = 0.0;
-      double F14 = 0.0;
       
       // Total number of operations to compute function values = 36
       for (unsigned int r = 0; r < 2; r++)
@@ -5475,7 +5480,7 @@ public:
         F11 += FE0_D001[ip][r]*w[1][nzc0[r]];
       } // end loop over 'r'
       
-      // Total number of operations to compute function values = 48
+      // Total number of operations to compute function values = 40
       for (unsigned int r = 0; r < 4; r++)
       {
         F0 += FE0[ip][r]*w[0][r];
@@ -5483,11 +5488,10 @@ public:
         F8 += FE0[ip][r]*w[4][r];
         F12 += FE0[ip][r]*w[6][r];
         F13 += FE0[ip][r]*w[3][r];
-        F14 += FE0[ip][r]*w[2][r];
       } // end loop over 'r'
       
-      // Number of operations to compute ip constants: 213
-      double I[41];
+      // Number of operations to compute ip constants: 210
+      double I[40];
       // Number of operations: 4
       I[0] = F12*G[0]*W15[ip]*std::exp(F1);
       
@@ -5513,103 +5517,100 @@ public:
       I[7] = F13*G[7]*W15[ip];
       
       // Number of operations: 2
-      I[8] = F13*G[4]*W15[ip];
+      I[8] = F13*G[8]*W15[ip];
       
       // Number of operations: 2
-      I[9] = F13*G[8]*W15[ip];
+      I[9] = F13*G[9]*W15[ip];
       
       // Number of operations: 2
-      I[10] = F13*G[5]*W15[ip];
+      I[10] = F13*G[10]*W15[ip];
       
       // Number of operations: 2
-      I[11] = F13*G[0]*W15[ip];
+      I[11] = F13*G[11]*W15[ip];
       
       // Number of operations: 4
-      I[12] = F8*G[9]*W15[ip]*std::exp(F0);
+      I[12] = F8*G[12]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[13] = F8*G[10]*W15[ip]*std::exp(F0);
+      I[13] = F8*G[13]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[14] = F8*G[11]*W15[ip]*std::exp(F0);
+      I[14] = F8*G[14]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[15] = F8*G[6]*W15[ip]*std::exp(F0);
+      I[15] = F8*G[15]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[16] = F8*G[7]*W15[ip]*std::exp(F0);
+      I[16] = F8*G[16]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
       I[17] = F8*G[4]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[18] = F8*G[12]*W15[ip]*std::exp(F0);
+      I[18] = F8*G[17]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[19] = F8*G[13]*W15[ip]*std::exp(F0);
+      I[19] = F8*G[18]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[20] = F8*G[8]*W15[ip]*std::exp(F0);
+      I[20] = F8*G[19]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
       I[21] = F8*G[5]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[22] = F8*G[14]*W15[ip]*std::exp(F0);
+      I[22] = F8*G[20]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
       I[23] = F8*G[0]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[24] = F12*G[15]*W15[ip]*std::exp(F1);
+      I[24] = F12*G[21]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[25] = F12*G[16]*W15[ip]*std::exp(F1);
+      I[25] = F12*G[22]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[26] = F12*G[6]*W15[ip]*std::exp(F1);
+      I[26] = F12*G[15]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[27] = F12*G[7]*W15[ip]*std::exp(F1);
+      I[27] = F12*G[16]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[28] = F12*G[17]*W15[ip]*std::exp(F1);
+      I[28] = F12*G[23]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[29] = F12*G[8]*W15[ip]*std::exp(F1);
+      I[29] = F12*G[19]*W15[ip]*std::exp(F1);
       
       // Number of operations: 15
       I[30] = F12*W15[ip]*std::exp(F1)*(F10*G[5] + F11*G[4] + F2*G[3] + F3*G[2] + F4*G[1] + F9*G[0]);
       
       // Number of operations: 15
-      I[31] = F8*W15[ip]*std::exp(F0)*(F2*G[11] + F3*G[10] + F4*G[9] + F5*G[4] + F6*G[7] + F7*G[6]);
+      I[31] = F8*W15[ip]*std::exp(F0)*(F2*G[14] + F3*G[13] + F4*G[12] + F5*G[4] + F6*G[16] + F7*G[15]);
       
       // Number of operations: 15
-      I[32] = F8*W15[ip]*std::exp(F0)*(F2*G[13] + F3*G[12] + F4*G[10] + F5*G[5] + F6*G[8] + F7*G[7]);
+      I[32] = F8*W15[ip]*std::exp(F0)*(F2*G[18] + F3*G[17] + F4*G[13] + F5*G[5] + F6*G[19] + F7*G[16]);
       
       // Number of operations: 15
-      I[33] = F8*W15[ip]*std::exp(F0)*(F2*G[14] + F3*G[13] + F4*G[11] + F5*G[0] + F6*G[5] + F7*G[4]);
+      I[33] = F8*W15[ip]*std::exp(F0)*(F2*G[20] + F3*G[18] + F4*G[14] + F5*G[0] + F6*G[5] + F7*G[4]);
       
       // Number of operations: 15
-      I[34] = F12*W15[ip]*std::exp(F1)*(F10*G[7] + F11*G[6] + F2*G[1] + F3*G[16] + F4*G[15] + F9*G[4]);
+      I[34] = F12*W15[ip]*std::exp(F1)*(F10*G[16] + F11*G[15] + F2*G[1] + F3*G[22] + F4*G[21] + F9*G[4]);
       
       // Number of operations: 15
-      I[35] = F12*W15[ip]*std::exp(F1)*(F10*G[8] + F11*G[7] + F2*G[2] + F3*G[17] + F4*G[16] + F9*G[5]);
+      I[35] = F12*W15[ip]*std::exp(F1)*(F10*G[19] + F11*G[16] + F2*G[2] + F3*G[23] + F4*G[22] + F9*G[5]);
       
       // Number of operations: 3
-      I[36] = W15[ip]*det*std::exp(F14);
+      I[36] = G[24]*W15[ip]*std::exp(F0);
       
       // Number of operations: 3
-      I[37] = G[18]*W15[ip]*std::exp(F0);
+      I[37] = G[25]*W15[ip]*std::exp(F1);
       
       // Number of operations: 3
-      I[38] = G[19]*W15[ip]*std::exp(F1);
+      I[38] = W15[ip]*det*std::exp(F0);
       
       // Number of operations: 3
-      I[39] = W15[ip]*det*std::exp(F0);
-      
-      // Number of operations: 3
-      I[40] = W15[ip]*det*std::exp(F1);
+      I[39] = W15[ip]*det*std::exp(F1);
       
       
       // Number of operations for primary indices: 540
@@ -5730,21 +5731,19 @@ public:
         } // end loop over 'k'
       } // end loop over 'j'
       
-      // Number of operations for primary indices: 240
+      // Number of operations for primary indices: 192
       for (unsigned int j = 0; j < 4; j++)
       {
         for (unsigned int k = 0; k < 4; k++)
         {
           // Number of operations to compute entry: 3
-          A[nzc11[j]*12 + nzc11[k]] += FE0[ip][j]*FE0[ip][k]*I[36];
+          A[nzc11[j]*12 + nzc3[k]] += FE0[ip][j]*FE0[ip][k]*I[36];
           // Number of operations to compute entry: 3
-          A[nzc11[j]*12 + nzc3[k]] += FE0[ip][j]*FE0[ip][k]*I[37];
+          A[nzc11[j]*12 + nzc7[k]] += FE0[ip][j]*FE0[ip][k]*I[37];
           // Number of operations to compute entry: 3
-          A[nzc11[j]*12 + nzc7[k]] += FE0[ip][j]*FE0[ip][k]*I[38];
+          A[nzc3[j]*12 + nzc3[k]] += FE0[ip][j]*FE0[ip][k]*I[38];
           // Number of operations to compute entry: 3
-          A[nzc3[j]*12 + nzc3[k]] += FE0[ip][j]*FE0[ip][k]*I[39];
-          // Number of operations to compute entry: 3
-          A[nzc7[j]*12 + nzc7[k]] += FE0[ip][j]*FE0[ip][k]*I[40];
+          A[nzc7[j]*12 + nzc7[k]] += FE0[ip][j]*FE0[ip][k]*I[39];
         } // end loop over 'k'
       } // end loop over 'j'
     } // end loop over 'ip'
@@ -5775,7 +5774,7 @@ public:
   /// Tabulate which form coefficients are used by this integral
   virtual const std::vector<bool> & enabled_coefficients() const
   {
-    static const std::vector<bool> enabled({true, true, true, true, true, true, true, true, true, true, true, true});
+    static const std::vector<bool> enabled({true, true, true, true, true, true, true, true, true, true, true});
     return enabled;
   }
 
@@ -5890,34 +5889,40 @@ public:
     {
       A[r] = 0.0;
     } // end loop over 'r'
-    // Number of operations to compute geometry constants: 142.
-    double G[20];
-    G[0] =  - det*w[11][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[1] =  - det*w[11][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[2] =  - det*w[11][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[3] =  - det*w[10][0]*w[11][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[4] =  - det*w[10][0]*w[11][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[5] =  - det*w[10][0]*w[11][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[6] =  - det*w[11][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[7] =  - det*w[11][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[8] =  - det*w[11][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[9] =  - det*w[11][0]*w[8][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[10] =  - det*w[11][0]*w[8][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[11] =  - det*w[11][0]*w[8][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[12] =  - det*w[11][0]*w[8][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[13] =  - det*w[11][0]*w[8][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[14] =  - det*w[11][0]*w[8][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[15] =  - det*w[10][0]*w[11][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[16] =  - det*w[10][0]*w[11][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[17] =  - det*w[10][0]*w[11][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[18] = det*w[11][0]*w[8][0];
-    G[19] = det*w[10][0]*w[11][0];
+    // Number of operations to compute geometry constants: 176.
+    double G[26];
+    G[0] =  - det*w[10][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[1] =  - det*w[10][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[2] =  - det*w[10][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[3] =  - det*w[10][0]*w[9][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[4] =  - det*w[10][0]*w[9][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[5] =  - det*w[10][0]*w[9][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[6] =  - det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[7] =  - det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[8] =  - det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[9] =  - det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[10] =  - det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[11] =  - det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[12] =  - det*w[10][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[13] =  - det*w[10][0]*w[7][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[14] =  - det*w[10][0]*w[7][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[15] =  - det*w[10][0]*w[7][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[16] =  - det*w[10][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[17] =  - det*w[10][0]*w[7][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[18] =  - det*w[10][0]*w[7][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[19] =  - det*w[10][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[20] =  - det*w[10][0]*w[7][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[21] =  - det*w[10][0]*w[9][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[22] =  - det*w[10][0]*w[9][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[23] =  - det*w[10][0]*w[9][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[24] = det*w[7][0];
+    G[25] = det*w[9][0];
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
     
     // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 4200
+    // Number of operations to compute element tensor for following IP loop = 3906
     for (unsigned int ip = 0; ip < 14; ip++)
     {
       
@@ -5938,68 +5943,64 @@ public:
       double F13 = 0.0;
       double F14 = 0.0;
       double F15 = 0.0;
-      double F16 = 0.0;
-      double F17 = 0.0;
       
       // Total number of operations to compute function values = 36
       for (unsigned int r = 0; r < 2; r++)
       {
-        F7 += FE0_D001[ip][r]*w[2][nzc2[r]];
-        F8 += FE0_D001[ip][r]*w[2][nzc1[r]];
-        F9 += FE0_D001[ip][r]*w[2][nzc0[r]];
-        F10 += FE0_D001[ip][r]*w[0][nzc2[r]];
-        F11 += FE0_D001[ip][r]*w[0][nzc1[r]];
-        F12 += FE0_D001[ip][r]*w[0][nzc0[r]];
-        F14 += FE0_D001[ip][r]*w[1][nzc2[r]];
-        F15 += FE0_D001[ip][r]*w[1][nzc1[r]];
-        F16 += FE0_D001[ip][r]*w[1][nzc0[r]];
+        F5 += FE0_D001[ip][r]*w[2][nzc2[r]];
+        F6 += FE0_D001[ip][r]*w[2][nzc1[r]];
+        F7 += FE0_D001[ip][r]*w[2][nzc0[r]];
+        F8 += FE0_D001[ip][r]*w[0][nzc2[r]];
+        F9 += FE0_D001[ip][r]*w[0][nzc1[r]];
+        F10 += FE0_D001[ip][r]*w[0][nzc0[r]];
+        F12 += FE0_D001[ip][r]*w[1][nzc2[r]];
+        F13 += FE0_D001[ip][r]*w[1][nzc1[r]];
+        F14 += FE0_D001[ip][r]*w[1][nzc0[r]];
       } // end loop over 'r'
       
-      // Total number of operations to compute function values = 72
+      // Total number of operations to compute function values = 56
       for (unsigned int r = 0; r < 4; r++)
       {
         F0 += FE0[ip][r]*w[3][r];
         F1 += FE0[ip][r]*w[0][r];
         F2 += FE0[ip][r]*w[4][r];
         F3 += FE0[ip][r]*w[1][r];
-        F4 += FE0[ip][r]*w[5][r];
-        F5 += FE0[ip][r]*w[2][r];
-        F6 += FE0[ip][r]*w[7][r];
-        F13 += FE0[ip][r]*w[9][r];
-        F17 += FE0[ip][r]*w[6][r];
+        F4 += FE0[ip][r]*w[6][r];
+        F11 += FE0[ip][r]*w[8][r];
+        F15 += FE0[ip][r]*w[5][r];
       } // end loop over 'r'
       
-      // Number of operations to compute ip constants: 132
+      // Number of operations to compute ip constants: 127
       double I[12];
       // Number of operations: 15
-      I[0] = F13*W14[ip]*std::exp(F3)*(F14*G[0] + F15*G[1] + F16*G[2] + F7*G[3] + F8*G[4] + F9*G[5]);
+      I[0] = F11*W14[ip]*std::exp(F3)*(F12*G[0] + F13*G[1] + F14*G[2] + F5*G[3] + F6*G[4] + F7*G[5]);
       
       // Number of operations: 7
-      I[1] = F17*W14[ip]*(F7*G[2] + F8*G[6] + F9*G[7]);
+      I[1] = F15*W14[ip]*(F5*G[6] + F6*G[7] + F7*G[8]);
       
       // Number of operations: 7
-      I[2] = F17*W14[ip]*(F7*G[1] + F8*G[8] + F9*G[6]);
+      I[2] = F15*W14[ip]*(F5*G[9] + F6*G[10] + F7*G[7]);
       
       // Number of operations: 7
-      I[3] = F17*W14[ip]*(F7*G[0] + F8*G[1] + F9*G[2]);
+      I[3] = F15*W14[ip]*(F5*G[11] + F6*G[9] + F7*G[6]);
       
       // Number of operations: 15
-      I[4] = F6*W14[ip]*std::exp(F1)*(F10*G[2] + F11*G[6] + F12*G[7] + F7*G[9] + F8*G[10] + F9*G[11]);
+      I[4] = F4*W14[ip]*std::exp(F1)*(F10*G[12] + F5*G[13] + F6*G[14] + F7*G[15] + F8*G[2] + F9*G[16]);
       
       // Number of operations: 15
-      I[5] = F6*W14[ip]*std::exp(F1)*(F10*G[1] + F11*G[8] + F12*G[6] + F7*G[12] + F8*G[13] + F9*G[10]);
+      I[5] = F4*W14[ip]*std::exp(F1)*(F10*G[16] + F5*G[17] + F6*G[18] + F7*G[14] + F8*G[1] + F9*G[19]);
       
       // Number of operations: 15
-      I[6] = F6*W14[ip]*std::exp(F1)*(F10*G[0] + F11*G[1] + F12*G[2] + F7*G[14] + F8*G[12] + F9*G[9]);
+      I[6] = F4*W14[ip]*std::exp(F1)*(F10*G[2] + F5*G[20] + F6*G[17] + F7*G[13] + F8*G[0] + F9*G[1]);
       
       // Number of operations: 15
-      I[7] = F13*W14[ip]*std::exp(F3)*(F14*G[2] + F15*G[6] + F16*G[7] + F7*G[5] + F8*G[15] + F9*G[16]);
+      I[7] = F11*W14[ip]*std::exp(F3)*(F12*G[2] + F13*G[16] + F14*G[12] + F5*G[5] + F6*G[21] + F7*G[22]);
       
       // Number of operations: 15
-      I[8] = F13*W14[ip]*std::exp(F3)*(F14*G[1] + F15*G[8] + F16*G[6] + F7*G[4] + F8*G[17] + F9*G[15]);
+      I[8] = F11*W14[ip]*std::exp(F3)*(F12*G[1] + F13*G[19] + F14*G[16] + F5*G[4] + F6*G[23] + F7*G[21]);
       
-      // Number of operations: 11
-      I[9] = W14[ip]*(G[18]*std::exp(F1) + G[19]*std::exp(F3) + det*(std::exp(F4) - std::exp(F5)));
+      // Number of operations: 6
+      I[9] = W14[ip]*(G[24]*std::exp(F1) + G[25]*std::exp(F3));
       
       // Number of operations: 5
       I[10] = W14[ip]*det*(std::exp(F0) - std::exp(F1));
@@ -6080,7 +6081,7 @@ public:
   /// Return a string identifying the form
   virtual const char* signature() const
   {
-    return "de2abe2af35e79ac93b68a0e8d90faaa02bee8a7047417a8228aa75671da979a04977dcf033f3bde7dbb65b8d5c12833441a1c6736e841490318baf9954ed1bd";
+    return "3526f4d5aca96188db49e2d1b3c9a06798fa3da17d7a7b4fe96bbb9419f3f340b628563ad5be8fa1c8365d9fdf68358b46306c342e7ef7ec88924e267266af15";
   }
 
 
@@ -6394,7 +6395,7 @@ public:
   /// Return a string identifying the form
   virtual const char* signature() const
   {
-    return "aa66219edb9c0a9723b59d5693425a5a7da500a05e3761f7dfdfbb5caaf785ebc46fdca233e8e41bbbda2bd9a359783d3b6920d36a5c6286a9b0ebeea5e002d2";
+    return "5e30648870b4abccd16ffe592d99fd7aaffa63fbd2152df1543fda2545c1d88947a21a024f6e155aaa8ba8878b7247e110eb77c0f2d18b442fd567a52706f2f3";
   }
 
 
@@ -6407,13 +6408,13 @@ public:
   /// Return the number of coefficients (n)
   virtual std::size_t num_coefficients() const
   {
-    return 12;
+    return 11;
   }
 
   /// Return original coefficient position for each coefficient (0 <= i < n)
   virtual std::size_t original_coefficient_position(std::size_t i) const
   {
-    static const std::vector<std::size_t> position({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11});
+    static const std::vector<std::size_t> position({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
     return position[i];
   }
 
@@ -6465,25 +6466,20 @@ public:
       }
     case 8:
       {
-        return new pnp_finite_element_1();
+        return new pnp_finite_element_0();
         break;
       }
     case 9:
       {
-        return new pnp_finite_element_0();
+        return new pnp_finite_element_1();
         break;
       }
     case 10:
       {
-        return new pnp_finite_element_1();
-        break;
-      }
-    case 11:
-      {
         return new pnp_finite_element_0();
         break;
       }
-    case 12:
+    case 11:
       {
         return new pnp_finite_element_0();
         break;
@@ -6540,25 +6536,20 @@ public:
       }
     case 8:
       {
-        return new pnp_dofmap_1();
+        return new pnp_dofmap_0();
         break;
       }
     case 9:
       {
-        return new pnp_dofmap_0();
+        return new pnp_dofmap_1();
         break;
       }
     case 10:
       {
-        return new pnp_dofmap_1();
-        break;
-      }
-    case 11:
-      {
         return new pnp_dofmap_0();
         break;
       }
-    case 12:
+    case 11:
       {
         return new pnp_dofmap_0();
         break;
@@ -7033,53 +7024,6 @@ public:
 
   // Create standard function space (shared pointer version)
   CoefficientSpace_EsEs(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
-    dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_dofmap_1()), *mesh, constrained_domain)))
-  {
-    // Do nothing
-  }
-
-};
-
-class CoefficientSpace_EsEs_t0: public dolfin::FunctionSpace
-{
-public:
-
-  //--- Constructors for standard function space, 2 different versions ---
-
-  // Create standard function space (reference version)
-  CoefficientSpace_EsEs_t0(const dolfin::Mesh& mesh):
-    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_dofmap_1()), mesh)))
-  {
-    // Do nothing
-  }
-
-  // Create standard function space (shared pointer version)
-  CoefficientSpace_EsEs_t0(std::shared_ptr<const dolfin::Mesh> mesh):
-    dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_dofmap_1()), *mesh)))
-  {
-    // Do nothing
-  }
-
-  //--- Constructors for constrained function space, 2 different versions ---
-
-  // Create standard function space (reference version)
-  CoefficientSpace_EsEs_t0(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
-    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_finite_element_1()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_dofmap_1()), mesh,
-                              dolfin::reference_to_no_delete_pointer(constrained_domain))))
-  {
-    // Do nothing
-  }
-
-  // Create standard function space (shared pointer version)
-  CoefficientSpace_EsEs_t0(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
                           std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new pnp_finite_element_1()))),
                           std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new pnp_dofmap_1()), *mesh, constrained_domain)))
@@ -7638,19 +7582,17 @@ typedef CoefficientSpace_CatCat_t0 Form_L_FunctionSpace_4;
 
 typedef CoefficientSpace_AnAn_t0 Form_L_FunctionSpace_5;
 
-typedef CoefficientSpace_EsEs_t0 Form_L_FunctionSpace_6;
+typedef CoefficientSpace_eps Form_L_FunctionSpace_6;
 
-typedef CoefficientSpace_eps Form_L_FunctionSpace_7;
+typedef CoefficientSpace_Dp Form_L_FunctionSpace_7;
 
-typedef CoefficientSpace_Dp Form_L_FunctionSpace_8;
+typedef CoefficientSpace_qp Form_L_FunctionSpace_8;
 
-typedef CoefficientSpace_qp Form_L_FunctionSpace_9;
+typedef CoefficientSpace_Dn Form_L_FunctionSpace_9;
 
-typedef CoefficientSpace_Dn Form_L_FunctionSpace_10;
+typedef CoefficientSpace_qn Form_L_FunctionSpace_10;
 
-typedef CoefficientSpace_qn Form_L_FunctionSpace_11;
-
-typedef CoefficientSpace_dt Form_L_FunctionSpace_12;
+typedef CoefficientSpace_dt Form_L_FunctionSpace_11;
 
 class Form_L: public dolfin::Form
 {
@@ -7658,7 +7600,7 @@ public:
 
   // Constructor
   Form_L(const dolfin::FunctionSpace& V0):
-    dolfin::Form(1, 12), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), CatCat_t0(*this, 3), AnAn_t0(*this, 4), EsEs_t0(*this, 5), eps(*this, 6), Dp(*this, 7), qp(*this, 8), Dn(*this, 9), qn(*this, 10), dt(*this, 11)
+    dolfin::Form(1, 11), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), CatCat_t0(*this, 3), AnAn_t0(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), dt(*this, 10)
   {
     _function_spaces[0] = reference_to_no_delete_pointer(V0);
 
@@ -7666,8 +7608,8 @@ public:
   }
 
   // Constructor
-  Form_L(const dolfin::FunctionSpace& V0, const dolfin::GenericFunction& CatCat, const dolfin::GenericFunction& AnAn, const dolfin::GenericFunction& EsEs, const dolfin::GenericFunction& CatCat_t0, const dolfin::GenericFunction& AnAn_t0, const dolfin::GenericFunction& EsEs_t0, const dolfin::GenericFunction& eps, const dolfin::GenericFunction& Dp, const dolfin::GenericFunction& qp, const dolfin::GenericFunction& Dn, const dolfin::GenericFunction& qn, const dolfin::GenericFunction& dt):
-    dolfin::Form(1, 12), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), CatCat_t0(*this, 3), AnAn_t0(*this, 4), EsEs_t0(*this, 5), eps(*this, 6), Dp(*this, 7), qp(*this, 8), Dn(*this, 9), qn(*this, 10), dt(*this, 11)
+  Form_L(const dolfin::FunctionSpace& V0, const dolfin::GenericFunction& CatCat, const dolfin::GenericFunction& AnAn, const dolfin::GenericFunction& EsEs, const dolfin::GenericFunction& CatCat_t0, const dolfin::GenericFunction& AnAn_t0, const dolfin::GenericFunction& eps, const dolfin::GenericFunction& Dp, const dolfin::GenericFunction& qp, const dolfin::GenericFunction& Dn, const dolfin::GenericFunction& qn, const dolfin::GenericFunction& dt):
+    dolfin::Form(1, 11), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), CatCat_t0(*this, 3), AnAn_t0(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), dt(*this, 10)
   {
     _function_spaces[0] = reference_to_no_delete_pointer(V0);
 
@@ -7676,7 +7618,6 @@ public:
     this->EsEs = EsEs;
     this->CatCat_t0 = CatCat_t0;
     this->AnAn_t0 = AnAn_t0;
-    this->EsEs_t0 = EsEs_t0;
     this->eps = eps;
     this->Dp = Dp;
     this->qp = qp;
@@ -7688,8 +7629,8 @@ public:
   }
 
   // Constructor
-  Form_L(const dolfin::FunctionSpace& V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> CatCat_t0, std::shared_ptr<const dolfin::GenericFunction> AnAn_t0, std::shared_ptr<const dolfin::GenericFunction> EsEs_t0, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> dt):
-    dolfin::Form(1, 12), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), CatCat_t0(*this, 3), AnAn_t0(*this, 4), EsEs_t0(*this, 5), eps(*this, 6), Dp(*this, 7), qp(*this, 8), Dn(*this, 9), qn(*this, 10), dt(*this, 11)
+  Form_L(const dolfin::FunctionSpace& V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> CatCat_t0, std::shared_ptr<const dolfin::GenericFunction> AnAn_t0, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> dt):
+    dolfin::Form(1, 11), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), CatCat_t0(*this, 3), AnAn_t0(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), dt(*this, 10)
   {
     _function_spaces[0] = reference_to_no_delete_pointer(V0);
 
@@ -7698,7 +7639,6 @@ public:
     this->EsEs = *EsEs;
     this->CatCat_t0 = *CatCat_t0;
     this->AnAn_t0 = *AnAn_t0;
-    this->EsEs_t0 = *EsEs_t0;
     this->eps = *eps;
     this->Dp = *Dp;
     this->qp = *qp;
@@ -7711,7 +7651,7 @@ public:
 
   // Constructor
   Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0):
-    dolfin::Form(1, 12), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), CatCat_t0(*this, 3), AnAn_t0(*this, 4), EsEs_t0(*this, 5), eps(*this, 6), Dp(*this, 7), qp(*this, 8), Dn(*this, 9), qn(*this, 10), dt(*this, 11)
+    dolfin::Form(1, 11), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), CatCat_t0(*this, 3), AnAn_t0(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), dt(*this, 10)
   {
     _function_spaces[0] = V0;
 
@@ -7719,8 +7659,8 @@ public:
   }
 
   // Constructor
-  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, const dolfin::GenericFunction& CatCat, const dolfin::GenericFunction& AnAn, const dolfin::GenericFunction& EsEs, const dolfin::GenericFunction& CatCat_t0, const dolfin::GenericFunction& AnAn_t0, const dolfin::GenericFunction& EsEs_t0, const dolfin::GenericFunction& eps, const dolfin::GenericFunction& Dp, const dolfin::GenericFunction& qp, const dolfin::GenericFunction& Dn, const dolfin::GenericFunction& qn, const dolfin::GenericFunction& dt):
-    dolfin::Form(1, 12), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), CatCat_t0(*this, 3), AnAn_t0(*this, 4), EsEs_t0(*this, 5), eps(*this, 6), Dp(*this, 7), qp(*this, 8), Dn(*this, 9), qn(*this, 10), dt(*this, 11)
+  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, const dolfin::GenericFunction& CatCat, const dolfin::GenericFunction& AnAn, const dolfin::GenericFunction& EsEs, const dolfin::GenericFunction& CatCat_t0, const dolfin::GenericFunction& AnAn_t0, const dolfin::GenericFunction& eps, const dolfin::GenericFunction& Dp, const dolfin::GenericFunction& qp, const dolfin::GenericFunction& Dn, const dolfin::GenericFunction& qn, const dolfin::GenericFunction& dt):
+    dolfin::Form(1, 11), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), CatCat_t0(*this, 3), AnAn_t0(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), dt(*this, 10)
   {
     _function_spaces[0] = V0;
 
@@ -7729,7 +7669,6 @@ public:
     this->EsEs = EsEs;
     this->CatCat_t0 = CatCat_t0;
     this->AnAn_t0 = AnAn_t0;
-    this->EsEs_t0 = EsEs_t0;
     this->eps = eps;
     this->Dp = Dp;
     this->qp = qp;
@@ -7741,8 +7680,8 @@ public:
   }
 
   // Constructor
-  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> CatCat_t0, std::shared_ptr<const dolfin::GenericFunction> AnAn_t0, std::shared_ptr<const dolfin::GenericFunction> EsEs_t0, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> dt):
-    dolfin::Form(1, 12), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), CatCat_t0(*this, 3), AnAn_t0(*this, 4), EsEs_t0(*this, 5), eps(*this, 6), Dp(*this, 7), qp(*this, 8), Dn(*this, 9), qn(*this, 10), dt(*this, 11)
+  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> CatCat_t0, std::shared_ptr<const dolfin::GenericFunction> AnAn_t0, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> dt):
+    dolfin::Form(1, 11), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), CatCat_t0(*this, 3), AnAn_t0(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), dt(*this, 10)
   {
     _function_spaces[0] = V0;
 
@@ -7751,7 +7690,6 @@ public:
     this->EsEs = *EsEs;
     this->CatCat_t0 = *CatCat_t0;
     this->AnAn_t0 = *AnAn_t0;
-    this->EsEs_t0 = *EsEs_t0;
     this->eps = *eps;
     this->Dp = *Dp;
     this->qp = *qp;
@@ -7779,20 +7717,18 @@ public:
       return 3;
     else if (name == "AnAn_t0")
       return 4;
-    else if (name == "EsEs_t0")
-      return 5;
     else if (name == "eps")
-      return 6;
+      return 5;
     else if (name == "Dp")
-      return 7;
+      return 6;
     else if (name == "qp")
-      return 8;
+      return 7;
     else if (name == "Dn")
-      return 9;
+      return 8;
     else if (name == "qn")
-      return 10;
+      return 9;
     else if (name == "dt")
-      return 11;
+      return 10;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -7816,18 +7752,16 @@ public:
     case 4:
       return "AnAn_t0";
     case 5:
-      return "EsEs_t0";
-    case 6:
       return "eps";
-    case 7:
+    case 6:
       return "Dp";
-    case 8:
+    case 7:
       return "qp";
-    case 9:
+    case 8:
       return "Dn";
-    case 10:
+    case 9:
       return "qn";
-    case 11:
+    case 10:
       return "dt";
     }
 
@@ -7844,13 +7778,12 @@ public:
   typedef Form_L_FunctionSpace_3 CoefficientSpace_EsEs;
   typedef Form_L_FunctionSpace_4 CoefficientSpace_CatCat_t0;
   typedef Form_L_FunctionSpace_5 CoefficientSpace_AnAn_t0;
-  typedef Form_L_FunctionSpace_6 CoefficientSpace_EsEs_t0;
-  typedef Form_L_FunctionSpace_7 CoefficientSpace_eps;
-  typedef Form_L_FunctionSpace_8 CoefficientSpace_Dp;
-  typedef Form_L_FunctionSpace_9 CoefficientSpace_qp;
-  typedef Form_L_FunctionSpace_10 CoefficientSpace_Dn;
-  typedef Form_L_FunctionSpace_11 CoefficientSpace_qn;
-  typedef Form_L_FunctionSpace_12 CoefficientSpace_dt;
+  typedef Form_L_FunctionSpace_6 CoefficientSpace_eps;
+  typedef Form_L_FunctionSpace_7 CoefficientSpace_Dp;
+  typedef Form_L_FunctionSpace_8 CoefficientSpace_qp;
+  typedef Form_L_FunctionSpace_9 CoefficientSpace_Dn;
+  typedef Form_L_FunctionSpace_10 CoefficientSpace_qn;
+  typedef Form_L_FunctionSpace_11 CoefficientSpace_dt;
 
   // Coefficients
   dolfin::CoefficientAssigner CatCat;
@@ -7858,7 +7791,6 @@ public:
   dolfin::CoefficientAssigner EsEs;
   dolfin::CoefficientAssigner CatCat_t0;
   dolfin::CoefficientAssigner AnAn_t0;
-  dolfin::CoefficientAssigner EsEs_t0;
   dolfin::CoefficientAssigner eps;
   dolfin::CoefficientAssigner Dp;
   dolfin::CoefficientAssigner qp;
