@@ -31,9 +31,9 @@ qn = Constant(tetrahedron)
 dt = Constant(tetrahedron)
 
 
-a   = Cat*cat*dx \
-    + An*an*dx \
-    + Phi*phi*dx \
+a   = Cat*exp(CatCat)*cat*dx \
+    + An*exp(AnAn)*an*dx \
+    + Phi*exp(EsEs)*phi*dx \
     + dt*( Dp*exp(CatCat) * ( inner(grad(Cat),grad(cat)) + inner(grad(CatCat)+qp*grad(EsEs), grad(cat)) * Cat ) )*dx \
     + dt*( qp*Dp*exp(CatCat) * inner(grad(Phi), grad(cat)) )*dx \
     + dt*( Dn*exp(AnAn  ) * ( inner(grad(An ),grad(an )) + inner(grad(AnAn  )+qn*grad(EsEs), grad(an))  * An  ) )*dx \
@@ -41,9 +41,9 @@ a   = Cat*cat*dx \
     + dt*( eps * inner(grad(Phi), grad(phi)) )*dx \
     + dt*( -(qp*exp(CatCat)*Cat + qn*exp(AnAn)*An)*phi )*dx
 
-L   = -(CatCat - CatCat_t0 )*cat*dx \
-    - (AnAn    - AnAn_t0   )*an*dx \
-    - (EsEs  - EsEs_t0   )*phi*dx \
+L   = -(exp(CatCat) - exp(CatCat_t0) )*cat*dx \
+    - (exp(AnAn)    - exp(AnAn_t0)   )*an*dx \
+    - (exp(EsEs)  - exp(EsEs_t0)   )*phi*dx \
     - dt*( Dp*exp(CatCat)*inner(grad(CatCat+qp*EsEs), grad(cat)) )*dx \
     - dt*( Dn*exp(AnAn  )*inner(grad(AnAn  +qn*EsEs), grad(an )) )*dx \
     - dt*( eps * inner(grad(EsEs),grad(phi)) )*dx \

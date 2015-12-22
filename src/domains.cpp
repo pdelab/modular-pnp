@@ -58,7 +58,7 @@ void domain_build (domain_param *domain_par,
       dolfin::FacetFunction<std::size_t> surfaces_object(*mesh);
       surfaces_object.set_all(1);
       *surfaces = surfaces_object;
-    } 
+    }
     else { // read in mesh from specified files
       printf("### ERROR: Reading in meshes is currently unsupported: %s...\n\n", domain_par->mesh_file);
     }
@@ -70,7 +70,7 @@ void domain_build (domain_param *domain_par,
       printf(" Reading in the mesh subdomains from %s \n", domain_par->subdomain_file);
       dolfin::MeshFunction<std::size_t> subdomains_object(*mesh, domain_par->subdomain_file);
       *subdomains = subdomains_object;
-      
+
       printf(" Reading in the mesh surfaces from %s \n", domain_par->surface_file);
       dolfin::MeshFunction<std::size_t>  surfaces_object(*mesh, domain_par->surface_file);
       *surfaces = surfaces_object;
@@ -113,15 +113,17 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   dolfin::Function cation_entropy(gradient_space);
   dolfin::Function anion_entropy(gradient_space);
 
+  Constant zero(0.0);
+
   // compute entropic potentials
   dolfin::Function cation_potential( *(voltage->function_space()) );
   cation_potential.interpolate(*voltage);
-  *(cation_potential.vector()) *= cation_valency;
-  *(cation_potential.vector()) += *(cation->vector());
+  // *(cation_potential.vector()) *= cation_valency;
+  // *(cation_potential.vector()) += *(cation->vector());
   dolfin::Function anion_potential( *(voltage->function_space()) );
   anion_potential.interpolate(*voltage);
-  *(anion_potential.vector()) *= anion_valency;
-  *(anion_potential.vector()) += *(anion->vector());
+  // *(anion_potential.vector()) *= anion_valency;
+  // *(anion_potential.vector()) += *(anion->vector());
 
   // setup matrix and rhs
   EigenMatrix A;
