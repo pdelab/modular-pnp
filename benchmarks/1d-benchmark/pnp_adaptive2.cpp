@@ -83,7 +83,7 @@ int main(int argc, char** argv)
 
   // File
   std::ofstream ofs;
-  ofs.open ("./benchmarks/1d-benchmark/data.txt", std::ofstream::out);
+  ofs.open ("./benchmarks/1d-benchmark/data2.txt", std::ofstream::out);
   ofs << "t" << "\t" << "newton_iteration" << "\t" << "relative_residual" << "\t" << "cation" << "\t" << "anion" << "\t" << "potential" << "\t" << "energy" << "\n";
   ofs.close();
 
@@ -156,10 +156,6 @@ int main(int argc, char** argv)
   double potentialError = 0.0;
   double energy = 0.0;
 
-  dolfin::Mesh mesh(mesh_init);
-  dolfin::MeshFunction<std::size_t> subdomains0;
-  dolfin::MeshFunction<std::size_t> surfaces0;
-  domain_build(&domain_par, &mesh, &subdomains0, &surfaces0);
 
 
   for (double t = 0; t < tf; t += dt) {
@@ -170,8 +166,8 @@ int main(int argc, char** argv)
 
 
     // interpolate
-    pnp::FunctionSpace V0(mesh);
-    dolfin::Function initialGuessFunction(V0);
+    // pnp::FunctionSpace V_init(mesh_init);
+    dolfin::Function initialGuessFunction(V_init);
     dolfin::Function initialCation(initialGuessFunction[0]);
     dolfin::Function initialAnion(initialGuessFunction[1]);
     dolfin::Function initialPotential(initialGuessFunction[2]);
@@ -182,9 +178,16 @@ int main(int argc, char** argv)
     //*************************************************************
     //  Mesh adaptivity
     //*************************************************************
+    // reset mesh
+    printf("reset to initial mesh...\n\n"); fflush(stdout);
+    dolfin::Mesh mesh0;
+    dolfin::MeshFunction<std::size_t> subdomains0;
+    dolfin::MeshFunction<std::size_t> surfaces0;
+    domain_build(&domain_par, &mesh0, &subdomains0, &surfaces0);
 
     // interpolate analytic expressions
     printf("interpolate analytic expressions onto initial mesh...\n\n"); fflush(stdout);
+    pnp::FunctionSpace V0(mesh0);
     dolfin::Function initialGuessFunction0(V0);
     dolfin::Function cation0(initialGuessFunction0[0]);
     dolfin::Function anion0(initialGuessFunction0[1]);
@@ -195,6 +198,7 @@ int main(int argc, char** argv)
 
 
     // set adaptivity parameters
+    dolfin::Mesh mesh(mesh0);
     double entropy_tol = 1.0e-5;
     unsigned int num_adapts = 0, max_adapts = 5;
     bool adaptive_convergence = false;
@@ -414,7 +418,19 @@ int main(int argc, char** argv)
         L_pnp.AnAn_t0 = Adapt_CatPrevious_t;
         assemble(b_pnp, L_pnp);
         bc.apply(b_pnp);
+        // if (newton_iteration == 1)
+        //   printf("\trelative nonlinear residual after 1 iteration has l2-norm of %e\n", relative_residual);
+        // else
+        //   printf("\trelative nonlinear residual after %d iterations has l2-norm of %e\n",
+        //     newton_iteration,
+        //     relative_residual
+        //   );
 
+        // write computed solution to file
+        // printf("\toutput computed solution to file\n"); fflush(stdout);
+        // cationFile << cationSolution;
+        // anionFile << anionSolution;
+        // potentialFile << potentialSolution;
       }
 
       if (relative_residual < nonlinear_tol)
@@ -433,7 +449,7 @@ int main(int argc, char** argv)
         &anionSolution,
         coeff_par.anion_valency,
         &potentialSolution,
-        &mesh,
+        &mesh0,
         entropy_tol
       );
 
@@ -469,7 +485,7 @@ int main(int argc, char** argv)
           printf("\tEnergy is:  %e\n", energy);
           printf("***********************************************\n");
           printf("***********************************************\n");
-          ofs.open("./benchmarks/1d-benchmark/data.txt", std::ofstream::out | std::ofstream::app);
+          ofs.open("./benchmarks/1d-benchmark/data2.txt", std::ofstream::out | std::ofstream::app);
           ofs << t << "\t" << newton_iteration << "\t" << relative_residual << "\t" << cationError << "\t" << anionError << "\t" << potentialError << "\t" << energy << "\n";
           ofs.close();
           CatPrevious_t.interpolate(cationSolution);
@@ -479,8 +495,8 @@ int main(int argc, char** argv)
           cationFile << cationSolution;
           anionFile << anionSolution;
           potentialFile << potentialSolution;
-
         }
+
         break;
       }
       else if ( ++num_adapts > max_adapts ) {
@@ -500,18 +516,16 @@ int main(int argc, char** argv)
       else
         printf("\tadapting the mesh using %d levels of local refinement...\n", num_refines);
 
-      std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(mesh) );
+      std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(mesh0) );
       cation0 = adapt(cationSolution, mesh_ptr);
       anion0 = adapt(anionSolution, mesh_ptr);
       potential0 = adapt(potentialSolution, mesh_ptr);
-      // mesh = mesh0;
-      // V0 = adapt(V, mesh_ptr);
-      CatPrevious_t = adapt(CatPrevious_t, mesh_ptr);
-      AnPrevious_t  = adapt(AnPrevious_t, mesh_ptr);
-      EsPrevious_t  = adapt(EsPrevious_t, mesh_ptr);
+      mesh = mesh0;
       mesh.bounding_box_tree()->build(mesh); // to ensure the building_box_tree is correctly indexed
+
     }
   }
+
   printf("\n-----------------------------------------------------------    "); fflush(stdout);
   printf("\n End                                                           "); fflush(stdout);
   printf("\n-----------------------------------------------------------\n\n"); fflush(stdout);
