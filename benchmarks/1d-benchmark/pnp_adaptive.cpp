@@ -365,10 +365,8 @@ int main(int argc, char** argv)
         EigenVector_to_dvector(&b_pnp,&b_fasp);
         EigenMatrix_to_dCSRmat(&A_pnp,&A_fasp);
         A_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
-        // printf("\ttoto 1 \n"); fflush(stdout);
         fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
         status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &solu_fasp, &itpar, &amgpar);
-        // printf("\ttoto 2 \n"); fflush(stdout);
         if (status < 0)
           printf("\n### WARNING: Solver failed! Exit status = %d.\n\n", status);
         else
@@ -487,9 +485,10 @@ int main(int argc, char** argv)
         // failed adaptivity
         printf("\nDid not adapt mesh to entropy in %d adapts...\n", max_adapts);
         adaptive_convergence = true;
+        fasp_dvec_free(&solu_fasp);
         break;
       }
-
+      fasp_dvec_free(&solu_fasp);
       // adapt solutions to refined mesh
       if (num_refines == 1)
         printf("\tadapting the mesh using one level of local refinement...\n");
