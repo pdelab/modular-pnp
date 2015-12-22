@@ -1,0 +1,50 @@
+# Copyright (C) 2014 CCMA@PSU Maximilian Metti, Xiaozhe Hu
+#
+#   Define bilinear and linear forms for 
+#   the linearized Poisson-Nernst-Planck equations for a MOSFET
+#
+# Compile this form with FFC: ffc -O -l dolfin mosfet.ufl.
+
+##  Finite Element Space
+CG = FiniteElement("Lagrange", tetrahedron, 1)
+V  = MixedElement([CG,CG,CG])        # Solution Space
+
+(Cat, An, Phi) = TrialFunction(V)
+(cat, an, phi) = TestFunction(V)
+
+##  Previous Iterates
+CatCat = Coefficient(CG)
+AnAn = Coefficient(CG)
+EsEs = Coefficient(CG)
+
+## Previous time step
+CatCat_t0 = Coefficient(CG)
+AnAn_t0 = Coefficient(CG)
+EsEs_t0 = Coefficient(CG)
+
+##  Coefficients
+eps = Coefficient(CG)
+Dp = Coefficient(CG)
+qp = Constant(tetrahedron)
+Dn = Coefficient(CG)
+qn = Constant(tetrahedron)
+dt = Constant(tetrahedron)
+
+
+a   = Cat*cat*dx \
+    + An*an*dx \
+    + Phi*phi*dx \
+    + dt*( Dp*exp(CatCat) * ( inner(grad(Cat),grad(cat)) + inner(grad(CatCat)+qp*grad(EsEs), grad(cat)) * Cat ) )*dx \
+    + dt*( qp*Dp*exp(CatCat) * inner(grad(Phi), grad(cat)) )*dx \
+    + dt*( Dn*exp(AnAn  ) * ( inner(grad(An ),grad(an )) + inner(grad(AnAn  )+qn*grad(EsEs), grad(an))  * An  ) )*dx \
+    + dt*( qn*Dn*exp(AnAn  ) * inner(grad(Phi), grad(an )) )*dx \
+    + dt*( eps * inner(grad(Phi), grad(phi)) )*dx \
+    + dt*( -(qp*exp(CatCat)*Cat + qn*exp(AnAn)*An)*phi )*dx
+
+L   = -(CatCat - CatCat_t0 )*cat*dx \
+    - (AnAn    - AnAn_t0   )*an*dx \
+    - (EsEs  - EsEs_t0   )*phi*dx \
+    - dt*( Dp*exp(CatCat)*inner(grad(CatCat+qp*EsEs), grad(cat)) )*dx \
+    - dt*( Dn*exp(AnAn  )*inner(grad(AnAn  +qn*EsEs), grad(an )) )*dx \
+    - dt*( eps * inner(grad(EsEs),grad(phi)) )*dx \
+    - dt*( -(qp*exp(CatCat) + qn*exp(AnAn))*phi )*dx
