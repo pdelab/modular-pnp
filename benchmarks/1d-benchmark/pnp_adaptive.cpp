@@ -431,10 +431,6 @@ int main(int argc, char** argv)
         printf("\tcurrent relative residual is %e > %e\n\n", relative_residual, nonlinear_tol);
       }
 
-      cationFile << cationSolution;
-      anionFile << anionSolution;
-      potentialFile << potentialSolution;
-
       // compute local entropy and refine mesh
       printf("Computing local entropy for refinement\n");
       unsigned int num_refines;
@@ -448,37 +444,44 @@ int main(int argc, char** argv)
         entropy_tol
       );
 
+      // free FASP matrices and arrays
+      fasp_dbsr_free(&A_fasp_bsr);
+      fasp_dvec_free(&solu_fasp);
+      
       if (num_refines == 0) {
         // successful solve
         printf("\tsuccessfully distributed entropy below desired entropy in %d adapts!\n\n", num_adapts);
         adaptive_convergence = true;
-        if (relative_residual < nonlinear_tol){
-            *(Adapt_CatPrevious_t.vector()) -= *(cationSolution.vector());
-            *(Adapt_AnPrevious_t.vector()) -= *(anionSolution.vector());
-            *(Adapt_EsPrevious_t.vector()) -= *(potentialSolution.vector());
-            *(Adapt_CatPrevious_t.vector()) /= dt;
-            *(Adapt_AnPrevious_t.vector()) /= dt;
-            *(Adapt_EsPrevious_t.vector()) /= dt;
-            L2Error::Form_M L2error1(mesh,Adapt_CatPrevious_t);
-            cationError = assemble(L2error1);
-            L2Error::Form_M L2error2(mesh,Adapt_AnPrevious_t);
-            anionError = assemble(L2error2);
-            L2Error::Form_M L2error3(mesh,Adapt_EsPrevious_t);
-            potentialError = assemble(L2error3);
-            printf("***********************************************\n");
-            printf("***********************************************\n");
-            printf("Difference at t=%e...\n",t);
-            printf("\tcation l2 error is:     %e\n", cationError);
-            printf("\tanion l2 error is:      %e\n", anionError);
-            printf("\tpotential l2 error is:  %e\n", potentialError);
-            printf("***********************************************\n");
-            printf("***********************************************\n");
-            CatPrevious_t.interpolate(cationSolution);
-            AnPrevious_t.interpolate(anionSolution);
-            EsPrevious_t.interpolate(potentialSolution);
-            fasp_dvec_free(&solu_fasp);
+        if (relative_residual < nonlinear_tol) {
+          *(Adapt_CatPrevious_t.vector()) -= *(cationSolution.vector());
+          *(Adapt_AnPrevious_t.vector()) -= *(anionSolution.vector());
+          *(Adapt_EsPrevious_t.vector()) -= *(potentialSolution.vector());
+          *(Adapt_CatPrevious_t.vector()) /= dt;
+          *(Adapt_AnPrevious_t.vector()) /= dt;
+          *(Adapt_EsPrevious_t.vector()) /= dt;
+          L2Error::Form_M L2error1(mesh,Adapt_CatPrevious_t);
+          cationError = assemble(L2error1);
+          L2Error::Form_M L2error2(mesh,Adapt_AnPrevious_t);
+          anionError = assemble(L2error2);
+          L2Error::Form_M L2error3(mesh,Adapt_EsPrevious_t);
+          potentialError = assemble(L2error3);
+          printf("***********************************************\n");
+          printf("***********************************************\n");
+          printf("Difference at t=%e...\n",t);
+          printf("\tcation l2 error is:     %e\n", cationError);
+          printf("\tanion l2 error is:      %e\n", anionError);
+          printf("\tpotential l2 error is:  %e\n", potentialError);
+          printf("***********************************************\n");
+          printf("***********************************************\n");
+          CatPrevious_t.interpolate(cationSolution);
+          AnPrevious_t.interpolate(anionSolution);
+          EsPrevious_t.interpolate(potentialSolution);
         }
 
+        // output solution after solved for timestep
+        cationFile << cationSolution;
+        anionFile << anionSolution;
+        potentialFile << potentialSolution;
         break;
       }
       else if ( ++num_adapts > max_adapts ) {
@@ -486,6 +489,11 @@ int main(int argc, char** argv)
         printf("\nDid not adapt mesh to entropy in %d adapts...\n", max_adapts);
         adaptive_convergence = true;
         fasp_dvec_free(&solu_fasp);
+
+        // output solution after solved for timestep
+        cationFile << cationSolution;
+        anionFile << anionSolution;
+        potentialFile << potentialSolution;
         break;
       }
       fasp_dvec_free(&solu_fasp);
