@@ -18,6 +18,7 @@
 #include "energy.h"
 #include "newton.h"
 #include "newton_functs.h"
+#include <ctime>
 extern "C"
 {
   #include "fasp.h"
@@ -84,7 +85,7 @@ int main(int argc, char** argv)
   // File
   std::ofstream ofs;
   ofs.open ("./benchmarks/1d-benchmark/data.txt", std::ofstream::out);
-  ofs << "t" << "\t" << "newton_iteration" << "\t" << "relative_residual" << "\t" << "cation" << "\t" << "anion" << "\t" << "potential" << "\t" << "energy" << "\n";
+  ofs << "t" << "\t" << "newton_iteration" << "\t" << "relative_residual" << "\t" << "cation" << "\t" << "anion" << "\t" << "potential" << "\t" << "energy" << "\t"<< "timeElaspsed" << "\t" << "meshSize" << "\n";
   ofs.close();
 
   //*************************************************************
@@ -161,6 +162,9 @@ int main(int argc, char** argv)
   dolfin::MeshFunction<std::size_t> surfaces0;
   domain_build(&domain_par, &mesh, &subdomains0, &surfaces0);
 
+  std::clock_t begin = std::clock();
+  std::clock_t end;
+  double timeElaspsed;
 
   for (double t = 0; t < tf; t += dt) {
     // printf("\nSet voltage to %e...\n", volt); fflush(stdout);
@@ -471,7 +475,9 @@ int main(int argc, char** argv)
           printf("***********************************************\n");
           printf("***********************************************\n");
           ofs.open("./benchmarks/1d-benchmark/data.txt", std::ofstream::out | std::ofstream::app);
-          ofs << t << "\t" << newton_iteration << "\t" << relative_residual << "\t" << cationError << "\t" << anionError << "\t" << potentialError << "\t" << energy << "\n";
+          end = clock();
+          timeElaspsed = double(end - begin) / CLOCKS_PER_SEC;
+          ofs << t << "\t" << newton_iteration << "\t" << relative_residual << "\t" << cationError << "\t" << anionError << "\t" << potentialError << "\t" << energy << "\t"<< timeElaspsed << "\t" << mesh.num_vertices() << "\n";
           ofs.close();
           CatPrevious_t.interpolate(cationSolution);
           AnPrevious_t.interpolate(anionSolution);
@@ -513,7 +519,9 @@ int main(int argc, char** argv)
           printf("***********************************************\n");
           printf("***********************************************\n");
           ofs.open("./benchmarks/1d-benchmark/data.txt", std::ofstream::out | std::ofstream::app);
-          ofs << t << "\t" << newton_iteration << "\t" << relative_residual << "\t" << cationError << "\t" << anionError << "\t" << potentialError << "\t" << energy << "\n";
+          end = clock();
+          timeElaspsed = double(end - begin) / CLOCKS_PER_SEC;
+          ofs << t << "\t" << newton_iteration << "\t" << relative_residual << "\t" << cationError << "\t" << anionError << "\t" << potentialError << "\t" << energy << "\t"<< timeElaspsed << "\t" << mesh.num_vertices() << "\n";
           ofs.close();
           CatPrevious_t.interpolate(cationSolution);
           AnPrevious_t.interpolate(anionSolution);
