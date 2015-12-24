@@ -219,6 +219,7 @@ int main(int argc, char** argv)
       Constant C_dt(dt);
       Constant cat_alpha(coeff_par.cation_diffusivity*dt);
       Constant an_alpha(coeff_par.anion_diffusivity*dt);
+      Constant C1(1.0);
       Constant zero(0.0);
       a_pnp.eps = eps; L_pnp.eps = eps;
       a_pnp.Dp = Dp; L_pnp.Dp = Dp;
@@ -272,11 +273,11 @@ int main(int argc, char** argv)
       EAFE::FunctionSpace V_cat(mesh);
       EAFE::BilinearForm a_cat(V_cat,V_cat);
       a_cat.alpha = an_alpha;
-      a_cat.gamma = zero;
+      a_cat.gamma = C1;
       EAFE::FunctionSpace V_an(mesh);
       EAFE::BilinearForm a_an(V_an,V_an);
       a_an.alpha = cat_alpha;
-      a_an.gamma = zero;
+      a_an.gamma = C1;
       dolfin::Function CatCatFunction(V_cat);
       dolfin::Function CatBetaFunction(V_cat);
       dolfin::Function AnAnFunction(V_an);
@@ -445,7 +446,7 @@ int main(int argc, char** argv)
         // successful solve
         printf("\tsuccessfully distributed entropy below desired entropy in %d adapts!\n\n", num_adapts);
         adaptive_convergence = true;
-        if (relative_residual < nonlinear_tol) {
+
           *(Adapt_CatPrevious_t.vector()) -= *(cationSolution.vector());
           *(Adapt_AnPrevious_t.vector()) -= *(anionSolution.vector());
           *(Adapt_EsPrevious_t.vector()) -= *(potentialSolution.vector());
@@ -480,13 +481,44 @@ int main(int argc, char** argv)
           anionFile << anionSolution;
           potentialFile << potentialSolution;
 
-        }
+
         break;
       }
       else if ( ++num_adapts > max_adapts ) {
         // failed adaptivity
         printf("\nDid not adapt mesh to entropy in %d adapts...\n", max_adapts);
         adaptive_convergence = true;
+
+          *(Adapt_CatPrevious_t.vector()) -= *(cationSolution.vector());
+          *(Adapt_AnPrevious_t.vector()) -= *(anionSolution.vector());
+          *(Adapt_EsPrevious_t.vector()) -= *(potentialSolution.vector());
+          *(Adapt_CatPrevious_t.vector()) /= dt;
+          *(Adapt_AnPrevious_t.vector()) /= dt;
+          *(Adapt_EsPrevious_t.vector()) /= dt;
+          L2Error::Form_M L2error1(mesh,Adapt_CatPrevious_t);
+          cationError = assemble(L2error1);
+          L2Error::Form_M L2error2(mesh,Adapt_AnPrevious_t);
+          anionError = assemble(L2error2);
+          L2Error::Form_M L2error3(mesh,Adapt_EsPrevious_t);
+          potentialError = assemble(L2error3);
+          energy::Form_M EN(mesh,cationSolution,anionSolution,potentialSolution,eps);
+          energy = assemble(EN);
+          printf("***********************************************\n");
+          printf("***********************************************\n");
+          printf("Difference at t=%e...\n",t);
+          printf("\tcation l2 error is:     %e\n", cationError);
+          printf("\tanion l2 error is:      %e\n", anionError);
+          printf("\tpotential l2 error is:  %e\n", potentialError);
+          printf("\tEnergy is:  %e\n", energy);
+          printf("***********************************************\n");
+          printf("***********************************************\n");
+          ofs.open("./benchmarks/1d-benchmark/data.txt", std::ofstream::out | std::ofstream::app);
+          ofs << t << "\t" << newton_iteration << "\t" << relative_residual << "\t" << cationError << "\t" << anionError << "\t" << potentialError << "\t" << energy << "\n";
+          ofs.close();
+          CatPrevious_t.interpolate(cationSolution);
+          AnPrevious_t.interpolate(anionSolution);
+          EsPrevious_t.interpolate(potentialSolution);
+
 
         // output solution after solved for timestep
         cationFile << cationSolution;
