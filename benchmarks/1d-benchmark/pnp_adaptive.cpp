@@ -141,6 +141,7 @@ int main(int argc, char** argv)
 
   // PREVIOUS ITERATE
   dolfin::Mesh mesh(mesh_init);
+  dolfin::Mesh meshAdapt(mesh);
   pnp::FunctionSpace V_init(mesh_init);
   dolfin::Function Previous_t(V_init);
   dolfin::Function CatPrevious_t(Previous_t[0]);
@@ -191,9 +192,6 @@ int main(int argc, char** argv)
 
     // Initialize guess
     printf("intial guess...\n"); fflush(stdout);
-    cationSolution.interpolate(CatPrevious_t);
-    anionSolution.interpolate(AnPrevious_t);
-    potentialSolution.interpolate(EsPrevious_t);
 
 
     //*************************************************************
@@ -212,6 +210,9 @@ int main(int argc, char** argv)
     {
       // output mesh
       meshOut << mesh;
+      cationSolution.interpolate(CatPrevious_t);
+      anionSolution.interpolate(AnPrevious_t);
+      potentialSolution.interpolate(EsPrevious_t);
 
       // Initialize variational forms
       printf("\tvariational forms...\n"); fflush(stdout);
@@ -404,7 +405,7 @@ int main(int argc, char** argv)
         &anionSolution,
         coeff_par.anion_valency,
         &potentialSolution,
-        &mesh,
+        &meshAdapt,
         entropy_tol
       );
 
@@ -510,14 +511,14 @@ int main(int argc, char** argv)
       else
         printf("\tadapting the mesh using %d levels of local refinement...\n", num_refines);
 
-      std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(mesh) );
+      std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(meshAdapt) );
       adapt(cationSolution, mesh_ptr);
       adapt(anionSolution, mesh_ptr);
       adapt(potentialSolution, mesh_ptr);
       adapt(CatPrevious_t, mesh_ptr);
       adapt(AnPrevious_t, mesh_ptr);
       adapt(EsPrevious_t, mesh_ptr);
-      // mesh_init = mesh;
+      mesh = meshAdapt;
       mesh.bounding_box_tree()->build(mesh);
       // mesh_init.bounding_box_tree()->build(mesh_init); // to ensure the building_box_tree is correctly indexed
 
