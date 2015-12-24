@@ -85,7 +85,7 @@ int main(int argc, char** argv)
   // File
   std::ofstream ofs;
   ofs.open ("./benchmarks/1d-benchmark/data.txt", std::ofstream::out);
-  ofs << "t" << "\t" << "newton_iteration" << "\t" << "relative_residual" << "\t" << "cation" << "\t" << "anion" << "\t" << "potential" << "\t" << "energy" << "\t"<< "timeElaspsed" << "\t" << "meshSize" << "\n";
+  ofs << "t" << "\t" << "NewtonIteration" << "\t" << "RelativeResidual" << "\t" << "Cation" << "\t" << "Anion" << "\t" << "Potential" << "\t" << "Energy" << "\t"<< "TimeElaspsed" << "\t" << "MeshSize" << "\n";
   ofs.close();
 
   //*************************************************************
@@ -201,7 +201,7 @@ int main(int argc, char** argv)
 
     // set adaptivity parameters
     double entropy_tol = 1.0e-5;
-    unsigned int num_adapts = 0, max_adapts = 5;
+    unsigned int num_adapts = 0, max_adapts = 1;
     bool adaptive_convergence = false;
 
     // adaptivity loop
@@ -385,7 +385,7 @@ int main(int argc, char** argv)
         assemble(b_pnp, L_pnp);
         bc.apply(b_pnp);
 
-        fasp_dbsr_free(&A_fasp_bsr);
+        //fasp_dbsr_free(&A_fasp_bsr);
 
       }
 
@@ -412,10 +412,11 @@ int main(int argc, char** argv)
       // free fasp solution
       fasp_dvec_free(&solu_fasp);
 
-      if (num_refines == 0) {
+      if ( (num_refines == 0) || ( ++num_adapts > max_adapts ) ){
         // successful solve
-        printf("\tsuccessfully distributed entropy below desired entropy in %d adapts!\n\n", num_adapts);
-        adaptive_convergence = true;
+          if (num_refines == 0) printf("\tsuccessfully distributed entropy below desired entropy in %d adapts!\n\n", num_adapts);
+          else printf("\nDid not adapt mesh to entropy in %d adapts...\n", max_adapts);
+          adaptive_convergence = true;
           dolfin::Function Er_cat(CatPrevious_t);
           dolfin::Function Er_an(AnPrevious_t);
           dolfin::Function Er_es(EsPrevious_t);
@@ -445,7 +446,7 @@ int main(int argc, char** argv)
           ofs.open("./benchmarks/1d-benchmark/data.txt", std::ofstream::out | std::ofstream::app);
           end = clock();
           timeElaspsed = double(end - begin) / CLOCKS_PER_SEC;
-          ofs << t << "\t" << newton_iteration << "\t" << relative_residual << "\t" << cationError << "\t" << anionError << "\t" << potentialError << "\t" << energy << "\t"<< timeElaspsed << "\t" << mesh.num_vertices() << "\n";
+          ofs << t << "\t" << newton_iteration << "\t" << relative_residual << "\t" << cationError << "\t" << anionError << "\t" << potentialError << "\t" << energy << "\t"<< timeElaspsed << "\t" << mesh.num_cells() << "\n";
           ofs.close();
           CatPrevious_t.interpolate(cationSolution);
           AnPrevious_t.interpolate(anionSolution);
@@ -455,56 +456,9 @@ int main(int argc, char** argv)
           anionFile << anionSolution;
           potentialFile << potentialSolution;
 
-
         break;
       }
-      else if ( ++num_adapts > max_adapts ) {
-        // failed adaptivity
-        printf("\nDid not adapt mesh to entropy in %d adapts...\n", max_adapts);
-        adaptive_convergence = true;
 
-          dolfin::Function Er_cat(CatPrevious_t);
-          dolfin::Function Er_an(AnPrevious_t);
-          dolfin::Function Er_es(EsPrevious_t);
-          *(Er_cat.vector()) -= *(cationSolution.vector());
-          *(Er_an.vector()) -= *(anionSolution.vector());
-          *(Er_es.vector()) -= *(potentialSolution.vector());
-          *(Er_cat.vector()) /= dt;
-          *(Er_an.vector()) /= dt;
-          *(Er_es.vector()) /= dt;
-          L2Error::Form_M L2error1(mesh,Er_cat);
-          cationError = assemble(L2error1);
-          L2Error::Form_M L2error2(mesh,Er_an);
-          anionError = assemble(L2error2);
-          L2Error::Form_M L2error3(mesh,Er_es);
-          potentialError = assemble(L2error3);
-          energy::Form_M EN(mesh,cationSolution,anionSolution,potentialSolution,eps);
-          energy = assemble(EN);
-          printf("***********************************************\n");
-          printf("***********************************************\n");
-          printf("Difference at t=%e...\n",t);
-          printf("\tcation l2 error is:     %e\n", cationError);
-          printf("\tanion l2 error is:      %e\n", anionError);
-          printf("\tpotential l2 error is:  %e\n", potentialError);
-          printf("\tEnergy is:  %e\n", energy);
-          printf("***********************************************\n");
-          printf("***********************************************\n");
-          ofs.open("./benchmarks/1d-benchmark/data.txt", std::ofstream::out | std::ofstream::app);
-          end = clock();
-          timeElaspsed = double(end - begin) / CLOCKS_PER_SEC;
-          ofs << t << "\t" << newton_iteration << "\t" << relative_residual << "\t" << cationError << "\t" << anionError << "\t" << potentialError << "\t" << energy << "\t"<< timeElaspsed << "\t" << mesh.num_vertices() << "\n";
-          ofs.close();
-          CatPrevious_t.interpolate(cationSolution);
-          AnPrevious_t.interpolate(anionSolution);
-          EsPrevious_t.interpolate(potentialSolution);
-
-
-        // output solution after solved for timestep
-        cationFile << cationSolution;
-        anionFile << anionSolution;
-        potentialFile << potentialSolution;
-        break;
-      }
       // adapt solutions to refined mesh
       if (num_refines == 1)
         printf("\tadapting the mesh using one level of local refinement...\n");
