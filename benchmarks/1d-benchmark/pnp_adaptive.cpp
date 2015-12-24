@@ -38,7 +38,7 @@ double lower_potential_val = -1.0;  // V
 double upper_potential_val = 1.0;  // V
 
 
-double dt = 0.01;
+double dt = 0.1;
 double tf = 10.0;
 
 double get_initial_residual (
@@ -140,6 +140,7 @@ int main(int argc, char** argv)
   File potentialFile("./benchmarks/1d-benchmark/output/potential.pvd");
 
   // PREVIOUS ITERATE
+  dolfin::Mesh mesh(mesh_init);
   pnp::FunctionSpace V_init(mesh_init);
   dolfin::Function Previous_t(V_init);
   dolfin::Function CatPrevious_t(Previous_t[0]);
@@ -157,48 +158,47 @@ int main(int argc, char** argv)
   double potentialError = 0.0;
   double energy = 0.0;
 
-  dolfin::Mesh mesh(mesh_init);
-  dolfin::MeshFunction<std::size_t> subdomains0;
-  dolfin::MeshFunction<std::size_t> surfaces0;
-  domain_build(&domain_par, &mesh, &subdomains0, &surfaces0);
-
+  // Time
   std::clock_t begin = std::clock();
   std::clock_t end;
   double timeElaspsed;
+
+  // Fasp matrices and vectors
   dCSRmat A_fasp;
   dBSRmat A_fasp_bsr;
   dvector b_fasp, solu_fasp;
+
+  // solution
+  dolfin::Function solutionFunction(V_init);
+  dolfin::Function cationSolution(solutionFunction[0]);
+  dolfin::Function anionSolution(solutionFunction[1]);
+  dolfin::Function potentialSolution(solutionFunction[2]);
+
+  // Constants
+  Constant eps(coeff_par.relative_permittivity);
+  Constant Dp(coeff_par.cation_diffusivity);
+  Constant Dn(coeff_par.anion_diffusivity);
+  Constant qp(coeff_par.cation_valency);
+  Constant qn(coeff_par.anion_valency);
+  Constant C_dt(dt);
+  Constant cat_alpha(coeff_par.cation_diffusivity*dt);
+  Constant an_alpha(coeff_par.anion_diffusivity*dt);
+  Constant C1(1.0);
+  Constant zero(0.0);
 
   for (double t = 0; t < tf; t += dt) {
     // printf("\nSet voltage to %e...\n", volt); fflush(stdout);
 
     // Initialize guess
     printf("intial guess...\n"); fflush(stdout);
+    cationSolution.interpolate(CatPrevious_t);
+    anionSolution.interpolate(AnPrevious_t);
+    potentialSolution.interpolate(EsPrevious_t);
 
-
-    // interpolate
-    pnp::FunctionSpace V0(mesh);
-    dolfin::Function initialGuessFunction(V0);
-    dolfin::Function initialCation(initialGuessFunction[0]);
-    dolfin::Function initialAnion(initialGuessFunction[1]);
-    dolfin::Function initialPotential(initialGuessFunction[2]);
-    initialCation.interpolate(CatPrevious_t);
-    initialAnion.interpolate(AnPrevious_t);
-    initialPotential.interpolate(EsPrevious_t);
 
     //*************************************************************
     //  Mesh adaptivity
     //*************************************************************
-
-    // interpolate analytic expressions
-    printf("interpolate analytic expressions onto initial mesh...\n\n"); fflush(stdout);
-    dolfin::Function initialGuessFunction0(V0);
-    dolfin::Function cation0(initialGuessFunction0[0]);
-    dolfin::Function anion0(initialGuessFunction0[1]);
-    dolfin::Function potential0(initialGuessFunction0[2]);
-    cation0.interpolate(CatPrevious_t);
-    anion0.interpolate(AnPrevious_t);
-    potential0.interpolate(EsPrevious_t);
 
 
     // set adaptivity parameters
@@ -218,16 +218,6 @@ int main(int argc, char** argv)
       pnp::FunctionSpace V(mesh);
       pnp::BilinearForm a_pnp(V,V);
       pnp::LinearForm L_pnp(V);
-      Constant eps(coeff_par.relative_permittivity);
-      Constant Dp(coeff_par.cation_diffusivity);
-      Constant Dn(coeff_par.anion_diffusivity);
-      Constant qp(coeff_par.cation_valency);
-      Constant qn(coeff_par.anion_valency);
-      Constant C_dt(dt);
-      Constant cat_alpha(coeff_par.cation_diffusivity*dt);
-      Constant an_alpha(coeff_par.anion_diffusivity*dt);
-      Constant C1(1.0);
-      Constant zero(0.0);
       a_pnp.eps = eps; L_pnp.eps = eps;
       a_pnp.Dp = Dp; L_pnp.Dp = Dp;
       a_pnp.Dn = Dn; L_pnp.Dn = Dn;
@@ -239,32 +229,6 @@ int main(int argc, char** argv)
       Constant zero_vec(0.0, 0.0, 0.0);
       SymmBoundaries boundary(dirichlet_coord, -domain_par.length_x/2.0, domain_par.length_x/2.0);
       dolfin::DirichletBC bc(V, zero_vec, boundary);
-
-      // Interpolate analytic expressions
-      printf("\tinterpolate solution onto new mesh...\n"); fflush(stdout);
-      dolfin::Function solutionFunction(V);
-      dolfin::Function cationSolution(solutionFunction[0]);
-      cationSolution.interpolate(cation0);
-      dolfin::Function anionSolution(solutionFunction[1]);
-      anionSolution.interpolate(anion0);
-
-      // solve for voltage
-      dolfin::Function potentialSolution(solutionFunction[2]);
-      potentialSolution.interpolate(potential0);
-
-      dolfin::Function Adapt_Previous_t(V);
-      dolfin::Function Adapt_CatPrevious_t(Adapt_Previous_t[0]);
-      dolfin::Function Adapt_AnPrevious_t(Adapt_Previous_t[1]);
-      dolfin::Function Adapt_EsPrevious_t(Adapt_Previous_t[2]);
-      Adapt_CatPrevious_t.interpolate(CatPrevious_t);
-      Adapt_AnPrevious_t.interpolate(AnPrevious_t);
-      Adapt_EsPrevious_t.interpolate(EsPrevious_t);
-
-      // write computed solution to file
-      // printf("\toutput projected solution to file\n"); fflush(stdout);
-      // cationFile << cationSolution;
-      // anionFile << anionSolution;
-      // potentialFile << potentialSolution;
 
       // map dofs
       ivector cation_dofs;
@@ -305,14 +269,14 @@ int main(int argc, char** argv)
 
       // set initial residual
       printf("\tupdate initial residual...\n"); fflush(stdout);
-      initial_residual = get_initial_residual(&L_pnp, &bc, &initialCation, &initialAnion, &initialPotential);
+      initial_residual = get_initial_residual(&L_pnp, &bc, &CatPrevious_t, &AnPrevious_t, &EsPrevious_t);
 
       printf("\tcompute relative residual...\n"); fflush(stdout);
       L_pnp.CatCat = cationSolution;
       L_pnp.AnAn = anionSolution;
       L_pnp.EsEs = potentialSolution;
-      L_pnp.CatCat_t0 = Adapt_CatPrevious_t;
-      L_pnp.AnAn_t0 = Adapt_AnPrevious_t;
+      L_pnp.CatCat_t0 = CatPrevious_t;
+      L_pnp.AnAn_t0 = AnPrevious_t;
       assemble(b_pnp, L_pnp);
       bc.apply(b_pnp);
       relative_residual = b_pnp.norm("l2") / initial_residual;
@@ -415,8 +379,8 @@ int main(int argc, char** argv)
         L_pnp.CatCat = cationSolution;
         L_pnp.AnAn = anionSolution;
         L_pnp.EsEs = potentialSolution;
-        L_pnp.CatCat_t0 = Adapt_CatPrevious_t;
-        L_pnp.AnAn_t0 = Adapt_CatPrevious_t;
+        L_pnp.CatCat_t0 = CatPrevious_t;
+        L_pnp.AnAn_t0 = CatPrevious_t;
         assemble(b_pnp, L_pnp);
         bc.apply(b_pnp);
 
@@ -444,28 +408,27 @@ int main(int argc, char** argv)
         entropy_tol
       );
 
-      // free FASP matrices and arrays
-      // fasp_dbsr_free(&A_fasp_bsr);
+      // free fasp solution
       fasp_dvec_free(&solu_fasp);
-      // fasp_dvec_free(&b_fasp);
-      // fasp_dcsr_free(&A_fasp);
 
       if (num_refines == 0) {
         // successful solve
         printf("\tsuccessfully distributed entropy below desired entropy in %d adapts!\n\n", num_adapts);
         adaptive_convergence = true;
-
-          *(Adapt_CatPrevious_t.vector()) -= *(cationSolution.vector());
-          *(Adapt_AnPrevious_t.vector()) -= *(anionSolution.vector());
-          *(Adapt_EsPrevious_t.vector()) -= *(potentialSolution.vector());
-          *(Adapt_CatPrevious_t.vector()) /= dt;
-          *(Adapt_AnPrevious_t.vector()) /= dt;
-          *(Adapt_EsPrevious_t.vector()) /= dt;
-          L2Error::Form_M L2error1(mesh,Adapt_CatPrevious_t);
+          dolfin::Function Er_cat(CatPrevious_t);
+          dolfin::Function Er_an(AnPrevious_t);
+          dolfin::Function Er_es(EsPrevious_t);
+          *(Er_cat.vector()) -= *(cationSolution.vector());
+          *(Er_an.vector()) -= *(anionSolution.vector());
+          *(Er_es.vector()) -= *(potentialSolution.vector());
+          *(Er_cat.vector()) /= dt;
+          *(Er_an.vector()) /= dt;
+          *(Er_es.vector()) /= dt;
+          L2Error::Form_M L2error1(mesh,Er_cat);
           cationError = assemble(L2error1);
-          L2Error::Form_M L2error2(mesh,Adapt_AnPrevious_t);
+          L2Error::Form_M L2error2(mesh,Er_an);
           anionError = assemble(L2error2);
-          L2Error::Form_M L2error3(mesh,Adapt_EsPrevious_t);
+          L2Error::Form_M L2error3(mesh,Er_es);
           potentialError = assemble(L2error3);
           energy::Form_M EN(mesh,cationSolution,anionSolution,potentialSolution,eps);
           energy = assemble(EN);
@@ -499,17 +462,20 @@ int main(int argc, char** argv)
         printf("\nDid not adapt mesh to entropy in %d adapts...\n", max_adapts);
         adaptive_convergence = true;
 
-          *(Adapt_CatPrevious_t.vector()) -= *(cationSolution.vector());
-          *(Adapt_AnPrevious_t.vector()) -= *(anionSolution.vector());
-          *(Adapt_EsPrevious_t.vector()) -= *(potentialSolution.vector());
-          *(Adapt_CatPrevious_t.vector()) /= dt;
-          *(Adapt_AnPrevious_t.vector()) /= dt;
-          *(Adapt_EsPrevious_t.vector()) /= dt;
-          L2Error::Form_M L2error1(mesh,Adapt_CatPrevious_t);
+          dolfin::Function Er_cat(CatPrevious_t);
+          dolfin::Function Er_an(AnPrevious_t);
+          dolfin::Function Er_es(EsPrevious_t);
+          *(Er_cat.vector()) -= *(cationSolution.vector());
+          *(Er_an.vector()) -= *(anionSolution.vector());
+          *(Er_es.vector()) -= *(potentialSolution.vector());
+          *(Er_cat.vector()) /= dt;
+          *(Er_an.vector()) /= dt;
+          *(Er_es.vector()) /= dt;
+          L2Error::Form_M L2error1(mesh,Er_cat);
           cationError = assemble(L2error1);
-          L2Error::Form_M L2error2(mesh,Adapt_AnPrevious_t);
+          L2Error::Form_M L2error2(mesh,Er_an);
           anionError = assemble(L2error2);
-          L2Error::Form_M L2error3(mesh,Adapt_EsPrevious_t);
+          L2Error::Form_M L2error3(mesh,Er_es);
           potentialError = assemble(L2error3);
           energy::Form_M EN(mesh,cationSolution,anionSolution,potentialSolution,eps);
           energy = assemble(EN);
@@ -545,15 +511,16 @@ int main(int argc, char** argv)
         printf("\tadapting the mesh using %d levels of local refinement...\n", num_refines);
 
       std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(mesh) );
-      cation0 = adapt(cationSolution, mesh_ptr);
-      anion0 = adapt(anionSolution, mesh_ptr);
-      potential0 = adapt(potentialSolution, mesh_ptr);
-      // mesh = mesh0;
-      // V0 = adapt(V, mesh_ptr);
-      CatPrevious_t = adapt(CatPrevious_t, mesh_ptr);
-      AnPrevious_t  = adapt(AnPrevious_t, mesh_ptr);
-      EsPrevious_t  = adapt(EsPrevious_t, mesh_ptr);
-      mesh.bounding_box_tree()->build(mesh); // to ensure the building_box_tree is correctly indexed
+      adapt(cationSolution, mesh_ptr);
+      adapt(anionSolution, mesh_ptr);
+      adapt(potentialSolution, mesh_ptr);
+      adapt(CatPrevious_t, mesh_ptr);
+      adapt(AnPrevious_t, mesh_ptr);
+      adapt(EsPrevious_t, mesh_ptr);
+      // mesh_init = mesh;
+      mesh.bounding_box_tree()->build(mesh);
+      // mesh_init.bounding_box_tree()->build(mesh_init); // to ensure the building_box_tree is correctly indexed
+
     }
   }
   printf("\n-----------------------------------------------------------    "); fflush(stdout);
