@@ -165,6 +165,9 @@ int main(int argc, char** argv)
   std::clock_t begin = std::clock();
   std::clock_t end;
   double timeElaspsed;
+  dCSRmat A_fasp;
+  dBSRmat A_fasp_bsr;
+  dvector b_fasp, solu_fasp;
 
   for (double t = 0; t < tf; t += dt) {
     // printf("\nSet voltage to %e...\n", volt); fflush(stdout);
@@ -291,9 +294,6 @@ int main(int argc, char** argv)
       printf("\tlinear algebraic objects...\n"); fflush(stdout);
       EigenMatrix A_pnp, A_cat, A_an;
       EigenVector b_pnp;
-      dCSRmat A_fasp;
-      dBSRmat A_fasp_bsr;
-      dvector b_fasp, solu_fasp;
 
       //*************************************************************
       //  Initialize Newton solver
@@ -420,6 +420,8 @@ int main(int argc, char** argv)
         assemble(b_pnp, L_pnp);
         bc.apply(b_pnp);
 
+        fasp_dbsr_free(&A_fasp_bsr);
+
       }
 
       if (relative_residual < nonlinear_tol)
@@ -443,8 +445,10 @@ int main(int argc, char** argv)
       );
 
       // free FASP matrices and arrays
-      fasp_dbsr_free(&A_fasp_bsr);
+      // fasp_dbsr_free(&A_fasp_bsr);
       fasp_dvec_free(&solu_fasp);
+      // fasp_dvec_free(&b_fasp);
+      // fasp_dcsr_free(&A_fasp);
 
       if (num_refines == 0) {
         // successful solve
