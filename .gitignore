@@ -7,3 +7,4 @@ output
 cmake_install.cmake
 Makefile
 output/*
+meshOut/
