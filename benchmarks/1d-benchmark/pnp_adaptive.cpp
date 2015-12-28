@@ -38,8 +38,8 @@ double lower_potential_val = -1.0;  // V
 double upper_potential_val = 1.0;  // V
 
 
-double time_step_size = 0.02;
-double final_time = 1.0;
+double time_step_size = 0.2;
+double final_time = 10.0;
 
 double get_initial_residual (
   pnp::LinearForm* L,
@@ -170,7 +170,7 @@ int main(int argc, char** argv)
   initial_cation.interpolate(Cation);
   initial_anion.interpolate(Anion);
   initial_potential.interpolate(Volt);
-  
+
   // output solution after solved for timestep
   cationFile << initial_cation;
   anionFile << initial_anion;
@@ -431,7 +431,7 @@ int main(int argc, char** argv)
         L_pnp.AnAn = anionSolution;
         L_pnp.EsEs = potentialSolution;
         L_pnp.CatCat_t0 = previous_cation;
-        L_pnp.AnAn_t0 = previous_cation;
+        L_pnp.AnAn_t0 = previous_anion;
         assemble(b_pnp, L_pnp);
         bc.apply(b_pnp);
 
