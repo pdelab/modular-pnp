@@ -435,7 +435,7 @@ int main(int argc, char** argv)
         assemble(b_pnp, L_pnp);
         bc.apply(b_pnp);
 
-        //fasp_dbsr_free(&A_fasp_bsr);
+        fasp_dbsr_free(&A_fasp_bsr);
 
       }
 
