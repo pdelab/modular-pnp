@@ -46,7 +46,7 @@ include_directories(${DOLFIN_INCLUDE_DIRS} ${FASP_INCLUDE_DIR} ${FASP4NS_INCLUDE
 include_directories(SYSTEM ${DOLFIN_3RD_PARTY_INCLUDE_DIRS})
 
 # Awesome OSX TARGET
-set(OSX_TARGET "/opt/local/lib/gcc49/gcc/x86_64-apple-darwin14/4.9.3/libgcc.a" "/opt/local/lib/gcc49/libquadmath.a" "/opt/local/lib/gcc49/libgfortran.a")
+#set(OSX_TARGET "/opt/local/lib/gcc49/gcc/x86_64-apple-darwin14/4.9.3/libgcc.a" "/opt/local/lib/gcc49/libquadmath.a" "/opt/local/lib/gcc49/libgfortran.a")
 
 # Executables
 add_executable(aux_test_reading ./aux/test_reading/aux_test_reading.cpp ${SRC_DIR})
@@ -77,6 +77,7 @@ add_executable(pnp ./benchmarks/PNP/pnp.cpp ${SRC_DIR})
 add_executable(pnp_adapt ./benchmarks/PNP/pnp_adaptive.cpp ${SRC_DIR})
 add_executable(newton_poisson ./benchmarks/Newton_Poisson/newton_poisson.cpp ${SRC_DIR})
 add_executable(pnp_1dbench ./benchmarks/1d-benchmark/pnp_adaptive.cpp ${SRC_DIR})
+add_executable(pnp_1dbench3 ./benchmarks/1d-benchmark/pnp_adaptive3.cpp ${SRC_DIR})
 
 # Setup targets
 ## AUX TESTs
@@ -109,3 +110,4 @@ target_link_libraries(pnp_eafe2 ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES
 target_link_libraries(pnp_adapt ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
 target_link_libraries(newton_poisson ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
 target_link_libraries(pnp_1dbench ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
+target_link_libraries(pnp_1dbench3 ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
