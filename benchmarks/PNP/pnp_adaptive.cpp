@@ -202,7 +202,7 @@ int main(int argc, char** argv)
 
   // set adaptivity parameters
   dolfin::Mesh mesh(mesh0);
-  double entropy_tol = 1.0e-6;
+  double entropy_tol = newtparam.adapt_tol;
   unsigned int num_adapts = 0, max_adapts = 5;
   bool adaptive_convergence = false;
 
@@ -327,7 +327,13 @@ int main(int argc, char** argv)
 
     // set initial residual
     printf("\tupdate initial residual...\n"); fflush(stdout);
-    initial_residual = get_initial_residual(&L_pnp, &bc, &initialCation, &initialAnion, &initialPotential);
+    initial_residual = get_initial_residual(
+      &L_pnp,
+      &bc,
+      &initialCation,
+      &initialAnion,
+      &initialPotential
+    );
 
     printf("\tcompute relative residual...\n"); fflush(stdout);
     L_pnp.CatCat = cationSolution;
@@ -373,9 +379,6 @@ int main(int argc, char** argv)
         AnBetaFunction.interpolate(potentialSolution);
         *(AnBetaFunction.vector()) *= coeff_par.anion_valency;
         *(AnBetaFunction.vector()) += *(AnAnFunction.vector());
-
-        // Construct EAFE approximations to Jacobian
-        printf("\tconstruct EAFE modifications...\n"); fflush(stdout);
         a_cat.eta = CatCatFunction;
         a_cat.beta = CatBetaFunction;
         a_an.eta = AnAnFunction;
@@ -391,14 +394,17 @@ int main(int argc, char** argv)
       bc.apply(A_pnp);
 
       // Convert to fasp
-      printf("\tconvert to FASP and solve...\n"); fflush(stdout);
+      printf("\tconvert to FASP...\n"); fflush(stdout);
       EigenVector_to_dvector(&b_pnp,&b_fasp);
       EigenMatrix_to_dCSRmat(&A_pnp,&A_fasp);
       A_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
       fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
+      
+      // solve the linear system using FASP solver
+      printf("\tsolve linear system using FASP solver...\n"); fflush(stdout);
       status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &solu_fasp, &itpar, &amgpar);
       if (status < 0)
-        printf("\n### WARNING: Solver failed! Exit status = %d.\n\n", status);
+        printf("\n### WARNING: FASP solver failed! Exit status = %d.\n\n", status);
       else
         printf("\tsolved linear system successfully...\n");
 
@@ -410,7 +416,7 @@ int main(int argc, char** argv)
 
       // update solution and reset solutionUpdate
       printf("\tupdate solution...\n"); fflush(stdout);
-      relative_residual = update_solution_pnp (
+      relative_residual = update_solution_pnp(
         &cationSolution,
         &anionSolution,
         &potentialSolution,
@@ -436,57 +442,29 @@ int main(int argc, char** argv)
       L_pnp.EsEs = potentialSolution;
       assemble(b_pnp, L_pnp);
       bc.apply(b_pnp);
-      // if (newton_iteration == 1)
-      //   printf("\trelative nonlinear residual after 1 iteration has l2-norm of %e\n", relative_residual);
-      // else
-      //   printf("\trelative nonlinear residual after %d iterations has l2-norm of %e\n",
-      //     newton_iteration,
-      //     relative_residual
-      //   );
 
-      // write computed solution to file
-      // printf("\toutput computed solution to file\n"); fflush(stdout);
-      // cationFile << cationSolution;
-      // anionFile << anionSolution;
-      // potentialFile << potentialSolution;
-
-      // compute solution error
-      // printf("\nCompute the error\n"); fflush(stdout);
-      // dolfin::Function Error1(analyticCation);
-      // dolfin::Function Error2(analyticAnion);
-      // dolfin::Function Error3(analyticPotential);
-      // *(Error1.vector()) -= *(cationSolution.vector());
-      // *(Error2.vector()) -= *(anionSolution.vector());
-      // *(Error3.vector()) -= *(potentialSolution.vector());
-      // double cationError = 0.0;
-      // double anionError = 0.0;
-      // double potentialError = 0.0;
-      // L2Error::Form_M L2error1(mesh,Error1);
-      // cationError = assemble(L2error1);
-      // L2Error::Form_M L2error2(mesh,Error2);
-      // anionError = assemble(L2error2);
-      // L2Error::Form_M L2error3(mesh,Error3);
-      // potentialError = assemble(L2error3);
-      // printf("\tcation l2 error is:     %e\n", cationError);
-      // printf("\tanion l2 error is:      %e\n", anionError);
-      // printf("\tpotential l2 error is:  %e\n", potentialError);
-
-      // print error
-      // cationFile << cationSolution;
-      // anionFile << anionSolution;
-      // potentialFile << potentialSolution;
+      // print
+      cationFile << cationSolution;
+      anionFile << anionSolution;
+      potentialFile << potentialSolution;
     }
 
-    if (relative_residual < nonlinear_tol)
+    if (!isnan(relative_residual) && relative_residual < nonlinear_tol)
       printf("\nSuccessfully solved the system below desired residual in %d steps!\n\n", newton_iteration);
+    else if (isnan(relative_residual)) {
+      printf("\n### WARNING: Newton solver failed...\n");
+      printf("\trelative residual is NaN!!\n\n");
+      adaptive_convergence = true;
+      break;
+    }
     else {
       printf("\nDid not converge in %d Newton iterations...\n", max_newton_iters);
       printf("\tcurrent relative residual is %e > %e\n\n", relative_residual, nonlinear_tol);
     }
 
-    cationFile << cationSolution;
-    anionFile << anionSolution;
-    potentialFile << potentialSolution;
+    // cationFile << cationSolution;
+    // anionFile << anionSolution;
+    // potentialFile << potentialSolution;
 
     // compute local entropy and refine mesh
     printf("Computing local entropy for refinement\n");
@@ -571,8 +549,7 @@ double update_solution_pnp (
   unsigned int damp_iters = 0;
   printf("\t\trelative residual after damping %d times: %e\n", damp_iters, new_relative_residual);
 
-  while (
-    new_relative_residual > relative_residual && damp_iters < params->damp_it )
+  while ( new_relative_residual > relative_residual && damp_iters < params->damp_it )
   {
     damp_iters++;
     *(_iterate0.vector()) = *(iterate0->vector());
@@ -590,7 +567,7 @@ double update_solution_pnp (
     assemble(b, *L);
     bc->apply(b);
     new_relative_residual = b.norm("l2") / initial_residual;
-    printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
+    printf("\t\trelative residual after damping %d times: %e\n", damp_iters, new_relative_residual);
   }
 
   // check for decrease
