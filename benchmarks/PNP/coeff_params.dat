@@ -13,7 +13,7 @@ ref_density           =  1.0000e+0      % 1 / m^3
 
 temperature           =  1.0000e+0      % K
 
-relative_permittivity =  1.0000e-3      % no units
+relative_permittivity =  1.0000e-8      % no units
 
 cation_diffusivity    =  1.0000e-0      % m / sec^2
 cation_mobility       =  1.0000e-0      % (e_c/k_B*T) * m / sec^2

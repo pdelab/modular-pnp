@@ -33,8 +33,8 @@ double lower_cation_val = 0.1;  // 1 / m^3
 double upper_cation_val = 1.0;  // 1 / m^3
 double lower_anion_val = 1.0;  // 1 / m^3
 double upper_anion_val = 0.1;  // 1 / m^3
-double lower_potential_val = 1.0;  // V
-double upper_potential_val = -1.0;  // V
+double lower_potential_val = +1.0e-0;  // V
+double upper_potential_val = -1.0e-0;  // V
 
 double get_initial_residual (
   pnp_and_source::LinearForm* L,
@@ -271,12 +271,15 @@ int main(int argc, char** argv)
     printf("\tinterpolate solution onto new mesh...\n"); fflush(stdout);
     dolfin::Function solutionFunction(V);
     dolfin::Function cationSolution(solutionFunction[0]);
+    // cationSolution.interpolate(initialCation);
     cationSolution.interpolate(cation0);
     dolfin::Function anionSolution(solutionFunction[1]);
+    // anionSolution.interpolate(initialAnion);
     anionSolution.interpolate(anion0);
 
     // solve for voltage
     dolfin::Function potentialSolution(solutionFunction[2]);
+    // potentialSolution.interpolate(initialPotential);
     potentialSolution.interpolate(potential0);
 
     // write computed solution to file
@@ -400,65 +403,75 @@ int main(int argc, char** argv)
       A_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
       fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
       
-      // solve the linear system using FASP solver
+      // solve the linear system using FASP solver and verify success
       printf("\tsolve linear system using FASP solver...\n"); fflush(stdout);
       status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &solu_fasp, &itpar, &amgpar);
-      if (status < 0)
-        printf("\n### WARNING: FASP solver failed! Exit status = %d.\n\n", status);
-      else
+      if (status < 0) {
+        printf("\n### WARNING: FASP solver failed! Exit status = %d.\n", status);
+        newton_iteration = max_newton_iters;
+      }
+      else {
         printf("\tsolved linear system successfully...\n");
 
-      // map solu_fasp into solutionUpdate
-      printf("\tconvert FASP solution to function...\n"); fflush(stdout);
-      copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &cation_dofs, &cation_dofs);
-      copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &anion_dofs, &anion_dofs);
-      copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &potential_dofs, &potential_dofs);
+        // map solu_fasp into solutionUpdate
+        printf("\tconvert FASP solution to function...\n"); fflush(stdout);
+        copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &cation_dofs, &cation_dofs);
+        copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &anion_dofs, &anion_dofs);
+        copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &potential_dofs, &potential_dofs);
 
-      // update solution and reset solutionUpdate
-      printf("\tupdate solution...\n"); fflush(stdout);
-      relative_residual = update_solution_pnp(
-        &cationSolution,
-        &anionSolution,
-        &potentialSolution,
-        &(solutionUpdate[0]),
-        &(solutionUpdate[1]),
-        &(solutionUpdate[2]),
-        relative_residual,
-        initial_residual,
-        &L_pnp,
-        &bc,
-        &newtparam
-      );
-      if (relative_residual < 0.0) {
-        printf("Newton backtracking failed!\n");
-        printf("\tresidual has not decreased after damping %d times\n", newtparam.damp_it);
-        printf("\tthe relative residual is %e\n", relative_residual);
-        relative_residual *= -1.0;
+        // update solution and reset solutionUpdate
+        printf("\tupdate solution...\n"); fflush(stdout);
+        relative_residual = update_solution_pnp(
+          &cationSolution,
+          &anionSolution,
+          &potentialSolution,
+          &(solutionUpdate[0]),
+          &(solutionUpdate[1]),
+          &(solutionUpdate[2]),
+          relative_residual,
+          initial_residual,
+          &L_pnp,
+          &bc,
+          &newtparam
+        );
+        if (relative_residual < 0.0) {
+          printf("Newton backtracking failed!\n");
+          printf("\tresidual has not decreased after damping %d times\n", newtparam.damp_it);
+          printf("\tthe relative residual is %e\n", relative_residual);
+          relative_residual *= -1.0;
+        }
+
+        // update nonlinear residual
+        L_pnp.CatCat = cationSolution;
+        L_pnp.AnAn = anionSolution;
+        L_pnp.EsEs = potentialSolution;
+        assemble(b_pnp, L_pnp);
+        bc.apply(b_pnp);
+
+        // print
+        cationFile << cationSolution;
+        anionFile << anionSolution;
+        potentialFile << potentialSolution;
       }
-
-      // update nonlinear residual
-      L_pnp.CatCat = cationSolution;
-      L_pnp.AnAn = anionSolution;
-      L_pnp.EsEs = potentialSolution;
-      assemble(b_pnp, L_pnp);
-      bc.apply(b_pnp);
-
-      // print
-      cationFile << cationSolution;
-      anionFile << anionSolution;
-      potentialFile << potentialSolution;
     }
 
-    if (!isnan(relative_residual) && relative_residual < nonlinear_tol)
-      printf("\nSuccessfully solved the system below desired residual in %d steps!\n\n", newton_iteration);
-    else if (isnan(relative_residual)) {
+    // check status of Newton solver
+    if (isnan(relative_residual)) {
       printf("\n### WARNING: Newton solver failed...\n");
       printf("\trelative residual is NaN!!\n\n");
       adaptive_convergence = true;
       break;
     }
+    else if (status < 0) {
+      entropy_tol *= 0.1;
+      printf("\tdrop adaptivity tolerance to %e\n\n", entropy_tol);
+    }
+    else if (relative_residual < nonlinear_tol) {
+      printf("\nSuccessfully solved the system below desired residual in %d steps!\n\n", newton_iteration);
+    }
     else {
-      printf("\nDid not converge in %d Newton iterations...\n", max_newton_iters);
+      printf("\n### WARNING: Newton solver failed...\n");
+      printf("\tDid not converge in %d Newton iterations...\n", max_newton_iters);
       printf("\tcurrent relative residual is %e > %e\n\n", relative_residual, nonlinear_tol);
     }
 
