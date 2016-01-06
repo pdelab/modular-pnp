@@ -11,9 +11,9 @@ subdomain_file = none  %./mesh/gramA_channel_physical_region.xml
 
 ref_length   = 1.0e-9
 length_x     = 10.0    % DO NOT CHANGE WITHOUT MODIFYING lin_pnp.cpp
-length_y     = 10.0
-length_z     = 1.0
+length_y     = 3.0
+length_z     = 3.0
 
-grid_x       = 20
-grid_y       = 20
+grid_x       = 10
+grid_y       = 3
 grid_z       = 3

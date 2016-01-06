@@ -34,12 +34,12 @@ double lower_cation_val = 0.1;  // 1 / m^3
 double upper_cation_val = 1.0;  // 1 / m^3
 double lower_anion_val = 1.0;  // 1 / m^3
 double upper_anion_val = 0.1;  // 1 / m^3
-double lower_potential_val = -1.0;  // V
-double upper_potential_val = 1.0;  // V
+double lower_potential_val = 1.0;  // V
+double upper_potential_val = -1.0;  // V
 
 
-double time_step_size = 0.2;
-double final_time = 10.0;
+double time_step_size = 1.0;
+double final_time = 100.0;
 
 double get_initial_residual (
   pnp::LinearForm* L,
@@ -81,12 +81,6 @@ int main(int argc, char** argv)
   // Need to use Eigen for linear algebra
   parameters["linear_algebra_backend"] = "Eigen";
   parameters["allow_extrapolation"] = true;
-
-  // File
-  std::ofstream ofs;
-  ofs.open ("./benchmarks/1d-benchmark/data.txt", std::ofstream::out);
-  ofs << "t" << "\t" << "NewtonIteration" << "\t" << "RelativeResidual" << "\t" << "Cation" << "\t" << "Anion" << "\t" << "Potential" << "\t" << "Energy" << "\t"<< "TimeElaspsed" << "\t" << "MeshSize" << "\n";
-  ofs.close();
 
   //*************************************************************
   //  Initialization
@@ -133,6 +127,13 @@ int main(int argc, char** argv)
   fasp_param_input(fasp_params, &inpar);
   fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
   INT status = FASP_SUCCESS;
+
+  // File
+  std::ofstream ofs;
+  ofs.open ("./benchmarks/1d-benchmark/data.txt", std::ofstream::out);
+  ofs << "starting mesh size =" << mesh_adapt.num_cells() << "\n";
+  ofs << "t" << "\t" << "NewtonIteration" << "\t" << "RelativeResidual" << "\t" << "Cation" << "\t" << "Anion" << "\t" << "Potential" << "\t" << "Energy" << "\t"<< "TimeElaspsed" << "\t" << "MeshSize" << "\n";
+  ofs.close();
 
   // open files for outputting solutions
   File cationFile("./benchmarks/1d-benchmark/output/cation.pvd");
@@ -214,8 +215,8 @@ int main(int argc, char** argv)
 
     // set adaptivity parameters
     dolfin::Mesh mesh(mesh_adapt);
-    double entropy_tol = 1.0e-5;
-    unsigned int num_adapts = 0, max_adapts = 1;
+    double entropy_tol = newtparam.adapt_tol;
+    unsigned int num_adapts = 0, max_adapts = 5;
     bool adaptive_convergence = false;
 
     // initialize storage functions for adaptivity

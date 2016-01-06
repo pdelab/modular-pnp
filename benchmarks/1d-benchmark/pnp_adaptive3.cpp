@@ -35,12 +35,12 @@ double lower_cation_val = 0.1;  // 1 / m^3
 double upper_cation_val = 1.0;  // 1 / m^3
 double lower_anion_val = 1.0;  // 1 / m^3
 double upper_anion_val = 0.1;  // 1 / m^3
-double lower_potential_val = -1.0;  // V
-double upper_potential_val = 1.0;  // V
+double lower_potential_val = 1.0;  // V
+double upper_potential_val = -1.0;  // V
 
 
-double time_step_size = 0.1;
-double final_time = 100.0;
+double time_step_size = 1.0;
+double final_time = 10.0;
 
 // Sub domain for Dirichlet boundary condition
 class LeftBoundary : public SubDomain
@@ -253,6 +253,8 @@ int main(int argc, char** argv)
   bc2_p.apply(b_p);
   dCSRmat A_fasp_p;
   dvector b_fasp_p,solu_p;
+  EigenVector_to_dvector(&b_p,&b_fasp_p);
+  EigenMatrix_to_dCSRmat(&A_p,&A_fasp_p);
   fasp_dvec_alloc(b_p.size(),&solu_p);
   fasp_dvec_set(b_fasp_p.row, &solu_p, 0.0);
   status = fasp_solver_dcsr_krylov(&A_fasp_p, &b_fasp_p, &solu_p, &itpar);
@@ -270,7 +272,7 @@ int main(int argc, char** argv)
 
     // set adaptivity parameters
     dolfin::Mesh mesh(mesh_adapt);
-    double entropy_tol = 1.0e-3;
+    double entropy_tol = newtparam.adapt_tol;
     unsigned int num_adapts = 0, max_adapts = 1;
     bool adaptive_convergence = false;
 
