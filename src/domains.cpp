@@ -155,15 +155,15 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   status = fasp_solver_dbsr_krylov_diag(&adaptA_fasp_bsr, &b_fasp, &solu_fasp, &itpar);
   copy_dvector_to_Function(&solu_fasp, &cation_entropy);
 
-  // set form for anion
-  L.potential = anion_potential;
-  assemble(b,L);
-  EigenVector_to_dvector(&b,&b_fasp);
-
-  // solve for anion entropy
-  fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
-  status = fasp_solver_dbsr_krylov_diag(&adaptA_fasp_bsr, &b_fasp, &solu_fasp, &itpar);
-  copy_dvector_to_Function(&solu_fasp, &anion_entropy);
+  // // set form for anion
+  // L.potential = anion_potential;
+  // assemble(b,L);
+  // EigenVector_to_dvector(&b,&b_fasp);
+  //
+  // // solve for anion entropy
+  // fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
+  // status = fasp_solver_dbsr_krylov_diag(&adaptA_fasp_bsr, &b_fasp, &solu_fasp, &itpar);
+  // copy_dvector_to_Function(&solu_fasp, &anion_entropy);
 
   // output entropy
   // File entropyFile("./benchmarks/PNP/output/entropy.pvd");
@@ -175,8 +175,8 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   poisson_cell_marker::LinearForm error_form(DG);
   error_form.cat_entr = cation_entropy;
   error_form.cat_pot  = cation_potential;
-  error_form.an_entr = anion_entropy;
-  error_form.an_pot  = anion_potential;
+  error_form.an_entr = cation_entropy;
+  error_form.an_pot  = cation_potential;
   dolfin::EigenVector error_vector;
   assemble(error_vector, error_form);
 
@@ -184,7 +184,7 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   MeshFunction<bool> cell_marker(mesh, mesh.topology().dim(), false);
   unsigned int marked_elem_count = 0;
   for ( uint errVecInd = 0; errVecInd < error_vector.size(); errVecInd++) {
-    if ( error_vector[errVecInd] > entropy_tol ) {
+    if ( error_vector[errVecInd] > entropy_tol/2.0 ) {
         marked_elem_count++;
         cell_marker.values()[errVecInd] = true;
     }

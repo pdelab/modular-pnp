@@ -34,11 +34,11 @@ double lower_cation_val = 0.1;  // 1 / m^3
 double upper_cation_val = 1.0;  // 1 / m^3
 double lower_anion_val = 1.0;  // 1 / m^3
 double upper_anion_val = 0.1;  // 1 / m^3
-double lower_potential_val = 1.0;  // V
-double upper_potential_val = -1.0;  // V
+double lower_potential_val = +1.0e-0;  // V
+double upper_potential_val = -1.0e-0;  // V
 
 
-double time_step_size = 1.0;
+double time_step_size = 0.1;
 double final_time = 100.0;
 
 double get_initial_residual (
@@ -393,6 +393,7 @@ int main(int argc, char** argv)
         A_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
         fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
         status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &solu_fasp, &itpar, &amgpar);
+        // status = fasp_solver_dcsr_krylov(&A_fasp, &b_fasp, &solu_fasp, &itpar);
         if (status < 0)
           printf("\n### WARNING: Solver failed! Exit status = %d.\n\n", status);
         else
