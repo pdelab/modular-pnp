@@ -58,7 +58,7 @@ void domain_build (domain_param *domain_par,
       dolfin::FacetFunction<std::size_t> surfaces_object(*mesh);
       surfaces_object.set_all(1);
       *surfaces = surfaces_object;
-    } 
+    }
     else { // read in mesh from specified files
       printf("### ERROR: Reading in meshes is currently unsupported: %s...\n\n", domain_par->mesh_file);
     }
@@ -70,7 +70,7 @@ void domain_build (domain_param *domain_par,
       printf(" Reading in the mesh subdomains from %s \n", domain_par->subdomain_file);
       dolfin::MeshFunction<std::size_t> subdomains_object(*mesh, domain_par->subdomain_file);
       *subdomains = subdomains_object;
-      
+
       printf(" Reading in the mesh surfaces from %s \n", domain_par->surface_file);
       dolfin::MeshFunction<std::size_t>  surfaces_object(*mesh, domain_par->surface_file);
       *surfaces = surfaces_object;
@@ -128,7 +128,6 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   assemble(A,a);
   dCSRmat A_fasp;
   EigenMatrix_to_dCSRmat(&A,&A_fasp);
-  dBSRmat adaptA_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, mesh.topology().dim());
   EigenVector b;
   dvector b_fasp, solu_fasp;
 
@@ -150,7 +149,7 @@ unsigned int check_local_entropy (dolfin::Function *cation,
 
   // solve for cation entropy
   fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
-  status = fasp_solver_dbsr_krylov_diag(&adaptA_fasp_bsr, &b_fasp, &solu_fasp, &itpar);
+  status = fasp_solver_dcsr_krylov_diag(&A_fasp, &b_fasp, &solu_fasp, &itpar);
   copy_dvector_to_Function(&solu_fasp, &cation_entropy);
 
   // set form for anion
@@ -160,8 +159,11 @@ unsigned int check_local_entropy (dolfin::Function *cation,
 
   // solve for anion entropy
   fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
-  status = fasp_solver_dbsr_krylov_diag(&adaptA_fasp_bsr, &b_fasp, &solu_fasp, &itpar);
+  status = fasp_solver_dcsr_krylov_diag(&A_fasp, &b_fasp, &solu_fasp, &itpar);
   copy_dvector_to_Function(&solu_fasp, &anion_entropy);
+
+  // Free memory
+  fasp_dvec_free(&solu_fasp);
 
   // output entropy
   // File entropyFile("./benchmarks/PNP/output/entropy.pvd");
