@@ -10,6 +10,7 @@
 #include "newton.h"
 #include "gradient_recovery.h"
 #include "poisson_cell_marker.h"
+#include "electric_cell_marker.h"
 #include "fasp_to_fenics.h"
 extern "C"
 {
@@ -78,30 +79,20 @@ void domain_build (domain_param *domain_par,
 }
 
 /**
- * \fn bool check_local_entropy (dolfin::Function *cation,
- *                               dolfin::Function *anion,
- *                               dolfin::Function *voltage,
+ * \fn bool check_electric_field (dolfin::Function *voltage,
  *                               dolfin::Mesh *target_mesh,
  *                               double entropy_tol)
  *
- * \brief Check if local entropy is below tolerance and refine
+ * \brief Check if the electric field gradient(potential) is below tolerance and refine
  *    mesh
  *
- * \param cation          cation function
- * \param cation_valency  valency of cation
- * \param anion           anion function
- * \param anion_valency  valency of anion
  * \param voltage         voltage function
  * \param mesh            ptr to refined mesh
  * \param entropy_tol     tolerance for local entropy
  *
  * \return            levels of refinement
  */
-unsigned int check_local_entropy (dolfin::Function *cation,
-                                  double cation_valency,
-                                  dolfin::Function *anion,
-                                  double anion_valency,
-                                  dolfin::Function *voltage,
+unsigned int check_electric_field (dolfin::Function *voltage,
                                   dolfin::Mesh *target_mesh,
                                   double entropy_tol)
 {
@@ -110,27 +101,17 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   gradient_recovery::FunctionSpace gradient_space(mesh);
   gradient_recovery::BilinearForm a(gradient_space,gradient_space);
   gradient_recovery::LinearForm L(gradient_space);
-  dolfin::Function cation_entropy(gradient_space);
-  dolfin::Function anion_entropy(gradient_space);
-
-  Constant zero(0.0);
+  dolfin::Function ElecField(gradient_space);
 
   // compute entropic potentials
-  dolfin::Function cation_potential( *(voltage->function_space()) );
-  cation_potential.interpolate(*voltage);
-  // *(cation_potential.vector()) *= cation_valency;
-  // *(cation_potential.vector()) += *(cation->vector());
-  dolfin::Function anion_potential( *(voltage->function_space()) );
-  anion_potential.interpolate(*voltage);
-  // *(anion_potential.vector()) *= anion_valency;
-  // *(anion_potential.vector()) += *(anion->vector());
+  dolfin::Function potential( *(voltage->function_space()) );
+  potential.interpolate(*voltage);
 
   // setup matrix and rhs
   EigenMatrix A;
   assemble(A,a);
   dCSRmat A_fasp;
   EigenMatrix_to_dCSRmat(&A,&A_fasp);
-  dBSRmat adaptA_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, mesh.topology().dim());
   EigenVector b;
   dvector b_fasp, solu_fasp;
 
@@ -145,38 +126,24 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   INT status = FASP_SUCCESS;
 
   // set form for cation
-  L.potential = cation_potential;
+  L.potential = potential;
   assemble(b,L);
   EigenVector_to_dvector(&b,&b_fasp);
   fasp_dvec_alloc(b.size(), &solu_fasp);
 
   // solve for cation entropy
   fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
-  status = fasp_solver_dbsr_krylov_diag(&adaptA_fasp_bsr, &b_fasp, &solu_fasp, &itpar);
-  copy_dvector_to_Function(&solu_fasp, &cation_entropy);
+  status = fasp_solver_dcsr_krylov_diag(&A_fasp, &b_fasp, &solu_fasp, &itpar);
+  copy_dvector_to_Function(&solu_fasp, &ElecField);
 
-  // // set form for anion
-  // L.potential = anion_potential;
-  // assemble(b,L);
-  // EigenVector_to_dvector(&b,&b_fasp);
-  //
-  // // solve for anion entropy
-  // fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
-  // status = fasp_solver_dbsr_krylov_diag(&adaptA_fasp_bsr, &b_fasp, &solu_fasp, &itpar);
-  // copy_dvector_to_Function(&solu_fasp, &anion_entropy);
-
-  // output entropy
-  // File entropyFile("./benchmarks/PNP/output/entropy.pvd");
-  // entropyFile << cation_entropy;
-  // entropyFile << anion_entropy;
+  // Free memory
+  fasp_dvec_free(&solu_fasp);
 
   // compute entropic error
-  poisson_cell_marker::FunctionSpace DG(mesh);
-  poisson_cell_marker::LinearForm error_form(DG);
-  error_form.cat_entr = cation_entropy;
-  error_form.cat_pot  = cation_potential;
-  error_form.an_entr = cation_entropy;
-  error_form.an_pot  = cation_potential;
+  electric_cell_marker::FunctionSpace DG(mesh);
+  electric_cell_marker::LinearForm error_form(DG);
+  error_form.pot = potential;
+  error_form.gradpot  = ElecField;
   dolfin::EigenVector error_vector;
   assemble(error_vector, error_form);
 
@@ -203,19 +170,11 @@ unsigned int check_local_entropy (dolfin::Function *cation,
     dolfin::FunctionSpace adapt_function_space( adapt(*(voltage->function_space()), mesh_ptr) );
 
     // adapt functions
-    dolfin::Function adapt_cation( adapt_function_space );
-    dolfin::Function adapt_anion( adapt_function_space );
     dolfin::Function adapt_voltage( adapt_function_space );
-    adapt_cation.interpolate(*cation);
-    adapt_anion.interpolate(*anion);
     adapt_voltage.interpolate(*voltage);
 
     unsigned int num_refines = 0;
-    num_refines = check_local_entropy(
-      &adapt_cation,
-      cation_valency,
-      &adapt_anion,
-      anion_valency,
+    num_refines =  check_electric_field(
       &adapt_voltage,
       target_mesh,
       entropy_tol

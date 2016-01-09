@@ -4,6 +4,7 @@
  *
  *  \note Currently initializes the problem based on specification
  */
+#include <boost/filesystem.hpp>
 #include <iostream>
 #include <fstream>
 #include <iostream>
@@ -38,7 +39,7 @@ double lower_potential_val = +1.0e-0;  // V
 double upper_potential_val = -1.0e-0;  // V
 
 
-double time_step_size = 0.1;
+double time_step_size = 0.5;
 double final_time = 100.0;
 
 double get_initial_residual (
@@ -92,6 +93,10 @@ int main(int argc, char** argv)
   char domain_param_filename[] = "./benchmarks/1d-benchmark/domain_params.dat";
   domain_param_input(domain_param_filename, &domain_par);
   print_domain_param(&domain_par);
+
+  // Deleting the folders:
+  boost::filesystem::remove_all("./benchmarks/1d-benchmark/output");
+  boost::filesystem::remove_all("./benchmarks/1d-benchmark/meshOut");
 
   // build mesh
   printf("mesh...\n"); fflush(stdout);
@@ -449,13 +454,9 @@ int main(int argc, char** argv)
       }
 
       // compute local entropy and refine mesh
-      printf("Computing local entropy for refinement\n");
+      printf("Computing electric field for refinement\n");
       unsigned int num_refines;
-      num_refines = check_local_entropy (
-        &cationSolution,
-        coeff_par.cation_valency,
-        &anionSolution,
-        coeff_par.anion_valency,
+      num_refines = check_electric_field (
         &potentialSolution,
         &mesh_adapt,
         entropy_tol
@@ -466,8 +467,8 @@ int main(int argc, char** argv)
 
       if ( (num_refines == 0) || ( ++num_adapts > max_adapts ) ){
         // successful solve
-          if (num_refines == 0) printf("\tsuccessfully distributed entropy below desired entropy in %d adapts!\n\n", num_adapts);
-          else printf("\nDid not adapt mesh to entropy in %d adapts...\n", max_adapts);
+          if (num_refines == 0) printf("\tsuccessfully distributed electric field below desired electric field in %d adapts!\n\n", num_adapts);
+          else printf("\nDid not adapt mesh to electric field in %d adapts...\n", max_adapts);
           adaptive_convergence = true;
           dolfin::Function Er_cat(previous_cation);
           dolfin::Function Er_an(previous_anion);
