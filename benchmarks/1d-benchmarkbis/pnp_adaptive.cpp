@@ -21,6 +21,7 @@
 #include "newton_functs.h"
 #include "L2Error.h"
 #include "energy.h"
+#include "poisson.h"
 extern "C"
 {
   #include "fasp.h"
@@ -39,8 +40,24 @@ double upper_anion_val = 0.1;  // 1 / m^3
 double lower_potential_val = -1.0e-0;  // V
 double upper_potential_val = 1.0e-0;  // V
 
-double time_step_size = 0.5;
-double final_time = 100.0;
+double time_step_size = 0.1;
+double final_time = 10.0;
+
+// Sub domain for Dirichlet boundary condition
+class LeftBoundary : public SubDomain
+{
+  bool inside(const Array<double>& x, bool on_boundary) const
+  {
+    return on_boundary && std::fabs(x[0] + 5.0) < 5.0*DOLFIN_EPS;
+  }
+};
+class RightBoundary : public SubDomain
+{
+  bool inside(const Array<double>& x, bool on_boundary) const
+  {
+    return on_boundary && std::fabs(x[0] - 5.0) < 5.0*DOLFIN_EPS;
+  }
+};
 
 double get_initial_residual (
   pnp::LinearForm* L,
@@ -161,7 +178,59 @@ int main(int argc, char** argv)
   dolfin::Function initial_potential(initial_soln[2]);
   initial_cation.interpolate(Cation);
   initial_anion.interpolate(Anion);
+  // initial_potential.interpolate(Volt);
+
+  // Computation of Phi
+  printf("Computing the intial Phi...");
+  Constant leftlower(upper_potential_val);
+  Constant rightupper(lower_potential_val);
+  poisson::FunctionSpace V_p(mesh_init);
+  poisson::BilinearForm a_p(V_p,V_p);
+  poisson::LinearForm L_p(V_p);
+  dolfin::Function pp(V_p);
+  dolfin::Function CatCat(V_p);
+  dolfin::Function AnAn(V_p);
+  CatCat.interpolate(Cation);
+  AnAn.interpolate(Anion);
+  Constant qp(coeff_par.cation_valency);
+  Constant qn(coeff_par.anion_valency);
+  Constant eps(coeff_par.relative_permittivity);
+  a_p.eps=eps;
+  L_p.qp=qp;
+  L_p.qn=qn;
+  L_p.CatCat=CatCat;
+  L_p.AnAn=AnAn;
+  Constant zero_vec(0.0, 0.0, 0.0);
+  LeftBoundary LeftP; RightBoundary RightP;
+  dolfin::DirichletBC bc1_p(V_p, leftlower,LeftP);
+  dolfin::DirichletBC bc2_p(V_p, rightupper,RightP);
+  EigenMatrix A_p;
+  EigenVector b_p;
+  assemble(b_p, L_p);
+  assemble(A_p, a_p);
+  bc1_p.apply(A_p);
+  bc2_p.apply(A_p);
+  bc1_p.apply(b_p);
+  bc2_p.apply(b_p);
+  dCSRmat A_fasp_p;
+  dvector b_fasp_p,solu_p;
+  EigenVector_to_dvector(&b_p,&b_fasp_p);
+  EigenMatrix_to_dCSRmat(&A_p,&A_fasp_p);
+  fasp_dvec_alloc(b_p.size(),&solu_p);
+  fasp_dvec_set(b_fasp_p.row, &solu_p, 0.0);
+  status = fasp_solver_dcsr_krylov(&A_fasp_p, &b_fasp_p, &solu_p, &itpar);
+  if (status < 0){
+    printf("\n### WARNING: Solver failed! Exit status = %d.\n\n", status);
+    return 0;
+  }
+  copy_dvector_to_Function(&solu_p,&pp);
+  printf("done\n"); fflush(stdout);
+  initial_potential.interpolate(pp);
   initial_potential.interpolate(Volt);
+
+  cationFile << initial_cation;
+  anionFile << initial_anion;
+  potentialFile << initial_potential;
 
   // set adaptivity parameters
   dolfin::Mesh mesh0(mesh_init);
@@ -367,12 +436,13 @@ int main(int argc, char** argv)
           printf("\tconvert to FASP...\n"); fflush(stdout);
           EigenVector_to_dvector(&b_pnp,&b_fasp);
           EigenMatrix_to_dCSRmat(&A_pnp,&A_fasp);
-          A_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
+          //A_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
           fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
 
           // solve the linear system using FASP solver and verify success
           printf("\tsolve linear system using FASP solver...\n"); fflush(stdout);
-          status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &solu_fasp, &itpar, &amgpar);
+          //status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &solu_fasp, &itpar, &amgpar);
+          status = fasp_solver_dcsr_krylov(&A_fasp, &b_fasp, &solu_fasp, &itpar);
           if (status < 0) {
             printf("\n### WARNING: FASP solver failed! Exit status = %d.\n", status);
             newton_iteration = max_newton_iters;
@@ -416,11 +486,11 @@ int main(int argc, char** argv)
             L_pnp.AnAn_t0 = previous_anion;
             assemble(b_pnp, L_pnp);
             bc.apply(b_pnp);
-
-            fasp_dbsr_free(&A_fasp_bsr);
           }
-        }
 
+        }
+        //fasp_dbsr_free(&A_fasp_bsr);
+        fasp_dvec_free(&solu_fasp);
         // check status of Newton solver
         if (isnan(relative_residual)) {
           printf("\n### WARNING: Newton solver failed...\n");
@@ -429,7 +499,7 @@ int main(int argc, char** argv)
           break;
         }
         else if (status < 0) {
-          entropy_tol *= 0.1;
+          //entropy_tol *= 0.1;
           printf("\tdrop adaptivity tolerance to %e\n\n", entropy_tol);
         }
         else if (relative_residual < nonlinear_tol) {
@@ -440,8 +510,6 @@ int main(int argc, char** argv)
           printf("\tDid not converge in %d Newton iterations...\n", max_newton_iters);
           printf("\tcurrent relative residual is %e > %e\n\n", relative_residual, nonlinear_tol);
         }
-
-        fasp_dvec_free(&solu_fasp);
 
         // compute local entropy and refine mesh
         printf("Computing local entropy for refinement\n");
