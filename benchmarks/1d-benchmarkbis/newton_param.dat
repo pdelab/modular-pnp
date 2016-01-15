@@ -1,0 +1,9 @@
+%--------------------------%
+% Newton Parameters        %
+%--------------------------%
+
+adapt_tol = 1E-1
+nonlin_tol = 1E-6
+nonlin_maxit = 15
+nonlin_damp_factor = 0.5
+nonlin_damp_it = 5
