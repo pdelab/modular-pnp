@@ -1,6 +1,6 @@
-/*! \file lin_pnp.cpp
+/*! \file pnp_adaptive.cpp
  *
- *  \brief Setup and solve the linearized PNP equation using FASP
+ *  \brief Setup and solve the PNP equations using adaptive meshing and FASP
  *
  *  \note Currently initializes the problem based on specification
  */
@@ -131,9 +131,10 @@ int main(int argc, char** argv)
 
   // read coefficients and boundary values
   printf("coefficients...\n"); fflush(stdout);
-  coeff_param coeff_par;
+  coeff_param coeff_par, non_dim_coeff_par;
   char coeff_param_filename[] = "./benchmarks/PNP/coeff_params.dat";
   coeff_param_input(coeff_param_filename, &coeff_par);
+  non_dimesionalize_coefficients(&domain_par, &coeff_par, &non_dim_coeff_par);
   print_coeff_param(&coeff_par);
 
   // initialize Newton solver parameters
