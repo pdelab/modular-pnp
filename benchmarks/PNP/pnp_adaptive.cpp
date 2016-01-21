@@ -29,13 +29,6 @@ using namespace dolfin;
 
 bool eafe_switch = false;
 
-double lower_cation_val = 0.1;  // 1 / m^3
-double upper_cation_val = 1.0;  // 1 / m^3
-double lower_anion_val = 1.0;  // 1 / m^3
-double upper_anion_val = 0.1;  // 1 / m^3
-double lower_potential_val = +1.0e-0;  // V
-double upper_potential_val = -1.0e-0;  // V
-
 double get_initial_residual (
   pnp_and_source::LinearForm* L,
   const dolfin::DirichletBC* bc,
@@ -57,39 +50,6 @@ double update_solution_pnp (
   const dolfin::DirichletBC* bc,
   newton_param* params
 );
-
-class analyticCationExpression : public Expression
-{
-  void eval(Array<double>& values, const Array<double>& x) const
-  {
-    values[0]  = lower_cation_val * (5.0 - x[0]) / 10.0;
-    values[0] += upper_cation_val * (x[0] + 5.0) / 10.0;
-    values[0] += 2.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
-    values[0]  = std::log(values[0]);
-  }
-};
-
-class analyticAnionExpression : public Expression
-{
-  void eval(Array<double>& values, const Array<double>& x) const
-  {
-    values[0]  = lower_anion_val * (5.0 - x[0]) / 10.0;
-    values[0] += upper_anion_val * (x[0] + 5.0) / 10.0;
-    values[0] += 1.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
-    values[0]  = std::log(values[0]);
-  }
-};
-
-class analyticPotentialExpression : public Expression
-{
-  void eval(Array<double>& values, const Array<double>& x) const
-  {
-    values[0]  = lower_potential_val * (5.0 - x[0]) / 10.0;
-    values[0] += upper_potential_val * (x[0] + 5.0) / 10.0;
-    values[0] += -20.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
-  }
-};
-
 
 int main(int argc, char** argv)
 {
@@ -134,7 +94,7 @@ int main(int argc, char** argv)
   coeff_param coeff_par, non_dim_coeff_par;
   char coeff_param_filename[] = "./benchmarks/PNP/coeff_params.dat";
   coeff_param_input(coeff_param_filename, &coeff_par);
-  non_dimesionalize_coefficients(&domain_par, &coeff_par, &non_dim_coeff_par);
+  // non_dimesionalize_coefficients(&domain_par, &coeff_par, &non_dim_coeff_par);
   print_coeff_param(&coeff_par);
 
   // initialize Newton solver parameters
@@ -163,12 +123,29 @@ int main(int argc, char** argv)
 
   // Initialize guess
   printf("intial guess...\n"); fflush(stdout);
-  unsigned int dirichlet_coord = 0;
-  LogCharge Cation(lower_cation_val, upper_cation_val, -domain_par.length_x/2.0, domain_par.length_x/2.0, dirichlet_coord);
-  LogCharge Anion(lower_anion_val, upper_anion_val, -domain_par.length_x/2.0, domain_par.length_x/2.0, dirichlet_coord);
+  LogCharge Cation(
+    coeff_par.cation_lower_val,
+    coeff_par.anion_lower_val,
+    -domain_par.length_x/2.0,
+    domain_par.length_x/2.0,
+    coeff_par.bc_coordinate
+  );
+  LogCharge Anion(
+    coeff_par.anion_lower_val,
+    coeff_par.anion_upper_val,
+    -domain_par.length_x/2.0,
+    domain_par.length_x/2.0,
+    coeff_par.bc_coordinate
+  );
 
   // not ideal implementation: replace by a solve for voltage below
-  Voltage Volt(lower_potential_val, upper_potential_val, -domain_par.length_x/2.0, domain_par.length_x/2.0, dirichlet_coord);
+  Voltage Volt(
+    coeff_par.potential_lower_val,
+    coeff_par.potential_upper_val,
+    -domain_par.length_x/2.0,
+    domain_par.length_x/2.0,
+    coeff_par.bc_coordinate
+  );
 
   // interpolate
   pnp_and_source::FunctionSpace V_init(mesh_init);
@@ -188,18 +165,12 @@ int main(int argc, char** argv)
   pnp_and_source::FunctionSpace V0(mesh0);
   dolfin::Function initialGuessFunction0(V0);
   dolfin::Function solutionFunction0(V0);
-  analyticCationExpression cationExpression0;
-  analyticAnionExpression anionExpression0;
-  analyticPotentialExpression potentialExpression0;
   dolfin::Function cation0(solutionFunction0[0]);
   dolfin::Function anion0(solutionFunction0[1]);
   dolfin::Function potential0(solutionFunction0[2]);
   cation0.interpolate(Cation);
   anion0.interpolate(Anion);
   potential0.interpolate(Volt);
-  // cation0.interpolate(cationExpression0);
-  // anion0.interpolate(anionExpression0);
-  // potential0.interpolate(potentialExpression0);
 
   // set adaptivity parameters
   dolfin::Mesh mesh(mesh0);
@@ -242,12 +213,6 @@ int main(int argc, char** argv)
     Function analyticCation(analyticSolutionFunction[0]);
     Function analyticAnion(analyticSolutionFunction[1]);
     Function analyticPotential(analyticSolutionFunction[2]);
-    analyticCationExpression cationExpression;
-    analyticAnionExpression anionExpression;
-    analyticPotentialExpression potentialExpression;
-    // analyticCation.interpolate(cationExpression);
-    // analyticAnion.interpolate(anionExpression);
-    // analyticPotential.interpolate(potentialExpression);
     analyticCation.interpolate(zero);
     analyticAnion.interpolate(zero);
     analyticPotential.interpolate(zero);
@@ -265,7 +230,7 @@ int main(int argc, char** argv)
     // Set Dirichlet boundaries
     printf("\tboundary conditions...\n"); fflush(stdout);
     Constant zero_vec(0.0, 0.0, 0.0);
-    SymmBoundaries boundary(dirichlet_coord, -domain_par.length_x/2.0, domain_par.length_x/2.0);
+    SymmBoundaries boundary(coeff_par.bc_coordinate, -domain_par.length_x/2.0, domain_par.length_x/2.0);
     dolfin::DirichletBC bc(V, zero_vec, boundary);
 
     // Interpolate analytic expressions
