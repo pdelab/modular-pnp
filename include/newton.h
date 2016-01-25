@@ -90,6 +90,9 @@ typedef struct {
     //! reference scale for charge density
     REAL ref_density;
 
+    //! coordinate direction of the Dirichlet BC
+    INT bc_coordinate;
+
     //! temperature
     REAL temperature;
 
@@ -113,6 +116,24 @@ typedef struct {
 
     //! anion diffusivity coefficient
     REAL anion_valency;
+
+    //! boundary value for potential on lower boundary
+    REAL potential_lower_val;
+
+    //! boundary value for potential on upper boundary
+    REAL potential_upper_val;
+
+    //! boundary value for cation on lower boundary
+    REAL cation_lower_val;
+
+    //! boundary value for cation on upper boundary
+    REAL cation_upper_val;
+
+    //! boundary value for anion on lower boundary
+    REAL anion_lower_val;
+
+    //! boundary value for anion on upper boundary
+    REAL anion_upper_val;
 
 } coeff_param; /**< Parameters for setting PDE coefficients */
 

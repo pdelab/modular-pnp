@@ -33,7 +33,7 @@ int main(int argc, char** argv)
   }
 
   newton_param newtparam;
-  char newton_param_file[] = "./benchmarks/PNP/newton_param.dat";
+  char newton_param_file[] = "./tests/newton_param_tests/newton_param.dat";
   newton_param_input (newton_param_file,&newtparam);
   if (DEBUG) print_newton_param(&newtparam);
 

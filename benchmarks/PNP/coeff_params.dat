@@ -7,13 +7,24 @@
 %
 % Please, make sure to do so...
 
+% Set units for solution variables
 ref_voltage           =  1.0000e+0      % V
 ref_density           =  1.0000e+0      % 1 / m^3
                                         % use negative to measure in mM = mol / m^3
 
-temperature           =  1.0000e+0      % K
+% Boundary conditions
+bc_coordinate         =  0              % 0 for x[0], 1 for x[1], 2 for x[2]
+potential_upper_val   =  1.0000e+0      % ref_voltage * V
+potential_lower_val   = -1.0000e+0      % ref_voltage * V
+cation_upper_val      =  1.0000e-1      % ref_density / m^3 ( *mol, if ref_density<0)
+cation_lower_val      =  1.0000e-0      % ref_density / m^3 ( *mol, if ref_density<0)
+anion_upper_val       =  1.0000e-0      % ref_density / m^3 ( *mol, if ref_density<0)
+anion_lower_val       =  1.0000e-1      % ref_density / m^3 ( *mol, if ref_density<0)
 
-relative_permittivity =  1.0000e-8      % no units
+% Observable coefficients
+
+temperature           =  1.0000e+0      % K
+relative_permittivity =  1.0000e-4      % no units
 
 cation_diffusivity    =  1.0000e-0      % m / sec^2
 cation_mobility       =  1.0000e-0      % (e_c/k_B*T) * m / sec^2
