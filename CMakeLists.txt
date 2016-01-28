@@ -46,7 +46,7 @@ include_directories(${DOLFIN_INCLUDE_DIRS} ${FASP_INCLUDE_DIR} ${FASP4NS_INCLUDE
 include_directories(SYSTEM ${DOLFIN_3RD_PARTY_INCLUDE_DIRS})
 
 # Awesome OSX TARGET
-set(OSX_TARGET "/opt/local/lib/gcc49/gcc/x86_64-apple-darwin14/4.9.3/libgcc.a" "/opt/local/lib/gcc49/libquadmath.a" "/opt/local/lib/gcc49/libgfortran.a")
+#set(OSX_TARGET "/opt/local/lib/gcc49/gcc/x86_64-apple-darwin14/4.9.3/libgcc.a" "/opt/local/lib/gcc49/libquadmath.a" "/opt/local/lib/gcc49/libgfortran.a")
 
 # Executables
 add_executable(aux_test_reading ./aux/test_reading/aux_test_reading.cpp ${SRC_DIR})
@@ -55,6 +55,7 @@ add_executable(aux_test_eafe ./aux/test_eafe/aux_test_eafe.cpp ${SRC_DIR})
 add_executable(aux_test_eafe2 ./aux/test_eafe2/aux_test_eafe2.cpp ${SRC_DIR})
 add_executable(aux_test_bc ./aux/test_bc/aux_test_bc.cpp ${SRC_DIR})
 add_executable(aux_test_dof ./aux/test_dof/aux_test_dof.cpp ${SRC_DIR})
+add_executable(mat ./aux/mat/mat.cpp ${SRC_DIR})
 
 add_executable(test_eafe ./tests/eafe_tests/test_eafe.cpp ${SRC_DIR})
 add_executable(test_faspfenics ./tests/faspfenics_tests/test_faspfenics.cpp ${SRC_DIR})
@@ -84,6 +85,8 @@ target_link_libraries(aux_test_bc ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARI
 target_link_libraries(aux_test_eafe ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
 target_link_libraries(aux_test_eafe2 ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
 target_link_libraries(aux_test_dof ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
+target_link_libraries(mat ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
+
 # # ## UNIT TESTS
 target_link_libraries(test_eafe ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
 target_link_libraries(test_faspfenics ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})

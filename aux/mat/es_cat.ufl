@@ -1,0 +1,25 @@
+# Copyright (C) 2014 CCMA@PSU Maximilian Metti, Xiaozhe Hu
+#
+#   Define bilinear and linear forms for 
+#   the linearized Poisson-Nernst-Planck equations for a MOSFET
+#
+# Compile this form with FFC: ffc -O -l dolfin mosfet.ufl.
+
+##  Finite Element Space
+CG = FiniteElement("Lagrange", tetrahedron, 1)
+
+Phi = TrialFunction(CG)
+cat = TestFunction(CG)
+
+##  Previous Iterates
+CatCat = Coefficient(CG)
+
+
+##  Coefficients
+D = Coefficient(CG)
+q = Constant(tetrahedron)
+
+
+
+a   = ( q*D*exp(CatCat) * inner(grad(Phi),grad(cat)) )*dx
+
