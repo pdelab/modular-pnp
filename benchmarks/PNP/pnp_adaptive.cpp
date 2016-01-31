@@ -1,6 +1,6 @@
-/*! \file lin_pnp.cpp
+/*! \file pnp_adaptive.cpp
  *
- *  \brief Setup and solve the linearized PNP equation using FASP
+ *  \brief Setup and solve the PNP equations using adaptive meshing and FASP
  *
  *  \note Currently initializes the problem based on specification
  */
@@ -29,13 +29,6 @@ using namespace dolfin;
 
 bool eafe_switch = false;
 
-double lower_cation_val = 0.1;  // 1 / m^3
-double upper_cation_val = 1.0;  // 1 / m^3
-double lower_anion_val = 1.0;  // 1 / m^3
-double upper_anion_val = 0.1;  // 1 / m^3
-double lower_potential_val = 1.0;  // V
-double upper_potential_val = -1.0;  // V
-
 double get_initial_residual (
   pnp_and_source::LinearForm* L,
   const dolfin::DirichletBC* bc,
@@ -57,39 +50,6 @@ double update_solution_pnp (
   const dolfin::DirichletBC* bc,
   newton_param* params
 );
-
-class analyticCationExpression : public Expression
-{
-  void eval(Array<double>& values, const Array<double>& x) const
-  {
-    values[0]  = lower_cation_val * (5.0 - x[0]) / 10.0;
-    values[0] += upper_cation_val * (x[0] + 5.0) / 10.0;
-    values[0] += 2.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
-    values[0]  = std::log(values[0]);
-  }
-};
-
-class analyticAnionExpression : public Expression
-{
-  void eval(Array<double>& values, const Array<double>& x) const
-  {
-    values[0]  = lower_anion_val * (5.0 - x[0]) / 10.0;
-    values[0] += upper_anion_val * (x[0] + 5.0) / 10.0;
-    values[0] += 1.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
-    values[0]  = std::log(values[0]);
-  }
-};
-
-class analyticPotentialExpression : public Expression
-{
-  void eval(Array<double>& values, const Array<double>& x) const
-  {
-    values[0]  = lower_potential_val * (5.0 - x[0]) / 10.0;
-    values[0] += upper_potential_val * (x[0] + 5.0) / 10.0;
-    values[0] += -20.0  * (5.0 - x[0]) * (x[0] + 5.0) / 100.0;
-  }
-};
-
 
 int main(int argc, char** argv)
 {
@@ -131,9 +91,10 @@ int main(int argc, char** argv)
 
   // read coefficients and boundary values
   printf("coefficients...\n"); fflush(stdout);
-  coeff_param coeff_par;
+  coeff_param coeff_par, non_dim_coeff_par;
   char coeff_param_filename[] = "./benchmarks/PNP/coeff_params.dat";
   coeff_param_input(coeff_param_filename, &coeff_par);
+  // non_dimesionalize_coefficients(&domain_par, &coeff_par, &non_dim_coeff_par);
   print_coeff_param(&coeff_par);
 
   // initialize Newton solver parameters
@@ -162,12 +123,29 @@ int main(int argc, char** argv)
 
   // Initialize guess
   printf("intial guess...\n"); fflush(stdout);
-  unsigned int dirichlet_coord = 0;
-  LogCharge Cation(lower_cation_val, upper_cation_val, -domain_par.length_x/2.0, domain_par.length_x/2.0, dirichlet_coord);
-  LogCharge Anion(lower_anion_val, upper_anion_val, -domain_par.length_x/2.0, domain_par.length_x/2.0, dirichlet_coord);
+  LogCharge Cation(
+    coeff_par.cation_lower_val,
+    coeff_par.anion_lower_val,
+    -domain_par.length_x/2.0,
+    domain_par.length_x/2.0,
+    coeff_par.bc_coordinate
+  );
+  LogCharge Anion(
+    coeff_par.anion_lower_val,
+    coeff_par.anion_upper_val,
+    -domain_par.length_x/2.0,
+    domain_par.length_x/2.0,
+    coeff_par.bc_coordinate
+  );
 
   // not ideal implementation: replace by a solve for voltage below
-  Voltage Volt(lower_potential_val, upper_potential_val, -domain_par.length_x/2.0, domain_par.length_x/2.0, dirichlet_coord);
+  Voltage Volt(
+    coeff_par.potential_lower_val,
+    coeff_par.potential_upper_val,
+    -domain_par.length_x/2.0,
+    domain_par.length_x/2.0,
+    coeff_par.bc_coordinate
+  );
 
   // interpolate
   pnp_and_source::FunctionSpace V_init(mesh_init);
@@ -187,22 +165,16 @@ int main(int argc, char** argv)
   pnp_and_source::FunctionSpace V0(mesh0);
   dolfin::Function initialGuessFunction0(V0);
   dolfin::Function solutionFunction0(V0);
-  analyticCationExpression cationExpression0;
-  analyticAnionExpression anionExpression0;
-  analyticPotentialExpression potentialExpression0;
   dolfin::Function cation0(solutionFunction0[0]);
   dolfin::Function anion0(solutionFunction0[1]);
   dolfin::Function potential0(solutionFunction0[2]);
   cation0.interpolate(Cation);
   anion0.interpolate(Anion);
   potential0.interpolate(Volt);
-  // cation0.interpolate(cationExpression0);
-  // anion0.interpolate(anionExpression0);
-  // potential0.interpolate(potentialExpression0);
 
   // set adaptivity parameters
   dolfin::Mesh mesh(mesh0);
-  double entropy_tol = 1.0e-6;
+  double entropy_tol = newtparam.adapt_tol;
   unsigned int num_adapts = 0, max_adapts = 5;
   bool adaptive_convergence = false;
 
@@ -241,12 +213,6 @@ int main(int argc, char** argv)
     Function analyticCation(analyticSolutionFunction[0]);
     Function analyticAnion(analyticSolutionFunction[1]);
     Function analyticPotential(analyticSolutionFunction[2]);
-    analyticCationExpression cationExpression;
-    analyticAnionExpression anionExpression;
-    analyticPotentialExpression potentialExpression;
-    // analyticCation.interpolate(cationExpression);
-    // analyticAnion.interpolate(anionExpression);
-    // analyticPotential.interpolate(potentialExpression);
     analyticCation.interpolate(zero);
     analyticAnion.interpolate(zero);
     analyticPotential.interpolate(zero);
@@ -264,19 +230,22 @@ int main(int argc, char** argv)
     // Set Dirichlet boundaries
     printf("\tboundary conditions...\n"); fflush(stdout);
     Constant zero_vec(0.0, 0.0, 0.0);
-    SymmBoundaries boundary(dirichlet_coord, -domain_par.length_x/2.0, domain_par.length_x/2.0);
+    SymmBoundaries boundary(coeff_par.bc_coordinate, -domain_par.length_x/2.0, domain_par.length_x/2.0);
     dolfin::DirichletBC bc(V, zero_vec, boundary);
 
     // Interpolate analytic expressions
     printf("\tinterpolate solution onto new mesh...\n"); fflush(stdout);
     dolfin::Function solutionFunction(V);
     dolfin::Function cationSolution(solutionFunction[0]);
+    // cationSolution.interpolate(initialCation);
     cationSolution.interpolate(cation0);
     dolfin::Function anionSolution(solutionFunction[1]);
+    // anionSolution.interpolate(initialAnion);
     anionSolution.interpolate(anion0);
 
     // solve for voltage
     dolfin::Function potentialSolution(solutionFunction[2]);
+    // potentialSolution.interpolate(initialPotential);
     potentialSolution.interpolate(potential0);
 
     // write computed solution to file
@@ -327,7 +296,13 @@ int main(int argc, char** argv)
 
     // set initial residual
     printf("\tupdate initial residual...\n"); fflush(stdout);
-    initial_residual = get_initial_residual(&L_pnp, &bc, &initialCation, &initialAnion, &initialPotential);
+    initial_residual = get_initial_residual(
+      &L_pnp,
+      &bc,
+      &initialCation,
+      &initialAnion,
+      &initialPotential
+    );
 
     printf("\tcompute relative residual...\n"); fflush(stdout);
     L_pnp.CatCat = cationSolution;
@@ -373,9 +348,6 @@ int main(int argc, char** argv)
         AnBetaFunction.interpolate(potentialSolution);
         *(AnBetaFunction.vector()) *= coeff_par.anion_valency;
         *(AnBetaFunction.vector()) += *(AnAnFunction.vector());
-
-        // Construct EAFE approximations to Jacobian
-        printf("\tconstruct EAFE modifications...\n"); fflush(stdout);
         a_cat.eta = CatCatFunction;
         a_cat.beta = CatBetaFunction;
         a_an.eta = AnAnFunction;
@@ -391,102 +363,87 @@ int main(int argc, char** argv)
       bc.apply(A_pnp);
 
       // Convert to fasp
-      printf("\tconvert to FASP and solve...\n"); fflush(stdout);
+      printf("\tconvert to FASP...\n"); fflush(stdout);
       EigenVector_to_dvector(&b_pnp,&b_fasp);
       EigenMatrix_to_dCSRmat(&A_pnp,&A_fasp);
       A_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
       fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
+      
+      // solve the linear system using FASP solver and verify success
+      printf("\tsolve linear system using FASP solver...\n"); fflush(stdout);
       status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &solu_fasp, &itpar, &amgpar);
-      if (status < 0)
-        printf("\n### WARNING: Solver failed! Exit status = %d.\n\n", status);
-      else
+      if (status < 0) {
+        printf("\n### WARNING: FASP solver failed! Exit status = %d.\n", status);
+        newton_iteration = max_newton_iters;
+      }
+      else {
         printf("\tsolved linear system successfully...\n");
 
-      // map solu_fasp into solutionUpdate
-      printf("\tconvert FASP solution to function...\n"); fflush(stdout);
-      copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &cation_dofs, &cation_dofs);
-      copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &anion_dofs, &anion_dofs);
-      copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &potential_dofs, &potential_dofs);
+        // map solu_fasp into solutionUpdate
+        printf("\tconvert FASP solution to function...\n"); fflush(stdout);
+        copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &cation_dofs, &cation_dofs);
+        copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &anion_dofs, &anion_dofs);
+        copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &potential_dofs, &potential_dofs);
 
-      // update solution and reset solutionUpdate
-      printf("\tupdate solution...\n"); fflush(stdout);
-      relative_residual = update_solution_pnp (
-        &cationSolution,
-        &anionSolution,
-        &potentialSolution,
-        &(solutionUpdate[0]),
-        &(solutionUpdate[1]),
-        &(solutionUpdate[2]),
-        relative_residual,
-        initial_residual,
-        &L_pnp,
-        &bc,
-        &newtparam
-      );
-      if (relative_residual < 0.0) {
-        printf("Newton backtracking failed!\n");
-        printf("\tresidual has not decreased after damping %d times\n", newtparam.damp_it);
-        printf("\tthe relative residual is %e\n", relative_residual);
-        relative_residual *= -1.0;
+        // update solution and reset solutionUpdate
+        printf("\tupdate solution...\n"); fflush(stdout);
+        relative_residual = update_solution_pnp(
+          &cationSolution,
+          &anionSolution,
+          &potentialSolution,
+          &(solutionUpdate[0]),
+          &(solutionUpdate[1]),
+          &(solutionUpdate[2]),
+          relative_residual,
+          initial_residual,
+          &L_pnp,
+          &bc,
+          &newtparam
+        );
+        if (relative_residual < 0.0) {
+          printf("Newton backtracking failed!\n");
+          printf("\tresidual has not decreased after damping %d times\n", newtparam.damp_it);
+          printf("\tthe relative residual is %e\n", relative_residual);
+          relative_residual *= -1.0;
+        }
+
+        // update nonlinear residual
+        L_pnp.CatCat = cationSolution;
+        L_pnp.AnAn = anionSolution;
+        L_pnp.EsEs = potentialSolution;
+        assemble(b_pnp, L_pnp);
+        bc.apply(b_pnp);
+
+        // print
+        cationFile << cationSolution;
+        anionFile << anionSolution;
+        potentialFile << potentialSolution;
       }
-
-      // update nonlinear residual
-      L_pnp.CatCat = cationSolution;
-      L_pnp.AnAn = anionSolution;
-      L_pnp.EsEs = potentialSolution;
-      assemble(b_pnp, L_pnp);
-      bc.apply(b_pnp);
-      // if (newton_iteration == 1)
-      //   printf("\trelative nonlinear residual after 1 iteration has l2-norm of %e\n", relative_residual);
-      // else
-      //   printf("\trelative nonlinear residual after %d iterations has l2-norm of %e\n",
-      //     newton_iteration,
-      //     relative_residual
-      //   );
-
-      // write computed solution to file
-      // printf("\toutput computed solution to file\n"); fflush(stdout);
-      // cationFile << cationSolution;
-      // anionFile << anionSolution;
-      // potentialFile << potentialSolution;
-
-      // compute solution error
-      // printf("\nCompute the error\n"); fflush(stdout);
-      // dolfin::Function Error1(analyticCation);
-      // dolfin::Function Error2(analyticAnion);
-      // dolfin::Function Error3(analyticPotential);
-      // *(Error1.vector()) -= *(cationSolution.vector());
-      // *(Error2.vector()) -= *(anionSolution.vector());
-      // *(Error3.vector()) -= *(potentialSolution.vector());
-      // double cationError = 0.0;
-      // double anionError = 0.0;
-      // double potentialError = 0.0;
-      // L2Error::Form_M L2error1(mesh,Error1);
-      // cationError = assemble(L2error1);
-      // L2Error::Form_M L2error2(mesh,Error2);
-      // anionError = assemble(L2error2);
-      // L2Error::Form_M L2error3(mesh,Error3);
-      // potentialError = assemble(L2error3);
-      // printf("\tcation l2 error is:     %e\n", cationError);
-      // printf("\tanion l2 error is:      %e\n", anionError);
-      // printf("\tpotential l2 error is:  %e\n", potentialError);
-
-      // print error
-      // cationFile << cationSolution;
-      // anionFile << anionSolution;
-      // potentialFile << potentialSolution;
     }
 
-    if (relative_residual < nonlinear_tol)
+    // check status of Newton solver
+    if (isnan(relative_residual)) {
+      printf("\n### WARNING: Newton solver failed...\n");
+      printf("\trelative residual is NaN!!\n\n");
+      adaptive_convergence = true;
+      break;
+    }
+    else if (status < 0) {
+      entropy_tol *= 0.1;
+      printf("\tdrop adaptivity tolerance to %e\n\n", entropy_tol);
+    }
+    else if (relative_residual < nonlinear_tol) {
       printf("\nSuccessfully solved the system below desired residual in %d steps!\n\n", newton_iteration);
+    }
     else {
-      printf("\nDid not converge in %d Newton iterations...\n", max_newton_iters);
+      printf("\n### WARNING: Newton solver failed...\n");
+      printf("\tDid not converge in %d Newton iterations...\n", max_newton_iters);
       printf("\tcurrent relative residual is %e > %e\n\n", relative_residual, nonlinear_tol);
     }
 
-    cationFile << cationSolution;
-    anionFile << anionSolution;
-    potentialFile << potentialSolution;
+    // cationFile << cationSolution;
+    // anionFile << anionSolution;
+    // potentialFile << potentialSolution;
 
     // compute local entropy and refine mesh
     printf("Computing local entropy for refinement\n");
@@ -571,8 +528,7 @@ double update_solution_pnp (
   unsigned int damp_iters = 0;
   printf("\t\trelative residual after damping %d times: %e\n", damp_iters, new_relative_residual);
 
-  while (
-    new_relative_residual > relative_residual && damp_iters < params->damp_it )
+  while ( new_relative_residual > relative_residual && damp_iters < params->damp_it )
   {
     damp_iters++;
     *(_iterate0.vector()) = *(iterate0->vector());
@@ -590,7 +546,7 @@ double update_solution_pnp (
     assemble(b, *L);
     bc->apply(b);
     new_relative_residual = b.norm("l2") / initial_residual;
-    printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
+    printf("\t\trelative residual after damping %d times: %e\n", damp_iters, new_relative_residual);
   }
 
   // check for decrease

@@ -504,7 +504,8 @@ SHORT coeff_param_input_init (coeff_param *inparam)
 {
     SHORT status = FASP_SUCCESS;
 
-    inparam->temperature = 3.0e+2;
+    inparam->temperature = 2.98e+2;
+    inparam->bc_coordinate = 0;
 
     inparam->relative_permittivity = 1.0;
 
@@ -515,6 +516,8 @@ SHORT coeff_param_input_init (coeff_param *inparam)
     inparam->anion_diffusivity = 1.0;
     inparam->anion_mobility = 1.0;
     inparam->anion_valency = -1.0;
+
+
 
     return status;
 }
@@ -534,9 +537,14 @@ SHORT coeff_param_check (coeff_param *inparam)
 
     if ( inparam->ref_voltage < 0.0
         || inparam->temperature < 0.0
+        || inparam->bc_coordinate < 0
         || inparam->relative_permittivity < 0.0
+        || inparam->cation_upper_val < 0.0
+        || inparam->cation_lower_val < 0.0
         || inparam->cation_diffusivity < 0.0
         || inparam->cation_mobility < 0.0
+        || inparam->anion_upper_val < 0.0
+        || inparam->anion_lower_val < 0.0
         || inparam->anion_diffusivity < 0.0
         || inparam->anion_mobility < 0.0
         ) status = ERROR_INPUT_PAR;
@@ -575,6 +583,7 @@ void coeff_param_input (const char *filenm,
     }
 
     while ( status == FASP_SUCCESS ) {
+        unsigned int ibuff;
         double  dbuff;
         char   *fgetsPtr;
 
@@ -609,6 +618,17 @@ void coeff_param_input (const char *filenm,
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
         }
 
+        else if (strcmp(buffer,"bc_coordinate")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%d",&ibuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->bc_coordinate = ibuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
         else if (strcmp(buffer,"temperature")==0) {
             val = fscanf(fp,"%s",buffer);
             if (val!=1 || strcmp(buffer,"=")!=0) {
@@ -620,6 +640,28 @@ void coeff_param_input (const char *filenm,
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
         }
 
+        else if (strcmp(buffer,"potential_lower_val")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%lf",&dbuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->potential_lower_val = dbuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
+        else if (strcmp(buffer,"potential_upper_val")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%lf",&dbuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->potential_upper_val = dbuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
         else if (strcmp(buffer,"relative_permittivity")==0) {
             val = fscanf(fp,"%s",buffer);
             if (val!=1 || strcmp(buffer,"=")!=0) {
@@ -628,6 +670,28 @@ void coeff_param_input (const char *filenm,
             val = fscanf(fp,"%lf",&dbuff);
             if (val!=1) { status = ERROR_INPUT_PAR; break; }
             inparam->relative_permittivity = dbuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
+        else if (strcmp(buffer,"cation_lower_val")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%lf",&dbuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->cation_lower_val = dbuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
+        else if (strcmp(buffer,"cation_upper_val")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%lf",&dbuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->cation_upper_val = dbuff;
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
         }
 
@@ -661,6 +725,28 @@ void coeff_param_input (const char *filenm,
             val = fscanf(fp,"%lf",&dbuff);
             if (val!=1) { status = ERROR_INPUT_PAR; break; }
             inparam->cation_valency = dbuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
+        else if (strcmp(buffer,"anion_lower_val")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%lf",&dbuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->anion_lower_val = dbuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
+        else if (strcmp(buffer,"anion_upper_val")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%lf",&dbuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->anion_upper_val = dbuff;
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
         }
 
@@ -726,19 +812,25 @@ void coeff_param_input (const char *filenm,
 void print_coeff_param (coeff_param *inparam)
 {
   printf("Successfully read-in PDE coefficients\n");
-  printf("\treference voltage:     \t%15.4e V\n",inparam->ref_voltage);
+  printf("\treference voltage:        \t%15.4e V\n",inparam->ref_voltage);
   if (inparam->ref_density > 0.0)
-    printf("\treference density:     \t%15.4e 1 / m^3\n",inparam->ref_density);
+    printf("\treference density:        \t%15.4e 1 / m^3\n",inparam->ref_density);
   else
-    printf("\treference density:     \t%15.4e mM\n",-inparam->ref_density);
-  printf("\ttemperature:           \t%15.4e K\n",inparam->temperature);
-  printf("\trelative permittivity: \t%15.4e\n",inparam->relative_permittivity);
-  printf("\tcation diffusivity:    \t%15.4e m / s^2\n",inparam->cation_diffusivity);
-  printf("\tcation mobility:       \t%15.4e (e_c/k_B*T) * m / s^2 \n",inparam->cation_mobility);
-  printf("\tcation valency:        \t%15.4e e_c\n",inparam->cation_valency);
-  printf("\tanion diffusivity:     \t%15.4e m / s^2\n",inparam->anion_diffusivity);
-  printf("\tanion mobility:        \t%15.4e (e_c/k_B*T) * m / s^2 \n",inparam->anion_mobility);
-  printf("\tanion valency:         \t%15.4e e_c\n",inparam->anion_valency);
+    printf("\treference density:        \t%15.4e mM\n",-inparam->ref_density);
+  printf("\ttemperature:              \t%15.4e K\n",inparam->temperature);
+  printf("\trelative permittivity:    \t%15.4e\n",inparam->relative_permittivity);
+  printf("\tcation diffusivity:       \t%15.4e m / s^2\n",inparam->cation_diffusivity);
+  printf("\tcation mobility:          \t%15.4e (e_c/k_B*T) * m / s^2 \n",inparam->cation_mobility);
+  printf("\tcation valency:           \t%15.4e e_c\n",inparam->cation_valency);
+  printf("\tanion diffusivity:        \t%15.4e m / s^2\n",inparam->anion_diffusivity);
+  printf("\tanion mobility:           \t%15.4e (e_c/k_B*T) * m / s^2 \n",inparam->anion_mobility);
+  printf("\tanion valency:            \t%15.4e e_c\n",inparam->anion_valency);
+  printf("\tvoltage in x[%d]:         \t%15.4e to %15.4e\n",
+    inparam->bc_coordinate, inparam->potential_lower_val, inparam->potential_upper_val);
+  printf("\tcation density in x[%d]:  \t%15.4e to %15.4e\n",
+    inparam->bc_coordinate, inparam->cation_lower_val, inparam->cation_upper_val);
+  printf("\tanion density in x[%d]:   \t%15.4e to %15.4e\n",
+    inparam->bc_coordinate, inparam->anion_lower_val, inparam->anion_upper_val);
   printf("\n");
 }
 
@@ -754,30 +846,50 @@ void non_dimesionalize_coefficients (domain_param *domain,
                                      coeff_param *non_dim_coeffs)
 {
   // physical constants
-  REAL boltzmann = 1.38064880e-23 ; // Boltzmann Constant (m^2 kg / s^2 K)
-  REAL eps_0 = 8.85418782e-12 ;     // Vacuum Permittivity (s^4 A^2 / m^3 kg)
-  REAL e_chrg = 1.60217657e-19 ;    // Elementary Positive Charge (A s)
-  REAL n_avo = 6.02214129e+23 ;     // Avogadro's number 1 / mol
+  REAL boltzmann = 1.38064880e-23; // Boltzmann Constant (m^2 kg / s^2 K)
+  REAL eps_0 = 8.85418782e-12;     // Vacuum Permittivity (s^4 A^2 / m^3 kg)
+  REAL e_chrg = 1.60217657e-19;    // Elementary Positive Charge (A s)
+  REAL n_avo = 6.02214129e+23;     // Avogadro's number 1 / mol
 
-  // solution scale
-  non_dim_coeffs->ref_voltage = boltzmann * coeffs->temperature * coeffs->ref_voltage / e_chrg;
-  non_dim_coeffs->ref_density = (coeffs->ref_density > 0.0)?
-    coeffs->ref_density : -(n_avo * coeffs->ref_density);
+  // solution scale: normalize & balance voltage, use maximum charge density
+  REAL ave_voltage = 0.5 * (coeffs->potential_lower_val + coeffs->potential_upper_val);
+  REAL voltage_scale = (coeffs->potential_lower_val == coeffs->potential_upper_val)? 
+    1.0 : 0.5*fabs(coeffs->potential_lower_val - coeffs->potential_upper_val);
+  REAL new_ref_voltage = voltage_scale * coeffs->ref_voltage;
+  non_dim_coeffs->ref_voltage = new_ref_voltage;
+  non_dim_coeffs->potential_lower_val = (coeffs->potential_lower_val - ave_voltage) / voltage_scale;
+  non_dim_coeffs->potential_upper_val = (coeffs->potential_upper_val - ave_voltage) / voltage_scale;
+  
+  REAL new_ref_density = (coeffs->ref_density>0.0)? coeffs->ref_density : -(n_avo * coeffs->ref_density);
+  REAL max_density = (coeffs->cation_upper_val > coeffs->cation_lower_val)? 
+    coeffs->cation_upper_val : coeffs->cation_lower_val;
+  max_density = (max_density > coeffs->anion_upper_val)? max_density : coeffs->anion_upper_val;
+  max_density = (max_density > coeffs->anion_lower_val)? max_density : coeffs->anion_lower_val;
+  non_dim_coeffs->ref_density = max_density * new_ref_density;
+  non_dim_coeffs->cation_lower_val = coeffs->cation_lower_val / max_density;
+  non_dim_coeffs->cation_upper_val = coeffs->cation_upper_val / max_density;
+  non_dim_coeffs->anion_lower_val = coeffs->anion_lower_val / max_density;
+  non_dim_coeffs->anion_upper_val = coeffs->anion_upper_val / max_density;
 
-  // length scale
+  // domain and length scales
+  non_dim_coeffs->bc_coordinate = coeffs->bc_coordinate;
   REAL ref_length = domain->ref_length;
-  REAL debye_length = sqrt( (boltzmann * eps_0 * coeffs->relative_permittivity * coeffs->temperature)
-    / non_dim_coeffs->ref_density ) / e_chrg;
+  REAL thermo_beta = e_chrg / (boltzmann * coeffs->temperature);
+  REAL debye_length = sqrt( eps_0*coeffs->relative_permittivity / (non_dim_coeffs->ref_density*e_chrg*thermo_beta) );
 
   // pde coefficients
+  non_dim_coeffs->temperature = coeffs->temperature;
+  non_dim_coeffs->relative_permittivity = new_ref_voltage * eps_0 * coeffs->relative_permittivity;
+  non_dim_coeffs->relative_permittivity /= e_chrg * new_ref_density * ref_length * ref_length;
+
   REAL diffusivity_ref = (coeffs->cation_diffusivity > coeffs->anion_diffusivity)?
     coeffs->cation_diffusivity : coeffs->anion_diffusivity;
-  non_dim_coeffs->relative_permittivity = debye_length * debye_length / (ref_length * ref_length);
   non_dim_coeffs->cation_diffusivity    = coeffs->cation_diffusivity / diffusivity_ref;
-  non_dim_coeffs->cation_mobility       = coeffs->cation_mobility / diffusivity_ref;
+  non_dim_coeffs->cation_mobility       = new_ref_voltage * coeffs->cation_mobility / diffusivity_ref;
   non_dim_coeffs->cation_valency        = coeffs->cation_valency;
+
   non_dim_coeffs->anion_diffusivity     = coeffs->anion_diffusivity / diffusivity_ref;
-  non_dim_coeffs->anion_mobility        = coeffs->anion_mobility / diffusivity_ref;
+  non_dim_coeffs->anion_mobility        = new_ref_voltage * coeffs->anion_mobility / diffusivity_ref;
   non_dim_coeffs->anion_valency         = coeffs->anion_valency;
 
   // if met unexpected input, stop the program
@@ -787,7 +899,7 @@ void non_dimesionalize_coefficients (domain_param *domain,
 
   printf("Dimensional analysis\n");
   printf("\treference length:      \t%15.4e m\n",ref_length);
-  printf("\treference length:      \t%15.4e m\n",debye_length);
+  printf("\tDebye length:          \t%15.4e m\n",debye_length);
   printf("\treference voltage:     \t%15.4e V\n",non_dim_coeffs->ref_voltage);
   printf("\treference density:     \t%15.4e 1 / m^3\n",non_dim_coeffs->ref_density);
   printf("\tpermittivity:          \t%15.4e\n",non_dim_coeffs->relative_permittivity);
@@ -795,6 +907,14 @@ void non_dimesionalize_coefficients (domain_param *domain,
   printf("\tcation mobility:       \t%15.4e\n",non_dim_coeffs->cation_mobility);
   printf("\tanion diffusivity:     \t%15.4e\n",non_dim_coeffs->anion_diffusivity);
   printf("\tanion mobility:        \t%15.4e\n",non_dim_coeffs->anion_mobility);
+  printf("\n");
+
+  printf("\tvoltage BC:            \t%15.4e to %15.4e\n",
+    non_dim_coeffs->potential_lower_val, non_dim_coeffs->potential_upper_val);
+  printf("\tcation BC:             \t%15.4e to %15.4e\n",
+    non_dim_coeffs->cation_lower_val, non_dim_coeffs->cation_upper_val);
+  printf("\tanion BC:              \t%15.4e to %15.4e\n",
+    non_dim_coeffs->anion_lower_val, non_dim_coeffs->anion_upper_val);
   printf("\n");
 }
 
