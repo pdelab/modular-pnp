@@ -78,9 +78,9 @@ for i in range(10):
 print "Generating the mesh..."
 mesh = generate_mesh(domain,Num_cells,"cgal")
 
-file = File("mesh.pvd")
-file << mesh
-file = File("mesh.xml")
+# file = File("mesh.pvd")
+# file << mesh
+file = File("mesh.xml.gz")
 file << mesh
 
 boundary_parts = MeshFunction("size_t", mesh, mesh.topology().dim() - 1)
@@ -90,7 +90,7 @@ box = domain_box()
 spheres.mark(boundary_parts, 1)
 box.mark(boundary_parts, 2)
 
-file = File("boundary_parts.pvd")
-file << boundary_parts
-file = File("boundary_parts.xml")
+# file = File("boundary_parts.pvd")
+# file << boundary_parts
+file = File("boundary_parts.xml.gz")
 file << boundary_parts
