@@ -31,14 +31,6 @@ using namespace dolfin;
 
 bool eafe_switch = false;
 
-double lower_cation_val = 0.1;  // 1 / m^3
-double upper_cation_val = 1.0;  // 1 / m^3
-double lower_anion_val = 1.0;  // 1 / m^3
-double upper_anion_val = 0.1;  // 1 / m^3
-double lower_potential_val = +1.0e-0;  // V
-double upper_potential_val = -1.0e-0;  // V
-
-
 double time_step_size = 0.5;
 double final_time = 100.0;
 
@@ -90,13 +82,13 @@ int main(int argc, char** argv)
   // read domain parameters
   printf("domain...\n"); fflush(stdout);
   domain_param domain_par;
-  char domain_param_filename[] = "./benchmarks/1d-benchmark/domain_params.dat";
+  char domain_param_filename[] = "./benchmarks/PNP_time/domain_params.dat";
   domain_param_input(domain_param_filename, &domain_par);
   print_domain_param(&domain_par);
 
   // Deleting the folders:
-  boost::filesystem::remove_all("./benchmarks/1d-benchmark/output");
-  boost::filesystem::remove_all("./benchmarks/1d-benchmark/meshOut");
+  boost::filesystem::remove_all("./benchmarks/PNP_time/output");
+  boost::filesystem::remove_all("./benchmarks/PNP_time/meshOut");
 
   // build mesh
   printf("mesh...\n"); fflush(stdout);
@@ -110,14 +102,14 @@ int main(int argc, char** argv)
   // read coefficients and boundary values
   printf("coefficients...\n"); fflush(stdout);
   coeff_param coeff_par;
-  char coeff_param_filename[] = "./benchmarks/1d-benchmark/coeff_params.dat";
+  char coeff_param_filename[] = "./benchmarks/PNP_time/coeff_params.dat";
   coeff_param_input(coeff_param_filename, &coeff_par);
   print_coeff_param(&coeff_par);
 
   // initialize Newton solver parameters
   printf("Newton solver parameters...\n"); fflush(stdout);
   newton_param newtparam;
-  char newton_param_file[] = "./benchmarks/1d-benchmark/newton_param.dat";
+  char newton_param_file[] = "./benchmarks/PNP_time/newton_param.dat";
   newton_param_input (newton_param_file, &newtparam);
   print_newton_param(&newtparam);
   double initial_residual, relative_residual = 1.0;
@@ -128,22 +120,22 @@ int main(int argc, char** argv)
   itsolver_param itpar;
   AMG_param amgpar;
   ILU_param ilupar;
-  char fasp_params[] = "./benchmarks/1d-benchmark/bsr.dat";
+  char fasp_params[] = "./benchmarks/PNP_time/bsr.dat";
   fasp_param_input(fasp_params, &inpar);
   fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
   INT status = FASP_SUCCESS;
 
   // File
   std::ofstream ofs;
-  ofs.open ("./benchmarks/1d-benchmark/data.txt", std::ofstream::out);
+  ofs.open ("./benchmarks/PNP_time/data.txt", std::ofstream::out);
   ofs << "starting mesh size =" << mesh_adapt.num_cells() << "\n";
   ofs << "t" << "\t" << "NewtonIteration" << "\t" << "RelativeResidual" << "\t" << "Cation" << "\t" << "Anion" << "\t" << "Potential" << "\t" << "Energy" << "\t"<< "TimeElaspsed" << "\t" << "MeshSize" << "\n";
   ofs.close();
 
   // open files for outputting solutions
-  File cationFile("./benchmarks/1d-benchmark/output/cation.pvd");
-  File anionFile("./benchmarks/1d-benchmark/output/anion.pvd");
-  File potentialFile("./benchmarks/1d-benchmark/output/potential.pvd");
+  File cationFile("./benchmarks/PNP_time/output/cation.pvd");
+  File anionFile("./benchmarks/PNP_time/output/anion.pvd");
+  File potentialFile("./benchmarks/PNP_time/output/potential.pvd");
 
   // PREVIOUS ITERATE
   pnp::FunctionSpace V_init(mesh_adapt);
@@ -151,27 +143,29 @@ int main(int argc, char** argv)
   dolfin::Function initial_cation(initial_soln[0]);
   dolfin::Function initial_anion(initial_soln[1]);
   dolfin::Function initial_potential(initial_soln[2]);
-  unsigned int dirichlet_coord = 0;
+  // Initialize guess
+  printf("intial guess...\n"); fflush(stdout);
   LogCharge Cation(
-    lower_cation_val,
-    upper_cation_val,
+    coeff_par.cation_lower_val,
+    coeff_par.anion_lower_val,
     -domain_par.length_x/2.0,
     domain_par.length_x/2.0,
-    dirichlet_coord
+    coeff_par.bc_coordinate
   );
   LogCharge Anion(
-    lower_anion_val,
-    upper_anion_val,
+    coeff_par.anion_lower_val,
+    coeff_par.anion_upper_val,
     -domain_par.length_x/2.0,
     domain_par.length_x/2.0,
-    dirichlet_coord
+    coeff_par.bc_coordinate
   );
+  // not ideal implementation: replace by a solve for voltage below
   Voltage Volt(
-    lower_potential_val,
-    upper_potential_val,
+    coeff_par.potential_lower_val,
+    coeff_par.potential_upper_val,
     -domain_par.length_x/2.0,
     domain_par.length_x/2.0,
-    dirichlet_coord
+    coeff_par.bc_coordinate
   );
   initial_cation.interpolate(Cation);
   initial_anion.interpolate(Anion);
@@ -284,7 +278,7 @@ int main(int argc, char** argv)
       // Set Dirichlet boundaries
       printf("\tboundary conditions...\n"); fflush(stdout);
       Constant zero_vec(0.0, 0.0, 0.0);
-      SymmBoundaries boundary(dirichlet_coord, -domain_par.length_x/2.0, domain_par.length_x/2.0);
+      SymmBoundaries boundary(coeff_par.bc_coordinate, -domain_par.length_x/2.0, domain_par.length_x/2.0);
       dolfin::DirichletBC bc(V, zero_vec, boundary);
 
       // map dofs
@@ -397,8 +391,10 @@ int main(int argc, char** argv)
         EigenMatrix_to_dCSRmat(&A_pnp,&A_fasp);
         A_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
         fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
-        status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &solu_fasp, &itpar, &amgpar);
-        // status = fasp_solver_dcsr_krylov(&A_fasp, &b_fasp, &solu_fasp, &itpar);
+        // BSR SOLVER
+        //status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &solu_fasp, &itpar, &amgpar);
+        // CSR SOLVER
+        status = fasp_solver_dcsr_krylov(&A_fasp, &b_fasp, &solu_fasp, &itpar);
         if (status < 0)
           printf("\n### WARNING: Solver failed! Exit status = %d.\n\n", status);
         else
@@ -499,7 +495,7 @@ int main(int argc, char** argv)
           printf("***********************************************\n");
           end = clock();
 
-          ofs.open("./benchmarks/1d-benchmark/data.txt", std::ofstream::out | std::ofstream::app);
+          ofs.open("./benchmarks/PNP_time/data.txt", std::ofstream::out | std::ofstream::app);
           timeElaspsed = double(end - begin) / CLOCKS_PER_SEC;
           ofs << t << "\t" << newton_iteration << "\t" << relative_residual << "\t" << cationError << "\t" << anionError << "\t" << potentialError << "\t" << energy << "\t"<< timeElaspsed << "\t" << mesh.num_cells() << "\n";
           ofs.close();

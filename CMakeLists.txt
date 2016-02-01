@@ -79,7 +79,7 @@ add_executable(pnp_eafe2 ./benchmarks/PNP/pnp_EAFE2.cpp ${SRC_DIR})
 add_executable(pnp ./benchmarks/PNP/pnp.cpp ${SRC_DIR})
 add_executable(pnp_adapt ./benchmarks/PNP/pnp_adaptive.cpp ${SRC_DIR})
 add_executable(newton_poisson ./benchmarks/Newton_Poisson/newton_poisson.cpp ${SRC_DIR})
-add_executable(pnp_time ./benchmarks/1d-benchmark/pnp_time.cpp ${SRC_DIR})
+add_executable(pnp_time ./benchmarks/PNP_time/pnp_time.cpp ${SRC_DIR})
 
 # Setup targets
 ## AUX TESTs
