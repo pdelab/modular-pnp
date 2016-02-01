@@ -19,6 +19,7 @@
 #include "energy.h"
 #include "newton.h"
 #include "newton_functs.h"
+#include "spheres.h"
 #include <ctime>
 extern "C"
 {
@@ -41,6 +42,7 @@ double Lx = 100.0;
 double Ly = 100.0;
 double Lz = 100.0;
 
+unsigned int dirichlet_coord = 0;
 
 double time_step_size = 0.1;
 double final_time = 100.0;
@@ -67,6 +69,22 @@ double update_solution_pnp (
   newton_param* params
 );
 
+// Sub domain for Periodic boundary condition
+class PeriodicBoundary : public SubDomain
+{
+  // Left boundary is "target domain" G
+  bool inside(const Array<double>& x, bool on_boundary) const
+  { return on_boundary && ((std::abs(x[0]) < Lx/2.0+5*DOLFIN_EPS) || (std::abs(x[1]) < Ly/2.0+5*DOLFIN_EPS) || (std::abs(x[2]) < Lz/2.0+5*DOLFIN_EPS)) ; }
+
+  // Map right boundary (H) to left boundary (G)
+  void map(const Array<double>& x, Array<double>& y) const
+  {
+    y[0] = x[0];
+    y[1] = x[1];
+    y[2] = x[2];
+  }
+};
+
 
 int main(int argc, char** argv)
 {
@@ -85,6 +103,7 @@ int main(int argc, char** argv)
   // Need to use Eigen for linear algebra
   parameters["linear_algebra_backend"] = "Eigen";
   parameters["allow_extrapolation"] = true;
+  parameters["refinement_algorithm"] = "plaza_with_parent_facets";
 
   //*************************************************************
   //  Initialization
@@ -98,17 +117,17 @@ int main(int argc, char** argv)
   // build mesh
   printf("mesh...\n"); fflush(stdout);
   dolfin::Mesh mesh_adapt("./benchmarks/battery/mesh.xml.gz");
-  MeshFunction<std::size_t> sub_domains(mesh_adapt, "./benchmarks/battery/boundary_parts.xml.gz");
+  // MeshFunction<std::size_t> sub_domains_adapt(mesh_adapt, "./benchmarks/battery/boundary_parts.xml.gz");
   // dolfin::MeshFunction<std::size_t> subdomains_init;
   // dolfin::MeshFunction<std::size_t> surfaces_init;
   dolfin::File meshOut("./benchmarks/battery/meshOut/mesh.pvd");
   // domain_build(&domain_par, &mesh_adapt, &subdomains_init, &surfaces_init);
 
 
-  dolfin::File BoundaryFile("./benchmarks/battery/meshOut/boundary.pvd");
-  BoundaryFile << sub_domains;
+  // dolfin::File BoundaryFile("./benchmarks/battery/meshOut/boundary.pvd");
+  // BoundaryFile << sub_domains_adapt;
   meshOut << mesh_adapt;
-  return 0;
+  // return 0;
 
   // read coefficients and boundary values
   printf("coefficients...\n"); fflush(stdout);
@@ -148,13 +167,14 @@ int main(int argc, char** argv)
   File anionFile("./benchmarks/battery/output/anion.pvd");
   File potentialFile("./benchmarks/battery/output/potential.pvd");
 
+  PeriodicBoundary periodic_boundary;
+
   // PREVIOUS ITERATE
-  pnp::FunctionSpace V_init(mesh_adapt);
+  pnp::FunctionSpace V_init(mesh_adapt,periodic_boundary);
   dolfin::Function initial_soln(V_init);
   dolfin::Function initial_cation(initial_soln[0]);
   dolfin::Function initial_anion(initial_soln[1]);
   dolfin::Function initial_potential(initial_soln[2]);
-  unsigned int dirichlet_coord = 0;
   LogCharge Cation(
     lower_cation_val,
     upper_cation_val,
@@ -223,13 +243,15 @@ int main(int argc, char** argv)
 
     // set adaptivity parameters
     dolfin::Mesh mesh(mesh_adapt);
+    // dolfin::MeshFunction<std::size_t> sub_domains(sub_domains_adapt);
+    // dolfin::MeshFunction<std::size_t> sub_domains = adapt(sub_domains_adapt, mesh);
     double entropy_tol = newtparam.adapt_tol;
     unsigned int num_adapts = 0, max_adapts = 5;
     bool adaptive_convergence = false;
 
     // initialize storage functions for adaptivity
     printf("store previous solution and initialize solution functions\n"); fflush(stdout);
-    pnp::FunctionSpace V_adapt(mesh_adapt);
+    pnp::FunctionSpace V_adapt(mesh_adapt,periodic_boundary);
     dolfin::Function prev_soln_adapt(V_adapt);
     dolfin::Function prev_cation_adapt(prev_soln_adapt[0]);
     dolfin::Function prev_anion_adapt(prev_soln_adapt[1]);
@@ -255,7 +277,7 @@ int main(int argc, char** argv)
 
       // Initialize variational forms
       printf("\tvariational forms...\n"); fflush(stdout);
-      pnp::FunctionSpace V(mesh);
+      pnp::FunctionSpace V(mesh,periodic_boundary);
       pnp::BilinearForm a_pnp(V,V);
       pnp::LinearForm L_pnp(V);
       a_pnp.eps = eps; L_pnp.eps = eps;
@@ -287,9 +309,11 @@ int main(int argc, char** argv)
       // Set Dirichlet boundaries
       printf("\tboundary conditions...\n"); fflush(stdout);
       Constant zero_vec(0.0, 0.0, 0.0);
-      SymmBoundaries boundary(dirichlet_coord, -Lx/2.0, Lx/2.0);
-      dolfin::DirichletBC bc(V, zero_vec, boundary);
-
+      // SymmBoundaries boundary(dirichlet_coord, -Lx/2.0, Lx/2.0);
+      SpheresSubDomain SPS;
+      dolfin::DirichletBC bc(V, zero_vec, SPS);
+      // dolfin::DirichletBC bc(V, zero_vec, sub_domains, 1);
+      printf("\t\tdone\n"); fflush(stdout);
       // map dofs
       ivector cation_dofs;
       ivector anion_dofs;
@@ -301,11 +325,11 @@ int main(int argc, char** argv)
       //EAFE Formulation
       if (eafe_switch)
         printf("\tEAFE initialization...\n");
-      EAFE::FunctionSpace V_cat(mesh);
+      EAFE::FunctionSpace V_cat(mesh,periodic_boundary);
       EAFE::BilinearForm a_cat(V_cat,V_cat);
       a_cat.alpha = an_alpha;
       a_cat.gamma = C1;
-      EAFE::FunctionSpace V_an(mesh);
+      EAFE::FunctionSpace V_an(mesh,periodic_boundary);
       EAFE::BilinearForm a_an(V_an,V_an);
       a_an.alpha = cat_alpha;
       a_an.gamma = C1;
@@ -512,9 +536,11 @@ int main(int argc, char** argv)
           initial_cation = adapt(cationSolution, mesh_ptr);
           initial_anion = adapt(anionSolution, mesh_ptr);
           initial_potential = adapt(potentialSolution, mesh_ptr);
+          // sub_domains_adapt= adapt(sub_domains, mesh_ptr);
 
           // to ensure the building_box_tree is correctly indexed
           mesh = mesh_adapt;
+          // sub_domains = sub_domains_adapt;
           mesh.bounding_box_tree()->build(mesh);
           mesh_adapt.bounding_box_tree()->build(mesh_adapt);
 

@@ -92,5 +92,36 @@ box.mark(boundary_parts, 2)
 
 # file = File("boundary_parts.pvd")
 # file << boundary_parts
-file = File("boundary_parts.xml.gz")
-file << boundary_parts
+# file = File("boundary_parts.xml.gz")
+# file << boundary_parts
+
+Ns=len(rc)
+f = open("values.txt",'w')
+
+f.write("double xc["+str(len(xc))+"] = { ")
+for i in range(Ns-1):
+    f.write(str(xc[i])+",")
+    if i%10==0 and i!=0:
+        f.write("\n\t")
+f.write(str(xc[Ns-1])+"};\n\n")
+
+f.write("double yc["+str(len(xc))+"] = { ")
+for i in range(Ns-1):
+    f.write(str(yc[i])+",")
+    if i%10==0 and i!=0:
+        f.write("\n\t")
+f.write(str(yc[Ns-1])+"};\n\n")
+
+f.write("double zc["+str(len(xc))+"] = { ")
+for i in range(Ns-1):
+    f.write(str(zc[i])+",")
+    if i%10==0 and i!=0:
+        f.write("\n\t")
+f.write(str(zc[Ns-1])+"};\n\n")
+
+f.write("double rc["+str(len(xc))+"] = { ")
+for i in range(Ns-1):
+    f.write(str(rc[i])+",")
+    if i%10==0 and i!=0:
+        f.write("\n\t")
+f.write(str(rc[Ns-1])+"};\n\n")
