@@ -52,18 +52,106 @@ double rc[86] = { 9.0,9.0,9.0,9.0,9.0,9.0,9.0,9.0,9.0,9.0,9.0,
 	6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,
 	6.0,6.0,6.0,6.0,5.0};
 
+int Numb_spheres = 20;
+
 class SpheresSubDomain : public dolfin::SubDomain
 {
     bool inside(const dolfin::Array<double>& x, bool on_boundary) const
     {
       bool flag=false;
-      for (int i=0;i<20;i++){
+      for (int i=0;i<Numb_spheres;i++){
           if (on_boundary && (std::pow(x[0]-xc[i],2) + std::pow(x[1]-yc[i],2) + std::pow(x[2]-zc[i],2) < std::pow(rc[i],2)+2.0) )
                   flag=true;
                 }
           return flag;
     }
 
+};
+
+/// Initialize expressions
+class Cation_SPH : public dolfin::Expression
+{
+public:
+  // constructor
+  Cation_SPH(double lower_val, double upper_val,
+    double lower, double upper, int bc_coord)
+		{
+			_lower_val = lower_val;
+			_upper_val = upper_val;
+			_lower = lower;
+			_upper = upper;
+			_bc_coord = bc_coord;
+		}
+  // evaluate LogCarge
+  void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const
+	{
+		values[0]  = std::log(_lower_val) * (_upper - x[_bc_coord]) / (_upper - _lower);
+	  values[0] += std::log(_upper_val) * (x[_bc_coord] - _lower) / (_upper - _lower);
+		// for (int i=0;i<Numb_spheres;i++){
+		// 		if (std::pow(x[0]-xc[i],2) + std::pow(x[1]-yc[i],2) + std::pow(x[2]-zc[i],2) < std::pow(rc[i],2)+2.0)
+		// 						values[0]=1.0;
+		// }
+	}
+private:
+  double _lower_val, _upper_val, _upper, _lower;
+  int _bc_coord;
+};
+
+/// Initialize expressions
+class Anion_SPH : public dolfin::Expression
+{
+public:
+  // constructor
+  Anion_SPH(double lower_val, double upper_val,
+    double lower, double upper, int bc_coord)
+		{
+			_lower_val = lower_val;
+			_upper_val = upper_val;
+			_lower = lower;
+			_upper = upper;
+			_bc_coord = bc_coord;
+		}
+  // evaluate LogCarge
+  void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const
+	{
+		values[0]  = std::log(_lower_val) * (_upper - x[_bc_coord]) / (_upper - _lower);
+	  values[0] += std::log(_upper_val) * (x[_bc_coord] - _lower) / (_upper - _lower);
+		// for (int i=0;i<Numb_spheres;i++){
+		// 		if (std::pow(x[0]-xc[i],2) + std::pow(x[1]-yc[i],2) + std::pow(x[2]-zc[i],2) < std::pow(rc[i],2)+2.0)
+		// 						values[0]=0.1;
+		// }
+	}
+private:
+  double _lower_val, _upper_val, _upper, _lower;
+  int _bc_coord;
+};
+
+class Potential_SPH: public dolfin::Expression
+{
+public:
+  // constructor
+  Potential_SPH(double lower_val, double upper_val,
+    double lower, double upper, int bc_coord)
+		{
+		  _lower_val = lower_val;
+		  _upper_val = upper_val;
+		  _lower = lower;
+		  _upper = upper;
+		  _bc_coord = bc_coord;
+		}
+  // evaluate Voltage
+  void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const
+	{
+	  values[0]  = _lower_val * (_upper - x[_bc_coord]) / (_upper - _lower);
+	  values[0] += _upper_val * (x[_bc_coord] - _lower) / (_upper - _lower);
+		// for (int i=0;i<Numb_spheres;i++){
+		// 		if (std::pow(x[0]-xc[i],2) + std::pow(x[1]-yc[i],2) + std::pow(x[2]-zc[i],2) < std::pow(rc[i],2)+2.0)
+		// 						values[0]=1.0;
+		// }
+	}
+private:
+  double _lower_val, _upper_val, _upper, _lower;
+  int _bc_coord;
 };
 
 #endif

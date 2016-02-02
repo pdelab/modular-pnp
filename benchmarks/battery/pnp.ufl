@@ -20,6 +20,7 @@ EsEs = Coefficient(CG)
 ## Previous time step
 CatCat_t0 = Coefficient(CG)
 AnAn_t0 = Coefficient(CG)
+g = Coefficient(CG)
 
 ##  Coefficients
 eps = Coefficient(CG)
@@ -44,4 +45,5 @@ L   = -(exp(CatCat) - exp(CatCat_t0) )*cat*dx \
     - dt*( Dp*exp(CatCat)*inner(grad(CatCat+qp*EsEs), grad(cat)) )*dx \
     - dt*( Dn*exp(AnAn  )*inner(grad(AnAn  +qn*EsEs), grad(an )) )*dx \
     - ( eps * inner(grad(EsEs),grad(phi)) )*dx \
-    - ( -(qp*exp(CatCat) + qn*exp(AnAn))*phi )*dx
+    - ( -(qp*exp(CatCat) + qn*exp(AnAn))*phi )*dx \
+    - ( - g*phi*ds(1) )

@@ -175,21 +175,21 @@ int main(int argc, char** argv)
   dolfin::Function initial_cation(initial_soln[0]);
   dolfin::Function initial_anion(initial_soln[1]);
   dolfin::Function initial_potential(initial_soln[2]);
-  LogCharge Cation(
+  Cation_SPH Cation(
     lower_cation_val,
     upper_cation_val,
     -Lx/2.0,
     Lx/2.0,
     dirichlet_coord
   );
-  LogCharge Anion(
+  Anion_SPH Anion(
     lower_anion_val,
     upper_anion_val,
     -Lx/2.0,
     Lx/2.0,
     dirichlet_coord
   );
-  Voltage Volt(
+  Potential_SPH Volt(
     lower_potential_val,
     upper_potential_val,
     -Lx/2.0,
@@ -233,6 +233,8 @@ int main(int argc, char** argv)
   Constant C1(1.0);
   Constant zero(0.0);
 
+  SpheresSubDomain SPS;
+
   for (double t = 0; t < final_time; t += time_step_size) {
     // printf("\nSet voltage to %e...\n", volt); fflush(stdout);
 
@@ -275,6 +277,9 @@ int main(int argc, char** argv)
       // output mesh
       meshOut << mesh;
 
+      FacetFunction<std::size_t> boundaries(mesh, 0);
+      SPS.mark(boundaries, 1);
+
       // Initialize variational forms
       printf("\tvariational forms...\n"); fflush(stdout);
       pnp::FunctionSpace V(mesh,periodic_boundary);
@@ -286,6 +291,8 @@ int main(int argc, char** argv)
       a_pnp.qp = qp; L_pnp.qp = qp;
       a_pnp.qn = qn; L_pnp.qn = qn;
       a_pnp.dt = C_dt; L_pnp.dt = C_dt;
+      L_pnp.g=C1;
+      L_pnp.ds = boundaries;
 
       // Interpolate previous solutions analytic expressions
       printf("\tinterpolate previous step solution onto new mesh...\n"); fflush(stdout);
@@ -309,10 +316,8 @@ int main(int argc, char** argv)
       // Set Dirichlet boundaries
       printf("\tboundary conditions...\n"); fflush(stdout);
       Constant zero_vec(0.0, 0.0, 0.0);
-      // SymmBoundaries boundary(dirichlet_coord, -Lx/2.0, Lx/2.0);
-      SpheresSubDomain SPS;
-      dolfin::DirichletBC bc(V, zero_vec, SPS);
-      // dolfin::DirichletBC bc(V, zero_vec, sub_domains, 1);
+      SymmBoundaries boundary(dirichlet_coord, -Lx/2.0, Lx/2.0);
+      dolfin::DirichletBC bc(V, zero_vec, boundary);
       printf("\t\tdone\n"); fflush(stdout);
       // map dofs
       ivector cation_dofs;
@@ -362,7 +367,7 @@ int main(int argc, char** argv)
       L_pnp.CatCat_t0 = previous_cation;
       L_pnp.AnAn_t0 = previous_anion;
       assemble(b_pnp, L_pnp);
-      bc.apply(b_pnp);
+      // bc.apply(b_pnp);
       relative_residual = b_pnp.norm("l2") / initial_residual;
       if (num_adapts == 0)
         printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
@@ -416,7 +421,7 @@ int main(int argc, char** argv)
           replace_matrix(3,0, &V, &V_cat, &A_pnp, &A_cat);
           replace_matrix(3,1, &V, &V_an , &A_pnp, &A_an );
         }
-        bc.apply(A_pnp);
+        // bc.apply(A_pnp);
 
         // Convert to fasp
         printf("\tconvert to FASP and solve...\n"); fflush(stdout);
@@ -467,7 +472,7 @@ int main(int argc, char** argv)
         L_pnp.CatCat_t0 = previous_cation;
         L_pnp.AnAn_t0 = previous_anion;
         assemble(b_pnp, L_pnp);
-        bc.apply(b_pnp);
+        // bc.apply(b_pnp);
 
         fasp_dbsr_free(&A_fasp_bsr);
 
@@ -608,7 +613,7 @@ double update_solution_pnp (
   L->EsEs = _iterate2;
   EigenVector b;
   assemble(b, *L);
-  bc->apply(b);
+  // bc->apply(b);
   double new_relative_residual = b.norm("l2") / initial_residual;
 
   // backtrack loop
@@ -632,7 +637,7 @@ double update_solution_pnp (
     L->AnAn = _iterate1;
     L->EsEs = _iterate2;
     assemble(b, *L);
-    bc->apply(b);
+    // bc->apply(b);
     new_relative_residual = b.norm("l2") / initial_residual;
     printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
   }
@@ -670,6 +675,6 @@ double get_initial_residual (
   L->AnAn_t0 = adapt_anion;
   EigenVector b;
   assemble(b, *L);
-  bc->apply(b);
+  // bc->apply(b);
   return b.norm("l2");
 }
