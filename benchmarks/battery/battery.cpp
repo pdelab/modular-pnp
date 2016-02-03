@@ -25,27 +25,27 @@ extern "C"
 {
   #include "fasp.h"
   #include "fasp_functs.h"
-  #define FASP_BSR     ON  /** use BSR format in fasp */
+  #define FASP_BSR ON /** use BSR format in fasp */
 }
 using namespace dolfin;
 // using namespace std;
 
 bool eafe_switch = false;
 
-double lower_cation_val = 0.1;  // 1 / m^3
+double lower_cation_val = 1.0;  // 1 / m^3
 double upper_cation_val = 1.0;  // 1 / m^3
 double lower_anion_val = 1.0;  // 1 / m^3
-double upper_anion_val = 0.1;  // 1 / m^3
+double upper_anion_val = 1.0;  // 1 / m^3
 double lower_potential_val = -1.0e-0;  // V
 double upper_potential_val = +1.0e-0;  // V
-double Lx = 100.0;
-double Ly = 100.0;
-double Lz = 100.0;
+double Lx = 72.0;
+double Ly = 72.0;
+double Lz = 72.0;
 
 unsigned int dirichlet_coord = 0;
 
-double time_step_size = 0.1;
-double final_time = 100.0;
+double time_step_size = 1.0;
+double final_time = 10.0;
 
 double get_initial_residual (
   pnp::LinearForm* L,
@@ -74,14 +74,20 @@ class PeriodicBoundary : public SubDomain
 {
   // Left boundary is "target domain" G
   bool inside(const Array<double>& x, bool on_boundary) const
-  { return on_boundary && ((std::abs(x[0]) < Lx/2.0+5*DOLFIN_EPS) || (std::abs(x[1]) < Ly/2.0+5*DOLFIN_EPS) || (std::abs(x[2]) < Lz/2.0+5*DOLFIN_EPS)) ; }
+  { 
+    return on_boundary && (
+      std::abs(x[0]) < Lx / 2.0 + 5.0 * DOLFIN_EPS
+      || std::abs(x[1]) < Ly / 2.0 + 5.0 * DOLFIN_EPS
+      || std::abs(x[2]) < Lz / 2.0 + 5.0 * DOLFIN_EPS
+    );
+  }
 
   // Map right boundary (H) to left boundary (G)
   void map(const Array<double>& x, Array<double>& y) const
   {
-    y[0] = x[0];
-    y[1] = x[1];
-    y[2] = x[2];
+    y[0] = -x[0];
+    y[1] = -x[1];
+    y[2] = -x[2];
   }
 };
 
@@ -167,35 +173,39 @@ int main(int argc, char** argv)
   File anionFile("./benchmarks/battery/output/anion.pvd");
   File potentialFile("./benchmarks/battery/output/potential.pvd");
 
-  PeriodicBoundary periodic_boundary;
+  // PeriodicBoundary periodic_boundary;
 
   // PREVIOUS ITERATE
-  pnp::FunctionSpace V_init(mesh_adapt,periodic_boundary);
+  pnp::FunctionSpace V_init(mesh_adapt /*,periodic_boundary*/);
   dolfin::Function initial_soln(V_init);
   dolfin::Function initial_cation(initial_soln[0]);
   dolfin::Function initial_anion(initial_soln[1]);
   dolfin::Function initial_potential(initial_soln[2]);
-  Cation_SPH Cation(
+
+  LogCharge_SPH Cation(
     lower_cation_val,
     upper_cation_val,
-    -Lx/2.0,
-    Lx/2.0,
+    -Lx / 2.0,
+    Lx / 2.0,
     dirichlet_coord
   );
-  Anion_SPH Anion(
+
+  LogCharge_SPH Anion(
     lower_anion_val,
     upper_anion_val,
-    -Lx/2.0,
-    Lx/2.0,
+    -Lx / 2.0,
+    Lx / 2.0,
     dirichlet_coord
   );
+
   Potential_SPH Volt(
     lower_potential_val,
     upper_potential_val,
-    -Lx/2.0,
-    Lx/2.0,
+    -Lx / 2.0,
+    Lx / 2.0,
     dirichlet_coord
   );
+
   initial_cation.interpolate(Cation);
   initial_anion.interpolate(Anion);
   initial_potential.interpolate(Volt);
@@ -230,12 +240,12 @@ int main(int argc, char** argv)
   Constant C_dt(time_step_size);
   Constant cat_alpha(coeff_par.cation_diffusivity*time_step_size);
   Constant an_alpha(coeff_par.anion_diffusivity*time_step_size);
-  Constant C1(1.0);
+  Constant one(1.0);
   Constant zero(0.0);
 
   SpheresSubDomain SPS;
 
-  for (double t = 0; t < final_time; t += time_step_size) {
+  for (double t = time_step_size; t < final_time; t += time_step_size) {
     // printf("\nSet voltage to %e...\n", volt); fflush(stdout);
 
     //*************************************************************
@@ -253,7 +263,7 @@ int main(int argc, char** argv)
 
     // initialize storage functions for adaptivity
     printf("store previous solution and initialize solution functions\n"); fflush(stdout);
-    pnp::FunctionSpace V_adapt(mesh_adapt,periodic_boundary);
+    pnp::FunctionSpace V_adapt(mesh_adapt /*,periodic_boundary*/);
     dolfin::Function prev_soln_adapt(V_adapt);
     dolfin::Function prev_cation_adapt(prev_soln_adapt[0]);
     dolfin::Function prev_anion_adapt(prev_soln_adapt[1]);
@@ -274,15 +284,15 @@ int main(int argc, char** argv)
     printf("Adaptivity loop\n"); fflush(stdout);
     while (!adaptive_convergence)
     {
-      // output mesh
-      meshOut << mesh;
-
-      FacetFunction<std::size_t> boundaries(mesh, 0);
+      // mark and output mesh
+      FacetFunction<std::size_t> boundaries(mesh);
+      boundaries.set_all(0);
       SPS.mark(boundaries, 1);
+      meshOut << boundaries;
 
       // Initialize variational forms
       printf("\tvariational forms...\n"); fflush(stdout);
-      pnp::FunctionSpace V(mesh,periodic_boundary);
+      pnp::FunctionSpace V(mesh /*,periodic_boundary*/);
       pnp::BilinearForm a_pnp(V,V);
       pnp::LinearForm L_pnp(V);
       a_pnp.eps = eps; L_pnp.eps = eps;
@@ -291,7 +301,7 @@ int main(int argc, char** argv)
       a_pnp.qp = qp; L_pnp.qp = qp;
       a_pnp.qn = qn; L_pnp.qn = qn;
       a_pnp.dt = C_dt; L_pnp.dt = C_dt;
-      L_pnp.g=C1;
+      L_pnp.g = one;
       L_pnp.ds = boundaries;
 
       // Interpolate previous solutions analytic expressions
@@ -316,7 +326,7 @@ int main(int argc, char** argv)
       // Set Dirichlet boundaries
       printf("\tboundary conditions...\n"); fflush(stdout);
       Constant zero_vec(0.0, 0.0, 0.0);
-      SymmBoundaries boundary(dirichlet_coord, -Lx/2.0, Lx/2.0);
+      SymmBoundaries boundary(dirichlet_coord, -Lx / 2.0, Lx / 2.0);
       dolfin::DirichletBC bc(V, zero_vec, boundary);
       printf("\t\tdone\n"); fflush(stdout);
       // map dofs
@@ -330,14 +340,14 @@ int main(int argc, char** argv)
       //EAFE Formulation
       if (eafe_switch)
         printf("\tEAFE initialization...\n");
-      EAFE::FunctionSpace V_cat(mesh,periodic_boundary);
+      EAFE::FunctionSpace V_cat(mesh /*,periodic_boundary*/);
       EAFE::BilinearForm a_cat(V_cat,V_cat);
       a_cat.alpha = an_alpha;
-      a_cat.gamma = C1;
-      EAFE::FunctionSpace V_an(mesh,periodic_boundary);
+      a_cat.gamma = one;
+      EAFE::FunctionSpace V_an(mesh /*,periodic_boundary*/);
       EAFE::BilinearForm a_an(V_an,V_an);
       a_an.alpha = cat_alpha;
-      a_an.gamma = C1;
+      a_an.gamma = one;
       dolfin::Function CatCatFunction(V_cat);
       dolfin::Function CatBetaFunction(V_cat);
       dolfin::Function AnAnFunction(V_an);
@@ -358,7 +368,13 @@ int main(int argc, char** argv)
 
       // set initial residual
       printf("\tupdate initial residual...\n"); fflush(stdout);
-      initial_residual = get_initial_residual(&L_pnp, &bc, &previous_cation, &previous_anion, &previous_potential);
+      initial_residual = get_initial_residual(
+        &L_pnp,
+        &bc,
+        &previous_cation,
+        &previous_anion,
+        &previous_potential
+      );
 
       printf("\tcompute relative residual...\n"); fflush(stdout);
       L_pnp.CatCat = cationSolution;
@@ -367,7 +383,7 @@ int main(int argc, char** argv)
       L_pnp.CatCat_t0 = previous_cation;
       L_pnp.AnAn_t0 = previous_anion;
       assemble(b_pnp, L_pnp);
-      // bc.apply(b_pnp);
+      bc.apply(b_pnp);
       relative_residual = b_pnp.norm("l2") / initial_residual;
       if (num_adapts == 0)
         printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
@@ -421,7 +437,7 @@ int main(int argc, char** argv)
           replace_matrix(3,0, &V, &V_cat, &A_pnp, &A_cat);
           replace_matrix(3,1, &V, &V_an , &A_pnp, &A_an );
         }
-        // bc.apply(A_pnp);
+        bc.apply(A_pnp);
 
         // Convert to fasp
         printf("\tconvert to FASP and solve...\n"); fflush(stdout);
@@ -472,7 +488,12 @@ int main(int argc, char** argv)
         L_pnp.CatCat_t0 = previous_cation;
         L_pnp.AnAn_t0 = previous_anion;
         assemble(b_pnp, L_pnp);
-        // bc.apply(b_pnp);
+        bc.apply(b_pnp);
+
+        // output solution after solved for Newton update
+        cationFile << cationSolution;
+        anionFile << anionSolution;
+        potentialFile << potentialSolution;
 
         fasp_dbsr_free(&A_fasp_bsr);
 
@@ -488,7 +509,7 @@ int main(int argc, char** argv)
       // compute local entropy and refine mesh
       printf("Computing electric field for refinement\n");
       unsigned int num_refines;
-      num_refines = check_electric_field (
+      num_refines = check_electric_field(
         &potentialSolution,
         &mesh_adapt,
         entropy_tol
@@ -613,7 +634,7 @@ double update_solution_pnp (
   L->EsEs = _iterate2;
   EigenVector b;
   assemble(b, *L);
-  // bc->apply(b);
+  bc->apply(b);
   double new_relative_residual = b.norm("l2") / initial_residual;
 
   // backtrack loop
@@ -637,7 +658,7 @@ double update_solution_pnp (
     L->AnAn = _iterate1;
     L->EsEs = _iterate2;
     assemble(b, *L);
-    // bc->apply(b);
+    bc->apply(b);
     new_relative_residual = b.norm("l2") / initial_residual;
     printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
   }
@@ -675,6 +696,6 @@ double get_initial_residual (
   L->AnAn_t0 = adapt_anion;
   EigenVector b;
   assemble(b, *L);
-  // bc->apply(b);
+  bc->apply(b);
   return b.norm("l2");
 }
