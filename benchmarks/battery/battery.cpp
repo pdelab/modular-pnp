@@ -36,8 +36,8 @@ double lower_cation_val = 1.0;  // 1 / m^3
 double upper_cation_val = 1.0;  // 1 / m^3
 double lower_anion_val = 1.0;  // 1 / m^3
 double upper_anion_val = 1.0;  // 1 / m^3
-double lower_potential_val = -1.0e-0;  // V
-double upper_potential_val = +1.0e-0;  // V
+double lower_potential_val = 0.0e-0;  // V
+double upper_potential_val = 0.0e-0;  // V
 double Lx = 72.0;
 double Ly = 72.0;
 double Lz = 72.0;
@@ -47,9 +47,11 @@ unsigned int dirichlet_coord = 0;
 double time_step_size = 1.0;
 double final_time = 10.0;
 
+void remove_constant (dolfin::Function* solution);
+
 double get_initial_residual (
   pnp::LinearForm* L,
-  const dolfin::DirichletBC* bc,
+  // const dolfin::DirichletBC* bc,
   dolfin::Function* cation,
   dolfin::Function* anion,
   dolfin::Function* potential
@@ -65,7 +67,7 @@ double update_solution_pnp (
   double relative_residual,
   double initial_residual,
   pnp::LinearForm* L,
-  const dolfin::DirichletBC* bc,
+  // const dolfin::DirichletBC* bc,
   newton_param* params
 );
 
@@ -241,6 +243,7 @@ int main(int argc, char** argv)
   Constant cat_alpha(coeff_par.cation_diffusivity*time_step_size);
   Constant an_alpha(coeff_par.anion_diffusivity*time_step_size);
   Constant one(1.0);
+  Constant hundredth(1.0e-2);
   Constant zero(0.0);
 
   SpheresSubDomain SPS;
@@ -301,7 +304,7 @@ int main(int argc, char** argv)
       a_pnp.qp = qp; L_pnp.qp = qp;
       a_pnp.qn = qn; L_pnp.qn = qn;
       a_pnp.dt = C_dt; L_pnp.dt = C_dt;
-      L_pnp.g = one;
+      L_pnp.g = hundredth;//one;
       L_pnp.ds = boundaries;
 
       // Interpolate previous solutions analytic expressions
@@ -327,7 +330,7 @@ int main(int argc, char** argv)
       printf("\tboundary conditions...\n"); fflush(stdout);
       Constant zero_vec(0.0, 0.0, 0.0);
       SymmBoundaries boundary(dirichlet_coord, -Lx / 2.0, Lx / 2.0);
-      dolfin::DirichletBC bc(V, zero_vec, boundary);
+      // dolfin::DirichletBC bc(V, zero_vec, boundary);
       printf("\t\tdone\n"); fflush(stdout);
       // map dofs
       ivector cation_dofs;
@@ -370,7 +373,7 @@ int main(int argc, char** argv)
       printf("\tupdate initial residual...\n"); fflush(stdout);
       initial_residual = get_initial_residual(
         &L_pnp,
-        &bc,
+        // &bc,
         &previous_cation,
         &previous_anion,
         &previous_potential
@@ -383,7 +386,7 @@ int main(int argc, char** argv)
       L_pnp.CatCat_t0 = previous_cation;
       L_pnp.AnAn_t0 = previous_anion;
       assemble(b_pnp, L_pnp);
-      bc.apply(b_pnp);
+      // bc.apply(b_pnp);
       relative_residual = b_pnp.norm("l2") / initial_residual;
       if (num_adapts == 0)
         printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
@@ -437,7 +440,7 @@ int main(int argc, char** argv)
           replace_matrix(3,0, &V, &V_cat, &A_pnp, &A_cat);
           replace_matrix(3,1, &V, &V_an , &A_pnp, &A_an );
         }
-        bc.apply(A_pnp);
+        // bc.apply(A_pnp);
 
         // Convert to fasp
         printf("\tconvert to FASP and solve...\n"); fflush(stdout);
@@ -458,7 +461,6 @@ int main(int argc, char** argv)
         copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &anion_dofs, &anion_dofs);
         copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &potential_dofs, &potential_dofs);
 
-
         // update solution and reset solutionUpdate
         printf("\tupdate solution...\n"); fflush(stdout);
         relative_residual = update_solution_pnp (
@@ -471,9 +473,15 @@ int main(int argc, char** argv)
           relative_residual,
           initial_residual,
           &L_pnp,
-          &bc,
+          // &bc,
           &newtparam
         );
+
+        // remove additive constant from potential
+        double average = potentialSolution.vector()->sum();
+        average /= (double) potentialSolution.vector()->size();
+        *(potentialSolution.vector()) -= average;
+
         if (relative_residual < 0.0) {
           printf("Newton backtracking failed!\n");
           printf("\tresidual has not decreased after damping %d times\n", newtparam.damp_it);
@@ -488,7 +496,7 @@ int main(int argc, char** argv)
         L_pnp.CatCat_t0 = previous_cation;
         L_pnp.AnAn_t0 = previous_anion;
         assemble(b_pnp, L_pnp);
-        bc.apply(b_pnp);
+        // bc.apply(b_pnp);
 
         // output solution after solved for Newton update
         cationFile << cationSolution;
@@ -518,62 +526,63 @@ int main(int argc, char** argv)
       // free fasp solution
       fasp_dvec_free(&solu_fasp);
 
-      if ( (num_refines == 0) || ( ++num_adapts > max_adapts ) ){
+      num_adapts++;
+      if ( (num_refines == 0) || num_adapts > max_adapts ){
         // successful solve
-          if (num_refines == 0) printf("\tsuccessfully distributed electric field below desired electric field in %d adapts!\n\n", num_adapts);
-          else printf("\nDid not adapt mesh to electric field in %d adapts...\n", max_adapts);
-          adaptive_convergence = true;
-          dolfin::Function Er_cat(previous_cation);
-          dolfin::Function Er_an(previous_anion);
-          dolfin::Function Er_es(previous_potential);
-          *(Er_cat.vector()) -= *(cationSolution.vector());
-          *(Er_an.vector()) -= *(anionSolution.vector());
-          *(Er_es.vector()) -= *(potentialSolution.vector());
-          *(Er_cat.vector()) /= time_step_size;
-          *(Er_an.vector()) /= time_step_size;
-          *(Er_es.vector()) /= time_step_size;
-          L2Error::Form_M L2error1(mesh,Er_cat);
-          cationError = assemble(L2error1);
-          L2Error::Form_M L2error2(mesh,Er_an);
-          anionError = assemble(L2error2);
-          L2Error::Form_M L2error3(mesh,Er_es);
-          potentialError = assemble(L2error3);
-          energy::Form_M EN(mesh,cationSolution,anionSolution,potentialSolution,eps);
-          energy = assemble(EN);
+        if (num_refines == 0) printf("\tsuccessfully distributed electric field below desired electric field in %d adapts!\n\n", num_adapts);
+        else printf("\nDid not adapt mesh to electric field in %d adapts...\n", max_adapts);
+        adaptive_convergence = true;
+        dolfin::Function Er_cat(previous_cation);
+        dolfin::Function Er_an(previous_anion);
+        dolfin::Function Er_es(previous_potential);
+        *(Er_cat.vector()) -= *(cationSolution.vector());
+        *(Er_an.vector()) -= *(anionSolution.vector());
+        *(Er_es.vector()) -= *(potentialSolution.vector());
+        *(Er_cat.vector()) /= time_step_size;
+        *(Er_an.vector()) /= time_step_size;
+        *(Er_es.vector()) /= time_step_size;
+        L2Error::Form_M L2error1(mesh,Er_cat);
+        cationError = assemble(L2error1);
+        L2Error::Form_M L2error2(mesh,Er_an);
+        anionError = assemble(L2error2);
+        L2Error::Form_M L2error3(mesh,Er_es);
+        potentialError = assemble(L2error3);
+        energy::Form_M EN(mesh,cationSolution,anionSolution,potentialSolution,eps);
+        energy = assemble(EN);
 
-          printf("***********************************************\n");
-          printf("***********************************************\n");
-          printf("Difference at t=%e...\n",t);
-          printf("\tcation l2 error is:     %e\n", cationError);
-          printf("\tanion l2 error is:      %e\n", anionError);
-          printf("\tpotential l2 error is:  %e\n", potentialError);
-          printf("\tEnergy is:  %e\n", energy);
-          printf("***********************************************\n");
-          printf("***********************************************\n");
-          end = clock();
+        printf("***********************************************\n");
+        printf("***********************************************\n");
+        printf("Difference at t=%e...\n",t);
+        printf("\tcation l2 error is:     %e\n", cationError);
+        printf("\tanion l2 error is:      %e\n", anionError);
+        printf("\tpotential l2 error is:  %e\n", potentialError);
+        printf("\tEnergy is:  %e\n", energy);
+        printf("***********************************************\n");
+        printf("***********************************************\n");
+        end = clock();
 
-          ofs.open("./benchmarks/battery/data.txt", std::ofstream::out | std::ofstream::app);
-          timeElaspsed = double(end - begin) / CLOCKS_PER_SEC;
-          ofs << t << "\t" << newton_iteration << "\t" << relative_residual << "\t" << cationError << "\t" << anionError << "\t" << potentialError << "\t" << energy << "\t"<< timeElaspsed << "\t" << mesh.num_cells() << "\n";
-          ofs.close();
+        ofs.open("./benchmarks/battery/data.txt", std::ofstream::out | std::ofstream::app);
+        timeElaspsed = double(end - begin) / CLOCKS_PER_SEC;
+        ofs << t << "\t" << newton_iteration << "\t" << relative_residual << "\t" << cationError << "\t" << anionError << "\t" << potentialError << "\t" << energy << "\t"<< timeElaspsed << "\t" << mesh.num_cells() << "\n";
+        ofs.close();
 
-          // store solution as solution from previous step
-          std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(mesh_adapt) );
-          initial_cation = adapt(cationSolution, mesh_ptr);
-          initial_anion = adapt(anionSolution, mesh_ptr);
-          initial_potential = adapt(potentialSolution, mesh_ptr);
-          // sub_domains_adapt= adapt(sub_domains, mesh_ptr);
+        // store solution as solution from previous step
+        std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(mesh_adapt) );
+        initial_cation = adapt(cationSolution, mesh_ptr);
+        initial_anion = adapt(anionSolution, mesh_ptr);
+        initial_potential = adapt(potentialSolution, mesh_ptr);
+        // sub_domains_adapt= adapt(sub_domains, mesh_ptr);
 
-          // to ensure the building_box_tree is correctly indexed
-          mesh = mesh_adapt;
-          // sub_domains = sub_domains_adapt;
-          mesh.bounding_box_tree()->build(mesh);
-          mesh_adapt.bounding_box_tree()->build(mesh_adapt);
+        // to ensure the building_box_tree is correctly indexed
+        mesh = mesh_adapt;
+        // sub_domains = sub_domains_adapt;
+        mesh.bounding_box_tree()->build(mesh);
+        mesh_adapt.bounding_box_tree()->build(mesh_adapt);
 
-          // output solution after solved for timestep
-          cationFile << initial_cation;
-          anionFile << initial_anion;
-          potentialFile << initial_potential;
+        // output solution after solved for timestep
+        cationFile << initial_cation;
+        anionFile << initial_anion;
+        potentialFile << initial_potential;
 
         break;
       }
@@ -615,7 +624,7 @@ double update_solution_pnp (
   double relative_residual,
   double initial_residual,
   pnp::LinearForm* L,
-  const dolfin::DirichletBC* bc,
+  // const dolfin::DirichletBC* bc,
   newton_param* params )
 {
   // compute residual
@@ -634,7 +643,7 @@ double update_solution_pnp (
   L->EsEs = _iterate2;
   EigenVector b;
   assemble(b, *L);
-  bc->apply(b);
+  // bc->apply(b);
   double new_relative_residual = b.norm("l2") / initial_residual;
 
   // backtrack loop
@@ -658,7 +667,7 @@ double update_solution_pnp (
     L->AnAn = _iterate1;
     L->EsEs = _iterate2;
     assemble(b, *L);
-    bc->apply(b);
+    // bc->apply(b);
     new_relative_residual = b.norm("l2") / initial_residual;
     printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
   }
@@ -676,7 +685,7 @@ double update_solution_pnp (
 
 double get_initial_residual (
   pnp::LinearForm* L,
-  const dolfin::DirichletBC* bc,
+  // const dolfin::DirichletBC* bc,
   dolfin::Function* cation,
   dolfin::Function* anion,
   dolfin::Function* potential)
@@ -696,6 +705,11 @@ double get_initial_residual (
   L->AnAn_t0 = adapt_anion;
   EigenVector b;
   assemble(b, *L);
-  bc->apply(b);
+  // bc->apply(b);
   return b.norm("l2");
+}
+
+void remove_constant (dolfin::Function* solution)
+{
+  // do something
 }
