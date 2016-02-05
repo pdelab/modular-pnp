@@ -1,0 +1,11 @@
+# Compile this form with FFC: ffc -O -l dolfin electric_cell_marker.ufl.
+
+element = FiniteElement("Lagrange", tetrahedron, 1)
+vector  = VectorElement("Lagrange", tetrahedron, 1)
+DG = FiniteElement("DG", tetrahedron, 0)
+
+v  = TestFunction(DG)
+pot  = Coefficient(element)
+gradpot = Coefficient(vector)
+
+L = inner(grad(pot)-gradpot, grad(pot)-gradpot) * v * dx

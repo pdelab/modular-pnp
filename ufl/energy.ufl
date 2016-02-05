@@ -1,0 +1,10 @@
+# Compile this form with FFC: ffc -O -l dolfin energy.ufl
+
+CG = FiniteElement("CG", tetrahedron, 1)
+
+Cat = Coefficient(CG)
+An = Coefficient(CG)
+Phi = Coefficient(CG)
+Eps = Coefficient(CG)
+
+M = ( exp(Cat)*(Cat-1) )*dx + ( exp(An)*(An-1) )*dx + Eps*0.5*inner(grad(Phi),grad(Phi))*dx
