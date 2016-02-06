@@ -241,7 +241,7 @@ unsigned int check_local_entropy (dolfin::Function *cation,
                                   dolfin::Mesh *target_mesh,
                                   double entropy_tol)
 {
-  int max_numb_cells = 5E6;
+  int max_numb_cells = 5E5;
   unsigned int c = check_local_entropy (cation,cation_valency,anion,anion_valency,voltage,target_mesh,entropy_tol,max_numb_cells);
   return c;
 }
@@ -363,7 +363,7 @@ unsigned int check_electric_field (dolfin::Function *voltage,
                                   dolfin::Mesh *target_mesh,
                                   double entropy_tol)
 {
-   int max_numb_cells = 5E6;
+   int max_numb_cells = 5E5;
    unsigned int c = check_electric_field(voltage,target_mesh, entropy_tol,max_numb_cells);
    return c;
 }

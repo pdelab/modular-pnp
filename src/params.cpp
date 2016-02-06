@@ -35,7 +35,7 @@ SHORT newton_param_input_init (newton_param *inparam)
     inparam->tol = 1.0e-4;
     inparam->damp_factor = 1.0;
     inparam->damp_it = 5;
-    inparam->max_numb_cells = 5.0e+6;
+    inparam->max_numb_cells = 5.0e+5;
 
     return status;
 }
