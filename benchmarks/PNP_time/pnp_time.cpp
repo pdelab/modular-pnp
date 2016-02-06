@@ -455,7 +455,8 @@ int main(int argc, char** argv)
       num_refines = check_electric_field (
         &potentialSolution,
         &mesh_adapt,
-        entropy_tol
+        entropy_tol,
+        newtparam.max_numb_cells
       );
 
       // free fasp solution

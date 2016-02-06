@@ -104,10 +104,19 @@ unsigned int check_local_entropy (dolfin::Function *cation,
                                   double anion_valency,
                                   dolfin::Function *voltage,
                                   dolfin::Mesh *target_mesh,
-                                  double entropy_tol)
+                                  double entropy_tol,
+                                  int Max_Numb_Cells)
 {
+
   // compute mesh from input voltage function and transfer
   dolfin::Mesh mesh( *(voltage->function_space()->mesh()) );
+
+  if (mesh.num_cells()>Max_Numb_Cells){
+    printf("\t\tThe mesh already has too many cells. No adaptivity\n");
+    return 0;
+  }
+
+
   gradient_recovery::FunctionSpace gradient_space(mesh);
   gradient_recovery::BilinearForm a(gradient_space,gradient_space);
   gradient_recovery::LinearForm L(gradient_space);
@@ -217,10 +226,24 @@ unsigned int check_local_entropy (dolfin::Function *cation,
       anion_valency,
       &adapt_voltage,
       target_mesh,
-      entropy_tol
+      entropy_tol,
+      Max_Numb_Cells
     );
     return 1+num_refines;
   }
+}
+
+unsigned int check_local_entropy (dolfin::Function *cation,
+                                  double cation_valency,
+                                  dolfin::Function *anion,
+                                  double anion_valency,
+                                  dolfin::Function *voltage,
+                                  dolfin::Mesh *target_mesh,
+                                  double entropy_tol)
+{
+  int max_numb_cells = 5E6;
+  unsigned int c = check_local_entropy (cation,cation_valency,anion,anion_valency,voltage,target_mesh,entropy_tol,max_numb_cells);
+  return c;
 }
 
 /**
@@ -239,10 +262,18 @@ unsigned int check_local_entropy (dolfin::Function *cation,
  */
 unsigned int check_electric_field (dolfin::Function *voltage,
                                   dolfin::Mesh *target_mesh,
-                                  double entropy_tol)
+                                  double entropy_tol,
+                                  int Max_Numb_Cells)
 {
+
   // compute mesh from input voltage function and transfer
   dolfin::Mesh mesh( *(voltage->function_space()->mesh()) );
+
+  if (mesh.num_cells()>Max_Numb_Cells){
+    printf("\t\tThe mesh already has too many cells. No adaptivity\n");
+    return 0;
+  }
+
   gradient_recovery::FunctionSpace gradient_space(mesh);
   gradient_recovery::BilinearForm a(gradient_space,gradient_space);
   gradient_recovery::LinearForm L(gradient_space);
@@ -322,10 +353,19 @@ unsigned int check_electric_field (dolfin::Function *voltage,
     num_refines =  check_electric_field(
       &adapt_voltage,
       target_mesh,
-      entropy_tol
+      entropy_tol,
+      Max_Numb_Cells
     );
     return 1+num_refines;
   }
+}
+unsigned int check_electric_field (dolfin::Function *voltage,
+                                  dolfin::Mesh *target_mesh,
+                                  double entropy_tol)
+{
+   int max_numb_cells = 5E6;
+   unsigned int c = check_electric_field(voltage,target_mesh, entropy_tol,max_numb_cells);
+   return c;
 }
 
 /*---------------------------------*/

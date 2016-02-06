@@ -35,6 +35,7 @@ SHORT newton_param_input_init (newton_param *inparam)
     inparam->tol = 1.0e-4;
     inparam->damp_factor = 1.0;
     inparam->damp_it = 5;
+    inparam->max_numb_cells = 5.0e+6;
 
     return status;
 }
@@ -162,6 +163,17 @@ void newton_param_input (const char *filenm,
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
         }
 
+        else if (strcmp(buffer,"max_numb_cells")==0) {
+            val = fscanf(fp,"%s",buffer);
+            if (val!=1 || strcmp(buffer,"=")!=0) {
+                status = ERROR_INPUT_PAR; break;
+            }
+            val = fscanf(fp,"%d",&ibuff);
+            if (val!=1) { status = ERROR_INPUT_PAR; break; }
+            inparam->max_numb_cells = ibuff;
+            fgetsPtr = fgets(buffer,500,fp); // skip rest of line
+        }
+
         else {
             printf("### WARNING: Unknown input keyword %s!\n", buffer);
             fgets(buffer,500,fp); // skip rest of line
@@ -195,6 +207,7 @@ void print_newton_param (newton_param *inparam)
   printf("\tNewton tolerance:                   \t%e\n",inparam->tol);
   printf("\tNewton damping factor:              \t%f\n",inparam->damp_factor);
   printf("\tNewton maximum damping iteration:   \t%d\n",inparam->damp_it);
+  printf("\tNewton number of cells:             \t%d\n",inparam->max_numb_cells);
   printf("\n");
 }
 
@@ -853,15 +866,15 @@ void non_dimesionalize_coefficients (domain_param *domain,
 
   // solution scale: normalize & balance voltage, use maximum charge density
   REAL ave_voltage = 0.5 * (coeffs->potential_lower_val + coeffs->potential_upper_val);
-  REAL voltage_scale = (coeffs->potential_lower_val == coeffs->potential_upper_val)? 
+  REAL voltage_scale = (coeffs->potential_lower_val == coeffs->potential_upper_val)?
     1.0 : 0.5*fabs(coeffs->potential_lower_val - coeffs->potential_upper_val);
   REAL new_ref_voltage = voltage_scale * coeffs->ref_voltage;
   non_dim_coeffs->ref_voltage = new_ref_voltage;
   non_dim_coeffs->potential_lower_val = (coeffs->potential_lower_val - ave_voltage) / voltage_scale;
   non_dim_coeffs->potential_upper_val = (coeffs->potential_upper_val - ave_voltage) / voltage_scale;
-  
+
   REAL new_ref_density = (coeffs->ref_density>0.0)? coeffs->ref_density : -(n_avo * coeffs->ref_density);
-  REAL max_density = (coeffs->cation_upper_val > coeffs->cation_lower_val)? 
+  REAL max_density = (coeffs->cation_upper_val > coeffs->cation_lower_val)?
     coeffs->cation_upper_val : coeffs->cation_lower_val;
   max_density = (max_density > coeffs->anion_upper_val)? max_density : coeffs->anion_upper_val;
   max_density = (max_density > coeffs->anion_lower_val)? max_density : coeffs->anion_lower_val;

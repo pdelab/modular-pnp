@@ -449,7 +449,8 @@ int main(int argc, char** argv)
       coeff_par.anion_valency,
       &potentialSolution,
       &mesh0,
-      entropy_tol
+      entropy_tol,
+      newtparam.max_numb_cells
     );
 
     if (num_refines == 0) {
