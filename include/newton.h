@@ -41,7 +41,7 @@ typedef struct {
     INT damp_it;
 
     //! maximal number of cells for the refinement
-    INT max_numb_cells;
+    INT max_cells;
 
 } newton_param; /**< Parameters for Newton Solver */
 

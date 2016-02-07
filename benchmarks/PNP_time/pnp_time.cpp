@@ -456,7 +456,7 @@ int main(int argc, char** argv)
         &potentialSolution,
         &mesh_adapt,
         entropy_tol,
-        newtparam.max_numb_cells
+        newtparam.max_cells
       );
 
       // free fasp solution

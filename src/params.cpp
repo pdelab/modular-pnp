@@ -35,7 +35,7 @@ SHORT newton_param_input_init (newton_param *inparam)
     inparam->tol = 1.0e-4;
     inparam->damp_factor = 1.0;
     inparam->damp_it = 5;
-    inparam->max_numb_cells = 5.0e+5;
+    inparam->max_cells = -1;
 
     return status;
 }
@@ -163,14 +163,14 @@ void newton_param_input (const char *filenm,
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
         }
 
-        else if (strcmp(buffer,"max_numb_cells")==0) {
+        else if (strcmp(buffer,"max_cells")==0) {
             val = fscanf(fp,"%s",buffer);
             if (val!=1 || strcmp(buffer,"=")!=0) {
                 status = ERROR_INPUT_PAR; break;
             }
             val = fscanf(fp,"%d",&ibuff);
             if (val!=1) { status = ERROR_INPUT_PAR; break; }
-            inparam->max_numb_cells = ibuff;
+            inparam->max_cells = ibuff;
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
         }
 
@@ -207,7 +207,7 @@ void print_newton_param (newton_param *inparam)
   printf("\tNewton tolerance:                   \t%e\n",inparam->tol);
   printf("\tNewton damping factor:              \t%f\n",inparam->damp_factor);
   printf("\tNewton maximum damping iteration:   \t%d\n",inparam->damp_it);
-  printf("\tNewton number of cells:             \t%d\n",inparam->max_numb_cells);
+  printf("\tNewton number of cells:             \t%d\n",inparam->max_cells);
   printf("\n");
 }
 

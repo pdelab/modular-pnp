@@ -450,7 +450,7 @@ int main(int argc, char** argv)
       &potentialSolution,
       &mesh0,
       entropy_tol,
-      newtparam.max_numb_cells
+      newtparam.max_cells
     );
 
     if (num_refines == 0) {
