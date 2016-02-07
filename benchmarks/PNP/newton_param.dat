@@ -2,6 +2,7 @@
 % Newton Parameters        %
 %--------------------------%
 
+max_cells = -1
 adapt_tol = 1E-7
 nonlin_tol = 1E-8
 nonlin_maxit = 15
