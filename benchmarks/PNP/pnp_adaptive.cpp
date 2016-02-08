@@ -17,7 +17,6 @@
 #include "newton.h"
 #include "newton_functs.h"
 #include "L2Error.h"
-#include "L2Error_3.h"
 extern "C"
 {
   #include "fasp.h"
@@ -177,11 +176,6 @@ int main(int argc, char** argv)
   double entropy_tol = newtparam.adapt_tol;
   unsigned int num_adapts = 0, max_adapts = 5;
   bool adaptive_convergence = false;
-
-
-
-
-
 
 
   // adaptivity loop
@@ -368,7 +362,7 @@ int main(int argc, char** argv)
       EigenMatrix_to_dCSRmat(&A_pnp,&A_fasp);
       A_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
       fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
-      
+
       // solve the linear system using FASP solver and verify success
       printf("\tsolve linear system using FASP solver...\n"); fflush(stdout);
       status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &solu_fasp, &itpar, &amgpar);
@@ -455,7 +449,8 @@ int main(int argc, char** argv)
       coeff_par.anion_valency,
       &potentialSolution,
       &mesh0,
-      entropy_tol
+      entropy_tol,
+      newtparam.max_cells
     );
 
     if (num_refines == 0) {
