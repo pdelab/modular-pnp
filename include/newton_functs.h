@@ -90,7 +90,6 @@ unsigned int check_electric_field (dolfin::Function *voltage,
                                 dolfin::Mesh *target_mesh,
                                 double entropy_tol,
                                 int Max_Numb_Cells);
->>>>>>> master
 
 #endif /* end if for __NEWTONFUNCTS_HEADER__ */
 
