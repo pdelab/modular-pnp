@@ -1,0 +1,9 @@
+1) construct JacobianPNP & JacobianStokes
+2) construct nonlinearResStokesWithPNP & nonlinearResStokesWithLinearPNP
+3) Solve JacobainPNP * dPNP = nonlinearResPNPwithLinearKinetic
+4) update nonlinearResStokesWithLinearPNP to include updates dCation, dAnion, dPhi
+5) solve JacobianStokes * dStokes = nonlinearResStokesWithLinearPNP
+6) update nonlinearResPNPwithKinetic to include updates dU
+7) update nonlinearResStokesWithLinearPNP to include updates ``dU`` and dPressure
+8) if || nonlinearResPNPwithKinetic || + ||  nonlinearResStokesWithPNP || > tol go to (3)
+9) update nonlinear residual and check nonlinear tolerance.  Then go to (1), if needed
