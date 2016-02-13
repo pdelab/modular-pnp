@@ -14,19 +14,15 @@
 #include "funcspace_to_vecspace.h"
 #include "fasp_to_fenics.h"
 #include "boundary_conditions.h"
-#include "pnp.h"
+#include "pnp_with_stokes.h"
+#include "stokes_with_pnp.h"
 #include "L2Error.h"
 #include "energy.h"
 #include "newton.h"
 #include "newton_functs.h"
 #include "spheres.h"
 #include <ctime>
-extern "C"
-{
-  #include "fasp.h"
-  #include "fasp_functs.h"
-  #define FASP_BSR ON /** use BSR format in fasp */
-}
+
 using namespace dolfin;
 // using namespace std;
 
@@ -49,26 +45,33 @@ double final_time = 10.0;
 
 double get_initial_residual (
   pnp_with_stokes::LinearForm* L,
+  stokes_with_pnp::LinearForm* Ls,
   const dolfin::DirichletBC* bc,
+  const dolfin::DirichletBC* bc_stokes,
   dolfin::Function* cation,
   dolfin::Function* anion,
-  dolfin::Function* potential.
-  dolfin::Function* velocity
-);
+  dolfin::Function* potential,
+  dolfin::Function* velocity,
+  dolfin::Function* pressure);
 
-double update_solution_pnp (
+double update_solution_pnp_stokes (
   dolfin::Function* iterate0,
   dolfin::Function* iterate1,
   dolfin::Function* iterate2,
+  dolfin::Function* iterate3,
+  dolfin::Function* iterate4,
   dolfin::Function* update0,
   dolfin::Function* update1,
   dolfin::Function* update2,
+  dolfin::Function* update3,
+  dolfin::Function* update4,
   double relative_residual,
   double initial_residual,
   pnp_with_stokes::LinearForm* L,
+  stokes_with_pnp::LinearForm* Ls,
   const dolfin::DirichletBC* bc,
-  newton_param* params
-);
+  const dolfin::DirichletBC* bc_stokes,
+  newton_param* params);
 
 // Sub domain for Periodic boundary condition
 class PeriodicBoundary : public SubDomain
@@ -162,6 +165,17 @@ int main(int argc, char** argv)
   fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
   INT status = FASP_SUCCESS;
 
+  // Setup FASP solver
+  printf("FASP solver parameters for stokes...\n"); fflush(stdout);
+  input_ns_param stokes_inpar;
+  itsolver_ns_param stokes_itpar;
+  AMG_ns_param  stokes_amgpar;
+  ILU_param stokes_ilupar;
+  Schwarz_param stokes_schpar;
+  char fasp_ns_params[] = "./benchmarks/battery/nsbcsr.dat";
+  fasp_ns_param_input(fasp_ns_params, &stokes_inpar);
+  fasp_ns_param_init(&stokes_inpar, &stokes_itpar, &stokes_amgpar, &stokes_ilupar, &stokes_schpar);
+
   // File
   std::ofstream ofs;
   ofs.open ("./benchmarks/battery/data.txt", std::ofstream::out);
@@ -173,6 +187,9 @@ int main(int argc, char** argv)
   File cationFile("./benchmarks/battery/output/cation.pvd");
   File anionFile("./benchmarks/battery/output/anion.pvd");
   File potentialFile("./benchmarks/battery/output/potential.pvd");
+  File velocityFile("./benchmarks/battery/output/velocity.pvd");
+  File pressureFile("./benchmarks/battery/output/pressure.pvd");
+
 
   // PeriodicBoundary periodic_boundary;
 
@@ -182,6 +199,10 @@ int main(int argc, char** argv)
   dolfin::Function initial_cation(initial_soln[0]);
   dolfin::Function initial_anion(initial_soln[1]);
   dolfin::Function initial_potential(initial_soln[2]);
+  pnp_with_stokes::FunctionSpace V_init_stokes(mesh_adapt /*,periodic_boundary*/);
+  dolfin::Function initial_soln_stokes(V_init_stokes);
+  dolfin::Function initial_velocity(initial_soln_stokes[0]);
+  dolfin::Function initial_pressure(initial_soln_stokes[1]);
 
   LogCharge_SPH Cation(
     lower_cation_val,
@@ -210,16 +231,22 @@ int main(int argc, char** argv)
   initial_cation.interpolate(Cation);
   initial_anion.interpolate(Anion);
   initial_potential.interpolate(Volt);
+  initial_velocity.interpolate(Constant(1.0,1.0,1.0));
+  initial_pressure.interpolate(Constant(1.0));
 
   // output solution after solved for timestep
   cationFile << initial_cation;
   anionFile << initial_anion;
   potentialFile << initial_potential;
+  velocityFile << initial_velocity;
+  pressureFile << initial_pressure;
 
   // initialize error
   double cationError = 0.0;
   double anionError = 0.0;
   double potentialError = 0.0;
+  double velocityError = 0.0;
+  double pressureError = 0.0;
   double energy = 0.0;
 
   // Time
@@ -231,9 +258,8 @@ int main(int argc, char** argv)
   dCSRmat A_fasp;
   dBSRmat A_fasp_bsr;
   dvector b_fasp, solu_fasp;
-  dCSRmat A_fasp_stokes;
-  dBSRmat A_fasp_bsr_stokes;
-  dvector b_fasp_stokes, solu_fasp_stokes;
+  dvector b_stokes_fasp, solu_stokes_fasp;
+  block_dCSRmat A_stokes_fasp;
 
   // Constants
   Constant eps(coeff_par.relative_permittivity);
@@ -246,7 +272,8 @@ int main(int argc, char** argv)
   Constant an_alpha(coeff_par.anion_diffusivity*time_step_size);
   Constant one(1.0);
   Constant zero(0.0);
-  Constant CU_init(0.1)
+  Constant zero_vec3(0.0, 0.0, 0.0);
+  Constant CU_init(0.1);
 
   SpheresSubDomain SPS;
 
@@ -305,14 +332,14 @@ int main(int argc, char** argv)
     dolfin::Function stokes_soln_adapt(VS_adapt);
     dolfin::Function velocity_adapt(stokes_soln_adapt[0]);
     dolfin::Function pressure_adapt(stokes_soln_adapt[1]);
-    velocity_adapt.interpolate(prev_velocity_adapt);
-    pressure_adapt.interpolate(prev_pressure_adapt);
+    velocity_adapt.interpolate(initial_velocity);
+    pressure_adapt.interpolate(initial_pressure);
 
     dolfin::Function dstokes_soln_adapt(VS_adapt);
     dolfin::Function dvelocity_adapt(dstokes_soln_adapt[0]);
     dolfin::Function dpressure_adapt(dstokes_soln_adapt[1]);
-    dvelocity_adapt.interpolate(zero);
-    dpressure_adapt.interpolate(zero);
+    dvelocity_adapt.interpolate(initial_velocity);
+    dpressure_adapt.interpolate(initial_pressure);
 
     // adaptivity loop
     printf("Adaptivity loop\n"); fflush(stdout);
@@ -338,18 +365,26 @@ int main(int argc, char** argv)
       a_pnp.dt = C_dt; L_pnp.dt = C_dt;
       L_pnp.g = one;
       L_pnp.ds = boundaries;
-      L_pnp.du = zero;
-      L_pnp.dCat = zero;
-      L_pnp.dAn = zero;
-      L_pnp.dPhi = zero;
+
 
       //Stokes
       stokes_with_pnp::FunctionSpace Vs(mesh /*,periodic_boundary*/);
       stokes_with_pnp::BilinearForm a_s(Vs,Vs);
       stokes_with_pnp::LinearForm L_s(Vs);
-      a_s.qp = qp; L_s.qp = qp;
-      a_s.qn = qn; L_s.qn = qn;
-      a_s.mu = one; L_mu.dt = one;
+      L_s.qp = qp; L_s.qn = qn;
+      a_s.mu = one; L_s.mu = one;
+
+
+      // Updates
+      L_pnp.du = zero_vec3;
+      L_pnp.dCat = zero;
+      L_pnp.dAn = zero;
+      L_pnp.dPhi = zero;
+      L_s.du      = zero_vec3;
+      L_s.dPress  = zero;
+      L_s.dPhi    = zero;
+      L_s.dCat    = zero;
+      L_s.dAn     = zero;
 
 
       // Interpolate previous solutions analytic expressions
@@ -389,9 +424,9 @@ int main(int argc, char** argv)
 
       // Set Dirichlet boundaries
       printf("\tboundary conditions...\n"); fflush(stdout);
-      Constant zero_vec(0.0, 0.0, 0.0);
+      Constant zero_vec3(0.0, 0.0, 0.0);
       SymmBoundaries boundary(dirichlet_coord, -Lx / 2.0, Lx / 2.0);
-      dolfin::DirichletBC bc(V, zero_vec, boundary);
+      dolfin::DirichletBC bc(V, zero_vec3, boundary);
       printf("\t\tdone\n"); fflush(stdout);
       // map dofs
       ivector cation_dofs;
@@ -402,8 +437,8 @@ int main(int argc, char** argv)
       get_dofs(&solutionFunction, &potential_dofs, 2);
 
       //Stokes
-      onstant zero_vec2(0.0, 0.0);
-      dolfin::DirichletBC bc_stokes(Vs, zero_vec2, boundary);
+      dolfin::SubSpace Vs1(Vs,0);
+      dolfin::DirichletBC bc_stokes(Vs1, zero_vec3, boundary);
       ivector velocity_dofs;
       ivector pressure_dofs;
       get_dofs(&solutionStokesFunction, &velocity_dofs, 0);
@@ -445,11 +480,14 @@ int main(int argc, char** argv)
       printf("\tupdate initial residual...\n"); fflush(stdout);
       initial_residual = get_initial_residual(
         &L_pnp,
+        &L_s,
         &bc,
+        &bc_stokes,
         &previous_cation,
         &previous_anion,
         &previous_potential,
-        &previous_velocity
+        &previous_velocity,
+        &previous_pressure
       );
 
       printf("\tcompute relative residual...\n"); fflush(stdout);
@@ -489,10 +527,7 @@ int main(int argc, char** argv)
         a_pnp.uu = VelocitySolution;
         assemble(A_pnp, a_pnp);
 
-        a_stokes.cation = cationSolution;
-        a_stokes.anion= anionSolution;
-        a_stokes.phi = potentialSolution;
-        assemble(A_stokes, a_stokes);
+        assemble(A_stokes, a_s);
 
         // EAFE expressions
         if (eafe_switch) {
@@ -529,9 +564,47 @@ int main(int argc, char** argv)
         EigenVector_to_dvector(&b_pnp,&b_fasp);
         EigenMatrix_to_dCSRmat(&A_pnp,&A_fasp);
         A_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
-        fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
-        status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &solu_fasp, &itpar, &amgpar);
-        // status = fasp_solver_dcsr_krylov(&A_fasp, &b_fasp, &solu_fasp, &itpar);
+
+        copy_EigenMatrix_to_block_dCSRmat(&A_stokes, &A_stokes_fasp, &velocity_dofs, &pressure_dofs);
+        copy_EigenVector_to_block_dvector(&b_stokes, &b_stokes_fasp, &velocity_dofs, &pressure_dofs);
+
+
+        double relative_residual_tol = 1E-6;
+        unsigned int max_bgs_it = 10;
+        status  = electrokinetic_block_guass_seidel (
+          &A_fasp_bsr,
+          &A_stokes_fasp,
+          &L_pnp,
+          &L_s,
+          &bc,
+          &bc_stokes,
+
+          &solutionUpdate,
+          &StokessolutionUpdate,
+
+          relative_residual_tol,
+          max_bgs_it,
+
+          &itpar,
+          &amgpar,
+          &stokes_itpar,
+          &stokes_amgpar,
+          &stokes_ilupar,
+          &stokes_schpar
+
+        );
+
+        // Updates
+        L_pnp.du = zero_vec3;
+        L_pnp.dCat = zero;
+        L_pnp.dAn = zero;
+        L_pnp.dPhi = zero;
+        L_s.du      = zero_vec3;
+        L_s.dPress  = zero;
+        L_s.dPhi    = zero;
+        L_s.dCat    = zero;
+        L_s.dAn     = zero;
+
         if (status < 0)
           printf("\n### WARNING: Solver failed! Exit status = %d.\n\n", status);
         else
@@ -539,48 +612,38 @@ int main(int argc, char** argv)
 
         // map solu_fasp into solutionUpdate
         printf("\tconvert FASP solution to function...\n"); fflush(stdout);
-        copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &cation_dofs, &cation_dofs);
-        copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &anion_dofs, &anion_dofs);
-        copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &potential_dofs, &potential_dofs);
-
-        // Stokes
-        EigenVector_to_dvector(&b_stokes,&b_stokes);
-        EigenMatrix_to_dCSRmat(&A_fasp_stokes,&A_fasp_stokes);
-        A_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp_stokes, 2);
-        fasp_dvec_set(b_fasp_stokes.row, &solu_fasp_stokes, 0.0);
-        status = fasp_solver_bdcsr_krylov_navier_stokes_with_pressure_mass(&A_fasp_bsr_stokes, &b_fasp_stoke, &solu_fasp_stoke, ????? );
-        if (status < 0)
-          printf("\n### WARNING: Stokes Solver failed! Exit status = %d.\n\n", status);
-        else
-          printf("\tsolved stokes linear system successfully...\n");
-
-        // map solu_fasp into solutionUpdate
-        printf("\tconvert FASP stokes solution to function...\n"); fflush(stdout);
-        copy_dvector_to_vector_function(&solu_fasp_stokes, &StokessolutionUpdate, &velocity_dofs, &velocity_dofs);
-        copy_dvector_to_vector_function(&solu_fasp_stokes,, &StokessolutionUpdate, &pressure_dofs, &pressure_dofs);
+        // copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &cation_dofs, &cation_dofs);
+        // copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &anion_dofs, &anion_dofs);
+        // copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &potential_dofs, &potential_dofs);
+        // copy_dvector_to_vector_function(&solu_stokes_fasp, &StokessolutionUpdate, &velocity_dofs, &velocity_dofs);
+        // copy_dvector_to_vector_function(&solu_stokes_fasp,, &StokessolutionUpdate, &pressure_dofs, &pressure_dofs);
 
         // update solution and reset solutionUpdate
         printf("\tupdate solution...\n"); fflush(stdout);
-        relative_residual = update_solution_pnp (
+        relative_residual = update_solution_pnp_stokes (
           &cationSolution,
           &anionSolution,
           &potentialSolution,
+          &VelocitySolution,
+          &PressureSolution,
           &(solutionUpdate[0]),
           &(solutionUpdate[1]),
           &(solutionUpdate[2]),
+          &(StokessolutionUpdate[0]),
+          &(StokessolutionUpdate[1]),
           relative_residual,
           initial_residual,
           &L_pnp,
+          &L_s,
           &bc,
-          &newtparam
-        );
+          &bc_stokes,
+          &newtparam);
         if (relative_residual < 0.0) {
           printf("Newton backtracking failed!\n");
           printf("\tresidual has not decreased after damping %d times\n", newtparam.damp_it);
           printf("\tthe relative residual is %e\n", relative_residual);
           relative_residual *= -1.0;
         }
-        update_solution_stokes ()
 
         // update nonlinear residual
         L_pnp.CatCat = cationSolution;
@@ -588,13 +651,24 @@ int main(int argc, char** argv)
         L_pnp.EsEs = potentialSolution;
         L_pnp.CatCat_t0 = previous_cation;
         L_pnp.AnAn_t0 = previous_anion;
+        L_pnp.uu = VelocitySolution;
         assemble(b_pnp, L_pnp);
         bc.apply(b_pnp);
 
+        L_s.cation = cationSolution;
+        L_s.anion = anionSolution;
+        L_s.phi = potentialSolution;
+        L_s.uu = VelocitySolution;
+        L_s.pp = PressureSolution;
+        assemble(b_stokes, L_s);
+        bc_stokes.apply(b_stokes);
+
         // output solution after solved for Newton update
-        cationFile << cationSolution;
-        anionFile << anionSolution;
-        potentialFile << potentialSolution;
+        // cationFile << cationSolution;
+        // anionFile << anionSolution;
+        // potentialFile << potentialSolution;
+        // velocityFile << VelocitySolution;
+        // pressureFile << PresureSolution;
 
         fasp_dbsr_free(&A_fasp_bsr);
 
@@ -663,6 +737,9 @@ int main(int argc, char** argv)
           initial_cation = adapt(cationSolution, mesh_ptr);
           initial_anion = adapt(anionSolution, mesh_ptr);
           initial_potential = adapt(potentialSolution, mesh_ptr);
+
+          initial_velocity = adapt(VelocitySolution, mesh_ptr);
+          initial_potential = adapt(PressureSolution, mesh_ptr);
           // sub_domains_adapt= adapt(sub_domains, mesh_ptr);
 
           // to ensure the building_box_tree is correctly indexed
@@ -675,6 +752,8 @@ int main(int argc, char** argv)
           cationFile << initial_cation;
           anionFile << initial_anion;
           potentialFile << initial_potential;
+          velocityFile << initial_velocity;
+          pressureFile << initial_pressure;
 
         break;
       }
@@ -711,37 +790,57 @@ int main(int argc, char** argv)
   return 0;
 }
 
-double update_solution_pnp (
+double update_solution_pnp_stokes (
   dolfin::Function* iterate0,
   dolfin::Function* iterate1,
   dolfin::Function* iterate2,
+  dolfin::Function* iterate3,
+  dolfin::Function* iterate4,
   dolfin::Function* update0,
   dolfin::Function* update1,
   dolfin::Function* update2,
+  dolfin::Function* update3,
+  dolfin::Function* update4,
   double relative_residual,
   double initial_residual,
   pnp_with_stokes::LinearForm* L,
+  stokes_with_pnp::LinearForm* Ls,
   const dolfin::DirichletBC* bc,
-  newton_param* params )
+  const dolfin::DirichletBC* bc_stokes,
+  newton_param* params)
 {
   // compute residual
   dolfin::Function _iterate0(*iterate0);
   dolfin::Function _iterate1(*iterate1);
   dolfin::Function _iterate2(*iterate2);
+  dolfin::Function _iterate3(*iterate3);
+  dolfin::Function _iterate4(*iterate4);
   dolfin::Function _update0(*update0);
   dolfin::Function _update1(*update1);
   dolfin::Function _update2(*update2);
+  dolfin::Function _update3(*update3);
+  dolfin::Function _update4(*update4);
   update_solution(&_iterate0, &_update0);
   update_solution(&_iterate1, &_update1);
   update_solution(&_iterate2, &_update2);
+  update_solution(&_iterate3, &_update3);
+  update_solution(&_iterate4, &_update4);
   dolfin::Constant C_dt(time_step_size);
   L->CatCat = _iterate0;
   L->AnAn = _iterate1;
   L->EsEs = _iterate2;
-  EigenVector b;
+  L->uu = _iterate3;
+  Ls->cation = _iterate0;
+  Ls->anion = _iterate1;
+  Ls->phi = _iterate2;
+  Ls->uu = _iterate3;
+  Ls->pp= _iterate4;
+  EigenVector b, bs;
   assemble(b, *L);
   bc->apply(b);
-  double new_relative_residual = b.norm("l2") / initial_residual;
+  assemble(bs, *Ls);
+  bc_stokes->apply(bs);
+  double new_relative_residual = (b.norm("l2") + bs.norm("l2") )/ initial_residual;
 
   // backtrack loop
   unsigned int damp_iters = 0;
@@ -754,18 +853,32 @@ double update_solution_pnp (
     *(_iterate0.vector()) = *(iterate0->vector());
     *(_iterate1.vector()) = *(iterate1->vector());
     *(_iterate2.vector()) = *(iterate2->vector());
+    *(_iterate3.vector()) = *(iterate3->vector());
+    *(_iterate4.vector()) = *(iterate4->vector());
     *(_update0.vector()) *= params->damp_factor;
     *(_update1.vector()) *= params->damp_factor;
     *(_update2.vector()) *= params->damp_factor;
+    *(_update3.vector()) *= params->damp_factor;
+    *(_update4.vector()) *= params->damp_factor;
     update_solution(&_iterate0, &_update0);
     update_solution(&_iterate1, &_update1);
     update_solution(&_iterate2, &_update2);
+    update_solution(&_iterate3, &_update3);
+    update_solution(&_iterate4, &_update4);
     L->CatCat = _iterate0;
     L->AnAn = _iterate1;
     L->EsEs = _iterate2;
+    L->uu = _iterate3;
+    Ls->cation = _iterate0;
+    Ls->anion = _iterate1;
+    Ls->phi = _iterate2;
+    Ls->uu = _iterate3;
+    Ls->pp= _iterate4;
     assemble(b, *L);
     bc->apply(b);
-    new_relative_residual = b.norm("l2") / initial_residual;
+    assemble(bs, *Ls);
+    bc_stokes->apply(bs);
+    double new_relative_residual = (b.norm("l2") + bs.norm("l2") )/ initial_residual;
     printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
   }
 
@@ -777,16 +890,21 @@ double update_solution_pnp (
   *(iterate0->vector()) = *(_iterate0.vector());
   *(iterate1->vector()) = *(_iterate1.vector());
   *(iterate2->vector()) = *(_iterate2.vector());
+  *(iterate3->vector()) = *(_iterate3.vector());
+  *(iterate4->vector()) = *(_iterate4.vector());
   return new_relative_residual;
 }
 
 double get_initial_residual (
   pnp_with_stokes::LinearForm* L,
+  stokes_with_pnp::LinearForm* Ls,
   const dolfin::DirichletBC* bc,
+  const dolfin::DirichletBC* bc_stokes,
   dolfin::Function* cation,
   dolfin::Function* anion,
   dolfin::Function* potential,
-  dolfin::Function* velocity)
+  dolfin::Function* velocity,
+  dolfin::Function* pressure)
 {
   pnp_with_stokes::FunctionSpace V( *(cation->function_space()->mesh()) );
   dolfin::Function adapt_func(V);
@@ -800,17 +918,27 @@ double get_initial_residual (
   stokes_with_pnp::FunctionSpace Vs( *(velocity->function_space()->mesh()) );
   dolfin::Function adapt_func_stokes(Vs);
   dolfin::Function adapt_velocity(adapt_func[0]);
+  dolfin::Function adapt_pressure(adapt_func[1]);
   adapt_velocity.interpolate(*velocity);
+  adapt_pressure.interpolate(*pressure);
 
   L->CatCat = adapt_cation;
   L->AnAn = adapt_anion;
   L->EsEs = adapt_potential;
   L->CatCat_t0 = adapt_cation;
   L->AnAn_t0 = adapt_anion;
-  L->uu = adapt_stokes;
+  L->uu = adapt_velocity;
 
-  EigenVector b;
+  Ls->cation = adapt_cation;
+  Ls->anion = adapt_anion;
+  Ls->phi = adapt_potential;
+  Ls->uu = adapt_velocity;
+  Ls->pp = adapt_pressure;
+
+  EigenVector b, bs;
   assemble(b, *L);
   bc->apply(b);
-  return b.norm("l2");
+  assemble(bs, *Ls);
+  bc_stokes->apply(bs);
+  return b.norm("l2")+bs.norm("l2");
 }
