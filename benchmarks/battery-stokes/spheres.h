@@ -166,6 +166,25 @@ private:
   int _bc_coord;
 };
 
+class FluidVelocity : public dolfin::Expression
+{
+public:
+    FluidVelocity(double out_flow, double in_flow, double bc_dist, int bc_dir): Expression(3),outflow(out_flow),inflow(in_flow),bc_distance(bc_dist),bc_direction(bc_dir) {}
+    void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const
+    {
+        values[0] = 0.0;
+        values[1] = 0.0;
+        values[2] = 0.0;
+        if ( std::fabs(x[0]) > 0.5 ) {
+            values[bc_direction]  = outflow*(x[bc_direction]+bc_distance/2.0)/(bc_distance);
+            values[bc_direction] -=  inflow*(x[bc_direction]-bc_distance/2.0)/(bc_distance);
+        }
+    }
+private:
+    double outflow, inflow, bc_distance;
+    int bc_direction;
+};
+
 
 INT electrokinetic_block_guass_seidel (
   dBSRmat* A_pnp,
@@ -195,34 +214,34 @@ INT electrokinetic_block_guass_seidel (
   // initialize guess is zero
   dolfin::Constant zero(0.0);
   dolfin::Constant zero_vector(0.0, 0.0, 0.0);
-  // dolfin::Function dCation((*dPNP)[0]);
-  // dolfin::Function dAnion((*dPNP)[1]);
-  // dolfin::Function dPhi((*dPNP)[2]);
-  // dolfin::Function dU((*dStokes)[0]);
-  // dolfin::Function dPressure((*dStokes)[1]);
-  (*dPNP)[0].interpolate(zero);
-  (*dPNP)[1].interpolate(zero);
-  (*dPNP)[2].interpolate(zero);
-  (*dStokes)[0].interpolate(zero_vector);
-  (*dStokes)[1].interpolate(zero);
+  dolfin::Function dCation((*dPNP)[0]);
+  dolfin::Function dAnion((*dPNP)[1]);
+  dolfin::Function dPhi((*dPNP)[2]);
+  dolfin::Function dU((*dStokes)[0]);
+  dolfin::Function dPressure((*dStokes)[1]);
+  // (*dPNP)[0].interpolate(zero);
+  // (*dPNP)[1].interpolate(zero);
+  // (*dPNP)[2].interpolate(zero);
+  // (*dStokes)[0].interpolate(zero_vector);
+  // (*dStokes)[1].interpolate(zero);
 
   // update pnp_rhs_form
-  pnp_rhs_form->dCat = (*dPNP)[0];
-  pnp_rhs_form->dAn = (*dPNP)[1];
-  pnp_rhs_form->dPhi = (*dPNP)[2];
-  pnp_rhs_form->du = (*dStokes)[0];
+  pnp_rhs_form->dCat = dCation;
+  pnp_rhs_form->dAn = dAnion;
+  pnp_rhs_form->dPhi = dPhi;
+  pnp_rhs_form->du = dU;
   dolfin::EigenVector pnp_rhs;
-  dolfin::assemble(pnp_rhs, *pnp_rhs_form);
+  assemble(pnp_rhs, *pnp_rhs_form);
   pnp_bc->apply(pnp_rhs);
 
   // update stokes_rhs_form
-  stokes_rhs_form->dCat = (*dPNP)[0];
-  stokes_rhs_form->dAn = (*dPNP)[1];
-  stokes_rhs_form->dPhi = (*dPNP)[2];
-  stokes_rhs_form->du = (*dStokes)[0];
-  stokes_rhs_form->dPress = (*dStokes)[1];
+  stokes_rhs_form->dCat = dCation;
+  stokes_rhs_form->dAn = dAnion;
+  stokes_rhs_form->dPhi =  dPhi;
+  stokes_rhs_form->du = dU;
+  stokes_rhs_form->dPress = dPressure;
   dolfin::EigenVector stokes_rhs;
-  dolfin::assemble(stokes_rhs, *stokes_rhs_form);
+  assemble(stokes_rhs, *stokes_rhs_form);
   stokes_bc->apply(stokes_rhs);
 
   // compute initial residual
@@ -234,22 +253,21 @@ INT electrokinetic_block_guass_seidel (
   // initialize FASP arrays
   dvector pnp_rhs_fasp, pnp_soln_fasp;
   dvector stokes_rhs_fasp, stokes_soln_fasp;
-  fasp_dvec_alloc(pnp_rhs.size(), &pnp_soln_fasp);
-  fasp_dvec_alloc(stokes_rhs.size(), &stokes_soln_fasp);
-  fasp_dvec_set(pnp_rhs_fasp.row, &pnp_soln_fasp, 0.0);
-  fasp_dvec_set(stokes_rhs_fasp.row, &stokes_soln_fasp, 0.0);
   std::vector<double> pnp_value_vector;
   std::vector<double> stokes_value_vector;
-  pnp_value_vector.reserve(pnp_rhs_fasp.row);
-  stokes_value_vector.reserve(stokes_rhs_fasp.row);
+  pnp_value_vector.reserve(pnp_rhs.size());
+  stokes_value_vector.reserve(stokes_rhs.size());
 
 
   // Block Gauss-Seidel loop
   INT pnp_status = FASP_SUCCESS;
   INT stokes_status = FASP_SUCCESS;
   unsigned int index, iteration_count = 0;
-  while (iteration_count++ < max_bgs_it && relative_residual < relative_residual_tol) {
+  // printf("%d %d %f %f\n",iteration_count,max_bgs_it,relative_residual,relative_residual_tol);
+  while ( (iteration_count < max_bgs_it) && (relative_residual > relative_residual_tol) ){
 
+    fasp_dvec_alloc(pnp_rhs.size(), &pnp_soln_fasp);
+    fasp_dvec_set(pnp_rhs_fasp.row, &pnp_soln_fasp, 0.0);
     // solve for pnp update
     EigenVector_to_dvector(&pnp_rhs, &pnp_rhs_fasp);
     pnp_status = fasp_solver_dbsr_krylov_amg (
@@ -259,6 +277,7 @@ INT electrokinetic_block_guass_seidel (
       pnp_itpar,
       pnp_amgpar
     );
+    // printf("pnp status %d",pnp_status);
     if (pnp_status < 0)
       printf("\n### WARNING: PNP solver failed! Exit status = %d.\n\n", pnp_status);
     else
@@ -271,19 +290,26 @@ INT electrokinetic_block_guass_seidel (
     (*dPNP).vector()->set_local(pnp_value_vector);
 
     // update pnp_rhs_form & stokes_rhs_form with pnp update
-    pnp_rhs_form->dCat = (*dPNP)[0];
-    pnp_rhs_form->dAn = (*dPNP)[1];
-    pnp_rhs_form->dPhi = (*dPNP)[2];
-    stokes_rhs_form->dCat = (*dPNP)[0];
-    stokes_rhs_form->dAn = (*dPNP)[1];
-    stokes_rhs_form->dPhi = (*dPNP)[2];
+    dolfin::Function dCation((*dPNP)[0]);
+    dolfin::Function dAnion((*dPNP)[1]);
+    dolfin::Function dPhi((*dPNP)[2]);
+    pnp_rhs_form->dCat = dCation;
+    pnp_rhs_form->dAn = dAnion;
+    pnp_rhs_form->dPhi = dPhi;
+    stokes_rhs_form->dCat = dCation;
+    stokes_rhs_form->dAn = dAnion;
+    stokes_rhs_form->dPhi = dPhi;
     assemble(stokes_rhs, *stokes_rhs_form);
     stokes_bc->apply(stokes_rhs);
 
 
 
     // solve for stokes update and convert to functions
-    EigenVector_to_dvector(&stokes_rhs, &stokes_rhs_fasp);
+    // EigenVector_to_dvector(&stokes_rhs, &stokes_rhs_fasp);
+    copy_EigenVector_to_block_dvector(&stokes_rhs, &stokes_rhs_fasp, dof_u, dof_p);
+    fasp_dvec_alloc(stokes_rhs.size(), &stokes_soln_fasp);
+    fasp_dvec_set(stokes_rhs_fasp.row, &stokes_soln_fasp, 0.0);
+    printf("--------------------------\n");
     stokes_status = fasp_solver_bdcsr_krylov_navier_stokes (
       A_stokes,
       &stokes_rhs_fasp,
@@ -308,9 +334,13 @@ INT electrokinetic_block_guass_seidel (
     (*dStokes).vector()->set_local(stokes_value_vector);
 
     // update pnp_rhs_form & stokes_rhs_form with stokes update
+    dolfin::Function dU((*dStokes)[0]);
+    dolfin::Function dPressure((*dStokes)[1]);
+
     pnp_rhs_form->du = (*dStokes)[0];
     stokes_rhs_form->du = (*dStokes)[0];
     stokes_rhs_form->dPress = (*dStokes)[1];
+
     assemble(pnp_rhs, *pnp_rhs_form);
     pnp_bc->apply(pnp_rhs);
     assemble(stokes_rhs, *stokes_rhs_form);
@@ -318,11 +348,13 @@ INT electrokinetic_block_guass_seidel (
 
 		fasp_dvec_free(&pnp_soln_fasp);
 		fasp_dvec_free(&stokes_soln_fasp);
+    fasp_dvec_free(&stokes_rhs_fasp);
 
     // update relative residual
     pnp_res = pnp_rhs.norm("l2");
     stokes_res = stokes_rhs.norm("l2");
     relative_residual = (pnp_res * pnp_res + stokes_res * stokes_res) / initial_residual;
+    iteration_count+=1;
   }
 
   return FASP_SUCCESS;
