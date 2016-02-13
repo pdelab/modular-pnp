@@ -177,6 +177,8 @@ INT electrokinetic_block_guass_seidel (
 
   dolfin::Function* dPNP,
   dolfin::Function* dStokes,
+  ivector* dof_u,
+  ivector* dof_p,
 
   double relative_residual_tol,
   unsigned int max_bgs_it,
@@ -297,8 +299,11 @@ INT electrokinetic_block_guass_seidel (
       printf("\tsolved Stokes system successfully....\n");
 
     // convert stokes update to functions
-    for (index = 0; index < stokes_soln_fasp.row; index++) {
-      stokes_value_vector[index] = stokes_soln_fasp.val[index];
+    for (index = 0; index < dof_u->row; index++) {
+      stokes_value_vector[dof_u->val[index]] = stokes_soln_fasp.val[index];
+    }
+    for (index = 0; index < dof_p->row; index++) {
+      stokes_value_vector[dof_p->val[index]] = stokes_soln_fasp.val[dof_u->row+index];
     }
     (*dStokes).vector()->set_local(stokes_value_vector);
 

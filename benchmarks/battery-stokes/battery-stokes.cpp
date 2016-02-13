@@ -121,20 +121,20 @@ int main(int argc, char** argv)
   printf("Initialize the problem\n"); fflush(stdout);
 
   // Deleting the folders:
-  boost::filesystem::remove_all("./benchmarks/battery/output");
-  boost::filesystem::remove_all("./benchmarks/battery/meshOut");
+  boost::filesystem::remove_all("./benchmarks/battery-stokes/output");
+  boost::filesystem::remove_all("./benchmarks/battery-stokes/meshOut");
 
   // build mesh
   printf("mesh...\n"); fflush(stdout);
-  dolfin::Mesh mesh_adapt("./benchmarks/battery/mesh.xml.gz");
-  // MeshFunction<std::size_t> sub_domains_adapt(mesh_adapt, "./benchmarks/battery/boundary_parts.xml.gz");
+  dolfin::Mesh mesh_adapt("./benchmarks/battery-stokes/mesh.xml.gz");
+  // MeshFunction<std::size_t> sub_domains_adapt(mesh_adapt, "./benchmarks/battery-stokes/boundary_parts.xml.gz");
   // dolfin::MeshFunction<std::size_t> subdomains_init;
   // dolfin::MeshFunction<std::size_t> surfaces_init;
-  dolfin::File meshOut("./benchmarks/battery/meshOut/mesh.pvd");
+  dolfin::File meshOut("./benchmarks/battery-stokes/meshOut/mesh.pvd");
   // domain_build(&domain_par, &mesh_adapt, &subdomains_init, &surfaces_init);
 
 
-  // dolfin::File BoundaryFile("./benchmarks/battery/meshOut/boundary.pvd");
+  // dolfin::File BoundaryFile("./benchmarks/battery-stokes/meshOut/boundary.pvd");
   // BoundaryFile << sub_domains_adapt;
   meshOut << mesh_adapt;
   // return 0;
@@ -142,14 +142,14 @@ int main(int argc, char** argv)
   // read coefficients and boundary values
   printf("coefficients...\n"); fflush(stdout);
   coeff_param coeff_par;
-  char coeff_param_filename[] = "./benchmarks/battery/coeff_params.dat";
+  char coeff_param_filename[] = "./benchmarks/battery-stokes/coeff_params.dat";
   coeff_param_input(coeff_param_filename, &coeff_par);
   print_coeff_param(&coeff_par);
 
   // initialize Newton solver parameters
   printf("Newton solver parameters...\n"); fflush(stdout);
   newton_param newtparam;
-  char newton_param_file[] = "./benchmarks/battery/newton_param.dat";
+  char newton_param_file[] = "./benchmarks/battery-stokes/newton_param.dat";
   newton_param_input (newton_param_file, &newtparam);
   print_newton_param(&newtparam);
   double initial_residual, relative_residual = 1.0;
@@ -160,7 +160,7 @@ int main(int argc, char** argv)
   itsolver_param itpar;
   AMG_param amgpar;
   ILU_param ilupar;
-  char fasp_params[] = "./benchmarks/battery/bsr.dat";
+  char fasp_params[] = "./benchmarks/battery-stokes/bsr.dat";
   fasp_param_input(fasp_params, &inpar);
   fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
   INT status = FASP_SUCCESS;
@@ -172,23 +172,23 @@ int main(int argc, char** argv)
   AMG_ns_param  stokes_amgpar;
   ILU_param stokes_ilupar;
   Schwarz_param stokes_schpar;
-  char fasp_ns_params[] = "./benchmarks/battery/nsbcsr.dat";
+  char fasp_ns_params[] = "./benchmarks/battery-stokes/nsbcsr.dat";
   fasp_ns_param_input(fasp_ns_params, &stokes_inpar);
   fasp_ns_param_init(&stokes_inpar, &stokes_itpar, &stokes_amgpar, &stokes_ilupar, &stokes_schpar);
 
   // File
   std::ofstream ofs;
-  ofs.open ("./benchmarks/battery/data.txt", std::ofstream::out);
+  ofs.open ("./benchmarks/battery-stokes/data.txt", std::ofstream::out);
   ofs << "starting mesh size =" << mesh_adapt.num_cells() << "\n";
   ofs << "t" << "\t" << "NewtonIteration" << "\t" << "RelativeResidual" << "\t" << "Cation" << "\t" << "Anion" << "\t" << "Potential" << "\t" << "Energy" << "\t"<< "TimeElaspsed" << "\t" << "MeshSize" << "\n";
   ofs.close();
 
   // open files for outputting solutions
-  File cationFile("./benchmarks/battery/output/cation.pvd");
-  File anionFile("./benchmarks/battery/output/anion.pvd");
-  File potentialFile("./benchmarks/battery/output/potential.pvd");
-  File velocityFile("./benchmarks/battery/output/velocity.pvd");
-  File pressureFile("./benchmarks/battery/output/pressure.pvd");
+  File cationFile("./benchmarks/battery-stokes/output/cation.pvd");
+  File anionFile("./benchmarks/battery-stokes/output/anion.pvd");
+  File potentialFile("./benchmarks/battery-stokes/output/potential.pvd");
+  File velocityFile("./benchmarks/battery-stokes/output/velocity.pvd");
+  File pressureFile("./benchmarks/battery-stokes/output/pressure.pvd");
 
 
   // PeriodicBoundary periodic_boundary;
@@ -231,8 +231,10 @@ int main(int argc, char** argv)
   initial_cation.interpolate(Cation);
   initial_anion.interpolate(Anion);
   initial_potential.interpolate(Volt);
-  initial_velocity.interpolate(Constant(1.0,1.0,1.0));
-  initial_pressure.interpolate(Constant(1.0));
+  Constant one3(1.0,1.0,1.0);
+  Constant one1(1.0);
+  initial_velocity.interpolate(one3);
+  initial_pressure.interpolate(one1);
 
   // output solution after solved for timestep
   cationFile << initial_cation;
@@ -581,6 +583,8 @@ int main(int argc, char** argv)
 
           &solutionUpdate,
           &StokessolutionUpdate,
+          &velocity_dofs,
+          &pressure_dofs,
 
           relative_residual_tol,
           max_bgs_it,
@@ -727,7 +731,7 @@ int main(int argc, char** argv)
           printf("***********************************************\n");
           end = clock();
 
-          ofs.open("./benchmarks/battery/data.txt", std::ofstream::out | std::ofstream::app);
+          ofs.open("./benchmarks/battery-stokes/data.txt", std::ofstream::out | std::ofstream::app);
           timeElaspsed = double(end - begin) / CLOCKS_PER_SEC;
           ofs << t << "\t" << newton_iteration << "\t" << relative_residual << "\t" << cationError << "\t" << anionError << "\t" << potentialError << "\t" << energy << "\t"<< timeElaspsed << "\t" << mesh.num_cells() << "\n";
           ofs.close();
