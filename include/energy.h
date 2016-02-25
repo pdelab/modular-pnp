@@ -21,8 +21,8 @@
 //   restrict_keyword:               ''
 //   split:                          False
 
-#ifndef __L2ERROR_H
-#define __L2ERROR_H
+#ifndef __ENERGY_H
+#define __ENERGY_H
 
 #include <cmath>
 #include <stdexcept>
@@ -31,18 +31,18 @@
 
 /// This class defines the interface for a finite element.
 
-class l2error_finite_element_0: public ufc::finite_element
+class energy_finite_element_0: public ufc::finite_element
 {
 public:
 
   /// Constructor
-  l2error_finite_element_0() : ufc::finite_element()
+  energy_finite_element_0() : ufc::finite_element()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~l2error_finite_element_0()
+  virtual ~energy_finite_element_0()
   {
     // Do nothing
   }
@@ -1249,7 +1249,7 @@ public:
   /// Create a new class instance
   virtual ufc::finite_element* create() const
   {
-    return new l2error_finite_element_0();
+    return new energy_finite_element_0();
   }
 
 };
@@ -1257,18 +1257,18 @@ public:
 /// This class defines the interface for a local-to-global mapping of
 /// degrees of freedom (dofs).
 
-class l2error_dofmap_0: public ufc::dofmap
+class energy_dofmap_0: public ufc::dofmap
 {
 public:
 
   /// Constructor
-  l2error_dofmap_0() : ufc::dofmap()
+  energy_dofmap_0() : ufc::dofmap()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~l2error_dofmap_0()
+  virtual ~energy_dofmap_0()
   {
     // Do nothing
   }
@@ -1515,7 +1515,7 @@ public:
   /// Create a new class instance
   virtual ufc::dofmap* create() const
   {
-    return new l2error_dofmap_0();
+    return new energy_dofmap_0();
   }
 
 };
@@ -1524,18 +1524,18 @@ public:
 /// tensor corresponding to the local contribution to a form from
 /// the integral over a cell.
 
-class l2error_cell_integral_0_otherwise: public ufc::cell_integral
+class energy_cell_integral_0_otherwise: public ufc::cell_integral
 {
 public:
 
   /// Constructor
-  l2error_cell_integral_0_otherwise() : ufc::cell_integral()
+  energy_cell_integral_0_otherwise() : ufc::cell_integral()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~l2error_cell_integral_0_otherwise()
+  virtual ~energy_cell_integral_0_otherwise()
   {
     // Do nothing
   }
@@ -1543,7 +1543,7 @@ public:
   /// Tabulate which form coefficients are used by this integral
   virtual const std::vector<bool> & enabled_coefficients() const
   {
-    static const std::vector<bool> enabled({true});
+    static const std::vector<bool> enabled({true, true, true, true});
     return enabled;
   }
 
@@ -1553,11 +1553,6 @@ public:
                                const double*  vertex_coordinates,
                                int cell_orientation) const
   {
-    // Number of operations (multiply-add pairs) for Jacobian data:      3
-    // Number of operations (multiply-add pairs) for geometry tensor:    24
-    // Number of operations (multiply-add pairs) for tensor contraction: 15
-    // Total number of operations (multiply-add pairs):                  42
-    
     // Compute Jacobian
     double J[9];
     compute_jacobian_tetrahedron_3d(J, vertex_coordinates);
@@ -1570,26 +1565,111 @@ public:
     // Set scale factor
     const double det = std::abs(detJ);
     
-    // Compute geometry tensor
-    const double G0_0_0 = det*w[0][0]*w[0][0]*(1.0);
-    const double G0_0_1 = det*w[0][0]*w[0][1]*(1.0);
-    const double G0_0_2 = det*w[0][0]*w[0][2]*(1.0);
-    const double G0_0_3 = det*w[0][0]*w[0][3]*(1.0);
-    const double G0_1_0 = det*w[0][1]*w[0][0]*(1.0);
-    const double G0_1_1 = det*w[0][1]*w[0][1]*(1.0);
-    const double G0_1_2 = det*w[0][1]*w[0][2]*(1.0);
-    const double G0_1_3 = det*w[0][1]*w[0][3]*(1.0);
-    const double G0_2_0 = det*w[0][2]*w[0][0]*(1.0);
-    const double G0_2_1 = det*w[0][2]*w[0][1]*(1.0);
-    const double G0_2_2 = det*w[0][2]*w[0][2]*(1.0);
-    const double G0_2_3 = det*w[0][2]*w[0][3]*(1.0);
-    const double G0_3_0 = det*w[0][3]*w[0][0]*(1.0);
-    const double G0_3_1 = det*w[0][3]*w[0][1]*(1.0);
-    const double G0_3_2 = det*w[0][3]*w[0][2]*(1.0);
-    const double G0_3_3 = det*w[0][3]*w[0][3]*(1.0);
+    // Compute cell volume
     
-    // Compute element tensor
-    A[0] = 0.0166666666666666*G0_0_0 + 0.0083333333333333*G0_0_1 + 0.0083333333333333*G0_0_2 + 0.0083333333333333*G0_0_3 + 0.0083333333333333*G0_1_0 + 0.0166666666666667*G0_1_1 + 0.00833333333333337*G0_1_2 + 0.00833333333333337*G0_1_3 + 0.0083333333333333*G0_2_0 + 0.00833333333333337*G0_2_1 + 0.0166666666666667*G0_2_2 + 0.00833333333333337*G0_2_3 + 0.0083333333333333*G0_3_0 + 0.00833333333333337*G0_3_1 + 0.00833333333333337*G0_3_2 + 0.0166666666666667*G0_3_3;
+    
+    // Compute circumradius
+    
+    
+    // Array of quadrature weights.
+    static const double W14[14] = {0.00317460317460317, 0.00317460317460317, 0.00317460317460317, 0.00317460317460317, 0.00317460317460317, 0.00317460317460317, 0.0147649707904968, 0.0147649707904968, 0.0147649707904968, 0.0147649707904968, 0.0221397911142651, 0.0221397911142651, 0.0221397911142651, 0.0221397911142651};
+    // Quadrature points on the UFC reference element: (0.0, 0.5, 0.5), (0.5, 0.0, 0.5), (0.5, 0.5, 0.0), (0.5, 0.0, 0.0), (0.0, 0.5, 0.0), (0.0, 0.0, 0.5), (0.698419704324387, 0.100526765225204, 0.100526765225204), (0.100526765225204, 0.100526765225204, 0.100526765225204), (0.100526765225204, 0.100526765225204, 0.698419704324387), (0.100526765225204, 0.698419704324387, 0.100526765225204), (0.0568813795204234, 0.314372873493192, 0.314372873493192), (0.314372873493192, 0.314372873493192, 0.314372873493192), (0.314372873493192, 0.314372873493192, 0.0568813795204234), (0.314372873493192, 0.0568813795204234, 0.314372873493192)
+    
+    // Values of basis functions at quadrature points.
+    static const double FE0[14][4] = \
+    {{0.0, 0.0, 0.5, 0.5},
+    {0.0, 0.5, 0.0, 0.5},
+    {0.0, 0.5, 0.5, 0.0},
+    {0.5, 0.5, 0.0, 0.0},
+    {0.5, 0.0, 0.5, 0.0},
+    {0.5, 0.0, 0.0, 0.5},
+    {0.100526765225205, 0.698419704324386, 0.100526765225205, 0.100526765225205},
+    {0.698419704324387, 0.100526765225204, 0.100526765225205, 0.100526765225205},
+    {0.100526765225205, 0.100526765225204, 0.100526765225205, 0.698419704324386},
+    {0.100526765225205, 0.100526765225204, 0.698419704324386, 0.100526765225205},
+    {0.314372873493192, 0.0568813795204234, 0.314372873493192, 0.314372873493192},
+    {0.0568813795204235, 0.314372873493192, 0.314372873493192, 0.314372873493192},
+    {0.314372873493192, 0.314372873493192, 0.314372873493192, 0.0568813795204234},
+    {0.314372873493192, 0.314372873493192, 0.0568813795204235, 0.314372873493192}};
+    
+    static const double FE0_D001[14][2] = \
+    {{-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0}};
+    
+    // Array of non-zero columns
+    static const unsigned int nzc0[2] = {0, 3};
+    
+    // Array of non-zero columns
+    static const unsigned int nzc1[2] = {0, 2};
+    
+    // Array of non-zero columns
+    static const unsigned int nzc2[2] = {0, 1};
+    
+    // Reset values in the element tensor.
+    A[0] = 0.0;
+    // Number of operations to compute geometry constants: 39.
+    double G[6];
+    G[0] = 0.5*det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[1] = det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[2] = det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[3] = 0.5*det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[4] = det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[5] = 0.5*det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    
+    // Compute element tensor using UFL quadrature representation
+    // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
+    
+    // Loop quadrature points for integral.
+    // Number of operations to compute element tensor for following IP loop = 868
+    for (unsigned int ip = 0; ip < 14; ip++)
+    {
+      
+      // Coefficient declarations.
+      double F0 = 0.0;
+      double F1 = 0.0;
+      double F2 = 0.0;
+      double F3 = 0.0;
+      double F4 = 0.0;
+      double F5 = 0.0;
+      
+      // Total number of operations to compute function values = 12
+      for (unsigned int r = 0; r < 2; r++)
+      {
+        F1 += FE0_D001[ip][r]*w[2][nzc2[r]];
+        F2 += FE0_D001[ip][r]*w[2][nzc1[r]];
+        F3 += FE0_D001[ip][r]*w[2][nzc0[r]];
+      } // end loop over 'r'
+      
+      // Total number of operations to compute function values = 24
+      for (unsigned int r = 0; r < 4; r++)
+      {
+        F0 += FE0[ip][r]*w[3][r];
+        F4 += FE0[ip][r]*w[0][r];
+        F5 += FE0[ip][r]*w[1][r];
+      } // end loop over 'r'
+      
+      // Number of operations to compute ip constants: 25
+      double I[1];
+      // Number of operations: 25
+      I[0] = W14[ip]*(F0*(F1*F1*G[0] + F2*(F1*G[1] + F2*G[3]) + F3*(F1*G[2] + F2*G[4] + F3*G[5])) + det*(std::exp(F4)*(F4-1.0) + std::exp(F5)*(F5-1.0)));
+      
+      
+      // Number of operations for primary indices: 1
+      // Number of operations to compute entry: 1
+      A[0] += I[0];
+    } // end loop over 'ip'
   }
 
 };
@@ -1609,18 +1689,18 @@ public:
 /// sequence of basis functions of Vj and w1, w2, ..., wn are given
 /// fixed functions (coefficients).
 
-class l2error_form_0: public ufc::form
+class energy_form_0: public ufc::form
 {
 public:
 
   /// Constructor
-  l2error_form_0() : ufc::form()
+  energy_form_0() : ufc::form()
   {
     // Do nothing
   }
 
   /// Destructor
-  virtual ~l2error_form_0()
+  virtual ~energy_form_0()
   {
     // Do nothing
   }
@@ -1628,7 +1708,7 @@ public:
   /// Return a string identifying the form
   virtual const char* signature() const
   {
-    return "73d2d86f0d05f6853cd2b276b62d9a0f19866f63066826d30b19852ee450e04eebffdc05338197968e6eaf470d30fdc503e4a8f0d2719bc2cbc240c2fcf5cb1b";
+    return "958d0af4bd2fbc1790dd246d5139bfb086ba7612538d498f2f13307658a3c3d951240f06158ff5cde04fefaff76c6ae590e4a3d386f3b36f4ee05c58485e2744";
   }
 
 
@@ -1641,13 +1721,13 @@ public:
   /// Return the number of coefficients (n)
   virtual std::size_t num_coefficients() const
   {
-    return 1;
+    return 4;
   }
 
   /// Return original coefficient position for each coefficient (0 <= i < n)
   virtual std::size_t original_coefficient_position(std::size_t i) const
   {
-    static const std::vector<std::size_t> position({0});
+    static const std::vector<std::size_t> position({0, 1, 2, 3});
     return position[i];
   }
 
@@ -1659,7 +1739,22 @@ public:
     {
     case 0:
       {
-        return new l2error_finite_element_0();
+        return new energy_finite_element_0();
+        break;
+      }
+    case 1:
+      {
+        return new energy_finite_element_0();
+        break;
+      }
+    case 2:
+      {
+        return new energy_finite_element_0();
+        break;
+      }
+    case 3:
+      {
+        return new energy_finite_element_0();
         break;
       }
     }
@@ -1674,7 +1769,22 @@ public:
     {
     case 0:
       {
-        return new l2error_dofmap_0();
+        return new energy_dofmap_0();
+        break;
+      }
+    case 1:
+      {
+        return new energy_dofmap_0();
+        break;
+      }
+    case 2:
+      {
+        return new energy_dofmap_0();
+        break;
+      }
+    case 3:
+      {
+        return new energy_dofmap_0();
         break;
       }
     }
@@ -1779,7 +1889,7 @@ public:
   /// Create a new cell integral on everywhere else
   virtual ufc::cell_integral* create_default_cell_integral() const
   {
-    return new l2error_cell_integral_0_otherwise();
+    return new energy_cell_integral_0_otherwise();
   }
 
   /// Create a new exterior facet integral on everywhere else
@@ -1824,29 +1934,29 @@ public:
 #include <dolfin/adaptivity/ErrorControl.h>
 #include <dolfin/adaptivity/GoalFunctional.h>
 
-namespace L2Error
+namespace energy
 {
 
-class CoefficientSpace_error: public dolfin::FunctionSpace
+class CoefficientSpace_An: public dolfin::FunctionSpace
 {
 public:
 
   //--- Constructors for standard function space, 2 different versions ---
 
   // Create standard function space (reference version)
-  CoefficientSpace_error(const dolfin::Mesh& mesh):
+  CoefficientSpace_An(const dolfin::Mesh& mesh):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new l2error_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new l2error_dofmap_0()), mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new energy_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new energy_dofmap_0()), mesh)))
   {
     // Do nothing
   }
 
   // Create standard function space (shared pointer version)
-  CoefficientSpace_error(std::shared_ptr<const dolfin::Mesh> mesh):
+  CoefficientSpace_An(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new l2error_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new l2error_dofmap_0()), *mesh)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new energy_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new energy_dofmap_0()), *mesh)))
   {
     // Do nothing
   }
@@ -1854,27 +1964,174 @@ public:
   //--- Constructors for constrained function space, 2 different versions ---
 
   // Create standard function space (reference version)
-  CoefficientSpace_error(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
+  CoefficientSpace_An(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
     dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new l2error_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new l2error_dofmap_0()), mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new energy_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new energy_dofmap_0()), mesh,
                               dolfin::reference_to_no_delete_pointer(constrained_domain))))
   {
     // Do nothing
   }
 
   // Create standard function space (shared pointer version)
-  CoefficientSpace_error(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+  CoefficientSpace_An(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new l2error_finite_element_0()))),
-                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new l2error_dofmap_0()), *mesh, constrained_domain)))
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new energy_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new energy_dofmap_0()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
 
 };
 
-typedef CoefficientSpace_error Form_M_FunctionSpace_0;
+class CoefficientSpace_Cat: public dolfin::FunctionSpace
+{
+public:
+
+  //--- Constructors for standard function space, 2 different versions ---
+
+  // Create standard function space (reference version)
+  CoefficientSpace_Cat(const dolfin::Mesh& mesh):
+    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new energy_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new energy_dofmap_0()), mesh)))
+  {
+    // Do nothing
+  }
+
+  // Create standard function space (shared pointer version)
+  CoefficientSpace_Cat(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::FunctionSpace(mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new energy_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new energy_dofmap_0()), *mesh)))
+  {
+    // Do nothing
+  }
+
+  //--- Constructors for constrained function space, 2 different versions ---
+
+  // Create standard function space (reference version)
+  CoefficientSpace_Cat(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
+    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new energy_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new energy_dofmap_0()), mesh,
+                              dolfin::reference_to_no_delete_pointer(constrained_domain))))
+  {
+    // Do nothing
+  }
+
+  // Create standard function space (shared pointer version)
+  CoefficientSpace_Cat(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+    dolfin::FunctionSpace(mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new energy_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new energy_dofmap_0()), *mesh, constrained_domain)))
+  {
+    // Do nothing
+  }
+
+};
+
+class CoefficientSpace_Eps: public dolfin::FunctionSpace
+{
+public:
+
+  //--- Constructors for standard function space, 2 different versions ---
+
+  // Create standard function space (reference version)
+  CoefficientSpace_Eps(const dolfin::Mesh& mesh):
+    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new energy_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new energy_dofmap_0()), mesh)))
+  {
+    // Do nothing
+  }
+
+  // Create standard function space (shared pointer version)
+  CoefficientSpace_Eps(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::FunctionSpace(mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new energy_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new energy_dofmap_0()), *mesh)))
+  {
+    // Do nothing
+  }
+
+  //--- Constructors for constrained function space, 2 different versions ---
+
+  // Create standard function space (reference version)
+  CoefficientSpace_Eps(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
+    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new energy_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new energy_dofmap_0()), mesh,
+                              dolfin::reference_to_no_delete_pointer(constrained_domain))))
+  {
+    // Do nothing
+  }
+
+  // Create standard function space (shared pointer version)
+  CoefficientSpace_Eps(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+    dolfin::FunctionSpace(mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new energy_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new energy_dofmap_0()), *mesh, constrained_domain)))
+  {
+    // Do nothing
+  }
+
+};
+
+class CoefficientSpace_Phi: public dolfin::FunctionSpace
+{
+public:
+
+  //--- Constructors for standard function space, 2 different versions ---
+
+  // Create standard function space (reference version)
+  CoefficientSpace_Phi(const dolfin::Mesh& mesh):
+    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new energy_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new energy_dofmap_0()), mesh)))
+  {
+    // Do nothing
+  }
+
+  // Create standard function space (shared pointer version)
+  CoefficientSpace_Phi(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::FunctionSpace(mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new energy_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new energy_dofmap_0()), *mesh)))
+  {
+    // Do nothing
+  }
+
+  //--- Constructors for constrained function space, 2 different versions ---
+
+  // Create standard function space (reference version)
+  CoefficientSpace_Phi(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
+    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new energy_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new energy_dofmap_0()), mesh,
+                              dolfin::reference_to_no_delete_pointer(constrained_domain))))
+  {
+    // Do nothing
+  }
+
+  // Create standard function space (shared pointer version)
+  CoefficientSpace_Phi(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+    dolfin::FunctionSpace(mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new energy_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new energy_dofmap_0()), *mesh, constrained_domain)))
+  {
+    // Do nothing
+  }
+
+};
+
+typedef CoefficientSpace_Cat Form_M_FunctionSpace_0;
+
+typedef CoefficientSpace_An Form_M_FunctionSpace_1;
+
+typedef CoefficientSpace_Phi Form_M_FunctionSpace_2;
+
+typedef CoefficientSpace_Eps Form_M_FunctionSpace_3;
 
 class Form_M: public dolfin::Form
 {
@@ -1882,58 +2139,70 @@ public:
 
   // Constructor
   Form_M(const dolfin::Mesh& mesh):
-    dolfin::Form(0, 1), error(*this, 0)
+    dolfin::Form(0, 4), Cat(*this, 0), An(*this, 1), Phi(*this, 2), Eps(*this, 3)
   {
     _mesh = reference_to_no_delete_pointer(mesh);
-    _ufc_form = std::shared_ptr<const ufc::form>(new l2error_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new energy_form_0());
   }
 
   // Constructor
-  Form_M(const dolfin::Mesh& mesh, const dolfin::GenericFunction& error):
-    dolfin::Form(0, 1), error(*this, 0)
+  Form_M(const dolfin::Mesh& mesh, const dolfin::GenericFunction& Cat, const dolfin::GenericFunction& An, const dolfin::GenericFunction& Phi, const dolfin::GenericFunction& Eps):
+    dolfin::Form(0, 4), Cat(*this, 0), An(*this, 1), Phi(*this, 2), Eps(*this, 3)
   {
     _mesh = reference_to_no_delete_pointer(mesh);
-    this->error = error;
+    this->Cat = Cat;
+    this->An = An;
+    this->Phi = Phi;
+    this->Eps = Eps;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new l2error_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new energy_form_0());
   }
 
   // Constructor
-  Form_M(const dolfin::Mesh& mesh, std::shared_ptr<const dolfin::GenericFunction> error):
-    dolfin::Form(0, 1), error(*this, 0)
+  Form_M(const dolfin::Mesh& mesh, std::shared_ptr<const dolfin::GenericFunction> Cat, std::shared_ptr<const dolfin::GenericFunction> An, std::shared_ptr<const dolfin::GenericFunction> Phi, std::shared_ptr<const dolfin::GenericFunction> Eps):
+    dolfin::Form(0, 4), Cat(*this, 0), An(*this, 1), Phi(*this, 2), Eps(*this, 3)
   {
     _mesh = reference_to_no_delete_pointer(mesh);
-    this->error = *error;
+    this->Cat = *Cat;
+    this->An = *An;
+    this->Phi = *Phi;
+    this->Eps = *Eps;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new l2error_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new energy_form_0());
   }
 
   // Constructor
   Form_M(std::shared_ptr<const dolfin::Mesh> mesh):
-    dolfin::Form(0, 1), error(*this, 0)
+    dolfin::Form(0, 4), Cat(*this, 0), An(*this, 1), Phi(*this, 2), Eps(*this, 3)
   {
     _mesh = mesh;
-    _ufc_form = std::shared_ptr<const ufc::form>(new l2error_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new energy_form_0());
   }
 
   // Constructor
-  Form_M(std::shared_ptr<const dolfin::Mesh> mesh, const dolfin::GenericFunction& error):
-    dolfin::Form(0, 1), error(*this, 0)
+  Form_M(std::shared_ptr<const dolfin::Mesh> mesh, const dolfin::GenericFunction& Cat, const dolfin::GenericFunction& An, const dolfin::GenericFunction& Phi, const dolfin::GenericFunction& Eps):
+    dolfin::Form(0, 4), Cat(*this, 0), An(*this, 1), Phi(*this, 2), Eps(*this, 3)
   {
     _mesh = mesh;
-    this->error = error;
+    this->Cat = Cat;
+    this->An = An;
+    this->Phi = Phi;
+    this->Eps = Eps;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new l2error_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new energy_form_0());
   }
 
   // Constructor
-  Form_M(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::GenericFunction> error):
-    dolfin::Form(0, 1), error(*this, 0)
+  Form_M(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::GenericFunction> Cat, std::shared_ptr<const dolfin::GenericFunction> An, std::shared_ptr<const dolfin::GenericFunction> Phi, std::shared_ptr<const dolfin::GenericFunction> Eps):
+    dolfin::Form(0, 4), Cat(*this, 0), An(*this, 1), Phi(*this, 2), Eps(*this, 3)
   {
     _mesh = mesh;
-    this->error = *error;
+    this->Cat = *Cat;
+    this->An = *An;
+    this->Phi = *Phi;
+    this->Eps = *Eps;
 
-    _ufc_form = std::shared_ptr<const ufc::form>(new l2error_form_0());
+    _ufc_form = std::shared_ptr<const ufc::form>(new energy_form_0());
   }
 
   // Destructor
@@ -1943,8 +2212,14 @@ public:
   /// Return the number of the coefficient with this name
   virtual std::size_t coefficient_number(const std::string& name) const
   {
-    if (name == "error")
+    if (name == "Cat")
       return 0;
+    else if (name == "An")
+      return 1;
+    else if (name == "Phi")
+      return 2;
+    else if (name == "Eps")
+      return 3;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -1958,7 +2233,13 @@ public:
     switch (i)
     {
     case 0:
-      return "error";
+      return "Cat";
+    case 1:
+      return "An";
+    case 2:
+      return "Phi";
+    case 3:
+      return "Eps";
     }
 
     dolfin::dolfin_error("generated code for class Form",
@@ -1968,10 +2249,16 @@ public:
   }
 
   // Typedefs
-  typedef Form_M_FunctionSpace_0 CoefficientSpace_error;
+  typedef Form_M_FunctionSpace_0 CoefficientSpace_Cat;
+  typedef Form_M_FunctionSpace_1 CoefficientSpace_An;
+  typedef Form_M_FunctionSpace_2 CoefficientSpace_Phi;
+  typedef Form_M_FunctionSpace_3 CoefficientSpace_Eps;
 
   // Coefficients
-  dolfin::CoefficientAssigner error;
+  dolfin::CoefficientAssigner Cat;
+  dolfin::CoefficientAssigner An;
+  dolfin::CoefficientAssigner Phi;
+  dolfin::CoefficientAssigner Eps;
 };
 
 // Class typedefs
