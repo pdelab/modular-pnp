@@ -168,9 +168,9 @@ void newton_param_input (const char *filenm,
             if (val!=1 || strcmp(buffer,"=")!=0) {
                 status = ERROR_INPUT_PAR; break;
             }
-            val = fscanf(fp,"%d",&ibuff);
+            val = fscanf(fp,"%lf",&dbuff);
             if (val!=1) { status = ERROR_INPUT_PAR; break; }
-            inparam->max_cells = ibuff;
+            inparam->max_cells = int(dbuff+0.5);
             fgetsPtr = fgets(buffer,500,fp); // skip rest of line
         }
 
