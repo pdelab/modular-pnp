@@ -80,6 +80,7 @@ add_executable(pnp ./benchmarks/PNP/pnp.cpp ${SRC_DIR})
 add_executable(pnp_adapt ./benchmarks/PNP/pnp_adaptive.cpp ${SRC_DIR})
 add_executable(newton_poisson ./benchmarks/Newton_Poisson/newton_poisson.cpp ${SRC_DIR})
 add_executable(pnp_time ./benchmarks/PNP_time/pnp_time.cpp ${SRC_DIR})
+add_executable(battery ./benchmarks/battery/battery.cpp ${SRC_DIR})
 
 # Setup targets
 ## AUX TESTs
@@ -112,3 +113,4 @@ target_link_libraries(pnp_eafe2 ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES
 target_link_libraries(pnp_adapt ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
 target_link_libraries(newton_poisson ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
 target_link_libraries(pnp_time ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
+target_link_libraries(battery ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})

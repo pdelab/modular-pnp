@@ -377,6 +377,111 @@ unsigned int check_electric_field (dolfin::Function *voltage,
    return c;
 }
 
+/**
+ * \fn bool check_electric_field (dolfin::Function *voltage,
+ *                               dolfin::Mesh *target_mesh,
+ *                               double entropy_tol)
+ *
+ * \brief Check if the electric field gradient(potential) is below tolerance and refine
+ *    mesh
+ *
+ * \param voltage         voltage function
+ * \param mesh            ptr to refined mesh
+ * \param entropy_tol     tolerance for local entropy
+ *
+ * \return            levels of refinement
+ */
+unsigned int check_electric_field (dolfin::Function *voltage,
+                                  dolfin::Mesh *target_mesh,
+                                  double entropy_tol)
+{
+  // compute mesh from input voltage function and transfer
+  dolfin::Mesh mesh( *(voltage->function_space()->mesh()) );
+  gradient_recovery::FunctionSpace gradient_space(mesh);
+  gradient_recovery::BilinearForm a(gradient_space,gradient_space);
+  gradient_recovery::LinearForm L(gradient_space);
+  dolfin::Function ElecField(gradient_space);
+
+  // compute entropic potentials
+  dolfin::Function potential( *(voltage->function_space()) );
+  potential.interpolate(*voltage);
+
+  // setup matrix and rhs
+  EigenMatrix A;
+  assemble(A,a);
+  dCSRmat A_fasp;
+  EigenMatrix_to_dCSRmat(&A,&A_fasp);
+  EigenVector b;
+  dvector b_fasp, solu_fasp;
+
+  // Setup FASP solver
+  input_param inpar;
+  itsolver_param itpar;
+  AMG_param amgpar;
+  ILU_param ilupar;
+  char fasp_param_file[] = "./src/gradient_recovery_bsr.dat";
+  fasp_param_input(fasp_param_file, &inpar);
+  fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
+  INT status = FASP_SUCCESS;
+
+  // set form for cation
+  L.potential = potential;
+  assemble(b,L);
+  EigenVector_to_dvector(&b,&b_fasp);
+  fasp_dvec_alloc(b.size(), &solu_fasp);
+
+  // solve for cation entropy
+  fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
+  status = fasp_solver_dcsr_krylov_diag(&A_fasp, &b_fasp, &solu_fasp, &itpar);
+  copy_dvector_to_Function(&solu_fasp, &ElecField);
+
+  // Free memory
+  fasp_dvec_free(&solu_fasp);
+
+  // compute entropic error
+  electric_cell_marker::FunctionSpace DG(mesh);
+  electric_cell_marker::LinearForm error_form(DG);
+  error_form.pot = potential;
+  error_form.gradpot  = ElecField;
+  dolfin::EigenVector error_vector;
+  assemble(error_vector, error_form);
+
+  // mark for refinement
+  MeshFunction<bool> cell_marker(mesh, mesh.topology().dim(), false);
+  unsigned int marked_elem_count = 0;
+  for ( uint errVecInd = 0; errVecInd < error_vector.size(); errVecInd++) {
+    if ( error_vector[errVecInd] > entropy_tol/2.0 ) {
+        marked_elem_count++;
+        cell_marker.values()[errVecInd] = true;
+    }
+  }
+  // File marked_elem_file("./benchmarks/PNP/output/marker.pvd");
+  // marked_elem_file << cell_marker;
+
+  // check for necessary refiments
+  if ( marked_elem_count == 0 ) {
+    *target_mesh = mesh;
+    return 0;
+  }
+  else {
+    // adapt mesh and function space
+    std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(refine(mesh, cell_marker)) );
+    dolfin::FunctionSpace adapt_function_space( adapt(*(voltage->function_space()), mesh_ptr) );
+
+    // adapt functions
+    dolfin::Function adapt_voltage( adapt_function_space );
+    adapt_voltage.interpolate(*voltage);
+
+    unsigned int num_refines = 0;
+    num_refines =  check_electric_field(
+      &adapt_voltage,
+      target_mesh,
+      entropy_tol
+    );
+    return 1+num_refines;
+  }
+}
+
 /*---------------------------------*/
 /*--        End of File          --*/
 /*---------------------------------*/
