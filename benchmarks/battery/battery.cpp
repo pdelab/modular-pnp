@@ -74,7 +74,7 @@ class PeriodicBoundary : public SubDomain
 {
   // Left boundary is "target domain" G
   bool inside(const Array<double>& x, bool on_boundary) const
-  { 
+  {
     return on_boundary && (
       std::abs(x[0]) < Lx / 2.0 + 5.0 * DOLFIN_EPS
       || std::abs(x[1]) < Ly / 2.0 + 5.0 * DOLFIN_EPS
@@ -512,7 +512,8 @@ int main(int argc, char** argv)
       num_refines = check_electric_field(
         &potentialSolution,
         &mesh_adapt,
-        entropy_tol
+        entropy_tol,
+        newtparam.max_cells
       );
 
       // free fasp solution
