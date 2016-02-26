@@ -46,28 +46,31 @@ with open("./partlist.dat") as f:
 data = data.split('\n')
 n = len(data)
 
+ref_Lx=7.2
+ref_Ly=7.2
+ref_Lz=7.2
 for row in data:
     line=row.split(" ")
     i=0
     for l in range(len(line)):
          if line[l]!='':
              if i==0:
-                 xc.append(float(line[l])-25.0)
+                 xc.append((float(line[l])-25.0)/7.2)
                  i+=1
              elif i==1:
-                 yc.append(float(line[l])-25.0)
+                 yc.append((float(line[l])-25.0)/7.2)
                  i+=1
              elif i==2:
-                 zc.append(float(line[l])-25.0)
+                 zc.append((float(line[l])-25.0)/7.2)
                  i+=1
              elif i==3:
-                 rc.append(float(line[l]))
+                 rc.append((float(line[l]))/7.2)
                  i+=1
 
 Num_cells=20
-Lx=72.0
-Ly=72.0
-Lz=72.0
+Lx=72.0/ref_Lx
+Ly=72.0/ref_Ly
+Lz=72.0/ref_Lz
 domain = Box(Point(-Lx/2.0,-Ly/2.0,-Lz/2.0),Point(Lx/2.0,Ly/2.0,Lz/2.0))
 print "Generating the domain..."
 ## The range can be at most len(x)=86

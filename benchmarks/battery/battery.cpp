@@ -38,9 +38,9 @@ double lower_anion_val = 1.0;  // 1 / m^3
 double upper_anion_val = 1.0;  // 1 / m^3
 double lower_potential_val = -1.0e-0;  // V
 double upper_potential_val = +1.0e-0;  // V
-double Lx = 72.0;
-double Ly = 72.0;
-double Lz = 72.0;
+double Lx = 10.0;
+double Ly = 10.0;
+double Lz = 10.0;
 
 unsigned int dirichlet_coord = 0;
 
@@ -182,7 +182,8 @@ int main(int argc, char** argv)
   dolfin::Function initial_anion(initial_soln[1]);
   dolfin::Function initial_potential(initial_soln[2]);
 
-  LogCharge_SPH Cation(
+  // LogCharge_SPH Cation(
+  LogCharge Cation(
     lower_cation_val,
     upper_cation_val,
     -Lx / 2.0,
@@ -190,7 +191,8 @@ int main(int argc, char** argv)
     dirichlet_coord
   );
 
-  LogCharge_SPH Anion(
+  // LogCharge_SPH Anion(
+  LogCharge Anion(
     lower_anion_val,
     upper_anion_val,
     -Lx / 2.0,
@@ -198,7 +200,8 @@ int main(int argc, char** argv)
     dirichlet_coord
   );
 
-  Potential_SPH Volt(
+  // Potential_SPH Volt(
+  Voltage Volt(
     lower_potential_val,
     upper_potential_val,
     -Lx / 2.0,
@@ -556,10 +559,6 @@ int main(int argc, char** argv)
           printf("***********************************************\n");
           printf("***********************************************\n");
           end = clock();
-
-          cationFile << cationSolution;
-          anionFile << anionSolution;
-          potentialFile << potentialSolution;
 
           ofs.open("./benchmarks/battery/data.txt", std::ofstream::out | std::ofstream::app);
           timeElaspsed = double(end - begin) / CLOCKS_PER_SEC;
