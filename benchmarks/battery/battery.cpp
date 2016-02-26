@@ -45,7 +45,7 @@ double Lz = 72.0;
 unsigned int dirichlet_coord = 0;
 
 double time_step_size = 1.0;
-double final_time = 10.0;
+double final_time = 50.0;
 
 double get_initial_residual (
   pnp::LinearForm* L,
@@ -244,6 +244,8 @@ int main(int argc, char** argv)
   Constant zero(0.0);
 
   SpheresSubDomain SPS;
+
+  printf("############## The mesh already has %d > %d \n",mesh_adapt.num_cells(),newtparam.max_cells);
 
   for (double t = time_step_size; t < final_time; t += time_step_size) {
     // printf("\nSet voltage to %e...\n", volt); fflush(stdout);
@@ -445,7 +447,9 @@ int main(int argc, char** argv)
         EigenMatrix_to_dCSRmat(&A_pnp,&A_fasp);
         A_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, 3);
         fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
+        // BSR SOLVER
         status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &solu_fasp, &itpar, &amgpar);
+        // CSR SOLVER
         // status = fasp_solver_dcsr_krylov(&A_fasp, &b_fasp, &solu_fasp, &itpar);
         if (status < 0)
           printf("\n### WARNING: Solver failed! Exit status = %d.\n\n", status);
@@ -491,9 +495,9 @@ int main(int argc, char** argv)
         bc.apply(b_pnp);
 
         // output solution after solved for Newton update
-        cationFile << cationSolution;
-        anionFile << anionSolution;
-        potentialFile << potentialSolution;
+        // cationFile << cationSolution;
+        // anionFile << anionSolution;
+        // potentialFile << potentialSolution;
 
         fasp_dbsr_free(&A_fasp_bsr);
 
@@ -552,6 +556,10 @@ int main(int argc, char** argv)
           printf("***********************************************\n");
           printf("***********************************************\n");
           end = clock();
+
+          cationFile << cationSolution;
+          anionFile << anionSolution;
+          potentialFile << potentialSolution;
 
           ofs.open("./benchmarks/battery/data.txt", std::ofstream::out | std::ofstream::app);
           timeElaspsed = double(end - begin) / CLOCKS_PER_SEC;

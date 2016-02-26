@@ -52,7 +52,7 @@ double rc[86] = { 9.0,9.0,9.0,9.0,9.0,9.0,9.0,9.0,9.0,9.0,9.0,
 	6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,
 	6.0,6.0,6.0,6.0,5.0};
 
-int Numb_spheres = 20;
+int Numb_spheres = 10;
 
 class SpheresSubDomain : public dolfin::SubDomain
 {
