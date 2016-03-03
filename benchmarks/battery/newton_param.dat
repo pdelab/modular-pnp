@@ -3,7 +3,7 @@
 %--------------------------%
 
 max_cells = 2E5
-adapt_tol = 1E-3
+adapt_tol = 1E-2
 nonlin_tol = 1E-6
 nonlin_maxit = 15
 nonlin_damp_factor = 0.5

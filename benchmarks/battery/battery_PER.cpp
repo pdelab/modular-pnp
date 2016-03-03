@@ -85,9 +85,29 @@ class PeriodicBoundary : public SubDomain
   // Map right boundary (H) to left boundary (G)
   void map(const Array<double>& x, Array<double>& y) const
   {
-    y[0] = -x[0];
-    y[1] = -x[1];
-    y[2] = -x[2];
+    y[0] = x[0];
+    y[1] = x[1];
+    y[2] = x[2];
+  }
+};
+
+// Sub domain for Periodic boundary condition
+class PeriodicBoundary1D : public SubDomain
+{
+  // Left boundary is "target domain" G
+  bool inside(const Array<double>& x, bool on_boundary) const
+  {
+    return on_boundary && (
+      std::abs(x[0]) < Lx / 2.0 + 5.0 * DOLFIN_EPS
+      || std::abs(x[1]) < Ly / 2.0 + 5.0 * DOLFIN_EPS
+      || std::abs(x[2]) < Lz / 2.0 + 5.0 * DOLFIN_EPS
+    );
+  }
+
+  // Map right boundary (H) to left boundary (G)
+  void map(const Array<double>& x, Array<double>& y) const
+  {
+    y[0] = x[0];
   }
 };
 
@@ -173,17 +193,18 @@ int main(int argc, char** argv)
   File anionFile("./benchmarks/battery/output/anion.pvd");
   File potentialFile("./benchmarks/battery/output/potential.pvd");
 
-  // PeriodicBoundary periodic_boundary;
+  PeriodicBoundary periodic_boundary;
+  PeriodicBoundary1D periodic_boundary1D;
 
   // PREVIOUS ITERATE
-  pnp::FunctionSpace V_init(mesh_adapt /*,periodic_boundary*/);
+  pnp::FunctionSpace V_init(mesh_adapt,periodic_boundary);
   dolfin::Function initial_soln(V_init);
   dolfin::Function initial_cation(initial_soln[0]);
   dolfin::Function initial_anion(initial_soln[1]);
   dolfin::Function initial_potential(initial_soln[2]);
 
-  // LogCharge_SPH Cation(
-  LogCharge Cation(
+  LogCharge_SPH Cation(
+  // LogCharge Cation(
     lower_cation_val,
     upper_cation_val,
     -Lx / 2.0,
@@ -191,8 +212,8 @@ int main(int argc, char** argv)
     dirichlet_coord
   );
 
-  // LogCharge_SPH Anion(
-  LogCharge Anion(
+  LogCharge_SPH Anion(
+  // LogCharge Anion(
     lower_anion_val,
     upper_anion_val,
     -Lx / 2.0,
@@ -200,8 +221,8 @@ int main(int argc, char** argv)
     dirichlet_coord
   );
 
-  // Potential_SPH Volt(
-  Voltage Volt(
+  Potential_SPH Volt(
+  // Voltage Volt(
     lower_potential_val,
     upper_potential_val,
     -Lx / 2.0,
@@ -269,7 +290,7 @@ int main(int argc, char** argv)
 
     // initialize storage functions for adaptivity
     printf("store previous solution and initialize solution functions\n"); fflush(stdout);
-    pnp::FunctionSpace V_adapt(mesh_adapt /*,periodic_boundary*/);
+    pnp::FunctionSpace V_adapt(mesh_adapt ,periodic_boundary);
     dolfin::Function prev_soln_adapt(V_adapt);
     dolfin::Function prev_cation_adapt(prev_soln_adapt[0]);
     dolfin::Function prev_anion_adapt(prev_soln_adapt[1]);
@@ -298,7 +319,7 @@ int main(int argc, char** argv)
 
       // Initialize variational forms
       printf("\tvariational forms...\n"); fflush(stdout);
-      pnp::FunctionSpace V(mesh /*,periodic_boundary*/);
+      pnp::FunctionSpace V(mesh ,periodic_boundary);
       pnp::BilinearForm a_pnp(V,V);
       pnp::LinearForm L_pnp(V);
       a_pnp.eps = eps; L_pnp.eps = eps;
@@ -308,7 +329,7 @@ int main(int argc, char** argv)
       a_pnp.qn = qn; L_pnp.qn = qn;
       a_pnp.dt = C_dt; L_pnp.dt = C_dt;
       Constant g(0.01);
-      L_pnp.g = C_g; // one;
+      L_pnp.g = C_g;//C_g; // one;
       L_pnp.ds = boundaries;
 
       // Interpolate previous solutions analytic expressions
@@ -347,11 +368,11 @@ int main(int argc, char** argv)
       //EAFE Formulation
       if (eafe_switch)
         printf("\tEAFE initialization...\n");
-      EAFE::FunctionSpace V_cat(mesh /*,periodic_boundary*/);
+      EAFE::FunctionSpace V_cat(mesh ,periodic_boundary1D);
       EAFE::BilinearForm a_cat(V_cat,V_cat);
       a_cat.alpha = an_alpha;
       a_cat.gamma = one;
-      EAFE::FunctionSpace V_an(mesh /*,periodic_boundary*/);
+      EAFE::FunctionSpace V_an(mesh ,periodic_boundary1D);
       EAFE::BilinearForm a_an(V_an,V_an);
       a_an.alpha = cat_alpha;
       a_an.gamma = one;
@@ -390,7 +411,7 @@ int main(int argc, char** argv)
       L_pnp.CatCat_t0 = previous_cation;
       L_pnp.AnAn_t0 = previous_anion;
       assemble(b_pnp, L_pnp);
-      bc.apply(b_pnp);
+      // bc.apply(b_pnp);
       relative_residual = b_pnp.norm("l2") / initial_residual;
       if (num_adapts == 0)
         printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
@@ -444,7 +465,7 @@ int main(int argc, char** argv)
           replace_matrix(3,0, &V, &V_cat, &A_pnp, &A_cat);
           replace_matrix(3,1, &V, &V_an , &A_pnp, &A_an );
         }
-        bc.apply(A_pnp);
+        // bc.apply(A_pnp);
 
         // Convert to fasp
         printf("\tconvert to FASP and solve...\n"); fflush(stdout);
@@ -497,12 +518,7 @@ int main(int argc, char** argv)
         L_pnp.CatCat_t0 = previous_cation;
         L_pnp.AnAn_t0 = previous_anion;
         assemble(b_pnp, L_pnp);
-        bc.apply(b_pnp);
-
-        // output solution after solved for Newton update
-        // cationFile << cationSolution;
-        // anionFile << anionSolution;
-        // potentialFile << potentialSolution;
+        // bc.apply(b_pnp);
 
         fasp_dbsr_free(&A_fasp_bsr);
 
@@ -644,7 +660,7 @@ double update_solution_pnp (
   L->EsEs = _iterate2;
   EigenVector b;
   assemble(b, *L);
-  bc->apply(b);
+  // bc->apply(b);
   double new_relative_residual = b.norm("l2") / initial_residual;
 
   // backtrack loop
@@ -668,7 +684,7 @@ double update_solution_pnp (
     L->AnAn = _iterate1;
     L->EsEs = _iterate2;
     assemble(b, *L);
-    bc->apply(b);
+    // bc->apply(b);
     new_relative_residual = b.norm("l2") / initial_residual;
     printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
   }
@@ -706,6 +722,6 @@ double get_initial_residual (
   L->AnAn_t0 = adapt_anion;
   EigenVector b;
   assemble(b, *L);
-  bc->apply(b);
+  // bc->apply(b);
   return b.norm("l2");
 }
