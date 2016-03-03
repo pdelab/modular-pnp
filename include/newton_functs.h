@@ -54,42 +54,38 @@ void coeff_param_input (const char *filenm,
 
 void print_coeff_param (coeff_param *inparam);
 
-void non_dimesionalize_coefficients (domain_param *domain,
-                                     coeff_param *coeffs,
-                                     coeff_param *non_dim_coeffs);
+void non_dimesionalize_coefficients (
+  domain_param *domain,
+  coeff_param *coeffs,
+  coeff_param *non_dim_coeffs
+);
 
 /*------------- In file: domains.cpp --------------*/
 
-void domain_build (domain_param *domain_par,
-           dolfin::Mesh *mesh,
-           dolfin::MeshFunction<size_t> *subdomains,
-           dolfin::MeshFunction<size_t> *surfaces);
+void domain_build (
+  domain_param *domain_par,
+  dolfin::Mesh *mesh,
+  dolfin::MeshFunction<size_t> *subdomains,
+  dolfin::MeshFunction<size_t> *surfaces
+);
 
-unsigned int check_local_entropy (dolfin::Function *cation,
-                                double cation_valency,
-                                dolfin::Function *anion,
-                                double anion_valency,
-                                dolfin::Function *voltage,
-                                dolfin::Mesh *target_mesh,
-                                double entropy_tol);
+unsigned int check_local_entropy (
+  dolfin::Function *cation,
+  double cation_valency,
+  dolfin::Function *anion,
+  double anion_valency,
+  dolfin::Function *voltage,
+  dolfin::Mesh *target_mesh,
+  double entropy_tol,
+  int max_elements
+);
 
-unsigned int check_local_entropy (dolfin::Function *cation,
-                                double cation_valency,
-                                dolfin::Function *anion,
-                                double anion_valency,
-                                dolfin::Function *voltage,
-                                dolfin::Mesh *target_mesh,
-                                double entropy_tol,
-                                int Max_Numb_Cells);
-
-unsigned int check_electric_field (dolfin::Function *voltage,
-                                 dolfin::Mesh *target_mesh,
-                                 double entropy_tol);
-
-unsigned int check_electric_field (dolfin::Function *voltage,
-                                dolfin::Mesh *target_mesh,
-                                double entropy_tol,
-                                int Max_Numb_Cells);
+unsigned int check_electric_field (
+  dolfin::Function *voltage,
+  dolfin::Mesh *target_mesh,
+  double entropy_tol,
+  int max_elements
+);
 
 #endif /* end if for __NEWTONFUNCTS_HEADER__ */
 

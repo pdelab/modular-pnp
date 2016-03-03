@@ -27,6 +27,7 @@ using namespace dolfin;
 // using namespace std;
 
 bool eafe_switch = false;
+double max_mesh_growth = 1.5;
 
 double get_initial_residual (
   pnp_and_source::LinearForm* L,
@@ -442,6 +443,8 @@ int main(int argc, char** argv)
     // compute local entropy and refine mesh
     printf("Computing local entropy for refinement\n");
     unsigned int num_refines;
+    double max_mesh_size_double = max_mesh_growth * ((double) mesh0.size(3));
+    int max_mesh_size = (int) std::floor(max_mesh_size_double);
     num_refines = check_local_entropy (
       &cationSolution,
       coeff_par.cation_valency,
@@ -450,7 +453,7 @@ int main(int argc, char** argv)
       &potentialSolution,
       &mesh0,
       entropy_tol,
-      newtparam.max_cells
+      max_mesh_size
     );
 
     if (num_refines == 0) {
