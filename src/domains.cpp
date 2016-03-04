@@ -183,7 +183,7 @@ unsigned int check_local_entropy (
   MeshFunction<bool> cell_marker(mesh, mesh.topology().dim(), false);
   double new_entropy_tol = entropy_tol;
   unsigned int marked_elem_count = 0;
-  for ( uint errVecInd = 0; errVecInd < error_vector.size(); errVecInd++) {
+  for (int errVecInd = 0; errVecInd < error_vector.size(); errVecInd++) {
     if (error_vector[errVecInd] > new_entropy_tol) {
       marked_elem_count++;
       cell_marker.values()[errVecInd] = true;
@@ -191,7 +191,8 @@ unsigned int check_local_entropy (
       if (marked_elem_count > max_elements) {
         cell_marker.values()[errVecInd] = false;
         new_entropy_tol *= 5.0;
-        errVecInd = 0;
+        errVecInd = -1;
+        marked_elem_count = 0;
         printf("\tOver-refined! Adjusting tolerance to %e\n", new_entropy_tol);
       }
     }
