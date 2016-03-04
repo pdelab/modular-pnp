@@ -319,7 +319,7 @@ unsigned int check_electric_field (
       if (marked_elem_count > max_elements) {
         cell_marker.values()[errVecInd] = false;
         new_entropy_tol *= 5.0;
-        errVecInd = 0;
+        errVecInd = -1;
         printf("\tOver-refined! Adjusting tolerance to %e\n", new_entropy_tol);
       }
     }
