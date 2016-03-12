@@ -35,10 +35,11 @@ using namespace dolfin;
  * \param subdomains  mesh subdomains to be constructed
  * \param surfaces    mesh surfaces to be constructed
  */
-void domain_build (domain_param *domain_par,
-                   dolfin::Mesh *mesh,
-                   dolfin::MeshFunction<size_t> *subdomains,
-                   dolfin::MeshFunction<size_t> *surfaces)
+void domain_build (
+  domain_param *domain_par,
+  dolfin::Mesh *mesh,
+  dolfin::MeshFunction<size_t> *subdomains,
+  dolfin::MeshFunction<size_t> *surfaces)
 {
   // no mesh provided: use length and grid parameters
   if ( strcmp(domain_par->mesh_file,"none")==0 ) {
@@ -78,6 +79,32 @@ void domain_build (domain_param *domain_par,
     }*/
 }
 
+
+INT mass_lumping_solver (
+  dCSRmat* A,
+  dvector* b,
+  dvector* x
+) {
+  uint rows = A->row;
+  uint i, j;
+  uint row_entries;
+  uint col_index;
+  double row_lump;
+
+  for (i = 0; i < rows; i++) {
+
+    row_lump = 0.0;
+    for(j = A->IA[i]; j < A->IA[i+1]; j++) {
+      row_lump += A->val[j];
+    }
+    if (row_lump == 0.0) { return -48; }
+
+    x->val[i] = b->val[i] / row_lump;
+  }
+
+  return FASP_SUCCESS;
+}
+
 /**
  * \fn bool check_local_entropy (dolfin::Function *cation,
  *                               dolfin::Function *anion,
@@ -85,8 +112,7 @@ void domain_build (domain_param *domain_par,
  *                               dolfin::Mesh *target_mesh,
  *                               double entropy_tol)
  *
- * \brief Check if local entropy is below tolerance and refine
- *    mesh
+ * \brief Check if local entropy is below tolerance and refine mesh
  *
  * \param cation          cation function
  * \param cation_valency  valency of cation
@@ -107,11 +133,19 @@ unsigned int check_local_entropy (
   dolfin::Function *voltage,
   dolfin::Mesh *target_mesh,
   double entropy_tol,
-  int max_elements
+  uint max_elements,
+  uint max_depth
 ) {
-
   // compute mesh from input voltage function and transfer
   dolfin::Mesh mesh( *(voltage->function_space()->mesh()) );
+
+  // refinement is too deep
+  if (max_depth == 0) {
+    printf("\tmesh refinement is attempting to over-refine...\n");
+    printf("\t\t terminating refinement\n");
+    *target_mesh = mesh;
+    return -1;
+  }
 
   gradient_recovery::FunctionSpace gradient_space(mesh);
   gradient_recovery::BilinearForm a(gradient_space,gradient_space);
@@ -133,8 +167,7 @@ unsigned int check_local_entropy (
   EigenMatrix A;
   assemble(A,a);
   dCSRmat A_fasp;
-  EigenMatrix_to_dCSRmat(&A,&A_fasp);
-  dBSRmat adaptA_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, mesh.topology().dim());
+  EigenMatrix_to_dCSRmat(&A, &A_fasp);
   EigenVector b;
   dvector b_fasp, solu_fasp;
 
@@ -149,6 +182,7 @@ unsigned int check_local_entropy (
   INT status = FASP_SUCCESS;
 
   // set form for cation
+  L.eta = *cation;
   L.potential = cation_potential;
   assemble(b,L);
   EigenVector_to_dvector(&b,&b_fasp);
@@ -156,17 +190,18 @@ unsigned int check_local_entropy (
 
   // solve for cation entropy
   fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
-  status = fasp_solver_dbsr_krylov_diag(&adaptA_fasp_bsr, &b_fasp, &solu_fasp, &itpar);
+  status = mass_lumping_solver(&A_fasp, &b_fasp, &solu_fasp);
   copy_dvector_to_Function(&solu_fasp, &cation_entropy);
 
   // set form for anion
+  L.eta = *anion;
   L.potential = anion_potential;
   assemble(b,L);
   EigenVector_to_dvector(&b,&b_fasp);
 
   // solve for anion entropy
   fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
-  status = fasp_solver_dbsr_krylov_diag(&adaptA_fasp_bsr, &b_fasp, &solu_fasp, &itpar);
+  status = mass_lumping_solver(&A_fasp, &b_fasp, &solu_fasp);
   copy_dvector_to_Function(&solu_fasp, &anion_entropy);
 
   // compute entropic error
@@ -187,7 +222,6 @@ unsigned int check_local_entropy (
     if (error_vector[errVecInd] > new_entropy_tol) {
       marked_elem_count++;
       cell_marker.values()[errVecInd] = true;
-      
       if (marked_elem_count > max_elements) {
         cell_marker.values()[errVecInd] = false;
         new_entropy_tol *= 5.0;
@@ -200,6 +234,7 @@ unsigned int check_local_entropy (
     else {
       cell_marker.values()[errVecInd] = false;
     }
+
   }
 
   // check for necessary refiments
@@ -219,7 +254,7 @@ unsigned int check_local_entropy (
     adapt_anion.interpolate(*anion);
     adapt_voltage.interpolate(*voltage);
 
-    unsigned int num_refines = 0;
+    int num_refines = 0;
     num_refines = check_local_entropy(
       &adapt_cation,
       cation_valency,
@@ -228,7 +263,8 @@ unsigned int check_local_entropy (
       &adapt_voltage,
       target_mesh,
       new_entropy_tol,
-      max_elements
+      max_elements,
+      max_depth - 1
     );
     return 1 + num_refines;
   }
@@ -253,11 +289,19 @@ unsigned int check_electric_field (
   dolfin::Function *voltage,
   dolfin::Mesh *target_mesh,
   double entropy_tol,
-  int max_elements
+  uint max_elements,
+  uint max_depth
 ) {
-
   // compute mesh from input voltage function and transfer
   dolfin::Mesh mesh( *(voltage->function_space()->mesh()) );
+
+  // refinement is too deep
+  if (max_depth == 0) {
+    printf("\tmesh refinement is attempting to over-refine...\n");
+    printf("\t\t terminating refinement\n");
+    *target_mesh = mesh;
+    return -1;
+  }
 
   gradient_recovery::FunctionSpace gradient_space(mesh);
   gradient_recovery::BilinearForm a(gradient_space,gradient_space);
@@ -292,9 +336,9 @@ unsigned int check_electric_field (
   EigenVector_to_dvector(&b,&b_fasp);
   fasp_dvec_alloc(b.size(), &solu_fasp);
 
-  // solve for cation entropy
+  // solve for electric field
   fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
-  status = fasp_solver_dcsr_krylov_diag(&A_fasp, &b_fasp, &solu_fasp, &itpar);
+  status = mass_lumping_solver(&A_fasp, &b_fasp, &solu_fasp);
   copy_dvector_to_Function(&solu_fasp, &ElecField);
 
   // Free memory
@@ -344,12 +388,13 @@ unsigned int check_electric_field (
     dolfin::Function adapt_voltage( adapt_function_space );
     adapt_voltage.interpolate(*voltage);
 
-    unsigned int num_refines = 0;
+    int num_refines = 0;
     num_refines =  check_electric_field(
       &adapt_voltage,
       target_mesh,
       entropy_tol,
-      max_elements
+      max_elements,
+      max_depth - 1
     );
     return 1 + num_refines;
   }

@@ -4,8 +4,9 @@ element = FiniteElement("Lagrange", tetrahedron, 1)
 vector  = VectorElement("Lagrange", tetrahedron, 1)
 
 entropy = TrialFunction(vector)
-v  = TestFunction(vector)
+v = TestFunction(vector)
+eta = Coefficient(element)
 potential = Coefficient(element)
 
 a = inner(entropy,v)*dx
-L = inner(grad(potential),v)*dx
+L = inner(exp(eta)*grad(potential),v)*dx

@@ -77,15 +77,24 @@ unsigned int check_local_entropy (
   dolfin::Function *voltage,
   dolfin::Mesh *target_mesh,
   double entropy_tol,
-  int max_elements
+  uint max_elements,
+  uint max_depth
 );
 
 unsigned int check_electric_field (
   dolfin::Function *voltage,
   dolfin::Mesh *target_mesh,
   double entropy_tol,
-  int max_elements
+  uint max_elements,
+  uint max_depth
 );
+
+INT mass_lumping_solver (
+  dCSRmat* A,
+  dvector* b,
+  dvector* x
+);
+
 
 #endif /* end if for __NEWTONFUNCTS_HEADER__ */
 
