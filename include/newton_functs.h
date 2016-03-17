@@ -24,6 +24,8 @@ extern "C"
 
 void update_solution (dolfin::Function* iterate, dolfin::Function* update);
 
+void update_mean_exp_zero(dolfin::Function* iterate, dolfin::Function* update, int index);
+
 /*------------- In file: params.cpp --------------*/
 
 SHORT newton_param_input_init (newton_param *inparam);

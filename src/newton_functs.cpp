@@ -8,6 +8,7 @@
 #include <dolfin.h>
 #include "newton.h"
 #include "newton_functs.h"
+#include "mean_exp.h"
 
 using namespace dolfin;
 

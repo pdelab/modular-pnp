@@ -6,6 +6,8 @@
 #include <iostream>
 #include <dolfin.h>
 #include "funcspace_to_vecspace.h"
+#include "mean.h"
+#include "mean_exp.h"
 
 using namespace std;
 using namespace dolfin;
@@ -154,4 +156,24 @@ void replace_matrix(int nc, int l, dolfin::FunctionSpace *V, dolfin::FunctionSpa
     }
   }
 
+}
+
+void replace_row(int row_index, dolfin::EigenMatrix* A, dolfin::EigenVector* b)
+{
+  int k, l;
+  int* JA=(int*) std::get<1>(A->data());
+  int *IA=(int*) std::get<0>(A->data());
+  double* vals = (double*) std::get<2>(A->data());
+  (*b)[row_index+l]=0.0;
+  for (k=IA[row_index];k<IA[row_index+1];k++)
+  {
+      if (JA[k]==row_index)
+      {
+        vals[k]=1.0;
+      }
+      else
+      {
+        vals[k]=0.0;
+      }
+  }
 }
