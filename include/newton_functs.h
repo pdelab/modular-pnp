@@ -90,9 +90,9 @@ unsigned int check_electric_field (
 );
 
 INT mass_lumping_solver (
-  dCSRmat* A,
-  dvector* b,
-  dvector* x
+  dolfin::EigenMatrix* A,
+  dolfin::EigenVector* b,
+  dolfin::Function* solution
 );
 
 

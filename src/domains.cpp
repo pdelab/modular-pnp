@@ -81,26 +81,40 @@ void domain_build (
 
 
 INT mass_lumping_solver (
-  dCSRmat* A,
-  dvector* b,
-  dvector* x
+  dolfin::EigenMatrix* A,
+  dolfin::EigenVector* b,
+  dolfin::Function* solution
 ) {
-  uint rows = A->row;
   uint i, j;
   uint row_entries;
   uint col_index;
   double row_lump;
 
+  // point to Eigenmatrix
+  int *IA;
+  uint rows = A->size(0);
+  double* A_vals, b_vals, x_vals;
+  IA = (int*) std::get<0>(A->data());
+  A_vals = (double*) std::get<2>(A->data());
+
+  double* rhs_vals;
+  rhs_vals = b->data();
+
+  std::vector<double> soln_vals;
+  soln_vals.reserve(rows);
+
   for (i = 0; i < rows; i++) {
 
     row_lump = 0.0;
-    for(j = A->IA[i]; j < A->IA[i+1]; j++) {
-      row_lump += A->val[j];
+    for(j = IA[i]; j < IA[i+1]; j++) {
+      row_lump += A_vals[j];
     }
     if (row_lump == 0.0) { return -48; }
 
-    x->val[i] = b->val[i] / row_lump;
+    soln_vals[i] = rhs_vals[i] / row_lump;
   }
+
+  solution->vector()->set_local(soln_vals);
 
   return FASP_SUCCESS;
 }
@@ -166,43 +180,20 @@ unsigned int check_local_entropy (
   // setup matrix and rhs
   EigenMatrix A;
   assemble(A,a);
-  dCSRmat A_fasp;
-  EigenMatrix_to_dCSRmat(&A, &A_fasp);
-  EigenVector b;
-  dvector b_fasp, solu_fasp;
-
-  // Setup FASP solver
-  input_param inpar;
-  itsolver_param itpar;
-  AMG_param amgpar;
-  ILU_param ilupar;
-  char fasp_param_file[] = "./src/gradient_recovery_bsr.dat";
-  fasp_param_input(fasp_param_file, &inpar);
-  fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
+  EigenVector b(A.size(0));
   INT status = FASP_SUCCESS;
 
   // set form for cation
   L.eta = *cation;
   L.potential = cation_potential;
   assemble(b,L);
-  EigenVector_to_dvector(&b,&b_fasp);
-  fasp_dvec_alloc(b.size(), &solu_fasp);
-
-  // solve for cation entropy
-  fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
-  status = mass_lumping_solver(&A_fasp, &b_fasp, &solu_fasp);
-  copy_dvector_to_Function(&solu_fasp, &cation_entropy);
+  status = mass_lumping_solver(&A, &b, &cation_entropy);
 
   // set form for anion
   L.eta = *anion;
   L.potential = anion_potential;
   assemble(b,L);
-  EigenVector_to_dvector(&b,&b_fasp);
-
-  // solve for anion entropy
-  fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
-  status = mass_lumping_solver(&A_fasp, &b_fasp, &solu_fasp);
-  copy_dvector_to_Function(&solu_fasp, &anion_entropy);
+  status = mass_lumping_solver(&A, &b, &anion_entropy);
 
   // compute entropic error
   poisson_cell_marker::FunctionSpace DG(mesh);
@@ -210,7 +201,7 @@ unsigned int check_local_entropy (
   error_form.cat_entr = cation_entropy;
   error_form.cat_pot  = cation_potential;
   error_form.an_entr = anion_entropy;
-  error_form.an_pot  = anion_potential;
+  error_form.an_pot = anion_potential;
   dolfin::EigenVector error_vector;
   assemble(error_vector, error_form);
 
@@ -315,34 +306,13 @@ unsigned int check_electric_field (
   // setup matrix and rhs
   EigenMatrix A;
   assemble(A,a);
-  dCSRmat A_fasp;
-  EigenMatrix_to_dCSRmat(&A,&A_fasp);
-  EigenVector b;
-  dvector b_fasp, solu_fasp;
-
-  // Setup FASP solver
-  input_param inpar;
-  itsolver_param itpar;
-  AMG_param amgpar;
-  ILU_param ilupar;
-  char fasp_param_file[] = "./src/gradient_recovery_bsr.dat";
-  fasp_param_input(fasp_param_file, &inpar);
-  fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
+  EigenVector b(A.size(0));
   INT status = FASP_SUCCESS;
 
-  // set form for cation
+  // set form for electric field
   L.potential = potential;
   assemble(b,L);
-  EigenVector_to_dvector(&b,&b_fasp);
-  fasp_dvec_alloc(b.size(), &solu_fasp);
-
-  // solve for electric field
-  fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
-  status = mass_lumping_solver(&A_fasp, &b_fasp, &solu_fasp);
-  copy_dvector_to_Function(&solu_fasp, &ElecField);
-
-  // Free memory
-  fasp_dvec_free(&solu_fasp);
+  status = mass_lumping_solver(&A, &b, &ElecField);
 
   // compute entropic error
   electric_cell_marker::FunctionSpace DG(mesh);
