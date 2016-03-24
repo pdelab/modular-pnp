@@ -1,0 +1,13 @@
+# Copyright (C) 2015 PSU CCMA
+#
+# Compute the L2 error of a computed solution.
+#
+# Compile this form with FFC: ffc -O -l dolfin L2Error.ufl.
+
+CG = FiniteElement("CG", tetrahedron, 1)
+
+u = Coefficient(CG)
+du = Coefficient(CG)
+
+M = ( exp(u+du)-exp(u) )*dx
+

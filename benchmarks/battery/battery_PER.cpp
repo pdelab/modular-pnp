@@ -33,8 +33,8 @@ using namespace dolfin;
 bool eafe_switch = false;
 
 double lower_cation_val = 1.0;  // 1 / m^3
-double upper_cation_val = 0.1;  // 1 / m^3
-double lower_anion_val = 0.1;  // 1 / m^3
+double upper_cation_val = 1.0;  // 1 / m^3
+double lower_anion_val = 1.0;  // 1 / m^3
 double upper_anion_val = 1.0;  // 1 / m^3
 double lower_potential_val = +1.0e-0;  // V
 double upper_potential_val = -1.0e-0;  // V
@@ -234,8 +234,8 @@ int main(int argc, char** argv)
     dirichlet_coord
   );
 
-  initial_cation.interpolate(Cation);
-  initial_anion.interpolate(Anion);
+  initial_cation.interpolate(Constant(0.69314718056));
+  initial_anion.interpolate(Constant(0.278387571042));
   initial_potential.interpolate(Volt);
 
   // output solution after solved for timestep
@@ -269,7 +269,7 @@ int main(int argc, char** argv)
   Constant cat_alpha(coeff_par.cation_diffusivity*time_step_size);
   Constant an_alpha(coeff_par.anion_diffusivity*time_step_size);
   Constant one(1.0);
-  Constant C_g(1.0*coeff_par.relative_permittivity);
+  Constant C_g(1.0);//1.0*coeff_par.relative_permittivity);
   Constant zero(0.0);
 
   SpheresSubDomain SPS;
@@ -418,7 +418,7 @@ int main(int argc, char** argv)
       L_pnp.AnAn_t0 = previous_anion;
       assemble(b_pnp, L_pnp);
       // bc.apply(b_pnp);
-      b_pnp[b_pnp.size()-1]=0.0;
+      b_pnp[3*int(b_pnp.size()/6.0)+2]=0.0;
       relative_residual = b_pnp.norm("l2") / initial_residual;
       if (num_adapts == 0)
         printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
@@ -473,7 +473,7 @@ int main(int argc, char** argv)
           replace_matrix(3,1, &V, &V_an , &A_pnp, &A_an );
         }
         // bc.apply(A_pnp);
-        replace_row(A_pnp.size(0)-1, &A_pnp, &b_pnp);
+        replace_row(3*int(b_pnp.size()/6.0)+2, &A_pnp, &b_pnp);
 
         // Convert to fasp
         printf("\tconvert to FASP and solve...\n"); fflush(stdout);
@@ -484,7 +484,7 @@ int main(int argc, char** argv)
         // BSR SOLVER
         status = fasp_solver_dbsr_krylov_amg(&A_fasp_bsr, &b_fasp, &solu_fasp, &itpar, &amgpar);
         // CSR SOLVER
-        // status = fasp_solver_dcsr_krylov(&A_fasp, &b_fasp, &solu_fasp, &itpar);
+        //status = fasp_solver_dcsr_krylov(&A_fasp, &b_fasp, &solu_fasp, &itpar);
         if (status < 0)
           printf("\n### WARNING: Solver failed! Exit status = %d.\n\n", status);
         else
@@ -496,9 +496,9 @@ int main(int argc, char** argv)
         copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &anion_dofs, &anion_dofs);
         copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &potential_dofs, &potential_dofs);
 
-        dcationFile << solutionUpdate[0];
-        danionFile << solutionUpdate[1];
-        dpotentialFile << solutionUpdate[2];
+        // dcationFile << solutionUpdate[0];
+        // danionFile << solutionUpdate[1];
+        // dpotentialFile << solutionUpdate[2];
 
         // update solution and reset solutionUpdate
         printf("\tupdate solution...\n"); fflush(stdout);
@@ -530,7 +530,7 @@ int main(int argc, char** argv)
         L_pnp.AnAn_t0 = previous_anion;
         assemble(b_pnp, L_pnp);
         // bc.apply(b_pnp);
-        b_pnp[b_pnp.size()-1]=0.0;
+        b_pnp[3*int(b_pnp.size()/6.0)+2]=0.0;
 
         fasp_dbsr_free(&A_fasp_bsr);
 
@@ -697,7 +697,7 @@ double update_solution_pnp (
     L->EsEs = _iterate2;
     assemble(b, *L);
     // bc->apply(b);
-    b[b.size()]=0.0;
+    b[3*int(b.size()/6.0)+2]=0.0;
     new_relative_residual = b.norm("l2") / initial_residual;
     printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
   }
@@ -737,7 +737,7 @@ double get_initial_residual (
   assemble(b, *L);
   // bc->apply(b);
   printf("tata");fflush(stdout);
-  b[b.size()-1]=0.0;
+  b[3*int(b.size()/6.0)+2]=0.0;
   printf("tete");fflush(stdout);
   return b.norm("l2");
 }

@@ -75,44 +75,38 @@ domain = Box(Point(-Lx/2.0,-Ly/2.0,-Lz/2.0),Point(Lx/2.0,Ly/2.0,Lz/2.0))
 print "Generating the domain..."
 ## The range can be at most len(x)=86
 Numb_spheres=10
-for i in range(Numb_spheres):
-    domain = domain - Sphere(Point(xc[i],yc[i],zc[i]), rc[i])
 
-print "Generating the mesh..."
-mesh = generate_mesh(domain,Num_cells,"cgal")
+# Read mesh
+mesh = Mesh("mesh.xml.gz")
 
+# Function to mark inner surface of pulley
+class SpheresSubDomain(SubDomain):
+    def inside(self, x, on_boundary):
+        flag=False
+        for i in range(Numb_spheres):
+            if (on_boundary and ( (x[0]-xc[i])**2 + (x[1]-yc[i])**2 + (x[2]-zc[i]**2) < (rc[i]**2)+2.0) ):
+                flag=True
+        return flag
 
-file = File("mesh.xml.gz")
-file << mesh
+boundary_parts = MeshFunction("size_t", mesh, mesh.topology().dim() - 1)
+boundary_parts.set_all(0)
+spheres = SpheresSubDomain()
+spheres.mark(boundary_parts,1)
 
-
-Ns=len(rc)
-f = open("values.txt",'w')
-
-f.write("double xc["+str(len(xc))+"] = { ")
-for i in range(Ns-1):
-    f.write(str(xc[i])+",")
-    if i%10==0 and i!=0:
-        f.write("\n\t")
-f.write(str(xc[Ns-1])+"};\n\n")
-
-f.write("double yc["+str(len(xc))+"] = { ")
-for i in range(Ns-1):
-    f.write(str(yc[i])+",")
-    if i%10==0 and i!=0:
-        f.write("\n\t")
-f.write(str(yc[Ns-1])+"};\n\n")
-
-f.write("double zc["+str(len(xc))+"] = { ")
-for i in range(Ns-1):
-    f.write(str(zc[i])+",")
-    if i%10==0 and i!=0:
-        f.write("\n\t")
-f.write(str(zc[Ns-1])+"};\n\n")
-
-f.write("double rc["+str(len(xc))+"] = { ")
-for i in range(Ns-1):
-    f.write(str(rc[i])+",")
-    if i%10==0 and i!=0:
-        f.write("\n\t")
-f.write(str(rc[Ns-1])+"};\n\n")
+ds = Measure("ds", domain=mesh, subdomain_data=boundary_parts)
+g=1.0
+Cat=np.log(2.0)
+An=1.0
+qn=-1.0
+qp=1.0
+CG = FunctionSpace(mesh, "Lagrange", 1)
+v = Function(CG)
+v.interpolate(Constant(1.0))
+# M = ( -(qp*exp(Cat) + qn*exp(An))*v )*dx + g*v*ds(1)
+# print assemble(( -(qp*exp(Cat) + qn*exp(An))*v )*dx(mesh) + g*v*ds(1))
+inte=assemble(( -(qp*exp(Cat) )*v )*dx(mesh) + g*v*ds(1))
+print inte
+An=np.log(inte/assemble(qn*v*dx(mesh)))
+print Cat, An
+print assemble(( -(qp*exp(Cat) + qn*exp(An))*v )*dx(mesh) + g*v*ds(1))
+# print assemble(g*v*ds(1))
