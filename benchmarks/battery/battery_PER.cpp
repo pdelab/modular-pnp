@@ -49,7 +49,7 @@ double final_time = 50.0;
 
 double get_initial_residual (
   pnp::LinearForm* L,
-  const dolfin::DirichletBC* bc,
+  int index,
   dolfin::Function* cation,
   dolfin::Function* anion,
   dolfin::Function* potential
@@ -65,7 +65,7 @@ double update_solution_pnp (
   double relative_residual,
   double initial_residual,
   pnp::LinearForm* L,
-  const dolfin::DirichletBC* bc,
+  int index,
   newton_param* params
 );
 
@@ -235,7 +235,10 @@ int main(int argc, char** argv)
   );
 
   initial_cation.interpolate(Constant(0.69314718056));
-  initial_anion.interpolate(Constant(0.278387571042));
+  // g=0.1
+  // initial_anion.interpolate(Constant(0.652718896743));
+  // g=1.0
+  initial_anion.interpolate(Constant(0.18860240241));
   initial_potential.interpolate(Volt);
 
   // output solution after solved for timestep
@@ -321,6 +324,8 @@ int main(int argc, char** argv)
       SPS.mark(boundaries, 1);
       meshOut << boundaries;
 
+      int index = 3* ( (int) mesh.num_vertices()/4.0 ) + 2;
+
       // Initialize variational forms
       printf("\tvariational forms...\n"); fflush(stdout);
       pnp::FunctionSpace V(mesh ,periodic_boundary);
@@ -402,7 +407,7 @@ int main(int argc, char** argv)
       printf("\tupdate initial residual...\n"); fflush(stdout);
       initial_residual = get_initial_residual(
         &L_pnp,
-        &bc,
+        index,
         &previous_cation,
         &previous_anion,
         &previous_potential
@@ -418,7 +423,7 @@ int main(int argc, char** argv)
       L_pnp.AnAn_t0 = previous_anion;
       assemble(b_pnp, L_pnp);
       // bc.apply(b_pnp);
-      b_pnp[3*int(b_pnp.size()/6.0)+2]=0.0;
+      b_pnp[index]=0.0;
       relative_residual = b_pnp.norm("l2") / initial_residual;
       if (num_adapts == 0)
         printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
@@ -473,7 +478,7 @@ int main(int argc, char** argv)
           replace_matrix(3,1, &V, &V_an , &A_pnp, &A_an );
         }
         // bc.apply(A_pnp);
-        replace_row(3*int(b_pnp.size()/6.0)+2, &A_pnp, &b_pnp);
+        replace_row(index, &A_pnp, &b_pnp);
 
         // Convert to fasp
         printf("\tconvert to FASP and solve...\n"); fflush(stdout);
@@ -512,7 +517,7 @@ int main(int argc, char** argv)
           relative_residual,
           initial_residual,
           &L_pnp,
-          &bc,
+          index,
           &newtparam
         );
         if (relative_residual < 0.0) {
@@ -530,7 +535,7 @@ int main(int argc, char** argv)
         L_pnp.AnAn_t0 = previous_anion;
         assemble(b_pnp, L_pnp);
         // bc.apply(b_pnp);
-        b_pnp[3*int(b_pnp.size()/6.0)+2]=0.0;
+        b_pnp[index]=0.0;
 
         fasp_dbsr_free(&A_fasp_bsr);
 
@@ -653,7 +658,7 @@ double update_solution_pnp (
   double relative_residual,
   double initial_residual,
   pnp::LinearForm* L,
-  const dolfin::DirichletBC* bc,
+  int index,
   newton_param* params )
 {
   // compute residual
@@ -697,7 +702,7 @@ double update_solution_pnp (
     L->EsEs = _iterate2;
     assemble(b, *L);
     // bc->apply(b);
-    b[3*int(b.size()/6.0)+2]=0.0;
+    b[index]=0.0;
     new_relative_residual = b.norm("l2") / initial_residual;
     printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
   }
@@ -715,7 +720,7 @@ double update_solution_pnp (
 
 double get_initial_residual (
   pnp::LinearForm* L,
-  const dolfin::DirichletBC* bc,
+  int index,
   dolfin::Function* cation,
   dolfin::Function* anion,
   dolfin::Function* potential)
@@ -736,8 +741,6 @@ double get_initial_residual (
   EigenVector b;
   assemble(b, *L);
   // bc->apply(b);
-  printf("tata");fflush(stdout);
-  b[3*int(b.size()/6.0)+2]=0.0;
-  printf("tete");fflush(stdout);
+  b[index]=0.0;
   return b.norm("l2");
 }

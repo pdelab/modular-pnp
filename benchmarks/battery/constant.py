@@ -74,7 +74,7 @@ Lz=72.0/ref_Lz
 domain = Box(Point(-Lx/2.0,-Ly/2.0,-Lz/2.0),Point(Lx/2.0,Ly/2.0,Lz/2.0))
 print "Generating the domain..."
 ## The range can be at most len(x)=86
-Numb_spheres=10
+Numb_spheres=20
 
 # Read mesh
 mesh = Mesh("mesh.xml.gz")
