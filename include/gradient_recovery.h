@@ -4974,7 +4974,7 @@ public:
   /// Tabulate which form coefficients are used by this integral
   virtual const std::vector<bool> & enabled_coefficients() const
   {
-    static const std::vector<bool> enabled({true});
+    static const std::vector<bool> enabled({true, true});
     return enabled;
   }
 
@@ -4984,11 +4984,6 @@ public:
                                const double*  vertex_coordinates,
                                int cell_orientation) const
   {
-    // Number of operations (multiply-add pairs) for Jacobian data:      3
-    // Number of operations (multiply-add pairs) for geometry tensor:    27
-    // Number of operations (multiply-add pairs) for tensor contraction: 66
-    // Total number of operations (multiply-add pairs):                  96
-    
     // Compute Jacobian
     double J[9];
     compute_jacobian_tetrahedron_3d(J, vertex_coordinates);
@@ -5001,39 +4996,135 @@ public:
     // Set scale factor
     const double det = std::abs(detJ);
     
-    // Compute geometry tensor
-    const double G0_0_0_0 = det*w[0][0]*K[0]*(1.0);
-    const double G0_0_0_1 = det*w[0][0]*K[3]*(1.0);
-    const double G0_0_0_2 = det*w[0][0]*K[6]*(1.0);
-    const double G0_0_1_0 = det*w[0][1]*K[0]*(1.0);
-    const double G0_0_2_1 = det*w[0][2]*K[3]*(1.0);
-    const double G0_0_3_2 = det*w[0][3]*K[6]*(1.0);
-    const double G0_1_0_0 = det*w[0][0]*K[1]*(1.0);
-    const double G0_1_0_1 = det*w[0][0]*K[4]*(1.0);
-    const double G0_1_0_2 = det*w[0][0]*K[7]*(1.0);
-    const double G0_1_1_0 = det*w[0][1]*K[1]*(1.0);
-    const double G0_1_2_1 = det*w[0][2]*K[4]*(1.0);
-    const double G0_1_3_2 = det*w[0][3]*K[7]*(1.0);
-    const double G0_2_0_0 = det*w[0][0]*K[2]*(1.0);
-    const double G0_2_0_1 = det*w[0][0]*K[5]*(1.0);
-    const double G0_2_0_2 = det*w[0][0]*K[8]*(1.0);
-    const double G0_2_1_0 = det*w[0][1]*K[2]*(1.0);
-    const double G0_2_2_1 = det*w[0][2]*K[5]*(1.0);
-    const double G0_2_3_2 = det*w[0][3]*K[8]*(1.0);
+    // Compute cell volume
     
-    // Compute element tensor
-    A[0] = -0.0416666666666667*G0_0_0_0 - 0.0416666666666667*G0_0_0_1 - 0.0416666666666667*G0_0_0_2 + 0.0416666666666667*G0_0_1_0 + 0.0416666666666667*G0_0_2_1 + 0.0416666666666667*G0_0_3_2;
-    A[1] = -0.0416666666666667*G0_0_0_0 - 0.0416666666666667*G0_0_0_1 - 0.0416666666666667*G0_0_0_2 + 0.0416666666666667*G0_0_1_0 + 0.0416666666666667*G0_0_2_1 + 0.0416666666666667*G0_0_3_2;
-    A[2] = -0.0416666666666667*G0_0_0_0 - 0.0416666666666667*G0_0_0_1 - 0.0416666666666667*G0_0_0_2 + 0.0416666666666667*G0_0_1_0 + 0.0416666666666667*G0_0_2_1 + 0.0416666666666667*G0_0_3_2;
-    A[3] = -0.0416666666666667*G0_0_0_0 - 0.0416666666666667*G0_0_0_1 - 0.0416666666666667*G0_0_0_2 + 0.0416666666666667*G0_0_1_0 + 0.0416666666666667*G0_0_2_1 + 0.0416666666666667*G0_0_3_2;
-    A[4] = -0.0416666666666667*G0_1_0_0 - 0.0416666666666667*G0_1_0_1 - 0.0416666666666667*G0_1_0_2 + 0.0416666666666667*G0_1_1_0 + 0.0416666666666667*G0_1_2_1 + 0.0416666666666667*G0_1_3_2;
-    A[5] = -0.0416666666666667*G0_1_0_0 - 0.0416666666666667*G0_1_0_1 - 0.0416666666666667*G0_1_0_2 + 0.0416666666666667*G0_1_1_0 + 0.0416666666666667*G0_1_2_1 + 0.0416666666666667*G0_1_3_2;
-    A[6] = -0.0416666666666667*G0_1_0_0 - 0.0416666666666667*G0_1_0_1 - 0.0416666666666667*G0_1_0_2 + 0.0416666666666667*G0_1_1_0 + 0.0416666666666667*G0_1_2_1 + 0.0416666666666667*G0_1_3_2;
-    A[7] = -0.0416666666666667*G0_1_0_0 - 0.0416666666666667*G0_1_0_1 - 0.0416666666666667*G0_1_0_2 + 0.0416666666666667*G0_1_1_0 + 0.0416666666666667*G0_1_2_1 + 0.0416666666666667*G0_1_3_2;
-    A[8] = -0.0416666666666667*G0_2_0_0 - 0.0416666666666667*G0_2_0_1 - 0.0416666666666667*G0_2_0_2 + 0.0416666666666667*G0_2_1_0 + 0.0416666666666667*G0_2_2_1 + 0.0416666666666667*G0_2_3_2;
-    A[9] = -0.0416666666666667*G0_2_0_0 - 0.0416666666666667*G0_2_0_1 - 0.0416666666666667*G0_2_0_2 + 0.0416666666666667*G0_2_1_0 + 0.0416666666666667*G0_2_2_1 + 0.0416666666666667*G0_2_3_2;
-    A[10] = -0.0416666666666667*G0_2_0_0 - 0.0416666666666667*G0_2_0_1 - 0.0416666666666667*G0_2_0_2 + 0.0416666666666667*G0_2_1_0 + 0.0416666666666667*G0_2_2_1 + 0.0416666666666667*G0_2_3_2;
-    A[11] = -0.0416666666666667*G0_2_0_0 - 0.0416666666666667*G0_2_0_1 - 0.0416666666666667*G0_2_0_2 + 0.0416666666666667*G0_2_1_0 + 0.0416666666666667*G0_2_2_1 + 0.0416666666666667*G0_2_3_2;
+    
+    // Compute circumradius
+    
+    
+    // Array of quadrature weights.
+    static const double W14[14] = {0.00317460317460317, 0.00317460317460317, 0.00317460317460317, 0.00317460317460317, 0.00317460317460317, 0.00317460317460317, 0.0147649707904968, 0.0147649707904968, 0.0147649707904968, 0.0147649707904968, 0.0221397911142651, 0.0221397911142651, 0.0221397911142651, 0.0221397911142651};
+    // Quadrature points on the UFC reference element: (0.0, 0.5, 0.5), (0.5, 0.0, 0.5), (0.5, 0.5, 0.0), (0.5, 0.0, 0.0), (0.0, 0.5, 0.0), (0.0, 0.0, 0.5), (0.698419704324387, 0.100526765225204, 0.100526765225204), (0.100526765225204, 0.100526765225204, 0.100526765225204), (0.100526765225204, 0.100526765225204, 0.698419704324387), (0.100526765225204, 0.698419704324387, 0.100526765225204), (0.0568813795204234, 0.314372873493192, 0.314372873493192), (0.314372873493192, 0.314372873493192, 0.314372873493192), (0.314372873493192, 0.314372873493192, 0.0568813795204234), (0.314372873493192, 0.0568813795204234, 0.314372873493192)
+    
+    // Values of basis functions at quadrature points.
+    static const double FE0[14][4] = \
+    {{0.0, 0.0, 0.5, 0.5},
+    {0.0, 0.5, 0.0, 0.5},
+    {0.0, 0.5, 0.5, 0.0},
+    {0.5, 0.5, 0.0, 0.0},
+    {0.5, 0.0, 0.5, 0.0},
+    {0.5, 0.0, 0.0, 0.5},
+    {0.100526765225205, 0.698419704324386, 0.100526765225205, 0.100526765225205},
+    {0.698419704324387, 0.100526765225204, 0.100526765225205, 0.100526765225205},
+    {0.100526765225205, 0.100526765225204, 0.100526765225205, 0.698419704324386},
+    {0.100526765225205, 0.100526765225204, 0.698419704324386, 0.100526765225205},
+    {0.314372873493192, 0.0568813795204234, 0.314372873493192, 0.314372873493192},
+    {0.0568813795204235, 0.314372873493192, 0.314372873493192, 0.314372873493192},
+    {0.314372873493192, 0.314372873493192, 0.314372873493192, 0.0568813795204234},
+    {0.314372873493192, 0.314372873493192, 0.0568813795204235, 0.314372873493192}};
+    
+    // Array of non-zero columns
+    static const unsigned int nzc3[4] = {0, 1, 2, 3};
+    
+    // Array of non-zero columns
+    static const unsigned int nzc7[4] = {4, 5, 6, 7};
+    
+    // Array of non-zero columns
+    static const unsigned int nzc11[4] = {8, 9, 10, 11};
+    
+    static const double FE0_D001[14][2] = \
+    {{-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0}};
+    
+    // Array of non-zero columns
+    static const unsigned int nzc0[2] = {0, 3};
+    
+    // Array of non-zero columns
+    static const unsigned int nzc1[2] = {0, 2};
+    
+    // Array of non-zero columns
+    static const unsigned int nzc2[2] = {0, 1};
+    
+    // Reset values in the element tensor.
+    for (unsigned int r = 0; r < 12; r++)
+    {
+      A[r] = 0.0;
+    } // end loop over 'r'
+    // Number of operations to compute geometry constants: 9.
+    double G[9];
+    G[0] = K[2]*det;
+    G[1] = K[5]*det;
+    G[2] = K[8]*det;
+    G[3] = K[0]*det;
+    G[4] = K[3]*det;
+    G[5] = K[6]*det;
+    G[6] = K[1]*det;
+    G[7] = K[4]*det;
+    G[8] = K[7]*det;
+    
+    // Compute element tensor using UFL quadrature representation
+    // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
+    
+    // Loop quadrature points for integral.
+    // Number of operations to compute element tensor for following IP loop = 952
+    for (unsigned int ip = 0; ip < 14; ip++)
+    {
+      
+      // Coefficient declarations.
+      double F0 = 0.0;
+      double F1 = 0.0;
+      double F2 = 0.0;
+      double F3 = 0.0;
+      
+      // Total number of operations to compute function values = 12
+      for (unsigned int r = 0; r < 2; r++)
+      {
+        F0 += FE0_D001[ip][r]*w[1][nzc2[r]];
+        F1 += FE0_D001[ip][r]*w[1][nzc1[r]];
+        F2 += FE0_D001[ip][r]*w[1][nzc0[r]];
+      } // end loop over 'r'
+      
+      // Total number of operations to compute function values = 8
+      for (unsigned int r = 0; r < 4; r++)
+      {
+        F3 += FE0[ip][r]*w[0][r];
+      } // end loop over 'r'
+      
+      // Number of operations to compute ip constants: 24
+      double I[3];
+      // Number of operations: 8
+      I[0] = W14[ip]*std::exp(F3)*(F0*G[0] + F1*G[1] + F2*G[2]);
+      
+      // Number of operations: 8
+      I[1] = W14[ip]*std::exp(F3)*(F0*G[3] + F1*G[4] + F2*G[5]);
+      
+      // Number of operations: 8
+      I[2] = W14[ip]*std::exp(F3)*(F0*G[6] + F1*G[7] + F2*G[8]);
+      
+      
+      // Number of operations for primary indices: 24
+      for (unsigned int j = 0; j < 4; j++)
+      {
+        // Number of operations to compute entry: 2
+        A[nzc11[j]] += FE0[ip][j]*I[0];
+        // Number of operations to compute entry: 2
+        A[nzc3[j]] += FE0[ip][j]*I[1];
+        // Number of operations to compute entry: 2
+        A[nzc7[j]] += FE0[ip][j]*I[2];
+      } // end loop over 'j'
+    } // end loop over 'ip'
   }
 
 };
@@ -5296,7 +5387,7 @@ public:
   /// Return a string identifying the form
   virtual const char* signature() const
   {
-    return "7f5d22a3dfc8c3dc6cbf111e018d334059523670bae550221b5def99e885939d88f902f18d9b4c438036d7d83558301b506d10387c9ccbd49f103983344506f6";
+    return "d796091accc61067cbde3a030049a19a09177b6d15672aaa1035b7c2c25a48e57755aa659c9c312084946fe596268ef311ac577195250ae6bf631bb25d1f5b3a";
   }
 
 
@@ -5309,13 +5400,13 @@ public:
   /// Return the number of coefficients (n)
   virtual std::size_t num_coefficients() const
   {
-    return 1;
+    return 2;
   }
 
   /// Return original coefficient position for each coefficient (0 <= i < n)
   virtual std::size_t original_coefficient_position(std::size_t i) const
   {
-    static const std::vector<std::size_t> position({0});
+    static const std::vector<std::size_t> position({0, 1});
     return position[i];
   }
 
@@ -5331,6 +5422,11 @@ public:
         break;
       }
     case 1:
+      {
+        return new gradient_recovery_finite_element_0();
+        break;
+      }
+    case 2:
       {
         return new gradient_recovery_finite_element_0();
         break;
@@ -5351,6 +5447,11 @@ public:
         break;
       }
     case 1:
+      {
+        return new gradient_recovery_dofmap_0();
+        break;
+      }
+    case 2:
       {
         return new gradient_recovery_dofmap_0();
         break;
@@ -5504,6 +5605,53 @@ public:
 
 namespace gradient_recovery
 {
+
+class CoefficientSpace_eta: public dolfin::FunctionSpace
+{
+public:
+
+  //--- Constructors for standard function space, 2 different versions ---
+
+  // Create standard function space (reference version)
+  CoefficientSpace_eta(const dolfin::Mesh& mesh):
+    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new gradient_recovery_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new gradient_recovery_dofmap_0()), mesh)))
+  {
+    // Do nothing
+  }
+
+  // Create standard function space (shared pointer version)
+  CoefficientSpace_eta(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::FunctionSpace(mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new gradient_recovery_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new gradient_recovery_dofmap_0()), *mesh)))
+  {
+    // Do nothing
+  }
+
+  //--- Constructors for constrained function space, 2 different versions ---
+
+  // Create standard function space (reference version)
+  CoefficientSpace_eta(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
+    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new gradient_recovery_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new gradient_recovery_dofmap_0()), mesh,
+                              dolfin::reference_to_no_delete_pointer(constrained_domain))))
+  {
+    // Do nothing
+  }
+
+  // Create standard function space (shared pointer version)
+  CoefficientSpace_eta(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+    dolfin::FunctionSpace(mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new gradient_recovery_finite_element_0()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new gradient_recovery_dofmap_0()), *mesh, constrained_domain)))
+  {
+    // Do nothing
+  }
+
+};
 
 class CoefficientSpace_potential: public dolfin::FunctionSpace
 {
@@ -5748,7 +5896,9 @@ public:
 
 };
 
-typedef CoefficientSpace_potential Form_L_FunctionSpace_1;
+typedef CoefficientSpace_eta Form_L_FunctionSpace_1;
+
+typedef CoefficientSpace_potential Form_L_FunctionSpace_2;
 
 class Form_L: public dolfin::Form
 {
@@ -5756,7 +5906,7 @@ public:
 
   // Constructor
   Form_L(const dolfin::FunctionSpace& V0):
-    dolfin::Form(1, 1), potential(*this, 0)
+    dolfin::Form(1, 2), eta(*this, 0), potential(*this, 1)
   {
     _function_spaces[0] = reference_to_no_delete_pointer(V0);
 
@@ -5764,22 +5914,24 @@ public:
   }
 
   // Constructor
-  Form_L(const dolfin::FunctionSpace& V0, const dolfin::GenericFunction& potential):
-    dolfin::Form(1, 1), potential(*this, 0)
+  Form_L(const dolfin::FunctionSpace& V0, const dolfin::GenericFunction& eta, const dolfin::GenericFunction& potential):
+    dolfin::Form(1, 2), eta(*this, 0), potential(*this, 1)
   {
     _function_spaces[0] = reference_to_no_delete_pointer(V0);
 
+    this->eta = eta;
     this->potential = potential;
 
     _ufc_form = std::shared_ptr<const ufc::form>(new gradient_recovery_form_1());
   }
 
   // Constructor
-  Form_L(const dolfin::FunctionSpace& V0, std::shared_ptr<const dolfin::GenericFunction> potential):
-    dolfin::Form(1, 1), potential(*this, 0)
+  Form_L(const dolfin::FunctionSpace& V0, std::shared_ptr<const dolfin::GenericFunction> eta, std::shared_ptr<const dolfin::GenericFunction> potential):
+    dolfin::Form(1, 2), eta(*this, 0), potential(*this, 1)
   {
     _function_spaces[0] = reference_to_no_delete_pointer(V0);
 
+    this->eta = *eta;
     this->potential = *potential;
 
     _ufc_form = std::shared_ptr<const ufc::form>(new gradient_recovery_form_1());
@@ -5787,7 +5939,7 @@ public:
 
   // Constructor
   Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0):
-    dolfin::Form(1, 1), potential(*this, 0)
+    dolfin::Form(1, 2), eta(*this, 0), potential(*this, 1)
   {
     _function_spaces[0] = V0;
 
@@ -5795,22 +5947,24 @@ public:
   }
 
   // Constructor
-  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, const dolfin::GenericFunction& potential):
-    dolfin::Form(1, 1), potential(*this, 0)
+  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, const dolfin::GenericFunction& eta, const dolfin::GenericFunction& potential):
+    dolfin::Form(1, 2), eta(*this, 0), potential(*this, 1)
   {
     _function_spaces[0] = V0;
 
+    this->eta = eta;
     this->potential = potential;
 
     _ufc_form = std::shared_ptr<const ufc::form>(new gradient_recovery_form_1());
   }
 
   // Constructor
-  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> potential):
-    dolfin::Form(1, 1), potential(*this, 0)
+  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> eta, std::shared_ptr<const dolfin::GenericFunction> potential):
+    dolfin::Form(1, 2), eta(*this, 0), potential(*this, 1)
   {
     _function_spaces[0] = V0;
 
+    this->eta = *eta;
     this->potential = *potential;
 
     _ufc_form = std::shared_ptr<const ufc::form>(new gradient_recovery_form_1());
@@ -5823,8 +5977,10 @@ public:
   /// Return the number of the coefficient with this name
   virtual std::size_t coefficient_number(const std::string& name) const
   {
-    if (name == "potential")
+    if (name == "eta")
       return 0;
+    else if (name == "potential")
+      return 1;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -5838,6 +5994,8 @@ public:
     switch (i)
     {
     case 0:
+      return "eta";
+    case 1:
       return "potential";
     }
 
@@ -5849,9 +6007,11 @@ public:
 
   // Typedefs
   typedef Form_L_FunctionSpace_0 TestSpace;
-  typedef Form_L_FunctionSpace_1 CoefficientSpace_potential;
+  typedef Form_L_FunctionSpace_1 CoefficientSpace_eta;
+  typedef Form_L_FunctionSpace_2 CoefficientSpace_potential;
 
   // Coefficients
+  dolfin::CoefficientAssigner eta;
   dolfin::CoefficientAssigner potential;
 };
 

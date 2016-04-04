@@ -453,7 +453,8 @@ int main(int argc, char** argv)
       &potentialSolution,
       &mesh0,
       entropy_tol,
-      max_mesh_size
+      max_mesh_size,
+      3
     );
 
     if (num_refines == 0) {
