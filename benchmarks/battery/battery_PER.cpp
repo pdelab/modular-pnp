@@ -15,6 +15,8 @@
 #include "fasp_to_fenics.h"
 #include "boundary_conditions.h"
 #include "pnp.h"
+#include "chargeSurface.h"
+#include "chargeVolume.h"
 #include "L2Error.h"
 #include "energy.h"
 #include "newton.h"
@@ -272,12 +274,48 @@ int main(int argc, char** argv)
   Constant cat_alpha(coeff_par.cation_diffusivity*time_step_size);
   Constant an_alpha(coeff_par.anion_diffusivity*time_step_size);
   Constant one(1.0);
-  Constant C_g(1.0);//1.0*coeff_par.relative_permittivity);
+  // Constant C_g(1.0);//1.0*coeff_par.relative_permittivity);
   Constant zero(0.0);
+
+
+
+
+  // Check charge sanity
+  chargeVolume::Functional volumeCharge(mesh_adapt);
+  volumeCharge.charge = initial_cation;
+  double cationNetCharge = assemble(volumeCharge);
+  printf("\n\nCation Net charge is %e\n\n", cationNetCharge);
+
+  volumeCharge.charge = initial_anion;
+  double anionNetCharge = assemble(volumeCharge);
+  printf("\n\nAnion Net charge is %e\n\n", anionNetCharge);
 
   SpheresSubDomain SPS;
 
-  printf("############## The mesh already has %d > %d \n",mesh_adapt.num_cells(),newtparam.max_cells);
+  FacetFunction<std::size_t> surf_boundaries(mesh_adapt);
+  surf_boundaries.set_all(0);
+  SPS.mark(surf_boundaries, 1);
+  meshOut << surf_boundaries;
+  chargeSurface::Functional surfaceCharge(mesh_adapt);
+  surfaceCharge.charge = one;
+  surfaceCharge.ds = surf_boundaries;
+  double surfaceNetCharge = assemble(surfaceCharge);
+  printf("\n\nSurface Net charge is %e\n\n", surfaceNetCharge);
+
+  printf("\n\nTotal charge is %e\n\n", cationNetCharge - anionNetCharge + surfaceNetCharge);
+
+
+  double correctedSurfaceCharge = -(cationNetCharge - anionNetCharge) / surfaceNetCharge;
+  Constant C_g( correctedSurfaceCharge );
+  surfaceCharge.charge = C_g;
+  surfaceNetCharge = assemble(surfaceCharge);
+  printf("\n\nCorrected Surface Net charge is %e\n\n", surfaceNetCharge);
+
+  printf("\n\nTotal charge is %e\n\n", cationNetCharge - anionNetCharge + surfaceNetCharge);
+
+
+
+  printf("############## The mesh already has %lu > %d \n",mesh_adapt.num_cells(),newtparam.max_cells);
 
   for (double t = time_step_size; t < final_time; t += time_step_size) {
     // printf("\nSet voltage to %e...\n", volt); fflush(stdout);

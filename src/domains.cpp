@@ -277,7 +277,7 @@ unsigned int check_electric_field (dolfin::Function *voltage,
   dolfin::Mesh mesh( *(voltage->function_space()->mesh()) );
 
   if ((max_cells>0) && (mesh.num_cells()>max_cells)){
-    printf("\t\tThe mesh already has %d > %d \n",mesh.num_cells(),max_cells);
+    printf("\t\tThe mesh already has %lu > %d \n",mesh.num_cells(),max_cells);
     printf("\t\tThe mesh already has too many cells. No adaptivity\n");
     *target_mesh = mesh;
     return 0;
