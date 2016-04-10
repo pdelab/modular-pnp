@@ -310,6 +310,8 @@ unsigned int check_electric_field (
   INT status = FASP_SUCCESS;
 
   // set form for electric field
+  Constant one(1.0);
+  L.eta = one;
   L.potential = potential;
   assemble(b,L);
   status = mass_lumping_solver(&A, &b, &ElecField);
@@ -330,7 +332,7 @@ unsigned int check_electric_field (
     if (error_vector[errVecInd] > new_entropy_tol) {
       marked_elem_count++;
       cell_marker.values()[errVecInd] = true;
-      
+
       if (marked_elem_count > max_elements) {
         cell_marker.values()[errVecInd] = false;
         new_entropy_tol *= 5.0;

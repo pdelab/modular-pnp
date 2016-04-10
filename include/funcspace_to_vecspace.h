@@ -13,4 +13,6 @@ void add_matrix(int nc, int l, dolfin::FunctionSpace *V, dolfin::FunctionSpace *
 
 void replace_matrix(int nc, int l, dolfin::FunctionSpace *V, dolfin::FunctionSpace *V_l, dolfin::EigenMatrix *A, dolfin::EigenMatrix *A_l);
 
+void replace_row(int row_index, dolfin::EigenMatrix* A, dolfin::EigenVector* b);
+
 #endif

@@ -31,6 +31,7 @@ using namespace dolfin;
 // using namespace std;
 
 bool eafe_switch = false;
+double max_mesh_growth = 1.5;
 
 double lower_cation_val = 1.0;  // 1 / m^3
 double upper_cation_val = 0.1;  // 1 / m^3
@@ -518,11 +519,14 @@ int main(int argc, char** argv)
       // compute local entropy and refine mesh
       printf("Computing electric field for refinement\n");
       unsigned int num_refines;
+      double max_mesh_size_double = max_mesh_growth * ((double) mesh_adapt.size(3));
+      int max_mesh_size = (int) std::floor(max_mesh_size_double);
       num_refines = check_electric_field(
         &potentialSolution,
         &mesh_adapt,
         entropy_tol,
-        newtparam.max_cells
+        max_mesh_size,
+        3
       );
 
       // free fasp solution
