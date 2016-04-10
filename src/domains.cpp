@@ -213,7 +213,7 @@ unsigned int check_local_entropy (
     if (error_vector[errVecInd] > new_entropy_tol) {
       marked_elem_count++;
       cell_marker.values()[errVecInd] = true;
-      if (mesh.num_cells()+marked_elem_count > max_elements) {
+      if (mesh.num_cells()+8*marked_elem_count > max_elements) {
         new_entropy_tol *= 5.0;
         cell_marker.set_all(false);
         marked_elem_count = 0;
@@ -332,7 +332,7 @@ unsigned int check_electric_field (
       marked_elem_count++;
       cell_marker.values()[errVecInd] = true;
 
-      if (mesh.num_cells()+marked_elem_count > max_elements) {
+      if (mesh.num_cells()+8*marked_elem_count > max_elements) {
         new_entropy_tol *= 5.0;
         cell_marker.set_all(false);
         marked_elem_count = 0;
