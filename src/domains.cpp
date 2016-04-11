@@ -154,7 +154,7 @@ unsigned int check_local_entropy (
   dolfin::Mesh mesh( *(voltage->function_space()->mesh()) );
 
   // refinement is too deep
-  if (max_depth == 0) {
+  if ( (max_depth == 0) || (mesh.num_cells()>max_elements) ) {
     printf("\tmesh refinement is attempting to over-refine...\n");
     printf("\t\t terminating refinement\n");
     *target_mesh = mesh;
@@ -213,8 +213,7 @@ unsigned int check_local_entropy (
     if (error_vector[errVecInd] > new_entropy_tol) {
       marked_elem_count++;
       cell_marker.values()[errVecInd] = true;
-      if (marked_elem_count > max_elements) {
-        cell_marker.values()[errVecInd] = false;
+      if (mesh.num_cells()+8*marked_elem_count > max_elements) {
         new_entropy_tol *= 5.0;
         cell_marker.set_all(false);
         marked_elem_count = 0;
@@ -287,7 +286,7 @@ unsigned int check_electric_field (
   dolfin::Mesh mesh( *(voltage->function_space()->mesh()) );
 
   // refinement is too deep
-  if (max_depth == 0) {
+  if ( (max_depth == 0) || (mesh.num_cells()>max_elements) ) {
     printf("\tmesh refinement is attempting to over-refine...\n");
     printf("\t\t terminating refinement\n");
     *target_mesh = mesh;
@@ -333,8 +332,7 @@ unsigned int check_electric_field (
       marked_elem_count++;
       cell_marker.values()[errVecInd] = true;
 
-      if (marked_elem_count > max_elements) {
-        cell_marker.values()[errVecInd] = false;
+      if (mesh.num_cells()+8*marked_elem_count > max_elements) {
         new_entropy_tol *= 5.0;
         cell_marker.set_all(false);
         marked_elem_count = 0;
