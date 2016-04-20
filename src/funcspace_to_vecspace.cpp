@@ -21,8 +21,13 @@ using namespace dolfin;
  *    V = VectorFunction space of dimensin nc
  *    V = Function space of dimension 1
  */
-void add_matrix(int nc, int l, dolfin::FunctionSpace *V, dolfin::FunctionSpace *V_l, dolfin::EigenMatrix *A, dolfin::EigenMatrix *A_l)
-{
+void add_matrix(
+  int nc,
+  int l, dolfin::FunctionSpace *V,
+  dolfin::FunctionSpace *V_l,
+  dolfin::EigenMatrix *A,
+  dolfin::EigenMatrix *A_l
+) {
   // dimensions of matrices
   int nrows_l = A_l->size(0);
   int ncols_l = A_l->size(1);
@@ -94,8 +99,14 @@ void add_matrix(int nc, int l, dolfin::FunctionSpace *V, dolfin::FunctionSpace *
  *    V = VectorFunction space of dimensin nc
  *    V = Function space of dimension 1
  */
-void replace_matrix(int nc, int l, dolfin::FunctionSpace *V, dolfin::FunctionSpace *V_l, dolfin::EigenMatrix *A, dolfin::EigenMatrix *A_l)
-{
+void replace_matrix(
+  int nc,
+  int l,
+  dolfin::FunctionSpace *V,
+  dolfin::FunctionSpace *V_l,
+  dolfin::EigenMatrix *A,
+  dolfin::EigenMatrix *A_l
+) {
   // dimensions of matrices
   int nrows_l = A_l->size(0);
   int ncols_l = A_l->size(1);
@@ -156,22 +167,18 @@ void replace_matrix(int nc, int l, dolfin::FunctionSpace *V, dolfin::FunctionSpa
 
 }
 
-void replace_row(int row_index, dolfin::EigenMatrix* A, dolfin::EigenVector* b)
-{
-  int k, l;
-  int* JA=(int*) std::get<1>(A->data());
-  int *IA=(int*) std::get<0>(A->data());
+void replace_row(
+  int row_index,
+  dolfin::EigenMatrix* A
+) {
+  int* JA = (int*) std::get<1>(A->data());
+  int* IA = (int*) std::get<0>(A->data());
   double* vals = (double*) std::get<2>(A->data());
-  (*b)[row_index+l]=0.0;
-  for (k=IA[row_index];k<IA[row_index+1];k++)
-  {
-      if (JA[k]==row_index)
-      {
-        vals[k]=1.0;
-      }
-      else
-      {
-        vals[k]=0.0;
-      }
+
+  for (int k = IA[row_index]; k < IA[row_index+1]; k++) {
+    if (JA[k]==row_index)
+      vals[k]=1.0;
+    else
+      vals[k]=0.0;
   }
 }
