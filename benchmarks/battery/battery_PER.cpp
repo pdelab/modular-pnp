@@ -238,10 +238,10 @@ int main(int argc, char** argv)
   );
 
   initial_cation.interpolate(Constant(0.69314718056));
-  // g=1.0
+  // For g=1.0 :
   initial_anion.interpolate(Constant(0.841997349595));
-  // g=0.1
-  // initial_anion.interpolate(Constant(0.709069652278));
+  // For g=0.1 :
+  //initial_anion.interpolate(Constant(0.709069652278));
   initial_potential.interpolate(Volt);
 
   // output solution after solved for timestep
@@ -617,7 +617,7 @@ int main(int argc, char** argv)
         &potentialSolution,
         &mesh_adapt,
         entropy_tol,
-        max_mesh_size,
+        newtparam.max_cells,
         3
       );
 
