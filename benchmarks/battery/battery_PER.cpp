@@ -174,7 +174,7 @@ int main(int argc, char** argv)
   double initial_residual, relative_residual = 1.0;
 
   // Setup FASP solver
-  printf("FASP solver parameters...\n"); fflush(stdout);
+  printf("FASP solver parameters...\n\n"); fflush(stdout);
   input_param inpar;
   itsolver_param itpar;
   AMG_param amgpar;
@@ -238,10 +238,7 @@ int main(int argc, char** argv)
   );
 
   initial_cation.interpolate(Constant(0.69314718056));
-  // For g=1.0 :
   initial_anion.interpolate(Constant(0.841997349595));
-  // For g=0.1 :
-  //initial_anion.interpolate(Constant(0.709069652278));
   initial_potential.interpolate(Volt);
 
   // output solution after solved for timestep
@@ -282,17 +279,15 @@ int main(int argc, char** argv)
 
 
   // Check charge sanity
+  printf("Checking for sane charges\n");
   chargeVolume::Functional volumeCharge(mesh_adapt);
   volumeCharge.charge = initial_cation;
   double cationNetCharge = assemble(volumeCharge);
-  printf("\n\nCation Net charge is %e\n\n", cationNetCharge);
 
   volumeCharge.charge = initial_anion;
   double anionNetCharge = assemble(volumeCharge);
-  printf("\n\nAnion Net charge is %e\n\n", anionNetCharge);
 
   SpheresSubDomain SPS;
-
   FacetFunction<std::size_t> surf_boundaries(mesh_adapt);
   surf_boundaries.set_all(0);
   SPS.mark(surf_boundaries, 1);
@@ -301,23 +296,15 @@ int main(int argc, char** argv)
   surfaceCharge.charge = one;
   surfaceCharge.ds = surf_boundaries;
   double surfaceNetCharge = assemble(surfaceCharge);
-  printf("\n\nSurface Net charge is %e\n\n", surfaceNetCharge);
-
-  printf("\n\nTotal charge is %e\n\n", cationNetCharge - anionNetCharge + surfaceNetCharge);
-
 
   double correctedSurfaceCharge = -(cationNetCharge - anionNetCharge) / surfaceNetCharge;
   Constant C_g( correctedSurfaceCharge );
   surfaceCharge.charge = C_g;
   surfaceNetCharge = assemble(surfaceCharge);
-  printf("\n\nCorrected Surface charge = %e\n\n", correctedSurfaceCharge);
-  printf("\n\nCorrected Surface Net charge is %e\n\n", surfaceNetCharge);
-
-  printf("\n\nTotal charge is %e\n\n", cationNetCharge - anionNetCharge + surfaceNetCharge);
+  printf("\tcorrected Surface Net charge is %e\n", surfaceNetCharge);
+  printf("\ttotal charge is %e\n\n", cationNetCharge - anionNetCharge + surfaceNetCharge);
 
 
-
-  printf("############## The mesh already has %lu > %d \n",mesh_adapt.num_cells(),newtparam.max_cells);
 
   for (double t = time_step_size; t < final_time; t += time_step_size) {
     // printf("\nSet voltage to %e...\n", volt); fflush(stdout);
@@ -380,10 +367,10 @@ int main(int argc, char** argv)
           flag_index=true;
         }
         else
-          index+=1;
+          index += 1;
       }
-      index=3*index+2;
-      printf("\tdone. index= %d\n",index); fflush(stdout);
+      index = 3 * index + 2;
+      printf("index = %d\n", index); fflush(stdout);
       // int index = 3* ( (int) mesh.num_vertices()/4.0 ) + 2 +3*25;
 
       // Initialize variational forms
@@ -473,8 +460,6 @@ int main(int argc, char** argv)
         &previous_potential
       );
 
-      printf("toto1");fflush(stdout);
-
       printf("\tcompute relative residual...\n"); fflush(stdout);
       L_pnp.CatCat = cationSolution;
       L_pnp.AnAn = anionSolution;
@@ -482,9 +467,9 @@ int main(int argc, char** argv)
       L_pnp.CatCat_t0 = previous_cation;
       L_pnp.AnAn_t0 = previous_anion;
       assemble(b_pnp, L_pnp);
-      // bc.apply(b_pnp);
-      b_pnp[index]=0.0;
+      b_pnp[index] = 0.0; //bc.apply(b_pnp);
       relative_residual = b_pnp.norm("l2") / initial_residual;
+
       if (num_adapts == 0)
         printf("\tinitial nonlinear residual has l2-norm of %e\n", initial_residual);
       else
@@ -538,7 +523,7 @@ int main(int argc, char** argv)
           replace_matrix(3,1, &V, &V_an , &A_pnp, &A_an );
         }
         // bc.apply(A_pnp);
-        replace_row(index, &A_pnp, &b_pnp);
+        replace_row(index, &A_pnp);
 
         // Convert to fasp
         printf("\tconvert to FASP and solve...\n"); fflush(stdout);
@@ -587,6 +572,10 @@ int main(int argc, char** argv)
           relative_residual *= -1.0;
         }
 
+        cationFile << cationSolution;
+        anionFile << anionSolution;
+        potentialFile << potentialSolution;
+
         // update nonlinear residual
         L_pnp.CatCat = cationSolution;
         L_pnp.AnAn = anionSolution;
@@ -594,8 +583,8 @@ int main(int argc, char** argv)
         L_pnp.CatCat_t0 = previous_cation;
         L_pnp.AnAn_t0 = previous_anion;
         assemble(b_pnp, L_pnp);
-        // bc.apply(b_pnp);
-        b_pnp[index]=0.0;
+        b_pnp[index] = 0.0; // bc.apply(b_pnp);
+        
 
         fasp_dbsr_free(&A_fasp_bsr);
 
@@ -617,17 +606,21 @@ int main(int argc, char** argv)
         &potentialSolution,
         &mesh_adapt,
         entropy_tol,
-        newtparam.max_cells,
+        max_mesh_size_double,
         3
       );
+      printf("\tneed %d levels of refinement\n", num_refines);
 
       // free fasp solution
       fasp_dvec_free(&solu_fasp);
 
       if ( (num_refines == 0) || ( ++num_adapts > max_adapts ) ){
         // successful solve
-          if (num_refines == 0) printf("\tsuccessfully distributed electric field below desired electric field in %d adapts!\n\n", num_adapts);
-          else printf("\nDid not adapt mesh to electric field in %d adapts...\n", max_adapts);
+          if (num_refines == 0)
+            printf("\tsuccessfully distributed electric field below desired electric field in %d adapts!\n\n", num_adapts);
+          else
+            printf("\nDid not adapt mesh to electric field in %d adapts...\n", max_adapts);
+
           adaptive_convergence = true;
           dolfin::Function Er_cat(previous_cation);
           dolfin::Function Er_an(previous_anion);
@@ -655,7 +648,7 @@ int main(int argc, char** argv)
           printf("\tpotential l2 error is:  %e\n", potentialError);
           printf("\tEnergy is:  %e\n", energy);
           printf("***********************************************\n");
-          printf("***********************************************\n");
+          printf("***********************************************\n\n");
           end = clock();
 
           ofs.open("./benchmarks/battery/data.txt", std::ofstream::out | std::ofstream::app);
@@ -740,8 +733,9 @@ double update_solution_pnp (
   L->EsEs = _iterate2;
   EigenVector b;
   assemble(b, *L);
-  // bc->apply(b);
+  b[index] = 0.0; // bc->apply(b);
   double new_relative_residual = b.norm("l2") / initial_residual;
+
 
   // backtrack loop
   unsigned int damp_iters = 0;
@@ -764,9 +758,9 @@ double update_solution_pnp (
     L->AnAn = _iterate1;
     L->EsEs = _iterate2;
     assemble(b, *L);
-    // bc->apply(b);
-    b[index]=0.0;
+    b[index] = 0.0; // bc->apply(b);
     new_relative_residual = b.norm("l2") / initial_residual;
+
     printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
   }
 
@@ -803,7 +797,7 @@ double get_initial_residual (
   L->AnAn_t0 = adapt_anion;
   EigenVector b;
   assemble(b, *L);
-  // bc->apply(b);
-  b[index]=0.0;
+  b[index] = 0.0; // bc->apply(b);
   return b.norm("l2");
+
 }

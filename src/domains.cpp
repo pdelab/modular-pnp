@@ -158,7 +158,7 @@ unsigned int check_local_entropy (
     printf("\tmesh refinement is attempting to over-refine...\n");
     printf("\t\t terminating refinement\n");
     *target_mesh = mesh;
-    return -1;
+    return 0;
   }
 
   gradient_recovery::FunctionSpace gradient_space(mesh);
@@ -214,7 +214,7 @@ unsigned int check_local_entropy (
       marked_elem_count++;
       cell_marker.values()[errVecInd] = true;
       if (mesh.num_cells()+8*marked_elem_count > max_elements) {
-        new_entropy_tol *= 5.0;
+        new_entropy_tol *= 2.0;
         cell_marker.set_all(false);
         marked_elem_count = 0;
         errVecInd = -1;
@@ -229,6 +229,7 @@ unsigned int check_local_entropy (
 
   // check for necessary refiments
   if ( marked_elem_count == 0 ) {
+    printf("\tno elements marked for refinement\n");
     *target_mesh = mesh;
     return 0;
   }
@@ -290,7 +291,7 @@ unsigned int check_electric_field (
     printf("\tmesh refinement is attempting to over-refine...\n");
     printf("\t\t terminating refinement\n");
     *target_mesh = mesh;
-    return -1;
+    return 0;
   }
 
   gradient_recovery::FunctionSpace gradient_space(mesh);
@@ -347,6 +348,7 @@ unsigned int check_electric_field (
 
   // check for necessary refiments
   if ( marked_elem_count == 0 ) {
+    printf("\tno elements marked for refinement\n");
     *target_mesh = mesh;
     return 0;
   }
