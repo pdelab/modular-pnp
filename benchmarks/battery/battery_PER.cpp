@@ -41,9 +41,9 @@ double lower_anion_val = 1.0;  // 1 / m^3
 double upper_anion_val = 1.0;  // 1 / m^3
 double lower_potential_val = +1.0e-0;  // V
 double upper_potential_val = -1.0e-0;  // V
-double Lx = 10.0;
-double Ly = 10.0;
-double Lz = 10.0;
+double Lx = 12.0;
+double Ly = 12.0;
+double Lz = 12.0;
 
 unsigned int dirichlet_coord = 0;
 
@@ -200,6 +200,14 @@ int main(int argc, char** argv)
   File danionFile("./benchmarks/battery/output/danion.pvd");
   File dpotentialFile("./benchmarks/battery/output/dpotential.pvd");
 
+  File cationFileBefore("./benchmarks/battery/output/cationBefore.pvd");
+  File anionFileBefore("./benchmarks/battery/output/anionefore.pvd");
+  File potentialFileBefore("./benchmarks/battery/output/potentialefore.pvd");
+
+  File cationFileAfter("./benchmarks/battery/output/cationAfter.pvd");
+  File anionFileAfter("./benchmarks/battery/output/anionAfter.pvd");
+  File potentialFileAfter("./benchmarks/battery/output/potentialAfter.pvd");
+
   PeriodicBoundary periodic_boundary;
   PeriodicBoundary1D periodic_boundary1D;
 
@@ -238,7 +246,7 @@ int main(int argc, char** argv)
   );
 
   initial_cation.interpolate(Constant(0.69314718056));
-  initial_anion.interpolate(Constant(0.841997349595));
+  initial_anion.interpolate(Constant(0.740978168975));
   initial_potential.interpolate(Volt);
 
   // output solution after solved for timestep
@@ -301,6 +309,7 @@ int main(int argc, char** argv)
   Constant C_g( correctedSurfaceCharge );
   surfaceCharge.charge = C_g;
   surfaceNetCharge = assemble(surfaceCharge);
+  printf("\tcorrected Surface Charge %e\n", correctedSurfaceCharge);
   printf("\tcorrected Surface Net charge is %e\n", surfaceNetCharge);
   printf("\ttotal charge is %e\n\n", cationNetCharge - anionNetCharge + surfaceNetCharge);
 
@@ -584,7 +593,7 @@ int main(int argc, char** argv)
         L_pnp.AnAn_t0 = previous_anion;
         assemble(b_pnp, L_pnp);
         b_pnp[index] = 0.0; // bc.apply(b_pnp);
-        
+
 
         fasp_dbsr_free(&A_fasp_bsr);
 
@@ -607,6 +616,7 @@ int main(int argc, char** argv)
         &mesh_adapt,
         entropy_tol,
         max_mesh_size_double,
+        // newtparam.max_cells,
         3
       );
       printf("\tneed %d levels of refinement\n", num_refines);
@@ -683,6 +693,11 @@ int main(int argc, char** argv)
       else
         printf("\tadapting the mesh using %d levels of local refinement...\n", num_refines);
 
+
+      cationFileBefore << cationSolution;
+      anionFileBefore << anionSolution;
+      potentialFileBefore << potentialSolution;
+
       std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(mesh_adapt) );
       cation_adapt = adapt(cationSolution, mesh_ptr);
       anion_adapt = adapt(anionSolution, mesh_ptr);
@@ -693,6 +708,10 @@ int main(int argc, char** argv)
       prev_potential_adapt = adapt(previous_potential, mesh_ptr);
       mesh = mesh_adapt;
       mesh.bounding_box_tree()->build(mesh);  // to ensure the building_box_tree is correctly indexed
+
+      cationFileAfter << cation_adapt;
+      anionFileAfter << anion_adapt;
+      potentialFileAfter << potential_adapt;
 
 
     }

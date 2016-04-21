@@ -67,14 +67,14 @@ for row in data:
                  rc.append((float(line[l]))/7.2)
                  i+=1
 
-Num_cells=25
-Lx=72.0/ref_Lx
-Ly=72.0/ref_Ly
-Lz=72.0/ref_Lz
+Num_cells=20
+Lx=72.0/ref_Lx+2
+Ly=72.0/ref_Ly+2
+Lz=72.0/ref_Lz+2
 domain = Box(Point(-Lx/2.0,-Ly/2.0,-Lz/2.0),Point(Lx/2.0,Ly/2.0,Lz/2.0))
 print "Generating the domain..."
 ## The range can be at most len(x)=86
-Numb_spheres=20
+Numb_spheres=10
 for i in range(Numb_spheres):
     domain = domain - Sphere(Point(xc[i],yc[i],zc[i]), rc[i])
 
