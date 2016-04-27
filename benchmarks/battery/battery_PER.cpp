@@ -75,22 +75,39 @@ double update_solution_pnp (
 // Sub domain for Periodic boundary condition
 class PeriodicBoundary : public SubDomain
 {
+  // G =
+
   // Left boundary is "target domain" G
   bool inside(const Array<double>& x, bool on_boundary) const
   {
     return on_boundary && (
-      std::abs(x[0]) < Lx / 2.0 + 5.0 * DOLFIN_EPS
-      || std::abs(x[1]) < Ly / 2.0 + 5.0 * DOLFIN_EPS
-      || std::abs(x[2]) < Lz / 2.0 + 5.0 * DOLFIN_EPS
-    );
+         ( x[0] < -Lx / 2.0 + 5.0 * DOLFIN_EPS)
+      || ( x[1] < -Ly / 2.0 + 5.0 * DOLFIN_EPS )
+      || ( x[2] < -Lz / 2.0 + 5.0 * DOLFIN_EPS ) );
   }
 
+  // The function map maps a coordinate x in domain H to a coordinate y in the domain G
   // Map right boundary (H) to left boundary (G)
   void map(const Array<double>& x, Array<double>& y) const
   {
-    y[0] = x[0];
-    y[1] = x[1];
-    y[2] = x[2];
+    if ( x[0] > Lx / 2.0 - 5.0 * DOLFIN_EPS)
+    {
+      y[0] = x[0]-12.0;
+      y[1] = x[1];
+      y[2] = x[2];
+    }
+    else if ( x[1] > Ly / 2.0 - 5.0 * DOLFIN_EPS )
+    {
+      y[0] = x[0];
+      y[1] = x[1]-12.0;
+      y[2] = x[2];
+    }
+    else
+    {
+      y[0] = x[0];
+      y[1] = x[1];
+      y[2] = x[2]-12.0;
+    }
   }
 };
 
