@@ -111,26 +111,6 @@ class PeriodicBoundary : public SubDomain
   }
 };
 
-// Sub domain for Periodic boundary condition
-class PeriodicBoundary1D : public SubDomain
-{
-  // Left boundary is "target domain" G
-  bool inside(const Array<double>& x, bool on_boundary) const
-  {
-    return on_boundary && (
-      std::abs(x[0]) < Lx / 2.0 + 5.0 * DOLFIN_EPS
-      || std::abs(x[1]) < Ly / 2.0 + 5.0 * DOLFIN_EPS
-      || std::abs(x[2]) < Lz / 2.0 + 5.0 * DOLFIN_EPS
-    );
-  }
-
-  // Map right boundary (H) to left boundary (G)
-  void map(const Array<double>& x, Array<double>& y) const
-  {
-    y[0] = x[0];
-  }
-};
-
 
 int main(int argc, char** argv)
 {
@@ -226,7 +206,6 @@ int main(int argc, char** argv)
   File potentialFileAfter("./benchmarks/battery/output/potentialAfter.pvd");
 
   PeriodicBoundary periodic_boundary;
-  PeriodicBoundary1D periodic_boundary1D;
 
   // PREVIOUS ITERATE
   pnp::FunctionSpace V_init(mesh_adapt,periodic_boundary);
@@ -450,11 +429,11 @@ int main(int argc, char** argv)
       //EAFE Formulation
       if (eafe_switch)
         printf("\tEAFE initialization...\n");
-      EAFE::FunctionSpace V_cat(mesh ,periodic_boundary1D);
+      EAFE::FunctionSpace V_cat(mesh ,periodic_boundary);
       EAFE::BilinearForm a_cat(V_cat,V_cat);
       a_cat.alpha = an_alpha;
       a_cat.gamma = one;
-      EAFE::FunctionSpace V_an(mesh ,periodic_boundary1D);
+      EAFE::FunctionSpace V_an(mesh ,periodic_boundary);
       EAFE::BilinearForm a_an(V_an,V_an);
       a_an.alpha = cat_alpha;
       a_an.gamma = one;
