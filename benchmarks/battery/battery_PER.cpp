@@ -80,33 +80,88 @@ class PeriodicBoundary : public SubDomain
   // Left boundary is "target domain" G
   bool inside(const Array<double>& x, bool on_boundary) const
   {
-    return on_boundary && (
-         ( x[0] < -Lx / 2.0 + 5.0 * DOLFIN_EPS)
-      || ( x[1] < -Ly / 2.0 + 5.0 * DOLFIN_EPS )
-      || ( x[2] < -Lz / 2.0 + 5.0 * DOLFIN_EPS ) );
+    // return on_boundary && (
+    //      ( x[0] < -Lx / 2.0 + 5.0 * DOLFIN_EPS)
+    //   || ( x[1] < -Ly / 2.0 + 5.0 * DOLFIN_EPS )
+    //   || ( x[2] < -Lz / 2.0 + 5.0 * DOLFIN_EPS ) );
+    return ( on_boundary
+            &&  ( near(x[0], -Lx/2.0, 5*DOLFIN_EPS) || near(x[1], -Ly/2.0, 5*DOLFIN_EPS) ||  near(x[2], -Lz/2.0, 5*DOLFIN_EPS) )
+
+            //1
+            && !( (x[0]== Lx/2.0) && (x[1]==-Ly/2.0) )
+            && !( (x[0]==-Lx/2.0) && (x[1]== Ly/2.0) )
+            //2
+            && !( (x[0]== Lx/2.0) && (x[2]==-Lz/2.0) )
+            && !( (x[0]==-Lx/2.0) && (x[2]== Lz/2.0) )
+            //3
+            && !( (x[1]== Ly/2.0) && (x[2]==-Lz/2.0) )
+            && !( (x[1]==-Ly/2.0) && (x[2]== Lz/2.0) )
+
+            // //1
+            // && !( near(x[0],  Lx/2.0, DOLFIN_EPS) && near(x[1], -Ly/2.0, DOLFIN_EPS) )
+            // && !( near(x[0], -Lx/2.0, DOLFIN_EPS) && near(x[1],  Ly/2.0, DOLFIN_EPS) )
+            // //2
+            // && !( near(x[0],  Lx/2.0, DOLFIN_EPS) && near(x[2], -Lz/2.0, DOLFIN_EPS) )
+            // && !( near(x[0], -Lx/2.0, DOLFIN_EPS) && near(x[2],  Lz/2.0, DOLFIN_EPS) )
+            // //3
+            // && !( near(x[1],  Ly/2.0, DOLFIN_EPS) && near(x[2], -Lz/2.0, DOLFIN_EPS) )
+            // && !( near(x[1], -Ly/2.0, DOLFIN_EPS) && near(x[2],  Lz/2.0, DOLFIN_EPS) )
+          );
+
   }
 
   // The function map maps a coordinate x in domain H to a coordinate y in the domain G
   // Map right boundary (H) to left boundary (G)
   void map(const Array<double>& x, Array<double>& y) const
   {
-    if ( x[0] > Lx / 2.0 - 5.0 * DOLFIN_EPS)
+    if ( near(x[0], Lx/2.0, DOLFIN_EPS) && near(x[1], Ly/2.0, DOLFIN_EPS) && near(x[2], Lz/2.0, DOLFIN_EPS) )
     {
-      y[0] = x[0]-12.0;
+      y[0] = x[0]-Lx;
+      y[1] = x[1]-Ly;
+      y[2] = x[2]-Lz;
+    }
+    else if ( near(x[0], Lx/2.0, DOLFIN_EPS) && near(x[1], Ly/2.0, DOLFIN_EPS) )
+    {
+      y[0] = x[0]-Lx;
+      y[1] = x[1]-Ly;
+      y[2] = x[2];
+    }
+    else if ( near(x[0], Lx/2.0, DOLFIN_EPS) && near(x[2], Lz/2.0, DOLFIN_EPS) )
+    {
+      y[0] = x[0]-Lx;
+      y[1] = x[1];
+      y[2] = x[2]-Lz;
+    }
+    else if ( near(x[1], Ly/2.0, DOLFIN_EPS) && near(x[2], Lz/2.0, DOLFIN_EPS) )
+    {
+      y[0] = x[0];
+      y[1] = x[1]-Ly;
+      y[2] = x[2]-Lz;
+    }
+    else if ( near(x[0], Lx/2.0, 5*DOLFIN_EPS) )
+    {
+      y[0] = x[0]-Lx;
       y[1] = x[1];
       y[2] = x[2];
     }
-    else if ( x[1] > Ly / 2.0 - 5.0 * DOLFIN_EPS )
+    else if ( near(x[1], Ly/2.0, 5*DOLFIN_EPS) )
     {
       y[0] = x[0];
-      y[1] = x[1]-12.0;
+      y[1] = x[1]-Ly;
       y[2] = x[2];
+    }
+    else if ( near(x[2], Lz/2.0, 5*DOLFIN_EPS) )
+    {
+      y[0] = x[0];
+      y[1] = x[1];
+      y[2] = x[2]-Lz;
     }
     else
     {
-      y[0] = x[0];
-      y[1] = x[1];
-      y[2] = x[2]-12.0;
+      y[0] = -1000;
+      y[1] = -1000;
+      y[2] = -1000;
+      // printf("\n\n\t\t HUGE ERRROR IN BOUNDRY CONDITIONS, x = %f, y = %f, z = %f\n\n",x[0],x[1],x[2]);fflush(stdout);
     }
   }
 };
@@ -154,6 +209,15 @@ int main(int argc, char** argv)
   // BoundaryFile << sub_domains_adapt;
   meshOut << mesh_adapt;
   // return 0;
+
+
+  // dolfin::FacetFunction<std::size_t> surfaces_object(*mesh);
+   dolfin::MeshFunction<std::size_t> SubDO(mesh_adapt, 2);
+   SubDO.set_all(0);
+   PeriodicBoundary Buddy;
+   Buddy.mark(SubDO,1);
+   dolfin::File boundariesPer("./benchmarks/battery/meshOut/boundariesPer.pvd");
+   boundariesPer << SubDO;
 
   // read coefficients and boundary values
   printf("coefficients...\n"); fflush(stdout);
@@ -611,8 +675,8 @@ int main(int argc, char** argv)
         &potentialSolution,
         &mesh_adapt,
         entropy_tol,
-        max_mesh_size_double,
-        // newtparam.max_cells,
+        //max_mesh_size_double,
+        newtparam.max_cells,
         3
       );
       printf("\tneed %d levels of refinement\n", num_refines);
