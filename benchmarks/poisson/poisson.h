@@ -1,3 +1,14 @@
+/** @file poisson.h
+ *  @brief Class and Functions to solve the Poisson equation in 3D.
+ *
+ *  This contains the class defining the Poisson problem
+ *  as well as some function to solve it.
+ *
+ *  @author Maximilien
+ *  @author Arthur
+ *  @bug No known bugs.
+ */
+
 #ifndef __POISSON_H
 #define __POISSON_H
 
@@ -15,22 +26,31 @@ extern "C" {
 
 #include "poisson_forms.h"
 
+
+/*! @class Poisson
+ *  @brief Poisson class.
+ *
+ * @details All variable and function necessary to solve the Poisson problem.
+ */
+
 class Poisson {
   public:
 
-    /// Create a PNP problem equipped with necessary
-    /// methods for defining, updating, and solving
-    /// the specific PNP problem.
-    ///
-    /// *Arguments*
-    ///  mesh (dolfin::Mesh)
-    ///    The mesh
-    ///  domain (_domain_param_)
-    ///    Parameters for domain dimensions and BCs
-    ///  itsolver (_itsolver_param_)
-    ///    Parameters for iterative linear solver
-    ///  amg (_AMG_param_)
-    ///    Parameters for AMG linear solver
+    /*! @fn Poisson:: Poisson (const std::shared_ptr<const dolfin::Mesh> mesh, const domain_param &domain,const std::map<std::string, double> coefficients,const itsolver_param &itsolver,const AMG_param &amg)
+    *
+    *  @brief Constructor.
+    *
+    *  @details Create a PNP problem equipped with necessary
+    *  methods for defining, updating, and solving
+    *  the specific PNP problem.
+    *
+    *  @param mesh (dolfin::Mesh) the mesh.
+    *  @param domain (_domain_param_) Parameters for domain dimensions and BCs
+    *  @param itsolver (_itsolver_param_) Parameters for iterative linear solver
+    *  @param  amg (_AMG_param_) Parameters for AMG linear solver
+    *
+    *  @return void.
+    */
     Poisson (
       const std::shared_ptr<const dolfin::Mesh> mesh,
       const domain_param &domain,
