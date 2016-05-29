@@ -1,5 +1,5 @@
-#ifndef __POISSON_H
-#define __POISSON_H
+#ifndef __VECTOR_POISSON_H
+#define __VECTOR_POISSON_H
 
 #include <iostream>
 #include <fstream>
@@ -13,9 +13,9 @@ extern "C" {
   #include "fasp_functs.h"
 }
 
-#include "poisson_forms.h"
+#include "vector_poisson_forms.h"
 
-class Poisson {
+class Vector_Poisson {
   public:
 
     /// Create a PNP problem equipped with necessary
@@ -31,16 +31,16 @@ class Poisson {
     ///    Parameters for iterative linear solver
     ///  amg (_AMG_param_)
     ///    Parameters for AMG linear solver
-    Poisson (
+    Vector_Poisson (
       const std::shared_ptr<const dolfin::Mesh> mesh,
       const domain_param &domain,
-      const std::map<std::string, double> coefficients,
+      const std::map<std::string, std::vector<double>> coefficients,
       const itsolver_param &itsolver,
       const AMG_param &amg
     );
 
     /// Destructor
-    virtual ~Poisson ();
+    virtual ~Vector_Poisson ();
 
     /// Update the mesh
     void update_mesh (
@@ -66,17 +66,21 @@ class Poisson {
 
     /// Set Dirichlet Boundary condition
     void set_DirichletBC (
-      std::size_t coordinate,
-      double lower_value,
-      double upper_value
+      std::vector<std::size_t> component,
+      std::vector<std::vector<double>> boundary
     );
 
     /// Return the DirichletBC SubDomain
-    dolfin::SubDomain get_Dirichlet_SubDomain();
+    std::vector<std::shared_ptr<dolfin::SubDomain>> get_Dirichlet_SubDomain();
 
     /// Set the solution to a constant value
     void set_solution (
       double value
+    );
+
+    /// Set the solution to a vector of constant values
+    void set_solution (
+      std::vector<double> value
     );
 
     /// Set the solution to interpolate an expression
@@ -90,6 +94,12 @@ class Poisson {
     /// Solve the problem using dolfin
     dolfin::Function dolfin_solve ();
 
+    /// Update solution given an update function
+    void update_solution(
+      dolfin::Function solution,
+      const dolfin::Function& update
+    );
+
 
     /// Define analytic functions from read-in files
     ///
@@ -98,7 +108,7 @@ class Poisson {
     ///    Parameters describing the PDE
     ///    May contain script defining coefficients
     void set_coefficients (
-      std::map<std::string, double> values
+      std::map<std::string, std::vector<double>> values
     );
 
   private:
@@ -112,11 +122,12 @@ class Poisson {
     std::shared_ptr<dolfin::FunctionSpace> _function_space;
 
     /// Forms
-    std::shared_ptr<poisson_forms::Form_a> _bilinear_form;
-    std::shared_ptr<poisson_forms::Form_L> _linear_form;
+    std::shared_ptr<vector_poisson_forms::Form_a> _bilinear_form;
+    std::shared_ptr<vector_poisson_forms::Form_L> _linear_form;
 
     // Current solution
     std::shared_ptr<dolfin::Function> _solution_function;
+    std::size_t _get_solution_dimension();
 
     /// Coefficients
     std::map<std::string, std::shared_ptr<const dolfin::Constant>> _bilinear_coefficient;
@@ -124,8 +135,8 @@ class Poisson {
     void _construct_coefficients ();
 
     // /// Dirichlet boundary conditions
-    std::shared_ptr<dolfin::DirichletBC> _dirichletBC;
-    std::shared_ptr<dolfin::SubDomain> _dirichlet_SubDomain;
+    std::vector<std::shared_ptr<dolfin::DirichletBC>> _dirichletBC;
+    std::vector<std::shared_ptr<dolfin::SubDomain>> _dirichlet_SubDomain;
 
     // /// quasi-Newton flag
     bool _quasi_newton;

@@ -3,7 +3,7 @@
 #   Define bilinear and linear forms for 
 #   the linearized Poisson-Nernst-Planck equations for a MOSFET
 #
-# Compile this form with FFC: ffc -O -l dolfin mosfet.ufl.
+# Compile this form with FFC: ffc -O -l dolfin poisson.ufl.
 
 ##  Finite Element Space
 CG = FiniteElement("Lagrange", tetrahedron, 1)

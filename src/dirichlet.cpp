@@ -57,7 +57,7 @@ void Linear_Function::eval (
   dolfin::Array<double>& values,
   const dolfin::Array<double>& x
 ) const {
-  values[0] = _lower_value * (_mesh_max - x[_coordinate]) * _distance;
-  values[0] += _upper_value * (x[_coordinate] - _mesh_min) * _distance;
+    values[0] = _lower_value * (_mesh_max - x[_coordinate]) * _distance;
+    values[0] += _upper_value * (x[_coordinate] - _mesh_min) * _distance;
 }
 //--------------------------------------

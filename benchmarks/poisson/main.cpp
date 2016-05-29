@@ -44,7 +44,7 @@ int main (int argc, char** argv)
   AMG_param amg;
   ILU_param ilu;
   fasp_param_input(fasp_params, &input);
-  fasp_param_init (
+  fasp_param_init(
     &input,
     &itsolver,
     &amg,
@@ -81,9 +81,8 @@ int main (int argc, char** argv)
   dolfin::File solution_file("./benchmarks/poisson/solution.pvd");
   solution_file << poisson_problem.get_solution();
 
-  poisson_problem.set_solution_to_constant(1.0);
+  poisson_problem.set_solution(1.0);
   solution_file << poisson_problem.get_solution();
-
 
   poisson_problem.set_DirichletBC(0, 0.0, 1.0);
   solution_file << poisson_problem.get_solution();

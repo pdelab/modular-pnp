@@ -1,0 +1,46 @@
+# Copyright (C) 2014 CCMA@PSU Maximilian Metti, Xiaozhe Hu
+#
+#   Define bilinear and linear forms for 
+#   the linearized Poisson-Nernst-Planck equations for a MOSFET
+#
+# Compile this form with FFC: ffc -O -l dolfin vector_poisson_forms.ufl.
+
+##  Finite Element Space
+CG = FiniteElement("Lagrange", tetrahedron, 1)
+V  = MixedElement([CG, CG, CG, CG])
+
+
+u = TrialFunction(V)
+v = TestFunction(V)
+
+##  Previous Iterates
+uu = Coefficient(V)
+
+##  Coefficients
+diffusivity = Coefficient(V)
+reactivity = Coefficient(V)
+source = Coefficient(V)
+
+a = \
+  + ( diffusivity[0] * inner(grad(u[0]), grad(v[0])) ) * dx \
+  + ( reactivity[0] * u[0] * v[0] ) * dx \
+  + ( diffusivity[1] * inner(grad(u[1]), grad(v[1])) ) * dx \
+  + ( reactivity[1] * u[1] * v[1] ) * dx \
+  + ( diffusivity[2] * inner(grad(u[2]), grad(v[2])) ) * dx \
+  + ( reactivity[2] * u[2] * v[2] ) * dx \
+  + ( diffusivity[3] * inner(grad(u[3]), grad(v[3])) ) * dx \
+  + ( reactivity[3] * u[3] * v[3] ) * dx
+
+L = \
+  + ( source[0] * v[0] ) * dx \
+  - ( diffusivity[0] * inner(grad(uu[0]), grad(v[0])) ) * dx \
+  - ( reactivity[0] * uu[0] * v[0] ) * dx \
+  + ( source[1] * v[1] ) * dx \
+  - ( diffusivity[1] * inner(grad(uu[1]), grad(v[1])) ) * dx \
+  - ( reactivity[1] * uu[1] * v[1] ) * dx \
+  + ( source[2] * v[2] ) * dx \
+  - ( diffusivity[2] * inner(grad(uu[2]), grad(v[2])) ) * dx \
+  - ( reactivity[2] * uu[2] * v[2] ) * dx \
+  + ( source[3] * v[3] ) * dx \
+  - ( diffusivity[3] * inner(grad(uu[3]), grad(v[3])) ) * dx \
+  - ( reactivity[3] * uu[3] * v[3] ) * dx

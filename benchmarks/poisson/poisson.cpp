@@ -36,7 +36,7 @@ Poisson::Poisson (
     new poisson_forms::Form_L(_function_space)
   );
 
-  Poisson::set_solution_to_constant(0.0);
+  Poisson::set_solution(0.0);
 
   Poisson::_construct_coefficients();
   Poisson::set_coefficients(coefficients);
@@ -82,7 +82,7 @@ void Poisson::use_exact_newton () {
   _quasi_newton = false;
 }
 //--------------------------------------
-void Poisson::set_solution_to_constant (
+void Poisson::set_solution (
   double value
 ) {
   _solution_function.reset( new dolfin::Function(_function_space) );
@@ -101,11 +101,16 @@ void Poisson::set_solution_to_constant (
 }
 //--------------------------------------
 void Poisson::set_solution (
-  Linear_Function::Linear_Function expression
+  const std::vector<Linear_Function::Linear_Function> expression
 ) {
-  _solution_function.reset( new dolfin::Function(_function_space) );
-  _solution_function->interpolate(expression);
-  _linear_form->uu = *(_solution_function);
+  if (_function_space->component().size() == 0) {
+    _solution_function.reset( new dolfin::Function(_function_space) );
+    _solution_function->interpolate(expression[0]);
+    _linear_form->uu = *(_solution_function);
+  }
+  else {
+    printf("Need to implement for vector functions still...\n3");
+  }
 }
 //--------------------------------------
 dolfin::Function Poisson::get_solution () {
@@ -200,7 +205,9 @@ void Poisson::set_DirichletBC (
    upper_value
   );
 
-  Poisson::set_solution(linear_interpolant);
+  std::vector<Linear_Function::Linear_Function> interpolant_vector;
+  interpolant_vector.push_back(linear_interpolant);
+  Poisson::set_solution(interpolant_vector);
 }
 //--------------------------------------
 dolfin::Function Poisson::dolfin_solve () {
