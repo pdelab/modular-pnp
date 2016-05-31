@@ -12,6 +12,8 @@ FILE_PATTERNS          = *.h \
 	
 RECURSIVE              = YES
 USE_MDFILE_AS_MAINPAGE = @doxy_main_page@
+EXCLUDE_PATTERNS = @PROJECT_SOURCE_DIR@/tests/* \
+		   *_forms.*
 
 HTML_EXTRA_STYLESHEET=style.css
 
