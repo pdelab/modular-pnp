@@ -52,8 +52,10 @@ set(SRC_DIR ./src/domain.cpp ./src/dirichlet.cpp)
 
 add_executable(test_poisson ./benchmarks/poisson/main.cpp ./benchmarks/poisson/poisson.cpp ${SRC_DIR})
 add_executable(test_vector_poisson ./benchmarks/vector_poisson/main.cpp ./benchmarks/vector_poisson/vector_poisson.cpp ${SRC_DIR})
+add_executable(test_vector_pnp ./benchmarks/linear_pnp_vector/main.cpp ./benchmarks/linear_pnp_vector/vector_pnp.cpp ${SRC_DIR})
 target_link_libraries(test_poisson ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
 target_link_libraries(test_vector_poisson ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
+target_link_libraries(test_vector_pnp ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
 
 
 
