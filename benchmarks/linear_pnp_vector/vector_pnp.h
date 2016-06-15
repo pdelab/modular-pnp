@@ -91,8 +91,17 @@ class Vector_PNP {
     /// Get the current solution
     dolfin::Function get_solution ();
 
+    /// Compute and store the dof-map for the solution space
+    void get_dofs();
+
     /// Solve the problem using dolfin
     dolfin::Function dolfin_solve ();
+
+    /// Setup the linear system in dolfin
+    void setup_linear_algebra ();
+
+    /// Solve the linear algebraic system usind dolfin
+    // dolfin::Function la_solve ();
 
     /// Update solution given an update function
     void update_solution(
@@ -111,6 +120,22 @@ class Vector_PNP {
       std::map<std::string, std::vector<double>> values
     );
 
+    void setup_fasp_linear_algebra ();
+
+    dolfin::Function fasp_solve ();
+
+    void free_fasp ();
+
+    void EigenMatrix_to_dCSRmat (
+      std::shared_ptr<const dolfin::EigenMatrix> mat_A,
+      dCSRmat* dCSR_A
+    );
+
+    void EigenVector_to_dvector (
+      std::shared_ptr<const dolfin::EigenVector> vec_b,
+      dvector* dVec_b
+    );
+
   private:
     /// Mesh
     std::shared_ptr<dolfin::Mesh> _mesh;
@@ -120,6 +145,7 @@ class Vector_PNP {
 
     /// Function Space
     std::shared_ptr<dolfin::FunctionSpace> _function_space;
+    std::map<std::size_t, std::vector<dolfin::la_index>> _dof_map;
 
     /// Forms
     std::shared_ptr<vector_linear_pnp_forms::Form_a> _bilinear_form;
@@ -132,18 +158,28 @@ class Vector_PNP {
     /// Coefficients
     std::map<std::string, std::shared_ptr<const dolfin::Constant>> _bilinear_coefficient;
     std::map<std::string, std::shared_ptr<const dolfin::Constant>> _linear_coefficient;
-    void _construct_coefficients ();
+    void _construct_coefficients();
 
-    // /// Dirichlet boundary conditions
+    /// Dirichlet boundary conditions
     std::vector<std::shared_ptr<dolfin::DirichletBC>> _dirichletBC;
     std::vector<std::shared_ptr<dolfin::SubDomain>> _dirichlet_SubDomain;
 
-    // /// quasi-Newton flag
+    /// quasi-Newton flag
     bool _quasi_newton;
 
-    // /// Linear solver
+    /// Linear solver
     itsolver_param _itsolver;
     AMG_param _amg;
+    dCSRmat _fasp_matrix;
+    dBSRmat _fasp_bsr_matrix;
+    dvector _fasp_vector, _fasp_soln;
+
+    /// Linear algebra
+    std::shared_ptr<const dolfin::EigenMatrix> _eigen_matrix;
+    std::shared_ptr<const dolfin::EigenVector> _eigen_vector;
+    dolfin::Function _convert_EigenVector_to_Function (
+      const dolfin::EigenVector &eigen_vector
+    );
 };
 
 #endif

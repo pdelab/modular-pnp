@@ -58,14 +58,10 @@ int main (int argc, char** argv)
   printf("Define coefficients\n");
   std::map<std::string, std::vector<double>> poisson_coefficients = {
     {"permittivity", {1.0}},
-    {"fixed_charge", {0.0}},
+    {"fixed_charge", {1.0}},
     {"diffusivity", {0.0, 2.0, 2.0, 10.0}},
     {"valency", {0.0, 1.0, -1.0, -1.0}}
   };
-  std::map<std::string, std::vector<double>>::iterator coeff;
-  for (coeff = poisson_coefficients.begin(); coeff != poisson_coefficients.end(); ++coeff) {
-    printf("\t%s will be set to [ %e, %e, %e ]\n", coeff->first.c_str(), coeff->second[0], coeff->second[1], coeff->second[2]);
-  }
 
   printf("\nConstructing the vector Poisson problem\n");
   Vector_PNP::Vector_PNP pnp_problem (
@@ -79,10 +75,10 @@ int main (int argc, char** argv)
   pnp_problem.print_coefficients();
   printf("\n");
 
-  dolfin::File solution_file0("./benchmarks/linear_pnp_vector/1solution.pvd");
-  dolfin::File solution_file1("./benchmarks/linear_pnp_vector/2solution.pvd");
-  dolfin::File solution_file2("./benchmarks/linear_pnp_vector/3solution.pvd");
-  dolfin::File solution_file3("./benchmarks/linear_pnp_vector/4solution.pvd");
+  dolfin::File solution_file0("./benchmarks/linear_pnp_vector/output/1solution.pvd");
+  dolfin::File solution_file1("./benchmarks/linear_pnp_vector/output/2solution.pvd");
+  dolfin::File solution_file2("./benchmarks/linear_pnp_vector/output/3solution.pvd");
+  dolfin::File solution_file3("./benchmarks/linear_pnp_vector/output/4solution.pvd");
 
   dolfin::Function solutionFn = pnp_problem.get_solution();
   solution_file0 << solutionFn[0];
@@ -90,7 +86,12 @@ int main (int argc, char** argv)
   solution_file2 << solutionFn[2];
   solution_file3 << solutionFn[3];
 
-  pnp_problem.set_solution({1.0, std::log(3.0), std::log(2.0), std::log(1.0)});
+  pnp_problem.set_solution({
+    1.0,
+    std::log(2.0),
+    std::log(2.0),
+    std::log(1.0)
+  });
   solutionFn = pnp_problem.get_solution();
   solution_file0 << solutionFn[0];
   solution_file1 << solutionFn[1];
@@ -101,7 +102,7 @@ int main (int argc, char** argv)
   std::vector<std::size_t> components = {0, 0, 0, 0};
   std::vector<std::vector<double>> bcs;
   bcs.push_back({0.0,  1.0});
-  bcs.push_back({std::log(2.0), std::log(3.0)});
+  bcs.push_back({std::log(1.0), std::log(2.0)});
   bcs.push_back({std::log(1.5), std::log(1.0)});
   bcs.push_back({std::log(0.5), std::log(2.0)});
 
@@ -112,11 +113,29 @@ int main (int argc, char** argv)
   solution_file2 << solutionFn[2];
   solution_file3 << solutionFn[3];
 
-  dolfin::Function solution(pnp_problem.dolfin_solve());
-  solution_file0 << solution[0];
-  solution_file1 << solution[1];
-  solution_file2 << solution[2];
-  solution_file3 << solution[3];
+  pnp_problem.set_DirichletBC(components, bcs);
+  dolfin::Function dolfin_solution(pnp_problem.dolfin_solve());
+  solution_file0 << dolfin_solution[0];
+  solution_file1 << dolfin_solution[1];
+  solution_file2 << dolfin_solution[2];
+  solution_file3 << dolfin_solution[3];
+
+  // pnp_problem.set_DirichletBC(components, bcs);
+  // dolfin::Function la_solution(pnp_problem.la_solve());
+  // solution_file0 << la_solution[0];
+  // solution_file1 << la_solution[1];
+  // solution_file2 << la_solution[2];
+  // solution_file3 << la_solution[3];
+
+  pnp_problem.set_DirichletBC(components, bcs);
+  dolfin::Function fasp_solution(pnp_problem.fasp_solve());
+  solution_file0 << fasp_solution[0];
+  solution_file1 << fasp_solution[1];
+  solution_file2 << fasp_solution[2];
+  solution_file3 << fasp_solution[3];
+
+  printf("Done\n\n"); fflush(stdout);
+  pnp_problem.free_fasp();
 
   return 0;
 }

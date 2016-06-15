@@ -287,20 +287,7 @@ dolfin::Function Vector_Poisson::dolfin_solve () {
   dolfin::solve(equation, solution_update, dirichletBC_vector);
   *(_solution_function->vector()) += *(solution_update.vector());
 
-  dolfin::File sol_file("./benchmarks/vector_poisson/poisson/solve_update.pvd");
-  sol_file << solution_update[0];
-  sol_file << solution_update[1];
-  sol_file << solution_update[2];
-  sol_file << solution_update[3];
-
-  dolfin::File sol_file1("./benchmarks/vector_poisson/poisson/in_solve.pvd");
-  sol_file1 << (*_solution_function)[0];
-  sol_file1 << (*_solution_function)[1];
-  sol_file1 << (*_solution_function)[2];
-  sol_file1 << (*_solution_function)[3];
-
   _linear_form->uu = *_solution_function;
-
   return *_solution_function;
 }
 //--------------------------------------

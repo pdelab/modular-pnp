@@ -36,15 +36,13 @@ Vector_PNP::Vector_PNP (
     new vector_linear_pnp_forms::Form_L(_function_space)
   );
 
-  printf("set solution\n"); fflush(stdout);
+  Vector_PNP::get_dofs();
   Vector_PNP::set_solution(0.0);
 
-  printf("construct coeffs\n"); fflush(stdout);
   Vector_PNP::_construct_coefficients();
-
-  printf("set coeffs\n"); fflush(stdout);
   Vector_PNP::set_coefficients(coefficients);
 
+  Vector_PNP::use_exact_newton();
   _itsolver = itsolver;
   _amg = amg;
 
@@ -87,9 +85,7 @@ void Vector_PNP::use_exact_newton () {
 }
 //--------------------------------------
 std::size_t Vector_PNP::_get_solution_dimension() {
-  return _solution_function->function_space()
-    ->element()
-    ->num_sub_elements();
+  return _function_space->element()->num_sub_elements();
 }
 //--------------------------------------
 void Vector_PNP::set_solution (
@@ -177,6 +173,35 @@ void Vector_PNP::set_solution (
 //--------------------------------------
 dolfin::Function Vector_PNP::get_solution () {
   return *(_solution_function);
+}
+//--------------------------------------
+void Vector_PNP::get_dofs() {
+  std::size_t dof;
+  std::vector<std::size_t> component(1);
+  std::vector<dolfin::la_index> index_vector;
+  const dolfin::la_index n_first = _function_space->dofmap()->ownership_range().first;
+  const dolfin::la_index n_second = _function_space->dofmap()->ownership_range().second;
+
+  for (std::size_t comp_index = 0; comp_index < Vector_PNP::_get_solution_dimension(); comp_index++) {
+    component[0] = comp_index;
+    index_vector.clear();
+    std::shared_ptr<dolfin::GenericDofMap> dofmap = _function_space->dofmap()
+      ->extract_sub_dofmap(component, *_mesh);
+
+    for (dolfin::CellIterator cell(*_mesh); !cell.end(); ++cell) {
+      dolfin::ArrayView<const dolfin::la_index> cell_dof = dofmap->cell_dofs(cell->index());
+
+      for (std::size_t i = 0; i < cell_dof.size(); ++i) {
+        dof = cell_dof[i];
+        if (dof >= n_first && dof < n_second)
+          index_vector.push_back(dof);
+      }
+    }
+
+    std::sort(index_vector.begin(), index_vector.end());
+    index_vector.erase(std::unique(index_vector.begin(), index_vector.end()), index_vector.end());
+    _dof_map[comp_index].swap(index_vector);
+  }
 }
 //--------------------------------------
 void Vector_PNP::_construct_coefficients () {
@@ -292,6 +317,10 @@ void Vector_PNP::set_DirichletBC (
   Vector_PNP::set_solution(interpolant_vector);
 }
 //--------------------------------------
+std::vector<std::shared_ptr<dolfin::SubDomain>> Vector_PNP::get_Dirichlet_SubDomain () {
+  return _dirichlet_SubDomain;
+}
+//--------------------------------------
 dolfin::Function Vector_PNP::dolfin_solve () {
   dolfin::Function solution_update(_function_space);
   dolfin::Equation equation(_bilinear_form, _linear_form);
@@ -310,14 +339,190 @@ dolfin::Function Vector_PNP::dolfin_solve () {
   return *_solution_function;
 }
 //--------------------------------------
-void Vector_PNP::update_solution(
-  dolfin::Function solution,
-  const dolfin::Function& update
-) {
-  *(solution.vector()) += *(update.vector());
+void Vector_PNP::setup_linear_algebra () {
+  dolfin::EigenMatrix eigen_matrix;
+  dolfin::EigenVector eigen_vector;
+  assemble(eigen_matrix, *_bilinear_form);
+  assemble(eigen_vector, *_linear_form);
+
+  if (_quasi_newton) {
+    printf("WARNING: No support for quasi-Newton solver!!!\n");
+  }
+
+  for (std::size_t i = 0; i < _dirichletBC.size(); i++) {
+    _dirichletBC[i]->apply(eigen_matrix);
+    _dirichletBC[i]->apply(eigen_vector);
+  }
+
+  _eigen_matrix.reset( new const dolfin::EigenMatrix(eigen_matrix) );
+  _eigen_vector.reset( new const dolfin::EigenVector(eigen_vector) );
 }
 //--------------------------------------
-std::vector<std::shared_ptr<dolfin::SubDomain>> Vector_PNP::get_Dirichlet_SubDomain () {
-  return _dirichlet_SubDomain;
+// dolfin::Function Vector_PNP::la_solve () {
+//   Vector_PNP::setup_linear_algebra();
+//   dolfin::EigenKrylovSolver eigen_solver;
+//   eigen_solver.set_operator(_eigen_matrix);
+
+//   std::size_t iterations;
+//   dolfin::EigenVector solution_vector;
+//   iterations = eigen_solver.solve(solution_vector, *_eigen_vector);
+//   printf("Solved the linear system in %lu iterations\n", iterations);
+
+//   dolfin::Function update(Vector_PNP::_convert_EigenVector_to_Function(solution_vector));
+//   *(_solution_function->vector()) += *(update.vector());
+
+//   _bilinear_form->uu = *_solution_function;
+//   _linear_form->uu = *_solution_function;
+
+//   return *_solution_function;
+// }
+//--------------------------------------
+dolfin::Function Vector_PNP::_convert_EigenVector_to_Function (
+  const dolfin::EigenVector &eigen_vector
+) {
+  dolfin::Function fn(_function_space);
+
+  if (eigen_vector.size() != _solution_function->vector()->size()) {
+    printf("Cannot convert EigenVector to Function...\n");
+    printf("\tincompatible dimensions!\n");
+  }
+
+  dolfin::la_index dof_index;
+  for (std::size_t component = 0; component < _dof_map.size(); component++) {
+    for (std::size_t index = 0; index < _dof_map[component].size(); index++) {
+      dof_index = _dof_map[component][index];
+      fn.vector()->setitem(dof_index, eigen_vector[dof_index]);
+    }
+  }
+
+  return fn;
+}
+//--------------------------------------
+void Vector_PNP::setup_fasp_linear_algebra () {
+  Vector_PNP::setup_linear_algebra();
+
+  std::size_t dimension = Vector_PNP::_get_solution_dimension();
+  EigenMatrix_to_dCSRmat(_eigen_matrix, &_fasp_matrix);
+  _fasp_bsr_matrix = fasp_format_dcsr_dbsr(&_fasp_matrix, dimension);
+
+  EigenVector_to_dvector(_eigen_vector, &_fasp_vector);
+  fasp_dvec_set(_fasp_vector.row, &_fasp_soln, 0.0);
+}
+//--------------------------------------
+dolfin::Function Vector_PNP::fasp_solve () {
+  Vector_PNP::setup_fasp_linear_algebra();
+
+  printf("Solving linear system using FASP solver...\n"); fflush(stdout);
+  INT status = fasp_solver_dbsr_krylov_amg (
+    &_fasp_bsr_matrix,
+    &_fasp_vector,
+    &_fasp_soln,
+    &_itsolver,
+    &_amg
+  );
+
+  if (status < 0) {
+    printf("\n### WARNING: FASP solver failed! Exit status = %d.\n", status);
+    fflush(stdout);
+  }
+  else {
+    printf("Successfully solved the linear system\n");
+    fflush(stdout);
+
+    dolfin::EigenVector solution_vector(_eigen_vector->size());
+    double* array = solution_vector.data();
+    for (std::size_t i = 0; i < _fasp_soln.row; ++i) {
+      array[i] = _fasp_soln.val[i];
+    }
+
+    dolfin::Function update (
+      Vector_PNP::_convert_EigenVector_to_Function(solution_vector)
+    );
+    *(_solution_function->vector()) += *(update.vector());
+  }
+
+  _bilinear_form->uu = *_solution_function;
+  _linear_form->uu = *_solution_function;
+
+  return *_solution_function;
+}
+//--------------------------------------
+void Vector_PNP::free_fasp () {
+  fasp_dcsr_free(&_fasp_matrix);
+  fasp_dbsr_free(&_fasp_bsr_matrix);
+  fasp_dvec_free(&_fasp_vector);
+  fasp_dvec_free(&_fasp_soln);
+}
+//--------------------------------------
+void Vector_PNP::EigenMatrix_to_dCSRmat (
+  std::shared_ptr<const dolfin::EigenMatrix> mat_A,
+  dCSRmat* dCSR_A
+) {
+  // dimensions of matrix
+  int nrows = mat_A->size(0);
+  int ncols = mat_A->size(1);
+  int nnz = mat_A->nnz();
+  // check for uninitialized EigenMatrix
+  if ( nrows<1 || ncols<1 || nnz<1 ) {
+    fasp_chkerr(ERROR_INPUT_PAR, "EigenMatrix_to_dCSRmat");
+  }
+
+  // point to JA array
+  int* JA;
+  JA = (int*) std::get<1>(mat_A->data());
+
+  int *IA;
+  IA = (int*) std::get<0>(mat_A->data());
+
+  // point to values array
+  double* vals;
+  vals = (double*) std::get<2>(mat_A->data());
+
+  // Check for rows of zeros and add a unit diagonal entry
+  bool nonzero_entry = false;
+  for ( uint rowInd=0; rowInd<nrows; rowInd++ ) {
+    // Check for nonzero entry
+    nonzero_entry = false;
+    int diagColInd = -1;
+    if ( IA[rowInd] < IA[rowInd+1] ) {
+      for ( uint colInd=IA[rowInd]; colInd < IA[rowInd+1]; colInd++ ) {
+        if ( vals[colInd] != 0.0 ) nonzero_entry = true;
+        if ( JA[colInd] == rowInd ) diagColInd = colInd;
+      }
+    }
+    if ( diagColInd < 0 ) {
+      printf(" ERROR: diagonal entry not allocated!!\n\n Exiting... \n \n"); fflush(stdout);
+      printf("      for row %d\n",rowInd); fflush(stdout);
+      for ( uint colInd=IA[rowInd]; colInd < IA[rowInd+1]; colInd++ ) {
+        printf("          %d\n",JA[colInd]);
+      }
+    }
+    if ( nonzero_entry == false ) {
+      printf(" Row %d has only zeros! Setting diagonal entry to 1.0 \n", rowInd); fflush(stdout);
+      vals[diagColInd] = 1.0;
+    }
+  }
+
+  // assign to dCSRmat
+  dCSR_A->nnz = nnz;
+  dCSR_A->row = nrows;
+  dCSR_A->col = ncols;
+  dCSR_A->IA = IA;
+  dCSR_A->JA = JA;
+  dCSR_A->val = vals;
+}
+//--------------------------------------
+void Vector_PNP::EigenVector_to_dvector (
+  std::shared_ptr<const dolfin::EigenVector> vec_b,
+  dvector* dVec_b
+) {
+  // check for uninitialized EigenMatrix
+  int length = (int) vec_b->size();
+  if ( length<1 ) {
+    fasp_chkerr(ERROR_INPUT_PAR, "EigenVector_to_dvector");
+  }
+
+  dVec_b->row = length;
+  dVec_b->val = (double*) vec_b->data();
 }
 //--------------------------------------
