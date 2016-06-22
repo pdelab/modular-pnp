@@ -417,7 +417,7 @@ int main(int argc, char** argv)
     }
 
     // check status of Newton solver
-    if (isnan(relative_residual)) {
+    if (std::isnan(relative_residual)) {
       printf("\n### WARNING: Newton solver failed...\n");
       printf("\trelative residual is NaN!!\n\n");
       adaptive_convergence = true;
