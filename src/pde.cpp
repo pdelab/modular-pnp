@@ -3,9 +3,9 @@
 #include <string.h>
 #include <dolfin.h>
 #include <ufc.h>
+#include "pde.h"
 #include "domain.h"
 #include "dirichlet.h"
-#include "problem.h"
 extern "C" {
   #include "fasp.h"
   #include "fasp_functs.h"
@@ -85,7 +85,7 @@ void PDE::use_exact_newton () {
 
 
 //--------------------------------------
-std::size_t PDE::_get_solution_dimension() {
+std::size_t PDE::get_solution_dimension() {
   return _function_space->element()->num_sub_elements();
 }
 //--------------------------------------
@@ -94,7 +94,7 @@ void PDE::set_solution (
 ) {
   std::shared_ptr<dolfin::Constant> constant_fn;
   _solution_function.reset( new dolfin::Function(_function_space) );
-  std::size_t dimension = PDE::_get_solution_dimension();
+  std::size_t dimension = PDE::get_solution_dimension();
 
   if (dimension == 0) {
     constant_fn.reset( new dolfin::Constant(value) );
@@ -115,7 +115,7 @@ void PDE::set_solution (
 ) {
   _solution_function.reset( new dolfin::Function(_function_space) );
   std::shared_ptr<dolfin::Constant> constant_fn;
-  std::size_t dimension = PDE::_get_solution_dimension();
+  std::size_t dimension = PDE::get_solution_dimension();
 
   if (dimension == value.size()) {
     constant_fn.reset( new dolfin::Constant(value) );
@@ -136,7 +136,7 @@ void PDE::set_solution (
   const std::vector<Linear_Function::Linear_Function> expression
 ) {
 
-  std::size_t dimension = PDE::_get_solution_dimension();
+  std::size_t dimension = PDE::get_solution_dimension();
   if (dimension == expression.size()) {
 
     std::vector<std::shared_ptr<const dolfin::FunctionSpace>> vector_space;
@@ -159,6 +159,29 @@ void PDE::set_solution (
     }
     dolfin::FunctionAssigner function_assigner(_function_space, vector_space);
     function_assigner.assign(_solution_function, vector_expression);
+  }
+  else {
+    printf("Dimension mismatch!!\n");
+    printf("\tsetting solution to zeros %lu \n", dimension);
+    std::shared_ptr<dolfin::Constant> constant_fn;
+    constant_fn.reset( new dolfin::Constant(dimension, 0.0) );
+    _solution_function->interpolate(*constant_fn);
+  }
+
+  _bilinear_form->set_coefficient("uu", _solution_function);
+  _linear_form->set_coefficient("uu", _solution_function);
+}
+//--------------------------------------
+void PDE::set_solution (
+  const dolfin::Function& new_solution
+) {
+
+  std::size_t dimension = PDE::get_solution_dimension();
+  std::size_t new_dim = new_solution.function_space()->element()->num_sub_elements();
+
+  if (dimension == new_dim) {
+    _solution_function.reset(new dolfin::Function(_function_space));
+    *_solution_function = new_solution;
   }
   else {
     printf("Dimension mismatch!!\n");
@@ -241,7 +264,7 @@ void PDE::get_dofs() {
   const dolfin::la_index n_first = _function_space->dofmap()->ownership_range().first;
   const dolfin::la_index n_second = _function_space->dofmap()->ownership_range().second;
 
-  for (std::size_t comp_index = 0; comp_index < PDE::_get_solution_dimension(); comp_index++) {
+  for (std::size_t comp_index = 0; comp_index < PDE::get_solution_dimension(); comp_index++) {
     component[0] = comp_index;
     index_vector.clear();
     std::shared_ptr<dolfin::GenericDofMap> dofmap = _function_space->dofmap()
@@ -267,7 +290,7 @@ void PDE::remove_Dirichlet_dof (
   std::vector<std::size_t> coordinates
 ) {
 
-  std::size_t dimension = PDE::_get_solution_dimension();
+  std::size_t dimension = PDE::get_solution_dimension();
 
   _dirichlet_SubDomain.clear();
   _dirichlet_SubDomain.resize(dimension);

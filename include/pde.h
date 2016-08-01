@@ -72,6 +72,9 @@ class PDE {
     /// Return the DirichletBC SubDomain
     std::vector<std::shared_ptr<dolfin::SubDomain>> get_Dirichlet_SubDomain ();
 
+    /// return the dimension of the solution
+    std::size_t get_solution_dimension ();
+
     /// Set the solution to a constant value
     void set_solution (
       double value
@@ -87,8 +90,17 @@ class PDE {
       std::vector<Linear_Function::Linear_Function> expression
     );
 
+    /// Copy function to solution
+    void set_solution (
+      const dolfin::Function& new_solution
+    );
+
     /// Get the current solution
     dolfin::Function get_solution ();
+
+
+
+
 
     /// Compute and store the dof-map for the solution space
     void get_dofs ();
@@ -127,6 +139,12 @@ class PDE {
       dvector* vector
     );
 
+    /// Linear algebra
+    std::shared_ptr<const dolfin::EigenMatrix> _eigen_matrix;
+    std::shared_ptr<const dolfin::EigenVector> _eigen_vector;
+    dolfin::Function _convert_EigenVector_to_Function (
+      const dolfin::EigenVector &eigen_vector
+    );
 
   private:
     /// Mesh
@@ -145,7 +163,6 @@ class PDE {
 
     // Current solution
     std::shared_ptr<dolfin::Function> _solution_function;
-    std::size_t _get_solution_dimension();
 
     /// Coefficients
     std::map<std::string, std::shared_ptr<const dolfin::Constant>> _bilinear_coefficient;
@@ -157,13 +174,6 @@ class PDE {
 
     /// quasi-Newton flag
     bool _quasi_newton;
-
-    /// Linear algebra
-    std::shared_ptr<const dolfin::EigenMatrix> _eigen_matrix;
-    std::shared_ptr<const dolfin::EigenVector> _eigen_vector;
-    dolfin::Function _convert_EigenVector_to_Function (
-      const dolfin::EigenVector &eigen_vector
-    );
 };
 
 #endif
