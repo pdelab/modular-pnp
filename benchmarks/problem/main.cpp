@@ -6,11 +6,13 @@
 #include <dolfin.h>
 #include "domain.h"
 #include "dirichlet.h"
-#include "vector_pnp.h"
+#include "problem.h"
 extern "C" {
   #include "fasp.h"
   #include "fasp_functs.h"
 }
+
+#include "vector_linear_pnp_forms.h"
 
 using namespace std;
 
@@ -54,30 +56,57 @@ int main (int argc, char** argv)
   printf("\n");
 
 
-  // construct the PDE
+  // setup function spaces and forms
+  std::shared_ptr<dolfin::FunctionSpace> function_space;
+  std::shared_ptr<dolfin::Form> bilinear_form;
+  std::shared_ptr<dolfin::Form> linear_form;
+  function_space.reset(
+    new vector_linear_pnp_forms::FunctionSpace(mesh)
+  );
+  bilinear_form.reset(
+    new vector_linear_pnp_forms::Form_a(function_space, function_space)
+  );
+  linear_form.reset(
+    new vector_linear_pnp_forms::Form_L(function_space)
+  );
+
+
+  // set PDE coefficients
   printf("Define coefficients\n");
-  std::map<std::string, std::vector<double>> poisson_coefficients = {
+  std::map<std::string, std::vector<double>> pnp_coefficients = {
     {"permittivity", {1.0}},
-    {"fixed_charge", {1.0}},
     {"diffusivity", {0.0, 2.0, 2.0, 10.0}},
     {"valency", {0.0, 1.0, -1.0, -1.0}}
   };
+  std::map<std::string, std::vector<double>> pnp_sources = {
+    {"fixed_charge", {1.0}}
+  };
 
-  printf("\nConstructing the vector Poisson problem\n");
-  Vector_PNP::Vector_PNP pnp_problem (
+
+  //-------------------------
+  // Construct Problem
+  //-------------------------
+  printf("\nConstructing the vector PNP problem\n");
+  PDE::PDE pnp_problem (
     mesh,
-    poisson_coefficients,
-    itsolver,
-    amg
+    function_space,
+    bilinear_form,
+    linear_form,
+    pnp_coefficients,
+    pnp_sources
   );
-  printf("\tconstructed poisson problem\n\n");
+  printf("\tconstructed PNP problem\n\n");
   pnp_problem.print_coefficients();
   printf("\n");
 
-  dolfin::File solution_file0("./benchmarks/linear_pnp_vector/output/1solution.pvd");
-  dolfin::File solution_file1("./benchmarks/linear_pnp_vector/output/2solution.pvd");
-  dolfin::File solution_file2("./benchmarks/linear_pnp_vector/output/3solution.pvd");
-  dolfin::File solution_file3("./benchmarks/linear_pnp_vector/output/4solution.pvd");
+
+  //-------------------------
+  // Print default solution
+  //-------------------------
+  dolfin::File solution_file0("./benchmarks/problem/output/1solution.pvd");
+  dolfin::File solution_file1("./benchmarks/problem/output/2solution.pvd");
+  dolfin::File solution_file2("./benchmarks/problem/output/3solution.pvd");
+  dolfin::File solution_file3("./benchmarks/problem/output/4solution.pvd");
 
   dolfin::Function solutionFn = pnp_problem.get_solution();
   solution_file0 << solutionFn[0];
@@ -119,15 +148,22 @@ int main (int argc, char** argv)
   solution_file2 << dolfin_solution[2];
   solution_file3 << dolfin_solution[3];
 
-  pnp_problem.set_DirichletBC(components, bcs);
-  dolfin::Function fasp_solution(pnp_problem.fasp_solve());
-  solution_file0 << fasp_solution[0];
-  solution_file1 << fasp_solution[1];
-  solution_file2 << fasp_solution[2];
-  solution_file3 << fasp_solution[3];
+
+
+
+
+
+
+
+
+  // pnp_problem.set_DirichletBC(components, bcs);
+  // dolfin::Function fasp_solution(pnp_problem.fasp_solve());
+  // solution_file0 << fasp_solution[0];
+  // solution_file1 << fasp_solution[1];
+  // solution_file2 << fasp_solution[2];
+  // solution_file3 << fasp_solution[3];
 
   printf("Done\n\n"); fflush(stdout);
-  pnp_problem.free_fasp();
 
   return 0;
 }

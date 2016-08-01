@@ -5,13 +5,13 @@
 #include <ufc.h>
 #include "domain.h"
 #include "dirichlet.h"
-#include "vector_pnp.h"
+#include "problem.h"
 extern "C" {
   #include "fasp.h"
   #include "fasp_functs.h"
 }
 
-#include "vector_linear_pnp_forms.h"
+#include "../benchmarks/problem/vector_linear_pnp_forms.h"
 
 using namespace std;
 

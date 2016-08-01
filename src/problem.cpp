@@ -5,51 +5,44 @@
 #include <ufc.h>
 #include "domain.h"
 #include "dirichlet.h"
-#include "vector_pnp.h"
+#include "problem.h"
 extern "C" {
   #include "fasp.h"
   #include "fasp_functs.h"
 }
 
-#include "vector_linear_pnp_forms.h"
-
 using namespace std;
 
 //--------------------------------------
-Vector_PNP::Vector_PNP (
+PDE::PDE (
   const std::shared_ptr<const dolfin::Mesh> mesh,
+  const std::shared_ptr<dolfin::FunctionSpace> function_space,
+  const std::shared_ptr<dolfin::Form> bilinear_form,
+  const std::shared_ptr<dolfin::Form> linear_form,
   const std::map<std::string, std::vector<double>> coefficients,
-  const itsolver_param &itsolver,
-  const AMG_param &amg
+  const std::map<std::string, std::vector<double>> sources
 ) {
-  Vector_PNP::update_mesh(mesh);
+  PDE::update_mesh(mesh);
+  _function_space = function_space;
+  _bilinear_form = bilinear_form;
+  _linear_form = linear_form;
 
-  _function_space.reset(
-    new vector_linear_pnp_forms::FunctionSpace(*_mesh)
-  );
+  PDE::get_dofs();
+  PDE::set_solution(0.0);
 
-  _bilinear_form.reset(
-    new vector_linear_pnp_forms::Form_a(_function_space, _function_space)
-  );
-  _linear_form.reset(
-    new vector_linear_pnp_forms::Form_L(_function_space)
-  );
+  PDE::set_coefficients(coefficients, sources);
 
-  Vector_PNP::get_dofs();
-  Vector_PNP::set_solution(0.0);
-
-  Vector_PNP::_construct_coefficients();
-  Vector_PNP::set_coefficients(coefficients);
-
-  Vector_PNP::use_exact_newton();
-  _itsolver = itsolver;
-  _amg = amg;
-
+  PDE::use_exact_newton();
 }
 //--------------------------------------
-Vector_PNP::~Vector_PNP() {}
+PDE::~PDE() {}
 //--------------------------------------
-void Vector_PNP::update_mesh (
+
+
+
+
+//--------------------------------------
+void PDE::update_mesh (
   const std::shared_ptr<const dolfin::Mesh> mesh
 ) {
   _mesh.reset(new dolfin::Mesh(*mesh));
@@ -71,28 +64,37 @@ void Vector_PNP::update_mesh (
   }
 }
 //--------------------------------------
-dolfin::Mesh Vector_PNP::get_mesh () {
+dolfin::Mesh PDE::get_mesh () {
   return *(_mesh);
 }
 //--------------------------------------
-void Vector_PNP::use_quasi_newton () {
+
+
+
+
+//--------------------------------------
+void PDE::use_quasi_newton () {
   _quasi_newton = true;
 }
 //--------------------------------------
-void Vector_PNP::use_exact_newton () {
+void PDE::use_exact_newton () {
   _quasi_newton = false;
 }
 //--------------------------------------
-std::size_t Vector_PNP::_get_solution_dimension() {
+
+
+
+//--------------------------------------
+std::size_t PDE::_get_solution_dimension() {
   return _function_space->element()->num_sub_elements();
 }
 //--------------------------------------
-void Vector_PNP::set_solution (
+void PDE::set_solution (
   double value
 ) {
   std::shared_ptr<dolfin::Constant> constant_fn;
   _solution_function.reset( new dolfin::Function(_function_space) );
-  std::size_t dimension = Vector_PNP::_get_solution_dimension();
+  std::size_t dimension = PDE::_get_solution_dimension();
 
   if (dimension == 0) {
     constant_fn.reset( new dolfin::Constant(value) );
@@ -108,12 +110,12 @@ void Vector_PNP::set_solution (
   _linear_form->set_coefficient("uu", (_solution_function));
 }
 //--------------------------------------
-void Vector_PNP::set_solution (
+void PDE::set_solution (
   std::vector<double> value
 ) {
   _solution_function.reset( new dolfin::Function(_function_space) );
   std::shared_ptr<dolfin::Constant> constant_fn;
-  std::size_t dimension = Vector_PNP::_get_solution_dimension();
+  std::size_t dimension = PDE::_get_solution_dimension();
 
   if (dimension == value.size()) {
     constant_fn.reset( new dolfin::Constant(value) );
@@ -130,11 +132,11 @@ void Vector_PNP::set_solution (
   _linear_form->set_coefficient("uu", (_solution_function));
 }
 //--------------------------------------
-void Vector_PNP::set_solution (
+void PDE::set_solution (
   const std::vector<Linear_Function::Linear_Function> expression
 ) {
 
-  std::size_t dimension = Vector_PNP::_get_solution_dimension();
+  std::size_t dimension = PDE::_get_solution_dimension();
   if (dimension == expression.size()) {
 
     std::vector<std::shared_ptr<const dolfin::FunctionSpace>> vector_space;
@@ -170,18 +172,76 @@ void Vector_PNP::set_solution (
   _linear_form->set_coefficient("uu", _solution_function);
 }
 //--------------------------------------
-dolfin::Function Vector_PNP::get_solution () {
+dolfin::Function PDE::get_solution () {
   return *(_solution_function);
 }
 //--------------------------------------
-void Vector_PNP::get_dofs() {
+
+
+
+//--------------------------------------
+void PDE::print_coefficients () {
+
+  printf("The coefficients of the bilinear form are:\n");
+  std::map<std::string, std::shared_ptr<const dolfin::Constant>>::iterator bc;
+  for (bc = _bilinear_coefficient.begin(); bc != _bilinear_coefficient.end(); ++bc) {
+    printf("\t%s\n", bc->first.c_str());
+  }
+
+  printf("The coefficients of the linear form are:\n");
+  std::map<std::string, std::shared_ptr<const dolfin::Constant>>::iterator lc;
+  for (lc = _linear_coefficient.begin(); lc != _linear_coefficient.end(); ++lc) {
+    printf("\t%s\n", lc->first.c_str());
+  }
+}
+//--------------------------------------
+void PDE::set_coefficients (
+  std::map<std::string, std::vector<double>> coefficients,
+  std::map<std::string, std::vector<double>> sources
+) {
+  std::shared_ptr<dolfin::Constant> constant_fn;
+
+  std::map<std::string, std::vector<double>>::iterator bc;
+  for (bc = coefficients.begin(); bc != coefficients.end(); ++bc) {
+    if (coefficients.find(bc->first)->second.size() == 1) {
+      constant_fn.reset( new dolfin::Constant(coefficients.find(bc->first)->second[0]) );
+    } else {
+      constant_fn.reset( new dolfin::Constant(coefficients.find(bc->first)->second) );
+    }
+
+    _bilinear_form->set_coefficient(bc->first, constant_fn);
+    _linear_form->set_coefficient(bc->first, constant_fn);
+
+    _bilinear_coefficient.emplace(bc->first, constant_fn);
+    _linear_coefficient.emplace(bc->first, constant_fn);
+  }
+
+  std::map<std::string, std::vector<double>>::iterator lc;
+  for (lc = sources.begin(); lc != sources.end(); ++lc) {
+    if (sources.find(lc->first)->second.size() == 1) {
+      constant_fn.reset( new dolfin::Constant(sources.find(lc->first)->second[0]) );
+    } else {
+      constant_fn.reset( new dolfin::Constant(sources.find(lc->first)->second) );
+    }
+
+    _linear_form->set_coefficient(lc->first, constant_fn);
+    _linear_coefficient.emplace(lc->first, constant_fn);
+  }
+}
+//--------------------------------------
+
+
+
+
+//--------------------------------------
+void PDE::get_dofs() {
   std::size_t dof;
   std::vector<std::size_t> component(1);
   std::vector<dolfin::la_index> index_vector;
   const dolfin::la_index n_first = _function_space->dofmap()->ownership_range().first;
   const dolfin::la_index n_second = _function_space->dofmap()->ownership_range().second;
 
-  for (std::size_t comp_index = 0; comp_index < Vector_PNP::_get_solution_dimension(); comp_index++) {
+  for (std::size_t comp_index = 0; comp_index < PDE::_get_solution_dimension(); comp_index++) {
     component[0] = comp_index;
     index_vector.clear();
     std::shared_ptr<dolfin::GenericDofMap> dofmap = _function_space->dofmap()
@@ -203,77 +263,11 @@ void Vector_PNP::get_dofs() {
   }
 }
 //--------------------------------------
-void Vector_PNP::_construct_coefficients () {
-  std::string permittivity("permittivity");
-  std::string fixed_charge("fixed_charge");
-  std::string diffusivity("diffusivity");
-  std::string valency("valency");
-
-  std::shared_ptr<const dolfin::Constant> permittivity_fn;
-  std::shared_ptr<const dolfin::Constant> fixed_charge_fn;
-  std::shared_ptr<const dolfin::Constant> diffusivity_fn;
-  std::shared_ptr<const dolfin::Constant> valency_fn;
-
-  _bilinear_coefficient.clear();
-  _bilinear_coefficient[permittivity] = permittivity_fn;
-  _bilinear_coefficient[diffusivity] = diffusivity_fn;
-  _bilinear_coefficient[valency] = valency_fn;
-
-  _linear_coefficient.clear();
-  _linear_coefficient[permittivity] = permittivity_fn;
-  _linear_coefficient[fixed_charge] = fixed_charge_fn;
-  _linear_coefficient[diffusivity] = diffusivity_fn;
-  _linear_coefficient[valency] = valency_fn;
-}
-//--------------------------------------
-void Vector_PNP::print_coefficients () {
-
-  printf("The coefficients of the bilinear form are:\n");
-  std::map<std::string, std::shared_ptr<const dolfin::Constant>>::iterator bc;
-  for (bc = _bilinear_coefficient.begin(); bc != _bilinear_coefficient.end(); ++bc) {
-    printf("\t%s\n", bc->first.c_str());
-  }
-
-  printf("The coefficients of the linear form are:\n");
-  std::map<std::string, std::shared_ptr<const dolfin::Constant>>::iterator lc;
-  for (lc = _linear_coefficient.begin(); lc != _linear_coefficient.end(); ++lc) {
-    printf("\t%s\n", lc->first.c_str());
-  }
-}
-//--------------------------------------
-void Vector_PNP::set_coefficients (
-  std::map<std::string, std::vector<double>> values
-) {
-  std::shared_ptr<dolfin::Constant> constant_fn;
-
-  std::map<std::string, std::shared_ptr<const dolfin::Constant>>::iterator bc;
-  for (bc = _bilinear_coefficient.begin(); bc != _bilinear_coefficient.end(); ++bc) {
-    if (values.find(bc->first)->second.size() == 1) {
-      constant_fn.reset( new dolfin::Constant(values.find(bc->first)->second[0]) );
-    } else {
-      constant_fn.reset( new dolfin::Constant(values.find(bc->first)->second) );
-    }
-
-    _bilinear_form->set_coefficient(bc->first, constant_fn);
-  }
-
-  std::map<std::string, std::shared_ptr<const dolfin::Constant>>::iterator lc;
-  for (lc = _linear_coefficient.begin(); lc != _linear_coefficient.end(); ++lc) {
-    if (values.find(lc->first)->second.size() == 1) {
-      constant_fn.reset( new dolfin::Constant(values.find(lc->first)->second[0]) );
-    } else {
-      constant_fn.reset( new dolfin::Constant(values.find(lc->first)->second) );
-    }
-
-    _linear_form->set_coefficient(lc->first, constant_fn);
-  }
-}
-//--------------------------------------
-void Vector_PNP::remove_Dirichlet_dof (
+void PDE::remove_Dirichlet_dof (
   std::vector<std::size_t> coordinates
 ) {
 
-  std::size_t dimension = Vector_PNP::_get_solution_dimension();
+  std::size_t dimension = PDE::_get_solution_dimension();
 
   _dirichlet_SubDomain.clear();
   _dirichlet_SubDomain.resize(dimension);
@@ -286,20 +280,26 @@ void Vector_PNP::remove_Dirichlet_dof (
 
   for (std::size_t i = 0; i < dimension; i++) {
     _dirichlet_SubDomain[i].reset(
-      new Dirichlet_Subdomain::Dirichlet_Subdomain({coordinates[i]}, _mesh_min, _mesh_max, _mesh_epsilon)
+      new Dirichlet_Subdomain::Dirichlet_Subdomain(
+        {coordinates[i]},
+        _mesh_min,
+        _mesh_max,
+        _mesh_epsilon
+      )
     );
     _dirichletBC[i].reset(
       new dolfin::DirichletBC((*_function_space)[i], zero_constant, _dirichlet_SubDomain[i])
     );
   }
 }
+
 //--------------------------------------
-void Vector_PNP::set_DirichletBC (
+void PDE::set_DirichletBC (
   std::vector<std::size_t> component,
   std::vector<std::vector<double>> boundary
 ) {
 
-  Vector_PNP::remove_Dirichlet_dof(component);
+  PDE::remove_Dirichlet_dof(component);
 
   std::vector<Linear_Function::Linear_Function> interpolant_vector;
   for (std::size_t i = 0; i < component.size(); i++) {
@@ -313,14 +313,20 @@ void Vector_PNP::set_DirichletBC (
     interpolant_vector.push_back(linear_interpolant);
   }
 
-  Vector_PNP::set_solution(interpolant_vector);
+  PDE::set_solution(interpolant_vector);
 }
 //--------------------------------------
-std::vector<std::shared_ptr<dolfin::SubDomain>> Vector_PNP::get_Dirichlet_SubDomain () {
+std::vector<std::shared_ptr<dolfin::SubDomain>> PDE::get_Dirichlet_SubDomain () {
   return _dirichlet_SubDomain;
 }
 //--------------------------------------
-dolfin::Function Vector_PNP::dolfin_solve () {
+
+
+
+
+
+//--------------------------------------
+dolfin::Function PDE::dolfin_solve () {
   dolfin::Function solution_update(_function_space);
   dolfin::Equation equation(_bilinear_form, _linear_form);
 
@@ -338,7 +344,14 @@ dolfin::Function Vector_PNP::dolfin_solve () {
   return *_solution_function;
 }
 //--------------------------------------
-void Vector_PNP::setup_linear_algebra () {
+
+
+
+
+
+
+//--------------------------------------
+void PDE::setup_linear_algebra () {
   dolfin::EigenMatrix eigen_matrix;
   dolfin::EigenVector eigen_vector;
   assemble(eigen_matrix, *_bilinear_form);
@@ -357,7 +370,7 @@ void Vector_PNP::setup_linear_algebra () {
   _eigen_vector.reset( new const dolfin::EigenVector(eigen_vector) );
 }
 //--------------------------------------
-dolfin::Function Vector_PNP::_convert_EigenVector_to_Function (
+dolfin::Function PDE::_convert_EigenVector_to_Function (
   const dolfin::EigenVector &eigen_vector
 ) {
   dolfin::Function fn(_function_space);
@@ -378,72 +391,7 @@ dolfin::Function Vector_PNP::_convert_EigenVector_to_Function (
   return fn;
 }
 //--------------------------------------
-void Vector_PNP::setup_fasp_linear_algebra () {
-  Vector_PNP::setup_linear_algebra();
-
-  std::size_t dimension = Vector_PNP::_get_solution_dimension();
-  EigenMatrix_to_dCSRmat(_eigen_matrix, &_fasp_matrix);
-  _fasp_bsr_matrix = fasp_format_dcsr_dbsr(&_fasp_matrix, dimension);
-
-  EigenVector_to_dvector(_eigen_vector, &_fasp_vector);
-  fasp_dvec_set(_fasp_vector.row, &_fasp_soln, 0.0);
-}
-//--------------------------------------
-
-
-
-
-
-
-
-
-
-dolfin::Function Vector_PNP::fasp_solve () {
-  Vector_PNP::setup_fasp_linear_algebra();
-
-  printf("Solving linear system using FASP solver...\n"); fflush(stdout);
-  INT status = fasp_solver_dbsr_krylov_amg (
-    &_fasp_bsr_matrix,
-    &_fasp_vector,
-    &_fasp_soln,
-    &_itsolver,
-    &_amg
-  );
-
-  if (status < 0) {
-    printf("\n### WARNING: FASP solver failed! Exit status = %d.\n", status);
-    fflush(stdout);
-  }
-  else {
-    printf("Successfully solved the linear system\n");
-    fflush(stdout);
-
-    dolfin::EigenVector solution_vector(_eigen_vector->size());
-    double* array = solution_vector.data();
-    for (std::size_t i = 0; i < _fasp_soln.row; ++i) {
-      array[i] = _fasp_soln.val[i];
-    }
-
-    dolfin::Function update (
-      Vector_PNP::_convert_EigenVector_to_Function(solution_vector)
-    );
-    *(_solution_function->vector()) += *(update.vector());
-  }
-
-  _bilinear_form->set_coefficient("uu", _solution_function);
-  _linear_form->set_coefficient("uu", _solution_function);
-
-  return *_solution_function;
-}
-//--------------------------------------
-void Vector_PNP::free_fasp () {
-  fasp_dcsr_free(&_fasp_matrix);
-  fasp_dbsr_free(&_fasp_bsr_matrix);
-  fasp_dvec_free(&_fasp_vector);
-  fasp_dvec_free(&_fasp_soln);
-}
-//--------------------------------------
-void Vector_PNP::EigenMatrix_to_dCSRmat (
+void PDE::EigenMatrix_to_dCSRmat (
   std::shared_ptr<const dolfin::EigenMatrix> eigen_matrix,
   dCSRmat* dCSR_matrix
 ) {
@@ -498,7 +446,7 @@ void Vector_PNP::EigenMatrix_to_dCSRmat (
   dCSR_matrix->val = val;
 }
 //--------------------------------------
-void Vector_PNP::EigenVector_to_dvector (
+void PDE::EigenVector_to_dvector (
   std::shared_ptr<const dolfin::EigenVector> eigen_vector,
   dvector* vector
 ) {
@@ -511,3 +459,4 @@ void Vector_PNP::EigenVector_to_dvector (
   vector->val = (double*) eigen_vector->data();
 }
 //--------------------------------------
+
