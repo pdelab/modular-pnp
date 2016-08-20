@@ -71,6 +71,11 @@ void Linear_PNP::setup_fasp_linear_algebra () {
   _fasp_bsr_matrix = fasp_format_dcsr_dbsr(&_fasp_matrix, dimension);
 
   EigenVector_to_dvector(_eigen_vector, &_fasp_vector);
+
+  if (_allocated_faps_soln) {
+    fasp_dvec_alloc(_eigen_vector->size(), &_fasp_soln);
+    _allocated_faps_soln = true;
+  }
   fasp_dvec_set(_fasp_vector.row, &_fasp_soln, 0.0);
 }
 //--------------------------------------

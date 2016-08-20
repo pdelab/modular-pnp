@@ -63,7 +63,9 @@ class Linear_PNP : public PDE {
     AMG_param _amg;
     dCSRmat _fasp_matrix;
     dBSRmat _fasp_bsr_matrix;
-    dvector _fasp_vector, _fasp_soln;
+    dvector _fasp_vector;
+    dvector _fasp_soln;
+    bool _allocated_faps_soln = false;
 };
 
 #endif

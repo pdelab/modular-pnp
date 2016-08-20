@@ -140,7 +140,7 @@ int main (int argc, char** argv) {
   printf("\n");
 
 
-  printf("\tdefining PNP coefficients from expressions\n\n");
+  printf("\tre-defining PNP coefficients from expressions\n");
   dolfin::Function permittivity(pnp_problem.fixed_charge_space);
   dolfin::File permittivity_file("./benchmarks/problem/output/permittivity.pvd");
   Permittivity_Expression permittivity_expr;
@@ -180,7 +180,6 @@ int main (int argc, char** argv) {
     {"fixed_charge", charges}
   };
 
-  printf("\tresetting PNP coefficients to expressions\n\n");
   pnp_problem.set_coefficients(
     pnp_coefficient_fns,
     pnp_source_fns
