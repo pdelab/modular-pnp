@@ -245,11 +245,11 @@ int main (int argc, char** argv) {
 
   // FASP computed solution
   pnp_problem.set_DirichletBC(components, bcs);
-  // dolfin::Function fasp_solution(pnp_problem.fasp_solve());
-  // solution_file0 << fasp_solution[0];
-  // solution_file1 << fasp_solution[1];
-  // solution_file2 << fasp_solution[2];
-  // solution_file3 << fasp_solution[3];
+  dolfin::Function fasp_solution(pnp_problem.fasp_solve());
+  solution_file0 << fasp_solution[0];
+  solution_file1 << fasp_solution[1];
+  solution_file2 << fasp_solution[2];
+  solution_file3 << fasp_solution[3];
 
   printf("Done\n\n"); fflush(stdout);
 
