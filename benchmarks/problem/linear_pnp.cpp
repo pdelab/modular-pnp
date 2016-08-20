@@ -11,6 +11,7 @@ extern "C" {
   #include "fasp_functs.h"
 }
 
+#include "vector_linear_pnp_forms.h"
 #include "linear_pnp.h"
 
 using namespace std;
@@ -33,6 +34,23 @@ Linear_PNP::Linear_PNP (
   coefficients,
   sources
 ) {
+
+  diffusivity_space.reset(
+    new vector_linear_pnp_forms::CoefficientSpace_diffusivity(*mesh)
+  );
+
+  valency_space.reset(
+    new vector_linear_pnp_forms::CoefficientSpace_valency(*mesh)
+  );
+
+  fixed_charge_space.reset(
+    new vector_linear_pnp_forms::CoefficientSpace_fixed_charge(*mesh)
+  );
+
+  permittivity_space.reset(
+    new vector_linear_pnp_forms::CoefficientSpace_permittivity(*mesh)
+  );
+
   _itsolver = itsolver;
   _amg = amg;
 }
@@ -53,6 +71,11 @@ void Linear_PNP::setup_fasp_linear_algebra () {
   _fasp_bsr_matrix = fasp_format_dcsr_dbsr(&_fasp_matrix, dimension);
 
   EigenVector_to_dvector(_eigen_vector, &_fasp_vector);
+
+  if (_allocated_faps_soln) {
+    fasp_dvec_alloc(_eigen_vector->size(), &_fasp_soln);
+    _allocated_faps_soln = true;
+  }
   fasp_dvec_set(_fasp_vector.row, &_fasp_soln, 0.0);
 }
 //--------------------------------------

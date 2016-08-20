@@ -17,8 +17,43 @@ extern "C" {
 
 using namespace std;
 
-int main (int argc, char** argv)
-{
+class Permittivity_Expression : public dolfin::Expression {
+  public:
+    void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
+      values[0] = 1.0;
+    }
+};
+
+class Fixed_Charged_Expression : public dolfin::Expression {
+  public:
+    void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
+      values[0] = 1.0;
+    }
+};
+
+class Diffusivity_Expression : public dolfin::Expression {
+  public:
+    Diffusivity_Expression() : dolfin::Expression(4) {}
+    void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
+      values[0] = x[0] < 0 ? 0.1 : 1.0;
+      values[1] = x[0] < 0 ? 0.1 : 1.0;
+      values[2] = x[0] < 0 ? 0.1 : 1.0;
+      values[3] = x[0] < 0 ? 0.1 : 1.0;
+    }
+};
+
+class Valency_Expression : public dolfin::Expression {
+  public:
+    Valency_Expression() : dolfin::Expression(4) {}
+    void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
+      values[0] =  0.0;
+      values[1] =  1.0;
+      values[2] = -1.0;
+      values[3] = -1.0;
+    }
+};
+
+int main (int argc, char** argv) {
   printf("----------------------------------------------------\n");
   printf(" Setting up the linearized PNP problem\n");
   printf("----------------------------------------------------\n\n");
@@ -103,6 +138,54 @@ int main (int argc, char** argv)
   printf("\tconstructed PNP problem\n\n");
   pnp_problem.print_coefficients();
   printf("\n");
+
+
+  printf("\tre-defining PNP coefficients from expressions\n");
+  dolfin::Function permittivity(pnp_problem.fixed_charge_space);
+  dolfin::File permittivity_file("./benchmarks/problem/output/permittivity.pvd");
+  Permittivity_Expression permittivity_expr;
+  permittivity.interpolate(permittivity_expr);
+  permittivity_file << permittivity;
+
+  dolfin::Function charges(pnp_problem.fixed_charge_space);
+  dolfin::File charges_file("./benchmarks/problem/output/charges.pvd");
+  Fixed_Charged_Expression fc_expr;
+  charges.interpolate(fc_expr);
+  charges_file << charges;
+
+  dolfin::Function diffusivity(pnp_problem.diffusivity_space);
+  dolfin::File diffusivity_file("./benchmarks/problem/output/diffusivity.pvd");
+  Diffusivity_Expression diff_expr;
+  diffusivity.interpolate(diff_expr);
+  // diffusivity_file << diffusivity[0];
+  diffusivity_file << diffusivity[1];
+  diffusivity_file << diffusivity[2];
+  diffusivity_file << diffusivity[3];
+
+  dolfin::Function valency(pnp_problem.valency_space);
+  dolfin::File valency_file("./benchmarks/problem/output/valency.pvd");
+  Valency_Expression valency_expr;
+  valency.interpolate(valency_expr);
+  // valency_file << valency[0];
+  valency_file << valency[1];
+  valency_file << valency[2];
+  valency_file << valency[3];
+
+  std::map<std::string, dolfin::Function> pnp_coefficient_fns = {
+    {"permittivity", permittivity},
+    {"diffusivity", diffusivity},
+    {"valency", valency}
+  };
+  std::map<std::string, dolfin::Function> pnp_source_fns = {
+    {"fixed_charge", charges}
+  };
+
+  pnp_problem.set_coefficients(
+    pnp_coefficient_fns,
+    pnp_source_fns
+  );
+  printf("\tdone\n\n");
+
 
 
 

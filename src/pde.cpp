@@ -252,6 +252,32 @@ void PDE::set_coefficients (
   }
 }
 //--------------------------------------
+void PDE::set_coefficients (
+  std::map<std::string, dolfin::Function> coefficients,
+  std::map<std::string, dolfin::Function> sources
+) {
+  std::shared_ptr<dolfin::Function> fn;
+
+  std::map<std::string, dolfin::Function>::iterator bc;
+  for (bc = coefficients.begin(); bc != coefficients.end(); ++bc) {
+    fn.reset( new dolfin::Function(coefficients.find(bc->first)->second) );
+
+    _bilinear_form->set_coefficient(bc->first, fn);
+    _linear_form->set_coefficient(bc->first, fn);
+
+    // _bilinear_coefficient.emplace(bc->first, fn);
+    // _linear_coefficient.emplace(bc->first, fn);
+  }
+
+  std::map<std::string, dolfin::Function>::iterator lc;
+  for (lc = sources.begin(); lc != sources.end(); ++lc) {
+    fn.reset( new dolfin::Function(sources.find(lc->first)->second) );
+
+    // _linear_form->set_coefficient(lc->first, fn);
+    // _linear_coefficient.emplace(lc->first, fn);
+  }
+}
+//--------------------------------------
 
 
 

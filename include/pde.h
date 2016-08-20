@@ -129,6 +129,11 @@ class PDE {
       std::map<std::string, std::vector<double>> sources
     );
 
+    void set_coefficients (
+      std::map<std::string, dolfin::Function> coefficients,
+      std::map<std::string, dolfin::Function> sources
+    );
+
     void EigenMatrix_to_dCSRmat (
       std::shared_ptr<const dolfin::EigenMatrix> eigen_matrix,
       dCSRmat* dCSR_matrix
