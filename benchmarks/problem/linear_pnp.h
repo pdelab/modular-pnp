@@ -14,6 +14,8 @@ extern "C" {
   #include "fasp_functs.h"
 }
 
+#include "vector_linear_pnp_forms.h"
+
 class Linear_PNP : public PDE {
   public:
 
@@ -50,6 +52,11 @@ class Linear_PNP : public PDE {
     dolfin::Function fasp_solve ();
 
     void free_fasp ();
+
+    std::shared_ptr<dolfin::FunctionSpace> diffusivity_space;
+    std::shared_ptr<dolfin::FunctionSpace> valency_space;
+    std::shared_ptr<dolfin::FunctionSpace> permittivity_space;
+    std::shared_ptr<dolfin::FunctionSpace> fixed_charge_space;
 
   private:
     itsolver_param _itsolver;

@@ -11,6 +11,7 @@ extern "C" {
   #include "fasp_functs.h"
 }
 
+#include "vector_linear_pnp_forms.h"
 #include "linear_pnp.h"
 
 using namespace std;
@@ -33,6 +34,23 @@ Linear_PNP::Linear_PNP (
   coefficients,
   sources
 ) {
+
+  diffusivity_space.reset(
+    new vector_linear_pnp_forms::CoefficientSpace_diffusivity(*mesh)
+  );
+
+  valency_space.reset(
+    new vector_linear_pnp_forms::CoefficientSpace_valency(*mesh)
+  );
+
+  fixed_charge_space.reset(
+    new vector_linear_pnp_forms::CoefficientSpace_fixed_charge(*mesh)
+  );
+
+  permittivity_space.reset(
+    new vector_linear_pnp_forms::CoefficientSpace_permittivity(*mesh)
+  );
+
   _itsolver = itsolver;
   _amg = amg;
 }
