@@ -216,3 +216,53 @@ void copy_dvector_to_vector_function(const dvector* vector, dolfin::Function* F,
   for (int i=0; i < dof_length; i++)
     F->vector()->setitem(function_dofs->val[i], vector->val[vector_dofs->val[i]]);
 }
+
+void copy_EigenMatrix_to_block_dCSRmat(dolfin::EigenMatrix *A, block_dCSRmat* A_block, ivector* dof_u, ivector* dof_p)
+{
+  // get index
+  int i;
+  int nrow_u     = dof_u->row;
+  int nrow_press = dof_p->row;
+
+  // Assign A_stokes_fasp
+  dCSRmat A_fasp;
+  EigenMatrix_to_dCSRmat(A, &A_fasp);
+
+
+  // extract blocks
+  A_block->brow = 2;
+  A_block->bcol = 2;
+  A_block->blocks = (dCSRmat **)calloc(4, sizeof(dCSRmat *));
+  fasp_mem_check((void *)A_block->blocks, "block matrix:cannot allocate memory!\n", ERROR_ALLOC_MEM);
+  for (i=0; i<4 ;i++) {
+      A_block->blocks[i] = (dCSRmat *)fasp_mem_calloc(1, sizeof(dCSRmat));
+  }
+
+
+  // get Auu block
+  fasp_dcsr_getblk(&A_fasp, dof_u->val, dof_u->val, dof_u->row, dof_u->row, A_block->blocks[0]);
+  // get Aup block
+  fasp_dcsr_getblk(&A_fasp, dof_u->val, dof_p->val, dof_u->row, dof_p->row, A_block->blocks[1]);
+  // get Apu block
+  fasp_dcsr_getblk(&A_fasp, dof_p->val, dof_u->val, dof_p->row, dof_u->row, A_block->blocks[2]);
+  // get App block
+  fasp_dcsr_getblk(&A_fasp, dof_p->val, dof_p->val, dof_p->row, dof_p->row, A_block->blocks[3]);
+
+}
+
+
+void copy_EigenVector_to_block_dvector(dolfin::EigenVector* b, dvector* b_block, ivector* dof_u, ivector* dof_p)
+{
+  // get index
+  int nrow_u     = dof_u->row;
+  int nrow_press = dof_p->row;
+  int i;
+
+  fasp_dvec_alloc(b->size(), b_block);
+
+  for (i=0; i<nrow_u; i++)
+      b_block->val[i]        = (*b)[dof_u->val[i]];
+  for (i=0; i<nrow_press; i++)
+      b_block->val[nrow_u+i] = (*b)[dof_p->val[i]];
+
+}

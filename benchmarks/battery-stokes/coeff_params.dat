@@ -1,0 +1,23 @@
+%--------------------------%
+% PDE coefficients         %
+%--------------------------%
+% For dimensional analysis, it is critical
+% that the coefficients are input in the
+% correct units!  
+% Please, make sure to do so...
+
+ref_voltage           =  1.0000e+0      % V
+ref_density           =  1.0000e+0      % 1 / m^3
+                                        % use negative to measure in mM = mol / m^3
+
+temperature           =  1.0000e+0      % K
+
+relative_permittivity =  1E-1     % no units
+
+cation_diffusivity    =  1.0000e-0      % m / sec^2
+cation_mobility       =  1.0000e-0      % (e_c/k_B*T) * m / sec^2
+cation_valency        =  1.0000e+0      % e_c
+
+anion_diffusivity     =  1.0000e-0      % m / sec^2
+anion_mobility        =  1.0000e-0      % (e_c/k_B*T) * m / sec^2
+anion_valency         = -1.0000e+0      % e_c
