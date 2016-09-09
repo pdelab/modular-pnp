@@ -194,8 +194,8 @@ INT electrokinetic_block_guass_seidel (
   const dolfin::DirichletBC* pnp_bc,
   const dolfin::DirichletBC* stokes_bc,
 
-  dolfin::Function* dPNP,
-  dolfin::Function* dStokes,
+  std::shared_ptr<dolfin::Function> dPNP,
+  std::shared_ptr<dolfin::Function> dStokes,
   ivector* dof_u,
   ivector* dof_p,
 
@@ -212,13 +212,15 @@ INT electrokinetic_block_guass_seidel (
 ) {
 
   // initialize guess is zero
-  dolfin::Constant zero(0.0);
-  dolfin::Constant zero_vector(0.0, 0.0, 0.0);
-  dolfin::Function dCation((*dPNP)[0]);
-  dolfin::Function dAnion((*dPNP)[1]);
-  dolfin::Function dPhi((*dPNP)[2]);
-  dolfin::Function dU((*dStokes)[0]);
-  dolfin::Function dPressure((*dStokes)[1]);
+  auto zero = std::make_shared<dolfin::Constant>(0.0);
+  auto zero_vec = std::make_shared<dolfin::Constant>(0.0, 0.0, 0.0);
+
+  auto dCation = std::make_shared<dolfin::Function>((*dPNP)[0]);
+  auto dAnion = std::make_shared<dolfin::Function>((*dPNP)[1]);
+  auto dPhi = std::make_shared<dolfin::Function>((*dPNP)[2]);
+  auto dU = std::make_shared<dolfin::Function>((*dStokes)[0]);
+  auto dPressure = std::make_shared<dolfin::Function>((*dStokes)[1]);
+
   // (*dPNP)[0].interpolate(zero);
   // (*dPNP)[1].interpolate(zero);
   // (*dPNP)[2].interpolate(zero);
@@ -290,9 +292,9 @@ INT electrokinetic_block_guass_seidel (
     (*dPNP).vector()->set_local(pnp_value_vector);
 
     // update pnp_rhs_form & stokes_rhs_form with pnp update
-    dolfin::Function dCation((*dPNP)[0]);
-    dolfin::Function dAnion((*dPNP)[1]);
-    dolfin::Function dPhi((*dPNP)[2]);
+    auto dCation = std::make_shared<dolfin::Function>((*dPNP)[0]);
+    auto dAnion = std::make_shared<dolfin::Function>((*dPNP)[1]);
+    auto dPhi = std::make_shared<dolfin::Function>((*dPNP)[2]);
     pnp_rhs_form->dCat = dCation;
     pnp_rhs_form->dAn = dAnion;
     pnp_rhs_form->dPhi = dPhi;
@@ -309,7 +311,9 @@ INT electrokinetic_block_guass_seidel (
     copy_EigenVector_to_block_dvector(&stokes_rhs, &stokes_rhs_fasp, dof_u, dof_p);
     fasp_dvec_alloc(stokes_rhs.size(), &stokes_soln_fasp);
     fasp_dvec_set(stokes_rhs_fasp.row, &stokes_soln_fasp, 0.0);
-    printf("--------------------------\n");
+    printf("--------------------------\n"); fflush(stdout);
+    printf("1\n"); fflush(stdout);
+    std::cout << A_stokes << std::endl;
     stokes_status = fasp_solver_bdcsr_krylov_navier_stokes (
       A_stokes,
       &stokes_rhs_fasp,
@@ -319,6 +323,7 @@ INT electrokinetic_block_guass_seidel (
       stokes_iluparam,
       stokes_schparam
     );
+    printf("2\n"); fflush(stdout);
     if (stokes_status < 0)
       printf("\n### WARNING: Stokes solver failed! Exit status = %d.\n\n", stokes_status);
     else
@@ -334,12 +339,12 @@ INT electrokinetic_block_guass_seidel (
     (*dStokes).vector()->set_local(stokes_value_vector);
 
     // update pnp_rhs_form & stokes_rhs_form with stokes update
-    dolfin::Function dU((*dStokes)[0]);
-    dolfin::Function dPressure((*dStokes)[1]);
+    auto dU = std::make_shared<dolfin::Function>((*dStokes)[0]);
+    auto dPressure = std::make_shared<dolfin::Function>((*dStokes)[1]);
 
-    pnp_rhs_form->du = (*dStokes)[0];
-    stokes_rhs_form->du = (*dStokes)[0];
-    stokes_rhs_form->dPress = (*dStokes)[1];
+    pnp_rhs_form->du = dU;
+    stokes_rhs_form->du = dU;
+    stokes_rhs_form->dPress = dPressure;
 
     assemble(pnp_rhs, *pnp_rhs_form);
     pnp_bc->apply(pnp_rhs);

@@ -31,9 +31,9 @@ bool eafe_switch = false;
 double get_initial_residual (
   pnp_and_source::LinearForm* L,
   const dolfin::DirichletBC* bc,
-  dolfin::Function* cation,
-  dolfin::Function* anion,
-  dolfin::Function* potential
+  std::shared_ptr<dolfin::Function> cation,
+  std::shared_ptr<dolfin::Function> anion,
+  std::shared_ptr<dolfin::Function> potential
 );
 
 double update_solution_pnp (
@@ -80,12 +80,19 @@ int main(int argc, char** argv)
 
   // build mesh
   printf("mesh...\n"); fflush(stdout);
-  dolfin::Mesh mesh0, mesh_init;
+  // std::shared_ptr<dolfin::Mesh> mesh0;
+  // std::shared_ptr<dolfin::Mesh> mesh_init;
   dolfin::MeshFunction<std::size_t> subdomains;
   dolfin::MeshFunction<std::size_t> surfaces;
   dolfin::File meshOut(domain_par.mesh_output);
-  domain_build(&domain_par, &mesh0, &subdomains, &surfaces);
-  domain_build(&domain_par, &mesh_init, &subdomains, &surfaces);
+  // domain_build(&domain_par, mesh0, &subdomains, &surfaces);
+  // domain_build(&domain_par, mesh_init, &subdomains, &surfaces);
+  // mesh
+  dolfin::Point p0( -domain_par.length_x/2, -domain_par.length_y/2, -domain_par.length_z/2);
+  dolfin::Point p1(  domain_par.length_x/2,  domain_par.length_y/2,  domain_par.length_z/2);
+  auto mesh0 = std::make_shared<dolfin::BoxMesh>(p0, p1, domain_par.grid_x, domain_par.grid_y, domain_par.grid_z);
+  // auto mesh0 = std::make_shared<dolfin::Mesh>("./benchmarks/PNP/cheese.xml");
+  auto mesh_init = std::make_shared<dolfin::Mesh>(*mesh0);
   print_domain_param(&domain_par);
 
   // read coefficients and boundary values
@@ -146,33 +153,35 @@ int main(int argc, char** argv)
     coeff_par.bc_coordinate
   );
 
+// meshOut << *mesh0;
+
   // interpolate
-  pnp_and_source::FunctionSpace V_init(mesh_init);
-  dolfin::Function initialGuessFunction(V_init);
-  dolfin::Function initialCation(initialGuessFunction[0]);
-  dolfin::Function initialAnion(initialGuessFunction[1]);
-  dolfin::Function initialPotential(initialGuessFunction[2]);
-  initialCation.interpolate(Cation);
-  initialAnion.interpolate(Anion);
-  initialPotential.interpolate(Volt);
+  auto V_init = std::make_shared<pnp_and_source::FunctionSpace>(mesh_init);
+  auto initialGuessFunction = std::make_shared<Function>(V_init);
+  auto initialCation = std::make_shared<Function>((*initialGuessFunction)[0]);
+  auto initialAnion = std::make_shared<Function>((*initialGuessFunction)[1]);
+  auto initialPotential = std::make_shared<Function>((*initialGuessFunction)[2]);
+  initialCation->interpolate(Cation);
+  initialAnion->interpolate(Anion);
+  initialPotential->interpolate(Volt);
 
   //*************************************************************
   //  Mesh adaptivity
   //*************************************************************
   // interpolate analytic expressions
   printf("interpolate analytic expressions onto initial mesh...\n\n"); fflush(stdout);
-  pnp_and_source::FunctionSpace V0(mesh0);
-  dolfin::Function initialGuessFunction0(V0);
-  dolfin::Function solutionFunction0(V0);
-  dolfin::Function cation0(solutionFunction0[0]);
-  dolfin::Function anion0(solutionFunction0[1]);
-  dolfin::Function potential0(solutionFunction0[2]);
-  cation0.interpolate(Cation);
-  anion0.interpolate(Anion);
-  potential0.interpolate(Volt);
+  auto V0 = std::make_shared<pnp_and_source::FunctionSpace>(mesh0);
+  // auto initialGuessFunction0 = std::make_shared<Function>(V0);
+  auto solutionFunction0 = std::make_shared<Function>(V0);
+  auto cation0 = std::make_shared<Function>((*solutionFunction0)[0]);
+  auto anion0 = std::make_shared<Function>((*solutionFunction0)[1]);
+  auto potential0 = std::make_shared<Function>((*solutionFunction0)[2]);
+  cation0->interpolate(Cation);
+  anion0->interpolate(Anion);
+  potential0->interpolate(Volt);
 
   // set adaptivity parameters
-  dolfin::Mesh mesh(mesh0);
+  auto mesh = std::make_shared<Mesh>(*mesh0);
   double entropy_tol = newtparam.adapt_tol;
   unsigned int num_adapts = 0, max_adapts = 5;
   bool adaptive_convergence = false;
@@ -183,19 +192,19 @@ int main(int argc, char** argv)
   while (!adaptive_convergence)
   {
     // output mesh
-    meshOut << mesh;
+    meshOut << *mesh;
 
     // Initialize variational forms
     printf("\tvariational forms...\n"); fflush(stdout);
-    pnp_and_source::FunctionSpace V(mesh);
+    auto V = std::make_shared<pnp_and_source::FunctionSpace>(mesh);
     pnp_and_source::BilinearForm a_pnp(V,V);
     pnp_and_source::LinearForm L_pnp(V);
-    Constant eps(coeff_par.relative_permittivity);
-    Constant Dp(coeff_par.cation_diffusivity);
-    Constant Dn(coeff_par.anion_diffusivity);
-    Constant qp(coeff_par.cation_valency);
-    Constant qn(coeff_par.anion_valency);
-    Constant zero(0.0);
+    auto eps = std::make_shared<Constant>(coeff_par.relative_permittivity);
+    auto Dp = std::make_shared<Constant>(coeff_par.cation_diffusivity);
+    auto Dn = std::make_shared<Constant>(coeff_par.anion_diffusivity);
+    auto qp = std::make_shared<Constant>(coeff_par.cation_valency);
+    auto qn = std::make_shared<Constant>(coeff_par.anion_valency);
+    auto zero = std::make_shared<Constant>(0.0);
     a_pnp.eps = eps; L_pnp.eps = eps;
     a_pnp.Dp = Dp; L_pnp.Dp = Dp;
     a_pnp.Dn = Dn; L_pnp.Dn = Dn;
@@ -203,13 +212,13 @@ int main(int argc, char** argv)
     a_pnp.qn = qn; L_pnp.qn = qn;
 
     // analytic solution
-    Function analyticSolutionFunction(V);
-    Function analyticCation(analyticSolutionFunction[0]);
-    Function analyticAnion(analyticSolutionFunction[1]);
-    Function analyticPotential(analyticSolutionFunction[2]);
-    analyticCation.interpolate(zero);
-    analyticAnion.interpolate(zero);
-    analyticPotential.interpolate(zero);
+    auto analyticSolutionFunction = std::make_shared<Function>(V);
+    auto analyticCation= std::make_shared<Function>((*analyticSolutionFunction)[0]);
+    auto analyticAnion= std::make_shared<Function>((*analyticSolutionFunction)[1]);
+    auto analyticPotential= std::make_shared<Function>((*analyticSolutionFunction)[2]);
+    analyticCation->interpolate(*zero);
+    analyticAnion->interpolate(*zero);
+    analyticPotential->interpolate(*zero);
     L_pnp.cation = analyticCation;
     L_pnp.anion = analyticAnion;
     L_pnp.potential = analyticPotential;
@@ -217,60 +226,59 @@ int main(int argc, char** argv)
     File EXcationFile("./benchmarks/PNP/output/Ex_cation.pvd");
     File EXanionFile("./benchmarks/PNP/output/Ex_anion.pvd");
     File EXpotentialFile("./benchmarks/PNP/output/Ex_potential.pvd");
-    EXcationFile << analyticCation;
-    EXanionFile << analyticAnion;
-    EXpotentialFile << analyticPotential;
+    EXcationFile << *analyticCation;
+    EXanionFile << *analyticAnion;
+    EXpotentialFile << *analyticPotential;
 
     // Set Dirichlet boundaries
     printf("\tboundary conditions...\n"); fflush(stdout);
-    Constant zero_vec(0.0, 0.0, 0.0);
-    SymmBoundaries boundary(coeff_par.bc_coordinate, -domain_par.length_x/2.0, domain_par.length_x/2.0);
+    auto zero_vec = std::make_shared<Constant>(0.0, 0.0, 0.0);
+    auto boundary = std::make_shared<SymmBoundaries>(coeff_par.bc_coordinate, -domain_par.length_x/2.0, domain_par.length_x/2.0);
     dolfin::DirichletBC bc(V, zero_vec, boundary);
 
     // Interpolate analytic expressions
     printf("\tinterpolate solution onto new mesh...\n"); fflush(stdout);
-    dolfin::Function solutionFunction(V);
-    dolfin::Function cationSolution(solutionFunction[0]);
+    auto solutionFunction = std::make_shared<Function>(V);
+    auto cationSolution = std::make_shared<Function>((*solutionFunction)[0]);
+    auto anionSolution = std::make_shared<Function>((*solutionFunction)[1]);
+    auto potentialSolution = std::make_shared<Function>((*solutionFunction)[2]);
     // cationSolution.interpolate(initialCation);
-    cationSolution.interpolate(cation0);
-    dolfin::Function anionSolution(solutionFunction[1]);
+    cationSolution->interpolate(*cation0);
     // anionSolution.interpolate(initialAnion);
-    anionSolution.interpolate(anion0);
-
+    anionSolution->interpolate(*anion0);
     // solve for voltage
-    dolfin::Function potentialSolution(solutionFunction[2]);
     // potentialSolution.interpolate(initialPotential);
-    potentialSolution.interpolate(potential0);
+    potentialSolution->interpolate(*potential0);
 
     // write computed solution to file
     printf("\toutput projected solution to file\n"); fflush(stdout);
-    cationFile << cationSolution;
-    anionFile << anionSolution;
-    potentialFile << potentialSolution;
+    cationFile << *cationSolution;
+    anionFile << *anionSolution;
+    potentialFile << *potentialSolution;
 
     // map dofs
     ivector cation_dofs;
     ivector anion_dofs;
     ivector potential_dofs;
-    get_dofs(&solutionFunction, &cation_dofs, 0);
-    get_dofs(&solutionFunction, &anion_dofs, 1);
-    get_dofs(&solutionFunction, &potential_dofs, 2);
+    get_dofs(solutionFunction.get(), &cation_dofs, 0);
+    get_dofs(solutionFunction.get(), &anion_dofs, 1);
+    get_dofs(solutionFunction.get(), &potential_dofs, 2);
 
     //EAFE Formulation
     if (eafe_switch)
       printf("\tEAFE initialization...\n");
-    EAFE::FunctionSpace V_cat(mesh);
+    auto V_cat = std::make_shared<EAFE::FunctionSpace>(mesh);
     EAFE::BilinearForm a_cat(V_cat,V_cat);
     a_cat.alpha = Dp;
     a_cat.gamma = zero;
-    EAFE::FunctionSpace V_an(mesh);
+    auto V_an = std::make_shared<EAFE::FunctionSpace>(mesh);
     EAFE::BilinearForm a_an(V_an,V_an);
     a_an.alpha = Dn;
     a_an.gamma = zero;
-    dolfin::Function CatCatFunction(V_cat);
-    dolfin::Function CatBetaFunction(V_cat);
-    dolfin::Function AnAnFunction(V_an);
-    dolfin::Function AnBetaFunction(V_an);
+    auto CatCatFunction = std::make_shared<Function>(V_cat);
+    auto CatBetaFunction = std::make_shared<Function>(V_cat);
+    auto AnAnFunction = std::make_shared<Function>(V_an);
+    auto AnBetaFunction = std::make_shared<Function>(V_an);
 
     // initialize linear system
     printf("\tlinear algebraic objects...\n"); fflush(stdout);
@@ -285,7 +293,8 @@ int main(int argc, char** argv)
     //*************************************************************
     // Setup newton parameters and compute initial residual
     printf("\tNewton solver initialization...\n"); fflush(stdout);
-    dolfin::Function solutionUpdate(V);
+    // auto solutionUpdate = std::make_shared<Function>(V);
+    Function solutionUpdate(V);
     unsigned int newton_iteration = 0;
 
     // set initial residual
@@ -293,9 +302,9 @@ int main(int argc, char** argv)
     initial_residual = get_initial_residual(
       &L_pnp,
       &bc,
-      &initialCation,
-      &initialAnion,
-      &initialPotential
+      initialCation,
+      initialAnion,
+      initialPotential
     );
 
     printf("\tcompute relative residual...\n"); fflush(stdout);
@@ -334,14 +343,14 @@ int main(int argc, char** argv)
       // EAFE expressions
       if (eafe_switch) {
         printf("\tcompute EAFE expressions...\n");
-        CatCatFunction.interpolate(cationSolution);
-        CatBetaFunction.interpolate(potentialSolution);
-        *(CatBetaFunction.vector()) *= coeff_par.cation_valency;
-        *(CatBetaFunction.vector()) += *(CatCatFunction.vector());
-        AnAnFunction.interpolate(anionSolution);
-        AnBetaFunction.interpolate(potentialSolution);
-        *(AnBetaFunction.vector()) *= coeff_par.anion_valency;
-        *(AnBetaFunction.vector()) += *(AnAnFunction.vector());
+        CatCatFunction->interpolate(*cationSolution);
+        CatBetaFunction->interpolate(*potentialSolution);
+        *(CatBetaFunction->vector()) *= coeff_par.cation_valency;
+        *(CatBetaFunction->vector()) += *(CatCatFunction->vector());
+        AnAnFunction->interpolate(*anionSolution);
+        AnBetaFunction->interpolate(*potentialSolution);
+        *(AnBetaFunction->vector()) *= coeff_par.anion_valency;
+        *(AnBetaFunction->vector()) += *(AnAnFunction->vector());
         a_cat.eta = CatCatFunction;
         a_cat.beta = CatBetaFunction;
         a_an.eta = AnAnFunction;
@@ -351,8 +360,8 @@ int main(int argc, char** argv)
 
         // Modify Jacobian
         printf("\treplace Jacobian with EAFE approximations...\n"); fflush(stdout);
-        replace_matrix(3,0, &V, &V_cat, &A_pnp, &A_cat);
-        replace_matrix(3,1, &V, &V_an , &A_pnp, &A_an );
+        replace_matrix(3,0, V.get(), V_cat.get(), &A_pnp, &A_cat);
+        replace_matrix(3,1, V.get(), V_an.get() , &A_pnp, &A_an );
       }
       bc.apply(A_pnp);
 
@@ -379,21 +388,38 @@ int main(int argc, char** argv)
         copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &anion_dofs, &anion_dofs);
         copy_dvector_to_vector_function(&solu_fasp, &solutionUpdate, &potential_dofs, &potential_dofs);
 
-        // update solution and reset solutionUpdate
-        printf("\tupdate solution...\n"); fflush(stdout);
-        relative_residual = update_solution_pnp(
-          &cationSolution,
-          &anionSolution,
-          &potentialSolution,
-          &(solutionUpdate[0]),
-          &(solutionUpdate[1]),
-          &(solutionUpdate[2]),
-          relative_residual,
-          initial_residual,
-          &L_pnp,
-          &bc,
-          &newtparam
-        );
+        Function dAnion = solutionUpdate[0];
+        Function dCation = solutionUpdate[1];
+        Function dPotential = solutionUpdate[2];
+        *(cationSolution->vector())+=*(dAnion.vector());
+        *(anionSolution->vector())+=*(dCation.vector());
+        *(potentialSolution->vector())+=*(dPotential.vector());
+        //
+        // // update solution and reset solutionUpdate
+        // printf("\tupdate solution...\n"); fflush(stdout);
+        // relative_residual = update_solution_pnp(
+        //   &cationSolution,
+        //   &anionSolution,
+        //   &potentialSolution,
+        //   &(solutionUpdate[0]),
+        //   &(solutionUpdate[1]),
+        //   &(solutionUpdate[2]),
+        //   relative_residual,
+        //   initial_residual,
+        //   &L_pnp,
+        //   &bc,
+        //   &newtparam
+        // );
+
+        // update nonlinear residual
+        L_pnp.CatCat = cationSolution;
+        L_pnp.AnAn = anionSolution;
+        L_pnp.EsEs = potentialSolution;
+        assemble(b_pnp, L_pnp);
+        bc.apply(b_pnp);
+        relative_residual = b_pnp.norm("l2") / initial_residual;
+        printf("\t\trelative residual : %e\n",relative_residual);
+
         if (relative_residual < 0.0) {
           printf("Newton backtracking failed!\n");
           printf("\tresidual has not decreased after damping %d times\n", newtparam.damp_it);
@@ -402,21 +428,21 @@ int main(int argc, char** argv)
         }
 
         // update nonlinear residual
-        L_pnp.CatCat = cationSolution;
-        L_pnp.AnAn = anionSolution;
-        L_pnp.EsEs = potentialSolution;
-        assemble(b_pnp, L_pnp);
-        bc.apply(b_pnp);
+        // L_pnp.CatCat = cationSolution;
+        // L_pnp.AnAn = anionSolution;
+        // L_pnp.EsEs = potentialSolution;
+        // assemble(b_pnp, L_pnp);
+        // bc.apply(b_pnp);
 
         // print
-        cationFile << cationSolution;
-        anionFile << anionSolution;
-        potentialFile << potentialSolution;
+        cationFile << *cationSolution;
+        anionFile << *anionSolution;
+        potentialFile << *potentialSolution;
       }
     }
 
     // check status of Newton solver
-    if (isnan(relative_residual)) {
+    if (std::isnan(relative_residual)) {
       printf("\n### WARNING: Newton solver failed...\n");
       printf("\trelative residual is NaN!!\n\n");
       adaptive_convergence = true;
@@ -442,13 +468,14 @@ int main(int argc, char** argv)
     // compute local entropy and refine mesh
     printf("Computing local entropy for refinement\n");
     unsigned int num_refines;
+    std::shared_ptr<Mesh> mesh_ptr;
     num_refines = check_local_entropy (
-      &cationSolution,
+      cationSolution,
       coeff_par.cation_valency,
-      &anionSolution,
+      anionSolution,
       coeff_par.anion_valency,
-      &potentialSolution,
-      &mesh0,
+      potentialSolution,
+      mesh_ptr,
       entropy_tol,
       newtparam.max_cells
     );
@@ -472,12 +499,12 @@ int main(int argc, char** argv)
     else
       printf("\tadapting the mesh using %d levels of local refinement...\n", num_refines);
 
-    std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(mesh0) );
-    cation0 = adapt(cationSolution, mesh_ptr);
-    anion0 = adapt(anionSolution, mesh_ptr);
-    potential0 = adapt(potentialSolution, mesh_ptr);
-    mesh = mesh0;
-    mesh.bounding_box_tree()->build(mesh); // to ensure the building_box_tree is correctly indexed
+    // std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(*mesh00) );
+    std::shared_ptr<GenericFunction> cation0 = adapt(cationSolution, mesh_ptr);
+    std::shared_ptr<GenericFunction> anion0 = adapt(anionSolution, mesh_ptr);
+    std::shared_ptr<GenericFunction> potential0 = adapt(potentialSolution, mesh_ptr);
+    *mesh = *mesh_ptr;
+    mesh->bounding_box_tree()->build(*mesh); // to ensure the building_box_tree is correctly indexed
 
   }
 
@@ -488,91 +515,91 @@ int main(int argc, char** argv)
   return 0;
 }
 
-double update_solution_pnp (
-  dolfin::Function* iterate0,
-  dolfin::Function* iterate1,
-  dolfin::Function* iterate2,
-  dolfin::Function* update0,
-  dolfin::Function* update1,
-  dolfin::Function* update2,
-  double relative_residual,
-  double initial_residual,
-  pnp_and_source::LinearForm* L,
-  const dolfin::DirichletBC* bc,
-  newton_param* params )
-{
-  // compute residual
-  dolfin::Function _iterate0(*iterate0);
-  dolfin::Function _iterate1(*iterate1);
-  dolfin::Function _iterate2(*iterate2);
-  dolfin::Function _update0(*update0);
-  dolfin::Function _update1(*update1);
-  dolfin::Function _update2(*update2);
-  update_solution(&_iterate0, &_update0);
-  update_solution(&_iterate1, &_update1);
-  update_solution(&_iterate2, &_update2);
-  L->CatCat = _iterate0;
-  L->AnAn = _iterate1;
-  L->EsEs = _iterate2;
-  EigenVector b;
-  assemble(b, *L);
-  bc->apply(b);
-  double new_relative_residual = b.norm("l2") / initial_residual;
-
-  // backtrack loop
-  unsigned int damp_iters = 0;
-  printf("\t\trelative residual after damping %d times: %e\n", damp_iters, new_relative_residual);
-
-  while ( new_relative_residual > relative_residual && damp_iters < params->damp_it )
-  {
-    damp_iters++;
-    *(_iterate0.vector()) = *(iterate0->vector());
-    *(_iterate1.vector()) = *(iterate1->vector());
-    *(_iterate2.vector()) = *(iterate2->vector());
-    *(_update0.vector()) *= params->damp_factor;
-    *(_update1.vector()) *= params->damp_factor;
-    *(_update2.vector()) *= params->damp_factor;
-    update_solution(&_iterate0, &_update0);
-    update_solution(&_iterate1, &_update1);
-    update_solution(&_iterate2, &_update2);
-    L->CatCat = _iterate0;
-    L->AnAn = _iterate1;
-    L->EsEs = _iterate2;
-    assemble(b, *L);
-    bc->apply(b);
-    new_relative_residual = b.norm("l2") / initial_residual;
-    printf("\t\trelative residual after damping %d times: %e\n", damp_iters, new_relative_residual);
-  }
-
-  // check for decrease
-  if ( new_relative_residual > relative_residual )
-    return -new_relative_residual;
-
-  // update iterates
-  *(iterate0->vector()) = *(_iterate0.vector());
-  *(iterate1->vector()) = *(_iterate1.vector());
-  *(iterate2->vector()) = *(_iterate2.vector());
-  return new_relative_residual;
-}
+// double update_solution_pnp (
+//   dolfin::Function* iterate0,
+//   dolfin::Function* iterate1,
+//   dolfin::Function* iterate2,
+//   dolfin::Function* update0,
+//   dolfin::Function* update1,
+//   dolfin::Function* update2,
+//   double relative_residual,
+//   double initial_residual,
+//   pnp_and_source::LinearForm* L,
+//   const dolfin::DirichletBC* bc,
+//   newton_param* params )
+// {
+//   // compute residual
+//   dolfin::Function _iterate0(*iterate0);
+//   dolfin::Function _iterate1(*iterate1);
+//   dolfin::Function _iterate2(*iterate2);
+//   dolfin::Function _update0(*update0);
+//   dolfin::Function _update1(*update1);
+//   dolfin::Function _update2(*update2);
+//   update_solution(&_iterate0, &_update0);
+//   update_solution(&_iterate1, &_update1);
+//   update_solution(&_iterate2, &_update2);
+//   L->CatCat = _iterate0;
+//   L->AnAn = _iterate1;
+//   L->EsEs = _iterate2;
+//   EigenVector b;
+//   assemble(b, *L);
+//   bc->apply(b);
+//   double new_relative_residual = b.norm("l2") / initial_residual;
+//
+//   // backtrack loop
+//   unsigned int damp_iters = 0;
+//   printf("\t\trelative residual after damping %d times: %e\n", damp_iters, new_relative_residual);
+//
+//   while ( new_relative_residual > relative_residual && damp_iters < params->damp_it )
+//   {
+//     damp_iters++;
+//     *(_iterate0.vector()) = *(iterate0->vector());
+//     *(_iterate1.vector()) = *(iterate1->vector());
+//     *(_iterate2.vector()) = *(iterate2->vector());
+//     *(_update0.vector()) *= params->damp_factor;
+//     *(_update1.vector()) *= params->damp_factor;
+//     *(_update2.vector()) *= params->damp_factor;
+//     update_solution(&_iterate0, &_update0);
+//     update_solution(&_iterate1, &_update1);
+//     update_solution(&_iterate2, &_update2);
+//     L->CatCat = _iterate0;
+//     L->AnAn = _iterate1;
+//     L->EsEs = _iterate2;
+//     assemble(b, *L);
+//     bc->apply(b);
+//     new_relative_residual = b.norm("l2") / initial_residual;
+//     printf("\t\trelative residual after damping %d times: %e\n", damp_iters, new_relative_residual);
+//   }
+//
+//   // check for decrease
+//   if ( new_relative_residual > relative_residual )
+//     return -new_relative_residual;
+//
+//   // update iterates
+//   *(iterate0->vector()) = *(_iterate0.vector());
+//   *(iterate1->vector()) = *(_iterate1.vector());
+//   *(iterate2->vector()) = *(_iterate2.vector());
+//   return new_relative_residual;
+// }
 
 double get_initial_residual (
   pnp_and_source::LinearForm* L,
   const dolfin::DirichletBC* bc,
-  dolfin::Function* cation,
-  dolfin::Function* anion,
-  dolfin::Function* potential)
+  std::shared_ptr<dolfin::Function> cation,
+  std::shared_ptr<dolfin::Function> anion,
+  std::shared_ptr<dolfin::Function> potential)
 {
-  pnp_and_source::FunctionSpace V( *(cation->function_space()->mesh()) );
-  dolfin::Function adapt_func(V);
-  dolfin::Function adapt_cation(adapt_func[0]);
-  dolfin::Function adapt_anion(adapt_func[1]);
-  dolfin::Function adapt_potential(adapt_func[2]);
-  adapt_cation.interpolate(*cation);
-  adapt_anion.interpolate(*anion);
-  adapt_potential.interpolate(*potential);
-  L->CatCat = adapt_cation;
-  L->AnAn = adapt_anion;
-  L->EsEs = adapt_potential;
+  // auto V = std::make_shared<pnp_and_source::FunctionSpace>( *(cation->function_space()->mesh()) );
+  // dolfin::Function adapt_func(V);
+  // dolfin::Function adapt_cation(adapt_func[0]);
+  // dolfin::Function adapt_anion(adapt_func[1]);
+  // dolfin::Function adapt_potential(adapt_func[2]);
+  // adapt_cation.interpolate(*cation);
+  // adapt_anion.interpolate(*anion);
+  // adapt_potential.interpolate(*potential);
+  L->CatCat = cation;
+  L->AnAn = anion;
+  L->EsEs = potential;
   EigenVector b;
   assemble(b, *L);
   bc->apply(b);

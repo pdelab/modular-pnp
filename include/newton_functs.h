@@ -22,7 +22,8 @@ extern "C"
 
 /*------------- In file: newton.cpp --------------*/
 
-void update_solution (dolfin::Function* iterate, dolfin::Function* update);
+void update_solution (std::shared_ptr<dolfin::Function> iterate,
+                     std::shared_ptr<dolfin::Function> update);
 
 /*------------- In file: params.cpp --------------*/
 
@@ -61,35 +62,35 @@ void non_dimesionalize_coefficients (domain_param *domain,
 /*------------- In file: domains.cpp --------------*/
 
 void domain_build (domain_param *domain_par,
-           dolfin::Mesh *mesh,
+           std::shared_ptr<dolfin::Mesh>& mesh,
            dolfin::MeshFunction<size_t> *subdomains,
            dolfin::MeshFunction<size_t> *surfaces);
 
-unsigned int check_local_entropy (dolfin::Function *cation,
-                                double cation_valency,
-                                dolfin::Function *anion,
-                                double anion_valency,
-                                dolfin::Function *voltage,
-                                dolfin::Mesh *target_mesh,
-                                double entropy_tol);
-
-unsigned int check_local_entropy (dolfin::Function *cation,
-                                double cation_valency,
-                                dolfin::Function *anion,
-                                double anion_valency,
-                                dolfin::Function *voltage,
-                                dolfin::Mesh *target_mesh,
-                                double entropy_tol,
-                                int Max_Numb_Cells);
-
-unsigned int check_electric_field (dolfin::Function *voltage,
-                                 dolfin::Mesh *target_mesh,
+unsigned int check_local_entropy (std::shared_ptr<dolfin::Function> cation,
+                                 double cation_valency,
+                                 std::shared_ptr<dolfin::Function> anion,
+                                 double anion_valency,
+                                 std::shared_ptr<dolfin::Function> voltage,
+                                 std::shared_ptr<dolfin::Mesh>& target_mesh,
                                  double entropy_tol);
 
-unsigned int check_electric_field (dolfin::Function *voltage,
-                                dolfin::Mesh *target_mesh,
-                                double entropy_tol,
-                                int Max_Numb_Cells);
+unsigned int check_local_entropy (std::shared_ptr<dolfin::Function> cation,
+                                  double cation_valency,
+                                  std::shared_ptr<dolfin::Function> anion,
+                                  double anion_valency,
+                                  std::shared_ptr<dolfin::Function> voltage,
+                                  std::shared_ptr<dolfin::Mesh>& target_mesh,
+                                  double entropy_tol,
+                                  int max_cells);
+
+unsigned int check_electric_field (std::shared_ptr<dolfin::Function> voltage,
+                                  std::shared_ptr<dolfin::Mesh>& target_mesh,
+                                  double entropy_tol);
+
+unsigned int check_electric_field (std::shared_ptr<dolfin::Function> voltage,
+                                 std::shared_ptr<dolfin::Mesh>& target_mesh,
+                                 double entropy_tol,
+                                 int max_cells);
 
 #endif /* end if for __NEWTONFUNCTS_HEADER__ */
 

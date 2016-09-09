@@ -36,7 +36,7 @@ using namespace dolfin;
  * \param surfaces    mesh surfaces to be constructed
  */
 void domain_build (domain_param *domain_par,
-                   dolfin::Mesh *mesh,
+                   std::shared_ptr<dolfin::Mesh>& mesh,
                    dolfin::MeshFunction<size_t> *subdomains,
                    dolfin::MeshFunction<size_t> *surfaces)
 {
@@ -44,21 +44,24 @@ void domain_build (domain_param *domain_par,
   if ( strcmp(domain_par->mesh_file,"none")==0 ) {
       fflush(stdout);
 
-      // mesh
+        // mesh
       dolfin::Point p0( -domain_par->length_x/2, -domain_par->length_y/2, -domain_par->length_z/2);
       dolfin::Point p1(  domain_par->length_x/2,  domain_par->length_y/2,  domain_par->length_z/2);
-      dolfin::BoxMesh box_mesh(p0, p1, domain_par->grid_x, domain_par->grid_y, domain_par->grid_z);
-      *mesh = box_mesh;
+      // dolfin::BoxMesh box_mesh(p0, p1, domain_par->grid_x, domain_par->grid_y, domain_par->grid_z);
+      auto box_mesh = std::make_shared<dolfin::BoxMesh>(p0, p1, domain_par->grid_x, domain_par->grid_y, domain_par->grid_z);
+      (mesh) = (box_mesh);
+
 
       // subdomains
-      dolfin::CellFunction<std::size_t> subdomains_object(*mesh);
+      dolfin::CellFunction<std::size_t> subdomains_object(box_mesh);
       subdomains_object.set_all(1);
       *subdomains = subdomains_object;
 
       // surfaces
-      dolfin::FacetFunction<std::size_t> surfaces_object(*mesh);
+      dolfin::FacetFunction<std::size_t> surfaces_object(box_mesh);
       surfaces_object.set_all(1);
       *surfaces = surfaces_object;
+
     }
     else { // read in mesh from specified files
       printf("### ERROR: Reading in meshes is currently unsupported: %s...\n\n", domain_par->mesh_file);
@@ -98,47 +101,47 @@ void domain_build (domain_param *domain_par,
  *
  * \return            levels of refinement
  */
-unsigned int check_local_entropy (dolfin::Function *cation,
+unsigned int check_local_entropy (std::shared_ptr<dolfin::Function> cation,
                                   double cation_valency,
-                                  dolfin::Function *anion,
+                                  std::shared_ptr<dolfin::Function> anion,
                                   double anion_valency,
-                                  dolfin::Function *voltage,
-                                  dolfin::Mesh *target_mesh,
+                                  std::shared_ptr<dolfin::Function> voltage,
+                                  std::shared_ptr<dolfin::Mesh>& target_mesh,
                                   double entropy_tol,
                                   int max_cells)
 {
 
   // compute mesh from input voltage function and transfer
-  dolfin::Mesh mesh( *(voltage->function_space()->mesh()) );
+  auto mesh = std::make_shared<dolfin::Mesh>(*(voltage->function_space()->mesh()));
 
-  if ((max_cells>0) && (mesh.num_cells()>max_cells)){
+  if ((max_cells>0) && (mesh->num_cells()>max_cells)){
     printf("\t\tThe mesh already has too many cells. No adaptivity\n");
     return 0;
   }
 
 
-  gradient_recovery::FunctionSpace gradient_space(mesh);
+  auto gradient_space = std::make_shared<gradient_recovery::FunctionSpace>(mesh);
   gradient_recovery::BilinearForm a(gradient_space,gradient_space);
   gradient_recovery::LinearForm L(gradient_space);
-  dolfin::Function cation_entropy(gradient_space);
-  dolfin::Function anion_entropy(gradient_space);
+  auto cation_entropy = std::make_shared<Function>(gradient_space);
+  auto anion_entropy = std::make_shared<Function>(gradient_space);
 
   // compute entropic potentials
-  dolfin::Function cation_potential( *(voltage->function_space()) );
-  cation_potential.interpolate(*voltage);
-  *(cation_potential.vector()) *= cation_valency;
-  *(cation_potential.vector()) += *(cation->vector());
-  dolfin::Function anion_potential( *(voltage->function_space()) );
-  anion_potential.interpolate(*voltage);
-  *(anion_potential.vector()) *= anion_valency;
-  *(anion_potential.vector()) += *(anion->vector());
+  auto cation_potential = std::make_shared<Function>( (voltage->function_space()) );
+  cation_potential->interpolate(*voltage);
+  *(cation_potential->vector()) *= cation_valency;
+  *(cation_potential->vector()) += *(cation->vector());
+  auto anion_potential = std::make_shared<Function>( (voltage->function_space()) );
+  anion_potential->interpolate(*voltage);
+  *(anion_potential->vector()) *= anion_valency;
+  *(anion_potential->vector()) += *(anion->vector());
 
   // setup matrix and rhs
   EigenMatrix A;
   assemble(A,a);
   dCSRmat A_fasp;
   EigenMatrix_to_dCSRmat(&A,&A_fasp);
-  dBSRmat adaptA_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, mesh.topology().dim());
+  dBSRmat adaptA_fasp_bsr = fasp_format_dcsr_dbsr(&A_fasp, mesh->topology().dim());
   EigenVector b;
   dvector b_fasp, solu_fasp;
 
@@ -161,7 +164,7 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   // solve for cation entropy
   fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
   status = fasp_solver_dbsr_krylov_diag(&adaptA_fasp_bsr, &b_fasp, &solu_fasp, &itpar);
-  copy_dvector_to_Function(&solu_fasp, &cation_entropy);
+  copy_dvector_to_Function(&solu_fasp, cation_entropy.get());
 
   // set form for anion
   L.potential = anion_potential;
@@ -171,7 +174,7 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   // solve for anion entropy
   fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
   status = fasp_solver_dbsr_krylov_diag(&adaptA_fasp_bsr, &b_fasp, &solu_fasp, &itpar);
-  copy_dvector_to_Function(&solu_fasp, &anion_entropy);
+  copy_dvector_to_Function(&solu_fasp, anion_entropy.get());
 
   // output entropy
   // File entropyFile("./benchmarks/PNP/output/entropy.pvd");
@@ -179,7 +182,7 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   // entropyFile << anion_entropy;
 
   // compute entropic error
-  poisson_cell_marker::FunctionSpace DG(mesh);
+  auto DG = std::make_shared<poisson_cell_marker::FunctionSpace>(mesh);
   poisson_cell_marker::LinearForm error_form(DG);
   error_form.cat_entr = cation_entropy;
   error_form.cat_pot  = cation_potential;
@@ -189,7 +192,7 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   assemble(error_vector, error_form);
 
   // mark for refinement
-  MeshFunction<bool> cell_marker(mesh, mesh.topology().dim(), false);
+  MeshFunction<bool> cell_marker(mesh, mesh->topology().dim(), false);
   unsigned int marked_elem_count = 0;
   for ( uint errVecInd = 0; errVecInd < error_vector.size(); errVecInd++) {
     if ( error_vector[errVecInd] > entropy_tol ) {
@@ -202,29 +205,33 @@ unsigned int check_local_entropy (dolfin::Function *cation,
 
   // check for necessary refiments
   if ( marked_elem_count == 0 ) {
-    *target_mesh = mesh;
+    target_mesh = mesh;
     return 0;
   }
   else {
     // adapt mesh and function space
-    std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(refine(mesh, cell_marker)) );
-    dolfin::FunctionSpace adapt_function_space( adapt(*(voltage->function_space()), mesh_ptr) );
+    std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(refine(*mesh, cell_marker)) );
+    // dolfin::FunctionSpace adapt_function_space( adapt(*(voltage->function_space()), mesh_ptr) );
+    std::shared_ptr<dolfin::FunctionSpace> adapt_function_space =  adapt(*(voltage->function_space()), mesh_ptr );
+
+    // adapt(*mesh, cell_markers);
+
 
     // adapt functions
-    dolfin::Function adapt_cation( adapt_function_space );
-    dolfin::Function adapt_anion( adapt_function_space );
-    dolfin::Function adapt_voltage( adapt_function_space );
-    adapt_cation.interpolate(*cation);
-    adapt_anion.interpolate(*anion);
-    adapt_voltage.interpolate(*voltage);
+    auto adapt_cation = std::make_shared<dolfin::Function>(adapt_function_space);
+    auto adapt_anion = std::make_shared<dolfin::Function>(adapt_function_space);
+    auto adapt_voltage = std::make_shared<dolfin::Function>(adapt_function_space);
+    adapt_cation->interpolate(*cation);
+    adapt_anion->interpolate(*anion);
+    adapt_voltage->interpolate(*voltage);
 
     unsigned int num_refines = 0;
     num_refines = check_local_entropy(
-      &adapt_cation,
+      adapt_cation,
       cation_valency,
-      &adapt_anion,
+      adapt_anion,
       anion_valency,
-      &adapt_voltage,
+      adapt_voltage,
       target_mesh,
       entropy_tol,
       max_cells
@@ -233,13 +240,13 @@ unsigned int check_local_entropy (dolfin::Function *cation,
   }
 }
 
-unsigned int check_local_entropy (dolfin::Function *cation,
-                                  double cation_valency,
-                                  dolfin::Function *anion,
-                                  double anion_valency,
-                                  dolfin::Function *voltage,
-                                  dolfin::Mesh *target_mesh,
-                                  double entropy_tol)
+unsigned int check_local_entropy (std::shared_ptr<dolfin::Function> cation,
+                                 double cation_valency,
+                                 std::shared_ptr<dolfin::Function> anion,
+                                 double anion_valency,
+                                 std::shared_ptr<dolfin::Function> voltage,
+                                 std::shared_ptr<dolfin::Mesh>& target_mesh,
+                                 double entropy_tol)
 {
   int max_cells = -1;
   unsigned int c = check_local_entropy (cation,
@@ -266,28 +273,29 @@ unsigned int check_local_entropy (dolfin::Function *cation,
  *
  * \return            levels of refinement
  */
-unsigned int check_electric_field (dolfin::Function *voltage,
-                                  dolfin::Mesh *target_mesh,
+unsigned int check_electric_field (std::shared_ptr<dolfin::Function> voltage,
+                                  std::shared_ptr<dolfin::Mesh> & target_mesh,
                                   double entropy_tol,
                                   int max_cells)
 {
 
   // compute mesh from input voltage function and transfer
-  dolfin::Mesh mesh( *(voltage->function_space()->mesh()) );
+  auto mesh = std::make_shared<dolfin::Mesh>(*(voltage->function_space()->mesh()));
 
-  if ((max_cells>0) && (mesh.num_cells()>max_cells)){
+  if ((max_cells>0) && (mesh->num_cells()>max_cells)){
     printf("\t\tThe mesh already has too many cells. No adaptivity\n");
     return 0;
   }
 
-  gradient_recovery::FunctionSpace gradient_space(mesh);
+
+  auto gradient_space = std::make_shared<gradient_recovery::FunctionSpace>(mesh);
   gradient_recovery::BilinearForm a(gradient_space,gradient_space);
   gradient_recovery::LinearForm L(gradient_space);
-  dolfin::Function ElecField(gradient_space);
+  auto ElecField = std::make_shared<Function>(gradient_space);
 
   // compute entropic potentials
-  dolfin::Function potential( *(voltage->function_space()) );
-  potential.interpolate(*voltage);
+  auto potential = std::make_shared<Function>((voltage->function_space()));
+  potential->interpolate(*voltage);
 
   // setup matrix and rhs
   EigenMatrix A;
@@ -316,13 +324,13 @@ unsigned int check_electric_field (dolfin::Function *voltage,
   // solve for cation entropy
   fasp_dvec_set(b_fasp.row, &solu_fasp, 0.0);
   status = fasp_solver_dcsr_krylov_diag(&A_fasp, &b_fasp, &solu_fasp, &itpar);
-  copy_dvector_to_Function(&solu_fasp, &ElecField);
+  copy_dvector_to_Function(&solu_fasp, ElecField.get());
 
   // Free memory
   fasp_dvec_free(&solu_fasp);
 
   // compute entropic error
-  electric_cell_marker::FunctionSpace DG(mesh);
+  auto DG = std::make_shared<electric_cell_marker::FunctionSpace>(mesh);
   electric_cell_marker::LinearForm error_form(DG);
   error_form.pot = potential;
   error_form.gradpot  = ElecField;
@@ -330,7 +338,7 @@ unsigned int check_electric_field (dolfin::Function *voltage,
   assemble(error_vector, error_form);
 
   // mark for refinement
-  MeshFunction<bool> cell_marker(mesh, mesh.topology().dim(), false);
+  MeshFunction<bool> cell_marker(mesh, mesh->topology().dim(), false);
   unsigned int marked_elem_count = 0;
   for ( uint errVecInd = 0; errVecInd < error_vector.size(); errVecInd++) {
     if ( error_vector[errVecInd] > entropy_tol/2.0 ) {
@@ -343,21 +351,22 @@ unsigned int check_electric_field (dolfin::Function *voltage,
 
   // check for necessary refiments
   if ( marked_elem_count == 0 ) {
-    *target_mesh = mesh;
+    target_mesh = mesh;
     return 0;
   }
   else {
     // adapt mesh and function space
-    std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(refine(mesh, cell_marker)) );
-    dolfin::FunctionSpace adapt_function_space( adapt(*(voltage->function_space()), mesh_ptr) );
+    std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(refine(*mesh, cell_marker)) );
+    // auto adapt_function_space = std::make_shared<dolfin::FunctionSpace> ( adapt(*(voltage->function_space()), mesh_ptr) );
+    std::shared_ptr<dolfin::FunctionSpace> adapt_function_space =  adapt(*(voltage->function_space()), mesh_ptr );
 
     // adapt functions
-    dolfin::Function adapt_voltage( adapt_function_space );
-    adapt_voltage.interpolate(*voltage);
+    auto adapt_voltage = std::make_shared<dolfin::Function>(adapt_function_space);
+    adapt_voltage->interpolate(*voltage);
 
     unsigned int num_refines = 0;
     num_refines =  check_electric_field(
-      &adapt_voltage,
+      adapt_voltage,
       target_mesh,
       entropy_tol,
       max_cells
@@ -365,8 +374,8 @@ unsigned int check_electric_field (dolfin::Function *voltage,
     return 1+num_refines;
   }
 }
-unsigned int check_electric_field (dolfin::Function *voltage,
-                                  dolfin::Mesh *target_mesh,
+unsigned int check_electric_field (std::shared_ptr<dolfin::Function> voltage,
+                                  std::shared_ptr<dolfin::Mesh>& target_mesh,
                                   double entropy_tol)
 {
    int max_cells = -1;

@@ -23,12 +23,15 @@ using namespace dolfin;
  * \param iterate   Function to be updated
  * \param update    update Function
  */
-void update_solution (dolfin::Function* iterate, dolfin::Function* update)
+void update_solution (std::shared_ptr<dolfin::Function> iterate,
+                     std::shared_ptr<dolfin::Function> update)
 {
-    dolfin::FunctionSpace V( *(iterate->function_space()) );
-    dolfin::Function update_interpolant(V);
-    update_interpolant.interpolate(*update);
-    *(iterate->vector()) += *(update_interpolant.vector());
+    // auto V = std::make_shared<dolfin::FunctionSpace>(iterate->function_space());
+    // std::shared_ptr<dolfin::FunctionSpace> V;
+    // *V = *(iterate->function_space());
+    auto update_interpolant = std::make_shared<dolfin::Function>(iterate->function_space());
+    update_interpolant->interpolate(*update);
+    *(iterate->vector()) += *(update_interpolant->vector());
 }
 
 /*---------------------------------*/

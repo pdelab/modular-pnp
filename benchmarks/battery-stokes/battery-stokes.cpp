@@ -48,30 +48,11 @@ double get_initial_residual (
   stokes_with_pnp::LinearForm* Ls,
   const dolfin::DirichletBC* bc,
   const dolfin::DirichletBC* bc_stokes,
-  dolfin::Function* cation,
-  dolfin::Function* anion,
-  dolfin::Function* potential,
-  dolfin::Function* velocity,
-  dolfin::Function* pressure);
-
-double update_solution_pnp_stokes (
-  dolfin::Function* iterate0,
-  dolfin::Function* iterate1,
-  dolfin::Function* iterate2,
-  dolfin::Function* iterate3,
-  dolfin::Function* iterate4,
-  dolfin::Function* update0,
-  dolfin::Function* update1,
-  dolfin::Function* update2,
-  dolfin::Function* update3,
-  dolfin::Function* update4,
-  double relative_residual,
-  double initial_residual,
-  pnp_with_stokes::LinearForm* L,
-  stokes_with_pnp::LinearForm* Ls,
-  const dolfin::DirichletBC* bc,
-  const dolfin::DirichletBC* bc_stokes,
-  newton_param* params);
+  std::shared_ptr<dolfin::Function> cation,
+  std::shared_ptr<dolfin::Function> anion,
+  std::shared_ptr<dolfin::Function> potential,
+  std::shared_ptr<dolfin::Function> velocity,
+  std::shared_ptr<dolfin::Function> pressure);
 
 // Sub domain for Periodic boundary condition
 class PeriodicBoundary : public SubDomain
@@ -126,7 +107,7 @@ int main(int argc, char** argv)
 
   // build mesh
   printf("mesh...\n"); fflush(stdout);
-  dolfin::Mesh mesh_adapt("./benchmarks/battery-stokes/mesh.xml.gz");
+  auto mesh_adapt = std::make_shared<dolfin::Mesh>("./benchmarks/battery-stokes/mesh.xml.gz");
   // MeshFunction<std::size_t> sub_domains_adapt(mesh_adapt, "./benchmarks/battery-stokes/boundary_parts.xml.gz");
   // dolfin::MeshFunction<std::size_t> subdomains_init;
   // dolfin::MeshFunction<std::size_t> surfaces_init;
@@ -136,7 +117,7 @@ int main(int argc, char** argv)
 
   // dolfin::File BoundaryFile("./benchmarks/battery-stokes/meshOut/boundary.pvd");
   // BoundaryFile << sub_domains_adapt;
-  meshOut << mesh_adapt;
+  meshOut << *mesh_adapt;
   // return 0;
 
   // read coefficients and boundary values
@@ -173,7 +154,7 @@ int main(int argc, char** argv)
   AMG_ns_param  stokes_amgpar;
   ILU_param stokes_ilupar;
   Schwarz_param stokes_schpar;
-  char fasp_ns_params[] = "./benchmarks/battery-stokes/nsbcsr.dat";
+  char fasp_ns_params[] = "./benchmarks/battery-stokes/ns.dat";
   fasp_ns_param_input(fasp_ns_params, &stokes_inpar);
   fasp_ns_param_init(&stokes_inpar, &stokes_itpar, &stokes_amgpar, &stokes_ilupar, &stokes_schpar);
   printf("done\n"); fflush(stdout);
@@ -181,7 +162,7 @@ int main(int argc, char** argv)
   // File
   std::ofstream ofs;
   ofs.open ("./benchmarks/battery-stokes/data.txt", std::ofstream::out);
-  ofs << "starting mesh size =" << mesh_adapt.num_cells() << "\n";
+  ofs << "starting mesh size =" << mesh_adapt->num_cells() << "\n";
   ofs << "t" << "\t" << "NewtonIteration" << "\t" << "RelativeResidual" << "\t" << "Cation" << "\t" << "Anion" << "\t" << "Potential" << "\t" << "Energy" << "\t"<< "TimeElaspsed" << "\t" << "MeshSize" << "\n";
   ofs.close();
 
@@ -196,31 +177,31 @@ int main(int argc, char** argv)
   // PeriodicBoundary periodic_boundary;
 
   // PREVIOUS ITERATE
-  pnp_with_stokes::FunctionSpace V_init(mesh_adapt /*,periodic_boundary*/);
-  dolfin::Function initial_soln(V_init);
-  dolfin::Function initial_cation(initial_soln[0]);
-  dolfin::Function initial_anion(initial_soln[1]);
-  dolfin::Function initial_potential(initial_soln[2]);
-  stokes_with_pnp::FunctionSpace V_init_stokes(mesh_adapt /*,periodic_boundary*/);
-  dolfin::Function initial_soln_stokes(V_init_stokes);
-  dolfin::Function initial_velocity(initial_soln_stokes[0]);
-  dolfin::Function initial_pressure(initial_soln_stokes[1]);
+  auto V_init = std::make_shared<pnp_with_stokes::FunctionSpace>(mesh_adapt);
+  auto initial_soln = std::make_shared<Function>(V_init);
+  auto initial_cation= std::make_shared<Function>((*initial_soln)[0]);
+  auto initial_anion = std::make_shared<Function>((*initial_soln)[1]);
+  auto initial_potential = std::make_shared<Function>((*initial_soln)[2]);
+  auto V_init_stokes = std::make_shared<stokes_with_pnp::FunctionSpace>(mesh_adapt);
+  auto initial_soln_stokes = std::make_shared<Function>(V_init_stokes );
+  auto initial_velocity = std::make_shared<Function>((*initial_soln_stokes)[0]);
+  auto initial_pressure = std::make_shared<Function>((*initial_soln_stokes)[1]);
 
   // Constants
-  Constant eps(coeff_par.relative_permittivity);
-  Constant Dp(coeff_par.cation_diffusivity);
-  Constant Dn(coeff_par.anion_diffusivity);
-  Constant qp(coeff_par.cation_valency);
-  Constant qn(coeff_par.anion_valency);
-  Constant C_dt(time_step_size);
-  Constant cat_alpha(coeff_par.cation_diffusivity*time_step_size);
-  Constant an_alpha(coeff_par.anion_diffusivity*time_step_size);
-  Constant one(1.0);
-  Constant zero(0.0);
-  Constant zero_vec3(0.0, 0.0, 0.0);
-  Constant CU_init(0.1);
-  Constant mu(0.1);
-  Constant penalty(1.0e+2);
+  auto eps = std::make_shared<Constant>(coeff_par.relative_permittivity);
+  auto Dp = std::make_shared<Constant>(coeff_par.cation_diffusivity);
+  auto Dn = std::make_shared<Constant>(coeff_par.anion_diffusivity);
+  auto qp = std::make_shared<Constant>(coeff_par.cation_valency);
+  auto qn = std::make_shared<Constant>(coeff_par.anion_valency);
+  auto C_dt = std::make_shared<Constant>(time_step_size);
+  auto cat_alpha=std::make_shared<Constant>(coeff_par.cation_diffusivity*time_step_size);
+  auto an_alpha=std::make_shared<Constant>(coeff_par.anion_diffusivity*time_step_size);
+  auto one=std::make_shared<Constant>(1.0);
+  auto zero=std::make_shared<Constant>(0.0);
+  auto zero_vec3=std::make_shared<Constant>(0.0, 0.0, 0.0);
+  auto CU_init=std::make_shared<Constant>(0.1);
+  auto mu=std::make_shared<Constant>(0.1);
+  auto penalty=std::make_shared<Constant>(1.0e+2);
 
   LogCharge_SPH Cation(
     lower_cation_val,
@@ -250,19 +231,19 @@ int main(int argc, char** argv)
 
 
   printf("Interpolating intial gueses..");fflush(stdout);
-  initial_cation.interpolate(Cation);
-  initial_anion.interpolate(Anion);
-  initial_potential.interpolate(Volt);
-  initial_velocity.interpolate(Velocity);
-  initial_pressure.interpolate(zero);
+  initial_cation->interpolate(Cation);
+  initial_anion->interpolate(Anion);
+  initial_potential->interpolate(Volt);
+  initial_velocity->interpolate(Velocity);
+  initial_pressure->interpolate(*zero);
   printf("done\n");fflush(stdout);
 
   // output solution after solved for timestep
-  cationFile << initial_cation;
-  anionFile << initial_anion;
-  potentialFile << initial_potential;
-  velocityFile << initial_velocity;
-  pressureFile << initial_pressure;
+  cationFile << *initial_cation;
+  anionFile << *initial_anion;
+  potentialFile << *initial_potential;
+  velocityFile << *initial_velocity;
+  pressureFile << *initial_pressure;
 
   // initialize error
   double cationError = 0.0;
@@ -284,6 +265,7 @@ int main(int argc, char** argv)
   dvector b_stokes_fasp, solu_stokes_fasp;
   block_dCSRmat A_stokes_fasp;
 
+  // auto SPS = std::make_shared<SpheresSubDomain>();
   SpheresSubDomain SPS;
 
   for (double t = time_step_size; t < final_time; t += time_step_size) {
@@ -295,7 +277,7 @@ int main(int argc, char** argv)
 
 
     // set adaptivity parameters
-    dolfin::Mesh mesh(mesh_adapt);
+    auto mesh= std::make_shared<dolfin::Mesh>(*mesh_adapt);
     // dolfin::MeshFunction<std::size_t> sub_domains(sub_domains_adapt);
     // dolfin::MeshFunction<std::size_t> sub_domains = adapt(sub_domains_adapt, mesh);
     double entropy_tol = newtparam.adapt_tol;
@@ -305,50 +287,50 @@ int main(int argc, char** argv)
     // initialize storage functions for adaptivity
     printf("store previous solution and initialize solution functions..."); fflush(stdout);
     // PNP
-    pnp_with_stokes::FunctionSpace V_adapt(mesh_adapt /*,periodic_boundary*/);
-    dolfin::Function prev_soln_adapt(V_adapt);
-    dolfin::Function prev_cation_adapt(prev_soln_adapt[0]);
-    dolfin::Function prev_anion_adapt(prev_soln_adapt[1]);
-    dolfin::Function prev_potential_adapt(prev_soln_adapt[2]);
-    prev_cation_adapt.interpolate(initial_cation);
-    prev_anion_adapt.interpolate(initial_anion);
-    prev_potential_adapt.interpolate(initial_potential);
+    auto V_adapt = std::make_shared<pnp_with_stokes::FunctionSpace>(mesh_adapt);
+    auto prev_soln_adapt = std::make_shared<Function>(V_adapt);
+    auto prev_cation_adapt = std::make_shared<Function>((*prev_soln_adapt)[0]);
+    auto prev_anion_adapt = std::make_shared<Function>((*prev_soln_adapt)[1]);
+    auto prev_potential_adapt = std::make_shared<Function>((*prev_soln_adapt)[2]);
+    prev_cation_adapt->interpolate(*initial_cation);
+    prev_anion_adapt->interpolate(*initial_anion);
+    prev_potential_adapt->interpolate(*initial_potential);
 
-    dolfin::Function soln_adapt(V_adapt);
-    dolfin::Function cation_adapt(soln_adapt[0]);
-    dolfin::Function anion_adapt(soln_adapt[1]);
-    dolfin::Function potential_adapt(soln_adapt[2]);
-    cation_adapt.interpolate(initial_cation);
-    anion_adapt.interpolate(initial_anion);
-    potential_adapt.interpolate(initial_potential);
+    auto soln_adapt = std::make_shared<Function>(V_adapt);
+    auto cation_adapt = std::make_shared<Function>((*soln_adapt)[0]);
+    auto anion_adapt = std::make_shared<Function>((*soln_adapt)[1]);
+    auto potential_adapt = std::make_shared<Function>((*soln_adapt)[2]);
+    cation_adapt->interpolate(*initial_cation);
+    anion_adapt->interpolate(*initial_anion);
+    potential_adapt->interpolate(*initial_potential);
 
-    dolfin::Function dsoln_adapt(V_adapt);
-    dolfin::Function dcation_adapt(dsoln_adapt[0]);
-    dolfin::Function danion_adapt(dsoln_adapt[1]);
-    dolfin::Function dpotential_adapt(dsoln_adapt[2]);
-    dcation_adapt.interpolate(zero);
-    danion_adapt.interpolate(zero);
-    dpotential_adapt.interpolate(zero);
+    auto dsoln_adapt = std::make_shared<Function>(V_adapt);
+    auto dcation_adapt = std::make_shared<Function>((*dsoln_adapt)[0]);
+    auto danion_adapt = std::make_shared<Function>((*dsoln_adapt)[1]);
+    auto dpotential_adapt = std::make_shared<Function>((*dsoln_adapt)[2]);
+    dcation_adapt->interpolate(*zero);
+    danion_adapt->interpolate(*zero);
+    dpotential_adapt->interpolate(*zero);
 
     // Stokes
-    stokes_with_pnp::FunctionSpace VS_adapt(mesh_adapt /*,periodic_boundary*/);
-    dolfin::Function prev_stokes_soln_adapt(VS_adapt);
-    dolfin::Function prev_velocity_adapt(prev_stokes_soln_adapt[0]);
-    dolfin::Function prev_pressure_adapt(prev_stokes_soln_adapt[1]);
-    prev_velocity_adapt.interpolate(initial_velocity);
-    prev_pressure_adapt.interpolate(initial_pressure);
+    auto VS_adapt = std::make_shared<stokes_with_pnp::FunctionSpace>(mesh_adapt);
+    auto prev_stokes_soln_adapt = std::make_shared<Function>(VS_adapt);
+    auto prev_velocity_adapt = std::make_shared<Function>((*prev_stokes_soln_adapt)[0]);
+    auto prev_pressure_adapt = std::make_shared<Function>((*prev_stokes_soln_adapt)[1]);
+    prev_velocity_adapt->interpolate(*initial_velocity);
+    prev_pressure_adapt->interpolate(*initial_pressure);
 
-    dolfin::Function stokes_soln_adapt(VS_adapt);
-    dolfin::Function velocity_adapt(stokes_soln_adapt[0]);
-    dolfin::Function pressure_adapt(stokes_soln_adapt[1]);
-    velocity_adapt.interpolate(initial_velocity);
-    pressure_adapt.interpolate(initial_pressure);
+    auto stokes_soln_adapt = std::make_shared<Function>(VS_adapt);
+    auto velocity_adapt = std::make_shared<Function>((*stokes_soln_adapt)[0]);
+    auto pressure_adapt = std::make_shared<Function>((*stokes_soln_adapt)[1]);
+    velocity_adapt->interpolate(*initial_velocity);
+    pressure_adapt->interpolate(*initial_pressure);
 
-    dolfin::Function dstokes_soln_adapt(VS_adapt);
-    dolfin::Function dvelocity_adapt(dstokes_soln_adapt[0]);
-    dolfin::Function dpressure_adapt(dstokes_soln_adapt[1]);
-    dvelocity_adapt.interpolate(zero_vec3);
-    dpressure_adapt.interpolate(zero);
+    auto dstokes_soln_adapt = std::make_shared<Function>(VS_adapt);
+    auto dvelocity_adapt = std::make_shared<Function>((*dstokes_soln_adapt)[0]);
+    auto dpressure_adapt = std::make_shared<Function>((*dstokes_soln_adapt)[1]);
+    dvelocity_adapt->interpolate(*zero_vec3);
+    dpressure_adapt->interpolate(*zero);
     printf("done\n");fflush(stdout);
 
     // adaptivity loop
@@ -356,15 +338,16 @@ int main(int argc, char** argv)
     while (!adaptive_convergence)
     {
       // mark and output mesh
-      FacetFunction<std::size_t> boundaries(mesh);
-      boundaries.set_all(0);
-      SPS.mark(boundaries, 1);
-      meshOut << boundaries;
+      auto boundaries = std::make_shared<dolfin::FacetFunction<std::size_t> >(mesh);
+      // FacetFunction<std::size_t> boundaries(mesh);
+      boundaries->set_all(0);
+      SPS.mark(*boundaries, 1);
+      meshOut << *boundaries;
 
       // Initialize variational forms
       printf("\tvariational forms...\n"); fflush(stdout);
       // PNP
-      pnp_with_stokes::FunctionSpace V(mesh /*,periodic_boundary*/);
+      auto V= std::make_shared<pnp_with_stokes::FunctionSpace>(mesh);
       pnp_with_stokes::BilinearForm a_pnp(V,V);
       pnp_with_stokes::LinearForm L_pnp(V);
       a_pnp.eps = eps; L_pnp.eps = eps;
@@ -378,7 +361,7 @@ int main(int argc, char** argv)
 
 
       //Stokes
-      stokes_with_pnp::FunctionSpace Vs(mesh /*,periodic_boundary*/);
+      auto Vs = std::make_shared<stokes_with_pnp::FunctionSpace>(mesh);
       stokes_with_pnp::BilinearForm a_s(Vs,Vs);
       stokes_with_pnp::LinearForm L_s(Vs);
       L_s.qp = qp; L_s.qn = qn;
@@ -401,74 +384,74 @@ int main(int argc, char** argv)
       // Interpolate previous solutions analytic expressions
       printf("\tinterpolate previous step solution onto new mesh...\n"); fflush(stdout);
       // PNP
-      dolfin::Function prev_soln(V);
-      dolfin::Function previous_cation(prev_soln[0]);
-      previous_cation.interpolate(prev_cation_adapt);
-      dolfin::Function previous_anion(prev_soln[1]);
-      previous_anion.interpolate(prev_anion_adapt);
-      dolfin::Function previous_potential(prev_soln[2]);
-      previous_potential.interpolate(prev_potential_adapt);
+      auto prev_soln = std::make_shared<Function>(V);
+      auto previous_cation = std::make_shared<Function>((*prev_soln)[0]);
+      auto previous_anion = std::make_shared<Function>((*prev_soln)[1]);
+      auto previous_potential = std::make_shared<Function>((*prev_soln)[2]);
+      previous_anion->interpolate(*prev_anion_adapt);
+      previous_cation->interpolate(*prev_cation_adapt);
+      previous_potential->interpolate(*prev_potential_adapt);
 
       // Stokes
-      dolfin::Function prev_stokes_soln(Vs);
-      dolfin::Function previous_velocity(prev_stokes_soln[0]);
-      previous_velocity.interpolate(prev_velocity_adapt);
-      dolfin::Function previous_pressure(prev_stokes_soln[1]);
-      previous_pressure.interpolate(prev_pressure_adapt);
+      auto prev_stokes_soln = std::make_shared<Function>(Vs);
+      auto previous_velocity = std::make_shared<Function>((*prev_stokes_soln)[0]);
+      auto previous_pressure= std::make_shared<Function>((*prev_stokes_soln)[1]);
+      previous_velocity->interpolate(*prev_velocity_adapt);
+      previous_pressure->interpolate(*prev_pressure_adapt);
 
       printf("\tinterpolate solution onto new mesh...\n"); fflush(stdout);
       //PNP
-      dolfin::Function solutionFunction(V);
-      dolfin::Function cationSolution(solutionFunction[0]);
-      cationSolution.interpolate(cation_adapt);
-      dolfin::Function anionSolution(solutionFunction[1]);
-      anionSolution.interpolate(anion_adapt);
-      dolfin::Function potentialSolution(solutionFunction[2]);
-      potentialSolution.interpolate(potential_adapt);
+      auto solutionFunction = std::make_shared<Function>(V);
+      auto cationSolution = std::make_shared<Function>((*solutionFunction)[0]);
+      auto anionSolution = std::make_shared<Function>((*solutionFunction)[1]);
+      auto potentialSolution = std::make_shared<Function>((*solutionFunction)[2]);
+      cationSolution->interpolate(*cation_adapt);
+      anionSolution->interpolate(*anion_adapt);
+      potentialSolution->interpolate(*potential_adapt);
 
       //Stokes
-      dolfin::Function solutionStokesFunction(Vs);
-      dolfin::Function VelocitySolution(solutionStokesFunction[0]);
-      VelocitySolution.interpolate(velocity_adapt);
-      dolfin::Function PressureSolution(solutionStokesFunction[1]);
-      PressureSolution.interpolate(pressure_adapt);
+      auto solutionStokesFunction = std::make_shared<Function>(Vs);
+      auto VelocitySolution = std::make_shared<Function>((*solutionStokesFunction)[0]);
+      auto PressureSolution = std::make_shared<Function>((*solutionStokesFunction)[1]);
+      VelocitySolution->interpolate(*velocity_adapt);
+      PressureSolution->interpolate(*pressure_adapt);
 
       // Set Dirichlet boundaries
       printf("\tboundary conditions...\n"); fflush(stdout);
-      SymmBoundaries boundary(dirichlet_coord, -Lx / 2.0, Lx / 2.0);
+      auto boundary = std::make_shared<SymmBoundaries>(dirichlet_coord, -Lx / 2.0, Lx / 2.0);
       dolfin::DirichletBC bc(V, zero_vec3, boundary);
       printf("\t\tdone\n"); fflush(stdout);
       // map dofs
       ivector cation_dofs;
       ivector anion_dofs;
       ivector potential_dofs;
-      get_dofs(&solutionFunction, &cation_dofs, 0);
-      get_dofs(&solutionFunction, &anion_dofs, 1);
-      get_dofs(&solutionFunction, &potential_dofs, 2);
+      get_dofs(solutionFunction.get(), &cation_dofs, 0);
+      get_dofs(solutionFunction.get(), &anion_dofs, 1);
+      get_dofs(solutionFunction.get(), &potential_dofs, 2);
 
       //Stokes
-      dolfin::SubSpace Vs1(Vs,0);
-      dolfin::DirichletBC bc_stokes(Vs1, zero_vec3, boundary);
+      // dolfin::SubSpace Vs1(Vs,0);
+      dolfin::DirichletBC bc_stokes(Vs->sub(0), zero_vec3, boundary);
       ivector velocity_dofs;
       ivector pressure_dofs;
-      get_dofs(&solutionStokesFunction, &velocity_dofs, 0);
-      get_dofs(&solutionStokesFunction, &pressure_dofs, 1);
+      get_dofs(solutionStokesFunction.get(), &velocity_dofs, 0);
+      get_dofs(solutionStokesFunction.get(), &pressure_dofs, 1);
 
       //EAFE Formulation
       if (eafe_switch)
         printf("\tEAFE initialization...\n");
-      EAFE::FunctionSpace V_cat(mesh /*,periodic_boundary*/);
+      auto V_cat = std::make_shared<EAFE::FunctionSpace>(mesh);
       EAFE::BilinearForm a_cat(V_cat,V_cat);
       a_cat.alpha = an_alpha;
       a_cat.gamma = one;
-      EAFE::FunctionSpace V_an(mesh /*,periodic_boundary*/);
+      auto V_an = std::make_shared<EAFE::FunctionSpace>(mesh);
       EAFE::BilinearForm a_an(V_an,V_an);
       a_an.alpha = cat_alpha;
       a_an.gamma = one;
-      dolfin::Function CatCatFunction(V_cat);
-      dolfin::Function CatBetaFunction(V_cat);
-      dolfin::Function AnAnFunction(V_an);
-      dolfin::Function AnBetaFunction(V_an);
+      auto CatCatFunction = std::make_shared<Function>(V_cat);
+      auto CatBetaFunction = std::make_shared<Function>(V_cat);
+      auto AnAnFunction = std::make_shared<Function>(V_an);
+      auto AnBetaFunction = std::make_shared<Function>(V_an);
 
       // initialize linear system
       printf("\tlinear algebraic objects...\n"); fflush(stdout);
@@ -482,8 +465,8 @@ int main(int argc, char** argv)
       //*************************************************************
       // Setup newton parameters and compute initial residual
       printf("\tNewton solver initialization...\n"); fflush(stdout);
-      dolfin::Function solutionUpdate(V);
-      dolfin::Function StokessolutionUpdate(Vs);
+      auto solutionUpdate = std::make_shared<dolfin::Function>(V);
+      auto StokessolutionUpdate = std::make_shared<dolfin::Function>(Vs);
       unsigned int newton_iteration = 0;
 
       // set initial residual
@@ -493,11 +476,11 @@ int main(int argc, char** argv)
         &L_s,
         &bc,
         &bc_stokes,
-        &previous_cation,
-        &previous_anion,
-        &previous_potential,
-        &previous_velocity,
-        &previous_pressure
+        previous_cation,
+        previous_anion,
+        previous_potential,
+        previous_velocity,
+        previous_pressure
       );
       printf("done\n"); fflush(stdout);
 
@@ -552,14 +535,14 @@ int main(int argc, char** argv)
         // EAFE expressions
         if (eafe_switch) {
           printf("\tcompute EAFE expressions...\n");
-          CatCatFunction.interpolate(cationSolution);
-          CatBetaFunction.interpolate(potentialSolution);
-          *(CatBetaFunction.vector()) *= coeff_par.cation_valency;
-          *(CatBetaFunction.vector()) += *(CatCatFunction.vector());
-          AnAnFunction.interpolate(anionSolution);
-          AnBetaFunction.interpolate(potentialSolution);
-          *(AnBetaFunction.vector()) *= coeff_par.anion_valency;
-          *(AnBetaFunction.vector()) += *(AnAnFunction.vector());
+          CatCatFunction->interpolate(*cationSolution);
+          CatBetaFunction->interpolate(*potentialSolution);
+          *(CatBetaFunction->vector()) *= coeff_par.cation_valency;
+          *(CatBetaFunction->vector()) += *(CatCatFunction->vector());
+          AnAnFunction->interpolate(*anionSolution);
+          AnBetaFunction->interpolate(*potentialSolution);
+          *(AnBetaFunction->vector()) *= coeff_par.anion_valency;
+          *(AnBetaFunction->vector()) += *(AnAnFunction->vector());
 
           // Construct EAFE approximations to Jacobian
           printf("\tconstruct EAFE modifications...\n"); fflush(stdout);
@@ -572,8 +555,8 @@ int main(int argc, char** argv)
 
           // Modify Jacobian
           printf("\treplace Jacobian with EAFE approximations...\n"); fflush(stdout);
-          replace_matrix(3,0, &V, &V_cat, &A_pnp, &A_cat);
-          replace_matrix(3,1, &V, &V_an , &A_pnp, &A_an );
+          replace_matrix(3,0, V.get(), V_cat.get(), &A_pnp, &A_cat);
+          replace_matrix(3,1, V.get(), V_an.get() , &A_pnp, &A_an );
         }
         bc.apply(A_pnp);
         bc_stokes.apply(A_stokes);
@@ -612,8 +595,8 @@ int main(int argc, char** argv)
           &bc,
           &bc_stokes,
 
-          &solutionUpdate,
-          &StokessolutionUpdate,
+          solutionUpdate,
+          StokessolutionUpdate,
           &velocity_dofs,
           &pressure_dofs,
 
@@ -653,32 +636,39 @@ int main(int argc, char** argv)
         // copy_dvector_to_vector_function(&solu_stokes_fasp, &StokessolutionUpdate, &velocity_dofs, &velocity_dofs);
         // copy_dvector_to_vector_function(&solu_stokes_fasp,, &StokessolutionUpdate, &pressure_dofs, &pressure_dofs);
 
-        // update solution and reset solutionUpdate
         printf("\tupdate solution...\n"); fflush(stdout);
-        relative_residual = update_solution_pnp_stokes (
-          &cationSolution,
-          &anionSolution,
-          &potentialSolution,
-          &VelocitySolution,
-          &PressureSolution,
-          &(solutionUpdate[0]),
-          &(solutionUpdate[1]),
-          &(solutionUpdate[2]),
-          &(StokessolutionUpdate[0]),
-          &(StokessolutionUpdate[1]),
-          relative_residual,
-          initial_residual,
-          &L_pnp,
-          &L_s,
-          &bc,
-          &bc_stokes,
-          &newtparam);
-        if (relative_residual < 0.0) {
-          printf("Newton backtracking failed!\n");
-          printf("\tresidual has not decreased after damping %d times\n", newtparam.damp_it);
-          printf("\tthe relative residual is %e\n", relative_residual);
-          relative_residual *= -1.0;
-        }
+        Function dAnion = (*solutionUpdate)[0];
+        Function dCation = (*solutionUpdate)[1];
+        Function dPotential = (*solutionUpdate)[2];
+        *(cationSolution->vector())+=*(dAnion.vector());
+        *(anionSolution->vector())+=*(dCation.vector());
+        *(potentialSolution->vector())+=*(dPotential.vector());
+
+        Function dU = (*StokessolutionUpdate)[0];
+        Function dPressure = (*StokessolutionUpdate)[1];
+        *(VelocitySolution->vector())+=*(dU.vector());
+        *(PressureSolution->vector())+=*(dPressure.vector());
+
+        // update solution and reset solutionUpdate
+        // printf("\tupdate solution...\n"); fflush(stdout);
+        // relative_residual = update_solution_pnp_stokes (
+        //   &cationSolution,
+        //   &anionSolution,
+        //   &potentialSolution,
+        //   &VelocitySolution,
+        //   &PressureSolution,
+        //   &(solutionUpdate[0]),
+        //   &(solutionUpdate[1]),
+        //   &(solutionUpdate[2]),
+        //   &(StokessolutionUpdate[0]),
+        //   &(StokessolutionUpdate[1]),
+        //   relative_residual,
+        //   initial_residual,
+        //   &L_pnp,
+        //   &L_s,
+        //   &bc,
+        //   &bc_stokes,
+        //   &newtparam);
 
         // update nonlinear residual
         L_pnp.CatCat = cationSolution;
@@ -698,6 +688,14 @@ int main(int argc, char** argv)
         assemble(b_stokes, L_s);
         bc_stokes.apply(b_stokes);
 
+        double relative_residual = (b_pnp.norm("l2") + b_stokes.norm("l2") )/ initial_residual;
+        printf("\t\trel_res after: %e\n", relative_residual);
+        if (relative_residual < 0.0) {
+          printf("Newton backtracking failed!\n");
+          printf("\tresidual has not decreased after damping %d times\n", newtparam.damp_it);
+          printf("\tthe relative residual is %e\n", relative_residual);
+          relative_residual *= -1.0;
+        }
         // output solution after solved for Newton update
         // cationFile << cationSolution;
         // anionFile << anionSolution;
@@ -707,7 +705,7 @@ int main(int argc, char** argv)
 
         fasp_dbsr_free(&A_fasp_bsr);
         fasp_bdcsr_free(&A_stokes_fasp);
-        relative_residual = ( b_pnp.norm("l2") + b_stokes.norm("l2") ) / initial_residual;
+        // relative_residual = ( b_pnp.norm("l2") + b_stokes.norm("l2") ) / initial_residual;
 
       }
 
@@ -721,9 +719,10 @@ int main(int argc, char** argv)
       // compute local entropy and refine mesh
       printf("Computing electric field for refinement\n");
       unsigned int num_refines;
+      std::shared_ptr<Mesh> mesh_ptr;
       num_refines = check_electric_field(
-        &potentialSolution,
-        &mesh_adapt,
+        potentialSolution,
+        mesh_ptr,
         entropy_tol
       );
 
@@ -735,15 +734,15 @@ int main(int argc, char** argv)
           if (num_refines == 0) printf("\tsuccessfully distributed electric field below desired electric field in %d adapts!\n\n", num_adapts);
           else printf("\nDid not adapt mesh to electric field in %d adapts...\n", max_adapts);
           adaptive_convergence = true;
-          dolfin::Function Er_cat(previous_cation);
-          dolfin::Function Er_an(previous_anion);
-          dolfin::Function Er_es(previous_potential);
-          *(Er_cat.vector()) -= *(cationSolution.vector());
-          *(Er_an.vector()) -= *(anionSolution.vector());
-          *(Er_es.vector()) -= *(potentialSolution.vector());
-          *(Er_cat.vector()) /= time_step_size;
-          *(Er_an.vector()) /= time_step_size;
-          *(Er_es.vector()) /= time_step_size;
+          auto Er_cat = std::make_shared<Function>(*previous_cation);
+          auto Er_an = std::make_shared<Function>(*previous_anion);
+          auto Er_es = std::make_shared<Function>(*previous_potential);
+          *(Er_cat->vector()) -= *(cationSolution->vector());
+          *(Er_an->vector()) -= *(anionSolution->vector());
+          *(Er_es->vector()) -= *(potentialSolution->vector());
+          *(Er_cat->vector()) /= time_step_size;
+          *(Er_an->vector()) /= time_step_size;
+          *(Er_es->vector()) /= time_step_size;
           L2Error::Form_M L2error1(mesh,Er_cat);
           cationError = assemble(L2error1);
           L2Error::Form_M L2error2(mesh,Er_an);
@@ -766,31 +765,32 @@ int main(int argc, char** argv)
 
           ofs.open("./benchmarks/battery-stokes/data.txt", std::ofstream::out | std::ofstream::app);
           timeElaspsed = double(end - begin) / CLOCKS_PER_SEC;
-          ofs << t << "\t" << newton_iteration << "\t" << relative_residual << "\t" << cationError << "\t" << anionError << "\t" << potentialError << "\t" << energy << "\t"<< timeElaspsed << "\t" << mesh.num_cells() << "\n";
+          ofs << t << "\t" << newton_iteration << "\t" << relative_residual << "\t" << cationError << "\t" << anionError << "\t" << potentialError << "\t" << energy << "\t"<< timeElaspsed << "\t" << mesh->num_cells() << "\n";
           ofs.close();
 
           // store solution as solution from previous step
-          std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(mesh_adapt) );
-          initial_cation = adapt(cationSolution, mesh_ptr);
-          initial_anion = adapt(anionSolution, mesh_ptr);
-          initial_potential = adapt(potentialSolution, mesh_ptr);
+          // std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(mesh_adapt) );
+          std::shared_ptr<GenericFunction> initial_cation = adapt(cationSolution, mesh_ptr);
+          std::shared_ptr<GenericFunction> initial_anion = adapt(anionSolution, mesh_ptr);
+          std::shared_ptr<GenericFunction> initial_potential = adapt(potentialSolution, mesh_ptr);
 
-          initial_velocity = adapt(VelocitySolution, mesh_ptr);
-          initial_potential = adapt(PressureSolution, mesh_ptr);
+          std::shared_ptr<GenericFunction> initial_velocity = adapt(VelocitySolution, mesh_ptr);
+          std::shared_ptr<GenericFunction> initial_pressure = adapt(PressureSolution, mesh_ptr);
           // sub_domains_adapt= adapt(sub_domains, mesh_ptr);
 
           // to ensure the building_box_tree is correctly indexed
-          mesh = mesh_adapt;
+          *mesh = *mesh_ptr;
+          *mesh_adapt = *mesh_adapt;
           // sub_domains = sub_domains_adapt;
-          mesh.bounding_box_tree()->build(mesh);
-          mesh_adapt.bounding_box_tree()->build(mesh_adapt);
+          mesh->bounding_box_tree()->build(*mesh);
+          mesh_adapt->bounding_box_tree()->build(*mesh_adapt);
 
           // output solution after solved for timestep
-          cationFile << initial_cation;
-          anionFile << initial_anion;
-          potentialFile << initial_potential;
-          velocityFile << initial_velocity;
-          pressureFile << initial_pressure;
+          // cationFile << *initial_cation;
+          // anionFile << *initial_anion;
+          // potentialFile << *initial_potential;
+          // velocityFile << *initial_velocity;
+          // pressureFile << *initial_pressure;
 
         break;
       }
@@ -801,21 +801,22 @@ int main(int argc, char** argv)
       else
         printf("\tadapting the mesh using %d levels of local refinement...\n", num_refines);
 
-      std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(mesh_adapt) );
-      cation_adapt = adapt(cationSolution, mesh_ptr);
-      anion_adapt = adapt(anionSolution, mesh_ptr);
-      potential_adapt = adapt(potentialSolution, mesh_ptr);
+      // std::shared_ptr<const Mesh> mesh_ptr( new const Mesh(mesh_adapt) );
+      std::shared_ptr<GenericFunction> cation_adapt = adapt(cationSolution, mesh_ptr);
+      std::shared_ptr<GenericFunction> anion_adapt = adapt(anionSolution, mesh_ptr);
+      std::shared_ptr<GenericFunction> potential_adapt = adapt(potentialSolution, mesh_ptr);
 
-      velocity_adapt = adapt(VelocitySolution, mesh_ptr);
-      pressure_adapt = adapt(PressureSolution, mesh_ptr);
+      std::shared_ptr<GenericFunction> velocity_adapt = adapt(VelocitySolution, mesh_ptr);
+      std::shared_ptr<GenericFunction> pressure_adapt = adapt(PressureSolution, mesh_ptr);
 
-      prev_cation_adapt = adapt(previous_cation, mesh_ptr);
-      prev_anion_adapt = adapt(previous_anion, mesh_ptr);
-      prev_potential_adapt = adapt(previous_potential, mesh_ptr);
-      prev_velocity_adapt = adapt(previous_velocity, mesh_ptr);
-      prev_pressure_adapt = adapt(previous_pressure, mesh_ptr);
-      mesh = mesh_adapt;
-      mesh.bounding_box_tree()->build(mesh);  // to ensure the building_box_tree is correctly indexed
+      std::shared_ptr<GenericFunction> prev_cation_adapt = adapt(previous_cation, mesh_ptr);
+      std::shared_ptr<GenericFunction> prev_anion_adapt = adapt(previous_anion, mesh_ptr);
+      std::shared_ptr<GenericFunction> prev_potential_adapt = adapt(previous_potential, mesh_ptr);
+      std::shared_ptr<GenericFunction> prev_velocity_adapt = adapt(previous_velocity, mesh_ptr);
+      std::shared_ptr<GenericFunction> prev_pressure_adapt = adapt(previous_pressure, mesh_ptr);
+      *mesh = *mesh_ptr;
+      *mesh_adapt = *mesh_ptr;
+      mesh->bounding_box_tree()->build(*mesh);  // to ensure the building_box_tree is correctly indexed
 
 
     }
@@ -827,150 +828,29 @@ int main(int argc, char** argv)
   return 0;
 }
 
-double update_solution_pnp_stokes (
-  dolfin::Function* iterate0,
-  dolfin::Function* iterate1,
-  dolfin::Function* iterate2,
-  dolfin::Function* iterate3,
-  dolfin::Function* iterate4,
-  dolfin::Function* update0,
-  dolfin::Function* update1,
-  dolfin::Function* update2,
-  dolfin::Function* update3,
-  dolfin::Function* update4,
-  double relative_residual,
-  double initial_residual,
-  pnp_with_stokes::LinearForm* L,
-  stokes_with_pnp::LinearForm* Ls,
-  const dolfin::DirichletBC* bc,
-  const dolfin::DirichletBC* bc_stokes,
-  newton_param* params)
-{
-  // compute residual
-  dolfin::Function _iterate0(*iterate0);
-  dolfin::Function _iterate1(*iterate1);
-  dolfin::Function _iterate2(*iterate2);
-  dolfin::Function _iterate3(*iterate3);
-  dolfin::Function _iterate4(*iterate4);
-  dolfin::Function _update0(*update0);
-  dolfin::Function _update1(*update1);
-  dolfin::Function _update2(*update2);
-  dolfin::Function _update3(*update3);
-  dolfin::Function _update4(*update4);
-  update_solution(&_iterate0, &_update0);
-  update_solution(&_iterate1, &_update1);
-  update_solution(&_iterate2, &_update2);
-  update_solution(&_iterate3, &_update3);
-  update_solution(&_iterate4, &_update4);
-  dolfin::Constant C_dt(time_step_size);
-  L->CatCat = _iterate0;
-  L->AnAn = _iterate1;
-  L->EsEs = _iterate2;
-  L->uu = _iterate3;
-  Ls->cation = _iterate0;
-  Ls->anion = _iterate1;
-  Ls->phi = _iterate2;
-  Ls->uu = _iterate3;
-  Ls->pp= _iterate4;
-  EigenVector b, bs;
-  assemble(b, *L);
-  bc->apply(b);
-  assemble(bs, *Ls);
-  bc_stokes->apply(bs);
-  double new_relative_residual = (b.norm("l2") + bs.norm("l2") )/ initial_residual;
-
-  // backtrack loop
-  unsigned int damp_iters = 0;
-  printf("\t\trelative residual after damping %d times: %e\n", damp_iters, new_relative_residual);
-
-  while (
-    new_relative_residual > relative_residual && damp_iters < params->damp_it )
-  {
-    damp_iters++;
-    *(_iterate0.vector()) = *(iterate0->vector());
-    *(_iterate1.vector()) = *(iterate1->vector());
-    *(_iterate2.vector()) = *(iterate2->vector());
-    *(_iterate3.vector()) = *(iterate3->vector());
-    *(_iterate4.vector()) = *(iterate4->vector());
-    *(_update0.vector()) *= params->damp_factor;
-    *(_update1.vector()) *= params->damp_factor;
-    *(_update2.vector()) *= params->damp_factor;
-    *(_update3.vector()) *= params->damp_factor;
-    *(_update4.vector()) *= params->damp_factor;
-    update_solution(&_iterate0, &_update0);
-    update_solution(&_iterate1, &_update1);
-    update_solution(&_iterate2, &_update2);
-    update_solution(&_iterate3, &_update3);
-    update_solution(&_iterate4, &_update4);
-    L->CatCat = _iterate0;
-    L->AnAn = _iterate1;
-    L->EsEs = _iterate2;
-    L->uu = _iterate3;
-    Ls->cation = _iterate0;
-    Ls->anion = _iterate1;
-    Ls->phi = _iterate2;
-    Ls->uu = _iterate3;
-    Ls->pp= _iterate4;
-    assemble(b, *L);
-    bc->apply(b);
-    assemble(bs, *Ls);
-    bc_stokes->apply(bs);
-    double new_relative_residual = (b.norm("l2") + bs.norm("l2") )/ initial_residual;
-    printf("\t\trel_res after damping %d times: %e\n", damp_iters, new_relative_residual);
-  }
-
-  // check for decrease
-  if ( new_relative_residual > relative_residual )
-    return -new_relative_residual;
-
-  // update iterates
-  *(iterate0->vector()) = *(_iterate0.vector());
-  *(iterate1->vector()) = *(_iterate1.vector());
-  *(iterate2->vector()) = *(_iterate2.vector());
-  *(iterate3->vector()) = *(_iterate3.vector());
-  *(iterate4->vector()) = *(_iterate4.vector());
-  return new_relative_residual;
-}
-
 double get_initial_residual (
   pnp_with_stokes::LinearForm* L,
   stokes_with_pnp::LinearForm* Ls,
   const dolfin::DirichletBC* bc,
   const dolfin::DirichletBC* bc_stokes,
-  dolfin::Function* cation,
-  dolfin::Function* anion,
-  dolfin::Function* potential,
-  dolfin::Function* velocity,
-  dolfin::Function* pressure)
+  std::shared_ptr<dolfin::Function> cation,
+  std::shared_ptr<dolfin::Function> anion,
+  std::shared_ptr<dolfin::Function> potential,
+  std::shared_ptr<dolfin::Function> velocity,
+  std::shared_ptr<dolfin::Function> pressure)
 {
-  pnp_with_stokes::FunctionSpace V( *(cation->function_space()->mesh()) );
-  dolfin::Function adapt_func(V);
-  dolfin::Function adapt_cation(adapt_func[0]);
-  dolfin::Function adapt_anion(adapt_func[1]);
-  dolfin::Function adapt_potential(adapt_func[2]);
-  adapt_cation.interpolate(*cation);
-  adapt_anion.interpolate(*anion);
-  adapt_potential.interpolate(*potential);
+  L->CatCat = cation;
+  L->AnAn = anion;
+  L->EsEs = potential;
+  L->CatCat_t0 = cation;
+  L->AnAn_t0 = anion;
+  L->uu = velocity;
 
-  stokes_with_pnp::FunctionSpace Vs( *(velocity->function_space()->mesh()) );
-  dolfin::Function adapt_func_stokes(Vs);
-  dolfin::Function adapt_velocity(adapt_func_stokes[0]);
-  dolfin::Function adapt_pressure(adapt_func_stokes[1]);
-  adapt_velocity.interpolate(*velocity);
-  adapt_pressure.interpolate(*pressure);
-
-  L->CatCat = adapt_cation;
-  L->AnAn = adapt_anion;
-  L->EsEs = adapt_potential;
-  L->CatCat_t0 = adapt_cation;
-  L->AnAn_t0 = adapt_anion;
-  L->uu = adapt_velocity;
-
-  Ls->cation = adapt_cation;
-  Ls->anion = adapt_anion;
-  Ls->phi = adapt_potential;
-  Ls->uu = adapt_velocity;
-  Ls->pp = adapt_pressure;
+  Ls->cation = cation;
+  Ls->anion = anion;
+  Ls->phi = potential;
+  Ls->uu = velocity;
+  Ls->pp = pressure;
 
   EigenVector b, bs;
   assemble(b, *L);
