@@ -1,0 +1,55 @@
+# Copyright (C) 2014 CCMA@PSU Maximilian Metti, Xiaozhe Hu
+#
+#   Define bilinear and linear forms for 
+#   the linearized Poisson-Nernst-Planck equations for a MOSFET
+#
+# Compile this form with FFC: ffc -O -l dolfin pnp_with_stokes.ufl.
+
+##  Finite Element Space
+CG = FiniteElement("Lagrange", tetrahedron, 1)
+V  = MixedElement([CG,CG,CG])        # Solution Space
+
+(Cat, An, Phi) = TrialFunction(V)
+(cat, an, phi) = TestFunction(V)
+
+##  Previous Iterates
+CatCat = Coefficient(CG)
+AnAn = Coefficient(CG)
+EsEs = Coefficient(CG)
+
+## Forcing terms
+Vu  = FiniteElement("RT", tetrahedron, 1)
+uu = Coefficient(Vu)
+
+##  Coefficients
+eps = Coefficient(CG)
+Dp = Coefficient(CG)
+qp = Constant(tetrahedron)
+Dn = Coefficient(CG)
+qn = Constant(tetrahedron)
+
+## Linear updates
+du   = Coefficient(Vu)
+dCat = Coefficient(CG)
+dAn  = Coefficient(CG)
+dPhi = Coefficient(CG)
+
+
+a   = ( Dp*exp(CatCat) * ( inner(grad(Cat),grad(cat)) + inner(grad(CatCat)+qp*grad(EsEs), grad(cat)) * Cat ) )*dx \
+    + ( qp*Dp*exp(CatCat) * inner(grad(Phi), grad(cat)) )*dx \
+    + ( Dn*exp(AnAn  ) * ( inner(grad(An ),grad(an )) + inner(grad(AnAn  )+qn*grad(EsEs), grad(an))  * An  ) )*dx \
+    + ( qn*Dn*exp(AnAn  ) * inner(grad(Phi), grad(an )) )*dx \
+    + ( eps * inner(grad(Phi), grad(phi)) )*dx \
+    + ( -(qp*exp(CatCat)*Cat + qn*exp(AnAn)*An)*phi )*dx \
+    - ( exp(CatCat)*Cat*(inner(uu,grad(cat))) )*dx \
+    - ( exp(AnAn)   *An*(inner(uu,grad(an)))  )*dx
+
+L   =- ( Dp*exp(CatCat)*inner(grad(CatCat+qp*EsEs), grad(cat)) - exp(CatCat)*(inner(uu+du,grad(cat))) )*dx \
+    - ( Dn*exp(AnAn  )*inner(grad(AnAn  +qn*EsEs), grad(an )) - exp(AnAn)*(inner(uu+du, grad(an))))*dx \
+    - ( eps * inner(grad(EsEs),grad(phi)) )*dx \
+    - ( -(qp*exp(CatCat) + qn*exp(AnAn))*phi )*dx \
+    - ( Dp*exp(CatCat)*(inner(grad(dCat),grad(cat))    + dCat*(inner(grad(CatCat)+qp*grad(EsEs),grad(cat))) + qp*(inner(grad(dPhi),grad(cat)))) )*dx \
+    - ( Dn*exp(AnAn)  *(inner(grad(dAn),grad(an))      +  dAn*(inner(grad(AnAn)  +qn*grad(EsEs),grad(an)))  + qn*(inner(grad(dPhi),grad(an))))  )*dx \
+    - ( eps*inner(grad(dPhi),grad(phi)) )*dx           + ( ( qp*exp(CatCat)*dCat + qn*exp(AnAn)*dAn )*phi )*dx \
+    + ( exp(CatCat)*dCat*(inner(uu,grad(cat))) )*dx \
+    + ( exp(AnAn)   *dAn*(inner(uu,grad(an)))  )*dx

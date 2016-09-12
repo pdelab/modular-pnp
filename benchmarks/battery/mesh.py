@@ -74,12 +74,13 @@ Lz=72.0/ref_Lz
 domain = Box(Point(-Lx/2.0,-Ly/2.0,-Lz/2.0),Point(Lx/2.0,Ly/2.0,Lz/2.0))
 print "Generating the domain..."
 ## The range can be at most len(x)=86
-Numb_spheres=20
+Numb_spheres=10
 for i in range(Numb_spheres):
     domain = domain - Sphere(Point(xc[i],yc[i],zc[i]), rc[i])
 
 print "Generating the mesh..."
 mesh = generate_mesh(domain,Num_cells,"cgal")
+
 
 
 file = File("mesh.xml.gz")

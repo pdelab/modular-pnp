@@ -52,7 +52,9 @@ double rc[86] = { 1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,
 	0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.833333333333,
 	0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.694444444444};
 
-int Numb_spheres = 20;
+int Numb_spheres = 11;
+// int list[12] = {0,1,2,3,6,7,10,11,12,13,17,19};
+int list[20] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19};
 
 class SpheresSubDomain : public dolfin::SubDomain
 {
@@ -60,7 +62,8 @@ class SpheresSubDomain : public dolfin::SubDomain
     {
       bool flag=false;
       for (int i=0;i<Numb_spheres;i++){
-          if (on_boundary && (std::pow(x[0]-xc[i],2) + std::pow(x[1]-yc[i],2) + std::pow(x[2]-zc[i],2) < std::pow(rc[i],2)+2.0) )
+          if (on_boundary && (std::pow(x[0]-xc[list[i]],2) + std::pow(x[1]-yc[list[i]],2) + std::pow(x[2]-zc[list[i]],2) < std::pow(rc[list[i]],2)+2.0) )
+          // if (on_boundary && (std::pow(x[0]-xc[i],2) + std::pow(x[1]-yc[i],2) + std::pow(x[2]-zc[i],2) < std::pow(rc[i],2)+2.0) )
                   flag=true;
                 }
           return flag;
@@ -128,6 +131,26 @@ public:
 private:
   double _lower_val, _upper_val, _upper, _lower;
   int _bc_coord;
+};
+
+void replace_row(int row_index, dolfin::EigenMatrix* A, dolfin::EigenVector* b)
+{
+  int k;
+  int* JA=(int*) std::get<1>(A->data());
+  int *IA=(int*) std::get<0>(A->data());
+  double* vals = (double*) std::get<2>(A->data());
+  (*b)[row_index]=0.0;
+  for (k=IA[row_index];k<IA[row_index+1];k++)
+  {
+      if (JA[k]==row_index)
+      {
+        vals[k]=1.0;
+      }
+      else
+      {
+        vals[k]=0.0;
+      }
+  }
 };
 
 #endif
