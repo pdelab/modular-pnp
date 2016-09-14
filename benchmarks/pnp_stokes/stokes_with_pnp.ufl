@@ -7,7 +7,7 @@
 
 ##  Finite Element Space
 V  = FiniteElement("RT", tetrahedron, 1)
-Q  = FiniteElement("Discontinuous Lagrange", tetrahedron, 1)
+Q  = FiniteElement("Discontinuous Lagrange", tetrahedron, 0)
 VQ = V * Q
 
 ##  Trial and Test Functions

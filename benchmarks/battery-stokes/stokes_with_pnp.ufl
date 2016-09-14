@@ -3,11 +3,11 @@
 #   Define bilinear and linear forms for 
 #   the Stokes' equations using a Discontinuous Galerkin approach
 #
-# Compile this form with FFC: ffc -O -l dolfin dg-stokes.ufl
+# Compile this form with FFC: ffc -O -l dolfin stokes_with_pnp
 
 ##  Finite Element Space
 V  = FiniteElement("RT", tetrahedron, 1)
-Q  = FiniteElement("Discontinuous Lagrange", tetrahedron, 1)
+Q  = FiniteElement("Discontinuous Lagrange", tetrahedron, 0)
 VQ = V * Q
 
 ##  Trial and Test Functions

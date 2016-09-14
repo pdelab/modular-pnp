@@ -154,10 +154,10 @@ INT electrokinetic_block_guass_seidel (
   // printf("%d %d %f %f\n",iteration_count,max_bgs_it,relative_residual,relative_residual_tol);
   while ( (iteration_count < max_bgs_it) && (relative_residual > relative_residual_tol) ){
 
+    EigenVector_to_dvector(&pnp_rhs, &pnp_rhs_fasp);
     fasp_dvec_alloc(pnp_rhs.size(), &pnp_soln_fasp);
     fasp_dvec_set(pnp_rhs_fasp.row, &pnp_soln_fasp, 0.0);
     // solve for pnp update
-    EigenVector_to_dvector(&pnp_rhs, &pnp_rhs_fasp);
     pnp_status = fasp_solver_dbsr_krylov_amg (
       A_pnp,
       &pnp_rhs_fasp,
