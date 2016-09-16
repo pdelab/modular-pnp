@@ -115,7 +115,7 @@ int main()
   printf("done\n"); fflush(stdout);
 
   auto V = std::make_shared< stokes::FunctionSpace>(mesh);
-  File FileMesh(Folder+"mesh.xml");
+  File FileMesh(Folder+"mesh.pvd");
   FileMesh << *mesh;
 
   auto zero = std::make_shared<Constant>(0.0);
