@@ -52,22 +52,6 @@ double rc[86] = { 1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,
 	0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.833333333333,
 	0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.694444444444};
 
-int Numb_spheres = 20;
-
-class SpheresSubDomain : public dolfin::SubDomain
-{
-    bool inside(const dolfin::Array<double>& x, bool on_boundary) const
-    {
-      bool flag=false;
-      for (int i=0;i<Numb_spheres;i++){
-          if (on_boundary && (std::pow(x[0]-xc[i],2) + std::pow(x[1]-yc[i],2) + std::pow(x[2]-zc[i],2) < std::pow(rc[i],2)+2.0) )
-                  flag=true;
-                }
-          return flag;
-    }
-
-};
-
 /// Initialize expressions
 class LogCharge_SPH : public dolfin::Expression
 {
