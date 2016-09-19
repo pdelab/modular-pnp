@@ -43,6 +43,31 @@ double get_initial_residual (
   std::shared_ptr<dolfin::Function> velocity,
   std::shared_ptr<dolfin::Function> pressure);
 
+  class Bd_all : public dolfin::SubDomain
+  {
+      bool inside(const dolfin::Array<double>& x, bool on_boundary) const
+      {
+          return on_boundary;
+      }
+
+  };
+
+  class zerovec4 : public dolfin::Expression
+  {
+  public:
+
+    zerovec4() : Expression(4) {}
+
+    void eval(Array<double>& values, const Array<double>& x) const
+    {
+      values[0] = 0.0;
+      values[1] = 0.0;
+      values[2] = 0.0;
+      values[3] = 0.0;
+    }
+
+  };
+
 int main(int argc, char** argv)
 {
   if (argc > 1)
@@ -170,9 +195,10 @@ int main(int argc, char** argv)
   auto zero=std::make_shared<Constant>(0.0);
   auto zero_vec3=std::make_shared<Constant>(0.0, 0.0, 0.0);
   auto zero_vec2=std::make_shared<Constant>(0.0, 0.0);
+  auto zero_vec4=std::make_shared<zerovec4>();
   auto CU_init=std::make_shared<Constant>(0.1);
   auto mu=std::make_shared<Constant>(0.1);
-  auto penalty=std::make_shared<Constant>(1.0e+2);
+  auto penalty=std::make_shared<Constant>(1.0e-2);
 
 // meshOut << *mesh0;
 
@@ -260,9 +286,10 @@ int main(int argc, char** argv)
     // Set Dirichlet boundaries
     printf("\tboundary conditions...\n"); fflush(stdout);
     auto boundary = std::make_shared<SymmBoundaries>(coeff_par.bc_coordinate, -domain_par.length_x/2.0, domain_par.length_x/2.0);
+    auto bddd = std::make_shared<Bd_all>();
     dolfin::DirichletBC bc(V, zero_vec3, boundary);
-    dolfin::DirichletBC bc_stokes(Vs->sub(0), zero_vec3, boundary);
-
+    dolfin::DirichletBC bc_stokes(Vs->sub(0), zero_vec3, bddd);
+    // dolfin::DirichletBC bc_stokes(Vs, zero_vec4, bddd);
 
     // Interpolate analytic expressions
     printf("\tinterpolate solution onto new mesh...\n"); fflush(stdout);

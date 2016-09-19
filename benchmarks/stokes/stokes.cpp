@@ -26,6 +26,31 @@ extern "C"
   #include "fasp4ns_functs.h"
 }
 
+class zerovec4 : public dolfin::Expression
+{
+public:
+
+  zerovec4() : Expression(4) {}
+
+  void eval(Array<double>& values, const Array<double>& x) const
+  {
+    values[0] = 0.0;
+    values[1] = 0.0;
+    values[2] = 0.0;
+    values[3] = 0.0;
+  }
+
+};
+
+class Bd_all : public dolfin::SubDomain
+{
+    bool inside(const dolfin::Array<double>& x, bool on_boundary) const
+    {
+        return on_boundary;
+    }
+
+};
+
 class FluidVelocity : public dolfin::Expression
 {
 public:
@@ -131,7 +156,8 @@ int main()
   // Set Dirichlet boundaries
   printf("\tboundary conditions...\n"); fflush(stdout);
   auto boundary = std::make_shared<SymmBoundaries>(coeff_par.bc_coordinate, -domain_par.length_x/2.0, domain_par.length_x/2.0);
-  dolfin::DirichletBC bc(V->sub(0), zero_vec3, boundary);
+  auto bddd = std::make_shared<Bd_all>();
+  dolfin::DirichletBC bc(V->sub(0), zero_vec3, bddd);
 
   auto Solution = std::make_shared<Function>(V);
   auto u = std::make_shared<Function>((*Solution)[0]);
