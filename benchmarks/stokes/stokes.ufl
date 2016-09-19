@@ -15,12 +15,7 @@ VQ = V * Q
 (v, q) = TestFunctions(VQ)
 
 ##  Previous Iterates
-uu  = Coefficient(V)
-pp  = Coefficient(Q)
-
-
-
-
+f  = Coefficient(V)
 
 ##  Coefficients
 mu  = Constant(tetrahedron)
@@ -37,7 +32,4 @@ a   = ( 2.0*mu* inner( sym(grad(u)), sym(grad(v)) ) )*dx    -    ( p*div(v) )*dx
 	+ ( 2.0*mu*(alpha/h_avg)* inner( jump(u),jump(v) ) )*dS
 
 
-L   =   - ( 2.0*mu* inner( sym(grad(uu)), sym(grad(v)) ) )*dx   +   ( pp*div(v) )*dx   -   ( div(uu)*q )*dx \
-  	- ( 2.0*mu*(alpha/h_avg)* inner( avg(sym(grad(uu))),  sym(outer(v('+'),n_vec('+')) + outer(v('-'),n_vec('-'))) ) )*dS \
-	- ( 2.0*mu*(alpha/h_avg)* inner( sym(outer(uu('+'),n_vec('+')) + outer(uu('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
-	- ( 2.0*mu*(alpha/h_avg)* inner( jump(uu),jump(v) ) )*dS
+L   = inner(f,v)*dx
