@@ -188,7 +188,7 @@ int main()
   stokes_value_vector.reserve(b.size());
   unsigned int index;
 
-  replace_row(index,&A);
+  replace_row(index_fix,&A);
   b[index_fix]=0.0;
 
   copy_EigenVector_to_block_dvector(&b, &b_fasp, &dof_u, &dof_p);
