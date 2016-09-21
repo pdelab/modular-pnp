@@ -21,15 +21,16 @@ f  = Coefficient(V)
 mu  = Constant(tetrahedron)
 
 ##  DG-terms
-alpha = Constant(tetrahedron)
+alpha1 = Constant(tetrahedron)
+alpha2 = Constant(tetrahedron)
 h     = 2.0*Circumradius(tetrahedron)
 h_avg = ( h('+')+h('-') )/2.0
 n_vec = FacetNormal(tetrahedron)
 
 a   = ( 2.0*mu* inner( sym(grad(u)), sym(grad(v)) ) )*dx    -    ( p*div(v) )*dx   +   ( div(u)*q )*dx \
-	+ ( 2.0*mu*(alpha/h_avg)* inner( avg(sym(grad(u))), sym(outer(v('+'),n_vec('+')) + outer(v('-'),n_vec('-'))) ) )*dS \
-	+ ( 2.0*mu*(alpha/h_avg)* inner( sym(outer(u('+'),n_vec('+')) + outer(u('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
-	+ ( 2.0*mu*(alpha/h_avg)* inner( jump(u),jump(v) ) )*dS
+	+ ( 2.0*mu*(alpha1)* inner( avg(sym(grad(u))), sym(outer(v('+'),n_vec('+')) + outer(v('-'),n_vec('-'))) ) )*dS \
+	+ ( 2.0*mu*(alpha1)* inner( sym(outer(u('+'),n_vec('+')) + outer(u('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
+	+ ( 2.0*mu*(alpha2/h_avg)* inner( jump(u),jump(v) ) )*dS
 
 
 L   = inner(f,v)*dx

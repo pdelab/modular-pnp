@@ -149,7 +149,8 @@ int main()
   auto one_vec3 = std::make_shared<Constant>(1.0,1.0,1.0);
   auto zero_vec2=std::make_shared<Constant>(0.0, 0.0);
   auto mu=std::make_shared<Constant>(0.1);
-  auto penalty=std::make_shared<Constant>(1.0e-2);
+  auto penalty1=std::make_shared<Constant>(1.0e-2);
+  auto penalty2=std::make_shared<Constant>(1.0e-3);
 
   stokes::BilinearForm a(V,V);
   stokes::LinearForm L(V);
@@ -160,18 +161,20 @@ int main()
   auto bddd = std::make_shared<Bd_all>();
   dolfin::DirichletBC bc(V->sub(0), one_vec3, bddd);
 
+
   Function Solution(V);
   ivector dof_u;
   ivector dof_p;
   get_dofs(&Solution, &dof_u, 0);
   get_dofs(&Solution, &dof_p, 1);
-
+  int index_fix = dof_p.val[0];
 
   EigenMatrix A;
   EigenVector b;
 
   a.mu = mu;
-  a.alpha = penalty;
+  a.alpha1 = penalty1;
+  a.alpha2 = penalty2;
   assemble(A,a);
 
   L.f = zero_vec3;
@@ -184,6 +187,9 @@ int main()
   std::vector<double> stokes_value_vector;
   stokes_value_vector.reserve(b.size());
   unsigned int index;
+
+  replace_row(index,&A);
+  b[index_fix]=0.0;
 
   copy_EigenVector_to_block_dvector(&b, &b_fasp, &dof_u, &dof_p);
   copy_EigenMatrix_to_block_dCSRmat(&A, &A_fasp, &dof_u, &dof_p);

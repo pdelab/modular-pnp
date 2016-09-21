@@ -198,7 +198,8 @@ int main(int argc, char** argv)
   auto zero_vec4=std::make_shared<zerovec4>();
   auto CU_init=std::make_shared<Constant>(0.1);
   auto mu=std::make_shared<Constant>(0.1);
-  auto penalty=std::make_shared<Constant>(1.0e-2);
+  auto penalty1=std::make_shared<Constant>(1.0e-3);
+  auto penalty2=std::make_shared<Constant>(1.0e-6);
 
 // meshOut << *mesh0;
 
@@ -212,11 +213,12 @@ int main(int argc, char** argv)
   auto initial_soln_stokes = std::make_shared<Function>(V_init_stokes );
   auto initialVelocity = std::make_shared<Function>((*initial_soln_stokes)[0]);
   auto initialPressure = std::make_shared<Function>((*initial_soln_stokes)[1]);
+  auto one_vec3 = std::make_shared<Constant>(1.0,1.0,1.0);
 
   initialCation->interpolate(Cation);
   initialAnion->interpolate(Anion);
   initialPotential->interpolate(Volt);
-  initialVelocity->interpolate(Velocity);
+  initialVelocity->interpolate(*one_vec3);
   initialPressure->interpolate(*zero);
 
   //*************************************************************
@@ -236,7 +238,8 @@ int main(int argc, char** argv)
   cation0->interpolate(Cation);
   anion0->interpolate(Anion);
   potential0->interpolate(Volt);
-  velocity0->interpolate(Velocity);
+  // velocity0->interpolate(Velocity);
+  velocity0->interpolate(*one_vec3);
   pressure0->interpolate(*zero);
 
   // set adaptivity parameters
@@ -269,7 +272,8 @@ int main(int argc, char** argv)
     stokes_with_pnp::LinearForm L_s(Vs);
     L_s.qp = qp; L_s.qn = qn;
     a_s.mu = mu; L_s.mu = mu;
-    a_s.alpha = penalty; L_s.alpha = penalty;
+    a_s.alpha1 = penalty1; L_s.alpha1 = penalty1;
+    a_s.alpha2 = penalty2; L_s.alpha2 = penalty2;
 
     // Updates
     L_pnp.du = zero_vec3;
@@ -450,6 +454,8 @@ int main(int argc, char** argv)
       }
       bc.apply(A_pnp);
       bc_stokes.apply(A_stokes);
+      int index = pressure_dofs.val[0];
+      replace_row(index, &A_stokes);
 
       // Convert to fasp
       printf("\tconvert to FASP...\n"); fflush(stdout);
@@ -460,16 +466,16 @@ int main(int argc, char** argv)
       copy_EigenMatrix_to_block_dCSRmat(&A_stokes, &A_stokes_fasp, &velocity_dofs, &pressure_dofs);
 
       /******************* TEST *******************/
-      L_pnp.CatCat = cationSolution;
-      L_pnp.AnAn = anionSolution;
-      L_pnp.EsEs = potentialSolution;
-      L_pnp.uu = VelocitySolution;
-
-      L_s.cation = cationSolution;
-      L_s.anion = anionSolution;
-      L_s.phi = potentialSolution;
-      L_s.uu = VelocitySolution;
-      L_s.pp = PressureSolution;
+      // L_pnp.CatCat = cationSolution;
+      // L_pnp.AnAn = anionSolution;
+      // L_pnp.EsEs = potentialSolution;
+      // L_pnp.uu = VelocitySolution;
+      //
+      // L_s.cation = cationSolution;
+      // L_s.anion = anionSolution;
+      // L_s.phi = potentialSolution;
+      // L_s.uu = VelocitySolution;
+      // L_s.pp = PressureSolution;
       /*******************************************/
 
       double relative_residual_tol = 1E-6;
@@ -599,6 +605,12 @@ int main(int argc, char** argv)
     if (num_refines == 0) {
       // successful solve
       printf("\tsuccessfully distributed entropy below desired entropy in %d adapts!\n\n", num_adapts);
+      adaptive_convergence = true;
+      break;
+    }
+    else if (num_refines == -1) {
+      // failed adaptivity
+      printf("\nDid not adapt mesh to entropy in %d adapts...\n", max_adapts);
       adaptive_convergence = true;
       break;
     }
