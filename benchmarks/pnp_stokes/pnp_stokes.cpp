@@ -214,11 +214,12 @@ int main(int argc, char** argv)
   auto initialVelocity = std::make_shared<Function>((*initial_soln_stokes)[0]);
   auto initialPressure = std::make_shared<Function>((*initial_soln_stokes)[1]);
   auto one_vec3 = std::make_shared<Constant>(1.0,1.0,1.0);
+  auto vec_vel = std::make_shared<Constant>(1.0,0.0,0.0);
 
   initialCation->interpolate(Cation);
   initialAnion->interpolate(Anion);
   initialPotential->interpolate(Volt);
-  initialVelocity->interpolate(*one_vec3);
+  initialVelocity->interpolate(*vec_vel);
   initialPressure->interpolate(*zero);
 
   //*************************************************************

@@ -34,23 +34,22 @@ dCat = Coefficient(CG)
 dAn  = Coefficient(CG)
 dPhi = Coefficient(CG)
 
+
 a   = ( Dp*exp(CatCat) * ( inner(grad(Cat),grad(cat)) + inner(grad(CatCat)+qp*grad(EsEs), grad(cat)) * Cat ) )*dx \
     + ( qp*Dp*exp(CatCat) * inner(grad(Phi), grad(cat)) )*dx \
     + ( Dn*exp(AnAn  ) * ( inner(grad(An ),grad(an )) + inner(grad(AnAn  )+qn*grad(EsEs), grad(an))  * An  ) )*dx \
     + ( qn*Dn*exp(AnAn  ) * inner(grad(Phi), grad(an )) )*dx \
     + ( eps * inner(grad(Phi), grad(phi)) )*dx \
     + ( -(qp*exp(CatCat)*Cat + qn*exp(AnAn)*An)*phi )*dx \
-    - ( exp(CatCat)*(Dx(Cat,0)*uu[0]+Dx(Cat,1)*uu[1]+Dx(Cat,2)*uu[2])*cat )*dx \
-    - ( exp(AnAn)*(Dx(An,0)*uu[0]+Dx(An,1)*uu[1]+Dx(An,2)*uu[2])*an  )*dx
+    - ( exp(CatCat)*Cat*(inner(uu,grad(cat))) )*dx \
+    - ( exp(AnAn)   *An*(inner(uu,grad(an)))  )*dx
 
-L   =- ( Dp*exp(CatCat)*inner(grad(CatCat+qp*EsEs), grad(cat)) )*dx \
-    + (exp(CatCat)*(Dx(CatCat,0)*(uu[0]+du[0])+Dx(CatCat,1)*(uu[1]+du[1])+Dx(CatCat,2)*(uu[2]+du[2]))*cat )*dx \
-    - ( Dn*exp(AnAn  )*inner(grad(AnAn  +qn*EsEs), grad(an )) )*dx \
-    + (exp(AnAn)*(Dx(AnAn,0)*(uu[0]+du[0])+Dx(AnAn,1)*(uu[1]+du[1])+Dx(AnAn,2)*(uu[2]+du[2]))*an )*dx \
+L   =- ( Dp*exp(CatCat)*inner(grad(CatCat+qp*EsEs), grad(cat)) - exp(CatCat)*(inner(uu+du,grad(cat))) )*dx \
+    - ( Dn*exp(AnAn  )*inner(grad(AnAn  +qn*EsEs), grad(an )) - exp(AnAn)*(inner(uu+du, grad(an))))*dx \
     - ( eps * inner(grad(EsEs),grad(phi)) )*dx \
     - ( -(qp*exp(CatCat) + qn*exp(AnAn))*phi )*dx \
     - ( Dp*exp(CatCat)*(inner(grad(dCat),grad(cat))    + dCat*(inner(grad(CatCat)+qp*grad(EsEs),grad(cat))) + qp*(inner(grad(dPhi),grad(cat)))) )*dx \
     - ( Dn*exp(AnAn)  *(inner(grad(dAn),grad(an))      +  dAn*(inner(grad(AnAn)  +qn*grad(EsEs),grad(an)))  + qn*(inner(grad(dPhi),grad(an))))  )*dx \
     - ( eps*inner(grad(dPhi),grad(phi)) )*dx           + ( ( qp*exp(CatCat)*dCat + qn*exp(AnAn)*dAn )*phi )*dx \
-    + ( exp(CatCat)*(Dx(dCat,0)*uu[0]+Dx(dCat,1)*uu[1]+Dx(dCat,2)*uu[2])*cat )*dx \
-    + ( exp(AnAn)*(Dx(dAn,0)*uu[0]+Dx(dAn,1)*uu[1]+Dx(dAn,2)*uu[2])*an  )*dx
+    + ( exp(CatCat)*dCat*(inner(uu,grad(cat))) )*dx \
+    + ( exp(AnAn)   *dAn*(inner(uu,grad(an)))  )*dx
