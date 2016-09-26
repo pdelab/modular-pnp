@@ -83,10 +83,13 @@ add_executable(battery_PER ./benchmarks/battery/battery_PER.cpp ${SRC_DIR})
 add_executable(battery_DIR ./benchmarks/battery/battery_DIR.cpp ${SRC_DIR})
 add_executable(battery_time_PER ./benchmarks/battery_time/battery_PER.cpp ${SRC_DIR})
 add_executable(battery_time_DIR ./benchmarks/battery_time/battery_DIRICHLET.cpp ${SRC_DIR})
+add_executable(battery_time_NEUMANN ./benchmarks/battery_time/battery_NEUMANN.cpp ${SRC_DIR})
 add_executable(pnp_time ./benchmarks/PNP_time/pnp_time.cpp ${SRC_DIR})
 add_executable(battery-stokes ./benchmarks/battery-stokes/battery-stokes.cpp ${SRC_DIR})
 add_executable(pnp_stokes ./benchmarks/pnp_stokes/pnp_stokes.cpp ${SRC_DIR})
+add_executable(pnp_stokes2 ./benchmarks/pnp_stokes/pnp_stokes2.cpp ${SRC_DIR})
 add_executable(stokes ./benchmarks/stokes/stokes.cpp ${SRC_DIR})
+add_executable(eafe_test ./benchmarks/EAFE/eafe_test.cpp ${SRC_DIR})
 
 # Setup targets
 ## AUX TESTs
@@ -123,6 +126,9 @@ target_link_libraries(battery_PER ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARI
 target_link_libraries(battery_DIR ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
 target_link_libraries(battery_time_PER ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
 target_link_libraries(battery_time_DIR ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
+target_link_libraries(battery_time_NEUMANN ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
 target_link_libraries(battery-stokes ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
 target_link_libraries(pnp_stokes ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
+target_link_libraries(pnp_stokes2 ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
 target_link_libraries(stokes ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
+target_link_libraries(eafe_test ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
