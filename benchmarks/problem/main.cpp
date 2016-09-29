@@ -140,7 +140,7 @@ int main (int argc, char** argv) {
   printf("\n");
 
 
-  printf("\tre-defining PNP coefficients from expressions\n");
+  printf("Re-defining PNP coefficients from expressions\n");
   dolfin::Function permittivity(pnp_problem.fixed_charge_space);
   dolfin::File permittivity_file("./benchmarks/problem/output/permittivity.pvd");
   Permittivity_Expression permittivity_expr;
@@ -157,7 +157,6 @@ int main (int argc, char** argv) {
   dolfin::File diffusivity_file("./benchmarks/problem/output/diffusivity.pvd");
   Diffusivity_Expression diff_expr;
   diffusivity.interpolate(diff_expr);
-  // diffusivity_file << diffusivity[0];
   diffusivity_file << diffusivity[1];
   diffusivity_file << diffusivity[2];
   diffusivity_file << diffusivity[3];
@@ -166,7 +165,6 @@ int main (int argc, char** argv) {
   dolfin::File valency_file("./benchmarks/problem/output/valency.pvd");
   Valency_Expression valency_expr;
   valency.interpolate(valency_expr);
-  // valency_file << valency[0];
   valency_file << valency[1];
   valency_file << valency[2];
   valency_file << valency[3];
@@ -234,21 +232,47 @@ int main (int argc, char** argv) {
 
 
   // computed solution for prescribed Dirichlet
-  pnp_problem.set_DirichletBC(components, bcs);
-  dolfin::Function dolfin_solution(pnp_problem.dolfin_solve());
-  solution_file0 << dolfin_solution[0];
-  solution_file1 << dolfin_solution[1];
-  solution_file2 << dolfin_solution[2];
-  solution_file3 << dolfin_solution[3];
+  // printf("Set Dirichlet BCs\n\n");
+  // pnp_problem.set_DirichletBC(components, bcs);
+  // dolfin::Function dolfin_solution(pnp_problem.dolfin_solve());
+  // solution_file0 << dolfin_solution[0];
+  // solution_file1 << dolfin_solution[1];
+  // solution_file2 << dolfin_solution[2];
+  // solution_file3 << dolfin_solution[3];
 
 
-  // FASP computed solution
+  // FASP computed solution using basic Newton iteration
+  printf("Newton solving the problem\n");
+  printf("Set Dirichlet BCs\n");
   pnp_problem.set_DirichletBC(components, bcs);
-  dolfin::Function fasp_solution(pnp_problem.fasp_solve());
-  solution_file0 << fasp_solution[0];
-  solution_file1 << fasp_solution[1];
-  solution_file2 << fasp_solution[2];
-  solution_file3 << fasp_solution[3];
+  dolfin::Function fasp_solution(pnp_problem.get_solution());
+
+  double relative_residual_factor = 0.1;
+  double residual, initial_residual = pnp_problem.compute_residual("l2");
+  printf("\tinitial residual: %e\n\n", initial_residual); fflush(stdout);
+
+
+  for(uint newton_count = 1; newton_count < 10; newton_count++) {
+    printf("iteration: %d\n", newton_count); fflush(stdout);
+
+    fasp_solution = pnp_problem.fasp_solve();
+    solution_file0 << fasp_solution[0];
+    solution_file1 << fasp_solution[1];
+    solution_file2 << fasp_solution[2];
+    solution_file3 << fasp_solution[3];
+    residual = pnp_problem.compute_residual("l2");
+    printf("\tresidual: %e\n\n", residual); fflush(stdout);
+
+    if (residual / initial_residual < relative_residual_factor) {
+      break;
+    }
+  }
+
+  printf("relative_residual: %e < %e\n",
+    residual / initial_residual,
+    relative_residual_factor
+  );
+  fflush(stdout);
 
   printf("Done\n\n"); fflush(stdout);
 

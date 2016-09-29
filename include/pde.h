@@ -117,6 +117,11 @@ class PDE {
       const dolfin::Function& update
     );
 
+    /// Compute the residual given the current solution
+    double compute_residual (
+      std::string norm_type
+    );
+
 
     /// Define analytic functions from read-in files
     ///

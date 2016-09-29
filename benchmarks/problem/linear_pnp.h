@@ -65,7 +65,7 @@ class Linear_PNP : public PDE {
     dBSRmat _fasp_bsr_matrix;
     dvector _fasp_vector;
     dvector _fasp_soln;
-    bool _allocated_faps_soln = false;
+    bool _faps_soln_unallocated = true;
 };
 
 #endif

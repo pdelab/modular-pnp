@@ -11,9 +11,9 @@ subdomain_file = none  %./mesh/gramA_channel_physical_region.xml
 
 ref_length   = 1.0e-9
 length_x     = 10.0
-length_y     = 5.0
-length_z     = 5.0
+length_y     = 1.0
+length_z     = 1.0
 
-grid_x       = 10
-grid_y       = 5
-grid_z       = 5
+grid_x       = 100
+grid_y       = 10
+grid_z       = 10

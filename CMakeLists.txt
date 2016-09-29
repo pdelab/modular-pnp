@@ -47,7 +47,7 @@ include_directories(${DOLFIN_INCLUDE_DIRS} ${FASP_INCLUDE_DIR} ${FASP4NS_INCLUDE
 include_directories(SYSTEM ${DOLFIN_3RD_PARTY_INCLUDE_DIRS})
 
 # Awesome OSX TARGET
-set(OSX_TARGET "/opt/local/lib/gcc5/gcc/x86_64-apple-darwin14/5.3.0/libgcc.a" "/opt/local/lib/gcc5/libquadmath.a" "/opt/local/lib/gcc5/libgfortran.a")
+set(OSX_TARGET "/opt/local/lib/gcc6/gcc/x86_64-apple-darwin15/6.1.0/libgcc.a" "/opt/local/lib/gcc6/libquadmath.a" "/opt/local/lib/gcc6/libgfortran.a")
 set(SRC_DIR ./src/domain.cpp ./src/dirichlet.cpp ./src/pde.cpp)
 
 add_executable(test_poisson ./benchmarks/poisson/main.cpp ./benchmarks/poisson/poisson.cpp ${SRC_DIR})

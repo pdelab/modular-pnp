@@ -264,18 +264,26 @@ void PDE::set_coefficients (
 
     _bilinear_form->set_coefficient(bc->first, fn);
     _linear_form->set_coefficient(bc->first, fn);
-
-    // _bilinear_coefficient.emplace(bc->first, fn);
-    // _linear_coefficient.emplace(bc->first, fn);
   }
 
   std::map<std::string, dolfin::Function>::iterator lc;
   for (lc = sources.begin(); lc != sources.end(); ++lc) {
     fn.reset( new dolfin::Function(sources.find(lc->first)->second) );
 
-    // _linear_form->set_coefficient(lc->first, fn);
-    // _linear_coefficient.emplace(lc->first, fn);
+    _linear_form->set_coefficient(lc->first, fn);
   }
+}
+//--------------------------------------
+double PDE::compute_residual (
+  std::string norm_type
+) {
+  dolfin::EigenVector eigen_vector;
+  assemble(eigen_vector, *_linear_form);
+  double residual = eigen_vector.norm(norm_type);
+
+  _eigen_vector.reset(new dolfin::EigenVector(eigen_vector));
+
+  return residual;
 }
 //--------------------------------------
 
