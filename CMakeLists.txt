@@ -51,78 +51,16 @@ set(OSX_TARGET "/opt/local/lib/gcc6/gcc/x86_64-apple-darwin15/6.1.0/libgcc.a" "/
 set(SRC_DIR ./src/domain.cpp ./src/dirichlet.cpp ./src/pde.cpp)
 
 add_executable(test_poisson ./benchmarks/poisson/main.cpp ./benchmarks/poisson/poisson.cpp ${SRC_DIR})
-add_executable(test_vector_poisson ./benchmarks/vector_poisson/main.cpp ./benchmarks/vector_poisson/vector_poisson.cpp ${SRC_DIR})
-add_executable(test_vector_pnp ./benchmarks/linear_pnp_vector/main.cpp ./benchmarks/linear_pnp_vector/vector_pnp.cpp ${SRC_DIR})
-add_executable(test_problem ./benchmarks/problem/main.cpp ./benchmarks/problem/linear_pnp.cpp ${SRC_DIR})
 target_link_libraries(test_poisson ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
+
+add_executable(test_vector_poisson ./benchmarks/vector_poisson/main.cpp ./benchmarks/vector_poisson/vector_poisson.cpp ${SRC_DIR})
 target_link_libraries(test_vector_poisson ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
+
+add_executable(test_vector_pnp ./benchmarks/linear_pnp_vector/main.cpp ./benchmarks/linear_pnp_vector/vector_pnp.cpp ${SRC_DIR})
 target_link_libraries(test_vector_pnp ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
+
+add_executable(test_problem ./benchmarks/problem/main.cpp ./benchmarks/problem/linear_pnp.cpp ${SRC_DIR})
 target_link_libraries(test_problem ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
 
-
-
-
-
-# Local src files and include
-set(SRC_DIR_v0 ./src/fasp_to_fenics.cpp ./src/params.cpp ./src/domains.cpp ./src/boundary_conditions.cpp ./src/funcspace_to_vecspace.cpp ./src/newton_functs.cpp)
-
-# Executables
-add_executable(aux_test_reading ./aux/test_reading/aux_test_reading.cpp ${SRC_DIR_v0})
-add_executable(aux_test_faspfenics ./aux/test_faspfenics/aux_test_faspfenics.cpp ${SRC_DIR_v0})
-add_executable(aux_test_eafe ./aux/test_eafe/aux_test_eafe.cpp ${SRC_DIR_v0})
-add_executable(aux_test_eafe2 ./aux/test_eafe2/aux_test_eafe2.cpp ${SRC_DIR_v0})
-add_executable(aux_test_bc ./aux/test_bc/aux_test_bc.cpp ${SRC_DIR_v0})
-add_executable(aux_test_dof ./aux/test_dof/aux_test_dof.cpp ${SRC_DIR_v0})
-
-add_executable(test_eafe ./tests/eafe_tests/test_eafe.cpp ${SRC_DIR_v0})
-add_executable(test_faspfenics ./tests/faspfenics_tests/test_faspfenics.cpp ${SRC_DIR_v0})
-add_executable(test_faspsolver ./tests/faspsolver_tests/test_faspsolver.cpp ${SRC_DIR_v0})
-add_executable(test_bc ./tests/bc_tests/test_bc.cpp ${SRC_DIR_v0})
-add_executable(test_add_matrix ./tests/matrices_tests/test_add_matrix.cpp ${SRC_DIR_v0})
-add_executable(test_replace_matrix ./tests/matrices_tests/test_replace_matrix.cpp ${SRC_DIR_v0})
-add_executable(test_replace_matrix2 ./tests/matrices_tests/test_replace_matrix2.cpp ${SRC_DIR_v0})
-add_executable(test_lin_pnp ./tests/linearized_pnp_tests/test_lin_pnp.cpp ${SRC_DIR_v0})
-add_executable(test_lin_pnp_eafe ./tests/linearized_pnp_tests/test_lin_pnp_eafe.cpp ${SRC_DIR_v0})
-add_executable(test_pnp_eafe ./tests/pnp_tests/test_pnp_eafe.cpp ${SRC_DIR_v0})
-add_executable(test_newton_param ./tests/newton_param_tests/test_newton_param.cpp ${SRC_DIR_v0})
-
-add_executable(lin_pnp_eafe ./benchmarks/linear_PNP/lin_pnp_EAFE.cpp ${SRC_DIR_v0})
-add_executable(lin_pnp ./benchmarks/linear_PNP/lin_pnp.cpp ${SRC_DIR_v0})
-add_executable(pnp_eafe ./benchmarks/PNP/pnp_EAFE.cpp ${SRC_DIR_v0})
-add_executable(pnp_eafe2 ./benchmarks/PNP/pnp_EAFE2.cpp ${SRC_DIR_v0})
-add_executable(pnp ./benchmarks/PNP/pnp.cpp ${SRC_DIR_v0})
-add_executable(pnp_adapt ./benchmarks/PNP/pnp_adaptive.cpp ${SRC_DIR_v0})
-add_executable(newton_poisson ./benchmarks/Newton_Poisson/newton_poisson.cpp ${SRC_DIR_v0})
-add_executable(pnp_time ./benchmarks/PNP_time/pnp_time.cpp ${SRC_DIR_v0})
-
-# Setup targets
-## AUX TESTs
-target_link_libraries(aux_test_reading ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
-target_link_libraries(aux_test_faspfenics ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
-target_link_libraries(aux_test_bc ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
-target_link_libraries(aux_test_eafe ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
-target_link_libraries(aux_test_eafe2 ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
-target_link_libraries(aux_test_dof ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
-
-## UNIT TESTS
-target_link_libraries(test_eafe ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
-target_link_libraries(test_faspfenics ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
-target_link_libraries(test_faspsolver ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
-target_link_libraries(test_bc ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
-target_link_libraries(test_add_matrix ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
-target_link_libraries(test_replace_matrix ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
-target_link_libraries(test_replace_matrix2 ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
-target_link_libraries(test_lin_pnp ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
-target_link_libraries(test_lin_pnp_eafe ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
-target_link_libraries(test_pnp_eafe ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
-target_link_libraries(test_newton_param ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET})
-
-# # ## BENCHMARKS
-target_link_libraries(lin_pnp ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
-target_link_libraries(lin_pnp_eafe ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
-target_link_libraries(pnp ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
-target_link_libraries(pnp_eafe ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
-target_link_libraries(pnp_eafe2 ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
-target_link_libraries(pnp_adapt ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
-target_link_libraries(newton_poisson ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
-target_link_libraries(pnp_time ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
+add_executable(linear_experiment ./benchmarks/linearized_pnp_experiment/main.cpp ./benchmarks/linearized_pnp_experiment/linear_pnp.cpp ${SRC_DIR})
+target_link_libraries(linear_experiment ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
