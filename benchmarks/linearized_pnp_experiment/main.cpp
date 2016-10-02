@@ -1,9 +1,9 @@
 /// Main file for solving the linearized PNP problem
-#include <iostream>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <time.h>
+#include <stdlib.h>
 #include <dolfin.h>
 #include "pde.h"
 #include "domain.h"
@@ -248,33 +248,45 @@ int main (int argc, char** argv) {
 
 
   // FASP computed solution using basic Newton iteration
-  printf("\tcomputed linearized solution using FASP solver\n");
-  pnp_problem.set_DirichletBC(components, bcs);
+  // printf("\tcomputed linearized solution using FASP solver\n");
+  // pnp_problem.set_DirichletBC(components, bcs);
   dolfin::Function fasp_solution(pnp_problem.get_solution());
-  fasp_solution = pnp_problem.fasp_solve();
-  solution_file0 << fasp_solution[0];
-  solution_file1 << fasp_solution[1];
-  solution_file2 << fasp_solution[2];
-  solution_file3 << fasp_solution[3];
-  printf("\n");
+  // fasp_solution = pnp_problem.fasp_solve();
+  // solution_file0 << fasp_solution[0];
+  // solution_file1 << fasp_solution[1];
+  // solution_file2 << fasp_solution[2];
+  // solution_file3 << fasp_solution[3];
+  // printf("\n");
 
 
 
-  // Measure error of FASP computed solution
+  // Measure error of FASP computed solution for random RHS
   printf("Measure error of FASP computed solution\n");
   pnp_problem.set_DirichletBC(components, bcs);
-  dolfin::EigenVector target_vector(fasp_solution.vector()->size());
-  target_vector = *(fasp_solution.vector());
+  std::size_t problem_size = fasp_solution.vector()->size();
 
-  dolfin::EigenVector fasp_vector(fasp_solution.vector()->size());
+  srand(time(NULL));
+  std::vector<double> random_values;
+  random_values.reserve(problem_size);
+  for (uint i = 0; i < problem_size; i++) {
+    random_values[i] = (double) rand() / RAND_MAX;
+  }
+
+  dolfin::EigenVector target_vector(problem_size);
+  target_vector.set_local(random_values);
+
+  dolfin::EigenVector fasp_vector(problem_size);
   fasp_vector = pnp_problem.fasp_test_solver(target_vector);
 
-  dolfin::EigenVector error_vector(fasp_solution.vector()->size());
+  dolfin::EigenVector error_vector(problem_size);
   error_vector = target_vector;
   error_vector -= fasp_vector;
+
   const double linear_error = error_vector.norm("l2");
   printf("\tFASP error in the l2-sense: %e\n", linear_error);
-  printf("\taverage FASP error entrywise: %e\n", linear_error / ((double) fasp_solution.vector()->size()));
+  printf("\taverage FASP error entrywise: %e\n",
+    linear_error / ((double) problem_size)
+  );
 
   printf("Done\n\n"); fflush(stdout);
   return 0;
