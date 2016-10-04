@@ -49,12 +49,6 @@ class PDE {
     /// Return mesh from the Poisson object
     dolfin::Mesh get_mesh ();
 
-    /// Set quasi-Newton option to true
-    void use_quasi_newton ();
-
-    /// Set quasi-Newton option to false
-    void use_exact_newton ();
-
     /// Print coefficient names to console
     void print_coefficients ();
 
@@ -156,6 +150,9 @@ class PDE {
       const dolfin::EigenVector &eigen_vector
     );
 
+    std::shared_ptr<dolfin::FunctionSpace> _function_space;
+    std::shared_ptr<dolfin::Form> _bilinear_form;
+
   private:
     /// Mesh
     std::shared_ptr<dolfin::Mesh> _mesh;
@@ -164,11 +161,9 @@ class PDE {
     double _mesh_epsilon;
 
     /// Function Space
-    std::shared_ptr<dolfin::FunctionSpace> _function_space;
     std::map<std::size_t, std::vector<dolfin::la_index>> _dof_map;
 
     /// Forms
-    std::shared_ptr<dolfin::Form> _bilinear_form;
     std::shared_ptr<dolfin::Form> _linear_form;
 
     // Current solution
@@ -181,9 +176,6 @@ class PDE {
     /// Dirichlet boundary conditions
     std::vector<std::shared_ptr<dolfin::DirichletBC>> _dirichletBC;
     std::vector<std::shared_ptr<dolfin::SubDomain>> _dirichlet_SubDomain;
-
-    /// quasi-Newton flag
-    bool _quasi_newton;
 };
 
 #endif

@@ -37,9 +37,9 @@ class Diffusivity_Expression : public dolfin::Expression {
     Diffusivity_Expression() : dolfin::Expression(4) {}
     void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
       values[0] = 1.0; // potential diffusivity is not used
-      values[1] = 1.0;
-      values[2] = 1.0;
-      values[3] = 1.0;
+      values[1] = x[0] > 0.0 ? 1.0 : 0.1;
+      values[2] = x[0] > 0.0 ? 2.0 : 0.1;
+      values[3] = x[0] > 0.0 ? 4.0 : 0.1;
     }
 };
 
@@ -289,5 +289,8 @@ int main (int argc, char** argv) {
   );
 
   printf("Done\n\n"); fflush(stdout);
+
+  pnp_problem.apply_eafe();
+
   return 0;
 }

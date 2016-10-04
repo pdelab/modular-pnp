@@ -6,6 +6,7 @@
 #include "pde.h"
 #include "domain.h"
 #include "dirichlet.h"
+#include "EAFE.h"
 extern "C" {
   #include "fasp.h"
   #include "fasp_functs.h"
@@ -168,3 +169,82 @@ void Linear_PNP::free_fasp () {
   fasp_dvec_free(&_fasp_soln);
 }
 //--------------------------------------
+
+
+//--------------------------------------
+void Linear_PNP::apply_eafe () {
+
+  dolfin::Function solution_function(Linear_PNP::get_solution());
+
+  if (_eafe_uninitialized) {
+    _eafe_function_space.reset(
+      new EAFE::FunctionSpace(Linear_PNP::get_mesh())
+    );
+    _eafe_bilinear_form.reset(
+      new EAFE::Form_a(_eafe_function_space, _eafe_function_space)
+    );
+    _eafe_matrix.reset(
+      new dolfin::EigenMatrix()
+    );
+
+    _diffusivity.reset(
+      new dolfin::Function(diffusivity_space)
+    );
+    _diffusivity->interpolate(
+      *(_bilinear_form->coefficient("diffusivity"))
+    );
+
+    dolfin::Function val_fn(valency_space);
+    val_fn.interpolate(
+      (*_bilinear_form->coefficient("valency"))
+    );
+
+    std::size_t vals = Linear_PNP::get_solution_dimension() + 1;
+    _valency_double.reserve(vals);
+    for (uint val_idx = 0; val_idx < vals; val_idx++) {
+      _valency_double[val_idx] = (*(val_fn.vector()))[val_idx];
+    }
+    _valency_double[0] = 0.0;
+  }
+
+  const dolfin::Constant zero(0.0);
+  std::size_t eqns = Linear_PNP::get_solution_dimension() + 1;
+
+  for (uint eqn_idx = 1; eqn_idx < eqns; eqn_idx++) {
+
+    printf("declare coeffs \n"); fflush(stdout);
+    eafe_alpha.reset(new dolfin::Function(_eafe_function_space));
+    eafe_beta.reset(new dolfin::Function(_eafe_function_space));
+    eafe_eta.reset(new dolfin::Function(_eafe_function_space));
+
+
+    printf("interpolate coeffs \n"); fflush(stdout);
+    eafe_alpha->interpolate( (*_diffusivity)[eqn_idx] );
+    eafe_beta->interpolate( solution_function[eqn_idx] );
+    eafe_eta->interpolate( solution_function[eqn_idx] );
+
+    printf("build beta \n"); fflush(stdout);
+    if (_valency_double[eqn_idx] != 0.0) {
+      *(eafe_eta->vector()) *= _valency_double[eqn_idx];
+      *(eafe_beta->vector()) += *(eafe_eta->vector());
+      *(eafe_eta->vector()) /= _valency_double[eqn_idx];
+    }
+
+    printf("assign coeffs\n"); fflush(stdout);
+    _eafe_bilinear_form->alpha = *eafe_alpha;
+    _eafe_bilinear_form->beta = *eafe_beta;
+    _eafe_bilinear_form->eta = *eafe_eta;
+    _eafe_bilinear_form->gamma = zero;
+
+    printf("assemble \n"); fflush(stdout);
+    dolfin::assemble(*_eafe_matrix, *_eafe_bilinear_form);
+    printf("assembled\n");
+
+    // replace_matrix (
+    //   Linear_PNP::get_solution_dimension(),
+    //   eqn_idx,
+    //   &_eigen_matrix,
+    //   &_eafe_matrix
+    // );
+  }
+}

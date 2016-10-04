@@ -20,7 +20,7 @@ uu = Coefficient(V)
 permittivity = Coefficient(CG)
 fixed_charge = Coefficient(CG)
 diffusivity = Coefficient(V)
-valency = Coefficient(V)
+valency = Constant(tetrahedron)
 
 a = \
   + ( permittivity * inner(grad(u[0]), grad(v[0])) ) * dx \

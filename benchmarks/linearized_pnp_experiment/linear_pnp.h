@@ -9,6 +9,7 @@
 #include "pde.h"
 #include "domain.h"
 #include "dirichlet.h"
+#include "EAFE.h"
 extern "C" {
   #include "fasp.h"
   #include "fasp_functs.h"
@@ -57,12 +58,16 @@ class Linear_PNP : public PDE {
 
     void free_fasp ();
 
+    void apply_eafe ();
+
+
     std::shared_ptr<dolfin::FunctionSpace> diffusivity_space;
     std::shared_ptr<dolfin::FunctionSpace> valency_space;
     std::shared_ptr<dolfin::FunctionSpace> permittivity_space;
     std::shared_ptr<dolfin::FunctionSpace> fixed_charge_space;
 
   private:
+    // FASP
     itsolver_param _itsolver;
     AMG_param _amg;
     dCSRmat _fasp_matrix;
@@ -70,6 +75,17 @@ class Linear_PNP : public PDE {
     dvector _fasp_vector;
     dvector _fasp_soln;
     bool _faps_soln_unallocated = true;
+
+    // EAFE
+    bool _eafe_uninitialized = true;
+    std::shared_ptr<EAFE::BilinearForm> _eafe_bilinear_form;
+    std::shared_ptr<EAFE::FunctionSpace> _eafe_function_space;
+    std::shared_ptr<dolfin::Function> _diffusivity;
+    std::vector<double> _valency_double;
+
+    std::shared_ptr<dolfin::Function> eafe_alpha, eafe_beta, eafe_eta;
+    std::shared_ptr<dolfin::EigenMatrix> _eafe_matrix;
+
 };
 
 #endif
