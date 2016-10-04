@@ -1,0 +1,13 @@
+# Copyright (C) 2015 PSU CCMA
+#
+# Compute the L2 error of a computed solution.
+#
+# Compile this form with FFC: ffc -O -l dolfin L2Error.ufl.
+
+
+DG = FiniteElement("Discontinuous Lagrange", tetrahedron, 0)
+
+
+error = Coefficient(DG)
+
+M = ( error*error )*dx
