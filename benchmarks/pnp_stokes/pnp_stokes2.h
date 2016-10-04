@@ -20,22 +20,21 @@
 //   representation:                 'auto'
 //   split:                          False
 
-#ifndef __PNP_STOKES_H
-#define __PNP_STOKES_H
-#include <cmath>
+#ifndef __PNP_STOKES2_H
+#define __PNP_STOKES2_H
 #include <stdexcept>
 #include <ufc.h>
 
-class pnp_stokes_finite_element_0: public ufc::finite_element
+class pnp_stokes2_finite_element_0: public ufc::finite_element
 {
 public:
 
-  pnp_stokes_finite_element_0() : ufc::finite_element()
+  pnp_stokes2_finite_element_0() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_finite_element_0() override
+  ~pnp_stokes2_finite_element_0() override
   {
     // Do nothing
   }
@@ -1252,22 +1251,22 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new pnp_stokes_finite_element_0();
+    return new pnp_stokes2_finite_element_0();
   }
 
 };
 
 
-class pnp_stokes_finite_element_1: public ufc::finite_element
+class pnp_stokes2_finite_element_1: public ufc::finite_element
 {
 public:
 
-  pnp_stokes_finite_element_1() : ufc::finite_element()
+  pnp_stokes2_finite_element_1() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_finite_element_1() override
+  ~pnp_stokes2_finite_element_1() override
   {
     // Do nothing
   }
@@ -4148,17 +4147,17 @@ public:
     {
     case 0:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes2_finite_element_0();
         break;
       }
     case 1:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes2_finite_element_0();
         break;
       }
     case 2:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes2_finite_element_0();
         break;
       }
     }
@@ -4168,22 +4167,22 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new pnp_stokes_finite_element_1();
+    return new pnp_stokes2_finite_element_1();
   }
 
 };
 
 
-class pnp_stokes_finite_element_2: public ufc::finite_element
+class pnp_stokes2_finite_element_2: public ufc::finite_element
 {
 public:
 
-  pnp_stokes_finite_element_2() : ufc::finite_element()
+  pnp_stokes2_finite_element_2() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_finite_element_2() override
+  ~pnp_stokes2_finite_element_2() override
   {
     // Do nothing
   }
@@ -5643,22 +5642,22 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new pnp_stokes_finite_element_2();
+    return new pnp_stokes2_finite_element_2();
   }
 
 };
 
 
-class pnp_stokes_finite_element_3: public ufc::finite_element
+class pnp_stokes2_finite_element_3: public ufc::finite_element
 {
 public:
 
-  pnp_stokes_finite_element_3() : ufc::finite_element()
+  pnp_stokes2_finite_element_3() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_finite_element_3() override
+  ~pnp_stokes2_finite_element_3() override
   {
     // Do nothing
   }
@@ -5942,22 +5941,22 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new pnp_stokes_finite_element_3();
+    return new pnp_stokes2_finite_element_3();
   }
 
 };
 
 
-class pnp_stokes_finite_element_4: public ufc::finite_element
+class pnp_stokes2_finite_element_4: public ufc::finite_element
 {
 public:
 
-  pnp_stokes_finite_element_4() : ufc::finite_element()
+  pnp_stokes2_finite_element_4() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_finite_element_4() override
+  ~pnp_stokes2_finite_element_4() override
   {
     // Do nothing
   }
@@ -10061,27 +10060,27 @@ public:
     {
     case 0:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes2_finite_element_0();
         break;
       }
     case 1:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes2_finite_element_0();
         break;
       }
     case 2:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes2_finite_element_0();
         break;
       }
     case 3:
       {
-        return new pnp_stokes_finite_element_2();
+        return new pnp_stokes2_finite_element_2();
         break;
       }
     case 4:
       {
-        return new pnp_stokes_finite_element_3();
+        return new pnp_stokes2_finite_element_3();
         break;
       }
     }
@@ -10091,22 +10090,22 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new pnp_stokes_finite_element_4();
+    return new pnp_stokes2_finite_element_4();
   }
 
 };
 
 
-class pnp_stokes_finite_element_5: public ufc::finite_element
+class pnp_stokes2_finite_element_5: public ufc::finite_element
 {
 public:
 
-  pnp_stokes_finite_element_5() : ufc::finite_element()
+  pnp_stokes2_finite_element_5() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_finite_element_5() override
+  ~pnp_stokes2_finite_element_5() override
   {
     // Do nothing
   }
@@ -10390,22 +10389,22 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new pnp_stokes_finite_element_5();
+    return new pnp_stokes2_finite_element_5();
   }
 
 };
 
 
-class pnp_stokes_dofmap_0: public ufc::dofmap
+class pnp_stokes2_dofmap_0: public ufc::dofmap
 {
 public:
 
-  pnp_stokes_dofmap_0() : ufc::dofmap()
+  pnp_stokes2_dofmap_0() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_dofmap_0() override
+  ~pnp_stokes2_dofmap_0() override
   {
     // Do nothing
   }
@@ -10616,22 +10615,22 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new pnp_stokes_dofmap_0();
+    return new pnp_stokes2_dofmap_0();
   }
 
 };
 
 
-class pnp_stokes_dofmap_1: public ufc::dofmap
+class pnp_stokes2_dofmap_1: public ufc::dofmap
 {
 public:
 
-  pnp_stokes_dofmap_1() : ufc::dofmap()
+  pnp_stokes2_dofmap_1() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_dofmap_1() override
+  ~pnp_stokes2_dofmap_1() override
   {
     // Do nothing
   }
@@ -10885,17 +10884,17 @@ public:
     {
     case 0:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes2_dofmap_0();
         break;
       }
     case 1:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes2_dofmap_0();
         break;
       }
     case 2:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes2_dofmap_0();
         break;
       }
     }
@@ -10905,22 +10904,22 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new pnp_stokes_dofmap_1();
+    return new pnp_stokes2_dofmap_1();
   }
 
 };
 
 
-class pnp_stokes_dofmap_2: public ufc::dofmap
+class pnp_stokes2_dofmap_2: public ufc::dofmap
 {
 public:
 
-  pnp_stokes_dofmap_2() : ufc::dofmap()
+  pnp_stokes2_dofmap_2() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_dofmap_2() override
+  ~pnp_stokes2_dofmap_2() override
   {
     // Do nothing
   }
@@ -11123,22 +11122,22 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new pnp_stokes_dofmap_2();
+    return new pnp_stokes2_dofmap_2();
   }
 
 };
 
 
-class pnp_stokes_dofmap_3: public ufc::dofmap
+class pnp_stokes2_dofmap_3: public ufc::dofmap
 {
 public:
 
-  pnp_stokes_dofmap_3() : ufc::dofmap()
+  pnp_stokes2_dofmap_3() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_dofmap_3() override
+  ~pnp_stokes2_dofmap_3() override
   {
     // Do nothing
   }
@@ -11315,22 +11314,22 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new pnp_stokes_dofmap_3();
+    return new pnp_stokes2_dofmap_3();
   }
 
 };
 
 
-class pnp_stokes_dofmap_4: public ufc::dofmap
+class pnp_stokes2_dofmap_4: public ufc::dofmap
 {
 public:
 
-  pnp_stokes_dofmap_4() : ufc::dofmap()
+  pnp_stokes2_dofmap_4() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_dofmap_4() override
+  ~pnp_stokes2_dofmap_4() override
   {
     // Do nothing
   }
@@ -11628,27 +11627,27 @@ public:
     {
     case 0:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes2_dofmap_0();
         break;
       }
     case 1:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes2_dofmap_0();
         break;
       }
     case 2:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes2_dofmap_0();
         break;
       }
     case 3:
       {
-        return new pnp_stokes_dofmap_2();
+        return new pnp_stokes2_dofmap_2();
         break;
       }
     case 4:
       {
-        return new pnp_stokes_dofmap_3();
+        return new pnp_stokes2_dofmap_3();
         break;
       }
     }
@@ -11658,22 +11657,22 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new pnp_stokes_dofmap_4();
+    return new pnp_stokes2_dofmap_4();
   }
 
 };
 
 
-class pnp_stokes_dofmap_5: public ufc::dofmap
+class pnp_stokes2_dofmap_5: public ufc::dofmap
 {
 public:
 
-  pnp_stokes_dofmap_5() : ufc::dofmap()
+  pnp_stokes2_dofmap_5() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_dofmap_5() override
+  ~pnp_stokes2_dofmap_5() override
   {
     // Do nothing
   }
@@ -11850,22 +11849,22 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new pnp_stokes_dofmap_5();
+    return new pnp_stokes2_dofmap_5();
   }
 
 };
 
 
-class pnp_stokes_cell_integral_0_otherwise: public ufc::cell_integral
+class pnp_stokes2_cell_integral_0_otherwise: public ufc::cell_integral
 {
 public:
 
-  pnp_stokes_cell_integral_0_otherwise() : ufc::cell_integral()
+  pnp_stokes2_cell_integral_0_otherwise() : ufc::cell_integral()
   {
     
   }
 
-  ~pnp_stokes_cell_integral_0_otherwise() override
+  ~pnp_stokes2_cell_integral_0_otherwise() override
   {
     
   }
@@ -11900,26 +11899,15 @@ public:
     
     
     // Array of quadrature weights.
-    static const double W15[15] = {0.0302836780970892, 0.00602678571428572, 0.00602678571428572, 0.00602678571428572, 0.00602678571428572, 0.011645249086029, 0.011645249086029, 0.011645249086029, 0.011645249086029, 0.0109491415613864, 0.0109491415613864, 0.0109491415613864, 0.0109491415613864, 0.0109491415613864, 0.0109491415613864};
-    // Quadrature points on the UFC reference element: (0.25, 0.25, 0.25), (0.0, 0.333333333333333, 0.333333333333333), (0.333333333333333, 0.333333333333333, 0.333333333333333), (0.333333333333333, 0.333333333333333, 0.0), (0.333333333333333, 0.0, 0.333333333333333), (0.727272727272727, 0.0909090909090909, 0.0909090909090909), (0.0909090909090909, 0.0909090909090909, 0.0909090909090909), (0.0909090909090909, 0.0909090909090909, 0.727272727272727), (0.0909090909090909, 0.727272727272727, 0.0909090909090909), (0.433449846426336, 0.0665501535736643, 0.0665501535736643), (0.0665501535736643, 0.433449846426336, 0.0665501535736643), (0.0665501535736643, 0.0665501535736643, 0.433449846426336), (0.0665501535736643, 0.433449846426336, 0.433449846426336), (0.433449846426336, 0.0665501535736643, 0.433449846426336), (0.433449846426336, 0.433449846426336, 0.0665501535736643)
+    static const double W4[4] = {0.0416666666666667, 0.0416666666666667, 0.0416666666666667, 0.0416666666666667};
+    // Quadrature points on the UFC reference element: (0.585410196624969, 0.138196601125011, 0.138196601125011), (0.138196601125011, 0.585410196624969, 0.138196601125011), (0.138196601125011, 0.138196601125011, 0.585410196624969), (0.138196601125011, 0.138196601125011, 0.138196601125011)
     
     // Values of basis functions at quadrature points.
-    static const double FE0[15][4] = \
-    {{0.25, 0.25, 0.25, 0.25},
-    {0.333333333333333, 0.0, 0.333333333333333, 0.333333333333333},
-    {0.0, 0.333333333333333, 0.333333333333333, 0.333333333333333},
-    {0.333333333333333, 0.333333333333333, 0.333333333333333, 0.0},
-    {0.333333333333333, 0.333333333333333, 0.0, 0.333333333333333},
-    {0.090909090909091, 0.727272727272727, 0.0909090909090909, 0.0909090909090909},
-    {0.727272727272727, 0.0909090909090908, 0.0909090909090909, 0.0909090909090909},
-    {0.090909090909091, 0.0909090909090909, 0.0909090909090909, 0.727272727272727},
-    {0.090909090909091, 0.0909090909090908, 0.727272727272727, 0.0909090909090909},
-    {0.433449846426336, 0.433449846426336, 0.0665501535736643, 0.0665501535736643},
-    {0.433449846426336, 0.0665501535736643, 0.433449846426336, 0.0665501535736643},
-    {0.433449846426336, 0.0665501535736643, 0.0665501535736643, 0.433449846426336},
-    {0.0665501535736644, 0.0665501535736643, 0.433449846426336, 0.433449846426336},
-    {0.0665501535736644, 0.433449846426336, 0.0665501535736643, 0.433449846426336},
-    {0.0665501535736643, 0.433449846426336, 0.433449846426336, 0.0665501535736643}};
+    static const double FE0[4][4] = \
+    {{0.138196601125009, 0.585410196624969, 0.138196601125011, 0.138196601125011},
+    {0.138196601125009, 0.138196601125011, 0.585410196624969, 0.138196601125011},
+    {0.138196601125009, 0.138196601125011, 0.138196601125011, 0.585410196624969},
+    {0.585410196624967, 0.138196601125011, 0.138196601125011, 0.138196601125011}};
     
     // Array of non-zero columns
     static const unsigned int nzc3[4] = {0, 1, 2, 3};
@@ -11930,19 +11918,8 @@ public:
     // Array of non-zero columns
     static const unsigned int nzc11[4] = {8, 9, 10, 11};
     
-    static const double FE0_D001[15][2] = \
+    static const double FE0_D001[4][2] = \
     {{-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
     {-1.0, 1.0},
     {-1.0, 1.0},
     {-1.0, 1.0}};
@@ -11983,39 +11960,17 @@ public:
     // Array of non-zero columns
     static const unsigned int nzc14[2] = {8, 9};
     
-    static const double FE1_C3[15][4] = \
-    {{-0.25, -0.75, -0.25, 0.25},
-    {0.0, -1.0, 0.0, 0.0},
-    {-0.333333333333333, -0.666666666666667, -0.333333333333333, 0.333333333333334},
-    {-0.333333333333333, -0.666666666666667, -0.333333333333333, 0.333333333333333},
-    {-0.333333333333333, -0.666666666666667, -0.333333333333333, 0.333333333333333},
-    {-0.727272727272727, -0.272727272727273, -0.727272727272727, 0.727272727272727},
-    {-0.0909090909090907, -0.909090909090909, -0.0909090909090907, 0.0909090909090907},
-    {-0.0909090909090909, -0.909090909090909, -0.090909090909091, 0.090909090909091},
-    {-0.0909090909090911, -0.909090909090909, -0.0909090909090911, 0.0909090909090911},
-    {-0.433449846426336, -0.566550153573664, -0.433449846426336, 0.433449846426336},
-    {-0.0665501535736643, -0.933449846426336, -0.0665501535736643, 0.0665501535736644},
-    {-0.0665501535736642, -0.933449846426336, -0.0665501535736642, 0.0665501535736643},
-    {-0.0665501535736645, -0.933449846426336, -0.0665501535736645, 0.0665501535736645},
-    {-0.433449846426336, -0.566550153573664, -0.433449846426336, 0.433449846426336},
-    {-0.433449846426336, -0.566550153573664, -0.433449846426336, 0.433449846426336}};
+    static const double FE1_C3[4][4] = \
+    {{-0.585410196624969, -0.414589803375031, -0.585410196624969, 0.585410196624969},
+    {-0.138196601125011, -0.861803398874989, -0.138196601125011, 0.138196601125011},
+    {-0.138196601125011, -0.861803398874989, -0.138196601125011, 0.138196601125011},
+    {-0.138196601125011, -0.861803398874989, -0.138196601125011, 0.138196601125011}};
     
     // Array of non-zero columns
     static const unsigned int nzc15[4] = {12, 13, 14, 15};
     
-    static const double FE1_C3_D100[15][4] = \
+    static const double FE1_C3_D100[4][4] = \
     {{-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
     {-1.0, 1.0, -1.0, 1.0},
     {-1.0, 1.0, -1.0, 1.0},
     {-1.0, 1.0, -1.0, 1.0}};
@@ -12023,42 +11978,20 @@ public:
     // Array of non-zero columns
     static const unsigned int nzc16[4] = {12, 13, 14, 15};
     
-    static const double FE1_C4[15][4] = \
-    {{-0.25, 0.25, 0.75, 0.25},
-    {-0.333333333333333, 0.333333333333333, 0.666666666666667, 0.333333333333333},
-    {-0.333333333333333, 0.333333333333333, 0.666666666666667, 0.333333333333333},
-    {-0.333333333333333, 0.333333333333333, 0.666666666666667, 0.333333333333333},
-    {0.0, 0.0, 1.0, 0.0},
-    {-0.0909090909090911, 0.090909090909091, 0.909090909090909, 0.0909090909090912},
-    {-0.0909090909090908, 0.0909090909090907, 0.909090909090909, 0.0909090909090909},
-    {-0.090909090909091, 0.0909090909090909, 0.909090909090909, 0.090909090909091},
-    {-0.727272727272727, 0.727272727272727, 0.272727272727273, 0.727272727272727},
-    {-0.0665501535736644, 0.0665501535736643, 0.933449846426335, 0.0665501535736644},
-    {-0.433449846426336, 0.433449846426336, 0.566550153573664, 0.433449846426336},
-    {-0.0665501535736643, 0.0665501535736642, 0.933449846426336, 0.0665501535736643},
-    {-0.433449846426336, 0.433449846426336, 0.566550153573664, 0.433449846426336},
-    {-0.0665501535736645, 0.0665501535736644, 0.933449846426335, 0.0665501535736645},
-    {-0.433449846426336, 0.433449846426336, 0.566550153573664, 0.433449846426336}};
+    static const double FE1_C4[4][4] = \
+    {{-0.138196601125011, 0.138196601125011, 0.861803398874989, 0.138196601125011},
+    {-0.585410196624969, 0.585410196624969, 0.414589803375031, 0.585410196624969},
+    {-0.138196601125011, 0.138196601125011, 0.861803398874989, 0.138196601125011},
+    {-0.138196601125011, 0.138196601125011, 0.861803398874989, 0.138196601125011}};
     
     // Array of non-zero columns
     static const unsigned int nzc17[4] = {12, 13, 14, 15};
     
-    static const double FE1_C5[15][4] = \
-    {{-0.25, 0.25, -0.25, -0.75},
-    {-0.333333333333333, 0.333333333333333, -0.333333333333333, -0.666666666666667},
-    {-0.333333333333333, 0.333333333333333, -0.333333333333333, -0.666666666666667},
-    {0.0, 0.0, 0.0, -1.0},
-    {-0.333333333333333, 0.333333333333333, -0.333333333333333, -0.666666666666667},
-    {-0.0909090909090909, 0.0909090909090908, -0.0909090909090908, -0.909090909090909},
-    {-0.0909090909090907, 0.0909090909090906, -0.0909090909090906, -0.909090909090909},
-    {-0.727272727272727, 0.727272727272727, -0.727272727272726, -0.272727272727273},
-    {-0.0909090909090908, 0.0909090909090907, -0.0909090909090907, -0.909090909090909},
-    {-0.0665501535736642, 0.0665501535736641, -0.0665501535736641, -0.933449846426336},
-    {-0.0665501535736641, 0.066550153573664, -0.0665501535736641, -0.933449846426336},
-    {-0.433449846426335, 0.433449846426335, -0.433449846426335, -0.566550153573665},
-    {-0.433449846426335, 0.433449846426335, -0.433449846426335, -0.566550153573665},
-    {-0.433449846426335, 0.433449846426335, -0.433449846426335, -0.566550153573665},
-    {-0.0665501535736643, 0.0665501535736641, -0.0665501535736642, -0.933449846426336}};
+    static const double FE1_C5[4][4] = \
+    {{-0.138196601125011, 0.138196601125011, -0.138196601125011, -0.861803398874989},
+    {-0.138196601125011, 0.138196601125011, -0.138196601125011, -0.861803398874989},
+    {-0.585410196624969, 0.585410196624969, -0.585410196624968, -0.414589803375032},
+    {-0.138196601125011, 0.138196601125011, -0.138196601125011, -0.861803398874989}};
     
     // Array of non-zero columns
     static const unsigned int nzc18[4] = {12, 13, 14, 15};
@@ -12125,8 +12058,8 @@ public:
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
     
     // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 34185
-    for (unsigned int ip = 0; ip < 15; ip++)
+    // Number of operations to compute element tensor for following IP loop = 8476
+    for (unsigned int ip = 0; ip < 4; ip++)
     {
       
       // Coefficient declarations.
@@ -12141,263 +12074,251 @@ public:
       double F8 = 0.0;
       double F9 = 0.0;
       double F10 = 0.0;
-      double F11 = 0.0;
-      double F12 = 0.0;
-      double F13 = 0.0;
-      double F14 = 0.0;
-      double F15 = 0.0;
-      double F16 = 0.0;
       
-      // Total number of operations to compute function values = 36
+      // Total number of operations to compute function values = 12
       for (unsigned int r = 0; r < 2; r++)
       {
-        F5 += FE0_D001[ip][r]*w[2][nzc2[r]];
-        F6 += FE0_D001[ip][r]*w[2][nzc1[r]];
-        F7 += FE0_D001[ip][r]*w[2][nzc0[r]];
-        F8 += FE0_D001[ip][r]*w[0][nzc2[r]];
-        F9 += FE0_D001[ip][r]*w[0][nzc1[r]];
-        F10 += FE0_D001[ip][r]*w[0][nzc0[r]];
-        F12 += FE0_D001[ip][r]*w[1][nzc2[r]];
-        F13 += FE0_D001[ip][r]*w[1][nzc1[r]];
-        F14 += FE0_D001[ip][r]*w[1][nzc0[r]];
+        F1 += FE0_D001[ip][r]*w[2][nzc2[r]];
+        F2 += FE0_D001[ip][r]*w[2][nzc1[r]];
+        F3 += FE0_D001[ip][r]*w[2][nzc0[r]];
       } // end loop over 'r'
       
       // Total number of operations to compute function values = 64
       for (unsigned int r = 0; r < 4; r++)
       {
-        F0 += FE0[ip][r]*w[0][r];
-        F1 += FE0[ip][r]*w[1][r];
-        F2 += FE1_C3[ip][r]*w[3][r];
-        F3 += FE1_C4[ip][r]*w[3][r];
-        F4 += FE1_C5[ip][r]*w[3][r];
-        F11 += FE0[ip][r]*w[5][r];
-        F15 += FE0[ip][r]*w[7][r];
-        F16 += FE0[ip][r]*w[4][r];
+        F0 += FE0[ip][r]*w[5][r];
+        F4 += FE0[ip][r]*w[7][r];
+        F5 += FE0[ip][r]*w[0][r];
+        F6 += FE0[ip][r]*w[1][r];
+        F7 += FE1_C3[ip][r]*w[3][r];
+        F8 += FE1_C4[ip][r]*w[3][r];
+        F9 += FE1_C5[ip][r]*w[3][r];
+        F10 += FE0[ip][r]*w[4][r];
       } // end loop over 'r'
       
-      // Number of operations to compute ip constants: 399
+      // Number of operations to compute ip constants: 263
       double I[74];
-      // Number of operations: 4
-      I[0] = F15*G[0]*W15[ip]*std::exp(F1);
+      // Number of operations: 2
+      I[0] = F4*G[0]*W4[ip];
       
-      // Number of operations: 4
-      I[1] = F15*G[1]*W15[ip]*std::exp(F1);
+      // Number of operations: 3
+      I[1] = F4*F6*G[1]*W4[ip];
       
-      // Number of operations: 4
-      I[2] = F15*G[2]*W15[ip]*std::exp(F1);
+      // Number of operations: 3
+      I[2] = F4*F6*G[2]*W4[ip];
       
-      // Number of operations: 4
-      I[3] = F15*G[3]*W15[ip]*std::exp(F1);
-      
-      // Number of operations: 4
-      I[4] = F15*G[4]*W15[ip]*std::exp(F1);
-      
-      // Number of operations: 4
-      I[5] = F15*G[5]*W15[ip]*std::exp(F1);
+      // Number of operations: 3
+      I[3] = F4*F6*G[3]*W4[ip];
       
       // Number of operations: 2
-      I[6] = F16*G[6]*W15[ip];
+      I[4] = F4*G[4]*W4[ip];
       
       // Number of operations: 2
-      I[7] = F16*G[7]*W15[ip];
+      I[5] = F4*G[5]*W4[ip];
       
       // Number of operations: 2
-      I[8] = F16*G[4]*W15[ip];
+      I[6] = F10*G[6]*W4[ip];
       
       // Number of operations: 2
-      I[9] = F16*G[8]*W15[ip];
+      I[7] = F10*G[7]*W4[ip];
       
       // Number of operations: 2
-      I[10] = F16*G[5]*W15[ip];
+      I[8] = F10*G[4]*W4[ip];
       
       // Number of operations: 2
-      I[11] = F16*G[0]*W15[ip];
+      I[9] = F10*G[8]*W4[ip];
       
-      // Number of operations: 4
-      I[12] = F11*G[9]*W15[ip]*std::exp(F0);
+      // Number of operations: 2
+      I[10] = F10*G[5]*W4[ip];
       
-      // Number of operations: 4
-      I[13] = F11*G[10]*W15[ip]*std::exp(F0);
-      
-      // Number of operations: 4
-      I[14] = F11*G[11]*W15[ip]*std::exp(F0);
-      
-      // Number of operations: 4
-      I[15] = F11*G[6]*W15[ip]*std::exp(F0);
-      
-      // Number of operations: 4
-      I[16] = F11*G[7]*W15[ip]*std::exp(F0);
-      
-      // Number of operations: 4
-      I[17] = F11*G[4]*W15[ip]*std::exp(F0);
-      
-      // Number of operations: 4
-      I[18] = F11*G[12]*W15[ip]*std::exp(F0);
-      
-      // Number of operations: 4
-      I[19] = F11*G[13]*W15[ip]*std::exp(F0);
-      
-      // Number of operations: 4
-      I[20] = F11*G[8]*W15[ip]*std::exp(F0);
-      
-      // Number of operations: 4
-      I[21] = F11*G[5]*W15[ip]*std::exp(F0);
-      
-      // Number of operations: 4
-      I[22] = F11*G[14]*W15[ip]*std::exp(F0);
-      
-      // Number of operations: 4
-      I[23] = F11*G[0]*W15[ip]*std::exp(F0);
-      
-      // Number of operations: 4
-      I[24] = F15*G[15]*W15[ip]*std::exp(F1);
-      
-      // Number of operations: 4
-      I[25] = F15*G[16]*W15[ip]*std::exp(F1);
-      
-      // Number of operations: 4
-      I[26] = F15*G[6]*W15[ip]*std::exp(F1);
-      
-      // Number of operations: 4
-      I[27] = F15*G[7]*W15[ip]*std::exp(F1);
-      
-      // Number of operations: 4
-      I[28] = F15*G[17]*W15[ip]*std::exp(F1);
-      
-      // Number of operations: 4
-      I[29] = F15*G[8]*W15[ip]*std::exp(F1);
+      // Number of operations: 2
+      I[11] = F10*G[0]*W4[ip];
       
       // Number of operations: 3
-      I[30] = G[18]*W15[ip]*std::exp(F1);
+      I[12] = F0*F5*G[9]*W4[ip];
       
       // Number of operations: 3
-      I[31] = G[19]*W15[ip]*std::exp(F1);
+      I[13] = F0*F5*G[10]*W4[ip];
       
       // Number of operations: 3
-      I[32] = G[20]*W15[ip]*std::exp(F1);
+      I[14] = F0*F5*G[11]*W4[ip];
       
-      // Number of operations: 21
-      I[33] = W15[ip]*std::exp(F1)*(F15*(F12*G[0] + F13*G[5] + F14*G[4] + F5*G[3] + F6*G[2] + F7*G[1]) + F2*G[18] + F3*G[19] + F4*G[20]);
+      // Number of operations: 2
+      I[15] = F0*G[6]*W4[ip];
       
-      // Number of operations: 3
-      I[34] = G[21]*W15[ip]*std::exp(F0);
+      // Number of operations: 2
+      I[16] = F0*G[7]*W4[ip];
       
-      // Number of operations: 3
-      I[35] = G[22]*W15[ip]*std::exp(F0);
-      
-      // Number of operations: 3
-      I[36] = G[23]*W15[ip]*std::exp(F0);
-      
-      // Number of operations: 21
-      I[37] = W15[ip]*std::exp(F0)*(F11*(F10*G[6] + F5*G[11] + F6*G[10] + F7*G[9] + F8*G[4] + F9*G[7]) + F2*G[21] + F3*G[22] + F4*G[23]);
+      // Number of operations: 2
+      I[17] = F0*G[4]*W4[ip];
       
       // Number of operations: 3
-      I[38] = G[24]*W15[ip]*std::exp(F0);
+      I[18] = F0*F5*G[12]*W4[ip];
       
       // Number of operations: 3
-      I[39] = G[25]*W15[ip]*std::exp(F0);
+      I[19] = F0*F5*G[13]*W4[ip];
+      
+      // Number of operations: 2
+      I[20] = F0*G[8]*W4[ip];
+      
+      // Number of operations: 2
+      I[21] = F0*G[5]*W4[ip];
       
       // Number of operations: 3
-      I[40] = G[26]*W15[ip]*std::exp(F0);
+      I[22] = F0*F5*G[14]*W4[ip];
       
-      // Number of operations: 21
-      I[41] = W15[ip]*std::exp(F0)*(F11*(F10*G[7] + F5*G[13] + F6*G[12] + F7*G[10] + F8*G[5] + F9*G[8]) + F2*G[24] + F3*G[25] + F4*G[26]);
-      
-      // Number of operations: 3
-      I[42] = G[18]*W15[ip]*std::exp(F0);
+      // Number of operations: 2
+      I[23] = F0*G[0]*W4[ip];
       
       // Number of operations: 3
-      I[43] = G[19]*W15[ip]*std::exp(F0);
+      I[24] = F4*F6*G[15]*W4[ip];
       
       // Number of operations: 3
-      I[44] = G[20]*W15[ip]*std::exp(F0);
+      I[25] = F4*F6*G[16]*W4[ip];
       
-      // Number of operations: 21
-      I[45] = W15[ip]*std::exp(F0)*(F11*(F10*G[4] + F5*G[14] + F6*G[13] + F7*G[11] + F8*G[0] + F9*G[5]) + F2*G[18] + F3*G[19] + F4*G[20]);
+      // Number of operations: 2
+      I[26] = F4*G[6]*W4[ip];
       
-      // Number of operations: 3
-      I[46] = G[21]*W15[ip]*std::exp(F1);
-      
-      // Number of operations: 3
-      I[47] = G[22]*W15[ip]*std::exp(F1);
+      // Number of operations: 2
+      I[27] = F4*G[7]*W4[ip];
       
       // Number of operations: 3
-      I[48] = G[23]*W15[ip]*std::exp(F1);
+      I[28] = F4*F6*G[17]*W4[ip];
       
-      // Number of operations: 21
-      I[49] = W15[ip]*std::exp(F1)*(F15*(F12*G[4] + F13*G[7] + F14*G[6] + F5*G[1] + F6*G[16] + F7*G[15]) + F2*G[21] + F3*G[22] + F4*G[23]);
+      // Number of operations: 2
+      I[29] = F4*G[8]*W4[ip];
       
-      // Number of operations: 3
-      I[50] = G[24]*W15[ip]*std::exp(F1);
+      // Number of operations: 2
+      I[30] = F6*G[18]*W4[ip];
       
-      // Number of operations: 3
-      I[51] = G[25]*W15[ip]*std::exp(F1);
+      // Number of operations: 2
+      I[31] = F6*G[19]*W4[ip];
       
-      // Number of operations: 3
-      I[52] = G[26]*W15[ip]*std::exp(F1);
+      // Number of operations: 2
+      I[32] = F6*G[20]*W4[ip];
       
-      // Number of operations: 21
-      I[53] = W15[ip]*std::exp(F1)*(F15*(F12*G[5] + F13*G[8] + F14*G[7] + F5*G[2] + F6*G[17] + F7*G[16]) + F2*G[24] + F3*G[25] + F4*G[26]);
+      // Number of operations: 13
+      I[33] = W4[ip]*(F4*(F1*G[3] + F2*G[2] + F3*G[1]) + F7*G[18] + F8*G[19] + F9*G[20]);
+      
+      // Number of operations: 2
+      I[34] = F5*G[21]*W4[ip];
+      
+      // Number of operations: 2
+      I[35] = F5*G[22]*W4[ip];
+      
+      // Number of operations: 2
+      I[36] = F5*G[23]*W4[ip];
+      
+      // Number of operations: 13
+      I[37] = W4[ip]*(F0*(F1*G[11] + F2*G[10] + F3*G[9]) + F7*G[21] + F8*G[22] + F9*G[23]);
+      
+      // Number of operations: 2
+      I[38] = F5*G[24]*W4[ip];
+      
+      // Number of operations: 2
+      I[39] = F5*G[25]*W4[ip];
+      
+      // Number of operations: 2
+      I[40] = F5*G[26]*W4[ip];
+      
+      // Number of operations: 13
+      I[41] = W4[ip]*(F0*(F1*G[13] + F2*G[12] + F3*G[10]) + F7*G[24] + F8*G[25] + F9*G[26]);
+      
+      // Number of operations: 2
+      I[42] = F5*G[18]*W4[ip];
+      
+      // Number of operations: 2
+      I[43] = F5*G[19]*W4[ip];
+      
+      // Number of operations: 2
+      I[44] = F5*G[20]*W4[ip];
+      
+      // Number of operations: 13
+      I[45] = W4[ip]*(F0*(F1*G[14] + F2*G[13] + F3*G[11]) + F7*G[18] + F8*G[19] + F9*G[20]);
+      
+      // Number of operations: 2
+      I[46] = F6*G[21]*W4[ip];
+      
+      // Number of operations: 2
+      I[47] = F6*G[22]*W4[ip];
+      
+      // Number of operations: 2
+      I[48] = F6*G[23]*W4[ip];
+      
+      // Number of operations: 13
+      I[49] = W4[ip]*(F4*(F1*G[1] + F2*G[16] + F3*G[15]) + F7*G[21] + F8*G[22] + F9*G[23]);
+      
+      // Number of operations: 2
+      I[50] = F6*G[24]*W4[ip];
+      
+      // Number of operations: 2
+      I[51] = F6*G[25]*W4[ip];
+      
+      // Number of operations: 2
+      I[52] = F6*G[26]*W4[ip];
+      
+      // Number of operations: 13
+      I[53] = W4[ip]*(F4*(F1*G[2] + F2*G[17] + F3*G[16]) + F7*G[24] + F8*G[25] + F9*G[26]);
       
       // Number of operations: 1
-      I[54] = G[27]*W15[ip];
+      I[54] = G[27]*W4[ip];
       
-      // Number of operations: 6
-      I[55] = W15[ip]*(G[28]*std::exp(F0) + G[29]*std::exp(F1));
+      // Number of operations: 4
+      I[55] = W4[ip]*(F5*G[28] + F6*G[29]);
       
-      // Number of operations: 6
-      I[56] = W15[ip]*(G[30]*std::exp(F0) + G[31]*std::exp(F1));
+      // Number of operations: 4
+      I[56] = W4[ip]*(F5*G[30] + F6*G[31]);
       
-      // Number of operations: 6
-      I[57] = W15[ip]*(G[32]*std::exp(F0) + G[33]*std::exp(F1));
+      // Number of operations: 4
+      I[57] = W4[ip]*(F5*G[32] + F6*G[33]);
       
-      // Number of operations: 6
-      I[58] = W15[ip]*(G[34]*std::exp(F0) + G[35]*std::exp(F1));
+      // Number of operations: 4
+      I[58] = W4[ip]*(F5*G[34] + F6*G[35]);
       
-      // Number of operations: 6
-      I[59] = W15[ip]*(G[36]*std::exp(F0) + G[37]*std::exp(F1));
+      // Number of operations: 4
+      I[59] = W4[ip]*(F5*G[36] + F6*G[37]);
       
-      // Number of operations: 6
-      I[60] = W15[ip]*(G[38]*std::exp(F0) + G[39]*std::exp(F1));
+      // Number of operations: 4
+      I[60] = W4[ip]*(F5*G[38] + F6*G[39]);
       
-      // Number of operations: 6
-      I[61] = W15[ip]*(G[40]*std::exp(F0) + G[41]*std::exp(F1));
+      // Number of operations: 4
+      I[61] = W4[ip]*(F5*G[40] + F6*G[41]);
       
-      // Number of operations: 6
-      I[62] = W15[ip]*(G[42]*std::exp(F0) + G[43]*std::exp(F1));
+      // Number of operations: 4
+      I[62] = W4[ip]*(F5*G[42] + F6*G[43]);
       
-      // Number of operations: 6
-      I[63] = W15[ip]*(G[44]*std::exp(F0) + G[45]*std::exp(F1));
-      
-      // Number of operations: 3
-      I[64] = G[46]*W15[ip]*std::exp(F0);
-      
-      // Number of operations: 3
-      I[65] = G[47]*W15[ip]*std::exp(F1);
-      
-      // Number of operations: 8
-      I[66] = W15[ip]*std::exp(F0)*(F5*G[32] + F6*G[30] + F7*G[28]);
-      
-      // Number of operations: 8
-      I[67] = W15[ip]*std::exp(F1)*(F5*G[33] + F6*G[31] + F7*G[29]);
+      // Number of operations: 4
+      I[63] = W4[ip]*(F5*G[44] + F6*G[45]);
       
       // Number of operations: 1
-      I[68] = G[48]*W15[ip];
-      
-      // Number of operations: 8
-      I[69] = W15[ip]*std::exp(F0)*(F5*G[38] + F6*G[36] + F7*G[34]);
-      
-      // Number of operations: 8
-      I[70] = W15[ip]*std::exp(F1)*(F5*G[39] + F6*G[37] + F7*G[35]);
-      
-      // Number of operations: 8
-      I[71] = W15[ip]*std::exp(F0)*(F5*G[44] + F6*G[42] + F7*G[40]);
-      
-      // Number of operations: 8
-      I[72] = W15[ip]*std::exp(F1)*(F5*G[45] + F6*G[43] + F7*G[41]);
+      I[64] = G[46]*W4[ip];
       
       // Number of operations: 1
-      I[73] = G[49]*W15[ip];
+      I[65] = G[47]*W4[ip];
+      
+      // Number of operations: 6
+      I[66] = W4[ip]*(F1*G[32] + F2*G[30] + F3*G[28]);
+      
+      // Number of operations: 6
+      I[67] = W4[ip]*(F1*G[33] + F2*G[31] + F3*G[29]);
+      
+      // Number of operations: 1
+      I[68] = G[48]*W4[ip];
+      
+      // Number of operations: 6
+      I[69] = W4[ip]*(F1*G[38] + F2*G[36] + F3*G[34]);
+      
+      // Number of operations: 6
+      I[70] = W4[ip]*(F1*G[39] + F2*G[37] + F3*G[35]);
+      
+      // Number of operations: 6
+      I[71] = W4[ip]*(F1*G[44] + F2*G[42] + F3*G[40]);
+      
+      // Number of operations: 6
+      I[72] = W4[ip]*(F1*G[45] + F2*G[43] + F3*G[41]);
+      
+      // Number of operations: 1
+      I[73] = G[49]*W4[ip];
       
       
       // Number of operations for primary indices: 540
@@ -12625,479 +12546,16 @@ public:
 };
 
 
-class pnp_stokes_exterior_facet_integral_0_otherwise: public ufc::exterior_facet_integral
+class pnp_stokes2_interior_facet_integral_0_otherwise: public ufc::interior_facet_integral
 {
 public:
 
-  pnp_stokes_exterior_facet_integral_0_otherwise() : ufc::exterior_facet_integral()
+  pnp_stokes2_interior_facet_integral_0_otherwise() : ufc::interior_facet_integral()
   {
     
   }
 
-  ~pnp_stokes_exterior_facet_integral_0_otherwise() override
-  {
-    
-  }
-
-  const std::vector<bool> & enabled_coefficients() const final override
-  {
-    static const std::vector<bool> enabled({false, false, false, false, false, false, false, false, false, true, false, true});
-    return enabled;
-  }
-
-  void tabulate_tensor(double * A,
-                       const double * const * w,
-                       const double * coordinate_dofs,
-                       std::size_t facet,
-                       int cell_orientation) const final override
-  {
-    // Compute Jacobian
-    double J[9];
-    compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
-    
-    // Compute Jacobian inverse and determinant
-    double K[9];
-    double detJ;
-    compute_jacobian_inverse_tetrahedron_3d(K, detJ, J);
-    
-    
-    
-    // Get vertices on face
-    static unsigned int face_vertices[4][3] = {{1, 2, 3}, {0, 2, 3}, {0, 1, 3}, {0, 1, 2}};
-    const unsigned int v0 = face_vertices[facet][0];
-    const unsigned int v1 = face_vertices[facet][1];
-    const unsigned int v2 = face_vertices[facet][2];
-    
-    // Compute scale factor (area of face scaled by area of reference triangle)
-    const double a0 = (coordinate_dofs[3*v0 + 1]*coordinate_dofs[3*v1 + 2]  + coordinate_dofs[3*v0 + 2]*coordinate_dofs[3*v2 + 1]  + coordinate_dofs[3*v1 + 1]*coordinate_dofs[3*v2 + 2]) - (coordinate_dofs[3*v2 + 1]*coordinate_dofs[3*v1 + 2] + coordinate_dofs[3*v2 + 2]*coordinate_dofs[3*v0 + 1] + coordinate_dofs[3*v1 + 1]*coordinate_dofs[3*v0 + 2]);
-    
-    const double a1 = (coordinate_dofs[3*v0 + 2]*coordinate_dofs[3*v1 + 0]  + coordinate_dofs[3*v0 + 0]*coordinate_dofs[3*v2 + 2] + coordinate_dofs[3*v1 + 2]*coordinate_dofs[3*v2 + 0]) - (coordinate_dofs[3*v2 + 2]*coordinate_dofs[3*v1 + 0]  + coordinate_dofs[3*v2 + 0]*coordinate_dofs[3*v0 + 2] + coordinate_dofs[3*v1 + 2]*coordinate_dofs[3*v0 + 0]);
-    
-    const double a2 = (coordinate_dofs[3*v0 + 0]*coordinate_dofs[3*v1 + 1]  + coordinate_dofs[3*v0 + 1]*coordinate_dofs[3*v2 + 0]  + coordinate_dofs[3*v1 + 0]*coordinate_dofs[3*v2 + 1]) - (coordinate_dofs[3*v2 + 0]*coordinate_dofs[3*v1 + 1]  + coordinate_dofs[3*v2 + 1]*coordinate_dofs[3*v0 + 0]  + coordinate_dofs[3*v1 + 0]*coordinate_dofs[3*v0 + 1]);
-    
-    const double det = std::sqrt(a0*a0 + a1*a1 + a2*a2);
-    
-    
-    const bool direction = a0*(coordinate_dofs[3*facet] - coordinate_dofs[3*v0]) + a1*(coordinate_dofs[3*facet + 1] - coordinate_dofs[3*v0 + 1])  + a2*(coordinate_dofs[3*facet + 2] - coordinate_dofs[3*v0 + 2]) < 0;
-    
-    const double n0 = direction ? a0 / det : -a0 / det;
-    const double n1 = direction ? a1 / det : -a1 / det;
-    const double n2 = direction ? a2 / det : -a2 / det;
-    
-    // Facet area (divide by two because 'det' is scaled by area of reference triangle)
-    
-    // Min edge length of facet
-    double min_facet_edge_length;
-    compute_min_facet_edge_length_tetrahedron_3d(min_facet_edge_length, facet, coordinate_dofs);
-    
-    
-    // Max edge length of facet
-    double max_facet_edge_length;
-    compute_max_facet_edge_length_tetrahedron_3d(max_facet_edge_length, facet, coordinate_dofs);
-    
-    
-    // Compute cell volume
-    const double volume = std::abs(detJ)/6.0;
-    
-    
-    // Compute circumradius
-    const double v1v2  = std::sqrt( (coordinate_dofs[6] - coordinate_dofs[3])*(coordinate_dofs[6] - coordinate_dofs[3]) + (coordinate_dofs[7] - coordinate_dofs[4])*(coordinate_dofs[7] - coordinate_dofs[4]) + (coordinate_dofs[8] - coordinate_dofs[5])*(coordinate_dofs[8] - coordinate_dofs[5]) );
-    const double v0v2  = std::sqrt(J[1]*J[1] + J[4]*J[4] + J[7]*J[7]);
-    const double v0v1  = std::sqrt(J[0]*J[0] + J[3]*J[3] + J[6]*J[6]);
-    const double v0v3  = std::sqrt(J[2]*J[2] + J[5]*J[5] + J[8]*J[8]);
-    const double v1v3  = std::sqrt( (coordinate_dofs[9] - coordinate_dofs[3])*(coordinate_dofs[9] - coordinate_dofs[3]) + (coordinate_dofs[10] - coordinate_dofs[4])*(coordinate_dofs[10] - coordinate_dofs[4]) + (coordinate_dofs[11] - coordinate_dofs[5])*(coordinate_dofs[11] - coordinate_dofs[5]) );
-    const double v2v3  = std::sqrt( (coordinate_dofs[9] - coordinate_dofs[6])*(coordinate_dofs[9] - coordinate_dofs[6]) + (coordinate_dofs[10] - coordinate_dofs[7])*(coordinate_dofs[10] - coordinate_dofs[7]) + (coordinate_dofs[11] - coordinate_dofs[8])*(coordinate_dofs[11] - coordinate_dofs[8]) );
-    const  double la   = v1v2*v0v3;
-    const  double lb   = v0v2*v1v3;
-    const  double lc   = v0v1*v2v3;
-    const  double s    = 0.5*(la+lb+lc);
-    const  double area = std::sqrt(s*(s-la)*(s-lb)*(s-lc));
-    const double circumradius = area / ( 6.0*volume );
-    
-    
-    // Array of quadrature weights.
-    static const double W3[3] = {0.166666666666667, 0.166666666666667, 0.166666666666667};
-    // Quadrature points on the UFC reference element: (0.166666666666667, 0.166666666666667), (0.166666666666667, 0.666666666666667), (0.666666666666667, 0.166666666666667)
-    
-    // Values of basis functions at quadrature points.
-    static const double FE0_f0_C3[3][4] = \
-    {{-0.666666666666667, -0.333333333333333, -0.666666666666667, 0.666666666666667},
-    {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
-    {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc3[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f0_C4[3][4] = \
-    {{-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666666}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc4[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f0_C5[3][4] = \
-    {{-0.166666666666667, 0.166666666666666, -0.166666666666666, -0.833333333333333},
-    {-0.666666666666666, 0.666666666666666, -0.666666666666666, -0.333333333333334},
-    {-0.166666666666667, 0.166666666666666, -0.166666666666666, -0.833333333333333}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc5[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f1_C3[3][1] = \
-    {{-1.0},
-    {-1.0},
-    {-1.0}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc10[1] = {13};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc20[1] = {15};
-    
-    static const double FE0_f2_C3[3][4] = \
-    {{-0.166666666666666, -0.833333333333334, -0.166666666666666, 0.166666666666667},
-    {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
-    {-0.666666666666667, -0.333333333333333, -0.666666666666667, 0.666666666666667}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc14[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f3_C4[3][4] = \
-    {{-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666667},
-    {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc19[4] = {12, 13, 14, 15};
-    
-    // Reset values in the element tensor.
-    for (unsigned int r = 0; r < 289; r++)
-    {
-      A[r] = 0.0;
-    } // end loop over 'r'
-    // Number of operations to compute geometry constants: 168.
-    double G[6];
-    G[0] = det*w[11][0]*w[9][0]*(J[0]*J[0]*n0*n0 + J[3]*n1*(2.0*J[0]*n0 + J[3]*n1) + J[6]*n2*(2.0*(J[0]*n0 + J[3]*n1) + J[6]*n2))/(circumradius*detJ*detJ);
-    G[1] = det*w[11][0]*w[9][0]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[2] = det*w[11][0]*w[9][0]*(J[0]*J[2]*n0*n0 + n1*(J[3]*J[5]*n1 + n0*(J[0]*J[5] + J[2]*J[3])) + n2*(J[6]*(J[2]*n0 + J[5]*n1) + J[8]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[3] = det*w[11][0]*w[9][0]*(J[1]*J[1]*n0*n0 + J[4]*n1*(2.0*J[1]*n0 + J[4]*n1) + J[7]*n2*(2.0*(J[1]*n0 + J[4]*n1) + J[7]*n2))/(circumradius*detJ*detJ);
-    G[4] = det*w[11][0]*w[9][0]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
-    G[5] = det*w[11][0]*w[9][0]*(J[2]*J[2]*n0*n0 + J[5]*n1*(2.0*J[2]*n0 + J[5]*n1) + J[8]*n2*(2.0*(J[2]*n0 + J[5]*n1) + J[8]*n2))/(circumradius*detJ*detJ);
-    
-    // Compute element tensor using UFL quadrature representation
-    // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
-    switch (facet)
-    {
-    case 0:
-      {
-        // Total number of operations to compute element tensor (from this point): 1314
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 1314
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Number of operations to compute ip constants: 6
-        double I[6];
-        // Number of operations: 1
-        I[0] = G[0]*W3[ip];
-        
-        // Number of operations: 1
-        I[1] = G[1]*W3[ip];
-        
-        // Number of operations: 1
-        I[2] = G[2]*W3[ip];
-        
-        // Number of operations: 1
-        I[3] = G[3]*W3[ip];
-        
-        // Number of operations: 1
-        I[4] = G[4]*W3[ip];
-        
-        // Number of operations: 1
-        I[5] = G[5]*W3[ip];
-        
-        
-        // Number of operations for primary indices: 432
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          for (unsigned int k = 0; k < 4; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc3[j]*17 + nzc3[k]] += FE0_f0_C3[ip][j]*FE0_f0_C3[ip][k]*I[0];
-            // Number of operations to compute entry: 3
-            A[nzc3[j]*17 + nzc4[k]] += FE0_f0_C3[ip][j]*FE0_f0_C4[ip][k]*I[1];
-            // Number of operations to compute entry: 3
-            A[nzc3[j]*17 + nzc5[k]] += FE0_f0_C3[ip][j]*FE0_f0_C5[ip][k]*I[2];
-            // Number of operations to compute entry: 3
-            A[nzc4[j]*17 + nzc3[k]] += FE0_f0_C3[ip][k]*FE0_f0_C4[ip][j]*I[1];
-            // Number of operations to compute entry: 3
-            A[nzc4[j]*17 + nzc4[k]] += FE0_f0_C4[ip][j]*FE0_f0_C4[ip][k]*I[3];
-            // Number of operations to compute entry: 3
-            A[nzc4[j]*17 + nzc5[k]] += FE0_f0_C4[ip][j]*FE0_f0_C5[ip][k]*I[4];
-            // Number of operations to compute entry: 3
-            A[nzc5[j]*17 + nzc3[k]] += FE0_f0_C3[ip][k]*FE0_f0_C5[ip][j]*I[2];
-            // Number of operations to compute entry: 3
-            A[nzc5[j]*17 + nzc4[k]] += FE0_f0_C4[ip][k]*FE0_f0_C5[ip][j]*I[4];
-            // Number of operations to compute entry: 3
-            A[nzc5[j]*17 + nzc5[k]] += FE0_f0_C5[ip][j]*FE0_f0_C5[ip][k]*I[5];
-          } // end loop over 'k'
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    case 1:
-      {
-        // Total number of operations to compute element tensor (from this point): 747
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 747
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Number of operations to compute ip constants: 6
-        double I[6];
-        // Number of operations: 1
-        I[0] = G[0]*W3[ip];
-        
-        // Number of operations: 1
-        I[1] = G[1]*W3[ip];
-        
-        // Number of operations: 1
-        I[2] = G[2]*W3[ip];
-        
-        // Number of operations: 1
-        I[3] = G[3]*W3[ip];
-        
-        // Number of operations: 1
-        I[4] = G[4]*W3[ip];
-        
-        // Number of operations: 1
-        I[5] = G[5]*W3[ip];
-        
-        
-        // Number of operations for primary indices: 3
-        for (unsigned int j = 0; j < 1; j++)
-        {
-          for (unsigned int k = 0; k < 1; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc10[j]*17 + nzc10[k]] += FE0_f1_C3[ip][j]*FE0_f1_C3[ip][k]*I[0];
-          } // end loop over 'k'
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 24
-        for (unsigned int j = 0; j < 1; j++)
-        {
-          for (unsigned int k = 0; k < 4; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc10[j]*17 + nzc4[k]] += FE0_f0_C4[ip][k]*FE0_f1_C3[ip][j]*I[1];
-            // Number of operations to compute entry: 3
-            A[nzc10[j]*17 + nzc5[k]] += FE0_f0_C5[ip][k]*FE0_f1_C3[ip][j]*I[2];
-          } // end loop over 'k'
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 24
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          for (unsigned int k = 0; k < 1; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc4[j]*17 + nzc10[k]] += FE0_f0_C4[ip][j]*FE0_f1_C3[ip][k]*I[1];
-            // Number of operations to compute entry: 3
-            A[nzc5[j]*17 + nzc10[k]] += FE0_f0_C5[ip][j]*FE0_f1_C3[ip][k]*I[2];
-          } // end loop over 'k'
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 192
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          for (unsigned int k = 0; k < 4; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc4[j]*17 + nzc4[k]] += FE0_f0_C4[ip][j]*FE0_f0_C4[ip][k]*I[3];
-            // Number of operations to compute entry: 3
-            A[nzc4[j]*17 + nzc5[k]] += FE0_f0_C4[ip][j]*FE0_f0_C5[ip][k]*I[4];
-            // Number of operations to compute entry: 3
-            A[nzc5[j]*17 + nzc4[k]] += FE0_f0_C4[ip][k]*FE0_f0_C5[ip][j]*I[4];
-            // Number of operations to compute entry: 3
-            A[nzc5[j]*17 + nzc5[k]] += FE0_f0_C5[ip][j]*FE0_f0_C5[ip][k]*I[5];
-          } // end loop over 'k'
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    case 2:
-      {
-        // Total number of operations to compute element tensor (from this point): 693
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 693
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Number of operations to compute ip constants: 6
-        double I[6];
-        // Number of operations: 1
-        I[0] = G[3]*W3[ip];
-        
-        // Number of operations: 1
-        I[1] = G[1]*W3[ip];
-        
-        // Number of operations: 1
-        I[2] = G[4]*W3[ip];
-        
-        // Number of operations: 1
-        I[3] = G[0]*W3[ip];
-        
-        // Number of operations: 1
-        I[4] = G[2]*W3[ip];
-        
-        // Number of operations: 1
-        I[5] = G[5]*W3[ip];
-        
-        
-        // Number of operations for primary indices: 1
-        // Number of operations to compute entry: 1
-        A[252] += I[0];
-        
-        // Number of operations for primary indices: 16
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc14[j]*17 + 14] += FE0_f2_C3[ip][j]*I[1];
-          // Number of operations to compute entry: 2
-          A[nzc5[j]*17 + 14] += FE0_f0_C5[ip][j]*I[2];
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 192
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          for (unsigned int k = 0; k < 4; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc14[j]*17 + nzc14[k]] += FE0_f2_C3[ip][j]*FE0_f2_C3[ip][k]*I[3];
-            // Number of operations to compute entry: 3
-            A[nzc14[j]*17 + nzc5[k]] += FE0_f0_C5[ip][k]*FE0_f2_C3[ip][j]*I[4];
-            // Number of operations to compute entry: 3
-            A[nzc5[j]*17 + nzc14[k]] += FE0_f0_C5[ip][j]*FE0_f2_C3[ip][k]*I[4];
-            // Number of operations to compute entry: 3
-            A[nzc5[j]*17 + nzc5[k]] += FE0_f0_C5[ip][j]*FE0_f0_C5[ip][k]*I[5];
-          } // end loop over 'k'
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 16
-        for (unsigned int k = 0; k < 4; k++)
-        {
-          // Number of operations to compute entry: 2
-          A[14*17 + nzc14[k]] += FE0_f2_C3[ip][k]*I[1];
-          // Number of operations to compute entry: 2
-          A[14*17 + nzc5[k]] += FE0_f0_C5[ip][k]*I[2];
-        } // end loop over 'k'
-      } // end loop over 'ip'
-        break;
-      }
-    case 3:
-      {
-        // Total number of operations to compute element tensor (from this point): 747
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 747
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Number of operations to compute ip constants: 6
-        double I[6];
-        // Number of operations: 1
-        I[0] = G[5]*W3[ip];
-        
-        // Number of operations: 1
-        I[1] = G[2]*W3[ip];
-        
-        // Number of operations: 1
-        I[2] = G[4]*W3[ip];
-        
-        // Number of operations: 1
-        I[3] = G[0]*W3[ip];
-        
-        // Number of operations: 1
-        I[4] = G[1]*W3[ip];
-        
-        // Number of operations: 1
-        I[5] = G[3]*W3[ip];
-        
-        
-        // Number of operations for primary indices: 3
-        for (unsigned int j = 0; j < 1; j++)
-        {
-          for (unsigned int k = 0; k < 1; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc20[j]*17 + nzc20[k]] += FE0_f1_C3[ip][j]*FE0_f1_C3[ip][k]*I[0];
-          } // end loop over 'k'
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 24
-        for (unsigned int j = 0; j < 1; j++)
-        {
-          for (unsigned int k = 0; k < 4; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc20[j]*17 + nzc14[k]] += FE0_f1_C3[ip][j]*FE0_f2_C3[ip][k]*I[1];
-            // Number of operations to compute entry: 3
-            A[nzc20[j]*17 + nzc19[k]] += FE0_f1_C3[ip][j]*FE0_f3_C4[ip][k]*I[2];
-          } // end loop over 'k'
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 24
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          for (unsigned int k = 0; k < 1; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc14[j]*17 + nzc20[k]] += FE0_f1_C3[ip][k]*FE0_f2_C3[ip][j]*I[1];
-            // Number of operations to compute entry: 3
-            A[nzc19[j]*17 + nzc20[k]] += FE0_f1_C3[ip][k]*FE0_f3_C4[ip][j]*I[2];
-          } // end loop over 'k'
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 192
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          for (unsigned int k = 0; k < 4; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc14[j]*17 + nzc14[k]] += FE0_f2_C3[ip][j]*FE0_f2_C3[ip][k]*I[3];
-            // Number of operations to compute entry: 3
-            A[nzc14[j]*17 + nzc19[k]] += FE0_f2_C3[ip][j]*FE0_f3_C4[ip][k]*I[4];
-            // Number of operations to compute entry: 3
-            A[nzc19[j]*17 + nzc14[k]] += FE0_f2_C3[ip][k]*FE0_f3_C4[ip][j]*I[4];
-            // Number of operations to compute entry: 3
-            A[nzc19[j]*17 + nzc19[k]] += FE0_f3_C4[ip][j]*FE0_f3_C4[ip][k]*I[5];
-          } // end loop over 'k'
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    }
-    
-  }
-
-};
-
-
-class pnp_stokes_interior_facet_integral_0_otherwise: public ufc::interior_facet_integral
-{
-public:
-
-  pnp_stokes_interior_facet_integral_0_otherwise() : ufc::interior_facet_integral()
-  {
-    
-  }
-
-  ~pnp_stokes_interior_facet_integral_0_otherwise() override
+  ~pnp_stokes2_interior_facet_integral_0_otherwise() override
   {
     
   }
@@ -17621,16 +17079,16 @@ public:
 };
 
 
-class pnp_stokes_cell_integral_1_otherwise: public ufc::cell_integral
+class pnp_stokes2_cell_integral_1_otherwise: public ufc::cell_integral
 {
 public:
 
-  pnp_stokes_cell_integral_1_otherwise() : ufc::cell_integral()
+  pnp_stokes2_cell_integral_1_otherwise() : ufc::cell_integral()
   {
     
   }
 
-  ~pnp_stokes_cell_integral_1_otherwise() override
+  ~pnp_stokes2_cell_integral_1_otherwise() override
   {
     
   }
@@ -17665,41 +17123,21 @@ public:
     
     
     // Array of quadrature weights.
-    static const double W14[14] = {0.00317460317460317, 0.00317460317460317, 0.00317460317460317, 0.00317460317460317, 0.00317460317460317, 0.00317460317460317, 0.0147649707904968, 0.0147649707904968, 0.0147649707904968, 0.0147649707904968, 0.0221397911142651, 0.0221397911142651, 0.0221397911142651, 0.0221397911142651};
-    // Quadrature points on the UFC reference element: (0.0, 0.5, 0.5), (0.5, 0.0, 0.5), (0.5, 0.5, 0.0), (0.5, 0.0, 0.0), (0.0, 0.5, 0.0), (0.0, 0.0, 0.5), (0.698419704324387, 0.100526765225204, 0.100526765225204), (0.100526765225204, 0.100526765225204, 0.100526765225204), (0.100526765225204, 0.100526765225204, 0.698419704324387), (0.100526765225204, 0.698419704324387, 0.100526765225204), (0.0568813795204234, 0.314372873493192, 0.314372873493192), (0.314372873493192, 0.314372873493192, 0.314372873493192), (0.314372873493192, 0.314372873493192, 0.0568813795204234), (0.314372873493192, 0.0568813795204234, 0.314372873493192)
+    static const double W4[4] = {0.0416666666666667, 0.0416666666666667, 0.0416666666666667, 0.0416666666666667};
+    // Quadrature points on the UFC reference element: (0.585410196624969, 0.138196601125011, 0.138196601125011), (0.138196601125011, 0.585410196624969, 0.138196601125011), (0.138196601125011, 0.138196601125011, 0.585410196624969), (0.138196601125011, 0.138196601125011, 0.138196601125011)
     
     // Values of basis functions at quadrature points.
-    static const double FE0[14][4] = \
-    {{0.0, 0.0, 0.5, 0.5},
-    {0.0, 0.5, 0.0, 0.5},
-    {0.0, 0.5, 0.5, 0.0},
-    {0.5, 0.5, 0.0, 0.0},
-    {0.5, 0.0, 0.5, 0.0},
-    {0.5, 0.0, 0.0, 0.5},
-    {0.100526765225205, 0.698419704324386, 0.100526765225204, 0.100526765225204},
-    {0.698419704324386, 0.100526765225204, 0.100526765225204, 0.100526765225204},
-    {0.100526765225205, 0.100526765225204, 0.100526765225205, 0.698419704324386},
-    {0.100526765225205, 0.100526765225204, 0.698419704324386, 0.100526765225204},
-    {0.314372873493192, 0.0568813795204234, 0.314372873493192, 0.314372873493192},
-    {0.0568813795204235, 0.314372873493192, 0.314372873493192, 0.314372873493192},
-    {0.314372873493192, 0.314372873493192, 0.314372873493192, 0.0568813795204234},
-    {0.314372873493192, 0.314372873493192, 0.0568813795204234, 0.314372873493192}};
+    static const double FE0[4][4] = \
+    {{0.138196601125009, 0.585410196624969, 0.138196601125011, 0.138196601125011},
+    {0.138196601125009, 0.138196601125011, 0.585410196624969, 0.138196601125011},
+    {0.138196601125009, 0.138196601125011, 0.138196601125011, 0.585410196624969},
+    {0.585410196624967, 0.138196601125011, 0.138196601125011, 0.138196601125011}};
     
     // Array of non-zero columns
     static const unsigned int nzc11[4] = {8, 9, 10, 11};
     
-    static const double FE0_D001[14][2] = \
+    static const double FE0_D001[4][2] = \
     {{-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
     {-1.0, 1.0},
     {-1.0, 1.0},
     {-1.0, 1.0}};
@@ -17740,37 +17178,17 @@ public:
     // Array of non-zero columns
     static const unsigned int nzc14[2] = {8, 9};
     
-    static const double FE2_C3[14][4] = \
-    {{0.0, -1.0, 0.0, 0.0},
-    {-0.5, -0.5, -0.5, 0.5},
-    {-0.5, -0.5, -0.5, 0.5},
-    {-0.5, -0.5, -0.5, 0.5},
-    {0.0, -1.0, 0.0, 0.0},
-    {0.0, -1.0, 0.0, 0.0},
-    {-0.698419704324387, -0.301580295675613, -0.698419704324387, 0.698419704324387},
-    {-0.100526765225204, -0.899473234774796, -0.100526765225204, 0.100526765225204},
-    {-0.100526765225205, -0.899473234774795, -0.100526765225205, 0.100526765225205},
-    {-0.100526765225205, -0.899473234774795, -0.100526765225205, 0.100526765225205},
-    {-0.0568813795204234, -0.943118620479577, -0.0568813795204234, 0.0568813795204234},
-    {-0.314372873493192, -0.685627126506807, -0.314372873493192, 0.314372873493192},
-    {-0.314372873493192, -0.685627126506808, -0.314372873493192, 0.314372873493192},
-    {-0.314372873493192, -0.685627126506808, -0.314372873493192, 0.314372873493192}};
+    static const double FE2_C3[4][4] = \
+    {{-0.585410196624969, -0.414589803375031, -0.585410196624969, 0.585410196624969},
+    {-0.138196601125011, -0.861803398874989, -0.138196601125011, 0.138196601125011},
+    {-0.138196601125011, -0.861803398874989, -0.138196601125011, 0.138196601125011},
+    {-0.138196601125011, -0.861803398874989, -0.138196601125011, 0.138196601125011}};
     
     // Array of non-zero columns
     static const unsigned int nzc15[4] = {12, 13, 14, 15};
     
-    static const double FE2_C3_D100[14][4] = \
+    static const double FE2_C3_D100[4][4] = \
     {{-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
-    {-1.0, 1.0, -1.0, 1.0},
     {-1.0, 1.0, -1.0, 1.0},
     {-1.0, 1.0, -1.0, 1.0},
     {-1.0, 1.0, -1.0, 1.0}};
@@ -17778,40 +17196,20 @@ public:
     // Array of non-zero columns
     static const unsigned int nzc16[4] = {12, 13, 14, 15};
     
-    static const double FE2_C4[14][4] = \
-    {{-0.5, 0.5, 0.5, 0.5},
-    {0.0, 0.0, 1.0, 0.0},
-    {-0.5, 0.5, 0.5, 0.5},
-    {0.0, 0.0, 1.0, 0.0},
-    {-0.5, 0.5, 0.5, 0.5},
-    {0.0, 0.0, 1.0, 0.0},
-    {-0.100526765225205, 0.100526765225205, 0.899473234774795, 0.100526765225205},
-    {-0.100526765225204, 0.100526765225204, 0.899473234774795, 0.100526765225204},
-    {-0.100526765225205, 0.100526765225205, 0.899473234774795, 0.100526765225205},
-    {-0.698419704324386, 0.698419704324386, 0.301580295675614, 0.698419704324386},
-    {-0.314372873493192, 0.314372873493192, 0.685627126506808, 0.314372873493192},
-    {-0.314372873493192, 0.314372873493192, 0.685627126506808, 0.314372873493192},
-    {-0.314372873493192, 0.314372873493192, 0.685627126506808, 0.314372873493192},
-    {-0.0568813795204235, 0.0568813795204234, 0.943118620479576, 0.0568813795204236}};
+    static const double FE2_C4[4][4] = \
+    {{-0.138196601125011, 0.138196601125011, 0.861803398874989, 0.138196601125011},
+    {-0.585410196624969, 0.585410196624969, 0.414589803375031, 0.585410196624969},
+    {-0.138196601125011, 0.138196601125011, 0.861803398874989, 0.138196601125011},
+    {-0.138196601125011, 0.138196601125011, 0.861803398874989, 0.138196601125011}};
     
     // Array of non-zero columns
     static const unsigned int nzc17[4] = {12, 13, 14, 15};
     
-    static const double FE2_C5[14][4] = \
-    {{-0.5, 0.5, -0.5, -0.5},
-    {-0.5, 0.5, -0.5, -0.5},
-    {0.0, 0.0, 0.0, -1.0},
-    {0.0, 0.0, 0.0, -1.0},
-    {0.0, 0.0, 0.0, -1.0},
-    {-0.5, 0.5, -0.5, -0.5},
-    {-0.100526765225204, 0.100526765225204, -0.100526765225204, -0.899473234774796},
-    {-0.100526765225204, 0.100526765225204, -0.100526765225204, -0.899473234774796},
-    {-0.698419704324386, 0.698419704324386, -0.698419704324386, -0.301580295675614},
-    {-0.100526765225204, 0.100526765225204, -0.100526765225204, -0.899473234774796},
-    {-0.314372873493192, 0.314372873493192, -0.314372873493192, -0.685627126506808},
-    {-0.314372873493192, 0.314372873493192, -0.314372873493192, -0.685627126506808},
-    {-0.0568813795204233, 0.0568813795204232, -0.0568813795204232, -0.943118620479577},
-    {-0.314372873493192, 0.314372873493192, -0.314372873493192, -0.685627126506808}};
+    static const double FE2_C5[4][4] = \
+    {{-0.138196601125011, 0.138196601125011, -0.138196601125011, -0.861803398874989},
+    {-0.138196601125011, 0.138196601125011, -0.138196601125011, -0.861803398874989},
+    {-0.585410196624969, 0.585410196624969, -0.585410196624968, -0.414589803375032},
+    {-0.138196601125011, 0.138196601125011, -0.138196601125011, -0.861803398874989}};
     
     // Array of non-zero columns
     static const unsigned int nzc18[4] = {12, 13, 14, 15};
@@ -17824,29 +17222,29 @@ public:
     // Number of operations to compute geometry constants: 595.
     double G[50];
     G[0] =  - det*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
-    G[1] =  - det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[2] =  - det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[3] =  - det*w[9][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[4] =  - det*w[9][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[5] =  - det*w[9][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[6] =  - det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[7] = det*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
-    G[8] = det*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
-    G[9] = det*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
+    G[1] =  - det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[2] =  - det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[3] =  - det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[4] = det*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
+    G[5] = det*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
+    G[6] = det*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
+    G[7] =  - det*w[9][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[8] =  - det*w[9][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[9] =  - det*w[9][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
     G[10] =  - det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
     G[11] =  - det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
     G[12] =  - det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[13] = det*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
-    G[14] = det*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
-    G[15] = det*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
-    G[16] =  - det*w[7][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[17] =  - det*w[7][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[18] =  - det*w[7][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[19] = det*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
-    G[20] = det*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
-    G[21] = det*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
-    G[22] =  - det*w[7][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[23] =  - det*w[7][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[13] =  - det*w[7][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[14] =  - det*w[7][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[15] =  - det*w[7][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[16] = det*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
+    G[17] = det*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
+    G[18] = det*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
+    G[19] =  - det*w[7][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[20] =  - det*w[7][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[21] = det*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
+    G[22] = det*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
+    G[23] = det*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
     G[24] =  - det*w[7][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
     G[25] =  - det*w[9][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
     G[26] =  - det*w[9][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
@@ -17854,32 +17252,32 @@ public:
     G[28] = det*w[7][0];
     G[29] = det*w[9][0];
     G[30] =  - det*w[7][0]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
-    G[31] =  - det*w[9][0]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
-    G[32] =  - det*w[7][0]*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
-    G[33] =  - det*w[9][0]*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
-    G[34] =  - det*w[7][0]*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
+    G[31] =  - det*w[7][0]*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
+    G[32] =  - det*w[7][0]*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
+    G[33] =  - det*w[9][0]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
+    G[34] =  - det*w[9][0]*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
     G[35] =  - det*w[9][0]*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
     G[36] = det*w[4][0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
     G[37] = det*w[10][0]*( - (K[0]*K[0]*(J[3]*J[3] + J[6]*J[6]) + K[1]*K[1]*(J[0]*J[0] + J[6]*J[6]) + K[2]*K[2]*(J[0]*J[0] + J[3]*J[3]) + K[3]*K[3]*(J[4]*J[4] + J[7]*J[7]) + K[4]*K[4]*(J[1]*J[1] + J[7]*J[7]) + K[5]*K[5]*(J[1]*J[1] + J[4]*J[4]) + K[6]*K[6]*(J[5]*J[5] + J[8]*J[8]) + K[7]*K[7]*(J[2]*J[2] + J[8]*J[8]) + K[8]*K[8]*(J[2]*J[2] + J[5]*J[5]))-2.0*(J[0]*J[0]*K[0]*K[0] + J[3]*K[1]*(J[0]*K[0] + J[3]*K[1]) + J[6]*K[2]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2]) + K[3]*(J[0]*(J[4]*K[1] + J[7]*K[2]) + J[1]*J[1]*K[3] + K[0]*(J[3]*J[4] + J[6]*J[7])) + K[4]*(J[1]*(J[0]*K[1] + J[3]*K[0] + J[4]*K[3]) + J[4]*J[4]*K[4] + J[7]*(J[3]*K[2] + J[6]*K[1])) + K[5]*(J[6]*(J[1]*K[0] + J[4]*K[1]) + J[7]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5]) + K[2]*(J[0]*J[1] + J[3]*J[4])) + K[6]*(J[2]*J[2]*K[6] + J[5]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3]) + J[8]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3])) + K[7]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[5]*J[5]*K[7] + J[8]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4])) + K[8]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[8]*J[8]*K[8]))-4.0*(J[0]*J[1]*K[0]*K[3] + J[2]*K[6]*(J[0]*K[0] + J[1]*K[3]) + J[3]*J[4]*K[1]*K[4] + J[5]*K[7]*(J[3]*K[1] + J[4]*K[4]) + J[6]*J[7]*K[2]*K[5] + J[8]*K[8]*(J[6]*K[2] + J[7]*K[5])))/(detJ*detJ);
     G[38] =  - det*w[7][0]*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
-    G[39] =  - det*w[9][0]*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
-    G[40] =  - det*w[7][0]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
-    G[41] =  - det*w[9][0]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
-    G[42] =  - det*w[7][0]*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
+    G[39] =  - det*w[7][0]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
+    G[40] =  - det*w[7][0]*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
+    G[41] =  - det*w[9][0]*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
+    G[42] =  - det*w[9][0]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
     G[43] =  - det*w[9][0]*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
     G[44] =  - det*w[7][0]*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
-    G[45] =  - det*w[9][0]*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
-    G[46] =  - det*w[7][0]*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
-    G[47] =  - det*w[9][0]*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
-    G[48] =  - det*w[7][0]*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
+    G[45] =  - det*w[7][0]*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
+    G[46] =  - det*w[7][0]*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
+    G[47] =  - det*w[9][0]*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
+    G[48] =  - det*w[9][0]*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
     G[49] =  - det*w[9][0]*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
     
     // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 5474
-    for (unsigned int ip = 0; ip < 14; ip++)
+    // Number of operations to compute element tensor for following IP loop = 1532
+    for (unsigned int ip = 0; ip < 4; ip++)
     {
       
       // Coefficient declarations.
@@ -17911,18 +17309,18 @@ public:
         F5 += FE0_D001[ip][r]*w[0][nzc2[r]];
         F6 += FE0_D001[ip][r]*w[0][nzc1[r]];
         F7 += FE0_D001[ip][r]*w[0][nzc0[r]];
-        F9 += FE0_D001[ip][r]*w[1][nzc2[r]];
-        F10 += FE0_D001[ip][r]*w[1][nzc1[r]];
-        F11 += FE0_D001[ip][r]*w[1][nzc0[r]];
+        F10 += FE0_D001[ip][r]*w[1][nzc2[r]];
+        F11 += FE0_D001[ip][r]*w[1][nzc1[r]];
+        F12 += FE0_D001[ip][r]*w[1][nzc0[r]];
       } // end loop over 'r'
       
       // Total number of operations to compute function values = 72
       for (unsigned int r = 0; r < 4; r++)
       {
-        F0 += FE0[ip][r]*w[0][r];
-        F1 += FE0[ip][r]*w[1][r];
-        F8 += FE0[ip][r]*w[6][r];
-        F12 += FE0[ip][r]*w[8][r];
+        F0 += FE0[ip][r]*w[6][r];
+        F1 += FE0[ip][r]*w[0][r];
+        F8 += FE0[ip][r]*w[8][r];
+        F9 += FE0[ip][r]*w[1][r];
         F13 += FE2_C3_D100[ip][r]*w[3][r];
         F14 += FE0[ip][r]*w[5][r];
         F15 += FE2_C3[ip][r]*w[3][r];
@@ -17930,52 +17328,52 @@ public:
         F17 += FE2_C5[ip][r]*w[3][r];
       } // end loop over 'r'
       
-      // Number of operations to compute ip constants: 206
+      // Number of operations to compute ip constants: 198
       double I[15];
       // Number of operations: 2
-      I[0] = F13*G[0]*W14[ip];
+      I[0] = F13*G[0]*W4[ip];
       
       // Number of operations: 21
-      I[1] = W14[ip]*std::exp(F1)*(F12*(F10*G[1] + F11*G[2] + F2*G[3] + F3*G[4] + F4*G[5] + F9*G[6]) + F15*G[7] + F16*G[8] + F17*G[9]);
+      I[1] = W4[ip]*(F8*(F10*G[1] + F11*G[2] + F12*G[3]) + F9*(F15*G[4] + F16*G[5] + F17*G[6] + F8*(F2*G[7] + F3*G[8] + F4*G[9])));
       
       // Number of operations: 7
-      I[2] = F14*W14[ip]*(F2*G[2] + F3*G[10] + F4*G[11]);
+      I[2] = F14*W4[ip]*(F2*G[3] + F3*G[10] + F4*G[11]);
       
       // Number of operations: 7
-      I[3] = F14*W14[ip]*(F2*G[1] + F3*G[12] + F4*G[10]);
+      I[3] = F14*W4[ip]*(F2*G[2] + F3*G[12] + F4*G[10]);
       
       // Number of operations: 7
-      I[4] = F14*W14[ip]*(F2*G[6] + F3*G[1] + F4*G[2]);
+      I[4] = F14*W4[ip]*(F2*G[1] + F3*G[2] + F4*G[3]);
       
       // Number of operations: 21
-      I[5] = W14[ip]*std::exp(F0)*(F15*G[13] + F16*G[14] + F17*G[15] + F8*(F2*G[16] + F3*G[17] + F4*G[18] + F5*G[2] + F6*G[10] + F7*G[11]));
+      I[5] = W4[ip]*(F0*(F5*G[3] + F6*G[10] + F7*G[11]) + F1*(F0*(F2*G[13] + F3*G[14] + F4*G[15]) + F15*G[16] + F16*G[17] + F17*G[18]));
       
       // Number of operations: 21
-      I[6] = W14[ip]*std::exp(F0)*(F15*G[19] + F16*G[20] + F17*G[21] + F8*(F2*G[22] + F3*G[23] + F4*G[17] + F5*G[1] + F6*G[12] + F7*G[10]));
+      I[6] = W4[ip]*(F0*(F5*G[2] + F6*G[12] + F7*G[10]) + F1*(F0*(F2*G[19] + F3*G[20] + F4*G[14]) + F15*G[21] + F16*G[22] + F17*G[23]));
       
       // Number of operations: 21
-      I[7] = W14[ip]*std::exp(F0)*(F15*G[7] + F16*G[8] + F17*G[9] + F8*(F2*G[24] + F3*G[22] + F4*G[16] + F5*G[6] + F6*G[1] + F7*G[2]));
+      I[7] = W4[ip]*(F0*(F5*G[1] + F6*G[2] + F7*G[3]) + F1*(F0*(F2*G[24] + F3*G[19] + F4*G[13]) + F15*G[4] + F16*G[5] + F17*G[6]));
       
       // Number of operations: 21
-      I[8] = W14[ip]*std::exp(F1)*(F12*(F10*G[10] + F11*G[11] + F2*G[5] + F3*G[25] + F4*G[26] + F9*G[2]) + F15*G[13] + F16*G[14] + F17*G[15]);
+      I[8] = W4[ip]*(F8*(F10*G[3] + F11*G[10] + F12*G[11]) + F9*(F15*G[16] + F16*G[17] + F17*G[18] + F8*(F2*G[9] + F3*G[25] + F4*G[26])));
       
       // Number of operations: 21
-      I[9] = W14[ip]*std::exp(F1)*(F12*(F10*G[12] + F11*G[10] + F2*G[4] + F3*G[27] + F4*G[25] + F9*G[1]) + F15*G[19] + F16*G[20] + F17*G[21]);
+      I[9] = W4[ip]*(F8*(F10*G[2] + F11*G[12] + F12*G[10]) + F9*(F15*G[21] + F16*G[22] + F17*G[23] + F8*(F2*G[8] + F3*G[27] + F4*G[25])));
       
-      // Number of operations: 6
-      I[10] = W14[ip]*(G[28]*std::exp(F0) + G[29]*std::exp(F1));
+      // Number of operations: 4
+      I[10] = W4[ip]*(F1*G[28] + F9*G[29]);
       
-      // Number of operations: 16
-      I[11] = W14[ip]*(std::exp(F0)*(F2*G[30] + F3*G[32] + F4*G[34]) + std::exp(F1)*(F2*G[31] + F3*G[33] + F4*G[35]));
+      // Number of operations: 14
+      I[11] = W4[ip]*(F1*(F2*G[30] + F3*G[31] + F4*G[32]) + F9*(F2*G[33] + F3*G[34] + F4*G[35]));
       
       // Number of operations: 3
-      I[12] = W14[ip]*(G[36] + F13*G[37]);
+      I[12] = W4[ip]*(G[36] + F13*G[37]);
       
-      // Number of operations: 16
-      I[13] = W14[ip]*(std::exp(F0)*(F2*G[38] + F3*G[40] + F4*G[42]) + std::exp(F1)*(F2*G[39] + F3*G[41] + F4*G[43]));
+      // Number of operations: 14
+      I[13] = W4[ip]*(F1*(F2*G[38] + F3*G[39] + F4*G[40]) + F9*(F2*G[41] + F3*G[42] + F4*G[43]));
       
-      // Number of operations: 16
-      I[14] = W14[ip]*(std::exp(F0)*(F2*G[44] + F3*G[46] + F4*G[48]) + std::exp(F1)*(F2*G[45] + F3*G[47] + F4*G[49]));
+      // Number of operations: 14
+      I[14] = W4[ip]*(F1*(F2*G[44] + F3*G[45] + F4*G[46]) + F9*(F2*G[47] + F3*G[48] + F4*G[49]));
       
       
       // Number of operations for primary indices: 1
@@ -18025,398 +17423,16 @@ public:
 };
 
 
-class pnp_stokes_exterior_facet_integral_1_otherwise: public ufc::exterior_facet_integral
+class pnp_stokes2_interior_facet_integral_1_otherwise: public ufc::interior_facet_integral
 {
 public:
 
-  pnp_stokes_exterior_facet_integral_1_otherwise() : ufc::exterior_facet_integral()
+  pnp_stokes2_interior_facet_integral_1_otherwise() : ufc::interior_facet_integral()
   {
     
   }
 
-  ~pnp_stokes_exterior_facet_integral_1_otherwise() override
-  {
-    
-  }
-
-  const std::vector<bool> & enabled_coefficients() const final override
-  {
-    static const std::vector<bool> enabled({false, false, false, true, false, false, false, false, false, false, true, false, true});
-    return enabled;
-  }
-
-  void tabulate_tensor(double * A,
-                       const double * const * w,
-                       const double * coordinate_dofs,
-                       std::size_t facet,
-                       int cell_orientation) const final override
-  {
-    // Compute Jacobian
-    double J[9];
-    compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
-    
-    // Compute Jacobian inverse and determinant
-    double K[9];
-    double detJ;
-    compute_jacobian_inverse_tetrahedron_3d(K, detJ, J);
-    
-    
-    
-    // Get vertices on face
-    static unsigned int face_vertices[4][3] = {{1, 2, 3}, {0, 2, 3}, {0, 1, 3}, {0, 1, 2}};
-    const unsigned int v0 = face_vertices[facet][0];
-    const unsigned int v1 = face_vertices[facet][1];
-    const unsigned int v2 = face_vertices[facet][2];
-    
-    // Compute scale factor (area of face scaled by area of reference triangle)
-    const double a0 = (coordinate_dofs[3*v0 + 1]*coordinate_dofs[3*v1 + 2]  + coordinate_dofs[3*v0 + 2]*coordinate_dofs[3*v2 + 1]  + coordinate_dofs[3*v1 + 1]*coordinate_dofs[3*v2 + 2]) - (coordinate_dofs[3*v2 + 1]*coordinate_dofs[3*v1 + 2] + coordinate_dofs[3*v2 + 2]*coordinate_dofs[3*v0 + 1] + coordinate_dofs[3*v1 + 1]*coordinate_dofs[3*v0 + 2]);
-    
-    const double a1 = (coordinate_dofs[3*v0 + 2]*coordinate_dofs[3*v1 + 0]  + coordinate_dofs[3*v0 + 0]*coordinate_dofs[3*v2 + 2] + coordinate_dofs[3*v1 + 2]*coordinate_dofs[3*v2 + 0]) - (coordinate_dofs[3*v2 + 2]*coordinate_dofs[3*v1 + 0]  + coordinate_dofs[3*v2 + 0]*coordinate_dofs[3*v0 + 2] + coordinate_dofs[3*v1 + 2]*coordinate_dofs[3*v0 + 0]);
-    
-    const double a2 = (coordinate_dofs[3*v0 + 0]*coordinate_dofs[3*v1 + 1]  + coordinate_dofs[3*v0 + 1]*coordinate_dofs[3*v2 + 0]  + coordinate_dofs[3*v1 + 0]*coordinate_dofs[3*v2 + 1]) - (coordinate_dofs[3*v2 + 0]*coordinate_dofs[3*v1 + 1]  + coordinate_dofs[3*v2 + 1]*coordinate_dofs[3*v0 + 0]  + coordinate_dofs[3*v1 + 0]*coordinate_dofs[3*v0 + 1]);
-    
-    const double det = std::sqrt(a0*a0 + a1*a1 + a2*a2);
-    
-    
-    const bool direction = a0*(coordinate_dofs[3*facet] - coordinate_dofs[3*v0]) + a1*(coordinate_dofs[3*facet + 1] - coordinate_dofs[3*v0 + 1])  + a2*(coordinate_dofs[3*facet + 2] - coordinate_dofs[3*v0 + 2]) < 0;
-    
-    const double n0 = direction ? a0 / det : -a0 / det;
-    const double n1 = direction ? a1 / det : -a1 / det;
-    const double n2 = direction ? a2 / det : -a2 / det;
-    
-    // Facet area (divide by two because 'det' is scaled by area of reference triangle)
-    
-    // Min edge length of facet
-    double min_facet_edge_length;
-    compute_min_facet_edge_length_tetrahedron_3d(min_facet_edge_length, facet, coordinate_dofs);
-    
-    
-    // Max edge length of facet
-    double max_facet_edge_length;
-    compute_max_facet_edge_length_tetrahedron_3d(max_facet_edge_length, facet, coordinate_dofs);
-    
-    
-    // Compute cell volume
-    const double volume = std::abs(detJ)/6.0;
-    
-    
-    // Compute circumradius
-    const double v1v2  = std::sqrt( (coordinate_dofs[6] - coordinate_dofs[3])*(coordinate_dofs[6] - coordinate_dofs[3]) + (coordinate_dofs[7] - coordinate_dofs[4])*(coordinate_dofs[7] - coordinate_dofs[4]) + (coordinate_dofs[8] - coordinate_dofs[5])*(coordinate_dofs[8] - coordinate_dofs[5]) );
-    const double v0v2  = std::sqrt(J[1]*J[1] + J[4]*J[4] + J[7]*J[7]);
-    const double v0v1  = std::sqrt(J[0]*J[0] + J[3]*J[3] + J[6]*J[6]);
-    const double v0v3  = std::sqrt(J[2]*J[2] + J[5]*J[5] + J[8]*J[8]);
-    const double v1v3  = std::sqrt( (coordinate_dofs[9] - coordinate_dofs[3])*(coordinate_dofs[9] - coordinate_dofs[3]) + (coordinate_dofs[10] - coordinate_dofs[4])*(coordinate_dofs[10] - coordinate_dofs[4]) + (coordinate_dofs[11] - coordinate_dofs[5])*(coordinate_dofs[11] - coordinate_dofs[5]) );
-    const double v2v3  = std::sqrt( (coordinate_dofs[9] - coordinate_dofs[6])*(coordinate_dofs[9] - coordinate_dofs[6]) + (coordinate_dofs[10] - coordinate_dofs[7])*(coordinate_dofs[10] - coordinate_dofs[7]) + (coordinate_dofs[11] - coordinate_dofs[8])*(coordinate_dofs[11] - coordinate_dofs[8]) );
-    const  double la   = v1v2*v0v3;
-    const  double lb   = v0v2*v1v3;
-    const  double lc   = v0v1*v2v3;
-    const  double s    = 0.5*(la+lb+lc);
-    const  double area = std::sqrt(s*(s-la)*(s-lb)*(s-lc));
-    const double circumradius = area / ( 6.0*volume );
-    
-    
-    // Array of quadrature weights.
-    static const double W3[3] = {0.166666666666667, 0.166666666666667, 0.166666666666667};
-    // Quadrature points on the UFC reference element: (0.166666666666667, 0.166666666666667), (0.166666666666667, 0.666666666666667), (0.666666666666667, 0.166666666666667)
-    
-    // Values of basis functions at quadrature points.
-    static const double FE0_f0_C3[3][4] = \
-    {{-0.666666666666667, -0.333333333333333, -0.666666666666667, 0.666666666666667},
-    {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
-    {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc3[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f0_C4[3][4] = \
-    {{-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666666}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc4[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f0_C5[3][4] = \
-    {{-0.166666666666667, 0.166666666666666, -0.166666666666666, -0.833333333333333},
-    {-0.666666666666666, 0.666666666666666, -0.666666666666666, -0.333333333333334},
-    {-0.166666666666667, 0.166666666666666, -0.166666666666666, -0.833333333333333}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc5[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f1_C3[3][1] = \
-    {{-1.0},
-    {-1.0},
-    {-1.0}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc10[1] = {13};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc20[1] = {15};
-    
-    static const double FE0_f2_C3[3][4] = \
-    {{-0.166666666666666, -0.833333333333334, -0.166666666666666, 0.166666666666667},
-    {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
-    {-0.666666666666667, -0.333333333333333, -0.666666666666667, 0.666666666666667}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc14[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f3_C4[3][4] = \
-    {{-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666667},
-    {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc19[4] = {12, 13, 14, 15};
-    
-    // Reset values in the element tensor.
-    for (unsigned int r = 0; r < 17; r++)
-    {
-      A[r] = 0.0;
-    } // end loop over 'r'
-    // Number of operations to compute geometry constants: 258.
-    double G[9];
-    G[0] = det*w[10][0]*w[12][0]*(J[3]*n1*( - J[3]*n1-2.0*J[0]*n0) + J[6]*n2*( - J[6]*n2-2.0*(J[0]*n0 + J[3]*n1)) - J[0]*J[0]*n0*n0)/(circumradius*detJ*detJ);
-    G[1] =  - det*w[10][0]*w[12][0]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[2] =  - det*w[10][0]*w[12][0]*(J[0]*J[2]*n0*n0 + n1*(J[3]*J[5]*n1 + n0*(J[0]*J[5] + J[2]*J[3])) + n2*(J[6]*(J[2]*n0 + J[5]*n1) + J[8]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[3] = det*w[10][0]*w[12][0]*(J[4]*n1*( - J[4]*n1-2.0*J[1]*n0) + J[7]*n2*( - J[7]*n2-2.0*(J[1]*n0 + J[4]*n1)) - J[1]*J[1]*n0*n0)/(circumradius*detJ*detJ);
-    G[4] =  - det*w[10][0]*w[12][0]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
-    G[5] = det*w[10][0]*w[12][0]*(J[5]*n1*( - J[5]*n1-2.0*J[2]*n0) + J[8]*n2*( - J[8]*n2-2.0*(J[2]*n0 + J[5]*n1)) - J[2]*J[2]*n0*n0)/(circumradius*detJ*detJ);
-    G[6] = det*w[10][0]*w[12][0]*w[3][2]*(J[4]*n1*( - J[4]*n1-2.0*J[1]*n0) + J[7]*n2*( - J[7]*n2-2.0*(J[1]*n0 + J[4]*n1)) - J[1]*J[1]*n0*n0)/(circumradius*detJ*detJ);
-    G[7] =  - det*w[10][0]*w[12][0]*w[3][2]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[8] =  - det*w[10][0]*w[12][0]*w[3][2]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
-    
-    // Compute element tensor using UFL quadrature representation
-    // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
-    switch (facet)
-    {
-    case 0:
-      {
-        // Total number of operations to compute element tensor (from this point): 198
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 198
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Coefficient declarations.
-        double F0 = 0.0;
-        double F1 = 0.0;
-        double F2 = 0.0;
-        
-        // Total number of operations to compute function values = 24
-        for (unsigned int r = 0; r < 4; r++)
-        {
-          F0 += FE0_f0_C3[ip][r]*w[3][r];
-          F1 += FE0_f0_C4[ip][r]*w[3][r];
-          F2 += FE0_f0_C5[ip][r]*w[3][r];
-        } // end loop over 'r'
-        
-        // Number of operations to compute ip constants: 18
-        double I[3];
-        // Number of operations: 6
-        I[0] = W3[ip]*(F0*G[0] + F1*G[1] + F2*G[2]);
-        
-        // Number of operations: 6
-        I[1] = W3[ip]*(F0*G[1] + F1*G[3] + F2*G[4]);
-        
-        // Number of operations: 6
-        I[2] = W3[ip]*(F0*G[2] + F1*G[4] + F2*G[5]);
-        
-        
-        // Number of operations for primary indices: 24
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc3[j]] += FE0_f0_C3[ip][j]*I[0];
-          // Number of operations to compute entry: 2
-          A[nzc4[j]] += FE0_f0_C4[ip][j]*I[1];
-          // Number of operations to compute entry: 2
-          A[nzc5[j]] += FE0_f0_C5[ip][j]*I[2];
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    case 1:
-      {
-        // Total number of operations to compute element tensor (from this point): 162
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 162
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Coefficient declarations.
-        double F0 = 0.0;
-        double F1 = 0.0;
-        double F2 = 0.0;
-        
-        // Total number of operations to compute function values = 2
-        for (unsigned int r = 0; r < 1; r++)
-        {
-          F0 += FE0_f1_C3[ip][0]*w[3][1];
-        } // end loop over 'r'
-        
-        // Total number of operations to compute function values = 16
-        for (unsigned int r = 0; r < 4; r++)
-        {
-          F1 += FE0_f0_C4[ip][r]*w[3][r];
-          F2 += FE0_f0_C5[ip][r]*w[3][r];
-        } // end loop over 'r'
-        
-        // Number of operations to compute ip constants: 18
-        double I[3];
-        // Number of operations: 6
-        I[0] = W3[ip]*(F0*G[0] + F1*G[1] + F2*G[2]);
-        
-        // Number of operations: 6
-        I[1] = W3[ip]*(F0*G[1] + F1*G[3] + F2*G[4]);
-        
-        // Number of operations: 6
-        I[2] = W3[ip]*(F0*G[2] + F1*G[4] + F2*G[5]);
-        
-        
-        // Number of operations for primary indices: 2
-        for (unsigned int j = 0; j < 1; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc10[j]] += FE0_f1_C3[ip][j]*I[0];
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 16
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc4[j]] += FE0_f0_C4[ip][j]*I[1];
-          // Number of operations to compute entry: 2
-          A[nzc5[j]] += FE0_f0_C5[ip][j]*I[2];
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    case 2:
-      {
-        // Total number of operations to compute element tensor (from this point): 144
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 144
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Coefficient declarations.
-        double F0 = 0.0;
-        double F1 = 0.0;
-        
-        // Total number of operations to compute function values = 16
-        for (unsigned int r = 0; r < 4; r++)
-        {
-          F0 += FE0_f2_C3[ip][r]*w[3][r];
-          F1 += FE0_f0_C5[ip][r]*w[3][r];
-        } // end loop over 'r'
-        
-        // Number of operations to compute ip constants: 15
-        double I[3];
-        // Number of operations: 5
-        I[0] = W3[ip]*(G[6] + F0*G[1] + F1*G[4]);
-        
-        // Number of operations: 5
-        I[1] = W3[ip]*(G[7] + F0*G[0] + F1*G[2]);
-        
-        // Number of operations: 5
-        I[2] = W3[ip]*(G[8] + F0*G[2] + F1*G[5]);
-        
-        
-        // Number of operations for primary indices: 1
-        // Number of operations to compute entry: 1
-        A[14] += I[0];
-        
-        // Number of operations for primary indices: 16
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc14[j]] += FE0_f2_C3[ip][j]*I[1];
-          // Number of operations to compute entry: 2
-          A[nzc5[j]] += FE0_f0_C5[ip][j]*I[2];
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    case 3:
-      {
-        // Total number of operations to compute element tensor (from this point): 162
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 162
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Coefficient declarations.
-        double F0 = 0.0;
-        double F1 = 0.0;
-        double F2 = 0.0;
-        
-        // Total number of operations to compute function values = 2
-        for (unsigned int r = 0; r < 1; r++)
-        {
-          F2 += FE0_f1_C3[ip][0]*w[3][3];
-        } // end loop over 'r'
-        
-        // Total number of operations to compute function values = 16
-        for (unsigned int r = 0; r < 4; r++)
-        {
-          F0 += FE0_f2_C3[ip][r]*w[3][r];
-          F1 += FE0_f3_C4[ip][r]*w[3][r];
-        } // end loop over 'r'
-        
-        // Number of operations to compute ip constants: 18
-        double I[3];
-        // Number of operations: 6
-        I[0] = W3[ip]*(F0*G[2] + F1*G[4] + F2*G[5]);
-        
-        // Number of operations: 6
-        I[1] = W3[ip]*(F0*G[0] + F1*G[1] + F2*G[2]);
-        
-        // Number of operations: 6
-        I[2] = W3[ip]*(F0*G[1] + F1*G[3] + F2*G[4]);
-        
-        
-        // Number of operations for primary indices: 2
-        for (unsigned int j = 0; j < 1; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc20[j]] += FE0_f1_C3[ip][j]*I[0];
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 16
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc14[j]] += FE0_f2_C3[ip][j]*I[1];
-          // Number of operations to compute entry: 2
-          A[nzc19[j]] += FE0_f3_C4[ip][j]*I[2];
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    }
-    
-  }
-
-};
-
-
-class pnp_stokes_interior_facet_integral_1_otherwise: public ufc::interior_facet_integral
-{
-public:
-
-  pnp_stokes_interior_facet_integral_1_otherwise() : ufc::interior_facet_integral()
-  {
-    
-  }
-
-  ~pnp_stokes_interior_facet_integral_1_otherwise() override
+  ~pnp_stokes2_interior_facet_integral_1_otherwise() override
   {
     
   }
@@ -20126,23 +19142,23 @@ public:
 };
 
 
-class pnp_stokes_form_0: public ufc::form
+class pnp_stokes2_form_0: public ufc::form
 {
 public:
 
-  pnp_stokes_form_0() : ufc::form()
+  pnp_stokes2_form_0() : ufc::form()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_form_0() override
+  ~pnp_stokes2_form_0() override
   {
     // Do nothing
   }
 
   const char * signature() const final override
   {
-    return "9364f55e2f980442774ab9fcce617b61580d23997a020d281a534771b10081e53f46e6a81e72c48c1c7bd83468ba6ad9381bfcf7fcd9f824f436a96e2d87e808";
+    return "319393a9607d3b16c90fff7af7ed14f9e92723b0f7d22bdcc73b733f304c956068a9ce69d7e52bbea13f36bc42600c9a861c525aaab334f6e98838c5f56a9c76";
   }
 
   std::size_t rank() const final override
@@ -20163,12 +19179,12 @@ public:
 
   ufc::finite_element * create_coordinate_finite_element() const final override
   {
-    return new pnp_stokes_finite_element_1();
+    return new pnp_stokes2_finite_element_1();
   }
 
   ufc::dofmap * create_coordinate_dofmap() const final override
   {
-    return new pnp_stokes_dofmap_1();
+    return new pnp_stokes2_dofmap_1();
    }
 
   ufc::coordinate_mapping * create_coordinate_mapping() const final override
@@ -20182,72 +19198,72 @@ public:
     {
     case 0:
       {
-        return new pnp_stokes_finite_element_4();
+        return new pnp_stokes2_finite_element_4();
         break;
       }
     case 1:
       {
-        return new pnp_stokes_finite_element_4();
+        return new pnp_stokes2_finite_element_4();
         break;
       }
     case 2:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes2_finite_element_0();
         break;
       }
     case 3:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes2_finite_element_0();
         break;
       }
     case 4:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes2_finite_element_0();
         break;
       }
     case 5:
       {
-        return new pnp_stokes_finite_element_2();
+        return new pnp_stokes2_finite_element_2();
         break;
       }
     case 6:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes2_finite_element_0();
         break;
       }
     case 7:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes2_finite_element_0();
         break;
       }
     case 8:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes2_finite_element_5();
         break;
       }
     case 9:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes2_finite_element_0();
         break;
       }
     case 10:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes2_finite_element_5();
         break;
       }
     case 11:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes2_finite_element_5();
         break;
       }
     case 12:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes2_finite_element_5();
         break;
       }
     case 13:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes2_finite_element_5();
         break;
       }
     }
@@ -20261,72 +19277,72 @@ public:
     {
     case 0:
       {
-        return new pnp_stokes_dofmap_4();
+        return new pnp_stokes2_dofmap_4();
         break;
       }
     case 1:
       {
-        return new pnp_stokes_dofmap_4();
+        return new pnp_stokes2_dofmap_4();
         break;
       }
     case 2:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes2_dofmap_0();
         break;
       }
     case 3:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes2_dofmap_0();
         break;
       }
     case 4:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes2_dofmap_0();
         break;
       }
     case 5:
       {
-        return new pnp_stokes_dofmap_2();
+        return new pnp_stokes2_dofmap_2();
         break;
       }
     case 6:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes2_dofmap_0();
         break;
       }
     case 7:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes2_dofmap_0();
         break;
       }
     case 8:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes2_dofmap_5();
         break;
       }
     case 9:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes2_dofmap_0();
         break;
       }
     case 10:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes2_dofmap_5();
         break;
       }
     case 11:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes2_dofmap_5();
         break;
       }
     case 12:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes2_dofmap_5();
         break;
       }
     case 13:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes2_dofmap_5();
         break;
       }
     }
@@ -20381,7 +19397,7 @@ public:
 
   bool has_exterior_facet_integrals() const final override
   {
-    return true;
+    return false;
   }
 
   bool has_interior_facet_integrals() const final override
@@ -20456,17 +19472,17 @@ public:
 
   ufc::cell_integral * create_default_cell_integral() const final override
   {
-    return new pnp_stokes_cell_integral_0_otherwise();
+    return new pnp_stokes2_cell_integral_0_otherwise();
   }
 
   ufc::exterior_facet_integral * create_default_exterior_facet_integral() const final override
   {
-    return new pnp_stokes_exterior_facet_integral_0_otherwise();
+    return 0;
   }
 
   ufc::interior_facet_integral * create_default_interior_facet_integral() const final override
   {
-    return new pnp_stokes_interior_facet_integral_0_otherwise();
+    return new pnp_stokes2_interior_facet_integral_0_otherwise();
   }
 
   ufc::vertex_integral * create_default_vertex_integral() const final override
@@ -20497,23 +19513,23 @@ public:
 };
 
 
-class pnp_stokes_form_1: public ufc::form
+class pnp_stokes2_form_1: public ufc::form
 {
 public:
 
-  pnp_stokes_form_1() : ufc::form()
+  pnp_stokes2_form_1() : ufc::form()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_form_1() override
+  ~pnp_stokes2_form_1() override
   {
     // Do nothing
   }
 
   const char * signature() const final override
   {
-    return "1420188e5ef22afee5eced934f67b8a29aef6f89ac6507082d0b8c06c48a3ef691de39dd68d1411307e8f053359860d9e0c3982d49fc13458cea9130117f581f";
+    return "bd8ea88e948b40fe486cecfe2f60244f2244573103744a092abcfc3f8699b8c36c51d958abcd25a92bc9bb191de402cf6185bd8b3d0d4372e0656d2e3b5d0c4d";
   }
 
   std::size_t rank() const final override
@@ -20534,12 +19550,12 @@ public:
 
   ufc::finite_element * create_coordinate_finite_element() const final override
   {
-    return new pnp_stokes_finite_element_1();
+    return new pnp_stokes2_finite_element_1();
   }
 
   ufc::dofmap * create_coordinate_dofmap() const final override
   {
-    return new pnp_stokes_dofmap_1();
+    return new pnp_stokes2_dofmap_1();
    }
 
   ufc::coordinate_mapping * create_coordinate_mapping() const final override
@@ -20553,72 +19569,72 @@ public:
     {
     case 0:
       {
-        return new pnp_stokes_finite_element_4();
+        return new pnp_stokes2_finite_element_4();
         break;
       }
     case 1:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes2_finite_element_0();
         break;
       }
     case 2:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes2_finite_element_0();
         break;
       }
     case 3:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes2_finite_element_0();
         break;
       }
     case 4:
       {
-        return new pnp_stokes_finite_element_2();
+        return new pnp_stokes2_finite_element_2();
         break;
       }
     case 5:
       {
-        return new pnp_stokes_finite_element_3();
+        return new pnp_stokes2_finite_element_3();
         break;
       }
     case 6:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes2_finite_element_0();
         break;
       }
     case 7:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes2_finite_element_0();
         break;
       }
     case 8:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes2_finite_element_5();
         break;
       }
     case 9:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes2_finite_element_0();
         break;
       }
     case 10:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes2_finite_element_5();
         break;
       }
     case 11:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes2_finite_element_5();
         break;
       }
     case 12:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes2_finite_element_5();
         break;
       }
     case 13:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes2_finite_element_5();
         break;
       }
     }
@@ -20632,72 +19648,72 @@ public:
     {
     case 0:
       {
-        return new pnp_stokes_dofmap_4();
+        return new pnp_stokes2_dofmap_4();
         break;
       }
     case 1:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes2_dofmap_0();
         break;
       }
     case 2:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes2_dofmap_0();
         break;
       }
     case 3:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes2_dofmap_0();
         break;
       }
     case 4:
       {
-        return new pnp_stokes_dofmap_2();
+        return new pnp_stokes2_dofmap_2();
         break;
       }
     case 5:
       {
-        return new pnp_stokes_dofmap_3();
+        return new pnp_stokes2_dofmap_3();
         break;
       }
     case 6:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes2_dofmap_0();
         break;
       }
     case 7:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes2_dofmap_0();
         break;
       }
     case 8:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes2_dofmap_5();
         break;
       }
     case 9:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes2_dofmap_0();
         break;
       }
     case 10:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes2_dofmap_5();
         break;
       }
     case 11:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes2_dofmap_5();
         break;
       }
     case 12:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes2_dofmap_5();
         break;
       }
     case 13:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes2_dofmap_5();
         break;
       }
     }
@@ -20752,7 +19768,7 @@ public:
 
   bool has_exterior_facet_integrals() const final override
   {
-    return true;
+    return false;
   }
 
   bool has_interior_facet_integrals() const final override
@@ -20827,17 +19843,17 @@ public:
 
   ufc::cell_integral * create_default_cell_integral() const final override
   {
-    return new pnp_stokes_cell_integral_1_otherwise();
+    return new pnp_stokes2_cell_integral_1_otherwise();
   }
 
   ufc::exterior_facet_integral * create_default_exterior_facet_integral() const final override
   {
-    return new pnp_stokes_exterior_facet_integral_1_otherwise();
+    return 0;
   }
 
   ufc::interior_facet_integral * create_default_interior_facet_integral() const final override
   {
-    return new pnp_stokes_interior_facet_integral_1_otherwise();
+    return new pnp_stokes2_interior_facet_integral_1_otherwise();
   }
 
   ufc::vertex_integral * create_default_vertex_integral() const final override
@@ -20889,7 +19905,7 @@ public:
 #include <dolfin/adaptivity/GoalFunctional.h>
 #include <dolfin/la/GenericVector.h>
 
-namespace pnp_stokes
+namespace pnp_stokes2
 {
 
 class CoefficientSpace_AnAn: public dolfin::FunctionSpace
@@ -20899,8 +19915,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_AnAn(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_0>(), *mesh))
   {
     // Do nothing
   }
@@ -20908,8 +19924,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_AnAn(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_0>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -20923,8 +19939,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_CatCat(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_0>(), *mesh))
   {
     // Do nothing
   }
@@ -20932,8 +19948,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_CatCat(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_0>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -20947,8 +19963,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_Dn(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_0>(), *mesh))
   {
     // Do nothing
   }
@@ -20956,8 +19972,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_Dn(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_0>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -20971,8 +19987,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_Dp(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_0>(), *mesh))
   {
     // Do nothing
   }
@@ -20980,8 +19996,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_Dp(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_0>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -20995,8 +20011,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_EsEs(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_0>(), *mesh))
   {
     // Do nothing
   }
@@ -21004,8 +20020,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_EsEs(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_0>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21019,8 +20035,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_alpha1(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_5>(), *mesh))
   {
     // Do nothing
   }
@@ -21028,8 +20044,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_alpha1(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_5>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21043,8 +20059,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_alpha2(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_5>(), *mesh))
   {
     // Do nothing
   }
@@ -21052,8 +20068,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_alpha2(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_5>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21067,8 +20083,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_eps(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_0>(), *mesh))
   {
     // Do nothing
   }
@@ -21076,8 +20092,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_eps(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_0>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21091,8 +20107,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_mu(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_5>(), *mesh))
   {
     // Do nothing
   }
@@ -21100,8 +20116,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_mu(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_5>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21115,8 +20131,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_pp(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_3>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_3>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_3>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_3>(), *mesh))
   {
     // Do nothing
   }
@@ -21124,8 +20140,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_pp(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_3>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_3>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_3>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_3>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21139,8 +20155,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_qn(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_5>(), *mesh))
   {
     // Do nothing
   }
@@ -21148,8 +20164,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_qn(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_5>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21163,8 +20179,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_qp(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_5>(), *mesh))
   {
     // Do nothing
   }
@@ -21172,8 +20188,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_qp(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_5>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21187,8 +20203,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_uu(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_2>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_2>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_2>(), *mesh))
   {
     // Do nothing
   }
@@ -21196,8 +20212,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_uu(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_2>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_2>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_2>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21211,8 +20227,8 @@ public:
   // Constructor for standard function space
   Form_a_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_4>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_4>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_4>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_4>(), *mesh))
   {
     // Do nothing
   }
@@ -21220,8 +20236,8 @@ public:
   // Constructor for constrained function space
   Form_a_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_4>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_4>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_4>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_4>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21235,8 +20251,8 @@ public:
   // Constructor for standard function space
   Form_a_FunctionSpace_1(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_4>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_4>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_4>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_4>(), *mesh))
   {
     // Do nothing
   }
@@ -21244,8 +20260,8 @@ public:
   // Constructor for constrained function space
   Form_a_FunctionSpace_1(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_4>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_4>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_4>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_4>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21327,7 +20343,7 @@ public:
     _function_spaces[0] = V0;
     _function_spaces[1] = V1;
 
-    _ufc_form = std::make_shared<const pnp_stokes_form_0>();
+    _ufc_form = std::make_shared<const pnp_stokes2_form_0>();
   }
 
   // Constructor
@@ -21350,7 +20366,7 @@ public:
     this->alpha1 = alpha1;
     this->alpha2 = alpha2;
 
-    _ufc_form = std::make_shared<const pnp_stokes_form_0>();
+    _ufc_form = std::make_shared<const pnp_stokes2_form_0>();
   }
 
   // Destructor
@@ -21630,8 +20646,8 @@ public:
   // Constructor for standard function space
   Form_L_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_4>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_4>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_4>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_4>(), *mesh))
   {
     // Do nothing
   }
@@ -21639,8 +20655,8 @@ public:
   // Constructor for constrained function space
   Form_L_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_4>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_4>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes2_finite_element_4>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes2_dofmap_4>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21703,7 +20719,7 @@ public:
   {
     _function_spaces[0] = V0;
 
-    _ufc_form = std::make_shared<const pnp_stokes_form_1>();
+    _ufc_form = std::make_shared<const pnp_stokes2_form_1>();
   }
 
   // Constructor
@@ -21726,7 +20742,7 @@ public:
     this->alpha1 = alpha1;
     this->alpha2 = alpha2;
 
-    _ufc_form = std::make_shared<const pnp_stokes_form_1>();
+    _ufc_form = std::make_shared<const pnp_stokes2_form_1>();
   }
 
   // Destructor

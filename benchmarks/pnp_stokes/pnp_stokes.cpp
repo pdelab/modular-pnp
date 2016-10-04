@@ -214,7 +214,7 @@ int main(int argc, char** argv)
   auto initialVelocity = std::make_shared<Function>((*initial_soln_stokes)[0]);
   auto initialPressure = std::make_shared<Function>((*initial_soln_stokes)[1]);
   auto one_vec3 = std::make_shared<Constant>(1.0,1.0,1.0);
-  auto vec_vel = std::make_shared<Constant>(1.0,0.0,0.0);
+  auto vec_vel = std::make_shared<Constant>(0.0,0.0,0.0);
 
   initialCation->interpolate(Cation);
   initialAnion->interpolate(Anion);
@@ -240,7 +240,7 @@ int main(int argc, char** argv)
   anion0->interpolate(Anion);
   potential0->interpolate(Volt);
   // velocity0->interpolate(Velocity);
-  velocity0->interpolate(*one_vec3);
+  velocity0->interpolate(*vec_vel);
   pressure0->interpolate(*zero);
 
   // set adaptivity parameters
@@ -292,7 +292,7 @@ int main(int argc, char** argv)
     printf("\tboundary conditions...\n"); fflush(stdout);
     auto boundary = std::make_shared<SymmBoundaries>(coeff_par.bc_coordinate, -domain_par.length_x/2.0, domain_par.length_x/2.0);
     auto bddd = std::make_shared<Bd_all>();
-    dolfin::DirichletBC bc(V, zero_vec3, boundary);
+    dolfin::DirichletBC bc(V, zero_vec3, bddd);
     dolfin::DirichletBC bc_stokes(Vs->sub(0), zero_vec3, bddd);
     // dolfin::DirichletBC bc_stokes(Vs, zero_vec4, bddd);
 

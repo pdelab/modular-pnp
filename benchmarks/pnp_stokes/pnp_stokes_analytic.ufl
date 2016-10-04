@@ -36,6 +36,8 @@ qn = Constant(tetrahedron)
 cation = Coefficient(CG)
 anion = Coefficient(CG)
 potential = Coefficient(CG)
+velocity = Coefficient(Vit)
+pressure = Coefficient(Pres)
 
 ##  Coefficients
 mu  = Constant(tetrahedron)
@@ -75,5 +77,12 @@ L   = - ( Dp*exp(CatCat)* (inner(grad(CatCat),grad(cat)) + qp*inner(grad(EsEs),g
     - ( 2.0*mu*(alpha1)* inner( avg(sym(grad(uu))),  sym(outer(v('+'),n_vec('+')) + outer(v('-'),n_vec('-'))) ) )*dS \
     - ( 2.0*mu*(alpha1)* inner( sym(outer(uu('+'),n_vec('+')) + outer(uu('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
     - ( 2.0*mu*(alpha2/h_avg)* inner( jump(uu),jump(v) ) )*dS \
-    - ( 2.0*mu*(alpha2/h)*(inner(uu,n_vec)*inner(v,n_vec) ) )*ds \
+   	- ( 2.0*mu*(alpha2/h)*(inner(uu,n_vec)*inner(v,n_vec) ) )*ds \
     - ( (qp*exp(CatCat)+qn*exp(AnAn))*inner( grad(EsEs),v ) )*dx \
+    + ( Dp*exp(cation)*inner(grad(cation+qp*potential), grad(cat)) )*dx \
+    + ( Dn*exp(anion )*inner(grad(anion +qn*potential), grad(an )) )*dx \
+    + ( eps * inner(grad(potential), grad(phi)) )*dx \
+    + ( -(qp*exp(cation) + qn*exp(anion))*phi )*dx \
+    - ( exp(cation)*(inner(velocity,grad(cat))) )*dx \
+    - ( exp(anion)*(inner(velocity,grad(an)))  )*dx \
+    + ( 2.0*mu* inner( sym(grad(velocity)), sym(grad(v)) ) )*dx   -   ( pressure*div(v) )*dx   +   ( div(velocity)*q )*dx

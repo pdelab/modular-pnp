@@ -20,22 +20,22 @@
 //   representation:                 'auto'
 //   split:                          False
 
-#ifndef __PNP_STOKES_H
-#define __PNP_STOKES_H
+#ifndef __PNP_STOKES_TIME_H
+#define __PNP_STOKES_TIME_H
 #include <cmath>
 #include <stdexcept>
 #include <ufc.h>
 
-class pnp_stokes_finite_element_0: public ufc::finite_element
+class pnp_stokes_time_finite_element_0: public ufc::finite_element
 {
 public:
 
-  pnp_stokes_finite_element_0() : ufc::finite_element()
+  pnp_stokes_time_finite_element_0() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_finite_element_0() override
+  ~pnp_stokes_time_finite_element_0() override
   {
     // Do nothing
   }
@@ -1252,22 +1252,22 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new pnp_stokes_finite_element_0();
+    return new pnp_stokes_time_finite_element_0();
   }
 
 };
 
 
-class pnp_stokes_finite_element_1: public ufc::finite_element
+class pnp_stokes_time_finite_element_1: public ufc::finite_element
 {
 public:
 
-  pnp_stokes_finite_element_1() : ufc::finite_element()
+  pnp_stokes_time_finite_element_1() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_finite_element_1() override
+  ~pnp_stokes_time_finite_element_1() override
   {
     // Do nothing
   }
@@ -4148,17 +4148,17 @@ public:
     {
     case 0:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     case 1:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     case 2:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     }
@@ -4168,22 +4168,22 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new pnp_stokes_finite_element_1();
+    return new pnp_stokes_time_finite_element_1();
   }
 
 };
 
 
-class pnp_stokes_finite_element_2: public ufc::finite_element
+class pnp_stokes_time_finite_element_2: public ufc::finite_element
 {
 public:
 
-  pnp_stokes_finite_element_2() : ufc::finite_element()
+  pnp_stokes_time_finite_element_2() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_finite_element_2() override
+  ~pnp_stokes_time_finite_element_2() override
   {
     // Do nothing
   }
@@ -5643,22 +5643,22 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new pnp_stokes_finite_element_2();
+    return new pnp_stokes_time_finite_element_2();
   }
 
 };
 
 
-class pnp_stokes_finite_element_3: public ufc::finite_element
+class pnp_stokes_time_finite_element_3: public ufc::finite_element
 {
 public:
 
-  pnp_stokes_finite_element_3() : ufc::finite_element()
+  pnp_stokes_time_finite_element_3() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_finite_element_3() override
+  ~pnp_stokes_time_finite_element_3() override
   {
     // Do nothing
   }
@@ -5942,22 +5942,22 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new pnp_stokes_finite_element_3();
+    return new pnp_stokes_time_finite_element_3();
   }
 
 };
 
 
-class pnp_stokes_finite_element_4: public ufc::finite_element
+class pnp_stokes_time_finite_element_4: public ufc::finite_element
 {
 public:
 
-  pnp_stokes_finite_element_4() : ufc::finite_element()
+  pnp_stokes_time_finite_element_4() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_finite_element_4() override
+  ~pnp_stokes_time_finite_element_4() override
   {
     // Do nothing
   }
@@ -10061,27 +10061,27 @@ public:
     {
     case 0:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     case 1:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     case 2:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     case 3:
       {
-        return new pnp_stokes_finite_element_2();
+        return new pnp_stokes_time_finite_element_2();
         break;
       }
     case 4:
       {
-        return new pnp_stokes_finite_element_3();
+        return new pnp_stokes_time_finite_element_3();
         break;
       }
     }
@@ -10091,22 +10091,22 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new pnp_stokes_finite_element_4();
+    return new pnp_stokes_time_finite_element_4();
   }
 
 };
 
 
-class pnp_stokes_finite_element_5: public ufc::finite_element
+class pnp_stokes_time_finite_element_5: public ufc::finite_element
 {
 public:
 
-  pnp_stokes_finite_element_5() : ufc::finite_element()
+  pnp_stokes_time_finite_element_5() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_finite_element_5() override
+  ~pnp_stokes_time_finite_element_5() override
   {
     // Do nothing
   }
@@ -10390,22 +10390,22 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new pnp_stokes_finite_element_5();
+    return new pnp_stokes_time_finite_element_5();
   }
 
 };
 
 
-class pnp_stokes_dofmap_0: public ufc::dofmap
+class pnp_stokes_time_dofmap_0: public ufc::dofmap
 {
 public:
 
-  pnp_stokes_dofmap_0() : ufc::dofmap()
+  pnp_stokes_time_dofmap_0() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_dofmap_0() override
+  ~pnp_stokes_time_dofmap_0() override
   {
     // Do nothing
   }
@@ -10616,22 +10616,22 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new pnp_stokes_dofmap_0();
+    return new pnp_stokes_time_dofmap_0();
   }
 
 };
 
 
-class pnp_stokes_dofmap_1: public ufc::dofmap
+class pnp_stokes_time_dofmap_1: public ufc::dofmap
 {
 public:
 
-  pnp_stokes_dofmap_1() : ufc::dofmap()
+  pnp_stokes_time_dofmap_1() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_dofmap_1() override
+  ~pnp_stokes_time_dofmap_1() override
   {
     // Do nothing
   }
@@ -10885,17 +10885,17 @@ public:
     {
     case 0:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     case 1:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     case 2:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     }
@@ -10905,22 +10905,22 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new pnp_stokes_dofmap_1();
+    return new pnp_stokes_time_dofmap_1();
   }
 
 };
 
 
-class pnp_stokes_dofmap_2: public ufc::dofmap
+class pnp_stokes_time_dofmap_2: public ufc::dofmap
 {
 public:
 
-  pnp_stokes_dofmap_2() : ufc::dofmap()
+  pnp_stokes_time_dofmap_2() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_dofmap_2() override
+  ~pnp_stokes_time_dofmap_2() override
   {
     // Do nothing
   }
@@ -11123,22 +11123,22 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new pnp_stokes_dofmap_2();
+    return new pnp_stokes_time_dofmap_2();
   }
 
 };
 
 
-class pnp_stokes_dofmap_3: public ufc::dofmap
+class pnp_stokes_time_dofmap_3: public ufc::dofmap
 {
 public:
 
-  pnp_stokes_dofmap_3() : ufc::dofmap()
+  pnp_stokes_time_dofmap_3() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_dofmap_3() override
+  ~pnp_stokes_time_dofmap_3() override
   {
     // Do nothing
   }
@@ -11315,22 +11315,22 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new pnp_stokes_dofmap_3();
+    return new pnp_stokes_time_dofmap_3();
   }
 
 };
 
 
-class pnp_stokes_dofmap_4: public ufc::dofmap
+class pnp_stokes_time_dofmap_4: public ufc::dofmap
 {
 public:
 
-  pnp_stokes_dofmap_4() : ufc::dofmap()
+  pnp_stokes_time_dofmap_4() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_dofmap_4() override
+  ~pnp_stokes_time_dofmap_4() override
   {
     // Do nothing
   }
@@ -11628,27 +11628,27 @@ public:
     {
     case 0:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     case 1:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     case 2:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     case 3:
       {
-        return new pnp_stokes_dofmap_2();
+        return new pnp_stokes_time_dofmap_2();
         break;
       }
     case 4:
       {
-        return new pnp_stokes_dofmap_3();
+        return new pnp_stokes_time_dofmap_3();
         break;
       }
     }
@@ -11658,22 +11658,22 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new pnp_stokes_dofmap_4();
+    return new pnp_stokes_time_dofmap_4();
   }
 
 };
 
 
-class pnp_stokes_dofmap_5: public ufc::dofmap
+class pnp_stokes_time_dofmap_5: public ufc::dofmap
 {
 public:
 
-  pnp_stokes_dofmap_5() : ufc::dofmap()
+  pnp_stokes_time_dofmap_5() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_dofmap_5() override
+  ~pnp_stokes_time_dofmap_5() override
   {
     // Do nothing
   }
@@ -11850,29 +11850,29 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new pnp_stokes_dofmap_5();
+    return new pnp_stokes_time_dofmap_5();
   }
 
 };
 
 
-class pnp_stokes_cell_integral_0_otherwise: public ufc::cell_integral
+class pnp_stokes_time_cell_integral_0_otherwise: public ufc::cell_integral
 {
 public:
 
-  pnp_stokes_cell_integral_0_otherwise() : ufc::cell_integral()
+  pnp_stokes_time_cell_integral_0_otherwise() : ufc::cell_integral()
   {
     
   }
 
-  ~pnp_stokes_cell_integral_0_otherwise() override
+  ~pnp_stokes_time_cell_integral_0_otherwise() override
   {
     
   }
 
   const std::vector<bool> & enabled_coefficients() const final override
   {
-    static const std::vector<bool> enabled({true, true, true, true, true, true, true, true, true, true, false, false});
+    static const std::vector<bool> enabled({true, true, true, true, true, true, true, true, true, true, true, false, false});
     return enabled;
   }
 
@@ -11912,7 +11912,7 @@ public:
     {0.333333333333333, 0.333333333333333, 0.0, 0.333333333333333},
     {0.090909090909091, 0.727272727272727, 0.0909090909090909, 0.0909090909090909},
     {0.727272727272727, 0.0909090909090908, 0.0909090909090909, 0.0909090909090909},
-    {0.090909090909091, 0.0909090909090909, 0.0909090909090909, 0.727272727272727},
+    {0.0909090909090909, 0.0909090909090909, 0.0909090909090909, 0.727272727272727},
     {0.090909090909091, 0.0909090909090908, 0.727272727272727, 0.0909090909090909},
     {0.433449846426336, 0.433449846426336, 0.0665501535736643, 0.0665501535736643},
     {0.433449846426336, 0.0665501535736643, 0.433449846426336, 0.0665501535736643},
@@ -11986,17 +11986,17 @@ public:
     static const double FE1_C3[15][4] = \
     {{-0.25, -0.75, -0.25, 0.25},
     {0.0, -1.0, 0.0, 0.0},
-    {-0.333333333333333, -0.666666666666667, -0.333333333333333, 0.333333333333334},
+    {-0.333333333333333, -0.666666666666667, -0.333333333333333, 0.333333333333333},
     {-0.333333333333333, -0.666666666666667, -0.333333333333333, 0.333333333333333},
     {-0.333333333333333, -0.666666666666667, -0.333333333333333, 0.333333333333333},
     {-0.727272727272727, -0.272727272727273, -0.727272727272727, 0.727272727272727},
-    {-0.0909090909090907, -0.909090909090909, -0.0909090909090907, 0.0909090909090907},
-    {-0.0909090909090909, -0.909090909090909, -0.090909090909091, 0.090909090909091},
-    {-0.0909090909090911, -0.909090909090909, -0.0909090909090911, 0.0909090909090911},
+    {-0.0909090909090906, -0.909090909090909, -0.0909090909090907, 0.0909090909090908},
+    {-0.0909090909090909, -0.909090909090909, -0.090909090909091, 0.0909090909090909},
+    {-0.0909090909090911, -0.909090909090909, -0.0909090909090912, 0.0909090909090911},
     {-0.433449846426336, -0.566550153573664, -0.433449846426336, 0.433449846426336},
-    {-0.0665501535736643, -0.933449846426336, -0.0665501535736643, 0.0665501535736644},
-    {-0.0665501535736642, -0.933449846426336, -0.0665501535736642, 0.0665501535736643},
-    {-0.0665501535736645, -0.933449846426336, -0.0665501535736645, 0.0665501535736645},
+    {-0.0665501535736643, -0.933449846426336, -0.0665501535736644, 0.0665501535736644},
+    {-0.0665501535736642, -0.933449846426336, -0.0665501535736643, 0.0665501535736643},
+    {-0.0665501535736644, -0.933449846426336, -0.0665501535736645, 0.0665501535736645},
     {-0.433449846426336, -0.566550153573664, -0.433449846426336, 0.433449846426336},
     {-0.433449846426336, -0.566550153573664, -0.433449846426336, 0.433449846426336}};
     
@@ -12026,18 +12026,18 @@ public:
     static const double FE1_C4[15][4] = \
     {{-0.25, 0.25, 0.75, 0.25},
     {-0.333333333333333, 0.333333333333333, 0.666666666666667, 0.333333333333333},
-    {-0.333333333333333, 0.333333333333333, 0.666666666666667, 0.333333333333333},
+    {-0.333333333333334, 0.333333333333333, 0.666666666666667, 0.333333333333334},
     {-0.333333333333333, 0.333333333333333, 0.666666666666667, 0.333333333333333},
     {0.0, 0.0, 1.0, 0.0},
-    {-0.0909090909090911, 0.090909090909091, 0.909090909090909, 0.0909090909090912},
-    {-0.0909090909090908, 0.0909090909090907, 0.909090909090909, 0.0909090909090909},
+    {-0.0909090909090912, 0.090909090909091, 0.909090909090909, 0.0909090909090912},
+    {-0.0909090909090908, 0.0909090909090906, 0.909090909090909, 0.0909090909090908},
     {-0.090909090909091, 0.0909090909090909, 0.909090909090909, 0.090909090909091},
     {-0.727272727272727, 0.727272727272727, 0.272727272727273, 0.727272727272727},
-    {-0.0665501535736644, 0.0665501535736643, 0.933449846426335, 0.0665501535736644},
+    {-0.0665501535736644, 0.0665501535736643, 0.933449846426336, 0.0665501535736644},
     {-0.433449846426336, 0.433449846426336, 0.566550153573664, 0.433449846426336},
-    {-0.0665501535736643, 0.0665501535736642, 0.933449846426336, 0.0665501535736643},
+    {-0.0665501535736643, 0.0665501535736641, 0.933449846426336, 0.0665501535736643},
     {-0.433449846426336, 0.433449846426336, 0.566550153573664, 0.433449846426336},
-    {-0.0665501535736645, 0.0665501535736644, 0.933449846426335, 0.0665501535736645},
+    {-0.0665501535736645, 0.0665501535736643, 0.933449846426336, 0.0665501535736645},
     {-0.433449846426336, 0.433449846426336, 0.566550153573664, 0.433449846426336}};
     
     // Array of non-zero columns
@@ -12049,16 +12049,16 @@ public:
     {-0.333333333333333, 0.333333333333333, -0.333333333333333, -0.666666666666667},
     {0.0, 0.0, 0.0, -1.0},
     {-0.333333333333333, 0.333333333333333, -0.333333333333333, -0.666666666666667},
-    {-0.0909090909090909, 0.0909090909090908, -0.0909090909090908, -0.909090909090909},
-    {-0.0909090909090907, 0.0909090909090906, -0.0909090909090906, -0.909090909090909},
+    {-0.090909090909091, 0.0909090909090909, -0.0909090909090909, -0.909090909090909},
+    {-0.0909090909090907, 0.0909090909090907, -0.0909090909090907, -0.909090909090909},
     {-0.727272727272727, 0.727272727272727, -0.727272727272726, -0.272727272727273},
-    {-0.0909090909090908, 0.0909090909090907, -0.0909090909090907, -0.909090909090909},
-    {-0.0665501535736642, 0.0665501535736641, -0.0665501535736641, -0.933449846426336},
-    {-0.0665501535736641, 0.066550153573664, -0.0665501535736641, -0.933449846426336},
+    {-0.0909090909090908, 0.0909090909090908, -0.0909090909090908, -0.909090909090909},
+    {-0.0665501535736643, 0.0665501535736643, -0.0665501535736643, -0.933449846426336},
+    {-0.0665501535736642, 0.0665501535736642, -0.0665501535736642, -0.933449846426336},
     {-0.433449846426335, 0.433449846426335, -0.433449846426335, -0.566550153573665},
     {-0.433449846426335, 0.433449846426335, -0.433449846426335, -0.566550153573665},
     {-0.433449846426335, 0.433449846426335, -0.433449846426335, -0.566550153573665},
-    {-0.0665501535736643, 0.0665501535736641, -0.0665501535736642, -0.933449846426336}};
+    {-0.0665501535736643, 0.0665501535736643, -0.0665501535736643, -0.933449846426336}};
     
     // Array of non-zero columns
     static const unsigned int nzc18[4] = {12, 13, 14, 15};
@@ -12068,64 +12068,70 @@ public:
     {
       A[r] = 0.0;
     } // end loop over 'r'
-    // Number of operations to compute geometry constants: 594.
-    double G[50];
-    G[0] = det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[1] = det*w[8][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[2] = det*w[8][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[3] = det*w[8][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[4] = det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[5] = det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    // Number of operations to compute geometry constants: 657.
+    double G[56];
+    G[0] = det*w[10][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[1] = det*w[10][0]*w[8][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[2] = det*w[10][0]*w[8][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[3] = det*w[10][0]*w[8][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[4] = det*w[10][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[5] = det*w[10][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
     G[6] = det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
     G[7] = det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[8] = det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[9] = det*w[6][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[10] = det*w[6][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[11] = det*w[6][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[12] = det*w[6][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[13] = det*w[6][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[14] = det*w[6][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[15] = det*w[8][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[16] = det*w[8][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[17] = det*w[8][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[18] =  - det*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
-    G[19] =  - det*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
-    G[20] =  - det*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
-    G[21] =  - det*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
-    G[22] =  - det*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
-    G[23] =  - det*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
-    G[24] =  - det*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
-    G[25] =  - det*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
-    G[26] =  - det*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
-    G[27] =  - det*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
-    G[28] = det*w[6][0]*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
-    G[29] = det*w[8][0]*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
-    G[30] = det*w[6][0]*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
-    G[31] = det*w[8][0]*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
-    G[32] = det*w[6][0]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
-    G[33] = det*w[8][0]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
-    G[34] = det*w[6][0]*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
-    G[35] = det*w[8][0]*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
-    G[36] = det*w[6][0]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
-    G[37] = det*w[8][0]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
-    G[38] = det*w[6][0]*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
-    G[39] = det*w[8][0]*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
-    G[40] = det*w[6][0]*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
-    G[41] = det*w[8][0]*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
-    G[42] = det*w[6][0]*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
-    G[43] = det*w[8][0]*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
-    G[44] = det*w[6][0]*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
-    G[45] = det*w[8][0]*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
-    G[46] =  - det*w[6][0];
-    G[47] =  - det*w[8][0];
-    G[48] = det*w[9][0]*(2.0*(J[0]*J[0]*K[0]*K[0] + J[3]*K[1]*(J[0]*K[0] + J[3]*K[1]) + J[6]*K[2]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2]) + K[3]*(J[0]*(J[4]*K[1] + J[7]*K[2]) + J[1]*J[1]*K[3] + K[0]*(J[3]*J[4] + J[6]*J[7])) + K[4]*(J[1]*(J[0]*K[1] + J[3]*K[0] + J[4]*K[3]) + J[4]*J[4]*K[4] + J[7]*(J[3]*K[2] + J[6]*K[1])) + K[5]*(J[6]*(J[1]*K[0] + J[4]*K[1]) + J[7]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5]) + K[2]*(J[0]*J[1] + J[3]*J[4])) + K[6]*(J[2]*J[2]*K[6] + J[5]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3]) + J[8]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3])) + K[7]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[5]*J[5]*K[7] + J[8]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4])) + K[8]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[8]*J[8]*K[8])) + 4.0*(J[0]*J[1]*K[0]*K[3] + J[2]*K[6]*(J[0]*K[0] + J[1]*K[3]) + J[3]*J[4]*K[1]*K[4] + J[5]*K[7]*(J[3]*K[1] + J[4]*K[4]) + J[6]*J[7]*K[2]*K[5] + J[8]*K[8]*(J[6]*K[2] + J[7]*K[5])) + K[0]*K[0]*(J[3]*J[3] + J[6]*J[6]) + K[1]*K[1]*(J[0]*J[0] + J[6]*J[6]) + K[2]*K[2]*(J[0]*J[0] + J[3]*J[3]) + K[3]*K[3]*(J[4]*J[4] + J[7]*J[7]) + K[4]*K[4]*(J[1]*J[1] + J[7]*J[7]) + K[5]*K[5]*(J[1]*J[1] + J[4]*J[4]) + K[6]*K[6]*(J[5]*J[5] + J[8]*J[8]) + K[7]*K[7]*(J[2]*J[2] + J[8]*J[8]) + K[8]*K[8]*(J[2]*J[2] + J[5]*J[5]))/(detJ*detJ);
-    G[49] = det*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
+    G[8] = det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[9] = det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[10] = det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[11] = det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[12] = det*w[10][0]*w[6][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[13] = det*w[10][0]*w[6][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[14] = det*w[10][0]*w[6][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[15] = det*w[10][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[16] = det*w[10][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[17] = det*w[10][0]*w[6][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[18] = det*w[10][0]*w[6][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[19] = det*w[10][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[20] = det*w[10][0]*w[6][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[21] = det*w[10][0]*w[8][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[22] = det*w[10][0]*w[8][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[23] = det*w[10][0]*w[8][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[24] =  - det*w[10][0]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
+    G[25] =  - det*w[10][0]*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
+    G[26] =  - det*w[10][0]*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
+    G[27] =  - det*w[10][0]*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
+    G[28] =  - det*w[10][0]*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
+    G[29] =  - det*w[10][0]*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
+    G[30] =  - det*w[10][0]*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
+    G[31] =  - det*w[10][0]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
+    G[32] =  - det*w[10][0]*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
+    G[33] =  - det*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
+    G[34] = det*w[6][0]*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
+    G[35] = det*w[8][0]*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
+    G[36] = det*w[6][0]*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
+    G[37] = det*w[8][0]*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
+    G[38] = det*w[6][0]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
+    G[39] = det*w[8][0]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
+    G[40] = det*w[6][0]*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
+    G[41] = det*w[8][0]*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
+    G[42] = det*w[6][0]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
+    G[43] = det*w[8][0]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
+    G[44] = det*w[6][0]*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
+    G[45] = det*w[8][0]*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
+    G[46] = det*w[6][0]*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
+    G[47] = det*w[8][0]*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
+    G[48] = det*w[6][0]*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
+    G[49] = det*w[8][0]*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
+    G[50] = det*w[6][0]*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
+    G[51] = det*w[8][0]*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
+    G[52] =  - det*w[6][0];
+    G[53] =  - det*w[8][0];
+    G[54] = det*w[9][0]*(2.0*(J[0]*J[0]*K[0]*K[0] + J[3]*K[1]*(J[0]*K[0] + J[3]*K[1]) + J[6]*K[2]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2]) + K[3]*(J[0]*(J[4]*K[1] + J[7]*K[2]) + J[1]*J[1]*K[3] + K[0]*(J[3]*J[4] + J[6]*J[7])) + K[4]*(J[1]*(J[0]*K[1] + J[3]*K[0] + J[4]*K[3]) + J[4]*J[4]*K[4] + J[7]*(J[3]*K[2] + J[6]*K[1])) + K[5]*(J[6]*(J[1]*K[0] + J[4]*K[1]) + J[7]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5]) + K[2]*(J[0]*J[1] + J[3]*J[4])) + K[6]*(J[2]*J[2]*K[6] + J[5]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3]) + J[8]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3])) + K[7]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[5]*J[5]*K[7] + J[8]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4])) + K[8]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[8]*J[8]*K[8])) + 4.0*(J[0]*J[1]*K[0]*K[3] + J[2]*K[6]*(J[0]*K[0] + J[1]*K[3]) + J[3]*J[4]*K[1]*K[4] + J[5]*K[7]*(J[3]*K[1] + J[4]*K[4]) + J[6]*J[7]*K[2]*K[5] + J[8]*K[8]*(J[6]*K[2] + J[7]*K[5])) + K[0]*K[0]*(J[3]*J[3] + J[6]*J[6]) + K[1]*K[1]*(J[0]*J[0] + J[6]*J[6]) + K[2]*K[2]*(J[0]*J[0] + J[3]*J[3]) + K[3]*K[3]*(J[4]*J[4] + J[7]*J[7]) + K[4]*K[4]*(J[1]*J[1] + J[7]*J[7]) + K[5]*K[5]*(J[1]*J[1] + J[4]*J[4]) + K[6]*K[6]*(J[5]*J[5] + J[8]*J[8]) + K[7]*K[7]*(J[2]*J[2] + J[8]*J[8]) + K[8]*K[8]*(J[2]*J[2] + J[5]*J[5]))/(detJ*detJ);
+    G[55] = det*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
     
     // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 34185
+    // Number of operations to compute element tensor for following IP loop = 35715
     for (unsigned int ip = 0; ip < 15; ip++)
     {
       
@@ -12175,8 +12181,8 @@ public:
         F16 += FE0[ip][r]*w[4][r];
       } // end loop over 'r'
       
-      // Number of operations to compute ip constants: 399
-      double I[74];
+      // Number of operations to compute ip constants: 405
+      double I[76];
       // Number of operations: 4
       I[0] = F15*G[0]*W15[ip]*std::exp(F1);
       
@@ -12202,202 +12208,208 @@ public:
       I[7] = F16*G[7]*W15[ip];
       
       // Number of operations: 2
-      I[8] = F16*G[4]*W15[ip];
+      I[8] = F16*G[8]*W15[ip];
       
       // Number of operations: 2
-      I[9] = F16*G[8]*W15[ip];
+      I[9] = F16*G[9]*W15[ip];
       
       // Number of operations: 2
-      I[10] = F16*G[5]*W15[ip];
+      I[10] = F16*G[10]*W15[ip];
       
       // Number of operations: 2
-      I[11] = F16*G[0]*W15[ip];
+      I[11] = F16*G[11]*W15[ip];
       
       // Number of operations: 4
-      I[12] = F11*G[9]*W15[ip]*std::exp(F0);
+      I[12] = F11*G[12]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[13] = F11*G[10]*W15[ip]*std::exp(F0);
+      I[13] = F11*G[13]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[14] = F11*G[11]*W15[ip]*std::exp(F0);
+      I[14] = F11*G[14]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[15] = F11*G[6]*W15[ip]*std::exp(F0);
+      I[15] = F11*G[15]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[16] = F11*G[7]*W15[ip]*std::exp(F0);
+      I[16] = F11*G[16]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
       I[17] = F11*G[4]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[18] = F11*G[12]*W15[ip]*std::exp(F0);
+      I[18] = F11*G[17]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[19] = F11*G[13]*W15[ip]*std::exp(F0);
+      I[19] = F11*G[18]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[20] = F11*G[8]*W15[ip]*std::exp(F0);
+      I[20] = F11*G[19]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
       I[21] = F11*G[5]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[22] = F11*G[14]*W15[ip]*std::exp(F0);
+      I[22] = F11*G[20]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
       I[23] = F11*G[0]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[24] = F15*G[15]*W15[ip]*std::exp(F1);
+      I[24] = F15*G[21]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[25] = F15*G[16]*W15[ip]*std::exp(F1);
+      I[25] = F15*G[22]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[26] = F15*G[6]*W15[ip]*std::exp(F1);
+      I[26] = F15*G[15]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[27] = F15*G[7]*W15[ip]*std::exp(F1);
+      I[27] = F15*G[16]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[28] = F15*G[17]*W15[ip]*std::exp(F1);
+      I[28] = F15*G[23]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[29] = F15*G[8]*W15[ip]*std::exp(F1);
+      I[29] = F15*G[19]*W15[ip]*std::exp(F1);
       
       // Number of operations: 3
-      I[30] = G[18]*W15[ip]*std::exp(F1);
+      I[30] = G[24]*W15[ip]*std::exp(F1);
       
       // Number of operations: 3
-      I[31] = G[19]*W15[ip]*std::exp(F1);
+      I[31] = G[25]*W15[ip]*std::exp(F1);
       
       // Number of operations: 3
-      I[32] = G[20]*W15[ip]*std::exp(F1);
+      I[32] = G[26]*W15[ip]*std::exp(F1);
       
       // Number of operations: 21
-      I[33] = W15[ip]*std::exp(F1)*(F15*(F12*G[0] + F13*G[5] + F14*G[4] + F5*G[3] + F6*G[2] + F7*G[1]) + F2*G[18] + F3*G[19] + F4*G[20]);
+      I[33] = W15[ip]*std::exp(F1)*(F15*(F12*G[0] + F13*G[5] + F14*G[4] + F5*G[3] + F6*G[2] + F7*G[1]) + F2*G[24] + F3*G[25] + F4*G[26]);
       
       // Number of operations: 3
-      I[34] = G[21]*W15[ip]*std::exp(F0);
+      I[34] = G[27]*W15[ip]*std::exp(F0);
       
       // Number of operations: 3
-      I[35] = G[22]*W15[ip]*std::exp(F0);
+      I[35] = G[28]*W15[ip]*std::exp(F0);
       
       // Number of operations: 3
-      I[36] = G[23]*W15[ip]*std::exp(F0);
+      I[36] = G[29]*W15[ip]*std::exp(F0);
       
       // Number of operations: 21
-      I[37] = W15[ip]*std::exp(F0)*(F11*(F10*G[6] + F5*G[11] + F6*G[10] + F7*G[9] + F8*G[4] + F9*G[7]) + F2*G[21] + F3*G[22] + F4*G[23]);
+      I[37] = W15[ip]*std::exp(F0)*(F11*(F10*G[15] + F5*G[14] + F6*G[13] + F7*G[12] + F8*G[4] + F9*G[16]) + F2*G[27] + F3*G[28] + F4*G[29]);
       
       // Number of operations: 3
-      I[38] = G[24]*W15[ip]*std::exp(F0);
+      I[38] = G[30]*W15[ip]*std::exp(F0);
       
       // Number of operations: 3
-      I[39] = G[25]*W15[ip]*std::exp(F0);
+      I[39] = G[31]*W15[ip]*std::exp(F0);
       
       // Number of operations: 3
-      I[40] = G[26]*W15[ip]*std::exp(F0);
+      I[40] = G[32]*W15[ip]*std::exp(F0);
       
       // Number of operations: 21
-      I[41] = W15[ip]*std::exp(F0)*(F11*(F10*G[7] + F5*G[13] + F6*G[12] + F7*G[10] + F8*G[5] + F9*G[8]) + F2*G[24] + F3*G[25] + F4*G[26]);
+      I[41] = W15[ip]*std::exp(F0)*(F11*(F10*G[16] + F5*G[18] + F6*G[17] + F7*G[13] + F8*G[5] + F9*G[19]) + F2*G[30] + F3*G[31] + F4*G[32]);
       
       // Number of operations: 3
-      I[42] = G[18]*W15[ip]*std::exp(F0);
+      I[42] = G[24]*W15[ip]*std::exp(F0);
       
       // Number of operations: 3
-      I[43] = G[19]*W15[ip]*std::exp(F0);
+      I[43] = G[25]*W15[ip]*std::exp(F0);
       
       // Number of operations: 3
-      I[44] = G[20]*W15[ip]*std::exp(F0);
+      I[44] = G[26]*W15[ip]*std::exp(F0);
       
       // Number of operations: 21
-      I[45] = W15[ip]*std::exp(F0)*(F11*(F10*G[4] + F5*G[14] + F6*G[13] + F7*G[11] + F8*G[0] + F9*G[5]) + F2*G[18] + F3*G[19] + F4*G[20]);
+      I[45] = W15[ip]*std::exp(F0)*(F11*(F10*G[4] + F5*G[20] + F6*G[18] + F7*G[14] + F8*G[0] + F9*G[5]) + F2*G[24] + F3*G[25] + F4*G[26]);
       
       // Number of operations: 3
-      I[46] = G[21]*W15[ip]*std::exp(F1);
+      I[46] = G[27]*W15[ip]*std::exp(F1);
       
       // Number of operations: 3
-      I[47] = G[22]*W15[ip]*std::exp(F1);
+      I[47] = G[28]*W15[ip]*std::exp(F1);
       
       // Number of operations: 3
-      I[48] = G[23]*W15[ip]*std::exp(F1);
+      I[48] = G[29]*W15[ip]*std::exp(F1);
       
       // Number of operations: 21
-      I[49] = W15[ip]*std::exp(F1)*(F15*(F12*G[4] + F13*G[7] + F14*G[6] + F5*G[1] + F6*G[16] + F7*G[15]) + F2*G[21] + F3*G[22] + F4*G[23]);
+      I[49] = W15[ip]*std::exp(F1)*(F15*(F12*G[4] + F13*G[16] + F14*G[15] + F5*G[1] + F6*G[22] + F7*G[21]) + F2*G[27] + F3*G[28] + F4*G[29]);
       
       // Number of operations: 3
-      I[50] = G[24]*W15[ip]*std::exp(F1);
+      I[50] = G[30]*W15[ip]*std::exp(F1);
       
       // Number of operations: 3
-      I[51] = G[25]*W15[ip]*std::exp(F1);
+      I[51] = G[31]*W15[ip]*std::exp(F1);
       
       // Number of operations: 3
-      I[52] = G[26]*W15[ip]*std::exp(F1);
+      I[52] = G[32]*W15[ip]*std::exp(F1);
       
       // Number of operations: 21
-      I[53] = W15[ip]*std::exp(F1)*(F15*(F12*G[5] + F13*G[8] + F14*G[7] + F5*G[2] + F6*G[17] + F7*G[16]) + F2*G[24] + F3*G[25] + F4*G[26]);
+      I[53] = W15[ip]*std::exp(F1)*(F15*(F12*G[5] + F13*G[19] + F14*G[16] + F5*G[2] + F6*G[23] + F7*G[22]) + F2*G[30] + F3*G[31] + F4*G[32]);
       
       // Number of operations: 1
-      I[54] = G[27]*W15[ip];
+      I[54] = G[33]*W15[ip];
       
       // Number of operations: 6
-      I[55] = W15[ip]*(G[28]*std::exp(F0) + G[29]*std::exp(F1));
+      I[55] = W15[ip]*(G[34]*std::exp(F0) + G[35]*std::exp(F1));
       
       // Number of operations: 6
-      I[56] = W15[ip]*(G[30]*std::exp(F0) + G[31]*std::exp(F1));
+      I[56] = W15[ip]*(G[36]*std::exp(F0) + G[37]*std::exp(F1));
       
       // Number of operations: 6
-      I[57] = W15[ip]*(G[32]*std::exp(F0) + G[33]*std::exp(F1));
+      I[57] = W15[ip]*(G[38]*std::exp(F0) + G[39]*std::exp(F1));
       
       // Number of operations: 6
-      I[58] = W15[ip]*(G[34]*std::exp(F0) + G[35]*std::exp(F1));
+      I[58] = W15[ip]*(G[40]*std::exp(F0) + G[41]*std::exp(F1));
       
       // Number of operations: 6
-      I[59] = W15[ip]*(G[36]*std::exp(F0) + G[37]*std::exp(F1));
+      I[59] = W15[ip]*(G[42]*std::exp(F0) + G[43]*std::exp(F1));
       
       // Number of operations: 6
-      I[60] = W15[ip]*(G[38]*std::exp(F0) + G[39]*std::exp(F1));
+      I[60] = W15[ip]*(G[44]*std::exp(F0) + G[45]*std::exp(F1));
       
       // Number of operations: 6
-      I[61] = W15[ip]*(G[40]*std::exp(F0) + G[41]*std::exp(F1));
+      I[61] = W15[ip]*(G[46]*std::exp(F0) + G[47]*std::exp(F1));
       
       // Number of operations: 6
-      I[62] = W15[ip]*(G[42]*std::exp(F0) + G[43]*std::exp(F1));
+      I[62] = W15[ip]*(G[48]*std::exp(F0) + G[49]*std::exp(F1));
       
       // Number of operations: 6
-      I[63] = W15[ip]*(G[44]*std::exp(F0) + G[45]*std::exp(F1));
+      I[63] = W15[ip]*(G[50]*std::exp(F0) + G[51]*std::exp(F1));
       
       // Number of operations: 3
-      I[64] = G[46]*W15[ip]*std::exp(F0);
+      I[64] = G[52]*W15[ip]*std::exp(F0);
       
       // Number of operations: 3
-      I[65] = G[47]*W15[ip]*std::exp(F1);
+      I[65] = G[53]*W15[ip]*std::exp(F1);
       
       // Number of operations: 8
-      I[66] = W15[ip]*std::exp(F0)*(F5*G[32] + F6*G[30] + F7*G[28]);
+      I[66] = W15[ip]*std::exp(F0)*(F5*G[38] + F6*G[36] + F7*G[34]);
       
       // Number of operations: 8
-      I[67] = W15[ip]*std::exp(F1)*(F5*G[33] + F6*G[31] + F7*G[29]);
+      I[67] = W15[ip]*std::exp(F1)*(F5*G[39] + F6*G[37] + F7*G[35]);
       
       // Number of operations: 1
-      I[68] = G[48]*W15[ip];
+      I[68] = G[54]*W15[ip];
       
       // Number of operations: 8
-      I[69] = W15[ip]*std::exp(F0)*(F5*G[38] + F6*G[36] + F7*G[34]);
+      I[69] = W15[ip]*std::exp(F0)*(F5*G[44] + F6*G[42] + F7*G[40]);
       
       // Number of operations: 8
-      I[70] = W15[ip]*std::exp(F1)*(F5*G[39] + F6*G[37] + F7*G[35]);
+      I[70] = W15[ip]*std::exp(F1)*(F5*G[45] + F6*G[43] + F7*G[41]);
       
       // Number of operations: 8
-      I[71] = W15[ip]*std::exp(F0)*(F5*G[44] + F6*G[42] + F7*G[40]);
+      I[71] = W15[ip]*std::exp(F0)*(F5*G[50] + F6*G[48] + F7*G[46]);
       
       // Number of operations: 8
-      I[72] = W15[ip]*std::exp(F1)*(F5*G[45] + F6*G[43] + F7*G[41]);
+      I[72] = W15[ip]*std::exp(F1)*(F5*G[51] + F6*G[49] + F7*G[47]);
+      
+      // Number of operations: 3
+      I[73] = W15[ip]*det*std::exp(F0);
+      
+      // Number of operations: 3
+      I[74] = W15[ip]*det*std::exp(F1);
       
       // Number of operations: 1
-      I[73] = G[49]*W15[ip];
+      I[75] = G[55]*W15[ip];
       
       
       // Number of operations for primary indices: 540
@@ -12587,7 +12599,7 @@ public:
         } // end loop over 'k'
       } // end loop over 'j'
       
-      // Number of operations for primary indices: 432
+      // Number of operations for primary indices: 528
       for (unsigned int j = 0; j < 4; j++)
       {
         for (unsigned int k = 0; k < 4; k++)
@@ -12610,6 +12622,10 @@ public:
           A[nzc18[j]*17 + nzc3[k]] += FE0[ip][k]*FE1_C5[ip][j]*I[71];
           // Number of operations to compute entry: 3
           A[nzc18[j]*17 + nzc7[k]] += FE0[ip][k]*FE1_C5[ip][j]*I[72];
+          // Number of operations to compute entry: 3
+          A[nzc3[j]*17 + nzc3[k]] += FE0[ip][j]*FE0[ip][k]*I[73];
+          // Number of operations to compute entry: 3
+          A[nzc7[j]*17 + nzc7[k]] += FE0[ip][j]*FE0[ip][k]*I[74];
         } // end loop over 'k'
       } // end loop over 'j'
       
@@ -12617,7 +12633,7 @@ public:
       for (unsigned int k = 0; k < 4; k++)
       {
         // Number of operations to compute entry: 2
-        A[16*17 + nzc16[k]] += FE1_C3_D100[ip][k]*I[73];
+        A[16*17 + nzc16[k]] += FE1_C3_D100[ip][k]*I[75];
       } // end loop over 'k'
     } // end loop over 'ip'
   }
@@ -12625,23 +12641,23 @@ public:
 };
 
 
-class pnp_stokes_exterior_facet_integral_0_otherwise: public ufc::exterior_facet_integral
+class pnp_stokes_time_exterior_facet_integral_0_otherwise: public ufc::exterior_facet_integral
 {
 public:
 
-  pnp_stokes_exterior_facet_integral_0_otherwise() : ufc::exterior_facet_integral()
+  pnp_stokes_time_exterior_facet_integral_0_otherwise() : ufc::exterior_facet_integral()
   {
     
   }
 
-  ~pnp_stokes_exterior_facet_integral_0_otherwise() override
+  ~pnp_stokes_time_exterior_facet_integral_0_otherwise() override
   {
     
   }
 
   const std::vector<bool> & enabled_coefficients() const final override
   {
-    static const std::vector<bool> enabled({false, false, false, false, false, false, false, false, false, true, false, true});
+    static const std::vector<bool> enabled({false, false, false, false, false, false, false, false, false, true, false, false, true});
     return enabled;
   }
 
@@ -12731,15 +12747,15 @@ public:
     static const double FE0_f0_C4[3][4] = \
     {{-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
     {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666666}};
+    {-0.666666666666667, 0.666666666666666, 0.333333333333334, 0.666666666666667}};
     
     // Array of non-zero columns
     static const unsigned int nzc4[4] = {12, 13, 14, 15};
     
     static const double FE0_f0_C5[3][4] = \
-    {{-0.166666666666667, 0.166666666666666, -0.166666666666666, -0.833333333333333},
+    {{-0.166666666666667, 0.166666666666667, -0.166666666666667, -0.833333333333333},
     {-0.666666666666666, 0.666666666666666, -0.666666666666666, -0.333333333333334},
-    {-0.166666666666667, 0.166666666666666, -0.166666666666666, -0.833333333333333}};
+    {-0.166666666666667, 0.166666666666667, -0.166666666666667, -0.833333333333333}};
     
     // Array of non-zero columns
     static const unsigned int nzc5[4] = {12, 13, 14, 15};
@@ -12756,7 +12772,7 @@ public:
     static const unsigned int nzc20[1] = {15};
     
     static const double FE0_f2_C3[3][4] = \
-    {{-0.166666666666666, -0.833333333333334, -0.166666666666666, 0.166666666666667},
+    {{-0.166666666666666, -0.833333333333334, -0.166666666666666, 0.166666666666666},
     {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
     {-0.666666666666667, -0.333333333333333, -0.666666666666667, 0.666666666666667}};
     
@@ -12764,8 +12780,8 @@ public:
     static const unsigned int nzc14[4] = {12, 13, 14, 15};
     
     static const double FE0_f3_C4[3][4] = \
-    {{-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666667},
+    {{-0.166666666666667, 0.166666666666666, 0.833333333333333, 0.166666666666667},
+    {-0.666666666666667, 0.666666666666666, 0.333333333333334, 0.666666666666667},
     {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667}};
     
     // Array of non-zero columns
@@ -12778,12 +12794,12 @@ public:
     } // end loop over 'r'
     // Number of operations to compute geometry constants: 168.
     double G[6];
-    G[0] = det*w[11][0]*w[9][0]*(J[0]*J[0]*n0*n0 + J[3]*n1*(2.0*J[0]*n0 + J[3]*n1) + J[6]*n2*(2.0*(J[0]*n0 + J[3]*n1) + J[6]*n2))/(circumradius*detJ*detJ);
-    G[1] = det*w[11][0]*w[9][0]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[2] = det*w[11][0]*w[9][0]*(J[0]*J[2]*n0*n0 + n1*(J[3]*J[5]*n1 + n0*(J[0]*J[5] + J[2]*J[3])) + n2*(J[6]*(J[2]*n0 + J[5]*n1) + J[8]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[3] = det*w[11][0]*w[9][0]*(J[1]*J[1]*n0*n0 + J[4]*n1*(2.0*J[1]*n0 + J[4]*n1) + J[7]*n2*(2.0*(J[1]*n0 + J[4]*n1) + J[7]*n2))/(circumradius*detJ*detJ);
-    G[4] = det*w[11][0]*w[9][0]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
-    G[5] = det*w[11][0]*w[9][0]*(J[2]*J[2]*n0*n0 + J[5]*n1*(2.0*J[2]*n0 + J[5]*n1) + J[8]*n2*(2.0*(J[2]*n0 + J[5]*n1) + J[8]*n2))/(circumradius*detJ*detJ);
+    G[0] = det*w[12][0]*w[9][0]*(J[0]*J[0]*n0*n0 + J[3]*n1*(2.0*J[0]*n0 + J[3]*n1) + J[6]*n2*(2.0*(J[0]*n0 + J[3]*n1) + J[6]*n2))/(circumradius*detJ*detJ);
+    G[1] = det*w[12][0]*w[9][0]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
+    G[2] = det*w[12][0]*w[9][0]*(J[0]*J[2]*n0*n0 + n1*(J[3]*J[5]*n1 + n0*(J[0]*J[5] + J[2]*J[3])) + n2*(J[6]*(J[2]*n0 + J[5]*n1) + J[8]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
+    G[3] = det*w[12][0]*w[9][0]*(J[1]*J[1]*n0*n0 + J[4]*n1*(2.0*J[1]*n0 + J[4]*n1) + J[7]*n2*(2.0*(J[1]*n0 + J[4]*n1) + J[7]*n2))/(circumradius*detJ*detJ);
+    G[4] = det*w[12][0]*w[9][0]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
+    G[5] = det*w[12][0]*w[9][0]*(J[2]*J[2]*n0*n0 + J[5]*n1*(2.0*J[2]*n0 + J[5]*n1) + J[8]*n2*(2.0*(J[2]*n0 + J[5]*n1) + J[8]*n2))/(circumradius*detJ*detJ);
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
@@ -13088,23 +13104,23 @@ public:
 };
 
 
-class pnp_stokes_interior_facet_integral_0_otherwise: public ufc::interior_facet_integral
+class pnp_stokes_time_interior_facet_integral_0_otherwise: public ufc::interior_facet_integral
 {
 public:
 
-  pnp_stokes_interior_facet_integral_0_otherwise() : ufc::interior_facet_integral()
+  pnp_stokes_time_interior_facet_integral_0_otherwise() : ufc::interior_facet_integral()
   {
     
   }
 
-  ~pnp_stokes_interior_facet_integral_0_otherwise() override
+  ~pnp_stokes_time_interior_facet_integral_0_otherwise() override
   {
     
   }
 
   const std::vector<bool> & enabled_coefficients() const final override
   {
-    static const std::vector<bool> enabled({false, false, false, false, false, false, false, false, false, true, true, true});
+    static const std::vector<bool> enabled({false, false, false, false, false, false, false, false, false, true, false, true, true});
     return enabled;
   }
 
@@ -13229,15 +13245,15 @@ public:
     static const double FE0_f0_C4[3][4] = \
     {{-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
     {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666666}};
+    {-0.666666666666667, 0.666666666666666, 0.333333333333334, 0.666666666666667}};
     
     // Array of non-zero columns
     static const unsigned int nzc14[4] = {12, 13, 14, 15};
     
     static const double FE0_f0_C5[3][4] = \
-    {{-0.166666666666667, 0.166666666666666, -0.166666666666666, -0.833333333333333},
+    {{-0.166666666666667, 0.166666666666667, -0.166666666666667, -0.833333333333333},
     {-0.666666666666666, 0.666666666666666, -0.666666666666666, -0.333333333333334},
-    {-0.166666666666667, 0.166666666666666, -0.166666666666666, -0.833333333333333}};
+    {-0.166666666666667, 0.166666666666667, -0.166666666666667, -0.833333333333333}};
     
     // Array of non-zero columns
     static const unsigned int nzc15[4] = {12, 13, 14, 15};
@@ -13254,7 +13270,7 @@ public:
     static const unsigned int nzc30[1] = {15};
     
     static const double FE0_f2_C3[3][4] = \
-    {{-0.166666666666666, -0.833333333333334, -0.166666666666666, 0.166666666666667},
+    {{-0.166666666666666, -0.833333333333334, -0.166666666666666, 0.166666666666666},
     {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
     {-0.666666666666667, -0.333333333333333, -0.666666666666667, 0.666666666666667}};
     
@@ -13262,8 +13278,8 @@ public:
     static const unsigned int nzc24[4] = {12, 13, 14, 15};
     
     static const double FE0_f3_C4[3][4] = \
-    {{-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666667},
+    {{-0.166666666666667, 0.166666666666666, 0.833333333333333, 0.166666666666667},
+    {-0.666666666666667, 0.666666666666666, 0.333333333333334, 0.666666666666667},
     {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667}};
     
     // Array of non-zero columns
@@ -13276,39 +13292,39 @@ public:
     } // end loop over 'r'
     // Number of operations to compute geometry constants: 1605.
     double G[33];
-    G[0] = 2.0*det*w[11][0]*w[9][0]*(J_1[0]*J_1[0] + J_1[3]*J_1[3] + J_1[6]*J_1[6])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[1] = det*w[10][0]*w[9][0]*(-0.5*(J_1[0]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + J_1[3]*(J_1[0]*K_1[0]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + J_1[6]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[0]*K_1[0] + J_1[3]*K_1[1]))) - (J_1[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_1*detJ_1);
-    G[2] = 2.0*det*w[11][0]*w[9][0]*(J_1[0]*J_1[1] + J_1[3]*J_1[4] + J_1[6]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[3] = 2.0*det*w[11][0]*w[9][0]*(J_1[0]*J_1[2] + J_1[3]*J_1[5] + J_1[6]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[4] = -2.0*det*w[11][0]*w[9][0]*(J_0[0]*J_1[0] + J_0[3]*J_1[3] + J_0[6]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[5] = det*w[10][0]*w[9][0]*(-0.5*(n_00*(J_1[3]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[0]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[0]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[3]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) - (J_1[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_1);
-    G[6] = -2.0*det*w[11][0]*w[9][0]*(J_0[1]*J_1[0] + J_0[4]*J_1[3] + J_0[7]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[7] = -2.0*det*w[11][0]*w[9][0]*(J_0[2]*J_1[0] + J_0[5]*J_1[3] + J_0[8]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[8] = det*w[10][0]*w[9][0]*(-0.5*(J_1[1]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[8]*K_1[6])) + J_1[4]*(J_1[1]*K_1[3]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[8]*K_1[7])) + J_1[7]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[1]*K_1[3] + J_1[4]*K_1[4]))) - (J_1[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_1*detJ_1);
-    G[9] = det*w[10][0]*w[9][0]*(-0.5*(J_1[2]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3])) + J_1[5]*(J_1[2]*K_1[6]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4])) + J_1[8]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[2]*K_1[6] + J_1[5]*K_1[7]))) - (J_1[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_1*detJ_1);
-    G[10] = det*w[10][0]*w[9][0]*(0.5*(n_00*(J_0[3]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[0]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[0]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[3]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) + J_0[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_0*detJ_1);
-    G[11] = det*w[10][0]*w[9][0]*(0.5*(n_00*(J_0[4]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[1]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[1]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[4]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) + J_0[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_0*detJ_1);
-    G[12] = det*w[10][0]*w[9][0]*(0.5*(n_00*(J_0[5]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[2]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[2]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[5]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) + J_0[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_0*detJ_1);
-    G[13] = 2.0*det*w[11][0]*w[9][0]*(J_1[1]*J_1[1] + J_1[4]*J_1[4] + J_1[7]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[14] = 2.0*det*w[11][0]*w[9][0]*(J_1[1]*J_1[2] + J_1[4]*J_1[5] + J_1[7]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[15] = -2.0*det*w[11][0]*w[9][0]*(J_0[0]*J_1[1] + J_0[3]*J_1[4] + J_0[6]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[16] = det*w[10][0]*w[9][0]*(-0.5*(n_00*(J_1[4]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[1]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[1]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[4]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) - (J_1[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_1);
-    G[17] = -2.0*det*w[11][0]*w[9][0]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[18] = -2.0*det*w[11][0]*w[9][0]*(J_0[2]*J_1[1] + J_0[5]*J_1[4] + J_0[8]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[19] = 2.0*det*w[11][0]*w[9][0]*(J_1[2]*J_1[2] + J_1[5]*J_1[5] + J_1[8]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[20] = -2.0*det*w[11][0]*w[9][0]*(J_0[0]*J_1[2] + J_0[3]*J_1[5] + J_0[6]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[21] = det*w[10][0]*w[9][0]*(-0.5*(n_00*(J_1[5]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[2]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[2]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[5]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) - (J_1[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_1);
-    G[22] = -2.0*det*w[11][0]*w[9][0]*(J_0[1]*J_1[2] + J_0[4]*J_1[5] + J_0[7]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[23] = -2.0*det*w[11][0]*w[9][0]*(J_0[2]*J_1[2] + J_0[5]*J_1[5] + J_0[8]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[24] = 2.0*det*w[11][0]*w[9][0]*(J_0[0]*J_0[0] + J_0[3]*J_0[3] + J_0[6]*J_0[6])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[25] = det*w[10][0]*w[9][0]*(0.5*(J_0[0]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + J_0[3]*(J_0[0]*K_0[0]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + J_0[6]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[0]*K_0[0] + J_0[3]*K_0[1]))) + J_0[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_0);
-    G[26] = 2.0*det*w[11][0]*w[9][0]*(J_0[0]*J_0[1] + J_0[3]*J_0[4] + J_0[6]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[27] = 2.0*det*w[11][0]*w[9][0]*(J_0[0]*J_0[2] + J_0[3]*J_0[5] + J_0[6]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[28] = det*w[10][0]*w[9][0]*(0.5*(J_0[1]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[8]*K_0[6])) + J_0[4]*(J_0[1]*K_0[3]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[8]*K_0[7])) + J_0[7]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[1]*K_0[3] + J_0[4]*K_0[4]))) + J_0[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_0);
-    G[29] = det*w[10][0]*w[9][0]*(0.5*(J_0[2]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3])) + J_0[5]*(J_0[2]*K_0[6]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4])) + J_0[8]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[2]*K_0[6] + J_0[5]*K_0[7]))) + J_0[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_0);
-    G[30] = 2.0*det*w[11][0]*w[9][0]*(J_0[1]*J_0[1] + J_0[4]*J_0[4] + J_0[7]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[31] = 2.0*det*w[11][0]*w[9][0]*(J_0[1]*J_0[2] + J_0[4]*J_0[5] + J_0[7]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[32] = 2.0*det*w[11][0]*w[9][0]*(J_0[2]*J_0[2] + J_0[5]*J_0[5] + J_0[8]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[0] = 2.0*det*w[12][0]*w[9][0]*(J_1[0]*J_1[0] + J_1[3]*J_1[3] + J_1[6]*J_1[6])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[1] = det*w[11][0]*w[9][0]*(-0.5*(J_1[0]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + J_1[3]*(J_1[0]*K_1[0]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + J_1[6]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[0]*K_1[0] + J_1[3]*K_1[1]))) - (J_1[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_1*detJ_1);
+    G[2] = 2.0*det*w[12][0]*w[9][0]*(J_1[0]*J_1[1] + J_1[3]*J_1[4] + J_1[6]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[3] = 2.0*det*w[12][0]*w[9][0]*(J_1[0]*J_1[2] + J_1[3]*J_1[5] + J_1[6]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[4] = -2.0*det*w[12][0]*w[9][0]*(J_0[0]*J_1[0] + J_0[3]*J_1[3] + J_0[6]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[5] = det*w[11][0]*w[9][0]*(-0.5*(n_00*(J_1[3]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[0]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[0]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[3]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) - (J_1[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_1);
+    G[6] = -2.0*det*w[12][0]*w[9][0]*(J_0[1]*J_1[0] + J_0[4]*J_1[3] + J_0[7]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[7] = -2.0*det*w[12][0]*w[9][0]*(J_0[2]*J_1[0] + J_0[5]*J_1[3] + J_0[8]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[8] = det*w[11][0]*w[9][0]*(-0.5*(J_1[1]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[8]*K_1[6])) + J_1[4]*(J_1[1]*K_1[3]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[8]*K_1[7])) + J_1[7]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[1]*K_1[3] + J_1[4]*K_1[4]))) - (J_1[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_1*detJ_1);
+    G[9] = det*w[11][0]*w[9][0]*(-0.5*(J_1[2]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3])) + J_1[5]*(J_1[2]*K_1[6]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4])) + J_1[8]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[2]*K_1[6] + J_1[5]*K_1[7]))) - (J_1[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_1*detJ_1);
+    G[10] = det*w[11][0]*w[9][0]*(0.5*(n_00*(J_0[3]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[0]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[0]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[3]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) + J_0[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_0*detJ_1);
+    G[11] = det*w[11][0]*w[9][0]*(0.5*(n_00*(J_0[4]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[1]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[1]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[4]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) + J_0[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_0*detJ_1);
+    G[12] = det*w[11][0]*w[9][0]*(0.5*(n_00*(J_0[5]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[2]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[2]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[5]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) + J_0[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_0*detJ_1);
+    G[13] = 2.0*det*w[12][0]*w[9][0]*(J_1[1]*J_1[1] + J_1[4]*J_1[4] + J_1[7]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[14] = 2.0*det*w[12][0]*w[9][0]*(J_1[1]*J_1[2] + J_1[4]*J_1[5] + J_1[7]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[15] = -2.0*det*w[12][0]*w[9][0]*(J_0[0]*J_1[1] + J_0[3]*J_1[4] + J_0[6]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[16] = det*w[11][0]*w[9][0]*(-0.5*(n_00*(J_1[4]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[1]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[1]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[4]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) - (J_1[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_1);
+    G[17] = -2.0*det*w[12][0]*w[9][0]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[18] = -2.0*det*w[12][0]*w[9][0]*(J_0[2]*J_1[1] + J_0[5]*J_1[4] + J_0[8]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[19] = 2.0*det*w[12][0]*w[9][0]*(J_1[2]*J_1[2] + J_1[5]*J_1[5] + J_1[8]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[20] = -2.0*det*w[12][0]*w[9][0]*(J_0[0]*J_1[2] + J_0[3]*J_1[5] + J_0[6]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[21] = det*w[11][0]*w[9][0]*(-0.5*(n_00*(J_1[5]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[2]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[2]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[5]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) - (J_1[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_1);
+    G[22] = -2.0*det*w[12][0]*w[9][0]*(J_0[1]*J_1[2] + J_0[4]*J_1[5] + J_0[7]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[23] = -2.0*det*w[12][0]*w[9][0]*(J_0[2]*J_1[2] + J_0[5]*J_1[5] + J_0[8]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[24] = 2.0*det*w[12][0]*w[9][0]*(J_0[0]*J_0[0] + J_0[3]*J_0[3] + J_0[6]*J_0[6])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[25] = det*w[11][0]*w[9][0]*(0.5*(J_0[0]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + J_0[3]*(J_0[0]*K_0[0]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + J_0[6]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[0]*K_0[0] + J_0[3]*K_0[1]))) + J_0[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_0);
+    G[26] = 2.0*det*w[12][0]*w[9][0]*(J_0[0]*J_0[1] + J_0[3]*J_0[4] + J_0[6]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[27] = 2.0*det*w[12][0]*w[9][0]*(J_0[0]*J_0[2] + J_0[3]*J_0[5] + J_0[6]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[28] = det*w[11][0]*w[9][0]*(0.5*(J_0[1]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[8]*K_0[6])) + J_0[4]*(J_0[1]*K_0[3]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[8]*K_0[7])) + J_0[7]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[1]*K_0[3] + J_0[4]*K_0[4]))) + J_0[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_0);
+    G[29] = det*w[11][0]*w[9][0]*(0.5*(J_0[2]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3])) + J_0[5]*(J_0[2]*K_0[6]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4])) + J_0[8]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[2]*K_0[6] + J_0[5]*K_0[7]))) + J_0[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_0);
+    G[30] = 2.0*det*w[12][0]*w[9][0]*(J_0[1]*J_0[1] + J_0[4]*J_0[4] + J_0[7]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[31] = 2.0*det*w[12][0]*w[9][0]*(J_0[1]*J_0[2] + J_0[4]*J_0[5] + J_0[7]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[32] = 2.0*det*w[12][0]*w[9][0]*(J_0[2]*J_0[2] + J_0[5]*J_0[5] + J_0[8]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
@@ -17621,23 +17637,23 @@ public:
 };
 
 
-class pnp_stokes_cell_integral_1_otherwise: public ufc::cell_integral
+class pnp_stokes_time_cell_integral_1_otherwise: public ufc::cell_integral
 {
 public:
 
-  pnp_stokes_cell_integral_1_otherwise() : ufc::cell_integral()
+  pnp_stokes_time_cell_integral_1_otherwise() : ufc::cell_integral()
   {
     
   }
 
-  ~pnp_stokes_cell_integral_1_otherwise() override
+  ~pnp_stokes_time_cell_integral_1_otherwise() override
   {
     
   }
 
   const std::vector<bool> & enabled_coefficients() const final override
   {
-    static const std::vector<bool> enabled({true, true, true, true, true, true, true, true, true, true, true, false, false});
+    static const std::vector<bool> enabled({true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false});
     return enabled;
   }
 
@@ -17676,14 +17692,20 @@ public:
     {0.5, 0.5, 0.0, 0.0},
     {0.5, 0.0, 0.5, 0.0},
     {0.5, 0.0, 0.0, 0.5},
-    {0.100526765225205, 0.698419704324386, 0.100526765225204, 0.100526765225204},
-    {0.698419704324386, 0.100526765225204, 0.100526765225204, 0.100526765225204},
+    {0.100526765225205, 0.698419704324386, 0.100526765225205, 0.100526765225205},
+    {0.698419704324387, 0.100526765225204, 0.100526765225205, 0.100526765225205},
     {0.100526765225205, 0.100526765225204, 0.100526765225205, 0.698419704324386},
-    {0.100526765225205, 0.100526765225204, 0.698419704324386, 0.100526765225204},
+    {0.100526765225205, 0.100526765225204, 0.698419704324386, 0.100526765225205},
     {0.314372873493192, 0.0568813795204234, 0.314372873493192, 0.314372873493192},
     {0.0568813795204235, 0.314372873493192, 0.314372873493192, 0.314372873493192},
     {0.314372873493192, 0.314372873493192, 0.314372873493192, 0.0568813795204234},
-    {0.314372873493192, 0.314372873493192, 0.0568813795204234, 0.314372873493192}};
+    {0.314372873493192, 0.314372873493192, 0.0568813795204235, 0.314372873493192}};
+    
+    // Array of non-zero columns
+    static const unsigned int nzc3[4] = {0, 1, 2, 3};
+    
+    // Array of non-zero columns
+    static const unsigned int nzc7[4] = {4, 5, 6, 7};
     
     // Array of non-zero columns
     static const unsigned int nzc11[4] = {8, 9, 10, 11};
@@ -17747,11 +17769,11 @@ public:
     {-0.5, -0.5, -0.5, 0.5},
     {0.0, -1.0, 0.0, 0.0},
     {0.0, -1.0, 0.0, 0.0},
-    {-0.698419704324387, -0.301580295675613, -0.698419704324387, 0.698419704324387},
+    {-0.698419704324386, -0.301580295675613, -0.698419704324386, 0.698419704324386},
     {-0.100526765225204, -0.899473234774796, -0.100526765225204, 0.100526765225204},
     {-0.100526765225205, -0.899473234774795, -0.100526765225205, 0.100526765225205},
     {-0.100526765225205, -0.899473234774795, -0.100526765225205, 0.100526765225205},
-    {-0.0568813795204234, -0.943118620479577, -0.0568813795204234, 0.0568813795204234},
+    {-0.0568813795204234, -0.943118620479577, -0.0568813795204235, 0.0568813795204235},
     {-0.314372873493192, -0.685627126506807, -0.314372873493192, 0.314372873493192},
     {-0.314372873493192, -0.685627126506808, -0.314372873493192, 0.314372873493192},
     {-0.314372873493192, -0.685627126506808, -0.314372873493192, 0.314372873493192}};
@@ -17787,12 +17809,12 @@ public:
     {0.0, 0.0, 1.0, 0.0},
     {-0.100526765225205, 0.100526765225205, 0.899473234774795, 0.100526765225205},
     {-0.100526765225204, 0.100526765225204, 0.899473234774795, 0.100526765225204},
-    {-0.100526765225205, 0.100526765225205, 0.899473234774795, 0.100526765225205},
+    {-0.100526765225205, 0.100526765225204, 0.899473234774795, 0.100526765225205},
     {-0.698419704324386, 0.698419704324386, 0.301580295675614, 0.698419704324386},
     {-0.314372873493192, 0.314372873493192, 0.685627126506808, 0.314372873493192},
     {-0.314372873493192, 0.314372873493192, 0.685627126506808, 0.314372873493192},
     {-0.314372873493192, 0.314372873493192, 0.685627126506808, 0.314372873493192},
-    {-0.0568813795204235, 0.0568813795204234, 0.943118620479576, 0.0568813795204236}};
+    {-0.0568813795204236, 0.0568813795204234, 0.943118620479576, 0.0568813795204236}};
     
     // Array of non-zero columns
     static const unsigned int nzc17[4] = {12, 13, 14, 15};
@@ -17804,13 +17826,13 @@ public:
     {0.0, 0.0, 0.0, -1.0},
     {0.0, 0.0, 0.0, -1.0},
     {-0.5, 0.5, -0.5, -0.5},
-    {-0.100526765225204, 0.100526765225204, -0.100526765225204, -0.899473234774796},
+    {-0.100526765225205, 0.100526765225205, -0.100526765225205, -0.899473234774795},
     {-0.100526765225204, 0.100526765225204, -0.100526765225204, -0.899473234774796},
     {-0.698419704324386, 0.698419704324386, -0.698419704324386, -0.301580295675614},
-    {-0.100526765225204, 0.100526765225204, -0.100526765225204, -0.899473234774796},
+    {-0.100526765225204, 0.100526765225204, -0.100526765225204, -0.899473234774795},
     {-0.314372873493192, 0.314372873493192, -0.314372873493192, -0.685627126506808},
     {-0.314372873493192, 0.314372873493192, -0.314372873493192, -0.685627126506808},
-    {-0.0568813795204233, 0.0568813795204232, -0.0568813795204232, -0.943118620479577},
+    {-0.0568813795204234, 0.0568813795204234, -0.0568813795204234, -0.943118620479577},
     {-0.314372873493192, 0.314372873493192, -0.314372873493192, -0.685627126506808}};
     
     // Array of non-zero columns
@@ -17821,64 +17843,70 @@ public:
     {
       A[r] = 0.0;
     } // end loop over 'r'
-    // Number of operations to compute geometry constants: 595.
-    double G[50];
+    // Number of operations to compute geometry constants: 658.
+    double G[56];
     G[0] =  - det*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
-    G[1] =  - det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[2] =  - det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[3] =  - det*w[9][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[4] =  - det*w[9][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[5] =  - det*w[9][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[6] =  - det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[7] = det*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
-    G[8] = det*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
-    G[9] = det*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
-    G[10] =  - det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[11] =  - det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[12] =  - det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[13] = det*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
-    G[14] = det*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
-    G[15] = det*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
-    G[16] =  - det*w[7][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[17] =  - det*w[7][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[18] =  - det*w[7][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[19] = det*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
-    G[20] = det*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
-    G[21] = det*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
-    G[22] =  - det*w[7][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[23] =  - det*w[7][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[24] =  - det*w[7][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[25] =  - det*w[9][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[26] =  - det*w[9][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[27] =  - det*w[9][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[28] = det*w[7][0];
-    G[29] = det*w[9][0];
-    G[30] =  - det*w[7][0]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
-    G[31] =  - det*w[9][0]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
-    G[32] =  - det*w[7][0]*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
-    G[33] =  - det*w[9][0]*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
-    G[34] =  - det*w[7][0]*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
-    G[35] =  - det*w[9][0]*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
-    G[36] = det*w[4][0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
-    G[37] = det*w[10][0]*( - (K[0]*K[0]*(J[3]*J[3] + J[6]*J[6]) + K[1]*K[1]*(J[0]*J[0] + J[6]*J[6]) + K[2]*K[2]*(J[0]*J[0] + J[3]*J[3]) + K[3]*K[3]*(J[4]*J[4] + J[7]*J[7]) + K[4]*K[4]*(J[1]*J[1] + J[7]*J[7]) + K[5]*K[5]*(J[1]*J[1] + J[4]*J[4]) + K[6]*K[6]*(J[5]*J[5] + J[8]*J[8]) + K[7]*K[7]*(J[2]*J[2] + J[8]*J[8]) + K[8]*K[8]*(J[2]*J[2] + J[5]*J[5]))-2.0*(J[0]*J[0]*K[0]*K[0] + J[3]*K[1]*(J[0]*K[0] + J[3]*K[1]) + J[6]*K[2]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2]) + K[3]*(J[0]*(J[4]*K[1] + J[7]*K[2]) + J[1]*J[1]*K[3] + K[0]*(J[3]*J[4] + J[6]*J[7])) + K[4]*(J[1]*(J[0]*K[1] + J[3]*K[0] + J[4]*K[3]) + J[4]*J[4]*K[4] + J[7]*(J[3]*K[2] + J[6]*K[1])) + K[5]*(J[6]*(J[1]*K[0] + J[4]*K[1]) + J[7]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5]) + K[2]*(J[0]*J[1] + J[3]*J[4])) + K[6]*(J[2]*J[2]*K[6] + J[5]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3]) + J[8]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3])) + K[7]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[5]*J[5]*K[7] + J[8]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4])) + K[8]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[8]*J[8]*K[8]))-4.0*(J[0]*J[1]*K[0]*K[3] + J[2]*K[6]*(J[0]*K[0] + J[1]*K[3]) + J[3]*J[4]*K[1]*K[4] + J[5]*K[7]*(J[3]*K[1] + J[4]*K[4]) + J[6]*J[7]*K[2]*K[5] + J[8]*K[8]*(J[6]*K[2] + J[7]*K[5])))/(detJ*detJ);
-    G[38] =  - det*w[7][0]*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
-    G[39] =  - det*w[9][0]*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
-    G[40] =  - det*w[7][0]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
-    G[41] =  - det*w[9][0]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
-    G[42] =  - det*w[7][0]*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
-    G[43] =  - det*w[9][0]*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
-    G[44] =  - det*w[7][0]*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
-    G[45] =  - det*w[9][0]*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
-    G[46] =  - det*w[7][0]*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
-    G[47] =  - det*w[9][0]*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
-    G[48] =  - det*w[7][0]*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
-    G[49] =  - det*w[9][0]*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
+    G[1] =  - det*w[13][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[2] =  - det*w[13][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[3] =  - det*w[13][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[4] =  - det*w[13][0]*w[9][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[5] =  - det*w[13][0]*w[9][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[6] =  - det*w[13][0]*w[9][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[7] = det*w[13][0]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
+    G[8] = det*w[13][0]*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
+    G[9] = det*w[13][0]*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
+    G[10] =  - det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[11] =  - det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[12] =  - det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[13] =  - det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[14] =  - det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[15] =  - det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[16] =  - det*w[13][0]*w[7][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[17] =  - det*w[13][0]*w[7][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[18] =  - det*w[13][0]*w[7][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[19] =  - det*w[13][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[20] =  - det*w[13][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[21] = det*w[13][0]*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
+    G[22] = det*w[13][0]*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
+    G[23] = det*w[13][0]*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
+    G[24] =  - det*w[13][0]*w[7][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[25] =  - det*w[13][0]*w[7][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[26] =  - det*w[13][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[27] = det*w[13][0]*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
+    G[28] = det*w[13][0]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
+    G[29] = det*w[13][0]*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
+    G[30] =  - det*w[13][0]*w[7][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[31] =  - det*w[13][0]*w[9][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[32] =  - det*w[13][0]*w[9][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[33] =  - det*w[13][0]*w[9][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[34] = det*w[7][0];
+    G[35] = det*w[9][0];
+    G[36] =  - det*w[7][0]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
+    G[37] =  - det*w[9][0]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
+    G[38] =  - det*w[7][0]*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
+    G[39] =  - det*w[9][0]*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
+    G[40] =  - det*w[7][0]*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
+    G[41] =  - det*w[9][0]*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
+    G[42] = det*w[4][0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
+    G[43] = det*w[12][0]*( - (K[0]*K[0]*(J[3]*J[3] + J[6]*J[6]) + K[1]*K[1]*(J[0]*J[0] + J[6]*J[6]) + K[2]*K[2]*(J[0]*J[0] + J[3]*J[3]) + K[3]*K[3]*(J[4]*J[4] + J[7]*J[7]) + K[4]*K[4]*(J[1]*J[1] + J[7]*J[7]) + K[5]*K[5]*(J[1]*J[1] + J[4]*J[4]) + K[6]*K[6]*(J[5]*J[5] + J[8]*J[8]) + K[7]*K[7]*(J[2]*J[2] + J[8]*J[8]) + K[8]*K[8]*(J[2]*J[2] + J[5]*J[5]))-2.0*(J[0]*J[0]*K[0]*K[0] + J[3]*K[1]*(J[0]*K[0] + J[3]*K[1]) + J[6]*K[2]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2]) + K[3]*(J[0]*(J[4]*K[1] + J[7]*K[2]) + J[1]*J[1]*K[3] + K[0]*(J[3]*J[4] + J[6]*J[7])) + K[4]*(J[1]*(J[0]*K[1] + J[3]*K[0] + J[4]*K[3]) + J[4]*J[4]*K[4] + J[7]*(J[3]*K[2] + J[6]*K[1])) + K[5]*(J[6]*(J[1]*K[0] + J[4]*K[1]) + J[7]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5]) + K[2]*(J[0]*J[1] + J[3]*J[4])) + K[6]*(J[2]*J[2]*K[6] + J[5]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3]) + J[8]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3])) + K[7]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[5]*J[5]*K[7] + J[8]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4])) + K[8]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[8]*J[8]*K[8]))-4.0*(J[0]*J[1]*K[0]*K[3] + J[2]*K[6]*(J[0]*K[0] + J[1]*K[3]) + J[3]*J[4]*K[1]*K[4] + J[5]*K[7]*(J[3]*K[1] + J[4]*K[4]) + J[6]*J[7]*K[2]*K[5] + J[8]*K[8]*(J[6]*K[2] + J[7]*K[5])))/(detJ*detJ);
+    G[44] =  - det*w[7][0]*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
+    G[45] =  - det*w[9][0]*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
+    G[46] =  - det*w[7][0]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
+    G[47] =  - det*w[9][0]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
+    G[48] =  - det*w[7][0]*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
+    G[49] =  - det*w[9][0]*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
+    G[50] =  - det*w[7][0]*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
+    G[51] =  - det*w[9][0]*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
+    G[52] =  - det*w[7][0]*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
+    G[53] =  - det*w[9][0]*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
+    G[54] =  - det*w[7][0]*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
+    G[55] =  - det*w[9][0]*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
     
     // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 5474
+    // Number of operations to compute element tensor for following IP loop = 6062
     for (unsigned int ip = 0; ip < 14; ip++)
     {
       
@@ -17901,81 +17929,91 @@ public:
       double F15 = 0.0;
       double F16 = 0.0;
       double F17 = 0.0;
+      double F18 = 0.0;
+      double F19 = 0.0;
       
       // Total number of operations to compute function values = 36
       for (unsigned int r = 0; r < 2; r++)
       {
-        F2 += FE0_D001[ip][r]*w[2][nzc2[r]];
-        F3 += FE0_D001[ip][r]*w[2][nzc1[r]];
-        F4 += FE0_D001[ip][r]*w[2][nzc0[r]];
-        F5 += FE0_D001[ip][r]*w[0][nzc2[r]];
-        F6 += FE0_D001[ip][r]*w[0][nzc1[r]];
-        F7 += FE0_D001[ip][r]*w[0][nzc0[r]];
-        F9 += FE0_D001[ip][r]*w[1][nzc2[r]];
-        F10 += FE0_D001[ip][r]*w[1][nzc1[r]];
-        F11 += FE0_D001[ip][r]*w[1][nzc0[r]];
+        F4 += FE0_D001[ip][r]*w[2][nzc2[r]];
+        F5 += FE0_D001[ip][r]*w[2][nzc1[r]];
+        F6 += FE0_D001[ip][r]*w[2][nzc0[r]];
+        F7 += FE0_D001[ip][r]*w[0][nzc2[r]];
+        F8 += FE0_D001[ip][r]*w[0][nzc1[r]];
+        F9 += FE0_D001[ip][r]*w[0][nzc0[r]];
+        F11 += FE0_D001[ip][r]*w[1][nzc2[r]];
+        F12 += FE0_D001[ip][r]*w[1][nzc1[r]];
+        F13 += FE0_D001[ip][r]*w[1][nzc0[r]];
       } // end loop over 'r'
       
-      // Total number of operations to compute function values = 72
+      // Total number of operations to compute function values = 88
       for (unsigned int r = 0; r < 4; r++)
       {
-        F0 += FE0[ip][r]*w[0][r];
-        F1 += FE0[ip][r]*w[1][r];
-        F8 += FE0[ip][r]*w[6][r];
-        F12 += FE0[ip][r]*w[8][r];
-        F13 += FE2_C3_D100[ip][r]*w[3][r];
-        F14 += FE0[ip][r]*w[5][r];
-        F15 += FE2_C3[ip][r]*w[3][r];
-        F16 += FE2_C4[ip][r]*w[3][r];
-        F17 += FE2_C5[ip][r]*w[3][r];
+        F0 += FE0[ip][r]*w[10][r];
+        F1 += FE0[ip][r]*w[0][r];
+        F2 += FE0[ip][r]*w[11][r];
+        F3 += FE0[ip][r]*w[1][r];
+        F10 += FE0[ip][r]*w[6][r];
+        F14 += FE0[ip][r]*w[8][r];
+        F15 += FE2_C3_D100[ip][r]*w[3][r];
+        F16 += FE0[ip][r]*w[5][r];
+        F17 += FE2_C3[ip][r]*w[3][r];
+        F18 += FE2_C4[ip][r]*w[3][r];
+        F19 += FE2_C5[ip][r]*w[3][r];
       } // end loop over 'r'
       
-      // Number of operations to compute ip constants: 206
-      double I[15];
+      // Number of operations to compute ip constants: 216
+      double I[17];
       // Number of operations: 2
-      I[0] = F13*G[0]*W14[ip];
+      I[0] = F15*G[0]*W14[ip];
       
       // Number of operations: 21
-      I[1] = W14[ip]*std::exp(F1)*(F12*(F10*G[1] + F11*G[2] + F2*G[3] + F3*G[4] + F4*G[5] + F9*G[6]) + F15*G[7] + F16*G[8] + F17*G[9]);
+      I[1] = W14[ip]*std::exp(F3)*(F14*(F11*G[1] + F12*G[2] + F13*G[3] + F4*G[4] + F5*G[5] + F6*G[6]) + F17*G[7] + F18*G[8] + F19*G[9]);
       
       // Number of operations: 7
-      I[2] = F14*W14[ip]*(F2*G[2] + F3*G[10] + F4*G[11]);
+      I[2] = F16*W14[ip]*(F4*G[10] + F5*G[11] + F6*G[12]);
       
       // Number of operations: 7
-      I[3] = F14*W14[ip]*(F2*G[1] + F3*G[12] + F4*G[10]);
+      I[3] = F16*W14[ip]*(F4*G[13] + F5*G[14] + F6*G[11]);
       
       // Number of operations: 7
-      I[4] = F14*W14[ip]*(F2*G[6] + F3*G[1] + F4*G[2]);
+      I[4] = F16*W14[ip]*(F4*G[15] + F5*G[13] + F6*G[10]);
       
       // Number of operations: 21
-      I[5] = W14[ip]*std::exp(F0)*(F15*G[13] + F16*G[14] + F17*G[15] + F8*(F2*G[16] + F3*G[17] + F4*G[18] + F5*G[2] + F6*G[10] + F7*G[11]));
+      I[5] = W14[ip]*std::exp(F1)*(F10*(F4*G[16] + F5*G[17] + F6*G[18] + F7*G[3] + F8*G[19] + F9*G[20]) + F17*G[21] + F18*G[22] + F19*G[23]);
       
       // Number of operations: 21
-      I[6] = W14[ip]*std::exp(F0)*(F15*G[19] + F16*G[20] + F17*G[21] + F8*(F2*G[22] + F3*G[23] + F4*G[17] + F5*G[1] + F6*G[12] + F7*G[10]));
+      I[6] = W14[ip]*std::exp(F1)*(F10*(F4*G[24] + F5*G[25] + F6*G[17] + F7*G[2] + F8*G[26] + F9*G[19]) + F17*G[27] + F18*G[28] + F19*G[29]);
       
       // Number of operations: 21
-      I[7] = W14[ip]*std::exp(F0)*(F15*G[7] + F16*G[8] + F17*G[9] + F8*(F2*G[24] + F3*G[22] + F4*G[16] + F5*G[6] + F6*G[1] + F7*G[2]));
+      I[7] = W14[ip]*std::exp(F1)*(F10*(F4*G[30] + F5*G[24] + F6*G[16] + F7*G[1] + F8*G[2] + F9*G[3]) + F17*G[7] + F18*G[8] + F19*G[9]);
       
       // Number of operations: 21
-      I[8] = W14[ip]*std::exp(F1)*(F12*(F10*G[10] + F11*G[11] + F2*G[5] + F3*G[25] + F4*G[26] + F9*G[2]) + F15*G[13] + F16*G[14] + F17*G[15]);
+      I[8] = W14[ip]*std::exp(F3)*(F14*(F11*G[3] + F12*G[19] + F13*G[20] + F4*G[6] + F5*G[31] + F6*G[32]) + F17*G[21] + F18*G[22] + F19*G[23]);
       
       // Number of operations: 21
-      I[9] = W14[ip]*std::exp(F1)*(F12*(F10*G[12] + F11*G[10] + F2*G[4] + F3*G[27] + F4*G[25] + F9*G[1]) + F15*G[19] + F16*G[20] + F17*G[21]);
+      I[9] = W14[ip]*std::exp(F3)*(F14*(F11*G[2] + F12*G[26] + F13*G[19] + F4*G[5] + F5*G[33] + F6*G[31]) + F17*G[27] + F18*G[28] + F19*G[29]);
       
       // Number of operations: 6
-      I[10] = W14[ip]*(G[28]*std::exp(F0) + G[29]*std::exp(F1));
+      I[10] = W14[ip]*(G[34]*std::exp(F1) + G[35]*std::exp(F3));
       
       // Number of operations: 16
-      I[11] = W14[ip]*(std::exp(F0)*(F2*G[30] + F3*G[32] + F4*G[34]) + std::exp(F1)*(F2*G[31] + F3*G[33] + F4*G[35]));
+      I[11] = W14[ip]*(std::exp(F1)*(F4*G[36] + F5*G[38] + F6*G[40]) + std::exp(F3)*(F4*G[37] + F5*G[39] + F6*G[41]));
       
       // Number of operations: 3
-      I[12] = W14[ip]*(G[36] + F13*G[37]);
+      I[12] = W14[ip]*(G[42] + F15*G[43]);
       
       // Number of operations: 16
-      I[13] = W14[ip]*(std::exp(F0)*(F2*G[38] + F3*G[40] + F4*G[42]) + std::exp(F1)*(F2*G[39] + F3*G[41] + F4*G[43]));
+      I[13] = W14[ip]*(std::exp(F1)*(F4*G[44] + F5*G[46] + F6*G[48]) + std::exp(F3)*(F4*G[45] + F5*G[47] + F6*G[49]));
       
       // Number of operations: 16
-      I[14] = W14[ip]*(std::exp(F0)*(F2*G[44] + F3*G[46] + F4*G[48]) + std::exp(F1)*(F2*G[45] + F3*G[47] + F4*G[49]));
+      I[14] = W14[ip]*(std::exp(F1)*(F4*G[50] + F5*G[52] + F6*G[54]) + std::exp(F3)*(F4*G[51] + F5*G[53] + F6*G[55]));
+      
+      // Number of operations: 5
+      I[15] = W14[ip]*det*(std::exp(F0) - std::exp(F1));
+      
+      // Number of operations: 5
+      I[16] = W14[ip]*det*(std::exp(F2) - std::exp(F3));
       
       
       // Number of operations for primary indices: 1
@@ -18005,7 +18043,7 @@ public:
         A[nzc9[j]] += FE0_D001[ip][j]*I[9];
       } // end loop over 'j'
       
-      // Number of operations for primary indices: 40
+      // Number of operations for primary indices: 56
       for (unsigned int j = 0; j < 4; j++)
       {
         // Number of operations to compute entry: 2
@@ -18018,6 +18056,10 @@ public:
         A[nzc17[j]] += FE2_C4[ip][j]*I[13];
         // Number of operations to compute entry: 2
         A[nzc18[j]] += FE2_C5[ip][j]*I[14];
+        // Number of operations to compute entry: 2
+        A[nzc3[j]] += FE0[ip][j]*I[15];
+        // Number of operations to compute entry: 2
+        A[nzc7[j]] += FE0[ip][j]*I[16];
       } // end loop over 'j'
     } // end loop over 'ip'
   }
@@ -18025,23 +18067,23 @@ public:
 };
 
 
-class pnp_stokes_exterior_facet_integral_1_otherwise: public ufc::exterior_facet_integral
+class pnp_stokes_time_exterior_facet_integral_1_otherwise: public ufc::exterior_facet_integral
 {
 public:
 
-  pnp_stokes_exterior_facet_integral_1_otherwise() : ufc::exterior_facet_integral()
+  pnp_stokes_time_exterior_facet_integral_1_otherwise() : ufc::exterior_facet_integral()
   {
     
   }
 
-  ~pnp_stokes_exterior_facet_integral_1_otherwise() override
+  ~pnp_stokes_time_exterior_facet_integral_1_otherwise() override
   {
     
   }
 
   const std::vector<bool> & enabled_coefficients() const final override
   {
-    static const std::vector<bool> enabled({false, false, false, true, false, false, false, false, false, false, true, false, true});
+    static const std::vector<bool> enabled({false, false, false, true, false, false, false, false, false, false, false, false, true, false, false, true});
     return enabled;
   }
 
@@ -18131,15 +18173,15 @@ public:
     static const double FE0_f0_C4[3][4] = \
     {{-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
     {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666666}};
+    {-0.666666666666667, 0.666666666666666, 0.333333333333334, 0.666666666666667}};
     
     // Array of non-zero columns
     static const unsigned int nzc4[4] = {12, 13, 14, 15};
     
     static const double FE0_f0_C5[3][4] = \
-    {{-0.166666666666667, 0.166666666666666, -0.166666666666666, -0.833333333333333},
+    {{-0.166666666666667, 0.166666666666667, -0.166666666666667, -0.833333333333333},
     {-0.666666666666666, 0.666666666666666, -0.666666666666666, -0.333333333333334},
-    {-0.166666666666667, 0.166666666666666, -0.166666666666666, -0.833333333333333}};
+    {-0.166666666666667, 0.166666666666667, -0.166666666666667, -0.833333333333333}};
     
     // Array of non-zero columns
     static const unsigned int nzc5[4] = {12, 13, 14, 15};
@@ -18156,7 +18198,7 @@ public:
     static const unsigned int nzc20[1] = {15};
     
     static const double FE0_f2_C3[3][4] = \
-    {{-0.166666666666666, -0.833333333333334, -0.166666666666666, 0.166666666666667},
+    {{-0.166666666666666, -0.833333333333334, -0.166666666666666, 0.166666666666666},
     {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
     {-0.666666666666667, -0.333333333333333, -0.666666666666667, 0.666666666666667}};
     
@@ -18164,8 +18206,8 @@ public:
     static const unsigned int nzc14[4] = {12, 13, 14, 15};
     
     static const double FE0_f3_C4[3][4] = \
-    {{-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666667},
+    {{-0.166666666666667, 0.166666666666666, 0.833333333333333, 0.166666666666667},
+    {-0.666666666666667, 0.666666666666666, 0.333333333333334, 0.666666666666667},
     {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667}};
     
     // Array of non-zero columns
@@ -18178,15 +18220,15 @@ public:
     } // end loop over 'r'
     // Number of operations to compute geometry constants: 258.
     double G[9];
-    G[0] = det*w[10][0]*w[12][0]*(J[3]*n1*( - J[3]*n1-2.0*J[0]*n0) + J[6]*n2*( - J[6]*n2-2.0*(J[0]*n0 + J[3]*n1)) - J[0]*J[0]*n0*n0)/(circumradius*detJ*detJ);
-    G[1] =  - det*w[10][0]*w[12][0]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[2] =  - det*w[10][0]*w[12][0]*(J[0]*J[2]*n0*n0 + n1*(J[3]*J[5]*n1 + n0*(J[0]*J[5] + J[2]*J[3])) + n2*(J[6]*(J[2]*n0 + J[5]*n1) + J[8]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[3] = det*w[10][0]*w[12][0]*(J[4]*n1*( - J[4]*n1-2.0*J[1]*n0) + J[7]*n2*( - J[7]*n2-2.0*(J[1]*n0 + J[4]*n1)) - J[1]*J[1]*n0*n0)/(circumradius*detJ*detJ);
-    G[4] =  - det*w[10][0]*w[12][0]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
-    G[5] = det*w[10][0]*w[12][0]*(J[5]*n1*( - J[5]*n1-2.0*J[2]*n0) + J[8]*n2*( - J[8]*n2-2.0*(J[2]*n0 + J[5]*n1)) - J[2]*J[2]*n0*n0)/(circumradius*detJ*detJ);
-    G[6] = det*w[10][0]*w[12][0]*w[3][2]*(J[4]*n1*( - J[4]*n1-2.0*J[1]*n0) + J[7]*n2*( - J[7]*n2-2.0*(J[1]*n0 + J[4]*n1)) - J[1]*J[1]*n0*n0)/(circumradius*detJ*detJ);
-    G[7] =  - det*w[10][0]*w[12][0]*w[3][2]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[8] =  - det*w[10][0]*w[12][0]*w[3][2]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
+    G[0] = det*w[12][0]*w[15][0]*(J[3]*n1*( - J[3]*n1-2.0*J[0]*n0) + J[6]*n2*( - J[6]*n2-2.0*(J[0]*n0 + J[3]*n1)) - J[0]*J[0]*n0*n0)/(circumradius*detJ*detJ);
+    G[1] =  - det*w[12][0]*w[15][0]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
+    G[2] =  - det*w[12][0]*w[15][0]*(J[0]*J[2]*n0*n0 + n1*(J[3]*J[5]*n1 + n0*(J[0]*J[5] + J[2]*J[3])) + n2*(J[6]*(J[2]*n0 + J[5]*n1) + J[8]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
+    G[3] = det*w[12][0]*w[15][0]*(J[4]*n1*( - J[4]*n1-2.0*J[1]*n0) + J[7]*n2*( - J[7]*n2-2.0*(J[1]*n0 + J[4]*n1)) - J[1]*J[1]*n0*n0)/(circumradius*detJ*detJ);
+    G[4] =  - det*w[12][0]*w[15][0]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
+    G[5] = det*w[12][0]*w[15][0]*(J[5]*n1*( - J[5]*n1-2.0*J[2]*n0) + J[8]*n2*( - J[8]*n2-2.0*(J[2]*n0 + J[5]*n1)) - J[2]*J[2]*n0*n0)/(circumradius*detJ*detJ);
+    G[6] = det*w[12][0]*w[15][0]*w[3][2]*(J[4]*n1*( - J[4]*n1-2.0*J[1]*n0) + J[7]*n2*( - J[7]*n2-2.0*(J[1]*n0 + J[4]*n1)) - J[1]*J[1]*n0*n0)/(circumradius*detJ*detJ);
+    G[7] =  - det*w[12][0]*w[15][0]*w[3][2]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
+    G[8] =  - det*w[12][0]*w[15][0]*w[3][2]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
@@ -18407,23 +18449,23 @@ public:
 };
 
 
-class pnp_stokes_interior_facet_integral_1_otherwise: public ufc::interior_facet_integral
+class pnp_stokes_time_interior_facet_integral_1_otherwise: public ufc::interior_facet_integral
 {
 public:
 
-  pnp_stokes_interior_facet_integral_1_otherwise() : ufc::interior_facet_integral()
+  pnp_stokes_time_interior_facet_integral_1_otherwise() : ufc::interior_facet_integral()
   {
     
   }
 
-  ~pnp_stokes_interior_facet_integral_1_otherwise() override
+  ~pnp_stokes_time_interior_facet_integral_1_otherwise() override
   {
     
   }
 
   const std::vector<bool> & enabled_coefficients() const final override
   {
-    static const std::vector<bool> enabled({false, false, false, true, false, false, false, false, false, false, true, true, true});
+    static const std::vector<bool> enabled({false, false, false, true, false, false, false, false, false, false, false, false, true, false, true, true});
     return enabled;
   }
 
@@ -18548,15 +18590,15 @@ public:
     static const double FE0_f0_C4[3][4] = \
     {{-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
     {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666666}};
+    {-0.666666666666667, 0.666666666666666, 0.333333333333334, 0.666666666666667}};
     
     // Array of non-zero columns
     static const unsigned int nzc14[4] = {12, 13, 14, 15};
     
     static const double FE0_f0_C5[3][4] = \
-    {{-0.166666666666667, 0.166666666666666, -0.166666666666666, -0.833333333333333},
+    {{-0.166666666666667, 0.166666666666667, -0.166666666666667, -0.833333333333333},
     {-0.666666666666666, 0.666666666666666, -0.666666666666666, -0.333333333333334},
-    {-0.166666666666667, 0.166666666666666, -0.166666666666666, -0.833333333333333}};
+    {-0.166666666666667, 0.166666666666667, -0.166666666666667, -0.833333333333333}};
     
     // Array of non-zero columns
     static const unsigned int nzc15[4] = {12, 13, 14, 15};
@@ -18573,7 +18615,7 @@ public:
     static const unsigned int nzc30[1] = {15};
     
     static const double FE0_f2_C3[3][4] = \
-    {{-0.166666666666666, -0.833333333333334, -0.166666666666666, 0.166666666666667},
+    {{-0.166666666666666, -0.833333333333334, -0.166666666666666, 0.166666666666666},
     {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
     {-0.666666666666667, -0.333333333333333, -0.666666666666667, 0.666666666666667}};
     
@@ -18581,8 +18623,8 @@ public:
     static const unsigned int nzc24[4] = {12, 13, 14, 15};
     
     static const double FE0_f3_C4[3][4] = \
-    {{-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666667},
+    {{-0.166666666666667, 0.166666666666666, 0.833333333333333, 0.166666666666667},
+    {-0.666666666666667, 0.666666666666666, 0.333333333333334, 0.666666666666667},
     {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667}};
     
     // Array of non-zero columns
@@ -18595,63 +18637,63 @@ public:
     } // end loop over 'r'
     // Number of operations to compute geometry constants: 3505.
     double G[57];
-    G[0] = -2.0*det*w[10][0]*w[12][0]*(J_1[0]*J_1[0] + J_1[3]*J_1[3] + J_1[6]*J_1[6])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[1] = -2.0*det*w[10][0]*w[12][0]*(J_1[0]*J_1[1] + J_1[3]*J_1[4] + J_1[6]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[2] = -2.0*det*w[10][0]*w[12][0]*(J_1[0]*J_1[2] + J_1[3]*J_1[5] + J_1[6]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[3] = 2.0*det*w[10][0]*w[12][0]*(J_0[0]*J_1[0] + J_0[3]*J_1[3] + J_0[6]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[4] = 2.0*det*w[10][0]*w[12][0]*(J_0[1]*J_1[0] + J_0[4]*J_1[3] + J_0[7]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[5] = 2.0*det*w[10][0]*w[12][0]*(J_0[2]*J_1[0] + J_0[5]*J_1[3] + J_0[8]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[6] = det*w[10][0]*w[11][0]*(0.5*(n_00*(J_1[3]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[0]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[0]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[3]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
-    G[7] = det*w[10][0]*w[11][0]*(0.5*(J_1[0]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + J_1[3]*(J_1[0]*K_1[0]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + J_1[6]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[0]*K_1[0] + J_1[3]*K_1[1]))) + J_1[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
-    G[8] = det*w[10][0]*w[11][0]*(0.5*(J_1[1]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[8]*K_1[6])) + J_1[4]*(J_1[1]*K_1[3]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[8]*K_1[7])) + J_1[7]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[1]*K_1[3] + J_1[4]*K_1[4]))) + J_1[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
-    G[9] = det*w[10][0]*w[11][0]*(0.5*(J_1[2]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3])) + J_1[5]*(J_1[2]*K_1[6]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4])) + J_1[8]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[2]*K_1[6] + J_1[5]*K_1[7]))) + J_1[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
-    G[10] = det*w[10][0]*w[11][0]*(-0.5*(n_00*(J_0[3]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[0]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[0]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[3]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
-    G[11] = det*w[10][0]*w[11][0]*(-0.5*(n_00*(J_0[4]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[1]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[1]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[4]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
-    G[12] = det*w[10][0]*w[11][0]*(-0.5*(n_00*(J_0[5]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[2]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[2]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[5]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
-    G[13] = -2.0*det*w[10][0]*w[12][0]*(J_1[1]*J_1[1] + J_1[4]*J_1[4] + J_1[7]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[14] = -2.0*det*w[10][0]*w[12][0]*(J_1[1]*J_1[2] + J_1[4]*J_1[5] + J_1[7]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[15] = 2.0*det*w[10][0]*w[12][0]*(J_0[0]*J_1[1] + J_0[3]*J_1[4] + J_0[6]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[16] = 2.0*det*w[10][0]*w[12][0]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[17] = 2.0*det*w[10][0]*w[12][0]*(J_0[2]*J_1[1] + J_0[5]*J_1[4] + J_0[8]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[18] = det*w[10][0]*w[11][0]*(0.5*(n_00*(J_1[4]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[1]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[1]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[4]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
-    G[19] = -2.0*det*w[10][0]*w[12][0]*(J_1[2]*J_1[2] + J_1[5]*J_1[5] + J_1[8]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[20] = 2.0*det*w[10][0]*w[12][0]*(J_0[0]*J_1[2] + J_0[3]*J_1[5] + J_0[6]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[21] = 2.0*det*w[10][0]*w[12][0]*(J_0[1]*J_1[2] + J_0[4]*J_1[5] + J_0[7]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[22] = 2.0*det*w[10][0]*w[12][0]*(J_0[2]*J_1[2] + J_0[5]*J_1[5] + J_0[8]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[23] = det*w[10][0]*w[11][0]*(0.5*(n_00*(J_1[5]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[2]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[2]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[5]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
-    G[24] = -2.0*det*w[10][0]*w[12][0]*(J_0[0]*J_0[0] + J_0[3]*J_0[3] + J_0[6]*J_0[6])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[25] = -2.0*det*w[10][0]*w[12][0]*(J_0[0]*J_0[1] + J_0[3]*J_0[4] + J_0[6]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[26] = -2.0*det*w[10][0]*w[12][0]*(J_0[0]*J_0[2] + J_0[3]*J_0[5] + J_0[6]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[27] = det*w[10][0]*w[11][0]*(-0.5*(J_0[0]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + J_0[3]*(J_0[0]*K_0[0]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + J_0[6]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[0]*K_0[0] + J_0[3]*K_0[1]))) - (J_0[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
-    G[28] = det*w[10][0]*w[11][0]*(-0.5*(J_0[1]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[8]*K_0[6])) + J_0[4]*(J_0[1]*K_0[3]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[8]*K_0[7])) + J_0[7]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[1]*K_0[3] + J_0[4]*K_0[4]))) - (J_0[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
-    G[29] = det*w[10][0]*w[11][0]*(-0.5*(J_0[2]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3])) + J_0[5]*(J_0[2]*K_0[6]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4])) + J_0[8]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[2]*K_0[6] + J_0[5]*K_0[7]))) - (J_0[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
-    G[30] = -2.0*det*w[10][0]*w[12][0]*(J_0[1]*J_0[1] + J_0[4]*J_0[4] + J_0[7]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[31] = -2.0*det*w[10][0]*w[12][0]*(J_0[1]*J_0[2] + J_0[4]*J_0[5] + J_0[7]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[32] = -2.0*det*w[10][0]*w[12][0]*(J_0[2]*J_0[2] + J_0[5]*J_0[5] + J_0[8]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[33] = -2.0*det*w[10][0]*w[12][0]*w[3][6]*(J_1[1]*J_1[1] + J_1[4]*J_1[4] + J_1[7]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[34] = det*w[10][0]*w[11][0]*w[3][6]*(0.5*(J_1[1]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[8]*K_1[6])) + J_1[4]*(J_1[1]*K_1[3]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[8]*K_1[7])) + J_1[7]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[1]*K_1[3] + J_1[4]*K_1[4]))) + J_1[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
-    G[35] = -2.0*det*w[10][0]*w[12][0]*w[3][6]*(J_1[1]*J_1[2] + J_1[4]*J_1[5] + J_1[7]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[36] = -2.0*det*w[10][0]*w[12][0]*w[3][6]*(J_1[0]*J_1[1] + J_1[3]*J_1[4] + J_1[6]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[37] = 2.0*det*w[10][0]*w[12][0]*w[3][6]*(J_0[0]*J_1[1] + J_0[3]*J_1[4] + J_0[6]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[38] = det*w[10][0]*w[11][0]*w[3][6]*(0.5*(n_00*(J_1[4]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[1]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[1]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[4]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
-    G[39] = 2.0*det*w[10][0]*w[12][0]*w[3][6]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[40] = 2.0*det*w[10][0]*w[12][0]*w[3][6]*(J_0[2]*J_1[1] + J_0[5]*J_1[4] + J_0[8]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[41] = -2.0*det*w[10][0]*w[12][0]*w[3][2]*(J_0[1]*J_0[1] + J_0[4]*J_0[4] + J_0[7]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[42] = 2.0*det*w[10][0]*w[12][0]*w[3][2]*(J_0[1]*J_1[0] + J_0[4]*J_1[3] + J_0[7]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[43] = det*w[10][0]*w[11][0]*w[3][2]*(-0.5*(n_00*(J_0[4]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[1]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[1]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[4]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
-    G[44] = 2.0*det*w[10][0]*w[12][0]*w[3][2]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[45] = 2.0*det*w[10][0]*w[12][0]*w[3][2]*(J_0[1]*J_1[2] + J_0[4]*J_1[5] + J_0[7]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[46] = det*w[10][0]*w[11][0]*w[3][2]*(-0.5*(J_0[1]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[8]*K_0[6])) + J_0[4]*(J_0[1]*K_0[3]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[8]*K_0[7])) + J_0[7]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[1]*K_0[3] + J_0[4]*K_0[4]))) - (J_0[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
-    G[47] = -2.0*det*w[10][0]*w[12][0]*w[3][2]*(J_0[1]*J_0[2] + J_0[4]*J_0[5] + J_0[7]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[48] = -2.0*det*w[10][0]*w[12][0]*w[3][2]*(J_0[0]*J_0[1] + J_0[3]*J_0[4] + J_0[6]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[49] = det*w[10][0]*w[12][0]*((-2.0*J_0[1]*J_0[1]*w[3][2]-2.0*J_0[4]*J_0[4]*w[3][2]-2.0*J_0[7]*J_0[7]*w[3][2])/(circumradius_0*detJ_0*detJ_0 + circumradius_1*detJ_0*detJ_0) + (2.0*J_0[1]*J_1[1]*w[3][6] + 2.0*J_0[4]*J_1[4]*w[3][6] + 2.0*J_0[7]*J_1[7]*w[3][6])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
-    G[50] = det*w[10][0]*w[12][0]*((-2.0*J_1[1]*J_1[1]*w[3][6]-2.0*J_1[4]*J_1[4]*w[3][6]-2.0*J_1[7]*J_1[7]*w[3][6])/(circumradius_0*detJ_1*detJ_1 + circumradius_1*detJ_1*detJ_1) + (2.0*J_0[1]*J_1[1]*w[3][2] + 2.0*J_0[4]*J_1[4]*w[3][2] + 2.0*J_0[7]*J_1[7]*w[3][2])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
-    G[51] = det*w[10][0]*w[11][0]*((-0.5*J_0[1]*J_1[0]*K_1[1]*n_01*w[3][2]-0.5*J_0[1]*J_1[0]*K_1[2]*n_02*w[3][2]-0.5*J_0[1]*J_1[1]*K_1[4]*n_01*w[3][2]-0.5*J_0[1]*J_1[1]*K_1[5]*n_02*w[3][2]-0.5*J_0[1]*J_1[2]*K_1[7]*n_01*w[3][2]-0.5*J_0[1]*J_1[2]*K_1[8]*n_02*w[3][2]-0.5*J_0[1]*J_1[3]*K_1[0]*n_01*w[3][2]-0.5*J_0[1]*J_1[4]*K_1[3]*n_01*w[3][2]-0.5*J_0[1]*J_1[5]*K_1[6]*n_01*w[3][2]-0.5*J_0[1]*J_1[6]*K_1[0]*n_02*w[3][2]-0.5*J_0[1]*J_1[7]*K_1[3]*n_02*w[3][2]-0.5*J_0[1]*J_1[8]*K_1[6]*n_02*w[3][2]-0.5*J_0[4]*J_1[0]*K_1[1]*n_00*w[3][2]-0.5*J_0[4]*J_1[1]*K_1[4]*n_00*w[3][2]-0.5*J_0[4]*J_1[2]*K_1[7]*n_00*w[3][2]-0.5*J_0[4]*J_1[3]*K_1[0]*n_00*w[3][2]-0.5*J_0[4]*J_1[3]*K_1[2]*n_02*w[3][2]-0.5*J_0[4]*J_1[4]*K_1[3]*n_00*w[3][2]-0.5*J_0[4]*J_1[4]*K_1[5]*n_02*w[3][2]-0.5*J_0[4]*J_1[5]*K_1[6]*n_00*w[3][2]-0.5*J_0[4]*J_1[5]*K_1[8]*n_02*w[3][2]-0.5*J_0[4]*J_1[6]*K_1[1]*n_02*w[3][2]-0.5*J_0[4]*J_1[7]*K_1[4]*n_02*w[3][2]-0.5*J_0[4]*J_1[8]*K_1[7]*n_02*w[3][2]-0.5*J_0[7]*J_1[0]*K_1[2]*n_00*w[3][2]-0.5*J_0[7]*J_1[1]*K_1[5]*n_00*w[3][2]-0.5*J_0[7]*J_1[2]*K_1[8]*n_00*w[3][2]-0.5*J_0[7]*J_1[3]*K_1[2]*n_01*w[3][2]-0.5*J_0[7]*J_1[4]*K_1[5]*n_01*w[3][2]-0.5*J_0[7]*J_1[5]*K_1[8]*n_01*w[3][2]-0.5*J_0[7]*J_1[6]*K_1[0]*n_00*w[3][2]-0.5*J_0[7]*J_1[6]*K_1[1]*n_01*w[3][2]-0.5*J_0[7]*J_1[7]*K_1[3]*n_00*w[3][2]-0.5*J_0[7]*J_1[7]*K_1[4]*n_01*w[3][2]-0.5*J_0[7]*J_1[8]*K_1[6]*n_00*w[3][2]-0.5*J_0[7]*J_1[8]*K_1[7]*n_01*w[3][2] - J_0[1]*J_1[0]*K_1[0]*n_00*w[3][2] - J_0[1]*J_1[1]*K_1[3]*n_00*w[3][2] - J_0[1]*J_1[2]*K_1[6]*n_00*w[3][2] - J_0[4]*J_1[3]*K_1[1]*n_01*w[3][2] - J_0[4]*J_1[4]*K_1[4]*n_01*w[3][2] - J_0[4]*J_1[5]*K_1[7]*n_01*w[3][2] - J_0[7]*J_1[6]*K_1[2]*n_02*w[3][2] - J_0[7]*J_1[7]*K_1[5]*n_02*w[3][2] - J_0[7]*J_1[8]*K_1[8]*n_02*w[3][2])/(detJ_0*detJ_1) + (0.5*J_1[0]*J_1[1]*K_1[1]*n_01*w[3][6] + 0.5*J_1[0]*J_1[1]*K_1[2]*n_02*w[3][6] + 0.5*J_1[0]*J_1[4]*K_1[1]*n_00*w[3][6] + 0.5*J_1[0]*J_1[7]*K_1[2]*n_00*w[3][6] + 0.5*J_1[1]*J_1[1]*K_1[4]*n_01*w[3][6] + 0.5*J_1[1]*J_1[1]*K_1[5]*n_02*w[3][6] + 0.5*J_1[1]*J_1[2]*K_1[7]*n_01*w[3][6] + 0.5*J_1[1]*J_1[2]*K_1[8]*n_02*w[3][6] + 0.5*J_1[1]*J_1[3]*K_1[0]*n_01*w[3][6] + 0.5*J_1[1]*J_1[4]*K_1[3]*n_01*w[3][6] + 0.5*J_1[1]*J_1[4]*K_1[4]*n_00*w[3][6] + 0.5*J_1[1]*J_1[5]*K_1[6]*n_01*w[3][6] + 0.5*J_1[1]*J_1[6]*K_1[0]*n_02*w[3][6] + 0.5*J_1[1]*J_1[7]*K_1[3]*n_02*w[3][6] + 0.5*J_1[1]*J_1[7]*K_1[5]*n_00*w[3][6] + 0.5*J_1[1]*J_1[8]*K_1[6]*n_02*w[3][6] + 0.5*J_1[2]*J_1[4]*K_1[7]*n_00*w[3][6] + 0.5*J_1[2]*J_1[7]*K_1[8]*n_00*w[3][6] + 0.5*J_1[3]*J_1[4]*K_1[0]*n_00*w[3][6] + 0.5*J_1[3]*J_1[4]*K_1[2]*n_02*w[3][6] + 0.5*J_1[3]*J_1[7]*K_1[2]*n_01*w[3][6] + 0.5*J_1[4]*J_1[4]*K_1[3]*n_00*w[3][6] + 0.5*J_1[4]*J_1[4]*K_1[5]*n_02*w[3][6] + 0.5*J_1[4]*J_1[5]*K_1[6]*n_00*w[3][6] + 0.5*J_1[4]*J_1[5]*K_1[8]*n_02*w[3][6] + 0.5*J_1[4]*J_1[6]*K_1[1]*n_02*w[3][6] + 0.5*J_1[4]*J_1[7]*K_1[4]*n_02*w[3][6] + 0.5*J_1[4]*J_1[7]*K_1[5]*n_01*w[3][6] + 0.5*J_1[4]*J_1[8]*K_1[7]*n_02*w[3][6] + 0.5*J_1[5]*J_1[7]*K_1[8]*n_01*w[3][6] + 0.5*J_1[6]*J_1[7]*K_1[0]*n_00*w[3][6] + 0.5*J_1[6]*J_1[7]*K_1[1]*n_01*w[3][6] + 0.5*J_1[7]*J_1[7]*K_1[3]*n_00*w[3][6] + 0.5*J_1[7]*J_1[7]*K_1[4]*n_01*w[3][6] + 0.5*J_1[7]*J_1[8]*K_1[6]*n_00*w[3][6] + 0.5*J_1[7]*J_1[8]*K_1[7]*n_01*w[3][6] + J_1[0]*J_1[1]*K_1[0]*n_00*w[3][6] + J_1[1]*J_1[1]*K_1[3]*n_00*w[3][6] + J_1[1]*J_1[2]*K_1[6]*n_00*w[3][6] + J_1[3]*J_1[4]*K_1[1]*n_01*w[3][6] + J_1[4]*J_1[4]*K_1[4]*n_01*w[3][6] + J_1[4]*J_1[5]*K_1[7]*n_01*w[3][6] + J_1[6]*J_1[7]*K_1[2]*n_02*w[3][6] + J_1[7]*J_1[7]*K_1[5]*n_02*w[3][6] + J_1[7]*J_1[8]*K_1[8]*n_02*w[3][6])/(detJ_1*detJ_1));
-    G[52] = det*w[10][0]*w[12][0]*((-2.0*J_1[1]*J_1[2]*w[3][6]-2.0*J_1[4]*J_1[5]*w[3][6]-2.0*J_1[7]*J_1[8]*w[3][6])/(circumradius_0*detJ_1*detJ_1 + circumradius_1*detJ_1*detJ_1) + (2.0*J_0[1]*J_1[2]*w[3][2] + 2.0*J_0[4]*J_1[5]*w[3][2] + 2.0*J_0[7]*J_1[8]*w[3][2])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
-    G[53] = det*w[10][0]*w[12][0]*((-2.0*J_1[0]*J_1[1]*w[3][6]-2.0*J_1[3]*J_1[4]*w[3][6]-2.0*J_1[6]*J_1[7]*w[3][6])/(circumradius_0*detJ_1*detJ_1 + circumradius_1*detJ_1*detJ_1) + (2.0*J_0[1]*J_1[0]*w[3][2] + 2.0*J_0[4]*J_1[3]*w[3][2] + 2.0*J_0[7]*J_1[6]*w[3][2])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
-    G[54] = det*w[10][0]*w[11][0]*((-0.5*J_0[0]*J_0[1]*K_0[1]*n_01*w[3][2]-0.5*J_0[0]*J_0[1]*K_0[2]*n_02*w[3][2]-0.5*J_0[0]*J_0[4]*K_0[1]*n_00*w[3][2]-0.5*J_0[0]*J_0[7]*K_0[2]*n_00*w[3][2]-0.5*J_0[1]*J_0[1]*K_0[4]*n_01*w[3][2]-0.5*J_0[1]*J_0[1]*K_0[5]*n_02*w[3][2]-0.5*J_0[1]*J_0[2]*K_0[7]*n_01*w[3][2]-0.5*J_0[1]*J_0[2]*K_0[8]*n_02*w[3][2]-0.5*J_0[1]*J_0[3]*K_0[0]*n_01*w[3][2]-0.5*J_0[1]*J_0[4]*K_0[3]*n_01*w[3][2]-0.5*J_0[1]*J_0[4]*K_0[4]*n_00*w[3][2]-0.5*J_0[1]*J_0[5]*K_0[6]*n_01*w[3][2]-0.5*J_0[1]*J_0[6]*K_0[0]*n_02*w[3][2]-0.5*J_0[1]*J_0[7]*K_0[3]*n_02*w[3][2]-0.5*J_0[1]*J_0[7]*K_0[5]*n_00*w[3][2]-0.5*J_0[1]*J_0[8]*K_0[6]*n_02*w[3][2]-0.5*J_0[2]*J_0[4]*K_0[7]*n_00*w[3][2]-0.5*J_0[2]*J_0[7]*K_0[8]*n_00*w[3][2]-0.5*J_0[3]*J_0[4]*K_0[0]*n_00*w[3][2]-0.5*J_0[3]*J_0[4]*K_0[2]*n_02*w[3][2]-0.5*J_0[3]*J_0[7]*K_0[2]*n_01*w[3][2]-0.5*J_0[4]*J_0[4]*K_0[3]*n_00*w[3][2]-0.5*J_0[4]*J_0[4]*K_0[5]*n_02*w[3][2]-0.5*J_0[4]*J_0[5]*K_0[6]*n_00*w[3][2]-0.5*J_0[4]*J_0[5]*K_0[8]*n_02*w[3][2]-0.5*J_0[4]*J_0[6]*K_0[1]*n_02*w[3][2]-0.5*J_0[4]*J_0[7]*K_0[4]*n_02*w[3][2]-0.5*J_0[4]*J_0[7]*K_0[5]*n_01*w[3][2]-0.5*J_0[4]*J_0[8]*K_0[7]*n_02*w[3][2]-0.5*J_0[5]*J_0[7]*K_0[8]*n_01*w[3][2]-0.5*J_0[6]*J_0[7]*K_0[0]*n_00*w[3][2]-0.5*J_0[6]*J_0[7]*K_0[1]*n_01*w[3][2]-0.5*J_0[7]*J_0[7]*K_0[3]*n_00*w[3][2]-0.5*J_0[7]*J_0[7]*K_0[4]*n_01*w[3][2]-0.5*J_0[7]*J_0[8]*K_0[6]*n_00*w[3][2]-0.5*J_0[7]*J_0[8]*K_0[7]*n_01*w[3][2] - J_0[0]*J_0[1]*K_0[0]*n_00*w[3][2] - J_0[1]*J_0[1]*K_0[3]*n_00*w[3][2] - J_0[1]*J_0[2]*K_0[6]*n_00*w[3][2] - J_0[3]*J_0[4]*K_0[1]*n_01*w[3][2] - J_0[4]*J_0[4]*K_0[4]*n_01*w[3][2] - J_0[4]*J_0[5]*K_0[7]*n_01*w[3][2] - J_0[6]*J_0[7]*K_0[2]*n_02*w[3][2] - J_0[7]*J_0[7]*K_0[5]*n_02*w[3][2] - J_0[7]*J_0[8]*K_0[8]*n_02*w[3][2])/(detJ_0*detJ_0) + (0.5*J_0[0]*J_1[1]*K_0[1]*n_01*w[3][6] + 0.5*J_0[0]*J_1[1]*K_0[2]*n_02*w[3][6] + 0.5*J_0[0]*J_1[4]*K_0[1]*n_00*w[3][6] + 0.5*J_0[0]*J_1[7]*K_0[2]*n_00*w[3][6] + 0.5*J_0[1]*J_1[1]*K_0[4]*n_01*w[3][6] + 0.5*J_0[1]*J_1[1]*K_0[5]*n_02*w[3][6] + 0.5*J_0[1]*J_1[4]*K_0[4]*n_00*w[3][6] + 0.5*J_0[1]*J_1[7]*K_0[5]*n_00*w[3][6] + 0.5*J_0[2]*J_1[1]*K_0[7]*n_01*w[3][6] + 0.5*J_0[2]*J_1[1]*K_0[8]*n_02*w[3][6] + 0.5*J_0[2]*J_1[4]*K_0[7]*n_00*w[3][6] + 0.5*J_0[2]*J_1[7]*K_0[8]*n_00*w[3][6] + 0.5*J_0[3]*J_1[1]*K_0[0]*n_01*w[3][6] + 0.5*J_0[3]*J_1[4]*K_0[0]*n_00*w[3][6] + 0.5*J_0[3]*J_1[4]*K_0[2]*n_02*w[3][6] + 0.5*J_0[3]*J_1[7]*K_0[2]*n_01*w[3][6] + 0.5*J_0[4]*J_1[1]*K_0[3]*n_01*w[3][6] + 0.5*J_0[4]*J_1[4]*K_0[3]*n_00*w[3][6] + 0.5*J_0[4]*J_1[4]*K_0[5]*n_02*w[3][6] + 0.5*J_0[4]*J_1[7]*K_0[5]*n_01*w[3][6] + 0.5*J_0[5]*J_1[1]*K_0[6]*n_01*w[3][6] + 0.5*J_0[5]*J_1[4]*K_0[6]*n_00*w[3][6] + 0.5*J_0[5]*J_1[4]*K_0[8]*n_02*w[3][6] + 0.5*J_0[5]*J_1[7]*K_0[8]*n_01*w[3][6] + 0.5*J_0[6]*J_1[1]*K_0[0]*n_02*w[3][6] + 0.5*J_0[6]*J_1[4]*K_0[1]*n_02*w[3][6] + 0.5*J_0[6]*J_1[7]*K_0[0]*n_00*w[3][6] + 0.5*J_0[6]*J_1[7]*K_0[1]*n_01*w[3][6] + 0.5*J_0[7]*J_1[1]*K_0[3]*n_02*w[3][6] + 0.5*J_0[7]*J_1[4]*K_0[4]*n_02*w[3][6] + 0.5*J_0[7]*J_1[7]*K_0[3]*n_00*w[3][6] + 0.5*J_0[7]*J_1[7]*K_0[4]*n_01*w[3][6] + 0.5*J_0[8]*J_1[1]*K_0[6]*n_02*w[3][6] + 0.5*J_0[8]*J_1[4]*K_0[7]*n_02*w[3][6] + 0.5*J_0[8]*J_1[7]*K_0[6]*n_00*w[3][6] + 0.5*J_0[8]*J_1[7]*K_0[7]*n_01*w[3][6] + J_0[0]*J_1[1]*K_0[0]*n_00*w[3][6] + J_0[1]*J_1[1]*K_0[3]*n_00*w[3][6] + J_0[2]*J_1[1]*K_0[6]*n_00*w[3][6] + J_0[3]*J_1[4]*K_0[1]*n_01*w[3][6] + J_0[4]*J_1[4]*K_0[4]*n_01*w[3][6] + J_0[5]*J_1[4]*K_0[7]*n_01*w[3][6] + J_0[6]*J_1[7]*K_0[2]*n_02*w[3][6] + J_0[7]*J_1[7]*K_0[5]*n_02*w[3][6] + J_0[8]*J_1[7]*K_0[8]*n_02*w[3][6])/(detJ_0*detJ_1));
-    G[55] = det*w[10][0]*w[12][0]*((-2.0*J_0[1]*J_0[2]*w[3][2]-2.0*J_0[4]*J_0[5]*w[3][2]-2.0*J_0[7]*J_0[8]*w[3][2])/(circumradius_0*detJ_0*detJ_0 + circumradius_1*detJ_0*detJ_0) + (2.0*J_0[2]*J_1[1]*w[3][6] + 2.0*J_0[5]*J_1[4]*w[3][6] + 2.0*J_0[8]*J_1[7]*w[3][6])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
-    G[56] = det*w[10][0]*w[12][0]*((-2.0*J_0[0]*J_0[1]*w[3][2]-2.0*J_0[3]*J_0[4]*w[3][2]-2.0*J_0[6]*J_0[7]*w[3][2])/(circumradius_0*detJ_0*detJ_0 + circumradius_1*detJ_0*detJ_0) + (2.0*J_0[0]*J_1[1]*w[3][6] + 2.0*J_0[3]*J_1[4]*w[3][6] + 2.0*J_0[6]*J_1[7]*w[3][6])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
+    G[0] = -2.0*det*w[12][0]*w[15][0]*(J_1[0]*J_1[0] + J_1[3]*J_1[3] + J_1[6]*J_1[6])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[1] = -2.0*det*w[12][0]*w[15][0]*(J_1[0]*J_1[1] + J_1[3]*J_1[4] + J_1[6]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[2] = -2.0*det*w[12][0]*w[15][0]*(J_1[0]*J_1[2] + J_1[3]*J_1[5] + J_1[6]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[3] = 2.0*det*w[12][0]*w[15][0]*(J_0[0]*J_1[0] + J_0[3]*J_1[3] + J_0[6]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[4] = 2.0*det*w[12][0]*w[15][0]*(J_0[1]*J_1[0] + J_0[4]*J_1[3] + J_0[7]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[5] = 2.0*det*w[12][0]*w[15][0]*(J_0[2]*J_1[0] + J_0[5]*J_1[3] + J_0[8]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[6] = det*w[12][0]*w[14][0]*(0.5*(n_00*(J_1[3]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[0]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[0]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[3]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
+    G[7] = det*w[12][0]*w[14][0]*(0.5*(J_1[0]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + J_1[3]*(J_1[0]*K_1[0]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + J_1[6]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[0]*K_1[0] + J_1[3]*K_1[1]))) + J_1[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
+    G[8] = det*w[12][0]*w[14][0]*(0.5*(J_1[1]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[8]*K_1[6])) + J_1[4]*(J_1[1]*K_1[3]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[8]*K_1[7])) + J_1[7]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[1]*K_1[3] + J_1[4]*K_1[4]))) + J_1[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
+    G[9] = det*w[12][0]*w[14][0]*(0.5*(J_1[2]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3])) + J_1[5]*(J_1[2]*K_1[6]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4])) + J_1[8]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[2]*K_1[6] + J_1[5]*K_1[7]))) + J_1[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
+    G[10] = det*w[12][0]*w[14][0]*(-0.5*(n_00*(J_0[3]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[0]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[0]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[3]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
+    G[11] = det*w[12][0]*w[14][0]*(-0.5*(n_00*(J_0[4]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[1]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[1]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[4]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
+    G[12] = det*w[12][0]*w[14][0]*(-0.5*(n_00*(J_0[5]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[2]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[2]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[5]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
+    G[13] = -2.0*det*w[12][0]*w[15][0]*(J_1[1]*J_1[1] + J_1[4]*J_1[4] + J_1[7]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[14] = -2.0*det*w[12][0]*w[15][0]*(J_1[1]*J_1[2] + J_1[4]*J_1[5] + J_1[7]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[15] = 2.0*det*w[12][0]*w[15][0]*(J_0[0]*J_1[1] + J_0[3]*J_1[4] + J_0[6]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[16] = 2.0*det*w[12][0]*w[15][0]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[17] = 2.0*det*w[12][0]*w[15][0]*(J_0[2]*J_1[1] + J_0[5]*J_1[4] + J_0[8]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[18] = det*w[12][0]*w[14][0]*(0.5*(n_00*(J_1[4]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[1]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[1]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[4]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
+    G[19] = -2.0*det*w[12][0]*w[15][0]*(J_1[2]*J_1[2] + J_1[5]*J_1[5] + J_1[8]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[20] = 2.0*det*w[12][0]*w[15][0]*(J_0[0]*J_1[2] + J_0[3]*J_1[5] + J_0[6]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[21] = 2.0*det*w[12][0]*w[15][0]*(J_0[1]*J_1[2] + J_0[4]*J_1[5] + J_0[7]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[22] = 2.0*det*w[12][0]*w[15][0]*(J_0[2]*J_1[2] + J_0[5]*J_1[5] + J_0[8]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[23] = det*w[12][0]*w[14][0]*(0.5*(n_00*(J_1[5]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[2]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[2]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[5]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
+    G[24] = -2.0*det*w[12][0]*w[15][0]*(J_0[0]*J_0[0] + J_0[3]*J_0[3] + J_0[6]*J_0[6])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[25] = -2.0*det*w[12][0]*w[15][0]*(J_0[0]*J_0[1] + J_0[3]*J_0[4] + J_0[6]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[26] = -2.0*det*w[12][0]*w[15][0]*(J_0[0]*J_0[2] + J_0[3]*J_0[5] + J_0[6]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[27] = det*w[12][0]*w[14][0]*(-0.5*(J_0[0]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + J_0[3]*(J_0[0]*K_0[0]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + J_0[6]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[0]*K_0[0] + J_0[3]*K_0[1]))) - (J_0[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
+    G[28] = det*w[12][0]*w[14][0]*(-0.5*(J_0[1]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[8]*K_0[6])) + J_0[4]*(J_0[1]*K_0[3]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[8]*K_0[7])) + J_0[7]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[1]*K_0[3] + J_0[4]*K_0[4]))) - (J_0[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
+    G[29] = det*w[12][0]*w[14][0]*(-0.5*(J_0[2]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3])) + J_0[5]*(J_0[2]*K_0[6]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4])) + J_0[8]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[2]*K_0[6] + J_0[5]*K_0[7]))) - (J_0[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
+    G[30] = -2.0*det*w[12][0]*w[15][0]*(J_0[1]*J_0[1] + J_0[4]*J_0[4] + J_0[7]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[31] = -2.0*det*w[12][0]*w[15][0]*(J_0[1]*J_0[2] + J_0[4]*J_0[5] + J_0[7]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[32] = -2.0*det*w[12][0]*w[15][0]*(J_0[2]*J_0[2] + J_0[5]*J_0[5] + J_0[8]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[33] = -2.0*det*w[12][0]*w[15][0]*w[3][6]*(J_1[1]*J_1[1] + J_1[4]*J_1[4] + J_1[7]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[34] = det*w[12][0]*w[14][0]*w[3][6]*(0.5*(J_1[1]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[8]*K_1[6])) + J_1[4]*(J_1[1]*K_1[3]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[8]*K_1[7])) + J_1[7]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[1]*K_1[3] + J_1[4]*K_1[4]))) + J_1[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
+    G[35] = -2.0*det*w[12][0]*w[15][0]*w[3][6]*(J_1[1]*J_1[2] + J_1[4]*J_1[5] + J_1[7]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[36] = -2.0*det*w[12][0]*w[15][0]*w[3][6]*(J_1[0]*J_1[1] + J_1[3]*J_1[4] + J_1[6]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[37] = 2.0*det*w[12][0]*w[15][0]*w[3][6]*(J_0[0]*J_1[1] + J_0[3]*J_1[4] + J_0[6]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[38] = det*w[12][0]*w[14][0]*w[3][6]*(0.5*(n_00*(J_1[4]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[1]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[1]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[4]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
+    G[39] = 2.0*det*w[12][0]*w[15][0]*w[3][6]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[40] = 2.0*det*w[12][0]*w[15][0]*w[3][6]*(J_0[2]*J_1[1] + J_0[5]*J_1[4] + J_0[8]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[41] = -2.0*det*w[12][0]*w[15][0]*w[3][2]*(J_0[1]*J_0[1] + J_0[4]*J_0[4] + J_0[7]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[42] = 2.0*det*w[12][0]*w[15][0]*w[3][2]*(J_0[1]*J_1[0] + J_0[4]*J_1[3] + J_0[7]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[43] = det*w[12][0]*w[14][0]*w[3][2]*(-0.5*(n_00*(J_0[4]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[1]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[1]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[4]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
+    G[44] = 2.0*det*w[12][0]*w[15][0]*w[3][2]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[45] = 2.0*det*w[12][0]*w[15][0]*w[3][2]*(J_0[1]*J_1[2] + J_0[4]*J_1[5] + J_0[7]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[46] = det*w[12][0]*w[14][0]*w[3][2]*(-0.5*(J_0[1]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[8]*K_0[6])) + J_0[4]*(J_0[1]*K_0[3]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[8]*K_0[7])) + J_0[7]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[1]*K_0[3] + J_0[4]*K_0[4]))) - (J_0[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
+    G[47] = -2.0*det*w[12][0]*w[15][0]*w[3][2]*(J_0[1]*J_0[2] + J_0[4]*J_0[5] + J_0[7]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[48] = -2.0*det*w[12][0]*w[15][0]*w[3][2]*(J_0[0]*J_0[1] + J_0[3]*J_0[4] + J_0[6]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[49] = det*w[12][0]*w[15][0]*((-2.0*J_0[1]*J_0[1]*w[3][2]-2.0*J_0[4]*J_0[4]*w[3][2]-2.0*J_0[7]*J_0[7]*w[3][2])/(circumradius_0*detJ_0*detJ_0 + circumradius_1*detJ_0*detJ_0) + (2.0*J_0[1]*J_1[1]*w[3][6] + 2.0*J_0[4]*J_1[4]*w[3][6] + 2.0*J_0[7]*J_1[7]*w[3][6])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
+    G[50] = det*w[12][0]*w[15][0]*((-2.0*J_1[1]*J_1[1]*w[3][6]-2.0*J_1[4]*J_1[4]*w[3][6]-2.0*J_1[7]*J_1[7]*w[3][6])/(circumradius_0*detJ_1*detJ_1 + circumradius_1*detJ_1*detJ_1) + (2.0*J_0[1]*J_1[1]*w[3][2] + 2.0*J_0[4]*J_1[4]*w[3][2] + 2.0*J_0[7]*J_1[7]*w[3][2])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
+    G[51] = det*w[12][0]*w[14][0]*((-0.5*J_0[1]*J_1[0]*K_1[1]*n_01*w[3][2]-0.5*J_0[1]*J_1[0]*K_1[2]*n_02*w[3][2]-0.5*J_0[1]*J_1[1]*K_1[4]*n_01*w[3][2]-0.5*J_0[1]*J_1[1]*K_1[5]*n_02*w[3][2]-0.5*J_0[1]*J_1[2]*K_1[7]*n_01*w[3][2]-0.5*J_0[1]*J_1[2]*K_1[8]*n_02*w[3][2]-0.5*J_0[1]*J_1[3]*K_1[0]*n_01*w[3][2]-0.5*J_0[1]*J_1[4]*K_1[3]*n_01*w[3][2]-0.5*J_0[1]*J_1[5]*K_1[6]*n_01*w[3][2]-0.5*J_0[1]*J_1[6]*K_1[0]*n_02*w[3][2]-0.5*J_0[1]*J_1[7]*K_1[3]*n_02*w[3][2]-0.5*J_0[1]*J_1[8]*K_1[6]*n_02*w[3][2]-0.5*J_0[4]*J_1[0]*K_1[1]*n_00*w[3][2]-0.5*J_0[4]*J_1[1]*K_1[4]*n_00*w[3][2]-0.5*J_0[4]*J_1[2]*K_1[7]*n_00*w[3][2]-0.5*J_0[4]*J_1[3]*K_1[0]*n_00*w[3][2]-0.5*J_0[4]*J_1[3]*K_1[2]*n_02*w[3][2]-0.5*J_0[4]*J_1[4]*K_1[3]*n_00*w[3][2]-0.5*J_0[4]*J_1[4]*K_1[5]*n_02*w[3][2]-0.5*J_0[4]*J_1[5]*K_1[6]*n_00*w[3][2]-0.5*J_0[4]*J_1[5]*K_1[8]*n_02*w[3][2]-0.5*J_0[4]*J_1[6]*K_1[1]*n_02*w[3][2]-0.5*J_0[4]*J_1[7]*K_1[4]*n_02*w[3][2]-0.5*J_0[4]*J_1[8]*K_1[7]*n_02*w[3][2]-0.5*J_0[7]*J_1[0]*K_1[2]*n_00*w[3][2]-0.5*J_0[7]*J_1[1]*K_1[5]*n_00*w[3][2]-0.5*J_0[7]*J_1[2]*K_1[8]*n_00*w[3][2]-0.5*J_0[7]*J_1[3]*K_1[2]*n_01*w[3][2]-0.5*J_0[7]*J_1[4]*K_1[5]*n_01*w[3][2]-0.5*J_0[7]*J_1[5]*K_1[8]*n_01*w[3][2]-0.5*J_0[7]*J_1[6]*K_1[0]*n_00*w[3][2]-0.5*J_0[7]*J_1[6]*K_1[1]*n_01*w[3][2]-0.5*J_0[7]*J_1[7]*K_1[3]*n_00*w[3][2]-0.5*J_0[7]*J_1[7]*K_1[4]*n_01*w[3][2]-0.5*J_0[7]*J_1[8]*K_1[6]*n_00*w[3][2]-0.5*J_0[7]*J_1[8]*K_1[7]*n_01*w[3][2] - J_0[1]*J_1[0]*K_1[0]*n_00*w[3][2] - J_0[1]*J_1[1]*K_1[3]*n_00*w[3][2] - J_0[1]*J_1[2]*K_1[6]*n_00*w[3][2] - J_0[4]*J_1[3]*K_1[1]*n_01*w[3][2] - J_0[4]*J_1[4]*K_1[4]*n_01*w[3][2] - J_0[4]*J_1[5]*K_1[7]*n_01*w[3][2] - J_0[7]*J_1[6]*K_1[2]*n_02*w[3][2] - J_0[7]*J_1[7]*K_1[5]*n_02*w[3][2] - J_0[7]*J_1[8]*K_1[8]*n_02*w[3][2])/(detJ_0*detJ_1) + (0.5*J_1[0]*J_1[1]*K_1[1]*n_01*w[3][6] + 0.5*J_1[0]*J_1[1]*K_1[2]*n_02*w[3][6] + 0.5*J_1[0]*J_1[4]*K_1[1]*n_00*w[3][6] + 0.5*J_1[0]*J_1[7]*K_1[2]*n_00*w[3][6] + 0.5*J_1[1]*J_1[1]*K_1[4]*n_01*w[3][6] + 0.5*J_1[1]*J_1[1]*K_1[5]*n_02*w[3][6] + 0.5*J_1[1]*J_1[2]*K_1[7]*n_01*w[3][6] + 0.5*J_1[1]*J_1[2]*K_1[8]*n_02*w[3][6] + 0.5*J_1[1]*J_1[3]*K_1[0]*n_01*w[3][6] + 0.5*J_1[1]*J_1[4]*K_1[3]*n_01*w[3][6] + 0.5*J_1[1]*J_1[4]*K_1[4]*n_00*w[3][6] + 0.5*J_1[1]*J_1[5]*K_1[6]*n_01*w[3][6] + 0.5*J_1[1]*J_1[6]*K_1[0]*n_02*w[3][6] + 0.5*J_1[1]*J_1[7]*K_1[3]*n_02*w[3][6] + 0.5*J_1[1]*J_1[7]*K_1[5]*n_00*w[3][6] + 0.5*J_1[1]*J_1[8]*K_1[6]*n_02*w[3][6] + 0.5*J_1[2]*J_1[4]*K_1[7]*n_00*w[3][6] + 0.5*J_1[2]*J_1[7]*K_1[8]*n_00*w[3][6] + 0.5*J_1[3]*J_1[4]*K_1[0]*n_00*w[3][6] + 0.5*J_1[3]*J_1[4]*K_1[2]*n_02*w[3][6] + 0.5*J_1[3]*J_1[7]*K_1[2]*n_01*w[3][6] + 0.5*J_1[4]*J_1[4]*K_1[3]*n_00*w[3][6] + 0.5*J_1[4]*J_1[4]*K_1[5]*n_02*w[3][6] + 0.5*J_1[4]*J_1[5]*K_1[6]*n_00*w[3][6] + 0.5*J_1[4]*J_1[5]*K_1[8]*n_02*w[3][6] + 0.5*J_1[4]*J_1[6]*K_1[1]*n_02*w[3][6] + 0.5*J_1[4]*J_1[7]*K_1[4]*n_02*w[3][6] + 0.5*J_1[4]*J_1[7]*K_1[5]*n_01*w[3][6] + 0.5*J_1[4]*J_1[8]*K_1[7]*n_02*w[3][6] + 0.5*J_1[5]*J_1[7]*K_1[8]*n_01*w[3][6] + 0.5*J_1[6]*J_1[7]*K_1[0]*n_00*w[3][6] + 0.5*J_1[6]*J_1[7]*K_1[1]*n_01*w[3][6] + 0.5*J_1[7]*J_1[7]*K_1[3]*n_00*w[3][6] + 0.5*J_1[7]*J_1[7]*K_1[4]*n_01*w[3][6] + 0.5*J_1[7]*J_1[8]*K_1[6]*n_00*w[3][6] + 0.5*J_1[7]*J_1[8]*K_1[7]*n_01*w[3][6] + J_1[0]*J_1[1]*K_1[0]*n_00*w[3][6] + J_1[1]*J_1[1]*K_1[3]*n_00*w[3][6] + J_1[1]*J_1[2]*K_1[6]*n_00*w[3][6] + J_1[3]*J_1[4]*K_1[1]*n_01*w[3][6] + J_1[4]*J_1[4]*K_1[4]*n_01*w[3][6] + J_1[4]*J_1[5]*K_1[7]*n_01*w[3][6] + J_1[6]*J_1[7]*K_1[2]*n_02*w[3][6] + J_1[7]*J_1[7]*K_1[5]*n_02*w[3][6] + J_1[7]*J_1[8]*K_1[8]*n_02*w[3][6])/(detJ_1*detJ_1));
+    G[52] = det*w[12][0]*w[15][0]*((-2.0*J_1[1]*J_1[2]*w[3][6]-2.0*J_1[4]*J_1[5]*w[3][6]-2.0*J_1[7]*J_1[8]*w[3][6])/(circumradius_0*detJ_1*detJ_1 + circumradius_1*detJ_1*detJ_1) + (2.0*J_0[1]*J_1[2]*w[3][2] + 2.0*J_0[4]*J_1[5]*w[3][2] + 2.0*J_0[7]*J_1[8]*w[3][2])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
+    G[53] = det*w[12][0]*w[15][0]*((-2.0*J_1[0]*J_1[1]*w[3][6]-2.0*J_1[3]*J_1[4]*w[3][6]-2.0*J_1[6]*J_1[7]*w[3][6])/(circumradius_0*detJ_1*detJ_1 + circumradius_1*detJ_1*detJ_1) + (2.0*J_0[1]*J_1[0]*w[3][2] + 2.0*J_0[4]*J_1[3]*w[3][2] + 2.0*J_0[7]*J_1[6]*w[3][2])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
+    G[54] = det*w[12][0]*w[14][0]*((-0.5*J_0[0]*J_0[1]*K_0[1]*n_01*w[3][2]-0.5*J_0[0]*J_0[1]*K_0[2]*n_02*w[3][2]-0.5*J_0[0]*J_0[4]*K_0[1]*n_00*w[3][2]-0.5*J_0[0]*J_0[7]*K_0[2]*n_00*w[3][2]-0.5*J_0[1]*J_0[1]*K_0[4]*n_01*w[3][2]-0.5*J_0[1]*J_0[1]*K_0[5]*n_02*w[3][2]-0.5*J_0[1]*J_0[2]*K_0[7]*n_01*w[3][2]-0.5*J_0[1]*J_0[2]*K_0[8]*n_02*w[3][2]-0.5*J_0[1]*J_0[3]*K_0[0]*n_01*w[3][2]-0.5*J_0[1]*J_0[4]*K_0[3]*n_01*w[3][2]-0.5*J_0[1]*J_0[4]*K_0[4]*n_00*w[3][2]-0.5*J_0[1]*J_0[5]*K_0[6]*n_01*w[3][2]-0.5*J_0[1]*J_0[6]*K_0[0]*n_02*w[3][2]-0.5*J_0[1]*J_0[7]*K_0[3]*n_02*w[3][2]-0.5*J_0[1]*J_0[7]*K_0[5]*n_00*w[3][2]-0.5*J_0[1]*J_0[8]*K_0[6]*n_02*w[3][2]-0.5*J_0[2]*J_0[4]*K_0[7]*n_00*w[3][2]-0.5*J_0[2]*J_0[7]*K_0[8]*n_00*w[3][2]-0.5*J_0[3]*J_0[4]*K_0[0]*n_00*w[3][2]-0.5*J_0[3]*J_0[4]*K_0[2]*n_02*w[3][2]-0.5*J_0[3]*J_0[7]*K_0[2]*n_01*w[3][2]-0.5*J_0[4]*J_0[4]*K_0[3]*n_00*w[3][2]-0.5*J_0[4]*J_0[4]*K_0[5]*n_02*w[3][2]-0.5*J_0[4]*J_0[5]*K_0[6]*n_00*w[3][2]-0.5*J_0[4]*J_0[5]*K_0[8]*n_02*w[3][2]-0.5*J_0[4]*J_0[6]*K_0[1]*n_02*w[3][2]-0.5*J_0[4]*J_0[7]*K_0[4]*n_02*w[3][2]-0.5*J_0[4]*J_0[7]*K_0[5]*n_01*w[3][2]-0.5*J_0[4]*J_0[8]*K_0[7]*n_02*w[3][2]-0.5*J_0[5]*J_0[7]*K_0[8]*n_01*w[3][2]-0.5*J_0[6]*J_0[7]*K_0[0]*n_00*w[3][2]-0.5*J_0[6]*J_0[7]*K_0[1]*n_01*w[3][2]-0.5*J_0[7]*J_0[7]*K_0[3]*n_00*w[3][2]-0.5*J_0[7]*J_0[7]*K_0[4]*n_01*w[3][2]-0.5*J_0[7]*J_0[8]*K_0[6]*n_00*w[3][2]-0.5*J_0[7]*J_0[8]*K_0[7]*n_01*w[3][2] - J_0[0]*J_0[1]*K_0[0]*n_00*w[3][2] - J_0[1]*J_0[1]*K_0[3]*n_00*w[3][2] - J_0[1]*J_0[2]*K_0[6]*n_00*w[3][2] - J_0[3]*J_0[4]*K_0[1]*n_01*w[3][2] - J_0[4]*J_0[4]*K_0[4]*n_01*w[3][2] - J_0[4]*J_0[5]*K_0[7]*n_01*w[3][2] - J_0[6]*J_0[7]*K_0[2]*n_02*w[3][2] - J_0[7]*J_0[7]*K_0[5]*n_02*w[3][2] - J_0[7]*J_0[8]*K_0[8]*n_02*w[3][2])/(detJ_0*detJ_0) + (0.5*J_0[0]*J_1[1]*K_0[1]*n_01*w[3][6] + 0.5*J_0[0]*J_1[1]*K_0[2]*n_02*w[3][6] + 0.5*J_0[0]*J_1[4]*K_0[1]*n_00*w[3][6] + 0.5*J_0[0]*J_1[7]*K_0[2]*n_00*w[3][6] + 0.5*J_0[1]*J_1[1]*K_0[4]*n_01*w[3][6] + 0.5*J_0[1]*J_1[1]*K_0[5]*n_02*w[3][6] + 0.5*J_0[1]*J_1[4]*K_0[4]*n_00*w[3][6] + 0.5*J_0[1]*J_1[7]*K_0[5]*n_00*w[3][6] + 0.5*J_0[2]*J_1[1]*K_0[7]*n_01*w[3][6] + 0.5*J_0[2]*J_1[1]*K_0[8]*n_02*w[3][6] + 0.5*J_0[2]*J_1[4]*K_0[7]*n_00*w[3][6] + 0.5*J_0[2]*J_1[7]*K_0[8]*n_00*w[3][6] + 0.5*J_0[3]*J_1[1]*K_0[0]*n_01*w[3][6] + 0.5*J_0[3]*J_1[4]*K_0[0]*n_00*w[3][6] + 0.5*J_0[3]*J_1[4]*K_0[2]*n_02*w[3][6] + 0.5*J_0[3]*J_1[7]*K_0[2]*n_01*w[3][6] + 0.5*J_0[4]*J_1[1]*K_0[3]*n_01*w[3][6] + 0.5*J_0[4]*J_1[4]*K_0[3]*n_00*w[3][6] + 0.5*J_0[4]*J_1[4]*K_0[5]*n_02*w[3][6] + 0.5*J_0[4]*J_1[7]*K_0[5]*n_01*w[3][6] + 0.5*J_0[5]*J_1[1]*K_0[6]*n_01*w[3][6] + 0.5*J_0[5]*J_1[4]*K_0[6]*n_00*w[3][6] + 0.5*J_0[5]*J_1[4]*K_0[8]*n_02*w[3][6] + 0.5*J_0[5]*J_1[7]*K_0[8]*n_01*w[3][6] + 0.5*J_0[6]*J_1[1]*K_0[0]*n_02*w[3][6] + 0.5*J_0[6]*J_1[4]*K_0[1]*n_02*w[3][6] + 0.5*J_0[6]*J_1[7]*K_0[0]*n_00*w[3][6] + 0.5*J_0[6]*J_1[7]*K_0[1]*n_01*w[3][6] + 0.5*J_0[7]*J_1[1]*K_0[3]*n_02*w[3][6] + 0.5*J_0[7]*J_1[4]*K_0[4]*n_02*w[3][6] + 0.5*J_0[7]*J_1[7]*K_0[3]*n_00*w[3][6] + 0.5*J_0[7]*J_1[7]*K_0[4]*n_01*w[3][6] + 0.5*J_0[8]*J_1[1]*K_0[6]*n_02*w[3][6] + 0.5*J_0[8]*J_1[4]*K_0[7]*n_02*w[3][6] + 0.5*J_0[8]*J_1[7]*K_0[6]*n_00*w[3][6] + 0.5*J_0[8]*J_1[7]*K_0[7]*n_01*w[3][6] + J_0[0]*J_1[1]*K_0[0]*n_00*w[3][6] + J_0[1]*J_1[1]*K_0[3]*n_00*w[3][6] + J_0[2]*J_1[1]*K_0[6]*n_00*w[3][6] + J_0[3]*J_1[4]*K_0[1]*n_01*w[3][6] + J_0[4]*J_1[4]*K_0[4]*n_01*w[3][6] + J_0[5]*J_1[4]*K_0[7]*n_01*w[3][6] + J_0[6]*J_1[7]*K_0[2]*n_02*w[3][6] + J_0[7]*J_1[7]*K_0[5]*n_02*w[3][6] + J_0[8]*J_1[7]*K_0[8]*n_02*w[3][6])/(detJ_0*detJ_1));
+    G[55] = det*w[12][0]*w[15][0]*((-2.0*J_0[1]*J_0[2]*w[3][2]-2.0*J_0[4]*J_0[5]*w[3][2]-2.0*J_0[7]*J_0[8]*w[3][2])/(circumradius_0*detJ_0*detJ_0 + circumradius_1*detJ_0*detJ_0) + (2.0*J_0[2]*J_1[1]*w[3][6] + 2.0*J_0[5]*J_1[4]*w[3][6] + 2.0*J_0[8]*J_1[7]*w[3][6])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
+    G[56] = det*w[12][0]*w[15][0]*((-2.0*J_0[0]*J_0[1]*w[3][2]-2.0*J_0[3]*J_0[4]*w[3][2]-2.0*J_0[6]*J_0[7]*w[3][2])/(circumradius_0*detJ_0*detJ_0 + circumradius_1*detJ_0*detJ_0) + (2.0*J_0[0]*J_1[1]*w[3][6] + 2.0*J_0[3]*J_1[4]*w[3][6] + 2.0*J_0[6]*J_1[7]*w[3][6])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
@@ -20126,23 +20168,23 @@ public:
 };
 
 
-class pnp_stokes_form_0: public ufc::form
+class pnp_stokes_time_form_0: public ufc::form
 {
 public:
 
-  pnp_stokes_form_0() : ufc::form()
+  pnp_stokes_time_form_0() : ufc::form()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_form_0() override
+  ~pnp_stokes_time_form_0() override
   {
     // Do nothing
   }
 
   const char * signature() const final override
   {
-    return "9364f55e2f980442774ab9fcce617b61580d23997a020d281a534771b10081e53f46e6a81e72c48c1c7bd83468ba6ad9381bfcf7fcd9f824f436a96e2d87e808";
+    return "45bb64682437f0fdb5da7d17a9de74ae921f6d30f05d779cb5cdac4e45d9f435cd382bebc4d85865016535e8106b630ee37ada9d4b77abf34d03e65c2483c506";
   }
 
   std::size_t rank() const final override
@@ -20152,23 +20194,23 @@ public:
 
   std::size_t num_coefficients() const final override
   {
-    return 12;
+    return 13;
   }
 
   std::size_t original_coefficient_position(std::size_t i) const final override
   {
-    static const std::vector<std::size_t> position({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11});
+    static const std::vector<std::size_t> position({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
     return position[i];
   }
 
   ufc::finite_element * create_coordinate_finite_element() const final override
   {
-    return new pnp_stokes_finite_element_1();
+    return new pnp_stokes_time_finite_element_1();
   }
 
   ufc::dofmap * create_coordinate_dofmap() const final override
   {
-    return new pnp_stokes_dofmap_1();
+    return new pnp_stokes_time_dofmap_1();
    }
 
   ufc::coordinate_mapping * create_coordinate_mapping() const final override
@@ -20182,72 +20224,77 @@ public:
     {
     case 0:
       {
-        return new pnp_stokes_finite_element_4();
+        return new pnp_stokes_time_finite_element_4();
         break;
       }
     case 1:
       {
-        return new pnp_stokes_finite_element_4();
+        return new pnp_stokes_time_finite_element_4();
         break;
       }
     case 2:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     case 3:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     case 4:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     case 5:
       {
-        return new pnp_stokes_finite_element_2();
+        return new pnp_stokes_time_finite_element_2();
         break;
       }
     case 6:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     case 7:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     case 8:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes_time_finite_element_5();
         break;
       }
     case 9:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     case 10:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes_time_finite_element_5();
         break;
       }
     case 11:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes_time_finite_element_5();
         break;
       }
     case 12:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes_time_finite_element_5();
         break;
       }
     case 13:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes_time_finite_element_5();
+        break;
+      }
+    case 14:
+      {
+        return new pnp_stokes_time_finite_element_5();
         break;
       }
     }
@@ -20261,72 +20308,77 @@ public:
     {
     case 0:
       {
-        return new pnp_stokes_dofmap_4();
+        return new pnp_stokes_time_dofmap_4();
         break;
       }
     case 1:
       {
-        return new pnp_stokes_dofmap_4();
+        return new pnp_stokes_time_dofmap_4();
         break;
       }
     case 2:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     case 3:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     case 4:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     case 5:
       {
-        return new pnp_stokes_dofmap_2();
+        return new pnp_stokes_time_dofmap_2();
         break;
       }
     case 6:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     case 7:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     case 8:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes_time_dofmap_5();
         break;
       }
     case 9:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     case 10:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes_time_dofmap_5();
         break;
       }
     case 11:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes_time_dofmap_5();
         break;
       }
     case 12:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes_time_dofmap_5();
         break;
       }
     case 13:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes_time_dofmap_5();
+        break;
+      }
+    case 14:
+      {
+        return new pnp_stokes_time_dofmap_5();
         break;
       }
     }
@@ -20456,17 +20508,17 @@ public:
 
   ufc::cell_integral * create_default_cell_integral() const final override
   {
-    return new pnp_stokes_cell_integral_0_otherwise();
+    return new pnp_stokes_time_cell_integral_0_otherwise();
   }
 
   ufc::exterior_facet_integral * create_default_exterior_facet_integral() const final override
   {
-    return new pnp_stokes_exterior_facet_integral_0_otherwise();
+    return new pnp_stokes_time_exterior_facet_integral_0_otherwise();
   }
 
   ufc::interior_facet_integral * create_default_interior_facet_integral() const final override
   {
-    return new pnp_stokes_interior_facet_integral_0_otherwise();
+    return new pnp_stokes_time_interior_facet_integral_0_otherwise();
   }
 
   ufc::vertex_integral * create_default_vertex_integral() const final override
@@ -20497,23 +20549,23 @@ public:
 };
 
 
-class pnp_stokes_form_1: public ufc::form
+class pnp_stokes_time_form_1: public ufc::form
 {
 public:
 
-  pnp_stokes_form_1() : ufc::form()
+  pnp_stokes_time_form_1() : ufc::form()
   {
     // Do nothing
   }
 
-  ~pnp_stokes_form_1() override
+  ~pnp_stokes_time_form_1() override
   {
     // Do nothing
   }
 
   const char * signature() const final override
   {
-    return "1420188e5ef22afee5eced934f67b8a29aef6f89ac6507082d0b8c06c48a3ef691de39dd68d1411307e8f053359860d9e0c3982d49fc13458cea9130117f581f";
+    return "a69ad313482677f6f91bd99a7cb37006f4736b940ae34878be337ffc17f7768448c7686ab3139d91b0d0942670b27caa4161e03d435761529f3f2e366604ef9b";
   }
 
   std::size_t rank() const final override
@@ -20523,23 +20575,23 @@ public:
 
   std::size_t num_coefficients() const final override
   {
-    return 13;
+    return 16;
   }
 
   std::size_t original_coefficient_position(std::size_t i) const final override
   {
-    static const std::vector<std::size_t> position({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
+    static const std::vector<std::size_t> position({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15});
     return position[i];
   }
 
   ufc::finite_element * create_coordinate_finite_element() const final override
   {
-    return new pnp_stokes_finite_element_1();
+    return new pnp_stokes_time_finite_element_1();
   }
 
   ufc::dofmap * create_coordinate_dofmap() const final override
   {
-    return new pnp_stokes_dofmap_1();
+    return new pnp_stokes_time_dofmap_1();
    }
 
   ufc::coordinate_mapping * create_coordinate_mapping() const final override
@@ -20553,72 +20605,87 @@ public:
     {
     case 0:
       {
-        return new pnp_stokes_finite_element_4();
+        return new pnp_stokes_time_finite_element_4();
         break;
       }
     case 1:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     case 2:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     case 3:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     case 4:
       {
-        return new pnp_stokes_finite_element_2();
+        return new pnp_stokes_time_finite_element_2();
         break;
       }
     case 5:
       {
-        return new pnp_stokes_finite_element_3();
+        return new pnp_stokes_time_finite_element_3();
         break;
       }
     case 6:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     case 7:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     case 8:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes_time_finite_element_5();
         break;
       }
     case 9:
       {
-        return new pnp_stokes_finite_element_0();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     case 10:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes_time_finite_element_5();
         break;
       }
     case 11:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     case 12:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes_time_finite_element_0();
         break;
       }
     case 13:
       {
-        return new pnp_stokes_finite_element_5();
+        return new pnp_stokes_time_finite_element_5();
+        break;
+      }
+    case 14:
+      {
+        return new pnp_stokes_time_finite_element_5();
+        break;
+      }
+    case 15:
+      {
+        return new pnp_stokes_time_finite_element_5();
+        break;
+      }
+    case 16:
+      {
+        return new pnp_stokes_time_finite_element_5();
         break;
       }
     }
@@ -20632,72 +20699,87 @@ public:
     {
     case 0:
       {
-        return new pnp_stokes_dofmap_4();
+        return new pnp_stokes_time_dofmap_4();
         break;
       }
     case 1:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     case 2:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     case 3:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     case 4:
       {
-        return new pnp_stokes_dofmap_2();
+        return new pnp_stokes_time_dofmap_2();
         break;
       }
     case 5:
       {
-        return new pnp_stokes_dofmap_3();
+        return new pnp_stokes_time_dofmap_3();
         break;
       }
     case 6:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     case 7:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     case 8:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes_time_dofmap_5();
         break;
       }
     case 9:
       {
-        return new pnp_stokes_dofmap_0();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     case 10:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes_time_dofmap_5();
         break;
       }
     case 11:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     case 12:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes_time_dofmap_0();
         break;
       }
     case 13:
       {
-        return new pnp_stokes_dofmap_5();
+        return new pnp_stokes_time_dofmap_5();
+        break;
+      }
+    case 14:
+      {
+        return new pnp_stokes_time_dofmap_5();
+        break;
+      }
+    case 15:
+      {
+        return new pnp_stokes_time_dofmap_5();
+        break;
+      }
+    case 16:
+      {
+        return new pnp_stokes_time_dofmap_5();
         break;
       }
     }
@@ -20827,17 +20909,17 @@ public:
 
   ufc::cell_integral * create_default_cell_integral() const final override
   {
-    return new pnp_stokes_cell_integral_1_otherwise();
+    return new pnp_stokes_time_cell_integral_1_otherwise();
   }
 
   ufc::exterior_facet_integral * create_default_exterior_facet_integral() const final override
   {
-    return new pnp_stokes_exterior_facet_integral_1_otherwise();
+    return new pnp_stokes_time_exterior_facet_integral_1_otherwise();
   }
 
   ufc::interior_facet_integral * create_default_interior_facet_integral() const final override
   {
-    return new pnp_stokes_interior_facet_integral_1_otherwise();
+    return new pnp_stokes_time_interior_facet_integral_1_otherwise();
   }
 
   ufc::vertex_integral * create_default_vertex_integral() const final override
@@ -20889,7 +20971,7 @@ public:
 #include <dolfin/adaptivity/GoalFunctional.h>
 #include <dolfin/la/GenericVector.h>
 
-namespace pnp_stokes
+namespace pnp_stokes_time
 {
 
 class CoefficientSpace_AnAn: public dolfin::FunctionSpace
@@ -20899,8 +20981,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_AnAn(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_0>(), *mesh))
   {
     // Do nothing
   }
@@ -20908,8 +20990,32 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_AnAn(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_0>(), *mesh, constrained_domain))
+  {
+    // Do nothing
+  }
+
+};
+
+class CoefficientSpace_AnAn_t0: public dolfin::FunctionSpace
+{
+public:
+
+  // Constructor for standard function space
+  CoefficientSpace_AnAn_t0(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_0>(), *mesh))
+  {
+    // Do nothing
+  }
+
+  // Constructor for constrained function space
+  CoefficientSpace_AnAn_t0(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_0>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -20923,8 +21029,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_CatCat(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_0>(), *mesh))
   {
     // Do nothing
   }
@@ -20932,8 +21038,32 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_CatCat(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_0>(), *mesh, constrained_domain))
+  {
+    // Do nothing
+  }
+
+};
+
+class CoefficientSpace_CatCat_t0: public dolfin::FunctionSpace
+{
+public:
+
+  // Constructor for standard function space
+  CoefficientSpace_CatCat_t0(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_0>(), *mesh))
+  {
+    // Do nothing
+  }
+
+  // Constructor for constrained function space
+  CoefficientSpace_CatCat_t0(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_0>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -20947,8 +21077,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_Dn(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_0>(), *mesh))
   {
     // Do nothing
   }
@@ -20956,8 +21086,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_Dn(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_0>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -20971,8 +21101,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_Dp(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_0>(), *mesh))
   {
     // Do nothing
   }
@@ -20980,8 +21110,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_Dp(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_0>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -20995,8 +21125,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_EsEs(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_0>(), *mesh))
   {
     // Do nothing
   }
@@ -21004,8 +21134,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_EsEs(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_0>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21019,8 +21149,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_alpha1(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_5>(), *mesh))
   {
     // Do nothing
   }
@@ -21028,8 +21158,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_alpha1(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_5>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21043,8 +21173,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_alpha2(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_5>(), *mesh))
   {
     // Do nothing
   }
@@ -21052,8 +21182,32 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_alpha2(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_5>(), *mesh, constrained_domain))
+  {
+    // Do nothing
+  }
+
+};
+
+class CoefficientSpace_dt: public dolfin::FunctionSpace
+{
+public:
+
+  // Constructor for standard function space
+  CoefficientSpace_dt(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_5>(), *mesh))
+  {
+    // Do nothing
+  }
+
+  // Constructor for constrained function space
+  CoefficientSpace_dt(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_5>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21067,8 +21221,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_eps(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_0>(), *mesh))
   {
     // Do nothing
   }
@@ -21076,8 +21230,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_eps(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_0>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_0>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21091,8 +21245,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_mu(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_5>(), *mesh))
   {
     // Do nothing
   }
@@ -21100,8 +21254,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_mu(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_5>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21115,8 +21269,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_pp(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_3>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_3>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_3>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_3>(), *mesh))
   {
     // Do nothing
   }
@@ -21124,8 +21278,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_pp(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_3>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_3>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_3>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_3>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21139,8 +21293,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_qn(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_5>(), *mesh))
   {
     // Do nothing
   }
@@ -21148,8 +21302,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_qn(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_5>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21163,8 +21317,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_qp(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_5>(), *mesh))
   {
     // Do nothing
   }
@@ -21172,8 +21326,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_qp(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_5>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_5>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_5>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21187,8 +21341,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_uu(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_2>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_2>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_2>(), *mesh))
   {
     // Do nothing
   }
@@ -21196,8 +21350,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_uu(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_2>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_2>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_2>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21211,8 +21365,8 @@ public:
   // Constructor for standard function space
   Form_a_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_4>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_4>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_4>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_4>(), *mesh))
   {
     // Do nothing
   }
@@ -21220,8 +21374,8 @@ public:
   // Constructor for constrained function space
   Form_a_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_4>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_4>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_4>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_4>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21235,8 +21389,8 @@ public:
   // Constructor for standard function space
   Form_a_FunctionSpace_1(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_4>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_4>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_4>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_4>(), *mesh))
   {
     // Do nothing
   }
@@ -21244,8 +21398,8 @@ public:
   // Constructor for constrained function space
   Form_a_FunctionSpace_1(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_4>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_4>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_4>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_4>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21312,9 +21466,11 @@ typedef CoefficientSpace_qn Form_a_FunctionSpace_10;
 
 typedef CoefficientSpace_mu Form_a_FunctionSpace_11;
 
-typedef CoefficientSpace_alpha1 Form_a_FunctionSpace_12;
+typedef CoefficientSpace_dt Form_a_FunctionSpace_12;
 
-typedef CoefficientSpace_alpha2 Form_a_FunctionSpace_13;
+typedef CoefficientSpace_alpha1 Form_a_FunctionSpace_13;
+
+typedef CoefficientSpace_alpha2 Form_a_FunctionSpace_14;
 
 class Form_a: public dolfin::Form
 {
@@ -21322,17 +21478,17 @@ public:
 
   // Constructor
   Form_a(std::shared_ptr<const dolfin::FunctionSpace> V1, std::shared_ptr<const dolfin::FunctionSpace> V0):
-    dolfin::Form(2, 12), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), eps(*this, 4), Dp(*this, 5), qp(*this, 6), Dn(*this, 7), qn(*this, 8), mu(*this, 9), alpha1(*this, 10), alpha2(*this, 11)
+    dolfin::Form(2, 13), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), eps(*this, 4), Dp(*this, 5), qp(*this, 6), Dn(*this, 7), qn(*this, 8), mu(*this, 9), dt(*this, 10), alpha1(*this, 11), alpha2(*this, 12)
   {
     _function_spaces[0] = V0;
     _function_spaces[1] = V1;
 
-    _ufc_form = std::make_shared<const pnp_stokes_form_0>();
+    _ufc_form = std::make_shared<const pnp_stokes_time_form_0>();
   }
 
   // Constructor
-  Form_a(std::shared_ptr<const dolfin::FunctionSpace> V1, std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> alpha1, std::shared_ptr<const dolfin::GenericFunction> alpha2):
-    dolfin::Form(2, 12), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), eps(*this, 4), Dp(*this, 5), qp(*this, 6), Dn(*this, 7), qn(*this, 8), mu(*this, 9), alpha1(*this, 10), alpha2(*this, 11)
+  Form_a(std::shared_ptr<const dolfin::FunctionSpace> V1, std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> dt, std::shared_ptr<const dolfin::GenericFunction> alpha1, std::shared_ptr<const dolfin::GenericFunction> alpha2):
+    dolfin::Form(2, 13), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), eps(*this, 4), Dp(*this, 5), qp(*this, 6), Dn(*this, 7), qn(*this, 8), mu(*this, 9), dt(*this, 10), alpha1(*this, 11), alpha2(*this, 12)
   {
     _function_spaces[0] = V0;
     _function_spaces[1] = V1;
@@ -21347,10 +21503,11 @@ public:
     this->Dn = Dn;
     this->qn = qn;
     this->mu = mu;
+    this->dt = dt;
     this->alpha1 = alpha1;
     this->alpha2 = alpha2;
 
-    _ufc_form = std::make_shared<const pnp_stokes_form_0>();
+    _ufc_form = std::make_shared<const pnp_stokes_time_form_0>();
   }
 
   // Destructor
@@ -21380,10 +21537,12 @@ public:
       return 8;
     else if (name == "mu")
       return 9;
-    else if (name == "alpha1")
+    else if (name == "dt")
       return 10;
-    else if (name == "alpha2")
+    else if (name == "alpha1")
       return 11;
+    else if (name == "alpha2")
+      return 12;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -21417,8 +21576,10 @@ public:
     case 9:
       return "mu";
     case 10:
-      return "alpha1";
+      return "dt";
     case 11:
+      return "alpha1";
+    case 12:
       return "alpha2";
     }
 
@@ -21443,8 +21604,9 @@ public:
   typedef Form_a_FunctionSpace_9 CoefficientSpace_Dn;
   typedef Form_a_FunctionSpace_10 CoefficientSpace_qn;
   typedef Form_a_FunctionSpace_11 CoefficientSpace_mu;
-  typedef Form_a_FunctionSpace_12 CoefficientSpace_alpha1;
-  typedef Form_a_FunctionSpace_13 CoefficientSpace_alpha2;
+  typedef Form_a_FunctionSpace_12 CoefficientSpace_dt;
+  typedef Form_a_FunctionSpace_13 CoefficientSpace_alpha1;
+  typedef Form_a_FunctionSpace_14 CoefficientSpace_alpha2;
 
   // Coefficients
   dolfin::CoefficientAssigner CatCat;
@@ -21457,6 +21619,7 @@ public:
   dolfin::CoefficientAssigner Dn;
   dolfin::CoefficientAssigner qn;
   dolfin::CoefficientAssigner mu;
+  dolfin::CoefficientAssigner dt;
   dolfin::CoefficientAssigner alpha1;
   dolfin::CoefficientAssigner alpha2;
 };
@@ -21467,7 +21630,7 @@ public:
 
   // Constructor
   MultiMeshForm_a(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V1, std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0):
-    dolfin::MultiMeshForm(V1, V0), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), eps(*this, 4), Dp(*this, 5), qp(*this, 6), Dn(*this, 7), qn(*this, 8), mu(*this, 9), alpha1(*this, 10), alpha2(*this, 11)
+    dolfin::MultiMeshForm(V1, V0), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), eps(*this, 4), Dp(*this, 5), qp(*this, 6), Dn(*this, 7), qn(*this, 8), mu(*this, 9), dt(*this, 10), alpha1(*this, 11), alpha2(*this, 12)
   {
     // Create and add standard forms
     std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
@@ -21485,8 +21648,8 @@ public:
   }
 
   // Constructor
-  MultiMeshForm_a(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V1, std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> alpha1, std::shared_ptr<const dolfin::GenericFunction> alpha2):
-    dolfin::MultiMeshForm(V1, V0), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), eps(*this, 4), Dp(*this, 5), qp(*this, 6), Dn(*this, 7), qn(*this, 8), mu(*this, 9), alpha1(*this, 10), alpha2(*this, 11)
+  MultiMeshForm_a(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V1, std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> dt, std::shared_ptr<const dolfin::GenericFunction> alpha1, std::shared_ptr<const dolfin::GenericFunction> alpha2):
+    dolfin::MultiMeshForm(V1, V0), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), eps(*this, 4), Dp(*this, 5), qp(*this, 6), Dn(*this, 7), qn(*this, 8), mu(*this, 9), dt(*this, 10), alpha1(*this, 11), alpha2(*this, 12)
   {
     // Create and add standard forms
     std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
@@ -21510,6 +21673,7 @@ public:
     this->Dn = Dn;
     this->qn = qn;
     this->mu = mu;
+    this->dt = dt;
     this->alpha1 = alpha1;
     this->alpha2 = alpha2;
 
@@ -21542,10 +21706,12 @@ public:
       return 8;
     else if (name == "mu")
       return 9;
-    else if (name == "alpha1")
+    else if (name == "dt")
       return 10;
-    else if (name == "alpha2")
+    else if (name == "alpha1")
       return 11;
+    else if (name == "alpha2")
+      return 12;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -21579,8 +21745,10 @@ public:
     case 9:
       return "mu";
     case 10:
-      return "alpha1";
+      return "dt";
     case 11:
+      return "alpha1";
+    case 12:
       return "alpha2";
     }
 
@@ -21605,8 +21773,9 @@ public:
   typedef Form_a_FunctionSpace_9 CoefficientSpace_Dn;
   typedef Form_a_FunctionSpace_10 CoefficientSpace_qn;
   typedef Form_a_FunctionSpace_11 CoefficientSpace_mu;
-  typedef Form_a_FunctionSpace_12 CoefficientSpace_alpha1;
-  typedef Form_a_FunctionSpace_13 CoefficientSpace_alpha2;
+  typedef Form_a_FunctionSpace_12 CoefficientSpace_dt;
+  typedef Form_a_FunctionSpace_13 CoefficientSpace_alpha1;
+  typedef Form_a_FunctionSpace_14 CoefficientSpace_alpha2;
 
   // Coefficients
   dolfin::MultiMeshCoefficientAssigner CatCat;
@@ -21619,6 +21788,7 @@ public:
   dolfin::MultiMeshCoefficientAssigner Dn;
   dolfin::MultiMeshCoefficientAssigner qn;
   dolfin::MultiMeshCoefficientAssigner mu;
+  dolfin::MultiMeshCoefficientAssigner dt;
   dolfin::MultiMeshCoefficientAssigner alpha1;
   dolfin::MultiMeshCoefficientAssigner alpha2;
 };
@@ -21630,8 +21800,8 @@ public:
   // Constructor for standard function space
   Form_L_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_4>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_4>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_4>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_4>(), *mesh))
   {
     // Do nothing
   }
@@ -21639,8 +21809,8 @@ public:
   // Constructor for constrained function space
   Form_L_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_finite_element_4>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_dofmap_4>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_time_finite_element_4>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_time_dofmap_4>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21687,11 +21857,17 @@ typedef CoefficientSpace_Dn Form_L_FunctionSpace_9;
 
 typedef CoefficientSpace_qn Form_L_FunctionSpace_10;
 
-typedef CoefficientSpace_mu Form_L_FunctionSpace_11;
+typedef CoefficientSpace_CatCat_t0 Form_L_FunctionSpace_11;
 
-typedef CoefficientSpace_alpha1 Form_L_FunctionSpace_12;
+typedef CoefficientSpace_AnAn_t0 Form_L_FunctionSpace_12;
 
-typedef CoefficientSpace_alpha2 Form_L_FunctionSpace_13;
+typedef CoefficientSpace_mu Form_L_FunctionSpace_13;
+
+typedef CoefficientSpace_dt Form_L_FunctionSpace_14;
+
+typedef CoefficientSpace_alpha1 Form_L_FunctionSpace_15;
+
+typedef CoefficientSpace_alpha2 Form_L_FunctionSpace_16;
 
 class Form_L: public dolfin::Form
 {
@@ -21699,16 +21875,16 @@ public:
 
   // Constructor
   Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0):
-    dolfin::Form(1, 13), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), pp(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), mu(*this, 10), alpha1(*this, 11), alpha2(*this, 12)
+    dolfin::Form(1, 16), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), pp(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), CatCat_t0(*this, 10), AnAn_t0(*this, 11), mu(*this, 12), dt(*this, 13), alpha1(*this, 14), alpha2(*this, 15)
   {
     _function_spaces[0] = V0;
 
-    _ufc_form = std::make_shared<const pnp_stokes_form_1>();
+    _ufc_form = std::make_shared<const pnp_stokes_time_form_1>();
   }
 
   // Constructor
-  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> pp, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> alpha1, std::shared_ptr<const dolfin::GenericFunction> alpha2):
-    dolfin::Form(1, 13), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), pp(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), mu(*this, 10), alpha1(*this, 11), alpha2(*this, 12)
+  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> pp, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> CatCat_t0, std::shared_ptr<const dolfin::GenericFunction> AnAn_t0, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> dt, std::shared_ptr<const dolfin::GenericFunction> alpha1, std::shared_ptr<const dolfin::GenericFunction> alpha2):
+    dolfin::Form(1, 16), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), pp(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), CatCat_t0(*this, 10), AnAn_t0(*this, 11), mu(*this, 12), dt(*this, 13), alpha1(*this, 14), alpha2(*this, 15)
   {
     _function_spaces[0] = V0;
 
@@ -21722,11 +21898,14 @@ public:
     this->qp = qp;
     this->Dn = Dn;
     this->qn = qn;
+    this->CatCat_t0 = CatCat_t0;
+    this->AnAn_t0 = AnAn_t0;
     this->mu = mu;
+    this->dt = dt;
     this->alpha1 = alpha1;
     this->alpha2 = alpha2;
 
-    _ufc_form = std::make_shared<const pnp_stokes_form_1>();
+    _ufc_form = std::make_shared<const pnp_stokes_time_form_1>();
   }
 
   // Destructor
@@ -21756,12 +21935,18 @@ public:
       return 8;
     else if (name == "qn")
       return 9;
-    else if (name == "mu")
+    else if (name == "CatCat_t0")
       return 10;
-    else if (name == "alpha1")
+    else if (name == "AnAn_t0")
       return 11;
-    else if (name == "alpha2")
+    else if (name == "mu")
       return 12;
+    else if (name == "dt")
+      return 13;
+    else if (name == "alpha1")
+      return 14;
+    else if (name == "alpha2")
+      return 15;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -21795,10 +21980,16 @@ public:
     case 9:
       return "qn";
     case 10:
-      return "mu";
+      return "CatCat_t0";
     case 11:
-      return "alpha1";
+      return "AnAn_t0";
     case 12:
+      return "mu";
+    case 13:
+      return "dt";
+    case 14:
+      return "alpha1";
+    case 15:
       return "alpha2";
     }
 
@@ -21821,9 +22012,12 @@ public:
   typedef Form_L_FunctionSpace_8 CoefficientSpace_qp;
   typedef Form_L_FunctionSpace_9 CoefficientSpace_Dn;
   typedef Form_L_FunctionSpace_10 CoefficientSpace_qn;
-  typedef Form_L_FunctionSpace_11 CoefficientSpace_mu;
-  typedef Form_L_FunctionSpace_12 CoefficientSpace_alpha1;
-  typedef Form_L_FunctionSpace_13 CoefficientSpace_alpha2;
+  typedef Form_L_FunctionSpace_11 CoefficientSpace_CatCat_t0;
+  typedef Form_L_FunctionSpace_12 CoefficientSpace_AnAn_t0;
+  typedef Form_L_FunctionSpace_13 CoefficientSpace_mu;
+  typedef Form_L_FunctionSpace_14 CoefficientSpace_dt;
+  typedef Form_L_FunctionSpace_15 CoefficientSpace_alpha1;
+  typedef Form_L_FunctionSpace_16 CoefficientSpace_alpha2;
 
   // Coefficients
   dolfin::CoefficientAssigner CatCat;
@@ -21836,7 +22030,10 @@ public:
   dolfin::CoefficientAssigner qp;
   dolfin::CoefficientAssigner Dn;
   dolfin::CoefficientAssigner qn;
+  dolfin::CoefficientAssigner CatCat_t0;
+  dolfin::CoefficientAssigner AnAn_t0;
   dolfin::CoefficientAssigner mu;
+  dolfin::CoefficientAssigner dt;
   dolfin::CoefficientAssigner alpha1;
   dolfin::CoefficientAssigner alpha2;
 };
@@ -21847,7 +22044,7 @@ public:
 
   // Constructor
   MultiMeshForm_L(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0):
-    dolfin::MultiMeshForm(V0), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), pp(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), mu(*this, 10), alpha1(*this, 11), alpha2(*this, 12)
+    dolfin::MultiMeshForm(V0), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), pp(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), CatCat_t0(*this, 10), AnAn_t0(*this, 11), mu(*this, 12), dt(*this, 13), alpha1(*this, 14), alpha2(*this, 15)
   {
     // Create and add standard forms
     std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
@@ -21865,8 +22062,8 @@ public:
   }
 
   // Constructor
-  MultiMeshForm_L(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> pp, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> alpha1, std::shared_ptr<const dolfin::GenericFunction> alpha2):
-    dolfin::MultiMeshForm(V0), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), pp(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), mu(*this, 10), alpha1(*this, 11), alpha2(*this, 12)
+  MultiMeshForm_L(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> pp, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> CatCat_t0, std::shared_ptr<const dolfin::GenericFunction> AnAn_t0, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> dt, std::shared_ptr<const dolfin::GenericFunction> alpha1, std::shared_ptr<const dolfin::GenericFunction> alpha2):
+    dolfin::MultiMeshForm(V0), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), pp(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), CatCat_t0(*this, 10), AnAn_t0(*this, 11), mu(*this, 12), dt(*this, 13), alpha1(*this, 14), alpha2(*this, 15)
   {
     // Create and add standard forms
     std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
@@ -21890,7 +22087,10 @@ public:
     this->qp = qp;
     this->Dn = Dn;
     this->qn = qn;
+    this->CatCat_t0 = CatCat_t0;
+    this->AnAn_t0 = AnAn_t0;
     this->mu = mu;
+    this->dt = dt;
     this->alpha1 = alpha1;
     this->alpha2 = alpha2;
 
@@ -21923,12 +22123,18 @@ public:
       return 8;
     else if (name == "qn")
       return 9;
-    else if (name == "mu")
+    else if (name == "CatCat_t0")
       return 10;
-    else if (name == "alpha1")
+    else if (name == "AnAn_t0")
       return 11;
-    else if (name == "alpha2")
+    else if (name == "mu")
       return 12;
+    else if (name == "dt")
+      return 13;
+    else if (name == "alpha1")
+      return 14;
+    else if (name == "alpha2")
+      return 15;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -21962,10 +22168,16 @@ public:
     case 9:
       return "qn";
     case 10:
-      return "mu";
+      return "CatCat_t0";
     case 11:
-      return "alpha1";
+      return "AnAn_t0";
     case 12:
+      return "mu";
+    case 13:
+      return "dt";
+    case 14:
+      return "alpha1";
+    case 15:
       return "alpha2";
     }
 
@@ -21988,9 +22200,12 @@ public:
   typedef Form_L_FunctionSpace_8 CoefficientSpace_qp;
   typedef Form_L_FunctionSpace_9 CoefficientSpace_Dn;
   typedef Form_L_FunctionSpace_10 CoefficientSpace_qn;
-  typedef Form_L_FunctionSpace_11 CoefficientSpace_mu;
-  typedef Form_L_FunctionSpace_12 CoefficientSpace_alpha1;
-  typedef Form_L_FunctionSpace_13 CoefficientSpace_alpha2;
+  typedef Form_L_FunctionSpace_11 CoefficientSpace_CatCat_t0;
+  typedef Form_L_FunctionSpace_12 CoefficientSpace_AnAn_t0;
+  typedef Form_L_FunctionSpace_13 CoefficientSpace_mu;
+  typedef Form_L_FunctionSpace_14 CoefficientSpace_dt;
+  typedef Form_L_FunctionSpace_15 CoefficientSpace_alpha1;
+  typedef Form_L_FunctionSpace_16 CoefficientSpace_alpha2;
 
   // Coefficients
   dolfin::MultiMeshCoefficientAssigner CatCat;
@@ -22003,7 +22218,10 @@ public:
   dolfin::MultiMeshCoefficientAssigner qp;
   dolfin::MultiMeshCoefficientAssigner Dn;
   dolfin::MultiMeshCoefficientAssigner qn;
+  dolfin::MultiMeshCoefficientAssigner CatCat_t0;
+  dolfin::MultiMeshCoefficientAssigner AnAn_t0;
   dolfin::MultiMeshCoefficientAssigner mu;
+  dolfin::MultiMeshCoefficientAssigner dt;
   dolfin::MultiMeshCoefficientAssigner alpha1;
   dolfin::MultiMeshCoefficientAssigner alpha2;
 };

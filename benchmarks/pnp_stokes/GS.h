@@ -58,13 +58,16 @@ public:
     FluidVelocity(double out_flow, double in_flow, double bc_dist, int bc_dir): Expression(3),outflow(out_flow),inflow(in_flow),bc_distance(bc_dist),bc_direction(bc_dir) {}
     void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const
     {
-        values[0] = 0.0;
+        values[0] = x[0];
         values[1] = 0.0;
         values[2] = 0.0;
-        if ( std::fabs(x[0]) > 0.5 ) {
-            values[bc_direction]  = outflow*(x[bc_direction]+bc_distance/2.0)/(bc_distance);
-            values[bc_direction] -=  inflow*(x[bc_direction]-bc_distance/2.0)/(bc_distance);
+        if ( (std::fabs(x[0]-5.0) < 0.01) ||  (std::fabs(x[0]+5.0) < 0.01) || (std::fabs(x[1]-2.5) < 0.01) ||  (std::fabs(x[1]+2.5) < 0.01) || (std::fabs(x[2]-2.5) < 0.01) ||( std::fabs(x[2]+2.5) < 0.01) ) {
+            values[0] = 0.0;
         }
+        // if ( std::fabs(x[0]) > 0.5 ) {
+        //     values[bc_direction]  = outflow*(x[bc_direction]+bc_distance/2.0)/(bc_distance);
+        //     values[bc_direction] -=  inflow*(x[bc_direction]-bc_distance/2.0)/(bc_distance);
+        // }
     }
 private:
     double outflow, inflow, bc_distance;

@@ -13,7 +13,7 @@
 #include "funcspace_to_vecspace.h"
 #include "fasp_to_fenics.h"
 #include "boundary_conditions.h"
-#include "pnp_stokes.h"
+#include "pnp_stokes2.h"
 #include "stokes_with_pnp.h"
 #include "newton.h"
 #include "newton_functs.h"
@@ -55,6 +55,30 @@ using namespace dolfin;
       values[3] = 0.0;
     }
 
+  };
+
+  class Charge: public dolfin::Expression
+  {
+  public:
+    // constructor
+    Charge(double lower_val, double upper_val,
+      double lower, double upper, int bc_coord)
+  		{
+  			_lower_val = lower_val;
+  			_upper_val = upper_val;
+  			_lower = lower;
+  			_upper = upper;
+  			_bc_coord = bc_coord;
+  		}
+    // evaluate LogCarge
+    void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const
+  	{
+      values[0]  = (_lower_val) * (_upper - x[_bc_coord]) / (_upper - _lower);
+      values[0] += (_upper_val) * (x[_bc_coord] - _lower) / (_upper - _lower);
+  	}
+  private:
+    double _lower_val, _upper_val, _upper, _lower;
+    int _bc_coord;
   };
 
 int main(int argc, char** argv)
@@ -140,14 +164,14 @@ int main(int argc, char** argv)
 
   // Initialize guess
   printf("intial guess...\n"); fflush(stdout);
-  LogCharge Cation(
+  Charge Cation(
     coeff_par.cation_lower_val,
     coeff_par.anion_lower_val,
     -domain_par.length_x/2.0,
     domain_par.length_x/2.0,
     coeff_par.bc_coordinate
   );
-  LogCharge Anion(
+  Charge Anion(
     coeff_par.anion_lower_val,
     coeff_par.anion_upper_val,
     -domain_par.length_x/2.0,
@@ -186,7 +210,7 @@ int main(int argc, char** argv)
 
 
   // interpolate
-  auto V= std::make_shared<pnp_stokes::FunctionSpace>(mesh);
+  auto V= std::make_shared<pnp_stokes2::FunctionSpace>(mesh);
   auto initialFunction = std::make_shared<Function>(V);
   auto initialCation = std::make_shared<Function>((*initialFunction)[0]);
   auto initialAnion = std::make_shared<Function>((*initialFunction)[1]);
@@ -194,7 +218,7 @@ int main(int argc, char** argv)
   auto initialVelocity = std::make_shared<Function>((*initialFunction)[3]);
   auto initialPressure = std::make_shared<Function>((*initialFunction)[4]);
   auto one_vec3 = std::make_shared<Constant>(1.0,1.0,1.0);
-  auto vel_vec = std::make_shared<Constant>(0.0,0.0,0.0);
+  auto vel_vec = std::make_shared<Constant>(1.0,0.0,0.0);
 
   initialCation->interpolate(Cation);
   initialAnion->interpolate(Anion);
@@ -213,8 +237,8 @@ int main(int argc, char** argv)
 
   // Initialize variational forms
   printf("\tvariational forms...\n"); fflush(stdout);
-  pnp_stokes::BilinearForm a(V,V);
-  pnp_stokes::LinearForm L(V);
+  pnp_stokes2::BilinearForm a(V,V);
+  pnp_stokes2::LinearForm L(V);
   a.eps = eps; L.eps = eps;
   a.Dp = Dp; L.Dp = Dp;
   a.Dn = Dn; L.Dn = Dn;
@@ -228,10 +252,10 @@ int main(int argc, char** argv)
   printf("\tboundary conditions...\n"); fflush(stdout);
   auto boundary = std::make_shared<SymmBoundaries>(coeff_par.bc_coordinate, -domain_par.length_x/2.0, domain_par.length_x/2.0);
   auto bddd = std::make_shared<Bd_all>();
-  dolfin::DirichletBC bc1(V->sub(0), zero, boundary);
-  dolfin::DirichletBC bc2(V->sub(1), zero, boundary);
-  dolfin::DirichletBC bc3(V->sub(2), zero, boundary);
-  dolfin::DirichletBC bc_stokes(V->sub(3), zero_vec3, boundary);
+  dolfin::DirichletBC bc1(V->sub(0), zero, bddd);
+  dolfin::DirichletBC bc2(V->sub(1), zero, bddd);
+  dolfin::DirichletBC bc3(V->sub(2), zero, bddd);
+  dolfin::DirichletBC bc_stokes(V->sub(3), zero_vec3, bddd);
   // dolfin::DirichletBC bc_stokes(Vs, zero_vec4, bddd);
 
 

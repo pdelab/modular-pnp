@@ -4,6 +4,7 @@
  *
  *  \note Currently initializes the problem based on specification
  */
+#include <math.h>
 #include <iostream>
 #include <fstream>
 #include <iostream>
@@ -13,11 +14,13 @@
 #include "funcspace_to_vecspace.h"
 #include "fasp_to_fenics.h"
 #include "boundary_conditions.h"
-#include "pnp_stokes.h"
+#include "pnp_stokes_analytic.h"
 #include "stokes_with_pnp.h"
 #include "newton.h"
 #include "newton_functs.h"
 #include "L2Error.h"
+#include "L2ErrorRT.h"
+#include "L2ErrorDG.h"
 #include "GS.h"
 #include "umfpack.h"
 extern "C"
@@ -32,6 +35,8 @@ extern "C"
 using namespace dolfin;
 // using namespace std;
 
+double Pi = M_PI;
+
   class Bd_all : public dolfin::SubDomain
   {
       bool inside(const dolfin::Array<double>& x, bool on_boundary) const
@@ -41,21 +46,85 @@ using namespace dolfin;
 
   };
 
-  class zerovec4 : public dolfin::Expression
+class zerovec4 : public dolfin::Expression
+{
+public:
+
+  zerovec4() : Expression(4) {}
+
+  void eval(Array<double>& values, const Array<double>& x) const
   {
-  public:
+    values[0] = 0.0;
+    values[1] = 0.0;
+    values[2] = 0.0;
+    values[3] = 0.0;
+  }
 
-    zerovec4() : Expression(4) {}
+};
 
-    void eval(Array<double>& values, const Array<double>& x) const
-    {
-      values[0] = 0.0;
-      values[1] = 0.0;
-      values[2] = 0.0;
-      values[3] = 0.0;
-    }
+class anion_analytic : public dolfin::Expression
+{
+public:
 
-  };
+  // anion_analytic() : Expression(1) {}
+
+  void eval(Array<double>& values, const Array<double>& x) const
+  {
+    values[0] = -std::log(0.1)*std::cos(Pi/20.0*(x[0]+5.0+20.0));
+  }
+
+};
+
+class cation_analytic : public dolfin::Expression
+{
+public:
+
+  // cation_analytic() : Expression(1) {}
+
+  void eval(Array<double>& values, const Array<double>& x) const
+  {
+    values[0] = -std::log(0.1)*std::sin(Pi/20.0*(x[0]+5.0+20.0));
+  }
+
+};
+
+class potential_analytic : public dolfin::Expression
+{
+public:
+
+  void eval(Array<double>& values, const Array<double>& x) const
+  {
+    values[0] = -std::cos(Pi/10.0*(x[0]+5.0+20.0));
+  }
+
+};
+
+class velocity_analytic : public dolfin::Expression
+{
+public:
+
+  velocity_analytic() : Expression(3) {}
+
+  void eval(Array<double>& values, const Array<double>& x) const
+  {
+    values[0] = std::sin(Pi/10.0*(x[0]+5.0+20.0));
+    values[1] = 0.0;
+    values[2] = 0.0;
+  }
+
+};
+
+class pressure_analytic : public dolfin::Expression
+{
+public:
+
+  void eval(Array<double>& values, const Array<double>& x) const
+  {
+    values[0] = (x[0]+5.0)*(x[0]-5.0);
+  }
+
+};
+
 
 int main(int argc, char** argv)
 {
@@ -138,6 +207,12 @@ int main(int argc, char** argv)
   File velocityFile("./benchmarks/pnp_stokes/output/velocity.pvd");
   File pressureFile("./benchmarks/pnp_stokes/output/pressure.pvd");
 
+  File cationAnalyticFile("./benchmarks/pnp_stokes/output/cationAnalyti.pvd");
+  File anionAnalyticFile("./benchmarks/pnp_stokes/output/anionAnalyti.pvd");
+  File potentialAnalyticFile("./benchmarks/pnp_stokes/output/potentialAnalyti.pvd");
+  File velocityAnalyticFile("./benchmarks/pnp_stokes/output/velocityAnalyti.pvd");
+  File pressureAnalyticFile("./benchmarks/pnp_stokes/output/pressureAnalyti.pvd");
+
   // Initialize guess
   printf("intial guess...\n"); fflush(stdout);
   LogCharge Cation(
@@ -186,21 +261,74 @@ int main(int argc, char** argv)
 
 
   // interpolate
-  auto V= std::make_shared<pnp_stokes::FunctionSpace>(mesh);
+  auto V= std::make_shared<pnp_stokes_analytic::FunctionSpace>(mesh);
   auto initialFunction = std::make_shared<Function>(V);
+  auto initialCation1 = std::make_shared<Function>((*initialFunction)[0]);
+  auto initialAnion1 = std::make_shared<Function>((*initialFunction)[1]);
+  auto initialPotential1 = std::make_shared<Function>((*initialFunction)[2]);
+  auto initialVelocity1 = std::make_shared<Function>((*initialFunction)[3]);
+  auto initialPressure1 = std::make_shared<Function>((*initialFunction)[4]);
+  auto one_vec3 = std::make_shared<Constant>(1.0,1.0,1.0);
+  auto vel_vec = std::make_shared<Constant>(0.0,0.0,0.0);
+
+  initialCation1->interpolate(Cation);
+  initialAnion1->interpolate(Anion);
+  initialPotential1->interpolate(Volt);
+  initialVelocity1->interpolate(*vel_vec);
+  initialPressure1->interpolate(*zero);
+
+
+  //Analytic solutions
+  auto CationAn = std::make_shared<cation_analytic>();
+  auto AnionAn = std::make_shared<anion_analytic>();
+  auto PotentialAn = std::make_shared<potential_analytic>();
+  auto VelocityAn = std::make_shared<velocity_analytic>();
+  auto PressureAn = std::make_shared<pressure_analytic>();
+  initialPressure1->interpolate(*PressureAn);
+  // cation_analytic CationAn();
+  // anion_analytic AnionAn();
+  // potential_analytic PotentialAn();
+  // velocity_analytic VelocityAn();
+  // pressure_analytic PressureAn();
+  auto AnalyticFunction = std::make_shared<Function>(V);
+  auto AnalyticCation = std::make_shared<Function>((*AnalyticFunction)[0]);
+  auto AnalyticAnion = std::make_shared<Function>((*AnalyticFunction)[1]);
+  auto AnalyticPotential = std::make_shared<Function>((*AnalyticFunction)[2]);
+  auto AnalyticVelocity = std::make_shared<Function>((*AnalyticFunction)[3]);
+  auto AnalyticPressure = std::make_shared<Function>((*AnalyticFunction)[4]);
+  AnalyticCation->interpolate(*CationAn);
+  AnalyticAnion->interpolate(*AnionAn);
+  AnalyticPotential->interpolate(*PotentialAn);
+  AnalyticVelocity->interpolate(*VelocityAn);
+  AnalyticPressure->interpolate(*PressureAn);
+  cationAnalyticFile << *AnalyticCation;
+  anionAnalyticFile << *AnalyticAnion;
+  potentialAnalyticFile << *AnalyticPotential;
+  velocityAnalyticFile << *AnalyticVelocity;
+  pressureAnalyticFile << *AnalyticPressure;
+
+  auto boundary = std::make_shared<SymmBoundaries>(coeff_par.bc_coordinate, -domain_par.length_x/2.0, domain_par.length_x/2.0);
+  auto bddd = std::make_shared<Bd_all>();
+
+
+  //  auto initialFunction = std::make_shared<Function>(V);
+  std::vector<std::shared_ptr<const Function>> vvv = {initialCation1,initialAnion1,initialPotential1,initialVelocity1,initialPressure1};
+  assign(initialFunction , vvv);
+  dolfin::DirichletBC bci1(V->sub(0), AnalyticCation, bddd);
+  dolfin::DirichletBC bci2(V->sub(1), AnalyticAnion, bddd);
+  dolfin::DirichletBC bci3(V->sub(2), AnalyticPotential, bddd);
+  dolfin::DirichletBC bci4(V->sub(3), AnalyticVelocity, bddd);
+  dolfin::DirichletBC bci5(V->sub(4), AnalyticPressure, bddd);
+  bci1.apply(*(initialFunction->vector()));
+  bci2.apply(*(initialFunction->vector()));
+  bci3.apply(*(initialFunction->vector()));
+  bci4.apply(*(initialFunction->vector()));
+  bci5.apply(*(initialFunction->vector()));
   auto initialCation = std::make_shared<Function>((*initialFunction)[0]);
   auto initialAnion = std::make_shared<Function>((*initialFunction)[1]);
   auto initialPotential = std::make_shared<Function>((*initialFunction)[2]);
   auto initialVelocity = std::make_shared<Function>((*initialFunction)[3]);
   auto initialPressure = std::make_shared<Function>((*initialFunction)[4]);
-  auto one_vec3 = std::make_shared<Constant>(1.0,1.0,1.0);
-  auto vel_vec = std::make_shared<Constant>(0.0,0.0,0.0);
-
-  initialCation->interpolate(Cation);
-  initialAnion->interpolate(Anion);
-  initialPotential->interpolate(Volt);
-  initialVelocity->interpolate(*vel_vec);
-  initialPressure->interpolate(*zero);
 
 
   // set adaptivity parameters
@@ -213,8 +341,8 @@ int main(int argc, char** argv)
 
   // Initialize variational forms
   printf("\tvariational forms...\n"); fflush(stdout);
-  pnp_stokes::BilinearForm a(V,V);
-  pnp_stokes::LinearForm L(V);
+  pnp_stokes_analytic::BilinearForm a(V,V);
+  pnp_stokes_analytic::LinearForm L(V);
   a.eps = eps; L.eps = eps;
   a.Dp = Dp; L.Dp = Dp;
   a.Dn = Dn; L.Dn = Dn;
@@ -224,14 +352,18 @@ int main(int argc, char** argv)
   a.alpha1 = penalty1; L.alpha1 = penalty1;
   a.alpha2 = penalty2; L.alpha2 = penalty2;
 
+  L.cation = AnalyticCation;
+  L.anion = AnalyticAnion;
+  L.potential = AnalyticPotential;
+  L.velocity = AnalyticVelocity;
+  L.pressure = AnalyticPressure;
+
   // Set Dirichlet boundaries
   printf("\tboundary conditions...\n"); fflush(stdout);
-  auto boundary = std::make_shared<SymmBoundaries>(coeff_par.bc_coordinate, -domain_par.length_x/2.0, domain_par.length_x/2.0);
-  auto bddd = std::make_shared<Bd_all>();
-  dolfin::DirichletBC bc1(V->sub(0), zero, boundary);
-  dolfin::DirichletBC bc2(V->sub(1), zero, boundary);
-  dolfin::DirichletBC bc3(V->sub(2), zero, boundary);
-  dolfin::DirichletBC bc_stokes(V->sub(3), zero_vec3, boundary);
+  dolfin::DirichletBC bc1(V->sub(0), zero, bddd);
+  dolfin::DirichletBC bc2(V->sub(1), zero, bddd);
+  dolfin::DirichletBC bc3(V->sub(2), zero, bddd);
+  dolfin::DirichletBC bc_stokes(V->sub(3), zero_vec3, bddd);
   // dolfin::DirichletBC bc_stokes(Vs, zero_vec4, bddd);
 
 
@@ -405,7 +537,7 @@ int main(int argc, char** argv)
     b[index_fix]=0.0;
 
 
-    double relative_residual = b.norm("l2")/ initial_residual;
+    relative_residual = b.norm("l2")/ initial_residual;
     printf("\t\trel_res after: %e\n", relative_residual);
     if (relative_residual < 0.0) {
       printf("Newton backtracking failed!\n");
@@ -414,20 +546,35 @@ int main(int argc, char** argv)
       relative_residual *= -1.0;
 
     }
-      // cationFile << *initialCation;
-      // anionFile << *initialAnion;
-      // potentialFile << *initialPotential;
-      // velocityFile << *initialVelocity;
-      // pressureFile << *initialPressure;
 
-      // cationFile << dCation;
-      // anionFile << dAnion;
-      // potentialFile << dPotential;
-      // velocityFile << dU;
-      // pressureFile << dPressure;
     }
 
+    *(AnalyticCation->vector()) -= *(initialCation->vector());
+    *(AnalyticAnion->vector()) -= *(initialAnion->vector());
+    *(AnalyticPotential->vector()) -= *(initialPotential->vector());
+    *(AnalyticVelocity->vector()) -= *(initialVelocity->vector());
+    *(AnalyticPressure->vector()) -= *(initialPressure->vector());
 
+    L2Error::Form_M L2error1(mesh,AnalyticCation);
+    double cationError = assemble(L2error1);
+    L2Error::Form_M L2error2(mesh,AnalyticAnion);
+    double anionError = assemble(L2error2);
+    L2Error::Form_M L2error3(mesh,AnalyticPotential);
+    double potentialError = assemble(L2error3);
+    L2ErrorRT::Form_M L2error4(mesh,AnalyticVelocity);
+    double velocityError = assemble(L2error4);
+    L2ErrorDG::Form_M L2error5(mesh,AnalyticPressure);
+    double pressurelError = assemble(L2error5);
+
+    printf("***********************************************\n");
+    printf("***********************************************\n");
+    printf("\tcation l2 error is:     %e\n", cationError);
+    printf("\tanion l2 error is:      %e\n", anionError);
+    printf("\tpotential l2 error is:  %e\n", potentialError);
+    printf("\tVelocity l2 error is:      %e\n", velocityError);
+    printf("\tPressure l2 error is:  %e\n", pressurelError);
+    printf("***********************************************\n");
+    printf("***********************************************\n");
 
   printf("\n-----------------------------------------------------------    "); fflush(stdout);
   printf("\n End                                                           "); fflush(stdout);
