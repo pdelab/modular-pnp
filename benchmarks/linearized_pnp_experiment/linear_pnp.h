@@ -60,9 +60,8 @@ class Linear_PNP : public PDE {
 
     void apply_eafe ();
 
-    std::vector<dolfin::Function> split_mixed_function (
-      std::shared_ptr<dolfin::FunctionSpace> target_space,
-      std::shared_ptr<dolfin::Function> mixed_function
+    std::vector<std::shared_ptr<dolfin::Function>> split_mixed_function (
+      std::shared_ptr<const dolfin::Function> mixed_function
     );
 
 
@@ -84,11 +83,12 @@ class Linear_PNP : public PDE {
     // EAFE
     bool _eafe_uninitialized = true;
     std::shared_ptr<EAFE::BilinearForm> _eafe_bilinear_form;
-    std::shared_ptr<const EAFE::FunctionSpace> _eafe_function_space;
-    std::vector<dolfin::Function> _split_diffusivity;
+    std::shared_ptr<dolfin::FunctionSpace> _eafe_function_space;
+
+    std::vector<std::shared_ptr<dolfin::Function>> _split_diffusivity;
     std::vector<double> _valency_double;
 
-    std::shared_ptr<dolfin::Function> eafe_alpha, eafe_beta, eafe_eta;
+    std::shared_ptr<dolfin::Function> eafe_beta, eafe_eta;
     std::shared_ptr<dolfin::EigenMatrix> _eafe_matrix;
 
 };

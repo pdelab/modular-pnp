@@ -290,6 +290,8 @@ int main (int argc, char** argv) {
 
   printf("Done\n\n"); fflush(stdout);
 
+  printf("Measure error of FASP computed solution with EAFE\n");
+  pnp_problem.set_DirichletBC(components, bcs);
   pnp_problem.apply_eafe();
 
   return 0;

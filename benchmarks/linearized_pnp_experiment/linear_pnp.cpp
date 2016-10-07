@@ -177,15 +177,11 @@ void Linear_PNP::apply_eafe () {
   dolfin::Function solution_function(Linear_PNP::get_solution());
 
   if (_eafe_uninitialized) {
-    _eafe_function_space.reset(
-      new const EAFE::FunctionSpace(Linear_PNP::get_mesh())
-    );
+    _eafe_function_space = solution_function[0].function_space()->collapse();
     _eafe_bilinear_form.reset(
       new EAFE::Form_a(_eafe_function_space, _eafe_function_space)
     );
-    _eafe_matrix.reset(
-      new dolfin::EigenMatrix()
-    );
+    _eafe_matrix.reset(new dolfin::EigenMatrix());
 
 
     std::shared_ptr<dolfin::Function> _diffusivity;
@@ -193,20 +189,7 @@ void Linear_PNP::apply_eafe () {
     _diffusivity->interpolate(
       *(_bilinear_form->coefficient("diffusivity"))
     );
-    _split_diffusivity = Linear_PNP::split_mixed_function(
-      (*diffusivity_space)[0]->collapse(),
-      _diffusivity
-    );
-
-
-
-
-    printf("output diffusivity\n"); fflush(stdout);
-    dolfin::File out_file("./benchmarks/linearized_pnp_experiment/output/eafe_terms.pvd");
-    out_file << _split_diffusivity[1];
-    out_file << _split_diffusivity[2];
-
-
+    _split_diffusivity = Linear_PNP::split_mixed_function(_diffusivity);
 
 
     dolfin::Function val_fn(valency_space);
@@ -222,38 +205,37 @@ void Linear_PNP::apply_eafe () {
     _valency_double[0] = 0.0;
   }
 
+  std::shared_ptr<dolfin::Function> solution_ptr;
+  solution_ptr.reset( new dolfin::Function(solution_function.function_space()) );
+  *solution_ptr = solution_function;
 
   const dolfin::Constant zero(0.0);
-  std::size_t eqns = Linear_PNP::get_solution_dimension() + 1;
+  std::vector<std::shared_ptr<dolfin::Function>> solution_vector;
+  solution_vector = Linear_PNP::split_mixed_function(solution_ptr);
+  std::shared_ptr<dolfin::Function> beta, eta, phi;
 
+
+  std::size_t eqns = Linear_PNP::get_solution_dimension();
   for (uint eqn_idx = 1; eqn_idx < eqns; eqn_idx++) {
-    eafe_alpha.reset(new dolfin::Function(_eafe_function_space));
-    eafe_beta.reset(new dolfin::Function(_eafe_function_space));
-    eafe_eta.reset(new dolfin::Function(_eafe_function_space));
+    beta.reset(new dolfin::Function(_eafe_function_space));
+    eta.reset(new dolfin::Function(_eafe_function_space));
+    phi.reset(new dolfin::Function(_eafe_function_space));
 
-    printf("interpolate alpha \n"); fflush(stdout);
-    eafe_alpha->interpolate(_split_diffusivity[eqn_idx]);
-
-    printf("interpolate coeffs \n"); fflush(stdout);
-    eafe_beta->interpolate( solution_function[eqn_idx] );
-    eafe_eta->interpolate( solution_function[eqn_idx] );
-
-    printf("build beta \n"); fflush(stdout);
+    beta->interpolate( *(solution_vector[eqn_idx]) );
+    eta->interpolate( *(solution_vector[eqn_idx]) );
+    phi->interpolate( *(solution_vector[0]) );
     if (_valency_double[eqn_idx] != 0.0) {
-      *(eafe_eta->vector()) *= _valency_double[eqn_idx];
-      *(eafe_beta->vector()) += *(eafe_eta->vector());
-      *(eafe_eta->vector()) /= _valency_double[eqn_idx];
+      *(phi->vector()) *= _valency_double[eqn_idx];
+      *beta = *beta + *phi;
+      *(phi->vector()) /= _valency_double[eqn_idx];
     }
 
-    printf("assign coeffs\n"); fflush(stdout);
-    _eafe_bilinear_form->alpha = *eafe_alpha;
-    _eafe_bilinear_form->beta = *eafe_beta;
-    _eafe_bilinear_form->eta = *eafe_eta;
+    _eafe_bilinear_form->alpha = *(_split_diffusivity[eqn_idx]);
+    _eafe_bilinear_form->beta = *beta;
+    _eafe_bilinear_form->eta = *eta;
     _eafe_bilinear_form->gamma = zero;
 
-    printf("assemble \n"); fflush(stdout);
     dolfin::assemble(*_eafe_matrix, *_eafe_bilinear_form);
-    printf("assembled\n");
 
     // replace_matrix (
     //   Linear_PNP::get_solution_dimension(),
@@ -265,65 +247,37 @@ void Linear_PNP::apply_eafe () {
 }
 //--------------------------------------
 
-
 //--------------------------------------
-std::vector<dolfin::Function> Linear_PNP::split_mixed_function (
-  std::shared_ptr<dolfin::FunctionSpace> target_space,
-  std::shared_ptr<dolfin::Function> mixed_function
+std::vector<std::shared_ptr<dolfin::Function>> Linear_PNP::split_mixed_function (
+  std::shared_ptr<const dolfin::Function> mixed_function
 ) {
-  std::vector<dolfin::Function> split_function;
-  std::size_t num_components = PDE::get_solution_dimension();
-  split_function.assign(num_components, dolfin::Function(*target_space));
+  //construct assignment arguments
+  std::shared_ptr<const dolfin::FunctionSpace> mixed_space(
+    mixed_function->function_space()
+  );
 
-  std::shared_ptr<const dolfin::FunctionSpace> mixed_function_space;
-  mixed_function_space = mixed_function->function_space();
-  dolfin::Mesh dof_mesh = *(mixed_function_space->mesh());
+  // construct receiving arguments
+  std::vector<std::shared_ptr<dolfin::Function>> function_vector;
+  std::vector<std::shared_ptr<const dolfin::FunctionSpace>> subspace_vector;
 
+  // initialize vectors
+  std::shared_ptr<dolfin::Function> subfunction;
+  std::shared_ptr<const dolfin::FunctionSpace> subspace;
+  std::size_t num_components = mixed_space->element()->num_sub_elements();
 
+  for (std::size_t c = 0; c < num_components; c++) {
+    subspace.reset(
+      new const dolfin::FunctionSpace( *( (*mixed_space)[c]->collapse() ) )
+    );
+    subfunction.reset(new dolfin::Function(subspace));
 
-  // build dof map of mixed function
-  std::size_t dof;
-  std::vector<std::size_t> component(1);
-  std::vector<dolfin::la_index> index_vector;
-  std::map<std::size_t, std::vector<dolfin::la_index>> dof_map;
-  const dolfin::la_index n_first = mixed_function_space->dofmap()->ownership_range().first;
-  const dolfin::la_index n_second = mixed_function_space->dofmap()->ownership_range().second;
-
-  for (std::size_t comp_index = 0; comp_index < num_components; comp_index++) {
-    component[0] = comp_index;
-    index_vector.clear();
-    std::shared_ptr<dolfin::GenericDofMap> dofmap = mixed_function_space->dofmap()
-      ->extract_sub_dofmap(component, dof_mesh);
-
-    for (dolfin::CellIterator cell(dof_mesh); !cell.end(); ++cell) {
-      dolfin::ArrayView<const dolfin::la_index> cell_dof = dofmap->cell_dofs(cell->index());
-
-      for (std::size_t i = 0; i < cell_dof.size(); ++i) {
-        dof = cell_dof[i];
-        if (dof >= n_first && dof < n_second)
-          index_vector.push_back(dof);
-      }
-    }
-
-    std::sort(index_vector.begin(), index_vector.end());
-    index_vector.erase(std::unique(index_vector.begin(), index_vector.end()), index_vector.end());
-    dof_map[comp_index].swap(index_vector);
+    subspace_vector.push_back(subspace);
+    function_vector.push_back(subfunction);
   }
 
+  // assign
+  dolfin::FunctionAssigner function_assigner(subspace_vector, mixed_space);
+  function_assigner.assign(function_vector, mixed_function);
 
-  // copy corresponding components to function vectors
-  dolfin::la_index dof_index;
-  std::vector<double> double_vector;
-  for (std::size_t component = 0; component < num_components; component++) {
-    mixed_function->vector()->gather(double_vector, dof_map[component]);
-
-    dolfin::Function comp_function(*target_space);
-    for (std::size_t index = 0; index < double_vector.size(); index++) {
-      comp_function.vector()->setitem(index, double_vector[index]);
-    }
-
-    split_function[component].interpolate(comp_function);
-  }
-
-  return split_function;
+  return function_vector;
 }
