@@ -404,8 +404,8 @@ void PDE::setup_linear_algebra () {
     _dirichletBC[i]->apply(eigen_vector);
   }
 
-  _eigen_matrix.reset( new const dolfin::EigenMatrix(eigen_matrix) );
-  _eigen_vector.reset( new const dolfin::EigenVector(eigen_vector) );
+  _eigen_matrix.reset(new dolfin::EigenMatrix(eigen_matrix));
+  _eigen_vector.reset(new dolfin::EigenVector(eigen_vector));
 }
 //--------------------------------------
 dolfin::Function PDE::_convert_EigenVector_to_Function (

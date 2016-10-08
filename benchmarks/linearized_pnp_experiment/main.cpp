@@ -231,6 +231,7 @@ int main (int argc, char** argv) {
   solution_file1 << solutionFn[1];
   solution_file2 << solutionFn[2];
   solution_file3 << solutionFn[3];
+  printf("\n");
 
 
   // computed solution for prescribed Dirichlet
@@ -248,20 +249,34 @@ int main (int argc, char** argv) {
 
 
   // FASP computed solution using basic Newton iteration
-  // printf("\tcomputed linearized solution using FASP solver\n");
-  // pnp_problem.set_DirichletBC(components, bcs);
+  printf("compute linearized solution using FASP solver\n");
+  pnp_problem.set_DirichletBC(components, bcs);
   dolfin::Function fasp_solution(pnp_problem.get_solution());
-  // fasp_solution = pnp_problem.fasp_solve();
-  // solution_file0 << fasp_solution[0];
-  // solution_file1 << fasp_solution[1];
-  // solution_file2 << fasp_solution[2];
-  // solution_file3 << fasp_solution[3];
-  // printf("\n");
+  fasp_solution = pnp_problem.fasp_solve();
+  solution_file0 << fasp_solution[0];
+  solution_file1 << fasp_solution[1];
+  solution_file2 << fasp_solution[2];
+  solution_file3 << fasp_solution[3];
+  printf("\n");
+
+  // FASP computed solution using basic Newton iteration
+  printf("computed linearized solution using FASP solver with EAFE\n");
+  pnp_problem.use_eafe();
+  pnp_problem.set_DirichletBC(components, bcs);
+  dolfin::Function fasp_solution_eafe(pnp_problem.get_solution());
+  fasp_solution_eafe = pnp_problem.fasp_solve();
+  solution_file0 << fasp_solution_eafe[0];
+  solution_file1 << fasp_solution_eafe[1];
+  solution_file2 << fasp_solution_eafe[2];
+  solution_file3 << fasp_solution_eafe[3];
+  printf("\n");
+
 
 
 
   // Measure error of FASP computed solution for random RHS
   printf("Measure error of FASP computed solution\n");
+  pnp_problem.no_eafe();
   pnp_problem.set_DirichletBC(components, bcs);
   std::size_t problem_size = fasp_solution.vector()->size();
 
@@ -287,12 +302,29 @@ int main (int argc, char** argv) {
   printf("\taverage FASP error entrywise: %e\n",
     linear_error / ((double) problem_size)
   );
-
   printf("Done\n\n"); fflush(stdout);
+
+
+
 
   printf("Measure error of FASP computed solution with EAFE\n");
   pnp_problem.set_DirichletBC(components, bcs);
-  pnp_problem.apply_eafe();
+  pnp_problem.use_eafe();
+
+  dolfin::EigenVector fasp_vector_eafe(problem_size);
+  fasp_vector_eafe = pnp_problem.fasp_test_solver(target_vector);
+
+  dolfin::EigenVector error_vector_eafe(problem_size);
+  error_vector_eafe = target_vector;
+  error_vector_eafe -= fasp_vector_eafe;
+
+  const double linear_error_eafe = error_vector_eafe.norm("l2");
+  printf("\tFASP error in the l2-sense: %e\n", linear_error_eafe);
+  printf("\taverage FASP error entrywise: %e\n",
+    linear_error_eafe / ((double) problem_size)
+  );
+  printf("Done\n\n"); fflush(stdout);
+
 
   return 0;
 }

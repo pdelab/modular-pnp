@@ -59,6 +59,8 @@ class Linear_PNP : public PDE {
     void free_fasp ();
 
     void apply_eafe ();
+    void use_eafe ();
+    void no_eafe ();
 
     std::vector<std::shared_ptr<dolfin::Function>> split_mixed_function (
       std::shared_ptr<const dolfin::Function> mixed_function
@@ -81,6 +83,7 @@ class Linear_PNP : public PDE {
     bool _faps_soln_unallocated = true;
 
     // EAFE
+    bool _use_eafe = false;
     bool _eafe_uninitialized = true;
     std::shared_ptr<EAFE::BilinearForm> _eafe_bilinear_form;
     std::shared_ptr<dolfin::FunctionSpace> _eafe_function_space;

@@ -66,6 +66,7 @@ Linear_PNP::~Linear_PNP () {}
 //--------------------------------------
 void Linear_PNP::setup_fasp_linear_algebra () {
   Linear_PNP::setup_linear_algebra();
+  if (_use_eafe) { Linear_PNP::apply_eafe(); }
 
   std::size_t dimension = Linear_PNP::get_solution_dimension();
   EigenMatrix_to_dCSRmat(_eigen_matrix, &_fasp_matrix);
@@ -172,10 +173,16 @@ void Linear_PNP::free_fasp () {
 
 
 //--------------------------------------
+void Linear_PNP::use_eafe () {
+ _use_eafe = true;
+}
+//--------------------------------------
+void Linear_PNP::no_eafe () {
+ _use_eafe = false;
+}
+//--------------------------------------
 void Linear_PNP::apply_eafe () {
-
   dolfin::Function solution_function(Linear_PNP::get_solution());
-
   if (_eafe_uninitialized) {
     _eafe_function_space = solution_function[0].function_space()->collapse();
     _eafe_bilinear_form.reset(
@@ -237,12 +244,32 @@ void Linear_PNP::apply_eafe () {
 
     dolfin::assemble(*_eafe_matrix, *_eafe_bilinear_form);
 
-    // replace_matrix (
-    //   Linear_PNP::get_solution_dimension(),
-    //   eqn_idx,
-    //   &_eigen_matrix,
-    //   &_eafe_matrix
-    // );
+    const int* IA = (int*) std::get<0>(_eafe_matrix->data());
+    const int* JA = (int*) std::get<1>(_eafe_matrix->data());
+    const double* values = (double*) std::get<2>(_eafe_matrix->data());
+
+    const int* global_IA = (int*) std::get<0>(_eigen_matrix->data());
+    const int* global_JA = (int*) std::get<1>(_eigen_matrix->data());
+    double* global_values = (double*) std::get<2>(_eigen_matrix->data());
+
+    uint row = 0, new_i = 0;
+    dolfin::la_index global_row, global_col;
+    std::size_t local_size = _eafe_matrix->nnz();
+    for (uint i = 0; i < local_size; i++) {
+
+      // convert local row/col to global row/col
+      while (IA[row + 1] < i + 1) row++;
+      global_row = _dof_map[eqn_idx][row];
+      global_col = _dof_map[eqn_idx][JA[i]];
+
+      // find and replace corresponding row/col in global IA/JA
+      new_i = global_IA[global_row];
+      while (global_JA[new_i] < global_col) new_i++;
+      global_values[new_i] = values[i];
+      // if (global_JA[new_i] != global_col) {
+        // printf("Error : %d != %d\n", global_JA[new_i], global_col); fflush(stdout);
+      // }
+    }
   }
 }
 //--------------------------------------
