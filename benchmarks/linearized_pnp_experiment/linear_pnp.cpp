@@ -66,7 +66,13 @@ Linear_PNP::~Linear_PNP () {}
 //--------------------------------------
 void Linear_PNP::setup_fasp_linear_algebra () {
   Linear_PNP::setup_linear_algebra();
-  if (_use_eafe) { Linear_PNP::apply_eafe(); }
+
+  if (_use_eafe) {
+    Linear_PNP::apply_eafe();
+    for (std::size_t i = 0; i < _dirichletBC.size(); i++) {
+      _dirichletBC[i]->apply(*_eigen_matrix);
+    }
+  }
 
   std::size_t dimension = Linear_PNP::get_solution_dimension();
   EigenMatrix_to_dCSRmat(_eigen_matrix, &_fasp_matrix);
@@ -83,7 +89,6 @@ void Linear_PNP::setup_fasp_linear_algebra () {
 //--------------------------------------
 dolfin::Function Linear_PNP::fasp_solve () {
   Linear_PNP::setup_fasp_linear_algebra();
-
   dolfin::Function solution(Linear_PNP::get_solution());
 
   printf("Solving linear system using FASP solver...\n"); fflush(stdout);
@@ -183,13 +188,14 @@ void Linear_PNP::no_eafe () {
 //--------------------------------------
 void Linear_PNP::apply_eafe () {
   dolfin::Function solution_function(Linear_PNP::get_solution());
+
   if (_eafe_uninitialized) {
+
     _eafe_function_space = solution_function[0].function_space()->collapse();
     _eafe_bilinear_form.reset(
       new EAFE::Form_a(_eafe_function_space, _eafe_function_space)
     );
     _eafe_matrix.reset(new dolfin::EigenMatrix());
-
 
     std::shared_ptr<dolfin::Function> _diffusivity;
     _diffusivity.reset(new dolfin::Function(diffusivity_space));
@@ -204,7 +210,7 @@ void Linear_PNP::apply_eafe () {
       (*_bilinear_form->coefficient("valency"))
     );
 
-    std::size_t vals = Linear_PNP::get_solution_dimension() + 1;
+    std::size_t vals = Linear_PNP::get_solution_dimension();
     _valency_double.reserve(vals);
     for (uint val_idx = 0; val_idx < vals; val_idx++) {
       _valency_double[val_idx] = (*(val_fn.vector()))[val_idx];
@@ -222,6 +228,9 @@ void Linear_PNP::apply_eafe () {
   std::shared_ptr<dolfin::Function> beta, eta, phi;
 
 
+  dolfin::File out_file("./benchmarks/linearized_pnp_experiment/output/eafe_terms.pvd");
+
+
   std::size_t eqns = Linear_PNP::get_solution_dimension();
   for (uint eqn_idx = 1; eqn_idx < eqns; eqn_idx++) {
     beta.reset(new dolfin::Function(_eafe_function_space));
@@ -231,16 +240,20 @@ void Linear_PNP::apply_eafe () {
     beta->interpolate( *(solution_vector[eqn_idx]) );
     eta->interpolate( *(solution_vector[eqn_idx]) );
     phi->interpolate( *(solution_vector[0]) );
+
     if (_valency_double[eqn_idx] != 0.0) {
       *(phi->vector()) *= _valency_double[eqn_idx];
       *beta = *beta + *phi;
-      *(phi->vector()) /= _valency_double[eqn_idx];
     }
 
     _eafe_bilinear_form->alpha = *(_split_diffusivity[eqn_idx]);
     _eafe_bilinear_form->beta = *beta;
     _eafe_bilinear_form->eta = *eta;
     _eafe_bilinear_form->gamma = zero;
+
+    out_file << *(_split_diffusivity[eqn_idx]);
+    out_file << *beta;
+    out_file << *eta;
 
     dolfin::assemble(*_eafe_matrix, *_eafe_bilinear_form);
 

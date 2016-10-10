@@ -5681,7 +5681,7 @@ public:
     {0.0636610018750176, 0.269672331458316, 0.603005664791649, 0.0636610018750175},
     {0.0636610018750177, 0.603005664791649, 0.0636610018750175, 0.269672331458316},
     {0.0636610018750176, 0.0636610018750175, 0.603005664791649, 0.269672331458316},
-    {0.0636610018750177, 0.269672331458316, 0.0636610018750175, 0.603005664791649},
+    {0.0636610018750176, 0.269672331458316, 0.0636610018750175, 0.603005664791649},
     {0.0636610018750177, 0.603005664791649, 0.269672331458316, 0.0636610018750175}};
     
     // Array of non-zero columns
@@ -5776,7 +5776,7 @@ public:
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
     
     // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 35472
+    // Number of operations to compute element tensor for following IP loop = 39768
     for (unsigned int ip = 0; ip < 24; ip++)
     {
       
@@ -5794,16 +5794,53 @@ public:
       double F10 = 0.0;
       double F11 = 0.0;
       double F12 = 0.0;
+      double F13 = 0.0;
+      double F14 = 0.0;
+      double F15 = 0.0;
+      double F16 = 0.0;
+      double F17 = 0.0;
+      double F18 = 0.0;
+      double F19 = 0.0;
+      double F20 = 0.0;
+      double F21 = 0.0;
+      double F22 = 0.0;
+      double F23 = 0.0;
+      double F24 = 0.0;
+      double F25 = 0.0;
+      double F26 = 0.0;
+      double F27 = 0.0;
+      double F28 = 0.0;
+      double F29 = 0.0;
+      double F30 = 0.0;
+      double F31 = 0.0;
       
-      // Total number of operations to compute function values = 12
+      // Total number of operations to compute function values = 84
       for (unsigned int r = 0; r < 2; r++)
       {
-        F10 += FE1_C0_D001[ip][r]*w[0][nzc15[r]];
-        F11 += FE1_C0_D001[ip][r]*w[0][nzc14[r]];
-        F12 += FE1_C0_D001[ip][r]*w[0][nzc13[r]];
+        F10 += FE1_C0_D001[ip][r]*w[0][nzc19[r]];
+        F11 += FE1_C0_D001[ip][r]*w[0][nzc18[r]];
+        F12 += FE1_C0_D001[ip][r]*w[0][nzc17[r]];
+        F13 += FE1_C0_D001[ip][r]*w[0][nzc15[r]];
+        F14 += FE1_C0_D001[ip][r]*w[0][nzc14[r]];
+        F15 += FE1_C0_D001[ip][r]*w[0][nzc13[r]];
+        F17 += FE1_C0_D001[ip][r]*w[3][nzc19[r]];
+        F18 += FE1_C0_D001[ip][r]*w[3][nzc18[r]];
+        F19 += FE1_C0_D001[ip][r]*w[3][nzc17[r]];
+        F20 += FE1_C0_D001[ip][r]*w[0][nzc23[r]];
+        F21 += FE1_C0_D001[ip][r]*w[0][nzc22[r]];
+        F22 += FE1_C0_D001[ip][r]*w[0][nzc21[r]];
+        F23 += FE1_C0_D001[ip][r]*w[3][nzc23[r]];
+        F24 += FE1_C0_D001[ip][r]*w[3][nzc22[r]];
+        F25 += FE1_C0_D001[ip][r]*w[3][nzc21[r]];
+        F26 += FE1_C0_D001[ip][r]*w[0][nzc27[r]];
+        F27 += FE1_C0_D001[ip][r]*w[0][nzc26[r]];
+        F28 += FE1_C0_D001[ip][r]*w[0][nzc25[r]];
+        F29 += FE1_C0_D001[ip][r]*w[3][nzc27[r]];
+        F30 += FE1_C0_D001[ip][r]*w[3][nzc26[r]];
+        F31 += FE1_C0_D001[ip][r]*w[3][nzc25[r]];
       } // end loop over 'r'
       
-      // Total number of operations to compute function values = 80
+      // Total number of operations to compute function values = 88
       for (unsigned int r = 0; r < 4; r++)
       {
         F0 += FE0[ip][r]*w[3][nzc16[r]];
@@ -5816,9 +5853,10 @@ public:
         F7 += FE0[ip][r]*w[0][nzc20[r]];
         F8 += FE0[ip][r]*w[2][nzc24[r]];
         F9 += FE0[ip][r]*w[0][nzc24[r]];
+        F16 += FE0[ip][r]*w[0][nzc12[r]];
       } // end loop over 'r'
       
-      // Number of operations to compute ip constants: 270
+      // Number of operations to compute ip constants: 369
       double I[54];
       // Number of operations: 2
       I[0] = F3*G[0]*W24[ip];
@@ -5946,32 +5984,32 @@ public:
       // Number of operations: 4
       I[41] = F8*G[5]*W24[ip]*std::exp(F9);
       
-      // Number of operations: 10
-      I[42] = F0*F4*W24[ip]*std::exp(F5)*(F10*G[2] + F11*G[1] + F12*G[0]);
+      // Number of operations: 21
+      I[42] = F4*W24[ip]*std::exp(F5)*(G[0]*(F12 + F0*F15 + F16*F19) + G[1]*(F11 + F0*F14 + F16*F18) + G[2]*(F10 + F0*F13 + F16*F17));
       
-      // Number of operations: 10
-      I[43] = F0*F4*W24[ip]*std::exp(F5)*(F10*G[4] + F11*G[3] + F12*G[1]);
+      // Number of operations: 21
+      I[43] = F4*W24[ip]*std::exp(F5)*(G[1]*(F12 + F0*F15 + F16*F19) + G[3]*(F11 + F0*F14 + F16*F18) + G[4]*(F10 + F0*F13 + F16*F17));
       
-      // Number of operations: 10
-      I[44] = F0*F4*W24[ip]*std::exp(F5)*(F10*G[5] + F11*G[4] + F12*G[2]);
+      // Number of operations: 21
+      I[44] = F4*W24[ip]*std::exp(F5)*(G[2]*(F12 + F0*F15 + F16*F19) + G[4]*(F11 + F0*F14 + F16*F18) + G[5]*(F10 + F0*F13 + F16*F17));
       
-      // Number of operations: 10
-      I[45] = F1*F6*W24[ip]*std::exp(F7)*(F10*G[2] + F11*G[1] + F12*G[0]);
+      // Number of operations: 21
+      I[45] = F6*W24[ip]*std::exp(F7)*(G[0]*(F22 + F1*F15 + F16*F25) + G[1]*(F21 + F1*F14 + F16*F24) + G[2]*(F20 + F1*F13 + F16*F23));
       
-      // Number of operations: 10
-      I[46] = F1*F6*W24[ip]*std::exp(F7)*(F10*G[4] + F11*G[3] + F12*G[1]);
+      // Number of operations: 21
+      I[46] = F6*W24[ip]*std::exp(F7)*(G[1]*(F22 + F1*F15 + F16*F25) + G[3]*(F21 + F1*F14 + F16*F24) + G[4]*(F20 + F1*F13 + F16*F23));
       
-      // Number of operations: 10
-      I[47] = F1*F6*W24[ip]*std::exp(F7)*(F10*G[5] + F11*G[4] + F12*G[2]);
+      // Number of operations: 21
+      I[47] = F6*W24[ip]*std::exp(F7)*(G[2]*(F22 + F1*F15 + F16*F25) + G[4]*(F21 + F1*F14 + F16*F24) + G[5]*(F20 + F1*F13 + F16*F23));
       
-      // Number of operations: 10
-      I[48] = F2*F8*W24[ip]*std::exp(F9)*(F10*G[2] + F11*G[1] + F12*G[0]);
+      // Number of operations: 21
+      I[48] = F8*W24[ip]*std::exp(F9)*(G[0]*(F28 + F15*F2 + F16*F31) + G[1]*(F27 + F14*F2 + F16*F30) + G[2]*(F26 + F13*F2 + F16*F29));
       
-      // Number of operations: 10
-      I[49] = F2*F8*W24[ip]*std::exp(F9)*(F10*G[4] + F11*G[3] + F12*G[1]);
+      // Number of operations: 21
+      I[49] = F8*W24[ip]*std::exp(F9)*(G[1]*(F28 + F15*F2 + F16*F31) + G[3]*(F27 + F14*F2 + F16*F30) + G[4]*(F26 + F13*F2 + F16*F29));
       
-      // Number of operations: 10
-      I[50] = F2*F8*W24[ip]*std::exp(F9)*(F10*G[5] + F11*G[4] + F12*G[2]);
+      // Number of operations: 21
+      I[50] = F8*W24[ip]*std::exp(F9)*(G[2]*(F28 + F15*F2 + F16*F31) + G[4]*(F27 + F14*F2 + F16*F30) + G[5]*(F26 + F13*F2 + F16*F29));
       
       // Number of operations: 2
       I[51] =  - F0*W24[ip]*det;
@@ -6223,7 +6261,7 @@ public:
     {0.0, 0.333333333333333, 0.333333333333333, 0.333333333333333},
     {0.333333333333333, 0.333333333333333, 0.333333333333333, 0.0},
     {0.333333333333333, 0.333333333333333, 0.0, 0.333333333333333},
-    {0.090909090909091, 0.727272727272727, 0.0909090909090909, 0.0909090909090909},
+    {0.0909090909090911, 0.727272727272727, 0.0909090909090909, 0.0909090909090909},
     {0.727272727272727, 0.0909090909090908, 0.0909090909090909, 0.0909090909090909},
     {0.0909090909090909, 0.0909090909090909, 0.0909090909090909, 0.727272727272727},
     {0.090909090909091, 0.0909090909090908, 0.727272727272727, 0.0909090909090909},
@@ -6515,7 +6553,7 @@ public:
   /// Return a string identifying the form
   virtual const char* signature() const
   {
-    return "58023dc177e1515fb160da59b21be89e65b5905490f059a537e869d54d30ef73e1f33f99510d2103a5c3d73073d77aacf4adb8b04fc4229b23f765d612f0bfae";
+    return "ca6367c7eb43ee30d15bcbf00b2778ec4574e24d3fa2f5e76f516d7c1e346cbdb86bfe813b59ad7b62102e4c9ce9b7a5f32c61fbede6892d477c6258c1ca73e8";
   }
 
 

@@ -155,6 +155,10 @@ class PDE {
 
     std::map<std::size_t, std::vector<dolfin::la_index>> _dof_map;
 
+    /// Dirichlet boundary conditions
+    std::vector<std::shared_ptr<dolfin::DirichletBC>> _dirichletBC;
+    std::vector<std::shared_ptr<dolfin::SubDomain>> _dirichlet_SubDomain;
+
   private:
     /// Mesh
     std::shared_ptr<dolfin::Mesh> _mesh;
@@ -171,10 +175,6 @@ class PDE {
     /// Coefficients
     std::map<std::string, std::shared_ptr<const dolfin::Constant>> _bilinear_coefficient;
     std::map<std::string, std::shared_ptr<const dolfin::Constant>> _linear_coefficient;
-
-    /// Dirichlet boundary conditions
-    std::vector<std::shared_ptr<dolfin::DirichletBC>> _dirichletBC;
-    std::vector<std::shared_ptr<dolfin::SubDomain>> _dirichlet_SubDomain;
 };
 
 #endif
