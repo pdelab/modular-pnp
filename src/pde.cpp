@@ -31,8 +31,6 @@ PDE::PDE (
   PDE::set_solution(0.0);
 
   PDE::set_coefficients(coefficients, sources);
-
-  PDE::use_exact_newton();
 }
 //--------------------------------------
 PDE::~PDE() {}
@@ -66,19 +64,6 @@ void PDE::update_mesh (
 //--------------------------------------
 dolfin::Mesh PDE::get_mesh () {
   return *(_mesh);
-}
-//--------------------------------------
-
-
-
-
-//--------------------------------------
-void PDE::use_quasi_newton () {
-  _quasi_newton = true;
-}
-//--------------------------------------
-void PDE::use_exact_newton () {
-  _quasi_newton = false;
 }
 //--------------------------------------
 
@@ -411,20 +396,16 @@ dolfin::Function PDE::dolfin_solve () {
 void PDE::setup_linear_algebra () {
   dolfin::EigenMatrix eigen_matrix;
   dolfin::EigenVector eigen_vector;
-  assemble(eigen_matrix, *_bilinear_form);
-  assemble(eigen_vector, *_linear_form);
-
-  if (_quasi_newton) {
-    printf("WARNING: No support for quasi-Newton solver!!!\n");
-  }
+  dolfin::assemble(eigen_matrix, *_bilinear_form);
+  dolfin::assemble(eigen_vector, *_linear_form);
 
   for (std::size_t i = 0; i < _dirichletBC.size(); i++) {
     _dirichletBC[i]->apply(eigen_matrix);
     _dirichletBC[i]->apply(eigen_vector);
   }
 
-  _eigen_matrix.reset( new const dolfin::EigenMatrix(eigen_matrix) );
-  _eigen_vector.reset( new const dolfin::EigenVector(eigen_vector) );
+  _eigen_matrix.reset(new dolfin::EigenMatrix(eigen_matrix));
+  _eigen_vector.reset(new dolfin::EigenVector(eigen_vector));
 }
 //--------------------------------------
 dolfin::Function PDE::_convert_EigenVector_to_Function (

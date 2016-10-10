@@ -49,12 +49,6 @@ class PDE {
     /// Return mesh from the Poisson object
     dolfin::Mesh get_mesh ();
 
-    /// Set quasi-Newton option to true
-    void use_quasi_newton ();
-
-    /// Set quasi-Newton option to false
-    void use_exact_newton ();
-
     /// Print coefficient names to console
     void print_coefficients ();
 
@@ -150,11 +144,20 @@ class PDE {
     );
 
     /// Linear algebra
-    std::shared_ptr<const dolfin::EigenMatrix> _eigen_matrix;
-    std::shared_ptr<const dolfin::EigenVector> _eigen_vector;
+    std::shared_ptr<dolfin::EigenMatrix> _eigen_matrix;
+    std::shared_ptr<dolfin::EigenVector> _eigen_vector;
     dolfin::Function _convert_EigenVector_to_Function (
       const dolfin::EigenVector &eigen_vector
     );
+
+    std::shared_ptr<dolfin::FunctionSpace> _function_space;
+    std::shared_ptr<dolfin::Form> _bilinear_form;
+
+    std::map<std::size_t, std::vector<dolfin::la_index>> _dof_map;
+
+    /// Dirichlet boundary conditions
+    std::vector<std::shared_ptr<dolfin::DirichletBC>> _dirichletBC;
+    std::vector<std::shared_ptr<dolfin::SubDomain>> _dirichlet_SubDomain;
 
   private:
     /// Mesh
@@ -163,27 +166,15 @@ class PDE {
     std::size_t _mesh_dim;
     double _mesh_epsilon;
 
-    /// Function Space
-    std::shared_ptr<dolfin::FunctionSpace> _function_space;
-    std::map<std::size_t, std::vector<dolfin::la_index>> _dof_map;
-
     /// Forms
-    std::shared_ptr<dolfin::Form> _bilinear_form;
     std::shared_ptr<dolfin::Form> _linear_form;
 
-    // Current solution
+    /// Current solution
     std::shared_ptr<dolfin::Function> _solution_function;
 
     /// Coefficients
     std::map<std::string, std::shared_ptr<const dolfin::Constant>> _bilinear_coefficient;
     std::map<std::string, std::shared_ptr<const dolfin::Constant>> _linear_coefficient;
-
-    /// Dirichlet boundary conditions
-    std::vector<std::shared_ptr<dolfin::DirichletBC>> _dirichletBC;
-    std::vector<std::shared_ptr<dolfin::SubDomain>> _dirichlet_SubDomain;
-
-    /// quasi-Newton flag
-    bool _quasi_newton;
 };
 
 #endif
