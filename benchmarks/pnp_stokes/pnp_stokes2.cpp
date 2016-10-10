@@ -14,7 +14,6 @@
 #include "fasp_to_fenics.h"
 #include "boundary_conditions.h"
 #include "pnp_stokes.h"
-#include "stokes_with_pnp.h"
 #include "newton.h"
 #include "newton_functs.h"
 #include "L2Error.h"
