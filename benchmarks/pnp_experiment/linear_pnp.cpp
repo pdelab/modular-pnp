@@ -78,11 +78,11 @@ void Linear_PNP::setup_fasp_linear_algebra () {
   EigenMatrix_to_dCSRmat(_eigen_matrix, &_fasp_matrix);
   _fasp_bsr_matrix = fasp_format_dcsr_dbsr(&_fasp_matrix, dimension);
 
-  EigenVector_to_dvector(_eigen_vector, &_fasp_vector);
   if (_faps_soln_unallocated) {
     fasp_dvec_alloc(_eigen_vector->size(), &_fasp_soln);
     _faps_soln_unallocated = false;
   }
+  EigenVector_to_dvector(_eigen_vector, &_fasp_vector);
 
   fasp_dvec_set(_fasp_vector.row, &_fasp_soln, 0.0);
 }
@@ -277,8 +277,6 @@ void Linear_PNP::apply_eafe () {
     }
   }
 }
-//--------------------------------------
-
 //--------------------------------------
 std::vector<std::shared_ptr<dolfin::Function>> Linear_PNP::split_mixed_function (
   std::shared_ptr<const dolfin::Function> mixed_function

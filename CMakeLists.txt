@@ -64,3 +64,6 @@ target_link_libraries(test_problem ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRAR
 
 add_executable(linear_experiment ./benchmarks/linearized_pnp_experiment/main.cpp ./benchmarks/linearized_pnp_experiment/linear_pnp.cpp ${SRC_DIR})
 target_link_libraries(linear_experiment ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
+
+add_executable(pnp_experiment ./benchmarks/pnp_experiment/main.cpp ./benchmarks/pnp_experiment/linear_pnp.cpp ${SRC_DIR})
+target_link_libraries(pnp_experiment ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
