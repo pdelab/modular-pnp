@@ -271,29 +271,27 @@ int main(int argc, char** argv)
     auto Vs = std::make_shared<stokes_with_pnp::FunctionSpace>(mesh);
     stokes_with_pnp::BilinearForm a_s(Vs,Vs);
     stokes_with_pnp::LinearForm L_s(Vs);
-    L_s.qp = qp; L_s.qn = qn;
     a_s.mu = mu; L_s.mu = mu;
+    L_s.eps = eps;
     a_s.alpha1 = penalty1; L_s.alpha1 = penalty1;
     a_s.alpha2 = penalty2; L_s.alpha2 = penalty2;
 
     // Updates
     L_pnp.du = zero_vec3;
+    L_pnp.dPhi = zero;
     L_pnp.dCat = zero;
     L_pnp.dAn = zero;
-    L_pnp.dPhi = zero;
     L_s.du      = zero_vec3;
     L_s.dPress  = zero;
     L_s.dPhi    = zero;
-    L_s.dCat    = zero;
-    L_s.dAn     = zero;
 
 
     // Set Dirichlet boundaries
     printf("\tboundary conditions...\n"); fflush(stdout);
     auto boundary = std::make_shared<SymmBoundaries>(coeff_par.bc_coordinate, -domain_par.length_x/2.0, domain_par.length_x/2.0);
     auto bddd = std::make_shared<Bd_all>();
-    dolfin::DirichletBC bc(V, zero_vec3, bddd);
-    dolfin::DirichletBC bc_stokes(Vs->sub(0), zero_vec3, bddd);
+    dolfin::DirichletBC bc(V, zero_vec3, boundary);
+    dolfin::DirichletBC bc_stokes(Vs->sub(0), zero_vec3, boundary);
     // dolfin::DirichletBC bc_stokes(Vs, zero_vec4, bddd);
 
     // Interpolate analytic expressions
@@ -393,8 +391,6 @@ int main(int argc, char** argv)
     assemble(b_pnp, L_pnp);
     bc.apply(b_pnp);
 
-    L_s.cation = cationSolution;
-    L_s.anion = anionSolution;
     L_s.phi = potentialSolution;
     L_s.uu = VelocitySolution;
     L_s.pp = PressureSolution;
@@ -514,8 +510,6 @@ int main(int argc, char** argv)
       L_s.du      = zero_vec3;
       L_s.dPress  = zero;
       L_s.dPhi    = zero;
-      L_s.dCat    = zero;
-      L_s.dAn     = zero;
 
       printf("\tconvert FASP solution to function...\n"); fflush(stdout);
 
@@ -539,8 +533,6 @@ int main(int argc, char** argv)
       assemble(b_pnp, L_pnp);
       bc.apply(b_pnp);
 
-      L_s.cation = cationSolution;
-      L_s.anion = anionSolution;
       L_s.phi = potentialSolution;
       L_s.uu = VelocitySolution;
       L_s.pp = PressureSolution;
@@ -662,8 +654,6 @@ double get_initial_residual (
   L->EsEs = potential;
   L->uu = velocity;
 
-  Ls->cation = cation;
-  Ls->anion = anion;
   Ls->phi = potential;
   Ls->uu = velocity;
   Ls->pp = pressure;
