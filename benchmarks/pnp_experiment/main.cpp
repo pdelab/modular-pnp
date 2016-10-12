@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <dolfin.h>
 #include "pde.h"
+#include "newton_status.h"
 #include "domain.h"
 #include "dirichlet.h"
 extern "C" {
@@ -218,39 +219,36 @@ int main (int argc, char** argv) {
   printf("Initializing nonlinear solver\n");
 
   // set nonlinear solver parameters
-  const std::size_t max_newton = 10;
+  const std::size_t max_newton = 5;
   const double max_residual_tol = 1.0e-4;
   const double relative_residual_tol = 1.0e-4;
-
-  // initialize iteration measurements
-  double relative_residual = 1.0;
-  std::size_t newton_iteration = 0;
-  double max_residual = pnp_problem.compute_residual("max");
   const double initial_residual = pnp_problem.compute_residual("l2");
-  printf("\tinitial maximum residual :  %10.5e\n", max_residual);
-  printf("\tinitial relative residual : %10.5e\n", initial_residual);
+  Newton_Status newton(
+    max_newton,
+    initial_residual,
+    relative_residual_tol,
+    max_residual_tol
+  );
+
+  printf("\tinitial relative residual : %10.5e\n", newton.initial_residual);
   printf("\n");
 
-  while (
-    ++newton_iteration < (max_newton + 1) && (
-      relative_residual > relative_residual_tol
-      || max_residual > max_residual_tol
-    )
-  ) {
+  while (newton.needs_to_iterate()) {
     // solve
-    printf("Solving for Newton iterate %lu \n", newton_iteration);
+    printf("Solving for Newton iterate %lu \n", newton.iteration);
     solutionFn = pnp_problem.fasp_solve();
 
     // update newton measurements
     printf("Newton measurements for iteration :\n");
     double residual = pnp_problem.compute_residual("l2");
-    relative_residual = residual / initial_residual;
-    max_residual = pnp_problem.compute_residual("max");
+    double max_residual = pnp_problem.compute_residual("max");
+    newton.update_residuals(residual, max_residual);
+    newton.update_iteration();
 
-    printf("\tmaximum residual :  %10.5e\n", max_residual);
-    printf("\trelative residual : %10.5e\n", relative_residual);
-
-    printf("Output solution to file...\n");
+    // output
+    printf("\tmaximum residual :  %10.5e\n", newton.max_residual);
+    printf("\trelative residual : %10.5e\n", newton.relative_residual);
+    printf("\toutput solution to file...\n");
     solution_file0 << solutionFn[0];
     solution_file1 << solutionFn[1];
     solution_file2 << solutionFn[2];
@@ -260,18 +258,12 @@ int main (int argc, char** argv) {
 
 
   // check status of nonlinear solve
-  if (newton_iteration > max_newton) {
-    printf("Solver failed... too many Newton iterations!\n");
-  } else if (relative_residual > relative_residual_tol) {
-    printf("Solver failed... relative residual greater than tolerance!\n");
-  } else if (relative_residual > relative_residual_tol) {
-    printf("Solver failed... maximum residual greater than tolerance!\n");
-  } else {
+  if (newton.converged()) {
     printf("Solver succeeded!\n");
+  } else {
+    newton.print_status();
   }
 
-
-  printf("\nSolver exiting\n");
-
+  printf("Solver exiting\n"); fflush(stdout);
   return 0;
 }
