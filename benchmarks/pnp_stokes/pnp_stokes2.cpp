@@ -112,13 +112,25 @@ int main(int argc, char** argv)
   itsolver_param itpar;
   AMG_param amgpar;
   ILU_param ilupar;
-  char fasp_params[] = "./benchmarks/pnp_stokes/bsr.dat";
+  char fasp_params[] = "./benchmarks/pnp_stokes/bcsr.dat";
   fasp_param_input(fasp_params, &inpar);
   fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
   INT status = FASP_SUCCESS;
   printf("done\n"); fflush(stdout);
+    
+    // Setup FASP solver for pnp
+    printf("FASP solver parameters for pnp..."); fflush(stdout);
+    input_param pnp_inpar;
+    itsolver_param pnp_itpar;
+    AMG_param  pnp_amgpar;
+    ILU_param pnp_ilupar;
+    Schwarz_param pnp_schpar;
+    char fasp_pnp_params[] = "./benchmarks/pnp_stokes/bsr.dat";
+    fasp_param_input(fasp_pnp_params, &pnp_inpar);
+    fasp_param_init(&pnp_inpar, &pnp_itpar, &pnp_amgpar, &pnp_ilupar, &pnp_schpar);
+    printf("done\n"); fflush(stdout);
 
-  // Setup FASP solver
+  // Setup FASP solver for stokes
   printf("FASP solver parameters for stokes..."); fflush(stdout);
   input_ns_param stokes_inpar;
   itsolver_ns_param stokes_itpar;
@@ -254,6 +266,16 @@ int main(int argc, char** argv)
   get_dofs(initialFunction.get(), &velocity_dofs, 3);
   get_dofs(initialFunction.get(), &pressure_dofs, 4);
   int index_fix = pressure_dofs.val[0];
+    
+  // output dofs
+    /*
+    fasp_ivec_write("cation_dofs", &cation_dofs);
+    fasp_ivec_write("anion_dofs", &anion_dofs);
+    fasp_ivec_write("potential_dofs", &potential_dofs);
+    fasp_ivec_write("velocity_dofs", &velocity_dofs);
+    fasp_ivec_write("pressure_dofs", &pressure_dofs);
+     */
+
 
   // initialize linear system
   printf("\tlinear algebraic objects...\n"); fflush(stdout);
@@ -261,9 +283,42 @@ int main(int argc, char** argv)
   EigenVector b;
   // Fasp matrices and vectors
   dCSRmat A_fasp;
-  dBSRmat A_fasp_bsr;
   dvector b_fasp, solu_fasp;
+    
+  block_dCSRmat A_fasp_bcsr;
+  dvector b_fasp_bcsr, solu_fasp_bcsr;
+    
+    // allocate
+    int i;
+    A_fasp_bcsr.brow = 2;
+    A_fasp_bcsr.bcol = 2;
+    A_fasp_bcsr.blocks = (dCSRmat **)calloc(4, sizeof(dCSRmat *));
+    fasp_mem_check((void *)A_fasp_bcsr.blocks, "block matrix:cannot allocate memory!\n", ERROR_ALLOC_MEM);
+    for (i=0; i<4 ;i++) {
+        A_fasp_bcsr.blocks[i] = (dCSRmat *)fasp_mem_calloc(1, sizeof(dCSRmat));
+    }
+   
+    // form dof index for PNP and Stokes
+    ivector pnp_dofs;
+    ivector stokes_dofs;
+    fasp_ivec_alloc(potential_dofs.row + cation_dofs.row + anion_dofs.row, &pnp_dofs);
+    fasp_ivec_alloc(velocity_dofs.row + pressure_dofs.row, &stokes_dofs);
 
+    // potential
+    for (i=0; i<potential_dofs.row; i++)
+        pnp_dofs.val[3*i] = potential_dofs.val[i];
+    // cation
+    for (i=0; i<cation_dofs.row; i++)
+        pnp_dofs.val[3*i+1] = cation_dofs.val[i];
+    // anion
+    for (i=0; i<anion_dofs.row; i++)
+        pnp_dofs.val[3*i+2] = anion_dofs.val[i];
+    // velocity
+    for (i=0; i<velocity_dofs.row; i++)
+        stokes_dofs.val[i] = velocity_dofs.val[i];
+    // pressure
+    for (i=0; i<pressure_dofs.row; i++)
+        stokes_dofs.val[velocity_dofs.row+i] = pressure_dofs.val[i];
 
   //*************************************************************
   //  Initialize Newton solver
@@ -310,7 +365,7 @@ int main(int argc, char** argv)
     a.EsEs = initialPotential;
     a.uu = initialVelocity;
     assemble(A, a);
-
+      
     bc1.apply(A);
     bc2.apply(A);
     bc3.apply(A);
@@ -332,7 +387,37 @@ int main(int argc, char** argv)
 
     // list_lu_solver_methods();
     // solve(A, *solutionUpdate->vector(), b, "umfpack");
+      
+      // --------------------------------------------------------------------------
+      // 2 by 2 block solver
+      // step 1: get blocks (order: PNP Stokes)
+      
+      fasp_dcsr_getblk(&A_fasp, pnp_dofs.val,    pnp_dofs.val,    pnp_dofs.row,    pnp_dofs.row,    A_fasp_bcsr.blocks[0]);
+      fasp_dcsr_getblk(&A_fasp, pnp_dofs.val,    stokes_dofs.val, pnp_dofs.row,    stokes_dofs.row, A_fasp_bcsr.blocks[1]);
+      fasp_dcsr_getblk(&A_fasp, stokes_dofs.val, pnp_dofs.val,    stokes_dofs.row, pnp_dofs.row,    A_fasp_bcsr.blocks[2]);
+      fasp_dcsr_getblk(&A_fasp, stokes_dofs.val, stokes_dofs.val, stokes_dofs.row, stokes_dofs.row, A_fasp_bcsr.blocks[3]);
 
+      // step 2: get right hand side
+      fasp_dvec_alloc(b_fasp.row, &b_fasp_bcsr);
+      
+      for (i=0; i<pnp_dofs.row; i++)
+          b_fasp_bcsr.val[i] = b_fasp.val[pnp_dofs.val[i]];
+      for (i=0; i<stokes_dofs.row; i++)
+          b_fasp_bcsr.val[pnp_dofs.row + i] = b_fasp.val[stokes_dofs.val[i]];
+      
+      // step 3: solve
+      fasp_dvec_alloc(b_fasp.row, &solu_fasp_bcsr);
+      fasp_dvec_set(solu_fasp_bcsr.row, &solu_fasp_bcsr, 0.0);
+      fasp_solver_bdcsr_krylov_pnp_stokes(&A_fasp_bcsr, &b_fasp_bcsr, &solu_fasp_bcsr, &itpar, &pnp_itpar, &pnp_amgpar, &stokes_itpar, &stokes_amgpar);
+      
+      // step 4: put solution back
+      for (i=0; i<pnp_dofs.row; i++)
+          solu_fasp.val[pnp_dofs.val[i]] = solu_fasp_bcsr.val[i];
+      for (i=0; i<stokes_dofs.row;    i++)
+          solu_fasp.val[stokes_dofs.val[i]] = solu_fasp_bcsr.val[pnp_dofs.row + i] ;
+      // --------------------------------------------------------------------------
+
+    /*
     // UMFPACK LU SOLVER
     dCSRmat A_tran;
     fasp_dcsr_trans(&A_fasp, &A_tran);
@@ -343,16 +428,19 @@ int main(int argc, char** argv)
     Numeric = fasp_umfpack_factorize(&A_fasp, 3);
     status = fasp_umfpack_solve(&A_fasp, &b_fasp, &solu_fasp, Numeric, 3);
     fasp_umfpack_free_numeric(Numeric);
+     */
 
     printf("\t status = %d\n",status);
 
 
-
     // fasp_dvec_print(b_fasp.row,&b_fasp);
+      /*
     char filemat[20] = "matrix.txt";
     char filevec[20] = "rhs.txt";
     fasp_dcoo_write(filemat,&A_fasp);
     fasp_dvec_write (filevec,&b_fasp);
+      getchar();
+       */
 
 
     fasp_blas_dcsr_aAxpy(-1.0,
