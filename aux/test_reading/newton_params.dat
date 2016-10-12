@@ -1,9 +1,0 @@
-%--------------------------%
-% input parameters for     %
-% the newton solver        %
-%--------------------------%
-
-adapt_tol    = 1e-6        % tolerance for a posteriori error estimate
-nonlin_tol   = 1e-10       % tolerance for nonlinear residual
-nonlin_maxit = 15          % maximal iteration cound
-nonlin_damp_factor  = 1.0  % backtracking damp factor
