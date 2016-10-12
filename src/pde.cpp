@@ -263,7 +263,17 @@ double PDE::compute_residual (
   std::string norm_type
 ) {
   dolfin::EigenVector eigen_vector;
-  assemble(eigen_vector, *_linear_form);
+  dolfin::assemble(eigen_vector, *_linear_form);
+  for (std::size_t i = 0; i < _dirichletBC.size(); i++) {
+    _dirichletBC[i]->apply(eigen_vector);
+  }
+
+  if (norm_type == "max" || norm_type == "infinity") {
+    double max = eigen_vector.max();
+    double min = - eigen_vector.min();
+    return max > min ? max : min;
+  }
+
   double residual = eigen_vector.norm(norm_type);
 
   _eigen_vector.reset(new dolfin::EigenVector(eigen_vector));
