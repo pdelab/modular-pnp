@@ -20,12 +20,16 @@ solver_type              = 6      % 1 CG | 2 BiCGstab | 3 MinRes | 4 GMRes |
 %----------------------------------------------%
 % parameters for iterative solvers             %
 %----------------------------------------------%
-precond_type             = 21      % 0 None | 21 block diagonal (exact) | 22 lower triangular (exact) | 23 Upper triangular (exact) | 24 SGS (exact)
-				   %	    | 31 block diagonal (AMG)   | 32 lower triangular (AMG)   | 33 Upper triangular (AMG) | 34 SGS (exact)
-itsolver_tol             = 1e-6    % solver tolerance 
+precond_type             = 33      % 0 None | 21 block diagonal (exact) | 22 lower triangular (exact) | 23 Upper triangular (exact) 
+				   %	    | 31 block diagonal (inexact)   | 32 lower triangular (inexact)   | 33 Upper triangular (inexact) 
+itsolver_tol             = 1e-5    % solver tolerance 
 itsolver_maxit           = 100   % maximal iteration number 
 stop_type                = 1      % 1 ||r||/||b|| | 2 ||r||_B/||b||_B | 3 ||r||/||x||  
 itsolver_restart         = 100     % restart number for GMRES
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% below is not use for pap-stokes solver
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %----------------------------------------------%
 % parameters for ILU preconditioners           %

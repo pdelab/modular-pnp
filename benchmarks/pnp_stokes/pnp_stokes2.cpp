@@ -391,7 +391,6 @@ int main(int argc, char** argv)
       // --------------------------------------------------------------------------
       // 2 by 2 block solver
       // step 1: get blocks (order: PNP Stokes)
-      
       fasp_dcsr_getblk(&A_fasp, pnp_dofs.val,    pnp_dofs.val,    pnp_dofs.row,    pnp_dofs.row,    A_fasp_bcsr.blocks[0]);
       fasp_dcsr_getblk(&A_fasp, pnp_dofs.val,    stokes_dofs.val, pnp_dofs.row,    stokes_dofs.row, A_fasp_bcsr.blocks[1]);
       fasp_dcsr_getblk(&A_fasp, stokes_dofs.val, pnp_dofs.val,    stokes_dofs.row, pnp_dofs.row,    A_fasp_bcsr.blocks[2]);
@@ -408,7 +407,7 @@ int main(int argc, char** argv)
       // step 3: solve
       fasp_dvec_alloc(b_fasp.row, &solu_fasp_bcsr);
       fasp_dvec_set(solu_fasp_bcsr.row, &solu_fasp_bcsr, 0.0);
-      fasp_solver_bdcsr_krylov_pnp_stokes(&A_fasp_bcsr, &b_fasp_bcsr, &solu_fasp_bcsr, &itpar, &pnp_itpar, &pnp_amgpar, &stokes_itpar, &stokes_amgpar);
+      fasp_solver_bdcsr_krylov_pnp_stokes(&A_fasp_bcsr, &b_fasp_bcsr, &solu_fasp_bcsr, &itpar, &pnp_itpar, &pnp_amgpar, &stokes_itpar, &stokes_amgpar, velocity_dofs.row, pressure_dofs.row);
       
       // step 4: put solution back
       for (i=0; i<pnp_dofs.row; i++)

@@ -387,7 +387,14 @@ int main(int argc, char** argv)
   get_dofs(initialFunction.get(), &velocity_dofs, 3);
   get_dofs(initialFunction.get(), &pressure_dofs, 4);
   int index_fix = pressure_dofs.val[0];
-
+    
+  // write the dofs
+  fasp_ivec_write("cation_dofs", &cation_dofs);
+  fasp_ivec_write("anion_dofs", &anion_dofs);
+  fasp_ivec_write("potentil_dofs", &potential_dofs);
+  fasp_ivec_write("velocity_dofs", &velocity_dofs);
+  fasp_ivec_write("pressure_dofs", &pressure_dofs);
+    
   // initialize linear system
   printf("\tlinear algebraic objects...\n"); fflush(stdout);
   EigenMatrix A;
@@ -486,7 +493,8 @@ int main(int argc, char** argv)
     char filevec[20] = "rhs.txt";
     fasp_dcoo_write(filemat,&A_fasp);
     fasp_dvec_write (filevec,&b_fasp);
-
+      
+      getchar();
 
     fasp_blas_dcsr_aAxpy(-1.0,
                            &A_res_fasp,
