@@ -19,6 +19,9 @@ extern "C" {
 
 using namespace std;
 
+const double electric_strength = 1.0;
+const double ref_concentration = 1.0;
+
 class Permittivity_Expression : public dolfin::Expression {
   public:
     void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
@@ -29,29 +32,29 @@ class Permittivity_Expression : public dolfin::Expression {
 class Fixed_Charged_Expression : public dolfin::Expression {
   public:
     void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
-      values[0] = 1.0;
+      values[0] = -std::exp(-electric_strength * x[0]);
+      values[0] += std::exp(electric_strength * x[0]);
+      values[0] *= ref_concentration;
     }
 };
 
 class Diffusivity_Expression : public dolfin::Expression {
   public:
-    Diffusivity_Expression() : dolfin::Expression(4) {}
+    Diffusivity_Expression() : dolfin::Expression(3) {}
     void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
       values[0] = 1.0; // potential diffusivity is not used
       values[1] = x[0] > 0.0 ? 1.0 : 0.1;
       values[2] = x[0] > 0.0 ? 2.0 : 0.1;
-      values[3] = x[0] > 0.0 ? 4.0 : 0.1;
     }
 };
 
 class Valency_Expression : public dolfin::Expression {
   public:
-    Valency_Expression() : dolfin::Expression(4) {}
+    Valency_Expression() : dolfin::Expression(3) {}
     void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
       values[0] =  0.0; // potential valency is not used
       values[1] =  1.0;
       values[2] = -1.0;
-      values[3] = -1.0;
     }
 };
 
@@ -68,7 +71,7 @@ int main (int argc, char** argv) {
 
   // read in parameters
   printf("Reading parameters from files...\n");
-  char domain_param_filename[] = "./benchmarks/pnp_experiment/domain.dat";
+  char domain_param_filename[] = "./benchmarks/pnp_exact_solution/domain.dat";
   printf("\tdomain... %s\n", domain_param_filename);
   domain_param domain;
   domain_param_input(domain_param_filename, &domain);
@@ -78,7 +81,7 @@ int main (int argc, char** argv) {
   // print_domain_param(&domain);
 
 
-  char fasp_params[] = "./benchmarks/pnp_experiment/bsr.dat";
+  char fasp_params[] = "./benchmarks/pnp_exact_solution/bsr.dat";
   printf("\tFASP parameters... %s\n", fasp_params);
   input_param input;
   itsolver_param itsolver;
@@ -119,8 +122,8 @@ int main (int argc, char** argv) {
   printf("Initialize coefficients\n");
   std::map<std::string, std::vector<double>> pnp_coefficients = {
     {"permittivity", {1.0}},
-    {"diffusivity", {0.0, 2.0, 2.0, 10.0}},
-    {"valency", {0.0, 1.0, -1.0, -1.0}}
+    {"diffusivity", {0.0, 2.0, 2.0}},
+    {"valency", {0.0, 1.0, -1.0}}
   };
   std::map<std::string, std::vector<double>> pnp_sources = {
     {"fixed_charge", {1.0}}
@@ -168,21 +171,19 @@ int main (int argc, char** argv) {
     pnp_source_fns
   );
 
-  bool plot_coefficients = false;
+  bool plot_coefficients = true;
   if (plot_coefficients) {
     printf("\toutput coefficients to file\n");
-    dolfin::File permittivity_file("./benchmarks/pnp_experiment/output/permittivity.pvd");
-    dolfin::File charges_file("./benchmarks/pnp_experiment/output/charges.pvd");
-    dolfin::File diffusivity_file("./benchmarks/pnp_experiment/output/diffusivity.pvd");
-    dolfin::File valency_file("./benchmarks/pnp_experiment/output/valency.pvd");
+    dolfin::File permittivity_file("./benchmarks/pnp_exact_solution/output/permittivity.pvd");
+    dolfin::File charges_file("./benchmarks/pnp_exact_solution/output/charges.pvd");
+    dolfin::File diffusivity_file("./benchmarks/pnp_exact_solution/output/diffusivity.pvd");
+    dolfin::File valency_file("./benchmarks/pnp_exact_solution/output/valency.pvd");
     permittivity_file << permittivity;
     charges_file << charges;
     diffusivity_file << diffusivity[1];
     diffusivity_file << diffusivity[2];
-    diffusivity_file << diffusivity[3];
     valency_file << valency[1];
     valency_file << valency[2];
-    valency_file << valency[3];
   }
 
 
@@ -191,25 +192,23 @@ int main (int argc, char** argv) {
   //-------------------------
   // Print various solutions
   //-------------------------
-  dolfin::File solution_file0("./benchmarks/pnp_experiment/output/1solution.pvd");
-  dolfin::File solution_file1("./benchmarks/pnp_experiment/output/2solution.pvd");
-  dolfin::File solution_file2("./benchmarks/pnp_experiment/output/3solution.pvd");
-  dolfin::File solution_file3("./benchmarks/pnp_experiment/output/4solution.pvd");
+  dolfin::File solution_file0("./benchmarks/pnp_exact_solution/output/1solution.pvd");
+  dolfin::File solution_file1("./benchmarks/pnp_exact_solution/output/2solution.pvd");
+  dolfin::File solution_file2("./benchmarks/pnp_exact_solution/output/3solution.pvd");
 
   // initial guess for prescibed Dirichlet
   printf("Record interpolant for given Dirichlet BCs (initial guess for solution)\n");
-  std::vector<std::size_t> components = {0, 0, 0, 0};
+  std::vector<std::size_t> components = {0, 0, 0};
   std::vector<std::vector<double>> bcs;
-  bcs.push_back({0.0,  1.0});
-  bcs.push_back({std::log(1.0), std::log(2.0)});
-  bcs.push_back({std::log(1.5), std::log(1.0)});
-  bcs.push_back({std::log(0.5), std::log(2.0)});
+  bcs.push_back({-electric_strength,  electric_strength});
+  bcs.push_back({std::log(ref_concentration) + electric_strength, std::log(ref_concentration) - electric_strength});
+  bcs.push_back({std::log(ref_concentration) - electric_strength, std::log(ref_concentration) + electric_strength});
+
   pnp_problem.set_DirichletBC(components, bcs);
   dolfin::Function solutionFn = pnp_problem.get_solution();
   solution_file0 << solutionFn[0];
   solution_file1 << solutionFn[1];
   solution_file2 << solutionFn[2];
-  solution_file3 << solutionFn[3];
   printf("\n");
 
 
@@ -223,6 +222,7 @@ int main (int argc, char** argv) {
   const double max_residual_tol = 1.0e-4;
   const double relative_residual_tol = 1.0e-4;
   const double initial_residual = pnp_problem.compute_residual("l2");
+  const double initial_max_residual = pnp_problem.compute_residual("max");
   Newton_Status newton(
     max_newton,
     initial_residual,
@@ -230,7 +230,8 @@ int main (int argc, char** argv) {
     max_residual_tol
   );
 
-  printf("\tinitial relative residual : %10.5e\n", newton.initial_residual);
+  printf("\tinitial residual :     %10.5e\n", newton.initial_residual);
+  printf("\tinitial max residual : %10.5e\n", initial_max_residual);
   printf("\n");
 
   while (newton.needs_to_iterate()) {
@@ -252,7 +253,6 @@ int main (int argc, char** argv) {
     solution_file0 << solutionFn[0];
     solution_file1 << solutionFn[1];
     solution_file2 << solutionFn[2];
-    solution_file3 << solutionFn[3];
     printf("\n");
   }
 

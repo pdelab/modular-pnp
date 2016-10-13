@@ -48,7 +48,7 @@ include_directories(SYSTEM ${DOLFIN_3RD_PARTY_INCLUDE_DIRS})
 
 # Awesome OSX TARGET
 set(OSX_TARGET "/opt/local/lib/gcc6/gcc/x86_64-apple-darwin15/6.1.0/libgcc.a" "/opt/local/lib/gcc6/libquadmath.a" "/opt/local/lib/gcc6/libgfortran.a")
-set(SRC_DIR ./src/domain.cpp ./src/dirichlet.cpp ./src/pde.cpp)
+set(SRC_DIR ./src/domain.cpp ./src/dirichlet.cpp ./src/pde.cpp ./src/newton_status.cpp)
 
 add_executable(test_poisson ./benchmarks/poisson/main.cpp ./benchmarks/poisson/poisson.cpp ${SRC_DIR})
 target_link_libraries(test_poisson ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
@@ -67,3 +67,6 @@ target_link_libraries(linear_experiment ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_L
 
 add_executable(pnp_experiment ./benchmarks/pnp_experiment/main.cpp ./benchmarks/pnp_experiment/linear_pnp.cpp ${SRC_DIR})
 target_link_libraries(pnp_experiment ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
+
+add_executable(pnp_exact ./benchmarks/pnp_exact_solution/main.cpp ./benchmarks/pnp_exact_solution/linear_pnp.cpp ${SRC_DIR})
+target_link_libraries(pnp_exact ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
