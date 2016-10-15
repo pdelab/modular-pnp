@@ -23,7 +23,7 @@ AnAn = Coefficient(CG)
 EsEs = Coefficient(CG)
 uu  = Coefficient(Vit)
 pp  = Coefficient(Pres)
-
+psi = Coefficient(CG)
 
 ##  Coefficients
 eps = Coefficient(CG)
@@ -39,7 +39,7 @@ potential = Coefficient(CG)
 
 ##  Coefficients
 mu  = Constant(tetrahedron)
-psi = Constant(tetrahedron)
+
 
 ##  DG-terms
 alpha1 = Constant(tetrahedron)
@@ -48,9 +48,9 @@ h     = 2.0*Circumradius(tetrahedron)
 h_avg = ( h('+')+h('-') )/2.0
 n_vec = FacetNormal(tetrahedron)
 
-a   = ( Dp*exp(CatCat) * ( inner(grad(Cat),grad(cat)) + inner(grad(CatCat)+qp*grad(EsEs),grad(cat)) * Cat ) )*dx \
+a   = ( Dp*exp(CatCat) * ( inner(grad(Cat),grad(cat)) + inner(grad(CatCat)+qp*grad(EsEs+psi),grad(cat)) * Cat ) )*dx \
     + ( qp*Dp*exp(CatCat) * inner(grad(Phi),grad(cat)) )*dx \
-    + ( Dn*exp(AnAn) * ( inner(grad(An),grad(an)) + inner(grad(AnAn)+qn*grad(EsEs), grad(an)) * An ) )*dx \
+    + ( Dn*exp(AnAn) * ( inner(grad(An),grad(an)) + inner(grad(AnAn)+qn*grad(EsEs+psi), grad(an)) * An ) )*dx \
     + ( qn*Dn*exp(AnAn) * inner(grad(Phi),grad(an)) )*dx \
     + ( eps * inner(grad(Phi),grad(phi)) )*dx \
     + ( -(qp*exp(CatCat)*Cat + qn*exp(AnAn)*An)*phi )*dx \
@@ -63,13 +63,12 @@ a   = ( Dp*exp(CatCat) * ( inner(grad(Cat),grad(cat)) + inner(grad(CatCat)+qp*gr
     + ( 2.0*mu*(alpha1)* inner( sym(outer(u('+'),n_vec('+')) + outer(u('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
     + ( 2.0*mu*(alpha2/h_avg)* inner( jump(u),jump(v) ) )*dS \
     + ( 2.0*mu*(alpha2/h)*(inner(u,n_vec)*inner(v,n_vec) ) )*ds \
-    + eps/2.0*inner( 2*outer(grad(Phi),grad(EsEs)) , grad(v) )*dx \
-    + ( (qp*exp(CatCat)*Cat+qn*exp(AnAn)*An)*inner(psi,v[0]) )*dx
+    + eps/2.0*inner( 2*outer(grad(Phi),grad(EsEs+psi)) , grad(v) )*dx
     
 
-L   = - ( Dp*exp(CatCat)* (inner(grad(CatCat),grad(cat)) + qp*inner(grad(EsEs),grad(cat))) )*dx \
-    - ( Dn*exp(AnAn  )* (inner(grad(AnAn  ),grad(an )) + qn*inner(grad(EsEs), grad(an))) )*dx \
-    - ( eps * inner(grad(EsEs),grad(phi)) )*dx \
+L   = - ( Dp*exp(CatCat)* (inner(grad(CatCat),grad(cat)) + qp*inner(grad(EsEs+psi),grad(cat))) )*dx \
+    - ( Dn*exp(AnAn  )* (inner(grad(AnAn  ),grad(an )) + qn*inner(grad(EsEs+psi), grad(an))) )*dx \
+    - ( eps * inner(grad(EsEs+psi),grad(phi)) )*dx \
     - ( -(qp*exp(CatCat) + qn*exp(AnAn))*phi )*dx \
     + ( exp(CatCat)*(inner(uu,grad(cat))) )*dx \
     + ( exp(AnAn)*(inner(uu,grad(an)))  )*dx \
@@ -78,5 +77,4 @@ L   = - ( Dp*exp(CatCat)* (inner(grad(CatCat),grad(cat)) + qp*inner(grad(EsEs),g
     - ( 2.0*mu*(alpha1)* inner( sym(outer(uu('+'),n_vec('+')) + outer(uu('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
     - ( 2.0*mu*(alpha2/h_avg)* inner( jump(uu),jump(v) ) )*dS \
     - ( 2.0*mu*(alpha2/h)*(inner(uu,n_vec)*inner(v,n_vec) ) )*ds \
-    - eps/2.0*inner( outer(grad(EsEs),grad(EsEs)) , grad(v) )*dx \
-    - ( (qp*exp(CatCat)+qn*exp(AnAn))*psi*v[0] )*dx
+    - eps/2.0*inner( outer(grad(EsEs+psi),grad(EsEs+psi)) , grad(v) )*dx

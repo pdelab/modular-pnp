@@ -57,6 +57,19 @@ using namespace dolfin;
 
   };
 
+  class ext_potential : public dolfin::Expression
+  {
+  public:
+
+    ext_potential() {}
+
+    void eval(Array<double>& values, const Array<double>& x) const
+    {
+      values[0] = -1.0*x[0];
+    }
+
+  };
+
   int Numb_spheres = 20;
 
   class SpheresSubDomain : public dolfin::SubDomain
@@ -215,7 +228,6 @@ int main(int argc, char** argv)
   auto mu=std::make_shared<Constant>(0.1);
   auto penalty1=std::make_shared<Constant>(1.0e-3);
   auto penalty2=std::make_shared<Constant>(1.0e-6);
-  auto psi = std::make_shared<Constant>(-0.01);
 
   auto SPH = std::make_shared<SpheresSubDomain>();
   auto zero3= std::make_shared<Constant>(0.0,0.0,0.0);
@@ -223,6 +235,8 @@ int main(int argc, char** argv)
   auto g = std::make_shared<Constant>(0.0);
   auto charge = std::make_shared<Constant>(-50000);
   auto neg_one = std::make_shared<Constant>(-1.0);
+
+  auto psi = std::make_shared<ext_potential>();
 
 
   // interpolate

@@ -12068,26 +12068,26 @@ public:
     {
       A[r] = 0.0;
     } // end loop over 'r'
-    // Number of operations to compute geometry constants: 1068.
-    double G[47];
+    // Number of operations to compute geometry constants: 1044.
+    double G[41];
     G[0] = det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[1] = det*w[8][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[2] = det*w[8][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[3] = det*w[8][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[1] = det*w[9][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[2] = det*w[9][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[3] = det*w[9][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
     G[4] = det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
     G[5] = det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
     G[6] = det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
     G[7] = det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
     G[8] = det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[9] = det*w[6][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[10] = det*w[6][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[11] = det*w[6][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[12] = det*w[6][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[13] = det*w[6][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[14] = det*w[6][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[15] = det*w[8][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[16] = det*w[8][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[17] = det*w[8][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[9] = det*w[7][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[10] = det*w[7][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[11] = det*w[7][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[12] = det*w[7][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[13] = det*w[7][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[14] = det*w[7][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[15] = det*w[9][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[16] = det*w[9][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[17] = det*w[9][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
     G[18] =  - det*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
     G[19] =  - det*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
     G[20] =  - det*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
@@ -12098,31 +12098,25 @@ public:
     G[25] =  - det*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
     G[26] =  - det*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
     G[27] =  - det*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
-    G[28] = det*(K[6]*(K[0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[1]*(J[0]*K[1] + J[1]*K[4]) + K[2]*(J[0]*K[2] + J[1]*K[5])) + K[7]*(K[0]*(J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[1]*(J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + K[2]*(J[3]*K[2] + J[4]*K[5])) + K[8]*(K[0]*(J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[1]*(J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[2]*(J[2]*K[6] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
-    G[29] = det*(K[6]*(K[3]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[4]*(J[0]*K[1] + J[1]*K[4]) + K[5]*(J[0]*K[2] + J[1]*K[5])) + K[7]*(K[3]*(J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[4]*(J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + K[5]*(J[3]*K[2] + J[4]*K[5])) + K[8]*(K[3]*(J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[4]*(J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[5]*(J[2]*K[6] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
-    G[30] = det*(K[6]*K[6]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[7]*(K[6]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[7]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + K[8]*(K[6]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[7]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[8]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
-    G[31] = det*(K[3]*(K[0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[1]*(J[0]*K[1] + J[2]*K[7]) + K[2]*(J[0]*K[2] + J[2]*K[8])) + K[4]*(K[0]*(J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[1]*(J[1]*K[3] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + K[2]*(J[3]*K[2] + J[5]*K[8])) + K[5]*(K[0]*(J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[1]*(J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[2]*(J[1]*K[3] + J[4]*K[4] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
-    G[32] = det*(K[3]*K[3]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[4]*(K[3]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[4]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + K[5]*(K[3]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[4]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[5]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
-    G[33] = det*(K[3]*(K[6]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[7]*(J[0]*K[1] + J[2]*K[7]) + K[8]*(J[0]*K[2] + J[2]*K[8])) + K[4]*(K[6]*(J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[7]*(J[1]*K[3] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + K[8]*(J[3]*K[2] + J[5]*K[8])) + K[5]*(K[6]*(J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[7]*(J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[8]*(J[1]*K[3] + J[4]*K[4] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
-    G[34] = det*(K[0]*K[0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[1]*(K[0]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[1]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + K[2]*(K[0]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[1]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[2]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
-    G[35] = det*(K[0]*(K[3]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[4]*(J[1]*K[4] + J[2]*K[7]) + K[5]*(J[1]*K[5] + J[2]*K[8])) + K[1]*(K[3]*(J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[4]*(J[0]*K[0] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + K[5]*(J[4]*K[5] + J[5]*K[8])) + K[2]*(K[3]*(J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[4]*(J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[5]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
-    G[36] = det*(K[0]*(K[6]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[7]*(J[1]*K[4] + J[2]*K[7]) + K[8]*(J[1]*K[5] + J[2]*K[8])) + K[1]*(K[6]*(J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[7]*(J[0]*K[0] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + K[8]*(J[4]*K[5] + J[5]*K[8])) + K[2]*(K[6]*(J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[7]*(J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[8]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
-    G[37] =  - det*w[6][0];
-    G[38] =  - det*w[8][0];
-    G[39] = J[0]*det*w[10][0]*w[6][0]/detJ;
-    G[40] = J[0]*det*w[10][0]*w[8][0]/detJ;
-    G[41] = det*w[9][0]*(2.0*(J[0]*J[0]*K[0]*K[0] + J[3]*K[1]*(J[0]*K[0] + J[3]*K[1]) + J[6]*K[2]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2]) + K[3]*(J[0]*(J[4]*K[1] + J[7]*K[2]) + J[1]*J[1]*K[3] + K[0]*(J[3]*J[4] + J[6]*J[7])) + K[4]*(J[1]*(J[0]*K[1] + J[3]*K[0] + J[4]*K[3]) + J[4]*J[4]*K[4] + J[7]*(J[3]*K[2] + J[6]*K[1])) + K[5]*(J[6]*(J[1]*K[0] + J[4]*K[1]) + J[7]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5]) + K[2]*(J[0]*J[1] + J[3]*J[4])) + K[6]*(J[2]*J[2]*K[6] + J[5]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3]) + J[8]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3])) + K[7]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[5]*J[5]*K[7] + J[8]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4])) + K[8]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[8]*J[8]*K[8])) + 4.0*(J[0]*J[1]*K[0]*K[3] + J[2]*K[6]*(J[0]*K[0] + J[1]*K[3]) + J[3]*J[4]*K[1]*K[4] + J[5]*K[7]*(J[3]*K[1] + J[4]*K[4]) + J[6]*J[7]*K[2]*K[5] + J[8]*K[8]*(J[6]*K[2] + J[7]*K[5])) + K[0]*K[0]*(J[3]*J[3] + J[6]*J[6]) + K[1]*K[1]*(J[0]*J[0] + J[6]*J[6]) + K[2]*K[2]*(J[0]*J[0] + J[3]*J[3]) + K[3]*K[3]*(J[4]*J[4] + J[7]*J[7]) + K[4]*K[4]*(J[1]*J[1] + J[7]*J[7]) + K[5]*K[5]*(J[1]*J[1] + J[4]*J[4]) + K[6]*K[6]*(J[5]*J[5] + J[8]*J[8]) + K[7]*K[7]*(J[2]*J[2] + J[8]*J[8]) + K[8]*K[8]*(J[2]*J[2] + J[5]*J[5]))/(detJ*detJ);
-    G[42] = J[1]*det*w[10][0]*w[6][0]/detJ;
-    G[43] = J[1]*det*w[10][0]*w[8][0]/detJ;
-    G[44] = J[2]*det*w[10][0]*w[6][0]/detJ;
-    G[45] = J[2]*det*w[10][0]*w[8][0]/detJ;
-    G[46] = det*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
+    G[28] = det*(K[6]*K[6]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[7]*(K[6]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[7]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + K[8]*(K[6]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[7]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[8]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
+    G[29] = det*(K[6]*(K[0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[1]*(J[0]*K[1] + J[1]*K[4]) + K[2]*(J[0]*K[2] + J[1]*K[5])) + K[7]*(K[0]*(J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[1]*(J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + K[2]*(J[3]*K[2] + J[4]*K[5])) + K[8]*(K[0]*(J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[1]*(J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[2]*(J[2]*K[6] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
+    G[30] = det*(K[6]*(K[3]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[4]*(J[0]*K[1] + J[1]*K[4]) + K[5]*(J[0]*K[2] + J[1]*K[5])) + K[7]*(K[3]*(J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[4]*(J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + K[5]*(J[3]*K[2] + J[4]*K[5])) + K[8]*(K[3]*(J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[4]*(J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[5]*(J[2]*K[6] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
+    G[31] = det*(K[3]*(K[6]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[7]*(J[0]*K[1] + J[2]*K[7]) + K[8]*(J[0]*K[2] + J[2]*K[8])) + K[4]*(K[6]*(J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[7]*(J[1]*K[3] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + K[8]*(J[3]*K[2] + J[5]*K[8])) + K[5]*(K[6]*(J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[7]*(J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[8]*(J[1]*K[3] + J[4]*K[4] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
+    G[32] = det*(K[3]*(K[0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[1]*(J[0]*K[1] + J[2]*K[7]) + K[2]*(J[0]*K[2] + J[2]*K[8])) + K[4]*(K[0]*(J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[1]*(J[1]*K[3] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + K[2]*(J[3]*K[2] + J[5]*K[8])) + K[5]*(K[0]*(J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[1]*(J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[2]*(J[1]*K[3] + J[4]*K[4] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
+    G[33] = det*(K[3]*K[3]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[4]*(K[3]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[4]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + K[5]*(K[3]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[4]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[5]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
+    G[34] = det*(K[0]*(K[6]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[7]*(J[1]*K[4] + J[2]*K[7]) + K[8]*(J[1]*K[5] + J[2]*K[8])) + K[1]*(K[6]*(J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[7]*(J[0]*K[0] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + K[8]*(J[4]*K[5] + J[5]*K[8])) + K[2]*(K[6]*(J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[7]*(J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[8]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
+    G[35] = det*(K[0]*K[0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[1]*(K[0]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[1]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + K[2]*(K[0]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[1]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[2]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
+    G[36] = det*(K[0]*(K[3]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[4]*(J[1]*K[4] + J[2]*K[7]) + K[5]*(J[1]*K[5] + J[2]*K[8])) + K[1]*(K[3]*(J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[4]*(J[0]*K[0] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + K[5]*(J[4]*K[5] + J[5]*K[8])) + K[2]*(K[3]*(J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[4]*(J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[5]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
+    G[37] =  - det*w[7][0];
+    G[38] =  - det*w[9][0];
+    G[39] = det*w[10][0]*(2.0*(J[0]*J[0]*K[0]*K[0] + J[3]*K[1]*(J[0]*K[0] + J[3]*K[1]) + J[6]*K[2]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2]) + K[3]*(J[0]*(J[4]*K[1] + J[7]*K[2]) + J[1]*J[1]*K[3] + K[0]*(J[3]*J[4] + J[6]*J[7])) + K[4]*(J[1]*(J[0]*K[1] + J[3]*K[0] + J[4]*K[3]) + J[4]*J[4]*K[4] + J[7]*(J[3]*K[2] + J[6]*K[1])) + K[5]*(J[6]*(J[1]*K[0] + J[4]*K[1]) + J[7]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5]) + K[2]*(J[0]*J[1] + J[3]*J[4])) + K[6]*(J[2]*J[2]*K[6] + J[5]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3]) + J[8]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3])) + K[7]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[5]*J[5]*K[7] + J[8]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4])) + K[8]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[8]*J[8]*K[8])) + 4.0*(J[0]*J[1]*K[0]*K[3] + J[2]*K[6]*(J[0]*K[0] + J[1]*K[3]) + J[3]*J[4]*K[1]*K[4] + J[5]*K[7]*(J[3]*K[1] + J[4]*K[4]) + J[6]*J[7]*K[2]*K[5] + J[8]*K[8]*(J[6]*K[2] + J[7]*K[5])) + K[0]*K[0]*(J[3]*J[3] + J[6]*J[6]) + K[1]*K[1]*(J[0]*J[0] + J[6]*J[6]) + K[2]*K[2]*(J[0]*J[0] + J[3]*J[3]) + K[3]*K[3]*(J[4]*J[4] + J[7]*J[7]) + K[4]*K[4]*(J[1]*J[1] + J[7]*J[7]) + K[5]*K[5]*(J[1]*J[1] + J[4]*J[4]) + K[6]*K[6]*(J[5]*J[5] + J[8]*J[8]) + K[7]*K[7]*(J[2]*J[2] + J[8]*J[8]) + K[8]*K[8]*(J[2]*J[2] + J[5]*J[5]))/(detJ*detJ);
+    G[40] = det*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
     
     // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 31080
+    // Number of operations to compute element tensor for following IP loop = 27075
     for (unsigned int ip = 0; ip < 15; ip++)
     {
       
@@ -12144,19 +12138,25 @@ public:
       double F14 = 0.0;
       double F15 = 0.0;
       double F16 = 0.0;
+      double F17 = 0.0;
+      double F18 = 0.0;
+      double F19 = 0.0;
       
-      // Total number of operations to compute function values = 36
+      // Total number of operations to compute function values = 48
       for (unsigned int r = 0; r < 2; r++)
       {
         F5 += FE0_D001[ip][r]*w[2][nzc2[r]];
         F6 += FE0_D001[ip][r]*w[2][nzc1[r]];
         F7 += FE0_D001[ip][r]*w[2][nzc0[r]];
-        F8 += FE0_D001[ip][r]*w[0][nzc2[r]];
-        F9 += FE0_D001[ip][r]*w[0][nzc1[r]];
-        F10 += FE0_D001[ip][r]*w[0][nzc0[r]];
-        F12 += FE0_D001[ip][r]*w[1][nzc2[r]];
-        F13 += FE0_D001[ip][r]*w[1][nzc1[r]];
-        F14 += FE0_D001[ip][r]*w[1][nzc0[r]];
+        F8 += FE0_D001[ip][r]*w[4][nzc2[r]];
+        F9 += FE0_D001[ip][r]*w[4][nzc1[r]];
+        F10 += FE0_D001[ip][r]*w[4][nzc0[r]];
+        F11 += FE0_D001[ip][r]*w[0][nzc2[r]];
+        F12 += FE0_D001[ip][r]*w[0][nzc1[r]];
+        F13 += FE0_D001[ip][r]*w[0][nzc0[r]];
+        F15 += FE0_D001[ip][r]*w[1][nzc2[r]];
+        F16 += FE0_D001[ip][r]*w[1][nzc1[r]];
+        F17 += FE0_D001[ip][r]*w[1][nzc0[r]];
       } // end loop over 'r'
       
       // Total number of operations to compute function values = 64
@@ -12167,102 +12167,102 @@ public:
         F2 += FE1_C3[ip][r]*w[3][r];
         F3 += FE1_C4[ip][r]*w[3][r];
         F4 += FE1_C5[ip][r]*w[3][r];
-        F11 += FE0[ip][r]*w[5][r];
-        F15 += FE0[ip][r]*w[7][r];
-        F16 += FE0[ip][r]*w[4][r];
+        F14 += FE0[ip][r]*w[6][r];
+        F18 += FE0[ip][r]*w[8][r];
+        F19 += FE0[ip][r]*w[5][r];
       } // end loop over 'r'
       
-      // Number of operations to compute ip constants: 336
-      double I[68];
+      // Number of operations to compute ip constants: 345
+      double I[62];
       // Number of operations: 4
-      I[0] = F15*G[0]*W15[ip]*std::exp(F1);
+      I[0] = F18*G[0]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[1] = F15*G[1]*W15[ip]*std::exp(F1);
+      I[1] = F18*G[1]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[2] = F15*G[2]*W15[ip]*std::exp(F1);
+      I[2] = F18*G[2]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[3] = F15*G[3]*W15[ip]*std::exp(F1);
+      I[3] = F18*G[3]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[4] = F15*G[4]*W15[ip]*std::exp(F1);
+      I[4] = F18*G[4]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[5] = F15*G[5]*W15[ip]*std::exp(F1);
+      I[5] = F18*G[5]*W15[ip]*std::exp(F1);
       
       // Number of operations: 2
-      I[6] = F16*G[6]*W15[ip];
+      I[6] = F19*G[6]*W15[ip];
       
       // Number of operations: 2
-      I[7] = F16*G[7]*W15[ip];
+      I[7] = F19*G[7]*W15[ip];
       
       // Number of operations: 2
-      I[8] = F16*G[4]*W15[ip];
+      I[8] = F19*G[4]*W15[ip];
       
       // Number of operations: 2
-      I[9] = F16*G[8]*W15[ip];
+      I[9] = F19*G[8]*W15[ip];
       
       // Number of operations: 2
-      I[10] = F16*G[5]*W15[ip];
+      I[10] = F19*G[5]*W15[ip];
       
       // Number of operations: 2
-      I[11] = F16*G[0]*W15[ip];
+      I[11] = F19*G[0]*W15[ip];
       
       // Number of operations: 4
-      I[12] = F11*G[9]*W15[ip]*std::exp(F0);
+      I[12] = F14*G[9]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[13] = F11*G[10]*W15[ip]*std::exp(F0);
+      I[13] = F14*G[10]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[14] = F11*G[11]*W15[ip]*std::exp(F0);
+      I[14] = F14*G[11]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[15] = F11*G[6]*W15[ip]*std::exp(F0);
+      I[15] = F14*G[6]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[16] = F11*G[7]*W15[ip]*std::exp(F0);
+      I[16] = F14*G[7]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[17] = F11*G[4]*W15[ip]*std::exp(F0);
+      I[17] = F14*G[4]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[18] = F11*G[12]*W15[ip]*std::exp(F0);
+      I[18] = F14*G[12]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[19] = F11*G[13]*W15[ip]*std::exp(F0);
+      I[19] = F14*G[13]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[20] = F11*G[8]*W15[ip]*std::exp(F0);
+      I[20] = F14*G[8]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[21] = F11*G[5]*W15[ip]*std::exp(F0);
+      I[21] = F14*G[5]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[22] = F11*G[14]*W15[ip]*std::exp(F0);
+      I[22] = F14*G[14]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[23] = F11*G[0]*W15[ip]*std::exp(F0);
+      I[23] = F14*G[0]*W15[ip]*std::exp(F0);
       
       // Number of operations: 4
-      I[24] = F15*G[15]*W15[ip]*std::exp(F1);
+      I[24] = F18*G[15]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[25] = F15*G[16]*W15[ip]*std::exp(F1);
+      I[25] = F18*G[16]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[26] = F15*G[6]*W15[ip]*std::exp(F1);
+      I[26] = F18*G[6]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[27] = F15*G[7]*W15[ip]*std::exp(F1);
+      I[27] = F18*G[7]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[28] = F15*G[17]*W15[ip]*std::exp(F1);
+      I[28] = F18*G[17]*W15[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[29] = F15*G[8]*W15[ip]*std::exp(F1);
+      I[29] = F18*G[8]*W15[ip]*std::exp(F1);
       
       // Number of operations: 3
       I[30] = G[18]*W15[ip]*std::exp(F1);
@@ -12273,8 +12273,8 @@ public:
       // Number of operations: 3
       I[32] = G[20]*W15[ip]*std::exp(F1);
       
-      // Number of operations: 21
-      I[33] = W15[ip]*std::exp(F1)*(F15*(F12*G[0] + F13*G[5] + F14*G[4] + F5*G[3] + F6*G[2] + F7*G[1]) + F2*G[18] + F3*G[19] + F4*G[20]);
+      // Number of operations: 24
+      I[33] = W15[ip]*std::exp(F1)*(F18*(F15*G[0] + F16*G[5] + F17*G[4] + G[1]*(F10 + F7) + G[2]*(F6 + F9) + G[3]*(F5 + F8)) + F2*G[18] + F3*G[19] + F4*G[20]);
       
       // Number of operations: 3
       I[34] = G[21]*W15[ip]*std::exp(F0);
@@ -12285,8 +12285,8 @@ public:
       // Number of operations: 3
       I[36] = G[23]*W15[ip]*std::exp(F0);
       
-      // Number of operations: 21
-      I[37] = W15[ip]*std::exp(F0)*(F11*(F10*G[6] + F5*G[11] + F6*G[10] + F7*G[9] + F8*G[4] + F9*G[7]) + F2*G[21] + F3*G[22] + F4*G[23]);
+      // Number of operations: 24
+      I[37] = W15[ip]*std::exp(F0)*(F14*(F11*G[4] + F12*G[7] + F13*G[6] + G[10]*(F6 + F9) + G[11]*(F5 + F8) + G[9]*(F10 + F7)) + F2*G[21] + F3*G[22] + F4*G[23]);
       
       // Number of operations: 3
       I[38] = G[24]*W15[ip]*std::exp(F0);
@@ -12297,8 +12297,8 @@ public:
       // Number of operations: 3
       I[40] = G[26]*W15[ip]*std::exp(F0);
       
-      // Number of operations: 21
-      I[41] = W15[ip]*std::exp(F0)*(F11*(F10*G[7] + F5*G[13] + F6*G[12] + F7*G[10] + F8*G[5] + F9*G[8]) + F2*G[24] + F3*G[25] + F4*G[26]);
+      // Number of operations: 24
+      I[41] = W15[ip]*std::exp(F0)*(F14*(F11*G[5] + F12*G[8] + F13*G[7] + G[10]*(F10 + F7) + G[12]*(F6 + F9) + G[13]*(F5 + F8)) + F2*G[24] + F3*G[25] + F4*G[26]);
       
       // Number of operations: 3
       I[42] = G[18]*W15[ip]*std::exp(F0);
@@ -12309,8 +12309,8 @@ public:
       // Number of operations: 3
       I[44] = G[20]*W15[ip]*std::exp(F0);
       
-      // Number of operations: 21
-      I[45] = W15[ip]*std::exp(F0)*(F11*(F10*G[4] + F5*G[14] + F6*G[13] + F7*G[11] + F8*G[0] + F9*G[5]) + F2*G[18] + F3*G[19] + F4*G[20]);
+      // Number of operations: 24
+      I[45] = W15[ip]*std::exp(F0)*(F14*(F11*G[0] + F12*G[5] + F13*G[4] + G[11]*(F10 + F7) + G[13]*(F6 + F9) + G[14]*(F5 + F8)) + F2*G[18] + F3*G[19] + F4*G[20]);
       
       // Number of operations: 3
       I[46] = G[21]*W15[ip]*std::exp(F1);
@@ -12321,8 +12321,8 @@ public:
       // Number of operations: 3
       I[48] = G[23]*W15[ip]*std::exp(F1);
       
-      // Number of operations: 21
-      I[49] = W15[ip]*std::exp(F1)*(F15*(F12*G[4] + F13*G[7] + F14*G[6] + F5*G[1] + F6*G[16] + F7*G[15]) + F2*G[21] + F3*G[22] + F4*G[23]);
+      // Number of operations: 24
+      I[49] = W15[ip]*std::exp(F1)*(F18*(F15*G[4] + F16*G[7] + F17*G[6] + G[15]*(F10 + F7) + G[16]*(F6 + F9) + G[1]*(F5 + F8)) + F2*G[21] + F3*G[22] + F4*G[23]);
       
       // Number of operations: 3
       I[50] = G[24]*W15[ip]*std::exp(F1);
@@ -12333,20 +12333,20 @@ public:
       // Number of operations: 3
       I[52] = G[26]*W15[ip]*std::exp(F1);
       
-      // Number of operations: 21
-      I[53] = W15[ip]*std::exp(F1)*(F15*(F12*G[5] + F13*G[8] + F14*G[7] + F5*G[2] + F6*G[17] + F7*G[16]) + F2*G[24] + F3*G[25] + F4*G[26]);
+      // Number of operations: 24
+      I[53] = W15[ip]*std::exp(F1)*(F18*(F15*G[5] + F16*G[8] + F17*G[7] + G[16]*(F10 + F7) + G[17]*(F6 + F9) + G[2]*(F5 + F8)) + F2*G[24] + F3*G[25] + F4*G[26]);
       
       // Number of operations: 1
       I[54] = G[27]*W15[ip];
       
-      // Number of operations: 7
-      I[55] = F16*W15[ip]*(F5*G[28] + F6*G[29] + F7*G[30]);
+      // Number of operations: 10
+      I[55] = F19*W15[ip]*(G[28]*(F10 + F7) + G[29]*(F5 + F8) + G[30]*(F6 + F9));
       
-      // Number of operations: 7
-      I[56] = F16*W15[ip]*(F5*G[31] + F6*G[32] + F7*G[33]);
+      // Number of operations: 10
+      I[56] = F19*W15[ip]*(G[31]*(F10 + F7) + G[32]*(F5 + F8) + G[33]*(F6 + F9));
       
-      // Number of operations: 7
-      I[57] = F16*W15[ip]*(F5*G[34] + F6*G[35] + F7*G[36]);
+      // Number of operations: 10
+      I[57] = F19*W15[ip]*(G[34]*(F10 + F7) + G[35]*(F5 + F8) + G[36]*(F6 + F9));
       
       // Number of operations: 3
       I[58] = G[37]*W15[ip]*std::exp(F0);
@@ -12354,29 +12354,11 @@ public:
       // Number of operations: 3
       I[59] = G[38]*W15[ip]*std::exp(F1);
       
-      // Number of operations: 3
-      I[60] = G[39]*W15[ip]*std::exp(F0);
-      
-      // Number of operations: 3
-      I[61] = G[40]*W15[ip]*std::exp(F1);
+      // Number of operations: 1
+      I[60] = G[39]*W15[ip];
       
       // Number of operations: 1
-      I[62] = G[41]*W15[ip];
-      
-      // Number of operations: 3
-      I[63] = G[42]*W15[ip]*std::exp(F0);
-      
-      // Number of operations: 3
-      I[64] = G[43]*W15[ip]*std::exp(F1);
-      
-      // Number of operations: 3
-      I[65] = G[44]*W15[ip]*std::exp(F0);
-      
-      // Number of operations: 3
-      I[66] = G[45]*W15[ip]*std::exp(F1);
-      
-      // Number of operations: 1
-      I[67] = G[46]*W15[ip];
+      I[61] = G[40]*W15[ip];
       
       
       // Number of operations for primary indices: 540
@@ -12554,7 +12536,7 @@ public:
         } // end loop over 'k'
       } // end loop over 'j'
       
-      // Number of operations for primary indices: 432
+      // Number of operations for primary indices: 144
       for (unsigned int j = 0; j < 4; j++)
       {
         for (unsigned int k = 0; k < 4; k++)
@@ -12564,19 +12546,7 @@ public:
           // Number of operations to compute entry: 3
           A[nzc11[j]*17 + nzc7[k]] += FE0[ip][j]*FE0[ip][k]*I[59];
           // Number of operations to compute entry: 3
-          A[nzc15[j]*17 + nzc3[k]] += FE0[ip][k]*FE1_C3[ip][j]*I[60];
-          // Number of operations to compute entry: 3
-          A[nzc15[j]*17 + nzc7[k]] += FE0[ip][k]*FE1_C3[ip][j]*I[61];
-          // Number of operations to compute entry: 3
-          A[nzc16[j]*17 + nzc16[k]] += FE1_C3_D100[ip][j]*FE1_C3_D100[ip][k]*I[62];
-          // Number of operations to compute entry: 3
-          A[nzc17[j]*17 + nzc3[k]] += FE0[ip][k]*FE1_C4[ip][j]*I[63];
-          // Number of operations to compute entry: 3
-          A[nzc17[j]*17 + nzc7[k]] += FE0[ip][k]*FE1_C4[ip][j]*I[64];
-          // Number of operations to compute entry: 3
-          A[nzc18[j]*17 + nzc3[k]] += FE0[ip][k]*FE1_C5[ip][j]*I[65];
-          // Number of operations to compute entry: 3
-          A[nzc18[j]*17 + nzc7[k]] += FE0[ip][k]*FE1_C5[ip][j]*I[66];
+          A[nzc16[j]*17 + nzc16[k]] += FE1_C3_D100[ip][j]*FE1_C3_D100[ip][k]*I[60];
         } // end loop over 'k'
       } // end loop over 'j'
       
@@ -12584,7 +12554,7 @@ public:
       for (unsigned int k = 0; k < 4; k++)
       {
         // Number of operations to compute entry: 2
-        A[16*17 + nzc16[k]] += FE1_C3_D100[ip][k]*I[67];
+        A[16*17 + nzc16[k]] += FE1_C3_D100[ip][k]*I[61];
       } // end loop over 'k'
     } // end loop over 'ip'
   }
@@ -12608,7 +12578,7 @@ public:
 
   const std::vector<bool> & enabled_coefficients() const final override
   {
-    static const std::vector<bool> enabled({false, false, false, false, false, false, false, false, false, true, false, false, true});
+    static const std::vector<bool> enabled({false, false, false, false, false, false, false, false, false, false, true, false, true});
     return enabled;
   }
 
@@ -12745,12 +12715,12 @@ public:
     } // end loop over 'r'
     // Number of operations to compute geometry constants: 168.
     double G[6];
-    G[0] = det*w[12][0]*w[9][0]*(J[0]*J[0]*n0*n0 + J[3]*n1*(2.0*J[0]*n0 + J[3]*n1) + J[6]*n2*(2.0*(J[0]*n0 + J[3]*n1) + J[6]*n2))/(circumradius*detJ*detJ);
-    G[1] = det*w[12][0]*w[9][0]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[2] = det*w[12][0]*w[9][0]*(J[0]*J[2]*n0*n0 + n1*(J[3]*J[5]*n1 + n0*(J[0]*J[5] + J[2]*J[3])) + n2*(J[6]*(J[2]*n0 + J[5]*n1) + J[8]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[3] = det*w[12][0]*w[9][0]*(J[1]*J[1]*n0*n0 + J[4]*n1*(2.0*J[1]*n0 + J[4]*n1) + J[7]*n2*(2.0*(J[1]*n0 + J[4]*n1) + J[7]*n2))/(circumradius*detJ*detJ);
-    G[4] = det*w[12][0]*w[9][0]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
-    G[5] = det*w[12][0]*w[9][0]*(J[2]*J[2]*n0*n0 + J[5]*n1*(2.0*J[2]*n0 + J[5]*n1) + J[8]*n2*(2.0*(J[2]*n0 + J[5]*n1) + J[8]*n2))/(circumradius*detJ*detJ);
+    G[0] = det*w[10][0]*w[12][0]*(J[0]*J[0]*n0*n0 + J[3]*n1*(2.0*J[0]*n0 + J[3]*n1) + J[6]*n2*(2.0*(J[0]*n0 + J[3]*n1) + J[6]*n2))/(circumradius*detJ*detJ);
+    G[1] = det*w[10][0]*w[12][0]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
+    G[2] = det*w[10][0]*w[12][0]*(J[0]*J[2]*n0*n0 + n1*(J[3]*J[5]*n1 + n0*(J[0]*J[5] + J[2]*J[3])) + n2*(J[6]*(J[2]*n0 + J[5]*n1) + J[8]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
+    G[3] = det*w[10][0]*w[12][0]*(J[1]*J[1]*n0*n0 + J[4]*n1*(2.0*J[1]*n0 + J[4]*n1) + J[7]*n2*(2.0*(J[1]*n0 + J[4]*n1) + J[7]*n2))/(circumradius*detJ*detJ);
+    G[4] = det*w[10][0]*w[12][0]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
+    G[5] = det*w[10][0]*w[12][0]*(J[2]*J[2]*n0*n0 + J[5]*n1*(2.0*J[2]*n0 + J[5]*n1) + J[8]*n2*(2.0*(J[2]*n0 + J[5]*n1) + J[8]*n2))/(circumradius*detJ*detJ);
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
@@ -13071,7 +13041,7 @@ public:
 
   const std::vector<bool> & enabled_coefficients() const final override
   {
-    static const std::vector<bool> enabled({false, false, false, false, false, false, false, false, false, true, false, true, true});
+    static const std::vector<bool> enabled({false, false, false, false, false, false, false, false, false, false, true, true, true});
     return enabled;
   }
 
@@ -13243,39 +13213,39 @@ public:
     } // end loop over 'r'
     // Number of operations to compute geometry constants: 1605.
     double G[33];
-    G[0] = 2.0*det*w[12][0]*w[9][0]*(J_1[0]*J_1[0] + J_1[3]*J_1[3] + J_1[6]*J_1[6])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[1] = det*w[11][0]*w[9][0]*(-0.5*(J_1[0]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + J_1[3]*(J_1[0]*K_1[0]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + J_1[6]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[0]*K_1[0] + J_1[3]*K_1[1]))) - (J_1[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_1*detJ_1);
-    G[2] = 2.0*det*w[12][0]*w[9][0]*(J_1[0]*J_1[1] + J_1[3]*J_1[4] + J_1[6]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[3] = 2.0*det*w[12][0]*w[9][0]*(J_1[0]*J_1[2] + J_1[3]*J_1[5] + J_1[6]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[4] = -2.0*det*w[12][0]*w[9][0]*(J_0[0]*J_1[0] + J_0[3]*J_1[3] + J_0[6]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[5] = det*w[11][0]*w[9][0]*(-0.5*(n_00*(J_1[3]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[0]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[0]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[3]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) - (J_1[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_1);
-    G[6] = -2.0*det*w[12][0]*w[9][0]*(J_0[1]*J_1[0] + J_0[4]*J_1[3] + J_0[7]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[7] = -2.0*det*w[12][0]*w[9][0]*(J_0[2]*J_1[0] + J_0[5]*J_1[3] + J_0[8]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[8] = det*w[11][0]*w[9][0]*(-0.5*(J_1[1]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[8]*K_1[6])) + J_1[4]*(J_1[1]*K_1[3]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[8]*K_1[7])) + J_1[7]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[1]*K_1[3] + J_1[4]*K_1[4]))) - (J_1[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_1*detJ_1);
-    G[9] = det*w[11][0]*w[9][0]*(-0.5*(J_1[2]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3])) + J_1[5]*(J_1[2]*K_1[6]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4])) + J_1[8]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[2]*K_1[6] + J_1[5]*K_1[7]))) - (J_1[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_1*detJ_1);
-    G[10] = det*w[11][0]*w[9][0]*(0.5*(n_00*(J_0[3]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[0]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[0]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[3]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) + J_0[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_0*detJ_1);
-    G[11] = det*w[11][0]*w[9][0]*(0.5*(n_00*(J_0[4]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[1]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[1]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[4]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) + J_0[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_0*detJ_1);
-    G[12] = det*w[11][0]*w[9][0]*(0.5*(n_00*(J_0[5]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[2]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[2]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[5]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) + J_0[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_0*detJ_1);
-    G[13] = 2.0*det*w[12][0]*w[9][0]*(J_1[1]*J_1[1] + J_1[4]*J_1[4] + J_1[7]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[14] = 2.0*det*w[12][0]*w[9][0]*(J_1[1]*J_1[2] + J_1[4]*J_1[5] + J_1[7]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[15] = -2.0*det*w[12][0]*w[9][0]*(J_0[0]*J_1[1] + J_0[3]*J_1[4] + J_0[6]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[16] = det*w[11][0]*w[9][0]*(-0.5*(n_00*(J_1[4]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[1]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[1]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[4]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) - (J_1[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_1);
-    G[17] = -2.0*det*w[12][0]*w[9][0]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[18] = -2.0*det*w[12][0]*w[9][0]*(J_0[2]*J_1[1] + J_0[5]*J_1[4] + J_0[8]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[19] = 2.0*det*w[12][0]*w[9][0]*(J_1[2]*J_1[2] + J_1[5]*J_1[5] + J_1[8]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[20] = -2.0*det*w[12][0]*w[9][0]*(J_0[0]*J_1[2] + J_0[3]*J_1[5] + J_0[6]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[21] = det*w[11][0]*w[9][0]*(-0.5*(n_00*(J_1[5]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[2]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[2]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[5]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) - (J_1[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_1);
-    G[22] = -2.0*det*w[12][0]*w[9][0]*(J_0[1]*J_1[2] + J_0[4]*J_1[5] + J_0[7]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[23] = -2.0*det*w[12][0]*w[9][0]*(J_0[2]*J_1[2] + J_0[5]*J_1[5] + J_0[8]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[24] = 2.0*det*w[12][0]*w[9][0]*(J_0[0]*J_0[0] + J_0[3]*J_0[3] + J_0[6]*J_0[6])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[25] = det*w[11][0]*w[9][0]*(0.5*(J_0[0]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + J_0[3]*(J_0[0]*K_0[0]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + J_0[6]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[0]*K_0[0] + J_0[3]*K_0[1]))) + J_0[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_0);
-    G[26] = 2.0*det*w[12][0]*w[9][0]*(J_0[0]*J_0[1] + J_0[3]*J_0[4] + J_0[6]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[27] = 2.0*det*w[12][0]*w[9][0]*(J_0[0]*J_0[2] + J_0[3]*J_0[5] + J_0[6]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[28] = det*w[11][0]*w[9][0]*(0.5*(J_0[1]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[8]*K_0[6])) + J_0[4]*(J_0[1]*K_0[3]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[8]*K_0[7])) + J_0[7]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[1]*K_0[3] + J_0[4]*K_0[4]))) + J_0[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_0);
-    G[29] = det*w[11][0]*w[9][0]*(0.5*(J_0[2]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3])) + J_0[5]*(J_0[2]*K_0[6]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4])) + J_0[8]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[2]*K_0[6] + J_0[5]*K_0[7]))) + J_0[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_0);
-    G[30] = 2.0*det*w[12][0]*w[9][0]*(J_0[1]*J_0[1] + J_0[4]*J_0[4] + J_0[7]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[31] = 2.0*det*w[12][0]*w[9][0]*(J_0[1]*J_0[2] + J_0[4]*J_0[5] + J_0[7]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[32] = 2.0*det*w[12][0]*w[9][0]*(J_0[2]*J_0[2] + J_0[5]*J_0[5] + J_0[8]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[0] = 2.0*det*w[10][0]*w[12][0]*(J_1[0]*J_1[0] + J_1[3]*J_1[3] + J_1[6]*J_1[6])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[1] = det*w[10][0]*w[11][0]*(-0.5*(J_1[0]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + J_1[3]*(J_1[0]*K_1[0]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + J_1[6]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[0]*K_1[0] + J_1[3]*K_1[1]))) - (J_1[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_1*detJ_1);
+    G[2] = 2.0*det*w[10][0]*w[12][0]*(J_1[0]*J_1[1] + J_1[3]*J_1[4] + J_1[6]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[3] = 2.0*det*w[10][0]*w[12][0]*(J_1[0]*J_1[2] + J_1[3]*J_1[5] + J_1[6]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[4] = -2.0*det*w[10][0]*w[12][0]*(J_0[0]*J_1[0] + J_0[3]*J_1[3] + J_0[6]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[5] = det*w[10][0]*w[11][0]*(-0.5*(n_00*(J_1[3]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[0]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[0]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[3]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) - (J_1[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_1);
+    G[6] = -2.0*det*w[10][0]*w[12][0]*(J_0[1]*J_1[0] + J_0[4]*J_1[3] + J_0[7]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[7] = -2.0*det*w[10][0]*w[12][0]*(J_0[2]*J_1[0] + J_0[5]*J_1[3] + J_0[8]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[8] = det*w[10][0]*w[11][0]*(-0.5*(J_1[1]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[8]*K_1[6])) + J_1[4]*(J_1[1]*K_1[3]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[8]*K_1[7])) + J_1[7]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[1]*K_1[3] + J_1[4]*K_1[4]))) - (J_1[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_1*detJ_1);
+    G[9] = det*w[10][0]*w[11][0]*(-0.5*(J_1[2]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3])) + J_1[5]*(J_1[2]*K_1[6]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4])) + J_1[8]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[2]*K_1[6] + J_1[5]*K_1[7]))) - (J_1[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_1*detJ_1);
+    G[10] = det*w[10][0]*w[11][0]*(0.5*(n_00*(J_0[3]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[0]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[0]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[3]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) + J_0[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_0*detJ_1);
+    G[11] = det*w[10][0]*w[11][0]*(0.5*(n_00*(J_0[4]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[1]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[1]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[4]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) + J_0[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_0*detJ_1);
+    G[12] = det*w[10][0]*w[11][0]*(0.5*(n_00*(J_0[5]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[2]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[2]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[5]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) + J_0[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_0*detJ_1);
+    G[13] = 2.0*det*w[10][0]*w[12][0]*(J_1[1]*J_1[1] + J_1[4]*J_1[4] + J_1[7]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[14] = 2.0*det*w[10][0]*w[12][0]*(J_1[1]*J_1[2] + J_1[4]*J_1[5] + J_1[7]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[15] = -2.0*det*w[10][0]*w[12][0]*(J_0[0]*J_1[1] + J_0[3]*J_1[4] + J_0[6]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[16] = det*w[10][0]*w[11][0]*(-0.5*(n_00*(J_1[4]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[1]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[1]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[4]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) - (J_1[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_1);
+    G[17] = -2.0*det*w[10][0]*w[12][0]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[18] = -2.0*det*w[10][0]*w[12][0]*(J_0[2]*J_1[1] + J_0[5]*J_1[4] + J_0[8]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[19] = 2.0*det*w[10][0]*w[12][0]*(J_1[2]*J_1[2] + J_1[5]*J_1[5] + J_1[8]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[20] = -2.0*det*w[10][0]*w[12][0]*(J_0[0]*J_1[2] + J_0[3]*J_1[5] + J_0[6]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[21] = det*w[10][0]*w[11][0]*(-0.5*(n_00*(J_1[5]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[2]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[2]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[5]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) - (J_1[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_1);
+    G[22] = -2.0*det*w[10][0]*w[12][0]*(J_0[1]*J_1[2] + J_0[4]*J_1[5] + J_0[7]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[23] = -2.0*det*w[10][0]*w[12][0]*(J_0[2]*J_1[2] + J_0[5]*J_1[5] + J_0[8]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[24] = 2.0*det*w[10][0]*w[12][0]*(J_0[0]*J_0[0] + J_0[3]*J_0[3] + J_0[6]*J_0[6])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[25] = det*w[10][0]*w[11][0]*(0.5*(J_0[0]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + J_0[3]*(J_0[0]*K_0[0]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + J_0[6]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[0]*K_0[0] + J_0[3]*K_0[1]))) + J_0[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_0);
+    G[26] = 2.0*det*w[10][0]*w[12][0]*(J_0[0]*J_0[1] + J_0[3]*J_0[4] + J_0[6]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[27] = 2.0*det*w[10][0]*w[12][0]*(J_0[0]*J_0[2] + J_0[3]*J_0[5] + J_0[6]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[28] = det*w[10][0]*w[11][0]*(0.5*(J_0[1]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[8]*K_0[6])) + J_0[4]*(J_0[1]*K_0[3]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[8]*K_0[7])) + J_0[7]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[1]*K_0[3] + J_0[4]*K_0[4]))) + J_0[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_0);
+    G[29] = det*w[10][0]*w[11][0]*(0.5*(J_0[2]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3])) + J_0[5]*(J_0[2]*K_0[6]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4])) + J_0[8]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[2]*K_0[6] + J_0[5]*K_0[7]))) + J_0[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_0);
+    G[30] = 2.0*det*w[10][0]*w[12][0]*(J_0[1]*J_0[1] + J_0[4]*J_0[4] + J_0[7]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[31] = 2.0*det*w[10][0]*w[12][0]*(J_0[1]*J_0[2] + J_0[4]*J_0[5] + J_0[7]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[32] = 2.0*det*w[10][0]*w[12][0]*(J_0[2]*J_0[2] + J_0[5]*J_0[5] + J_0[8]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
@@ -17723,9 +17693,6 @@ public:
     {-0.314372873493192, -0.685627126506808, -0.314372873493192, 0.314372873493192},
     {-0.314372873493192, -0.685627126506808, -0.314372873493192, 0.314372873493192}};
     
-    // Array of non-zero columns
-    static const unsigned int nzc15[4] = {12, 13, 14, 15};
-    
     static const double FE2_C3_D100[14][4] = \
     {{-1.0, 1.0, -1.0, 1.0},
     {-1.0, 1.0, -1.0, 1.0},
@@ -17761,9 +17728,6 @@ public:
     {-0.314372873493192, 0.314372873493192, 0.685627126506808, 0.314372873493192},
     {-0.0568813795204236, 0.0568813795204234, 0.943118620479576, 0.0568813795204236}};
     
-    // Array of non-zero columns
-    static const unsigned int nzc17[4] = {12, 13, 14, 15};
-    
     static const double FE2_C5[14][4] = \
     {{-0.5, 0.5, -0.5, -0.5},
     {-0.5, 0.5, -0.5, -0.5},
@@ -17780,66 +17744,60 @@ public:
     {-0.0568813795204234, 0.0568813795204234, -0.0568813795204234, -0.943118620479577},
     {-0.314372873493192, 0.314372873493192, -0.314372873493192, -0.685627126506808}};
     
-    // Array of non-zero columns
-    static const unsigned int nzc18[4] = {12, 13, 14, 15};
-    
     // Reset values in the element tensor.
     for (unsigned int r = 0; r < 17; r++)
     {
       A[r] = 0.0;
     } // end loop over 'r'
-    // Number of operations to compute geometry constants: 997.
-    double G[44];
+    // Number of operations to compute geometry constants: 1165.
+    double G[41];
     G[0] =  - det*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
-    G[1] =  - det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[2] =  - det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[3] =  - det*w[9][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[4] =  - det*w[9][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[5] =  - det*w[9][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[6] =  - det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[1] =  - det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[2] =  - det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[3] =  - det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[4] =  - det*w[10][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[5] =  - det*w[10][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[6] =  - det*w[10][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
     G[7] = det*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
     G[8] = det*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
     G[9] = det*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
     G[10] =  - det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
     G[11] =  - det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
     G[12] =  - det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[13] = det*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
-    G[14] = det*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
-    G[15] = det*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
-    G[16] =  - det*w[7][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[17] =  - det*w[7][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[18] =  - det*w[7][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[19] = det*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
-    G[20] = det*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
-    G[21] = det*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
-    G[22] =  - det*w[7][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[23] =  - det*w[7][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[24] =  - det*w[7][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[25] =  - det*w[9][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[26] =  - det*w[9][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[27] =  - det*w[9][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[28] = det*w[7][0];
-    G[29] = det*w[9][0];
-    G[30] =  - J[0]*det*w[11][0]*w[7][0]/detJ;
-    G[31] =  - J[0]*det*w[11][0]*w[9][0]/detJ;
-    G[32] = det*w[4][0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
-    G[33] = det*w[10][0]*( - (K[0]*K[0]*(J[3]*J[3] + J[6]*J[6]) + K[1]*K[1]*(J[0]*J[0] + J[6]*J[6]) + K[2]*K[2]*(J[0]*J[0] + J[3]*J[3]) + K[3]*K[3]*(J[4]*J[4] + J[7]*J[7]) + K[4]*K[4]*(J[1]*J[1] + J[7]*J[7]) + K[5]*K[5]*(J[1]*J[1] + J[4]*J[4]) + K[6]*K[6]*(J[5]*J[5] + J[8]*J[8]) + K[7]*K[7]*(J[2]*J[2] + J[8]*J[8]) + K[8]*K[8]*(J[2]*J[2] + J[5]*J[5]))-2.0*(J[0]*J[0]*K[0]*K[0] + J[3]*K[1]*(J[0]*K[0] + J[3]*K[1]) + J[6]*K[2]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2]) + K[3]*(J[0]*(J[4]*K[1] + J[7]*K[2]) + J[1]*J[1]*K[3] + K[0]*(J[3]*J[4] + J[6]*J[7])) + K[4]*(J[1]*(J[0]*K[1] + J[3]*K[0] + J[4]*K[3]) + J[4]*J[4]*K[4] + J[7]*(J[3]*K[2] + J[6]*K[1])) + K[5]*(J[6]*(J[1]*K[0] + J[4]*K[1]) + J[7]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5]) + K[2]*(J[0]*J[1] + J[3]*J[4])) + K[6]*(J[2]*J[2]*K[6] + J[5]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3]) + J[8]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3])) + K[7]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[5]*J[5]*K[7] + J[8]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4])) + K[8]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[8]*J[8]*K[8]))-4.0*(J[0]*J[1]*K[0]*K[3] + J[2]*K[6]*(J[0]*K[0] + J[1]*K[3]) + J[3]*J[4]*K[1]*K[4] + J[5]*K[7]*(J[3]*K[1] + J[4]*K[4]) + J[6]*J[7]*K[2]*K[5] + J[8]*K[8]*(J[6]*K[2] + J[7]*K[5])))/(detJ*detJ);
-    G[34] = -0.5*det*(K[0]*K[0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[1]*(K[0]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[1]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + K[2]*(K[0]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[1]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[2]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
-    G[35] = det*(-0.5*(K[3]*(K[1]*(J[0]*K[1] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[2]*(J[0]*K[2] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6])) + K[4]*(J[1]*K[1]*K[3] + K[0]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[2]*(J[3]*K[2] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7])) + K[5]*(K[0]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[1]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[2]*(J[1]*K[3] + J[4]*K[4]))) - (K[0]*K[3]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[1]*K[4]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + K[2]*K[5]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
-    G[36] = det*(-0.5*(K[6]*(K[1]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[2]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6])) + K[7]*(J[2]*K[1]*K[6] + K[0]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[2]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7])) + K[8]*(K[0]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[1]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[2]*(J[2]*K[6] + J[5]*K[7]))) - (K[0]*K[6]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[1]*K[7]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + K[2]*K[8]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
-    G[37] = -0.5*det*(K[3]*K[3]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[4]*(K[3]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[4]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + K[5]*(K[3]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[4]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[5]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
-    G[38] = det*(-0.5*(K[6]*(K[4]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[5]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6])) + K[7]*(J[2]*K[4]*K[6] + K[3]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[5]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7])) + K[8]*(K[3]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[4]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[5]*(J[2]*K[6] + J[5]*K[7]))) - (K[3]*K[6]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[4]*K[7]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + K[5]*K[8]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
+    G[13] =  - det*w[8][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[14] =  - det*w[8][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[15] =  - det*w[8][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[16] = det*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
+    G[17] = det*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
+    G[18] = det*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
+    G[19] =  - det*w[8][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[20] =  - det*w[8][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[21] = det*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
+    G[22] = det*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
+    G[23] = det*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
+    G[24] =  - det*w[8][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[25] =  - det*w[10][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[26] =  - det*w[10][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[27] =  - det*w[10][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[28] = det*w[8][0];
+    G[29] = det*w[10][0];
+    G[30] = det*w[4][0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
+    G[31] = det*w[11][0]*( - (K[0]*K[0]*(J[3]*J[3] + J[6]*J[6]) + K[1]*K[1]*(J[0]*J[0] + J[6]*J[6]) + K[2]*K[2]*(J[0]*J[0] + J[3]*J[3]) + K[3]*K[3]*(J[4]*J[4] + J[7]*J[7]) + K[4]*K[4]*(J[1]*J[1] + J[7]*J[7]) + K[5]*K[5]*(J[1]*J[1] + J[4]*J[4]) + K[6]*K[6]*(J[5]*J[5] + J[8]*J[8]) + K[7]*K[7]*(J[2]*J[2] + J[8]*J[8]) + K[8]*K[8]*(J[2]*J[2] + J[5]*J[5]))-2.0*(J[0]*J[0]*K[0]*K[0] + J[3]*K[1]*(J[0]*K[0] + J[3]*K[1]) + J[6]*K[2]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2]) + K[3]*(J[0]*(J[4]*K[1] + J[7]*K[2]) + J[1]*J[1]*K[3] + K[0]*(J[3]*J[4] + J[6]*J[7])) + K[4]*(J[1]*(J[0]*K[1] + J[3]*K[0] + J[4]*K[3]) + J[4]*J[4]*K[4] + J[7]*(J[3]*K[2] + J[6]*K[1])) + K[5]*(J[6]*(J[1]*K[0] + J[4]*K[1]) + J[7]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5]) + K[2]*(J[0]*J[1] + J[3]*J[4])) + K[6]*(J[2]*J[2]*K[6] + J[5]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3]) + J[8]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3])) + K[7]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[5]*J[5]*K[7] + J[8]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4])) + K[8]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[8]*J[8]*K[8]))-4.0*(J[0]*J[1]*K[0]*K[3] + J[2]*K[6]*(J[0]*K[0] + J[1]*K[3]) + J[3]*J[4]*K[1]*K[4] + J[5]*K[7]*(J[3]*K[1] + J[4]*K[4]) + J[6]*J[7]*K[2]*K[5] + J[8]*K[8]*(J[6]*K[2] + J[7]*K[5])))/(detJ*detJ);
+    G[32] = -0.5*det*(K[0]*K[0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[1]*(K[0]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[1]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + K[2]*(K[0]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[1]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[2]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
+    G[33] = det*(-0.5*(K[3]*(K[1]*(J[0]*K[1] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[2]*(J[0]*K[2] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6])) + K[4]*(J[1]*K[1]*K[3] + K[0]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[2]*(J[3]*K[2] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7])) + K[5]*(K[0]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[1]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[2]*(J[1]*K[3] + J[4]*K[4]))) - (K[0]*K[3]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[1]*K[4]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + K[2]*K[5]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
+    G[34] = det*(-0.5*(K[6]*(K[1]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[2]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6])) + K[7]*(J[2]*K[1]*K[6] + K[0]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[2]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7])) + K[8]*(K[0]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[1]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[2]*(J[2]*K[6] + J[5]*K[7]))) - (K[0]*K[6]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[1]*K[7]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + K[2]*K[8]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
+    G[35] =  - det*(K[0]*K[0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[1]*(K[0]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[1]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + K[2]*(K[0]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[1]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[2]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
+    G[36] = -0.5*det*(K[3]*K[3]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[4]*(K[3]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[4]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + K[5]*(K[3]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[4]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[5]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
+    G[37] = det*(-0.5*(K[6]*(K[4]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[5]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6])) + K[7]*(J[2]*K[4]*K[6] + K[3]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[5]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7])) + K[8]*(K[3]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[4]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[5]*(J[2]*K[6] + J[5]*K[7]))) - (K[3]*K[6]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[4]*K[7]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + K[5]*K[8]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
+    G[38] =  - det*(K[3]*K[3]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[4]*(K[3]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[4]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + K[5]*(K[3]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[4]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[5]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
     G[39] = -0.5*det*(K[6]*K[6]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[7]*(K[6]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[7]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + K[8]*(K[6]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[7]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[8]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
-    G[40] =  - J[1]*det*w[11][0]*w[7][0]/detJ;
-    G[41] =  - J[1]*det*w[11][0]*w[9][0]/detJ;
-    G[42] =  - J[2]*det*w[11][0]*w[7][0]/detJ;
-    G[43] =  - J[2]*det*w[11][0]*w[9][0]/detJ;
+    G[40] =  - det*(K[6]*K[6]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + K[7]*(K[6]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + K[7]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + K[8]*(K[6]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + K[7]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + K[8]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/detJ;
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
     
     // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 5278
+    // Number of operations to compute element tensor for following IP loop = 5656
     for (unsigned int ip = 0; ip < 14; ip++)
     {
       
@@ -17862,19 +17820,25 @@ public:
       double F15 = 0.0;
       double F16 = 0.0;
       double F17 = 0.0;
+      double F18 = 0.0;
+      double F19 = 0.0;
+      double F20 = 0.0;
       
-      // Total number of operations to compute function values = 36
+      // Total number of operations to compute function values = 48
       for (unsigned int r = 0; r < 2; r++)
       {
         F2 += FE0_D001[ip][r]*w[2][nzc2[r]];
         F3 += FE0_D001[ip][r]*w[2][nzc1[r]];
         F4 += FE0_D001[ip][r]*w[2][nzc0[r]];
-        F5 += FE0_D001[ip][r]*w[0][nzc2[r]];
-        F6 += FE0_D001[ip][r]*w[0][nzc1[r]];
-        F7 += FE0_D001[ip][r]*w[0][nzc0[r]];
-        F9 += FE0_D001[ip][r]*w[1][nzc2[r]];
-        F10 += FE0_D001[ip][r]*w[1][nzc1[r]];
-        F11 += FE0_D001[ip][r]*w[1][nzc0[r]];
+        F5 += FE0_D001[ip][r]*w[5][nzc2[r]];
+        F6 += FE0_D001[ip][r]*w[5][nzc1[r]];
+        F7 += FE0_D001[ip][r]*w[5][nzc0[r]];
+        F8 += FE0_D001[ip][r]*w[0][nzc2[r]];
+        F9 += FE0_D001[ip][r]*w[0][nzc1[r]];
+        F10 += FE0_D001[ip][r]*w[0][nzc0[r]];
+        F12 += FE0_D001[ip][r]*w[1][nzc2[r]];
+        F13 += FE0_D001[ip][r]*w[1][nzc1[r]];
+        F14 += FE0_D001[ip][r]*w[1][nzc0[r]];
       } // end loop over 'r'
       
       // Total number of operations to compute function values = 72
@@ -17882,61 +17846,52 @@ public:
       {
         F0 += FE0[ip][r]*w[0][r];
         F1 += FE0[ip][r]*w[1][r];
-        F8 += FE0[ip][r]*w[6][r];
-        F12 += FE0[ip][r]*w[8][r];
-        F13 += FE2_C3_D100[ip][r]*w[3][r];
-        F14 += FE0[ip][r]*w[5][r];
-        F15 += FE2_C3[ip][r]*w[3][r];
-        F16 += FE2_C4[ip][r]*w[3][r];
-        F17 += FE2_C5[ip][r]*w[3][r];
+        F11 += FE0[ip][r]*w[7][r];
+        F15 += FE0[ip][r]*w[9][r];
+        F16 += FE2_C3_D100[ip][r]*w[3][r];
+        F17 += FE0[ip][r]*w[6][r];
+        F18 += FE2_C3[ip][r]*w[3][r];
+        F19 += FE2_C4[ip][r]*w[3][r];
+        F20 += FE2_C5[ip][r]*w[3][r];
       } // end loop over 'r'
       
-      // Number of operations to compute ip constants: 192
-      double I[15];
+      // Number of operations to compute ip constants: 231
+      double I[12];
       // Number of operations: 2
-      I[0] = F13*G[0]*W14[ip];
+      I[0] = F16*G[0]*W14[ip];
       
-      // Number of operations: 21
-      I[1] = W14[ip]*std::exp(F1)*(F12*(F10*G[1] + F11*G[2] + F2*G[3] + F3*G[4] + F4*G[5] + F9*G[6]) + F15*G[7] + F16*G[8] + F17*G[9]);
+      // Number of operations: 24
+      I[1] = W14[ip]*std::exp(F1)*(F15*(F12*G[1] + F13*G[2] + F14*G[3] + G[4]*(F2 + F5) + G[5]*(F3 + F6) + G[6]*(F4 + F7)) + F18*G[7] + F19*G[8] + F20*G[9]);
       
-      // Number of operations: 7
-      I[2] = F14*W14[ip]*(F2*G[2] + F3*G[10] + F4*G[11]);
+      // Number of operations: 10
+      I[2] = F17*W14[ip]*(G[10]*(F3 + F6) + G[11]*(F4 + F7) + G[3]*(F2 + F5));
       
-      // Number of operations: 7
-      I[3] = F14*W14[ip]*(F2*G[1] + F3*G[12] + F4*G[10]);
+      // Number of operations: 10
+      I[3] = F17*W14[ip]*(G[10]*(F4 + F7) + G[12]*(F3 + F6) + G[2]*(F2 + F5));
       
-      // Number of operations: 7
-      I[4] = F14*W14[ip]*(F2*G[6] + F3*G[1] + F4*G[2]);
+      // Number of operations: 10
+      I[4] = F17*W14[ip]*(G[1]*(F2 + F5) + G[2]*(F3 + F6) + G[3]*(F4 + F7));
       
-      // Number of operations: 21
-      I[5] = W14[ip]*std::exp(F0)*(F15*G[13] + F16*G[14] + F17*G[15] + F8*(F2*G[16] + F3*G[17] + F4*G[18] + F5*G[2] + F6*G[10] + F7*G[11]));
+      // Number of operations: 24
+      I[5] = W14[ip]*std::exp(F0)*(F11*(F10*G[11] + F8*G[3] + F9*G[10] + G[13]*(F2 + F5) + G[14]*(F3 + F6) + G[15]*(F4 + F7)) + F18*G[16] + F19*G[17] + F20*G[18]);
       
-      // Number of operations: 21
-      I[6] = W14[ip]*std::exp(F0)*(F15*G[19] + F16*G[20] + F17*G[21] + F8*(F2*G[22] + F3*G[23] + F4*G[17] + F5*G[1] + F6*G[12] + F7*G[10]));
+      // Number of operations: 24
+      I[6] = W14[ip]*std::exp(F0)*(F11*(F10*G[10] + F8*G[2] + F9*G[12] + G[14]*(F4 + F7) + G[19]*(F2 + F5) + G[20]*(F3 + F6)) + F18*G[21] + F19*G[22] + F20*G[23]);
       
-      // Number of operations: 21
-      I[7] = W14[ip]*std::exp(F0)*(F15*G[7] + F16*G[8] + F17*G[9] + F8*(F2*G[24] + F3*G[22] + F4*G[16] + F5*G[6] + F6*G[1] + F7*G[2]));
+      // Number of operations: 24
+      I[7] = W14[ip]*std::exp(F0)*(F11*(F10*G[3] + F8*G[1] + F9*G[2] + G[13]*(F4 + F7) + G[19]*(F3 + F6) + G[24]*(F2 + F5)) + F18*G[7] + F19*G[8] + F20*G[9]);
       
-      // Number of operations: 21
-      I[8] = W14[ip]*std::exp(F1)*(F12*(F10*G[10] + F11*G[11] + F2*G[5] + F3*G[25] + F4*G[26] + F9*G[2]) + F15*G[13] + F16*G[14] + F17*G[15]);
+      // Number of operations: 24
+      I[8] = W14[ip]*std::exp(F1)*(F15*(F12*G[3] + F13*G[10] + F14*G[11] + G[25]*(F3 + F6) + G[26]*(F4 + F7) + G[6]*(F2 + F5)) + F18*G[16] + F19*G[17] + F20*G[18]);
       
-      // Number of operations: 21
-      I[9] = W14[ip]*std::exp(F1)*(F12*(F10*G[12] + F11*G[10] + F2*G[4] + F3*G[27] + F4*G[25] + F9*G[1]) + F15*G[19] + F16*G[20] + F17*G[21]);
+      // Number of operations: 24
+      I[9] = W14[ip]*std::exp(F1)*(F15*(F12*G[2] + F13*G[12] + F14*G[10] + G[25]*(F4 + F7) + G[27]*(F3 + F6) + G[5]*(F2 + F5)) + F18*G[21] + F19*G[22] + F20*G[23]);
       
       // Number of operations: 6
       I[10] = W14[ip]*(G[28]*std::exp(F0) + G[29]*std::exp(F1));
       
-      // Number of operations: 6
-      I[11] = W14[ip]*(G[30]*std::exp(F0) + G[31]*std::exp(F1));
-      
-      // Number of operations: 19
-      I[12] = W14[ip]*(G[32] + F13*G[33] + F14*(F2*F2*G[34] + F3*(F2*G[35] + F3*G[37]) + F4*(F2*G[36] + F3*G[38] + F4*G[39])));
-      
-      // Number of operations: 6
-      I[13] = W14[ip]*(G[40]*std::exp(F0) + G[41]*std::exp(F1));
-      
-      // Number of operations: 6
-      I[14] = W14[ip]*(G[42]*std::exp(F0) + G[43]*std::exp(F1));
+      // Number of operations: 49
+      I[11] = W14[ip]*(G[30] + F16*G[31] + F17*(F2*F2*G[32] + F3*(F2*G[33] + F3*G[36]) + F4*(F2*G[34] + F3*G[37] + F4*G[39]) + F5*(F2*G[35] + F3*G[33] + F4*G[34] + F5*G[32]) + F6*(F3*G[38] + F4*G[37] + F6*G[36] + G[33]*(F2 + F5)) + F7*(F4*G[40] + F7*G[39] + G[34]*(F2 + F5) + G[37]*(F3 + F6))));
       
       
       // Number of operations for primary indices: 1
@@ -17966,19 +17921,13 @@ public:
         A[nzc9[j]] += FE0_D001[ip][j]*I[9];
       } // end loop over 'j'
       
-      // Number of operations for primary indices: 40
+      // Number of operations for primary indices: 16
       for (unsigned int j = 0; j < 4; j++)
       {
         // Number of operations to compute entry: 2
         A[nzc11[j]] += FE0[ip][j]*I[10];
         // Number of operations to compute entry: 2
-        A[nzc15[j]] += FE2_C3[ip][j]*I[11];
-        // Number of operations to compute entry: 2
-        A[nzc16[j]] += FE2_C3_D100[ip][j]*I[12];
-        // Number of operations to compute entry: 2
-        A[nzc17[j]] += FE2_C4[ip][j]*I[13];
-        // Number of operations to compute entry: 2
-        A[nzc18[j]] += FE2_C5[ip][j]*I[14];
+        A[nzc16[j]] += FE2_C3_D100[ip][j]*I[11];
       } // end loop over 'j'
     } // end loop over 'ip'
   }
@@ -18002,7 +17951,7 @@ public:
 
   const std::vector<bool> & enabled_coefficients() const final override
   {
-    static const std::vector<bool> enabled({false, false, false, true, false, false, false, false, false, false, true, false, false, true});
+    static const std::vector<bool> enabled({false, false, false, true, false, false, false, false, false, false, false, true, false, true});
     return enabled;
   }
 
@@ -18139,15 +18088,15 @@ public:
     } // end loop over 'r'
     // Number of operations to compute geometry constants: 258.
     double G[9];
-    G[0] = det*w[10][0]*w[13][0]*(J[3]*n1*( - J[3]*n1-2.0*J[0]*n0) + J[6]*n2*( - J[6]*n2-2.0*(J[0]*n0 + J[3]*n1)) - J[0]*J[0]*n0*n0)/(circumradius*detJ*detJ);
-    G[1] =  - det*w[10][0]*w[13][0]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[2] =  - det*w[10][0]*w[13][0]*(J[0]*J[2]*n0*n0 + n1*(J[3]*J[5]*n1 + n0*(J[0]*J[5] + J[2]*J[3])) + n2*(J[6]*(J[2]*n0 + J[5]*n1) + J[8]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[3] = det*w[10][0]*w[13][0]*(J[4]*n1*( - J[4]*n1-2.0*J[1]*n0) + J[7]*n2*( - J[7]*n2-2.0*(J[1]*n0 + J[4]*n1)) - J[1]*J[1]*n0*n0)/(circumradius*detJ*detJ);
-    G[4] =  - det*w[10][0]*w[13][0]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
-    G[5] = det*w[10][0]*w[13][0]*(J[5]*n1*( - J[5]*n1-2.0*J[2]*n0) + J[8]*n2*( - J[8]*n2-2.0*(J[2]*n0 + J[5]*n1)) - J[2]*J[2]*n0*n0)/(circumradius*detJ*detJ);
-    G[6] = det*w[10][0]*w[13][0]*w[3][2]*(J[4]*n1*( - J[4]*n1-2.0*J[1]*n0) + J[7]*n2*( - J[7]*n2-2.0*(J[1]*n0 + J[4]*n1)) - J[1]*J[1]*n0*n0)/(circumradius*detJ*detJ);
-    G[7] =  - det*w[10][0]*w[13][0]*w[3][2]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[8] =  - det*w[10][0]*w[13][0]*w[3][2]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
+    G[0] = det*w[11][0]*w[13][0]*(J[3]*n1*( - J[3]*n1-2.0*J[0]*n0) + J[6]*n2*( - J[6]*n2-2.0*(J[0]*n0 + J[3]*n1)) - J[0]*J[0]*n0*n0)/(circumradius*detJ*detJ);
+    G[1] =  - det*w[11][0]*w[13][0]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
+    G[2] =  - det*w[11][0]*w[13][0]*(J[0]*J[2]*n0*n0 + n1*(J[3]*J[5]*n1 + n0*(J[0]*J[5] + J[2]*J[3])) + n2*(J[6]*(J[2]*n0 + J[5]*n1) + J[8]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
+    G[3] = det*w[11][0]*w[13][0]*(J[4]*n1*( - J[4]*n1-2.0*J[1]*n0) + J[7]*n2*( - J[7]*n2-2.0*(J[1]*n0 + J[4]*n1)) - J[1]*J[1]*n0*n0)/(circumradius*detJ*detJ);
+    G[4] =  - det*w[11][0]*w[13][0]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
+    G[5] = det*w[11][0]*w[13][0]*(J[5]*n1*( - J[5]*n1-2.0*J[2]*n0) + J[8]*n2*( - J[8]*n2-2.0*(J[2]*n0 + J[5]*n1)) - J[2]*J[2]*n0*n0)/(circumradius*detJ*detJ);
+    G[6] = det*w[11][0]*w[13][0]*w[3][2]*(J[4]*n1*( - J[4]*n1-2.0*J[1]*n0) + J[7]*n2*( - J[7]*n2-2.0*(J[1]*n0 + J[4]*n1)) - J[1]*J[1]*n0*n0)/(circumradius*detJ*detJ);
+    G[7] =  - det*w[11][0]*w[13][0]*w[3][2]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
+    G[8] =  - det*w[11][0]*w[13][0]*w[3][2]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
@@ -18384,7 +18333,7 @@ public:
 
   const std::vector<bool> & enabled_coefficients() const final override
   {
-    static const std::vector<bool> enabled({false, false, false, true, false, false, false, false, false, false, true, false, true, true});
+    static const std::vector<bool> enabled({false, false, false, true, false, false, false, false, false, false, false, true, true, true});
     return enabled;
   }
 
@@ -18556,63 +18505,63 @@ public:
     } // end loop over 'r'
     // Number of operations to compute geometry constants: 3505.
     double G[57];
-    G[0] = -2.0*det*w[10][0]*w[13][0]*(J_1[0]*J_1[0] + J_1[3]*J_1[3] + J_1[6]*J_1[6])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[1] = -2.0*det*w[10][0]*w[13][0]*(J_1[0]*J_1[1] + J_1[3]*J_1[4] + J_1[6]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[2] = -2.0*det*w[10][0]*w[13][0]*(J_1[0]*J_1[2] + J_1[3]*J_1[5] + J_1[6]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[3] = 2.0*det*w[10][0]*w[13][0]*(J_0[0]*J_1[0] + J_0[3]*J_1[3] + J_0[6]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[4] = 2.0*det*w[10][0]*w[13][0]*(J_0[1]*J_1[0] + J_0[4]*J_1[3] + J_0[7]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[5] = 2.0*det*w[10][0]*w[13][0]*(J_0[2]*J_1[0] + J_0[5]*J_1[3] + J_0[8]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[6] = det*w[10][0]*w[12][0]*(0.5*(n_00*(J_1[3]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[0]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[0]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[3]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
-    G[7] = det*w[10][0]*w[12][0]*(0.5*(J_1[0]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + J_1[3]*(J_1[0]*K_1[0]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + J_1[6]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[0]*K_1[0] + J_1[3]*K_1[1]))) + J_1[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
-    G[8] = det*w[10][0]*w[12][0]*(0.5*(J_1[1]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[8]*K_1[6])) + J_1[4]*(J_1[1]*K_1[3]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[8]*K_1[7])) + J_1[7]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[1]*K_1[3] + J_1[4]*K_1[4]))) + J_1[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
-    G[9] = det*w[10][0]*w[12][0]*(0.5*(J_1[2]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3])) + J_1[5]*(J_1[2]*K_1[6]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4])) + J_1[8]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[2]*K_1[6] + J_1[5]*K_1[7]))) + J_1[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
-    G[10] = det*w[10][0]*w[12][0]*(-0.5*(n_00*(J_0[3]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[0]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[0]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[3]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
-    G[11] = det*w[10][0]*w[12][0]*(-0.5*(n_00*(J_0[4]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[1]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[1]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[4]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
-    G[12] = det*w[10][0]*w[12][0]*(-0.5*(n_00*(J_0[5]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[2]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[2]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[5]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
-    G[13] = -2.0*det*w[10][0]*w[13][0]*(J_1[1]*J_1[1] + J_1[4]*J_1[4] + J_1[7]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[14] = -2.0*det*w[10][0]*w[13][0]*(J_1[1]*J_1[2] + J_1[4]*J_1[5] + J_1[7]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[15] = 2.0*det*w[10][0]*w[13][0]*(J_0[0]*J_1[1] + J_0[3]*J_1[4] + J_0[6]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[16] = 2.0*det*w[10][0]*w[13][0]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[17] = 2.0*det*w[10][0]*w[13][0]*(J_0[2]*J_1[1] + J_0[5]*J_1[4] + J_0[8]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[18] = det*w[10][0]*w[12][0]*(0.5*(n_00*(J_1[4]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[1]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[1]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[4]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
-    G[19] = -2.0*det*w[10][0]*w[13][0]*(J_1[2]*J_1[2] + J_1[5]*J_1[5] + J_1[8]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[20] = 2.0*det*w[10][0]*w[13][0]*(J_0[0]*J_1[2] + J_0[3]*J_1[5] + J_0[6]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[21] = 2.0*det*w[10][0]*w[13][0]*(J_0[1]*J_1[2] + J_0[4]*J_1[5] + J_0[7]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[22] = 2.0*det*w[10][0]*w[13][0]*(J_0[2]*J_1[2] + J_0[5]*J_1[5] + J_0[8]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[23] = det*w[10][0]*w[12][0]*(0.5*(n_00*(J_1[5]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[2]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[2]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[5]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
-    G[24] = -2.0*det*w[10][0]*w[13][0]*(J_0[0]*J_0[0] + J_0[3]*J_0[3] + J_0[6]*J_0[6])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[25] = -2.0*det*w[10][0]*w[13][0]*(J_0[0]*J_0[1] + J_0[3]*J_0[4] + J_0[6]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[26] = -2.0*det*w[10][0]*w[13][0]*(J_0[0]*J_0[2] + J_0[3]*J_0[5] + J_0[6]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[27] = det*w[10][0]*w[12][0]*(-0.5*(J_0[0]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + J_0[3]*(J_0[0]*K_0[0]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + J_0[6]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[0]*K_0[0] + J_0[3]*K_0[1]))) - (J_0[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
-    G[28] = det*w[10][0]*w[12][0]*(-0.5*(J_0[1]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[8]*K_0[6])) + J_0[4]*(J_0[1]*K_0[3]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[8]*K_0[7])) + J_0[7]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[1]*K_0[3] + J_0[4]*K_0[4]))) - (J_0[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
-    G[29] = det*w[10][0]*w[12][0]*(-0.5*(J_0[2]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3])) + J_0[5]*(J_0[2]*K_0[6]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4])) + J_0[8]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[2]*K_0[6] + J_0[5]*K_0[7]))) - (J_0[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
-    G[30] = -2.0*det*w[10][0]*w[13][0]*(J_0[1]*J_0[1] + J_0[4]*J_0[4] + J_0[7]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[31] = -2.0*det*w[10][0]*w[13][0]*(J_0[1]*J_0[2] + J_0[4]*J_0[5] + J_0[7]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[32] = -2.0*det*w[10][0]*w[13][0]*(J_0[2]*J_0[2] + J_0[5]*J_0[5] + J_0[8]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[33] = -2.0*det*w[10][0]*w[13][0]*w[3][6]*(J_1[1]*J_1[1] + J_1[4]*J_1[4] + J_1[7]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[34] = det*w[10][0]*w[12][0]*w[3][6]*(0.5*(J_1[1]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[8]*K_1[6])) + J_1[4]*(J_1[1]*K_1[3]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[8]*K_1[7])) + J_1[7]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[1]*K_1[3] + J_1[4]*K_1[4]))) + J_1[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
-    G[35] = -2.0*det*w[10][0]*w[13][0]*w[3][6]*(J_1[1]*J_1[2] + J_1[4]*J_1[5] + J_1[7]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[36] = -2.0*det*w[10][0]*w[13][0]*w[3][6]*(J_1[0]*J_1[1] + J_1[3]*J_1[4] + J_1[6]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[37] = 2.0*det*w[10][0]*w[13][0]*w[3][6]*(J_0[0]*J_1[1] + J_0[3]*J_1[4] + J_0[6]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[38] = det*w[10][0]*w[12][0]*w[3][6]*(0.5*(n_00*(J_1[4]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[1]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[1]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[4]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
-    G[39] = 2.0*det*w[10][0]*w[13][0]*w[3][6]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[40] = 2.0*det*w[10][0]*w[13][0]*w[3][6]*(J_0[2]*J_1[1] + J_0[5]*J_1[4] + J_0[8]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[41] = -2.0*det*w[10][0]*w[13][0]*w[3][2]*(J_0[1]*J_0[1] + J_0[4]*J_0[4] + J_0[7]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[42] = 2.0*det*w[10][0]*w[13][0]*w[3][2]*(J_0[1]*J_1[0] + J_0[4]*J_1[3] + J_0[7]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[43] = det*w[10][0]*w[12][0]*w[3][2]*(-0.5*(n_00*(J_0[4]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[1]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[1]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[4]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
-    G[44] = 2.0*det*w[10][0]*w[13][0]*w[3][2]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[45] = 2.0*det*w[10][0]*w[13][0]*w[3][2]*(J_0[1]*J_1[2] + J_0[4]*J_1[5] + J_0[7]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[46] = det*w[10][0]*w[12][0]*w[3][2]*(-0.5*(J_0[1]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[8]*K_0[6])) + J_0[4]*(J_0[1]*K_0[3]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[8]*K_0[7])) + J_0[7]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[1]*K_0[3] + J_0[4]*K_0[4]))) - (J_0[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
-    G[47] = -2.0*det*w[10][0]*w[13][0]*w[3][2]*(J_0[1]*J_0[2] + J_0[4]*J_0[5] + J_0[7]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[48] = -2.0*det*w[10][0]*w[13][0]*w[3][2]*(J_0[0]*J_0[1] + J_0[3]*J_0[4] + J_0[6]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[49] = det*w[10][0]*w[13][0]*((-2.0*J_0[1]*J_0[1]*w[3][2]-2.0*J_0[4]*J_0[4]*w[3][2]-2.0*J_0[7]*J_0[7]*w[3][2])/(circumradius_0*detJ_0*detJ_0 + circumradius_1*detJ_0*detJ_0) + (2.0*J_0[1]*J_1[1]*w[3][6] + 2.0*J_0[4]*J_1[4]*w[3][6] + 2.0*J_0[7]*J_1[7]*w[3][6])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
-    G[50] = det*w[10][0]*w[13][0]*((-2.0*J_1[1]*J_1[1]*w[3][6]-2.0*J_1[4]*J_1[4]*w[3][6]-2.0*J_1[7]*J_1[7]*w[3][6])/(circumradius_0*detJ_1*detJ_1 + circumradius_1*detJ_1*detJ_1) + (2.0*J_0[1]*J_1[1]*w[3][2] + 2.0*J_0[4]*J_1[4]*w[3][2] + 2.0*J_0[7]*J_1[7]*w[3][2])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
-    G[51] = det*w[10][0]*w[12][0]*((-0.5*J_0[1]*J_1[0]*K_1[1]*n_01*w[3][2]-0.5*J_0[1]*J_1[0]*K_1[2]*n_02*w[3][2]-0.5*J_0[1]*J_1[1]*K_1[4]*n_01*w[3][2]-0.5*J_0[1]*J_1[1]*K_1[5]*n_02*w[3][2]-0.5*J_0[1]*J_1[2]*K_1[7]*n_01*w[3][2]-0.5*J_0[1]*J_1[2]*K_1[8]*n_02*w[3][2]-0.5*J_0[1]*J_1[3]*K_1[0]*n_01*w[3][2]-0.5*J_0[1]*J_1[4]*K_1[3]*n_01*w[3][2]-0.5*J_0[1]*J_1[5]*K_1[6]*n_01*w[3][2]-0.5*J_0[1]*J_1[6]*K_1[0]*n_02*w[3][2]-0.5*J_0[1]*J_1[7]*K_1[3]*n_02*w[3][2]-0.5*J_0[1]*J_1[8]*K_1[6]*n_02*w[3][2]-0.5*J_0[4]*J_1[0]*K_1[1]*n_00*w[3][2]-0.5*J_0[4]*J_1[1]*K_1[4]*n_00*w[3][2]-0.5*J_0[4]*J_1[2]*K_1[7]*n_00*w[3][2]-0.5*J_0[4]*J_1[3]*K_1[0]*n_00*w[3][2]-0.5*J_0[4]*J_1[3]*K_1[2]*n_02*w[3][2]-0.5*J_0[4]*J_1[4]*K_1[3]*n_00*w[3][2]-0.5*J_0[4]*J_1[4]*K_1[5]*n_02*w[3][2]-0.5*J_0[4]*J_1[5]*K_1[6]*n_00*w[3][2]-0.5*J_0[4]*J_1[5]*K_1[8]*n_02*w[3][2]-0.5*J_0[4]*J_1[6]*K_1[1]*n_02*w[3][2]-0.5*J_0[4]*J_1[7]*K_1[4]*n_02*w[3][2]-0.5*J_0[4]*J_1[8]*K_1[7]*n_02*w[3][2]-0.5*J_0[7]*J_1[0]*K_1[2]*n_00*w[3][2]-0.5*J_0[7]*J_1[1]*K_1[5]*n_00*w[3][2]-0.5*J_0[7]*J_1[2]*K_1[8]*n_00*w[3][2]-0.5*J_0[7]*J_1[3]*K_1[2]*n_01*w[3][2]-0.5*J_0[7]*J_1[4]*K_1[5]*n_01*w[3][2]-0.5*J_0[7]*J_1[5]*K_1[8]*n_01*w[3][2]-0.5*J_0[7]*J_1[6]*K_1[0]*n_00*w[3][2]-0.5*J_0[7]*J_1[6]*K_1[1]*n_01*w[3][2]-0.5*J_0[7]*J_1[7]*K_1[3]*n_00*w[3][2]-0.5*J_0[7]*J_1[7]*K_1[4]*n_01*w[3][2]-0.5*J_0[7]*J_1[8]*K_1[6]*n_00*w[3][2]-0.5*J_0[7]*J_1[8]*K_1[7]*n_01*w[3][2] - J_0[1]*J_1[0]*K_1[0]*n_00*w[3][2] - J_0[1]*J_1[1]*K_1[3]*n_00*w[3][2] - J_0[1]*J_1[2]*K_1[6]*n_00*w[3][2] - J_0[4]*J_1[3]*K_1[1]*n_01*w[3][2] - J_0[4]*J_1[4]*K_1[4]*n_01*w[3][2] - J_0[4]*J_1[5]*K_1[7]*n_01*w[3][2] - J_0[7]*J_1[6]*K_1[2]*n_02*w[3][2] - J_0[7]*J_1[7]*K_1[5]*n_02*w[3][2] - J_0[7]*J_1[8]*K_1[8]*n_02*w[3][2])/(detJ_0*detJ_1) + (0.5*J_1[0]*J_1[1]*K_1[1]*n_01*w[3][6] + 0.5*J_1[0]*J_1[1]*K_1[2]*n_02*w[3][6] + 0.5*J_1[0]*J_1[4]*K_1[1]*n_00*w[3][6] + 0.5*J_1[0]*J_1[7]*K_1[2]*n_00*w[3][6] + 0.5*J_1[1]*J_1[1]*K_1[4]*n_01*w[3][6] + 0.5*J_1[1]*J_1[1]*K_1[5]*n_02*w[3][6] + 0.5*J_1[1]*J_1[2]*K_1[7]*n_01*w[3][6] + 0.5*J_1[1]*J_1[2]*K_1[8]*n_02*w[3][6] + 0.5*J_1[1]*J_1[3]*K_1[0]*n_01*w[3][6] + 0.5*J_1[1]*J_1[4]*K_1[3]*n_01*w[3][6] + 0.5*J_1[1]*J_1[4]*K_1[4]*n_00*w[3][6] + 0.5*J_1[1]*J_1[5]*K_1[6]*n_01*w[3][6] + 0.5*J_1[1]*J_1[6]*K_1[0]*n_02*w[3][6] + 0.5*J_1[1]*J_1[7]*K_1[3]*n_02*w[3][6] + 0.5*J_1[1]*J_1[7]*K_1[5]*n_00*w[3][6] + 0.5*J_1[1]*J_1[8]*K_1[6]*n_02*w[3][6] + 0.5*J_1[2]*J_1[4]*K_1[7]*n_00*w[3][6] + 0.5*J_1[2]*J_1[7]*K_1[8]*n_00*w[3][6] + 0.5*J_1[3]*J_1[4]*K_1[0]*n_00*w[3][6] + 0.5*J_1[3]*J_1[4]*K_1[2]*n_02*w[3][6] + 0.5*J_1[3]*J_1[7]*K_1[2]*n_01*w[3][6] + 0.5*J_1[4]*J_1[4]*K_1[3]*n_00*w[3][6] + 0.5*J_1[4]*J_1[4]*K_1[5]*n_02*w[3][6] + 0.5*J_1[4]*J_1[5]*K_1[6]*n_00*w[3][6] + 0.5*J_1[4]*J_1[5]*K_1[8]*n_02*w[3][6] + 0.5*J_1[4]*J_1[6]*K_1[1]*n_02*w[3][6] + 0.5*J_1[4]*J_1[7]*K_1[4]*n_02*w[3][6] + 0.5*J_1[4]*J_1[7]*K_1[5]*n_01*w[3][6] + 0.5*J_1[4]*J_1[8]*K_1[7]*n_02*w[3][6] + 0.5*J_1[5]*J_1[7]*K_1[8]*n_01*w[3][6] + 0.5*J_1[6]*J_1[7]*K_1[0]*n_00*w[3][6] + 0.5*J_1[6]*J_1[7]*K_1[1]*n_01*w[3][6] + 0.5*J_1[7]*J_1[7]*K_1[3]*n_00*w[3][6] + 0.5*J_1[7]*J_1[7]*K_1[4]*n_01*w[3][6] + 0.5*J_1[7]*J_1[8]*K_1[6]*n_00*w[3][6] + 0.5*J_1[7]*J_1[8]*K_1[7]*n_01*w[3][6] + J_1[0]*J_1[1]*K_1[0]*n_00*w[3][6] + J_1[1]*J_1[1]*K_1[3]*n_00*w[3][6] + J_1[1]*J_1[2]*K_1[6]*n_00*w[3][6] + J_1[3]*J_1[4]*K_1[1]*n_01*w[3][6] + J_1[4]*J_1[4]*K_1[4]*n_01*w[3][6] + J_1[4]*J_1[5]*K_1[7]*n_01*w[3][6] + J_1[6]*J_1[7]*K_1[2]*n_02*w[3][6] + J_1[7]*J_1[7]*K_1[5]*n_02*w[3][6] + J_1[7]*J_1[8]*K_1[8]*n_02*w[3][6])/(detJ_1*detJ_1));
-    G[52] = det*w[10][0]*w[13][0]*((-2.0*J_1[1]*J_1[2]*w[3][6]-2.0*J_1[4]*J_1[5]*w[3][6]-2.0*J_1[7]*J_1[8]*w[3][6])/(circumradius_0*detJ_1*detJ_1 + circumradius_1*detJ_1*detJ_1) + (2.0*J_0[1]*J_1[2]*w[3][2] + 2.0*J_0[4]*J_1[5]*w[3][2] + 2.0*J_0[7]*J_1[8]*w[3][2])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
-    G[53] = det*w[10][0]*w[13][0]*((-2.0*J_1[0]*J_1[1]*w[3][6]-2.0*J_1[3]*J_1[4]*w[3][6]-2.0*J_1[6]*J_1[7]*w[3][6])/(circumradius_0*detJ_1*detJ_1 + circumradius_1*detJ_1*detJ_1) + (2.0*J_0[1]*J_1[0]*w[3][2] + 2.0*J_0[4]*J_1[3]*w[3][2] + 2.0*J_0[7]*J_1[6]*w[3][2])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
-    G[54] = det*w[10][0]*w[12][0]*((-0.5*J_0[0]*J_0[1]*K_0[1]*n_01*w[3][2]-0.5*J_0[0]*J_0[1]*K_0[2]*n_02*w[3][2]-0.5*J_0[0]*J_0[4]*K_0[1]*n_00*w[3][2]-0.5*J_0[0]*J_0[7]*K_0[2]*n_00*w[3][2]-0.5*J_0[1]*J_0[1]*K_0[4]*n_01*w[3][2]-0.5*J_0[1]*J_0[1]*K_0[5]*n_02*w[3][2]-0.5*J_0[1]*J_0[2]*K_0[7]*n_01*w[3][2]-0.5*J_0[1]*J_0[2]*K_0[8]*n_02*w[3][2]-0.5*J_0[1]*J_0[3]*K_0[0]*n_01*w[3][2]-0.5*J_0[1]*J_0[4]*K_0[3]*n_01*w[3][2]-0.5*J_0[1]*J_0[4]*K_0[4]*n_00*w[3][2]-0.5*J_0[1]*J_0[5]*K_0[6]*n_01*w[3][2]-0.5*J_0[1]*J_0[6]*K_0[0]*n_02*w[3][2]-0.5*J_0[1]*J_0[7]*K_0[3]*n_02*w[3][2]-0.5*J_0[1]*J_0[7]*K_0[5]*n_00*w[3][2]-0.5*J_0[1]*J_0[8]*K_0[6]*n_02*w[3][2]-0.5*J_0[2]*J_0[4]*K_0[7]*n_00*w[3][2]-0.5*J_0[2]*J_0[7]*K_0[8]*n_00*w[3][2]-0.5*J_0[3]*J_0[4]*K_0[0]*n_00*w[3][2]-0.5*J_0[3]*J_0[4]*K_0[2]*n_02*w[3][2]-0.5*J_0[3]*J_0[7]*K_0[2]*n_01*w[3][2]-0.5*J_0[4]*J_0[4]*K_0[3]*n_00*w[3][2]-0.5*J_0[4]*J_0[4]*K_0[5]*n_02*w[3][2]-0.5*J_0[4]*J_0[5]*K_0[6]*n_00*w[3][2]-0.5*J_0[4]*J_0[5]*K_0[8]*n_02*w[3][2]-0.5*J_0[4]*J_0[6]*K_0[1]*n_02*w[3][2]-0.5*J_0[4]*J_0[7]*K_0[4]*n_02*w[3][2]-0.5*J_0[4]*J_0[7]*K_0[5]*n_01*w[3][2]-0.5*J_0[4]*J_0[8]*K_0[7]*n_02*w[3][2]-0.5*J_0[5]*J_0[7]*K_0[8]*n_01*w[3][2]-0.5*J_0[6]*J_0[7]*K_0[0]*n_00*w[3][2]-0.5*J_0[6]*J_0[7]*K_0[1]*n_01*w[3][2]-0.5*J_0[7]*J_0[7]*K_0[3]*n_00*w[3][2]-0.5*J_0[7]*J_0[7]*K_0[4]*n_01*w[3][2]-0.5*J_0[7]*J_0[8]*K_0[6]*n_00*w[3][2]-0.5*J_0[7]*J_0[8]*K_0[7]*n_01*w[3][2] - J_0[0]*J_0[1]*K_0[0]*n_00*w[3][2] - J_0[1]*J_0[1]*K_0[3]*n_00*w[3][2] - J_0[1]*J_0[2]*K_0[6]*n_00*w[3][2] - J_0[3]*J_0[4]*K_0[1]*n_01*w[3][2] - J_0[4]*J_0[4]*K_0[4]*n_01*w[3][2] - J_0[4]*J_0[5]*K_0[7]*n_01*w[3][2] - J_0[6]*J_0[7]*K_0[2]*n_02*w[3][2] - J_0[7]*J_0[7]*K_0[5]*n_02*w[3][2] - J_0[7]*J_0[8]*K_0[8]*n_02*w[3][2])/(detJ_0*detJ_0) + (0.5*J_0[0]*J_1[1]*K_0[1]*n_01*w[3][6] + 0.5*J_0[0]*J_1[1]*K_0[2]*n_02*w[3][6] + 0.5*J_0[0]*J_1[4]*K_0[1]*n_00*w[3][6] + 0.5*J_0[0]*J_1[7]*K_0[2]*n_00*w[3][6] + 0.5*J_0[1]*J_1[1]*K_0[4]*n_01*w[3][6] + 0.5*J_0[1]*J_1[1]*K_0[5]*n_02*w[3][6] + 0.5*J_0[1]*J_1[4]*K_0[4]*n_00*w[3][6] + 0.5*J_0[1]*J_1[7]*K_0[5]*n_00*w[3][6] + 0.5*J_0[2]*J_1[1]*K_0[7]*n_01*w[3][6] + 0.5*J_0[2]*J_1[1]*K_0[8]*n_02*w[3][6] + 0.5*J_0[2]*J_1[4]*K_0[7]*n_00*w[3][6] + 0.5*J_0[2]*J_1[7]*K_0[8]*n_00*w[3][6] + 0.5*J_0[3]*J_1[1]*K_0[0]*n_01*w[3][6] + 0.5*J_0[3]*J_1[4]*K_0[0]*n_00*w[3][6] + 0.5*J_0[3]*J_1[4]*K_0[2]*n_02*w[3][6] + 0.5*J_0[3]*J_1[7]*K_0[2]*n_01*w[3][6] + 0.5*J_0[4]*J_1[1]*K_0[3]*n_01*w[3][6] + 0.5*J_0[4]*J_1[4]*K_0[3]*n_00*w[3][6] + 0.5*J_0[4]*J_1[4]*K_0[5]*n_02*w[3][6] + 0.5*J_0[4]*J_1[7]*K_0[5]*n_01*w[3][6] + 0.5*J_0[5]*J_1[1]*K_0[6]*n_01*w[3][6] + 0.5*J_0[5]*J_1[4]*K_0[6]*n_00*w[3][6] + 0.5*J_0[5]*J_1[4]*K_0[8]*n_02*w[3][6] + 0.5*J_0[5]*J_1[7]*K_0[8]*n_01*w[3][6] + 0.5*J_0[6]*J_1[1]*K_0[0]*n_02*w[3][6] + 0.5*J_0[6]*J_1[4]*K_0[1]*n_02*w[3][6] + 0.5*J_0[6]*J_1[7]*K_0[0]*n_00*w[3][6] + 0.5*J_0[6]*J_1[7]*K_0[1]*n_01*w[3][6] + 0.5*J_0[7]*J_1[1]*K_0[3]*n_02*w[3][6] + 0.5*J_0[7]*J_1[4]*K_0[4]*n_02*w[3][6] + 0.5*J_0[7]*J_1[7]*K_0[3]*n_00*w[3][6] + 0.5*J_0[7]*J_1[7]*K_0[4]*n_01*w[3][6] + 0.5*J_0[8]*J_1[1]*K_0[6]*n_02*w[3][6] + 0.5*J_0[8]*J_1[4]*K_0[7]*n_02*w[3][6] + 0.5*J_0[8]*J_1[7]*K_0[6]*n_00*w[3][6] + 0.5*J_0[8]*J_1[7]*K_0[7]*n_01*w[3][6] + J_0[0]*J_1[1]*K_0[0]*n_00*w[3][6] + J_0[1]*J_1[1]*K_0[3]*n_00*w[3][6] + J_0[2]*J_1[1]*K_0[6]*n_00*w[3][6] + J_0[3]*J_1[4]*K_0[1]*n_01*w[3][6] + J_0[4]*J_1[4]*K_0[4]*n_01*w[3][6] + J_0[5]*J_1[4]*K_0[7]*n_01*w[3][6] + J_0[6]*J_1[7]*K_0[2]*n_02*w[3][6] + J_0[7]*J_1[7]*K_0[5]*n_02*w[3][6] + J_0[8]*J_1[7]*K_0[8]*n_02*w[3][6])/(detJ_0*detJ_1));
-    G[55] = det*w[10][0]*w[13][0]*((-2.0*J_0[1]*J_0[2]*w[3][2]-2.0*J_0[4]*J_0[5]*w[3][2]-2.0*J_0[7]*J_0[8]*w[3][2])/(circumradius_0*detJ_0*detJ_0 + circumradius_1*detJ_0*detJ_0) + (2.0*J_0[2]*J_1[1]*w[3][6] + 2.0*J_0[5]*J_1[4]*w[3][6] + 2.0*J_0[8]*J_1[7]*w[3][6])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
-    G[56] = det*w[10][0]*w[13][0]*((-2.0*J_0[0]*J_0[1]*w[3][2]-2.0*J_0[3]*J_0[4]*w[3][2]-2.0*J_0[6]*J_0[7]*w[3][2])/(circumradius_0*detJ_0*detJ_0 + circumradius_1*detJ_0*detJ_0) + (2.0*J_0[0]*J_1[1]*w[3][6] + 2.0*J_0[3]*J_1[4]*w[3][6] + 2.0*J_0[6]*J_1[7]*w[3][6])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
+    G[0] = -2.0*det*w[11][0]*w[13][0]*(J_1[0]*J_1[0] + J_1[3]*J_1[3] + J_1[6]*J_1[6])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[1] = -2.0*det*w[11][0]*w[13][0]*(J_1[0]*J_1[1] + J_1[3]*J_1[4] + J_1[6]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[2] = -2.0*det*w[11][0]*w[13][0]*(J_1[0]*J_1[2] + J_1[3]*J_1[5] + J_1[6]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[3] = 2.0*det*w[11][0]*w[13][0]*(J_0[0]*J_1[0] + J_0[3]*J_1[3] + J_0[6]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[4] = 2.0*det*w[11][0]*w[13][0]*(J_0[1]*J_1[0] + J_0[4]*J_1[3] + J_0[7]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[5] = 2.0*det*w[11][0]*w[13][0]*(J_0[2]*J_1[0] + J_0[5]*J_1[3] + J_0[8]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[6] = det*w[11][0]*w[12][0]*(0.5*(n_00*(J_1[3]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[0]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[0]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[3]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
+    G[7] = det*w[11][0]*w[12][0]*(0.5*(J_1[0]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + J_1[3]*(J_1[0]*K_1[0]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + J_1[6]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[0]*K_1[0] + J_1[3]*K_1[1]))) + J_1[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
+    G[8] = det*w[11][0]*w[12][0]*(0.5*(J_1[1]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[8]*K_1[6])) + J_1[4]*(J_1[1]*K_1[3]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[8]*K_1[7])) + J_1[7]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[1]*K_1[3] + J_1[4]*K_1[4]))) + J_1[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
+    G[9] = det*w[11][0]*w[12][0]*(0.5*(J_1[2]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3])) + J_1[5]*(J_1[2]*K_1[6]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4])) + J_1[8]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[2]*K_1[6] + J_1[5]*K_1[7]))) + J_1[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
+    G[10] = det*w[11][0]*w[12][0]*(-0.5*(n_00*(J_0[3]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[0]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[0]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[3]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
+    G[11] = det*w[11][0]*w[12][0]*(-0.5*(n_00*(J_0[4]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[1]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[1]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[4]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
+    G[12] = det*w[11][0]*w[12][0]*(-0.5*(n_00*(J_0[5]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[2]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[2]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[5]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
+    G[13] = -2.0*det*w[11][0]*w[13][0]*(J_1[1]*J_1[1] + J_1[4]*J_1[4] + J_1[7]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[14] = -2.0*det*w[11][0]*w[13][0]*(J_1[1]*J_1[2] + J_1[4]*J_1[5] + J_1[7]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[15] = 2.0*det*w[11][0]*w[13][0]*(J_0[0]*J_1[1] + J_0[3]*J_1[4] + J_0[6]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[16] = 2.0*det*w[11][0]*w[13][0]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[17] = 2.0*det*w[11][0]*w[13][0]*(J_0[2]*J_1[1] + J_0[5]*J_1[4] + J_0[8]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[18] = det*w[11][0]*w[12][0]*(0.5*(n_00*(J_1[4]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[1]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[1]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[4]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
+    G[19] = -2.0*det*w[11][0]*w[13][0]*(J_1[2]*J_1[2] + J_1[5]*J_1[5] + J_1[8]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[20] = 2.0*det*w[11][0]*w[13][0]*(J_0[0]*J_1[2] + J_0[3]*J_1[5] + J_0[6]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[21] = 2.0*det*w[11][0]*w[13][0]*(J_0[1]*J_1[2] + J_0[4]*J_1[5] + J_0[7]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[22] = 2.0*det*w[11][0]*w[13][0]*(J_0[2]*J_1[2] + J_0[5]*J_1[5] + J_0[8]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[23] = det*w[11][0]*w[12][0]*(0.5*(n_00*(J_1[5]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[2]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[2]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[5]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
+    G[24] = -2.0*det*w[11][0]*w[13][0]*(J_0[0]*J_0[0] + J_0[3]*J_0[3] + J_0[6]*J_0[6])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[25] = -2.0*det*w[11][0]*w[13][0]*(J_0[0]*J_0[1] + J_0[3]*J_0[4] + J_0[6]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[26] = -2.0*det*w[11][0]*w[13][0]*(J_0[0]*J_0[2] + J_0[3]*J_0[5] + J_0[6]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[27] = det*w[11][0]*w[12][0]*(-0.5*(J_0[0]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + J_0[3]*(J_0[0]*K_0[0]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + J_0[6]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[0]*K_0[0] + J_0[3]*K_0[1]))) - (J_0[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
+    G[28] = det*w[11][0]*w[12][0]*(-0.5*(J_0[1]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[8]*K_0[6])) + J_0[4]*(J_0[1]*K_0[3]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[8]*K_0[7])) + J_0[7]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[1]*K_0[3] + J_0[4]*K_0[4]))) - (J_0[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
+    G[29] = det*w[11][0]*w[12][0]*(-0.5*(J_0[2]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3])) + J_0[5]*(J_0[2]*K_0[6]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4])) + J_0[8]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[2]*K_0[6] + J_0[5]*K_0[7]))) - (J_0[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
+    G[30] = -2.0*det*w[11][0]*w[13][0]*(J_0[1]*J_0[1] + J_0[4]*J_0[4] + J_0[7]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[31] = -2.0*det*w[11][0]*w[13][0]*(J_0[1]*J_0[2] + J_0[4]*J_0[5] + J_0[7]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[32] = -2.0*det*w[11][0]*w[13][0]*(J_0[2]*J_0[2] + J_0[5]*J_0[5] + J_0[8]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[33] = -2.0*det*w[11][0]*w[13][0]*w[3][6]*(J_1[1]*J_1[1] + J_1[4]*J_1[4] + J_1[7]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[34] = det*w[11][0]*w[12][0]*w[3][6]*(0.5*(J_1[1]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[8]*K_1[6])) + J_1[4]*(J_1[1]*K_1[3]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[8]*K_1[7])) + J_1[7]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[1]*K_1[3] + J_1[4]*K_1[4]))) + J_1[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
+    G[35] = -2.0*det*w[11][0]*w[13][0]*w[3][6]*(J_1[1]*J_1[2] + J_1[4]*J_1[5] + J_1[7]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[36] = -2.0*det*w[11][0]*w[13][0]*w[3][6]*(J_1[0]*J_1[1] + J_1[3]*J_1[4] + J_1[6]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[37] = 2.0*det*w[11][0]*w[13][0]*w[3][6]*(J_0[0]*J_1[1] + J_0[3]*J_1[4] + J_0[6]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[38] = det*w[11][0]*w[12][0]*w[3][6]*(0.5*(n_00*(J_1[4]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[1]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[1]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[4]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
+    G[39] = 2.0*det*w[11][0]*w[13][0]*w[3][6]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[40] = 2.0*det*w[11][0]*w[13][0]*w[3][6]*(J_0[2]*J_1[1] + J_0[5]*J_1[4] + J_0[8]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[41] = -2.0*det*w[11][0]*w[13][0]*w[3][2]*(J_0[1]*J_0[1] + J_0[4]*J_0[4] + J_0[7]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[42] = 2.0*det*w[11][0]*w[13][0]*w[3][2]*(J_0[1]*J_1[0] + J_0[4]*J_1[3] + J_0[7]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[43] = det*w[11][0]*w[12][0]*w[3][2]*(-0.5*(n_00*(J_0[4]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[1]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[1]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[4]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
+    G[44] = 2.0*det*w[11][0]*w[13][0]*w[3][2]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[45] = 2.0*det*w[11][0]*w[13][0]*w[3][2]*(J_0[1]*J_1[2] + J_0[4]*J_1[5] + J_0[7]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[46] = det*w[11][0]*w[12][0]*w[3][2]*(-0.5*(J_0[1]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[8]*K_0[6])) + J_0[4]*(J_0[1]*K_0[3]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[8]*K_0[7])) + J_0[7]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[1]*K_0[3] + J_0[4]*K_0[4]))) - (J_0[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
+    G[47] = -2.0*det*w[11][0]*w[13][0]*w[3][2]*(J_0[1]*J_0[2] + J_0[4]*J_0[5] + J_0[7]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[48] = -2.0*det*w[11][0]*w[13][0]*w[3][2]*(J_0[0]*J_0[1] + J_0[3]*J_0[4] + J_0[6]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[49] = det*w[11][0]*w[13][0]*((-2.0*J_0[1]*J_0[1]*w[3][2]-2.0*J_0[4]*J_0[4]*w[3][2]-2.0*J_0[7]*J_0[7]*w[3][2])/(circumradius_0*detJ_0*detJ_0 + circumradius_1*detJ_0*detJ_0) + (2.0*J_0[1]*J_1[1]*w[3][6] + 2.0*J_0[4]*J_1[4]*w[3][6] + 2.0*J_0[7]*J_1[7]*w[3][6])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
+    G[50] = det*w[11][0]*w[13][0]*((-2.0*J_1[1]*J_1[1]*w[3][6]-2.0*J_1[4]*J_1[4]*w[3][6]-2.0*J_1[7]*J_1[7]*w[3][6])/(circumradius_0*detJ_1*detJ_1 + circumradius_1*detJ_1*detJ_1) + (2.0*J_0[1]*J_1[1]*w[3][2] + 2.0*J_0[4]*J_1[4]*w[3][2] + 2.0*J_0[7]*J_1[7]*w[3][2])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
+    G[51] = det*w[11][0]*w[12][0]*((-0.5*J_0[1]*J_1[0]*K_1[1]*n_01*w[3][2]-0.5*J_0[1]*J_1[0]*K_1[2]*n_02*w[3][2]-0.5*J_0[1]*J_1[1]*K_1[4]*n_01*w[3][2]-0.5*J_0[1]*J_1[1]*K_1[5]*n_02*w[3][2]-0.5*J_0[1]*J_1[2]*K_1[7]*n_01*w[3][2]-0.5*J_0[1]*J_1[2]*K_1[8]*n_02*w[3][2]-0.5*J_0[1]*J_1[3]*K_1[0]*n_01*w[3][2]-0.5*J_0[1]*J_1[4]*K_1[3]*n_01*w[3][2]-0.5*J_0[1]*J_1[5]*K_1[6]*n_01*w[3][2]-0.5*J_0[1]*J_1[6]*K_1[0]*n_02*w[3][2]-0.5*J_0[1]*J_1[7]*K_1[3]*n_02*w[3][2]-0.5*J_0[1]*J_1[8]*K_1[6]*n_02*w[3][2]-0.5*J_0[4]*J_1[0]*K_1[1]*n_00*w[3][2]-0.5*J_0[4]*J_1[1]*K_1[4]*n_00*w[3][2]-0.5*J_0[4]*J_1[2]*K_1[7]*n_00*w[3][2]-0.5*J_0[4]*J_1[3]*K_1[0]*n_00*w[3][2]-0.5*J_0[4]*J_1[3]*K_1[2]*n_02*w[3][2]-0.5*J_0[4]*J_1[4]*K_1[3]*n_00*w[3][2]-0.5*J_0[4]*J_1[4]*K_1[5]*n_02*w[3][2]-0.5*J_0[4]*J_1[5]*K_1[6]*n_00*w[3][2]-0.5*J_0[4]*J_1[5]*K_1[8]*n_02*w[3][2]-0.5*J_0[4]*J_1[6]*K_1[1]*n_02*w[3][2]-0.5*J_0[4]*J_1[7]*K_1[4]*n_02*w[3][2]-0.5*J_0[4]*J_1[8]*K_1[7]*n_02*w[3][2]-0.5*J_0[7]*J_1[0]*K_1[2]*n_00*w[3][2]-0.5*J_0[7]*J_1[1]*K_1[5]*n_00*w[3][2]-0.5*J_0[7]*J_1[2]*K_1[8]*n_00*w[3][2]-0.5*J_0[7]*J_1[3]*K_1[2]*n_01*w[3][2]-0.5*J_0[7]*J_1[4]*K_1[5]*n_01*w[3][2]-0.5*J_0[7]*J_1[5]*K_1[8]*n_01*w[3][2]-0.5*J_0[7]*J_1[6]*K_1[0]*n_00*w[3][2]-0.5*J_0[7]*J_1[6]*K_1[1]*n_01*w[3][2]-0.5*J_0[7]*J_1[7]*K_1[3]*n_00*w[3][2]-0.5*J_0[7]*J_1[7]*K_1[4]*n_01*w[3][2]-0.5*J_0[7]*J_1[8]*K_1[6]*n_00*w[3][2]-0.5*J_0[7]*J_1[8]*K_1[7]*n_01*w[3][2] - J_0[1]*J_1[0]*K_1[0]*n_00*w[3][2] - J_0[1]*J_1[1]*K_1[3]*n_00*w[3][2] - J_0[1]*J_1[2]*K_1[6]*n_00*w[3][2] - J_0[4]*J_1[3]*K_1[1]*n_01*w[3][2] - J_0[4]*J_1[4]*K_1[4]*n_01*w[3][2] - J_0[4]*J_1[5]*K_1[7]*n_01*w[3][2] - J_0[7]*J_1[6]*K_1[2]*n_02*w[3][2] - J_0[7]*J_1[7]*K_1[5]*n_02*w[3][2] - J_0[7]*J_1[8]*K_1[8]*n_02*w[3][2])/(detJ_0*detJ_1) + (0.5*J_1[0]*J_1[1]*K_1[1]*n_01*w[3][6] + 0.5*J_1[0]*J_1[1]*K_1[2]*n_02*w[3][6] + 0.5*J_1[0]*J_1[4]*K_1[1]*n_00*w[3][6] + 0.5*J_1[0]*J_1[7]*K_1[2]*n_00*w[3][6] + 0.5*J_1[1]*J_1[1]*K_1[4]*n_01*w[3][6] + 0.5*J_1[1]*J_1[1]*K_1[5]*n_02*w[3][6] + 0.5*J_1[1]*J_1[2]*K_1[7]*n_01*w[3][6] + 0.5*J_1[1]*J_1[2]*K_1[8]*n_02*w[3][6] + 0.5*J_1[1]*J_1[3]*K_1[0]*n_01*w[3][6] + 0.5*J_1[1]*J_1[4]*K_1[3]*n_01*w[3][6] + 0.5*J_1[1]*J_1[4]*K_1[4]*n_00*w[3][6] + 0.5*J_1[1]*J_1[5]*K_1[6]*n_01*w[3][6] + 0.5*J_1[1]*J_1[6]*K_1[0]*n_02*w[3][6] + 0.5*J_1[1]*J_1[7]*K_1[3]*n_02*w[3][6] + 0.5*J_1[1]*J_1[7]*K_1[5]*n_00*w[3][6] + 0.5*J_1[1]*J_1[8]*K_1[6]*n_02*w[3][6] + 0.5*J_1[2]*J_1[4]*K_1[7]*n_00*w[3][6] + 0.5*J_1[2]*J_1[7]*K_1[8]*n_00*w[3][6] + 0.5*J_1[3]*J_1[4]*K_1[0]*n_00*w[3][6] + 0.5*J_1[3]*J_1[4]*K_1[2]*n_02*w[3][6] + 0.5*J_1[3]*J_1[7]*K_1[2]*n_01*w[3][6] + 0.5*J_1[4]*J_1[4]*K_1[3]*n_00*w[3][6] + 0.5*J_1[4]*J_1[4]*K_1[5]*n_02*w[3][6] + 0.5*J_1[4]*J_1[5]*K_1[6]*n_00*w[3][6] + 0.5*J_1[4]*J_1[5]*K_1[8]*n_02*w[3][6] + 0.5*J_1[4]*J_1[6]*K_1[1]*n_02*w[3][6] + 0.5*J_1[4]*J_1[7]*K_1[4]*n_02*w[3][6] + 0.5*J_1[4]*J_1[7]*K_1[5]*n_01*w[3][6] + 0.5*J_1[4]*J_1[8]*K_1[7]*n_02*w[3][6] + 0.5*J_1[5]*J_1[7]*K_1[8]*n_01*w[3][6] + 0.5*J_1[6]*J_1[7]*K_1[0]*n_00*w[3][6] + 0.5*J_1[6]*J_1[7]*K_1[1]*n_01*w[3][6] + 0.5*J_1[7]*J_1[7]*K_1[3]*n_00*w[3][6] + 0.5*J_1[7]*J_1[7]*K_1[4]*n_01*w[3][6] + 0.5*J_1[7]*J_1[8]*K_1[6]*n_00*w[3][6] + 0.5*J_1[7]*J_1[8]*K_1[7]*n_01*w[3][6] + J_1[0]*J_1[1]*K_1[0]*n_00*w[3][6] + J_1[1]*J_1[1]*K_1[3]*n_00*w[3][6] + J_1[1]*J_1[2]*K_1[6]*n_00*w[3][6] + J_1[3]*J_1[4]*K_1[1]*n_01*w[3][6] + J_1[4]*J_1[4]*K_1[4]*n_01*w[3][6] + J_1[4]*J_1[5]*K_1[7]*n_01*w[3][6] + J_1[6]*J_1[7]*K_1[2]*n_02*w[3][6] + J_1[7]*J_1[7]*K_1[5]*n_02*w[3][6] + J_1[7]*J_1[8]*K_1[8]*n_02*w[3][6])/(detJ_1*detJ_1));
+    G[52] = det*w[11][0]*w[13][0]*((-2.0*J_1[1]*J_1[2]*w[3][6]-2.0*J_1[4]*J_1[5]*w[3][6]-2.0*J_1[7]*J_1[8]*w[3][6])/(circumradius_0*detJ_1*detJ_1 + circumradius_1*detJ_1*detJ_1) + (2.0*J_0[1]*J_1[2]*w[3][2] + 2.0*J_0[4]*J_1[5]*w[3][2] + 2.0*J_0[7]*J_1[8]*w[3][2])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
+    G[53] = det*w[11][0]*w[13][0]*((-2.0*J_1[0]*J_1[1]*w[3][6]-2.0*J_1[3]*J_1[4]*w[3][6]-2.0*J_1[6]*J_1[7]*w[3][6])/(circumradius_0*detJ_1*detJ_1 + circumradius_1*detJ_1*detJ_1) + (2.0*J_0[1]*J_1[0]*w[3][2] + 2.0*J_0[4]*J_1[3]*w[3][2] + 2.0*J_0[7]*J_1[6]*w[3][2])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
+    G[54] = det*w[11][0]*w[12][0]*((-0.5*J_0[0]*J_0[1]*K_0[1]*n_01*w[3][2]-0.5*J_0[0]*J_0[1]*K_0[2]*n_02*w[3][2]-0.5*J_0[0]*J_0[4]*K_0[1]*n_00*w[3][2]-0.5*J_0[0]*J_0[7]*K_0[2]*n_00*w[3][2]-0.5*J_0[1]*J_0[1]*K_0[4]*n_01*w[3][2]-0.5*J_0[1]*J_0[1]*K_0[5]*n_02*w[3][2]-0.5*J_0[1]*J_0[2]*K_0[7]*n_01*w[3][2]-0.5*J_0[1]*J_0[2]*K_0[8]*n_02*w[3][2]-0.5*J_0[1]*J_0[3]*K_0[0]*n_01*w[3][2]-0.5*J_0[1]*J_0[4]*K_0[3]*n_01*w[3][2]-0.5*J_0[1]*J_0[4]*K_0[4]*n_00*w[3][2]-0.5*J_0[1]*J_0[5]*K_0[6]*n_01*w[3][2]-0.5*J_0[1]*J_0[6]*K_0[0]*n_02*w[3][2]-0.5*J_0[1]*J_0[7]*K_0[3]*n_02*w[3][2]-0.5*J_0[1]*J_0[7]*K_0[5]*n_00*w[3][2]-0.5*J_0[1]*J_0[8]*K_0[6]*n_02*w[3][2]-0.5*J_0[2]*J_0[4]*K_0[7]*n_00*w[3][2]-0.5*J_0[2]*J_0[7]*K_0[8]*n_00*w[3][2]-0.5*J_0[3]*J_0[4]*K_0[0]*n_00*w[3][2]-0.5*J_0[3]*J_0[4]*K_0[2]*n_02*w[3][2]-0.5*J_0[3]*J_0[7]*K_0[2]*n_01*w[3][2]-0.5*J_0[4]*J_0[4]*K_0[3]*n_00*w[3][2]-0.5*J_0[4]*J_0[4]*K_0[5]*n_02*w[3][2]-0.5*J_0[4]*J_0[5]*K_0[6]*n_00*w[3][2]-0.5*J_0[4]*J_0[5]*K_0[8]*n_02*w[3][2]-0.5*J_0[4]*J_0[6]*K_0[1]*n_02*w[3][2]-0.5*J_0[4]*J_0[7]*K_0[4]*n_02*w[3][2]-0.5*J_0[4]*J_0[7]*K_0[5]*n_01*w[3][2]-0.5*J_0[4]*J_0[8]*K_0[7]*n_02*w[3][2]-0.5*J_0[5]*J_0[7]*K_0[8]*n_01*w[3][2]-0.5*J_0[6]*J_0[7]*K_0[0]*n_00*w[3][2]-0.5*J_0[6]*J_0[7]*K_0[1]*n_01*w[3][2]-0.5*J_0[7]*J_0[7]*K_0[3]*n_00*w[3][2]-0.5*J_0[7]*J_0[7]*K_0[4]*n_01*w[3][2]-0.5*J_0[7]*J_0[8]*K_0[6]*n_00*w[3][2]-0.5*J_0[7]*J_0[8]*K_0[7]*n_01*w[3][2] - J_0[0]*J_0[1]*K_0[0]*n_00*w[3][2] - J_0[1]*J_0[1]*K_0[3]*n_00*w[3][2] - J_0[1]*J_0[2]*K_0[6]*n_00*w[3][2] - J_0[3]*J_0[4]*K_0[1]*n_01*w[3][2] - J_0[4]*J_0[4]*K_0[4]*n_01*w[3][2] - J_0[4]*J_0[5]*K_0[7]*n_01*w[3][2] - J_0[6]*J_0[7]*K_0[2]*n_02*w[3][2] - J_0[7]*J_0[7]*K_0[5]*n_02*w[3][2] - J_0[7]*J_0[8]*K_0[8]*n_02*w[3][2])/(detJ_0*detJ_0) + (0.5*J_0[0]*J_1[1]*K_0[1]*n_01*w[3][6] + 0.5*J_0[0]*J_1[1]*K_0[2]*n_02*w[3][6] + 0.5*J_0[0]*J_1[4]*K_0[1]*n_00*w[3][6] + 0.5*J_0[0]*J_1[7]*K_0[2]*n_00*w[3][6] + 0.5*J_0[1]*J_1[1]*K_0[4]*n_01*w[3][6] + 0.5*J_0[1]*J_1[1]*K_0[5]*n_02*w[3][6] + 0.5*J_0[1]*J_1[4]*K_0[4]*n_00*w[3][6] + 0.5*J_0[1]*J_1[7]*K_0[5]*n_00*w[3][6] + 0.5*J_0[2]*J_1[1]*K_0[7]*n_01*w[3][6] + 0.5*J_0[2]*J_1[1]*K_0[8]*n_02*w[3][6] + 0.5*J_0[2]*J_1[4]*K_0[7]*n_00*w[3][6] + 0.5*J_0[2]*J_1[7]*K_0[8]*n_00*w[3][6] + 0.5*J_0[3]*J_1[1]*K_0[0]*n_01*w[3][6] + 0.5*J_0[3]*J_1[4]*K_0[0]*n_00*w[3][6] + 0.5*J_0[3]*J_1[4]*K_0[2]*n_02*w[3][6] + 0.5*J_0[3]*J_1[7]*K_0[2]*n_01*w[3][6] + 0.5*J_0[4]*J_1[1]*K_0[3]*n_01*w[3][6] + 0.5*J_0[4]*J_1[4]*K_0[3]*n_00*w[3][6] + 0.5*J_0[4]*J_1[4]*K_0[5]*n_02*w[3][6] + 0.5*J_0[4]*J_1[7]*K_0[5]*n_01*w[3][6] + 0.5*J_0[5]*J_1[1]*K_0[6]*n_01*w[3][6] + 0.5*J_0[5]*J_1[4]*K_0[6]*n_00*w[3][6] + 0.5*J_0[5]*J_1[4]*K_0[8]*n_02*w[3][6] + 0.5*J_0[5]*J_1[7]*K_0[8]*n_01*w[3][6] + 0.5*J_0[6]*J_1[1]*K_0[0]*n_02*w[3][6] + 0.5*J_0[6]*J_1[4]*K_0[1]*n_02*w[3][6] + 0.5*J_0[6]*J_1[7]*K_0[0]*n_00*w[3][6] + 0.5*J_0[6]*J_1[7]*K_0[1]*n_01*w[3][6] + 0.5*J_0[7]*J_1[1]*K_0[3]*n_02*w[3][6] + 0.5*J_0[7]*J_1[4]*K_0[4]*n_02*w[3][6] + 0.5*J_0[7]*J_1[7]*K_0[3]*n_00*w[3][6] + 0.5*J_0[7]*J_1[7]*K_0[4]*n_01*w[3][6] + 0.5*J_0[8]*J_1[1]*K_0[6]*n_02*w[3][6] + 0.5*J_0[8]*J_1[4]*K_0[7]*n_02*w[3][6] + 0.5*J_0[8]*J_1[7]*K_0[6]*n_00*w[3][6] + 0.5*J_0[8]*J_1[7]*K_0[7]*n_01*w[3][6] + J_0[0]*J_1[1]*K_0[0]*n_00*w[3][6] + J_0[1]*J_1[1]*K_0[3]*n_00*w[3][6] + J_0[2]*J_1[1]*K_0[6]*n_00*w[3][6] + J_0[3]*J_1[4]*K_0[1]*n_01*w[3][6] + J_0[4]*J_1[4]*K_0[4]*n_01*w[3][6] + J_0[5]*J_1[4]*K_0[7]*n_01*w[3][6] + J_0[6]*J_1[7]*K_0[2]*n_02*w[3][6] + J_0[7]*J_1[7]*K_0[5]*n_02*w[3][6] + J_0[8]*J_1[7]*K_0[8]*n_02*w[3][6])/(detJ_0*detJ_1));
+    G[55] = det*w[11][0]*w[13][0]*((-2.0*J_0[1]*J_0[2]*w[3][2]-2.0*J_0[4]*J_0[5]*w[3][2]-2.0*J_0[7]*J_0[8]*w[3][2])/(circumradius_0*detJ_0*detJ_0 + circumradius_1*detJ_0*detJ_0) + (2.0*J_0[2]*J_1[1]*w[3][6] + 2.0*J_0[5]*J_1[4]*w[3][6] + 2.0*J_0[8]*J_1[7]*w[3][6])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
+    G[56] = det*w[11][0]*w[13][0]*((-2.0*J_0[0]*J_0[1]*w[3][2]-2.0*J_0[3]*J_0[4]*w[3][2]-2.0*J_0[6]*J_0[7]*w[3][2])/(circumradius_0*detJ_0*detJ_0 + circumradius_1*detJ_0*detJ_0) + (2.0*J_0[0]*J_1[1]*w[3][6] + 2.0*J_0[3]*J_1[4]*w[3][6] + 2.0*J_0[6]*J_1[7]*w[3][6])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
@@ -20103,7 +20052,7 @@ public:
 
   const char * signature() const final override
   {
-    return "1576b1ed54c4802ce21f54bd5126230bfd7a891428d63bf955fb52f66a1d210c436db8d52f87383ad0cd9b2b87383fc61f53ada37894c9ede0b707e99cc5f9f6";
+    return "63718c2783fe0b74ab75184b061305525d3010ff892fd0ce875d8bc40c6353984e4076f3b65053b13c10e69731325ccbc20a62fa9a84169744807e387374932e";
   }
 
   std::size_t rank() const final override
@@ -20183,17 +20132,17 @@ public:
       }
     case 8:
       {
-        return new pnp_stokes_battery_finite_element_5();
+        return new pnp_stokes_battery_finite_element_0();
         break;
       }
     case 9:
       {
-        return new pnp_stokes_battery_finite_element_0();
+        return new pnp_stokes_battery_finite_element_5();
         break;
       }
     case 10:
       {
-        return new pnp_stokes_battery_finite_element_5();
+        return new pnp_stokes_battery_finite_element_0();
         break;
       }
     case 11:
@@ -20267,17 +20216,17 @@ public:
       }
     case 8:
       {
-        return new pnp_stokes_battery_dofmap_5();
+        return new pnp_stokes_battery_dofmap_0();
         break;
       }
     case 9:
       {
-        return new pnp_stokes_battery_dofmap_0();
+        return new pnp_stokes_battery_dofmap_5();
         break;
       }
     case 10:
       {
-        return new pnp_stokes_battery_dofmap_5();
+        return new pnp_stokes_battery_dofmap_0();
         break;
       }
     case 11:
@@ -20484,7 +20433,7 @@ public:
 
   const char * signature() const final override
   {
-    return "be45dc4a6881327c19438d33becde1c5c950fc9e3fe1ce5b1696149c4e13da1114c5b06cb4f024c0d2143f70490212e0c7a8547743568fbc960bdf6cdacdce0a";
+    return "0a05a4cc29910b0d7596e64ee180878363d314897c070d0422912e6eb11e1bb74d40d80da17bb8218f6701b00da0a562b80854ae49f22ca0ab1ac97f4b8e7b73";
   }
 
   std::size_t rank() const final override
@@ -20564,17 +20513,17 @@ public:
       }
     case 8:
       {
-        return new pnp_stokes_battery_finite_element_5();
+        return new pnp_stokes_battery_finite_element_0();
         break;
       }
     case 9:
       {
-        return new pnp_stokes_battery_finite_element_0();
+        return new pnp_stokes_battery_finite_element_5();
         break;
       }
     case 10:
       {
-        return new pnp_stokes_battery_finite_element_5();
+        return new pnp_stokes_battery_finite_element_0();
         break;
       }
     case 11:
@@ -20648,17 +20597,17 @@ public:
       }
     case 8:
       {
-        return new pnp_stokes_battery_dofmap_5();
+        return new pnp_stokes_battery_dofmap_0();
         break;
       }
     case 9:
       {
-        return new pnp_stokes_battery_dofmap_0();
+        return new pnp_stokes_battery_dofmap_5();
         break;
       }
     case 10:
       {
-        return new pnp_stokes_battery_dofmap_5();
+        return new pnp_stokes_battery_dofmap_0();
         break;
       }
     case 11:
@@ -21120,8 +21069,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_psi(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_battery_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_battery_dofmap_5>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_battery_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_battery_dofmap_0>(), *mesh))
   {
     // Do nothing
   }
@@ -21129,8 +21078,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_psi(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_battery_finite_element_5>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_battery_dofmap_5>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<pnp_stokes_battery_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<pnp_stokes_battery_dofmap_0>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -21305,19 +21254,19 @@ typedef CoefficientSpace_EsEs Form_a_FunctionSpace_4;
 
 typedef CoefficientSpace_uu Form_a_FunctionSpace_5;
 
-typedef CoefficientSpace_eps Form_a_FunctionSpace_6;
+typedef CoefficientSpace_psi Form_a_FunctionSpace_6;
 
-typedef CoefficientSpace_Dp Form_a_FunctionSpace_7;
+typedef CoefficientSpace_eps Form_a_FunctionSpace_7;
 
-typedef CoefficientSpace_qp Form_a_FunctionSpace_8;
+typedef CoefficientSpace_Dp Form_a_FunctionSpace_8;
 
-typedef CoefficientSpace_Dn Form_a_FunctionSpace_9;
+typedef CoefficientSpace_qp Form_a_FunctionSpace_9;
 
-typedef CoefficientSpace_qn Form_a_FunctionSpace_10;
+typedef CoefficientSpace_Dn Form_a_FunctionSpace_10;
 
-typedef CoefficientSpace_mu Form_a_FunctionSpace_11;
+typedef CoefficientSpace_qn Form_a_FunctionSpace_11;
 
-typedef CoefficientSpace_psi Form_a_FunctionSpace_12;
+typedef CoefficientSpace_mu Form_a_FunctionSpace_12;
 
 typedef CoefficientSpace_alpha1 Form_a_FunctionSpace_13;
 
@@ -21329,7 +21278,7 @@ public:
 
   // Constructor
   Form_a(std::shared_ptr<const dolfin::FunctionSpace> V1, std::shared_ptr<const dolfin::FunctionSpace> V0):
-    dolfin::Form(2, 13), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), eps(*this, 4), Dp(*this, 5), qp(*this, 6), Dn(*this, 7), qn(*this, 8), mu(*this, 9), psi(*this, 10), alpha1(*this, 11), alpha2(*this, 12)
+    dolfin::Form(2, 13), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), psi(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), mu(*this, 10), alpha1(*this, 11), alpha2(*this, 12)
   {
     _function_spaces[0] = V0;
     _function_spaces[1] = V1;
@@ -21338,8 +21287,8 @@ public:
   }
 
   // Constructor
-  Form_a(std::shared_ptr<const dolfin::FunctionSpace> V1, std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> psi, std::shared_ptr<const dolfin::GenericFunction> alpha1, std::shared_ptr<const dolfin::GenericFunction> alpha2):
-    dolfin::Form(2, 13), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), eps(*this, 4), Dp(*this, 5), qp(*this, 6), Dn(*this, 7), qn(*this, 8), mu(*this, 9), psi(*this, 10), alpha1(*this, 11), alpha2(*this, 12)
+  Form_a(std::shared_ptr<const dolfin::FunctionSpace> V1, std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> psi, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> alpha1, std::shared_ptr<const dolfin::GenericFunction> alpha2):
+    dolfin::Form(2, 13), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), psi(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), mu(*this, 10), alpha1(*this, 11), alpha2(*this, 12)
   {
     _function_spaces[0] = V0;
     _function_spaces[1] = V1;
@@ -21348,13 +21297,13 @@ public:
     this->AnAn = AnAn;
     this->EsEs = EsEs;
     this->uu = uu;
+    this->psi = psi;
     this->eps = eps;
     this->Dp = Dp;
     this->qp = qp;
     this->Dn = Dn;
     this->qn = qn;
     this->mu = mu;
-    this->psi = psi;
     this->alpha1 = alpha1;
     this->alpha2 = alpha2;
 
@@ -21376,19 +21325,19 @@ public:
       return 2;
     else if (name == "uu")
       return 3;
-    else if (name == "eps")
-      return 4;
-    else if (name == "Dp")
-      return 5;
-    else if (name == "qp")
-      return 6;
-    else if (name == "Dn")
-      return 7;
-    else if (name == "qn")
-      return 8;
-    else if (name == "mu")
-      return 9;
     else if (name == "psi")
+      return 4;
+    else if (name == "eps")
+      return 5;
+    else if (name == "Dp")
+      return 6;
+    else if (name == "qp")
+      return 7;
+    else if (name == "Dn")
+      return 8;
+    else if (name == "qn")
+      return 9;
+    else if (name == "mu")
       return 10;
     else if (name == "alpha1")
       return 11;
@@ -21415,19 +21364,19 @@ public:
     case 3:
       return "uu";
     case 4:
-      return "eps";
-    case 5:
-      return "Dp";
-    case 6:
-      return "qp";
-    case 7:
-      return "Dn";
-    case 8:
-      return "qn";
-    case 9:
-      return "mu";
-    case 10:
       return "psi";
+    case 5:
+      return "eps";
+    case 6:
+      return "Dp";
+    case 7:
+      return "qp";
+    case 8:
+      return "Dn";
+    case 9:
+      return "qn";
+    case 10:
+      return "mu";
     case 11:
       return "alpha1";
     case 12:
@@ -21449,13 +21398,13 @@ public:
   typedef Form_a_FunctionSpace_3 CoefficientSpace_AnAn;
   typedef Form_a_FunctionSpace_4 CoefficientSpace_EsEs;
   typedef Form_a_FunctionSpace_5 CoefficientSpace_uu;
-  typedef Form_a_FunctionSpace_6 CoefficientSpace_eps;
-  typedef Form_a_FunctionSpace_7 CoefficientSpace_Dp;
-  typedef Form_a_FunctionSpace_8 CoefficientSpace_qp;
-  typedef Form_a_FunctionSpace_9 CoefficientSpace_Dn;
-  typedef Form_a_FunctionSpace_10 CoefficientSpace_qn;
-  typedef Form_a_FunctionSpace_11 CoefficientSpace_mu;
-  typedef Form_a_FunctionSpace_12 CoefficientSpace_psi;
+  typedef Form_a_FunctionSpace_6 CoefficientSpace_psi;
+  typedef Form_a_FunctionSpace_7 CoefficientSpace_eps;
+  typedef Form_a_FunctionSpace_8 CoefficientSpace_Dp;
+  typedef Form_a_FunctionSpace_9 CoefficientSpace_qp;
+  typedef Form_a_FunctionSpace_10 CoefficientSpace_Dn;
+  typedef Form_a_FunctionSpace_11 CoefficientSpace_qn;
+  typedef Form_a_FunctionSpace_12 CoefficientSpace_mu;
   typedef Form_a_FunctionSpace_13 CoefficientSpace_alpha1;
   typedef Form_a_FunctionSpace_14 CoefficientSpace_alpha2;
 
@@ -21464,13 +21413,13 @@ public:
   dolfin::CoefficientAssigner AnAn;
   dolfin::CoefficientAssigner EsEs;
   dolfin::CoefficientAssigner uu;
+  dolfin::CoefficientAssigner psi;
   dolfin::CoefficientAssigner eps;
   dolfin::CoefficientAssigner Dp;
   dolfin::CoefficientAssigner qp;
   dolfin::CoefficientAssigner Dn;
   dolfin::CoefficientAssigner qn;
   dolfin::CoefficientAssigner mu;
-  dolfin::CoefficientAssigner psi;
   dolfin::CoefficientAssigner alpha1;
   dolfin::CoefficientAssigner alpha2;
 };
@@ -21481,7 +21430,7 @@ public:
 
   // Constructor
   MultiMeshForm_a(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V1, std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0):
-    dolfin::MultiMeshForm(V1, V0), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), eps(*this, 4), Dp(*this, 5), qp(*this, 6), Dn(*this, 7), qn(*this, 8), mu(*this, 9), psi(*this, 10), alpha1(*this, 11), alpha2(*this, 12)
+    dolfin::MultiMeshForm(V1, V0), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), psi(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), mu(*this, 10), alpha1(*this, 11), alpha2(*this, 12)
   {
     // Create and add standard forms
     std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
@@ -21499,8 +21448,8 @@ public:
   }
 
   // Constructor
-  MultiMeshForm_a(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V1, std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> psi, std::shared_ptr<const dolfin::GenericFunction> alpha1, std::shared_ptr<const dolfin::GenericFunction> alpha2):
-    dolfin::MultiMeshForm(V1, V0), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), eps(*this, 4), Dp(*this, 5), qp(*this, 6), Dn(*this, 7), qn(*this, 8), mu(*this, 9), psi(*this, 10), alpha1(*this, 11), alpha2(*this, 12)
+  MultiMeshForm_a(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V1, std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> psi, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> alpha1, std::shared_ptr<const dolfin::GenericFunction> alpha2):
+    dolfin::MultiMeshForm(V1, V0), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), psi(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), mu(*this, 10), alpha1(*this, 11), alpha2(*this, 12)
   {
     // Create and add standard forms
     std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
@@ -21518,13 +21467,13 @@ public:
     this->AnAn = AnAn;
     this->EsEs = EsEs;
     this->uu = uu;
+    this->psi = psi;
     this->eps = eps;
     this->Dp = Dp;
     this->qp = qp;
     this->Dn = Dn;
     this->qn = qn;
     this->mu = mu;
-    this->psi = psi;
     this->alpha1 = alpha1;
     this->alpha2 = alpha2;
 
@@ -21545,19 +21494,19 @@ public:
       return 2;
     else if (name == "uu")
       return 3;
-    else if (name == "eps")
-      return 4;
-    else if (name == "Dp")
-      return 5;
-    else if (name == "qp")
-      return 6;
-    else if (name == "Dn")
-      return 7;
-    else if (name == "qn")
-      return 8;
-    else if (name == "mu")
-      return 9;
     else if (name == "psi")
+      return 4;
+    else if (name == "eps")
+      return 5;
+    else if (name == "Dp")
+      return 6;
+    else if (name == "qp")
+      return 7;
+    else if (name == "Dn")
+      return 8;
+    else if (name == "qn")
+      return 9;
+    else if (name == "mu")
       return 10;
     else if (name == "alpha1")
       return 11;
@@ -21584,19 +21533,19 @@ public:
     case 3:
       return "uu";
     case 4:
-      return "eps";
-    case 5:
-      return "Dp";
-    case 6:
-      return "qp";
-    case 7:
-      return "Dn";
-    case 8:
-      return "qn";
-    case 9:
-      return "mu";
-    case 10:
       return "psi";
+    case 5:
+      return "eps";
+    case 6:
+      return "Dp";
+    case 7:
+      return "qp";
+    case 8:
+      return "Dn";
+    case 9:
+      return "qn";
+    case 10:
+      return "mu";
     case 11:
       return "alpha1";
     case 12:
@@ -21618,13 +21567,13 @@ public:
   typedef Form_a_FunctionSpace_3 CoefficientSpace_AnAn;
   typedef Form_a_FunctionSpace_4 CoefficientSpace_EsEs;
   typedef Form_a_FunctionSpace_5 CoefficientSpace_uu;
-  typedef Form_a_FunctionSpace_6 CoefficientSpace_eps;
-  typedef Form_a_FunctionSpace_7 CoefficientSpace_Dp;
-  typedef Form_a_FunctionSpace_8 CoefficientSpace_qp;
-  typedef Form_a_FunctionSpace_9 CoefficientSpace_Dn;
-  typedef Form_a_FunctionSpace_10 CoefficientSpace_qn;
-  typedef Form_a_FunctionSpace_11 CoefficientSpace_mu;
-  typedef Form_a_FunctionSpace_12 CoefficientSpace_psi;
+  typedef Form_a_FunctionSpace_6 CoefficientSpace_psi;
+  typedef Form_a_FunctionSpace_7 CoefficientSpace_eps;
+  typedef Form_a_FunctionSpace_8 CoefficientSpace_Dp;
+  typedef Form_a_FunctionSpace_9 CoefficientSpace_qp;
+  typedef Form_a_FunctionSpace_10 CoefficientSpace_Dn;
+  typedef Form_a_FunctionSpace_11 CoefficientSpace_qn;
+  typedef Form_a_FunctionSpace_12 CoefficientSpace_mu;
   typedef Form_a_FunctionSpace_13 CoefficientSpace_alpha1;
   typedef Form_a_FunctionSpace_14 CoefficientSpace_alpha2;
 
@@ -21633,13 +21582,13 @@ public:
   dolfin::MultiMeshCoefficientAssigner AnAn;
   dolfin::MultiMeshCoefficientAssigner EsEs;
   dolfin::MultiMeshCoefficientAssigner uu;
+  dolfin::MultiMeshCoefficientAssigner psi;
   dolfin::MultiMeshCoefficientAssigner eps;
   dolfin::MultiMeshCoefficientAssigner Dp;
   dolfin::MultiMeshCoefficientAssigner qp;
   dolfin::MultiMeshCoefficientAssigner Dn;
   dolfin::MultiMeshCoefficientAssigner qn;
   dolfin::MultiMeshCoefficientAssigner mu;
-  dolfin::MultiMeshCoefficientAssigner psi;
   dolfin::MultiMeshCoefficientAssigner alpha1;
   dolfin::MultiMeshCoefficientAssigner alpha2;
 };
@@ -21698,19 +21647,19 @@ typedef CoefficientSpace_uu Form_L_FunctionSpace_4;
 
 typedef CoefficientSpace_pp Form_L_FunctionSpace_5;
 
-typedef CoefficientSpace_eps Form_L_FunctionSpace_6;
+typedef CoefficientSpace_psi Form_L_FunctionSpace_6;
 
-typedef CoefficientSpace_Dp Form_L_FunctionSpace_7;
+typedef CoefficientSpace_eps Form_L_FunctionSpace_7;
 
-typedef CoefficientSpace_qp Form_L_FunctionSpace_8;
+typedef CoefficientSpace_Dp Form_L_FunctionSpace_8;
 
-typedef CoefficientSpace_Dn Form_L_FunctionSpace_9;
+typedef CoefficientSpace_qp Form_L_FunctionSpace_9;
 
-typedef CoefficientSpace_qn Form_L_FunctionSpace_10;
+typedef CoefficientSpace_Dn Form_L_FunctionSpace_10;
 
-typedef CoefficientSpace_mu Form_L_FunctionSpace_11;
+typedef CoefficientSpace_qn Form_L_FunctionSpace_11;
 
-typedef CoefficientSpace_psi Form_L_FunctionSpace_12;
+typedef CoefficientSpace_mu Form_L_FunctionSpace_12;
 
 typedef CoefficientSpace_alpha1 Form_L_FunctionSpace_13;
 
@@ -21722,7 +21671,7 @@ public:
 
   // Constructor
   Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0):
-    dolfin::Form(1, 14), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), pp(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), mu(*this, 10), psi(*this, 11), alpha1(*this, 12), alpha2(*this, 13)
+    dolfin::Form(1, 14), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), pp(*this, 4), psi(*this, 5), eps(*this, 6), Dp(*this, 7), qp(*this, 8), Dn(*this, 9), qn(*this, 10), mu(*this, 11), alpha1(*this, 12), alpha2(*this, 13)
   {
     _function_spaces[0] = V0;
 
@@ -21730,8 +21679,8 @@ public:
   }
 
   // Constructor
-  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> pp, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> psi, std::shared_ptr<const dolfin::GenericFunction> alpha1, std::shared_ptr<const dolfin::GenericFunction> alpha2):
-    dolfin::Form(1, 14), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), pp(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), mu(*this, 10), psi(*this, 11), alpha1(*this, 12), alpha2(*this, 13)
+  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> pp, std::shared_ptr<const dolfin::GenericFunction> psi, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> alpha1, std::shared_ptr<const dolfin::GenericFunction> alpha2):
+    dolfin::Form(1, 14), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), pp(*this, 4), psi(*this, 5), eps(*this, 6), Dp(*this, 7), qp(*this, 8), Dn(*this, 9), qn(*this, 10), mu(*this, 11), alpha1(*this, 12), alpha2(*this, 13)
   {
     _function_spaces[0] = V0;
 
@@ -21740,13 +21689,13 @@ public:
     this->EsEs = EsEs;
     this->uu = uu;
     this->pp = pp;
+    this->psi = psi;
     this->eps = eps;
     this->Dp = Dp;
     this->qp = qp;
     this->Dn = Dn;
     this->qn = qn;
     this->mu = mu;
-    this->psi = psi;
     this->alpha1 = alpha1;
     this->alpha2 = alpha2;
 
@@ -21770,19 +21719,19 @@ public:
       return 3;
     else if (name == "pp")
       return 4;
-    else if (name == "eps")
-      return 5;
-    else if (name == "Dp")
-      return 6;
-    else if (name == "qp")
-      return 7;
-    else if (name == "Dn")
-      return 8;
-    else if (name == "qn")
-      return 9;
-    else if (name == "mu")
-      return 10;
     else if (name == "psi")
+      return 5;
+    else if (name == "eps")
+      return 6;
+    else if (name == "Dp")
+      return 7;
+    else if (name == "qp")
+      return 8;
+    else if (name == "Dn")
+      return 9;
+    else if (name == "qn")
+      return 10;
+    else if (name == "mu")
       return 11;
     else if (name == "alpha1")
       return 12;
@@ -21811,19 +21760,19 @@ public:
     case 4:
       return "pp";
     case 5:
-      return "eps";
-    case 6:
-      return "Dp";
-    case 7:
-      return "qp";
-    case 8:
-      return "Dn";
-    case 9:
-      return "qn";
-    case 10:
-      return "mu";
-    case 11:
       return "psi";
+    case 6:
+      return "eps";
+    case 7:
+      return "Dp";
+    case 8:
+      return "qp";
+    case 9:
+      return "Dn";
+    case 10:
+      return "qn";
+    case 11:
+      return "mu";
     case 12:
       return "alpha1";
     case 13:
@@ -21844,13 +21793,13 @@ public:
   typedef Form_L_FunctionSpace_3 CoefficientSpace_EsEs;
   typedef Form_L_FunctionSpace_4 CoefficientSpace_uu;
   typedef Form_L_FunctionSpace_5 CoefficientSpace_pp;
-  typedef Form_L_FunctionSpace_6 CoefficientSpace_eps;
-  typedef Form_L_FunctionSpace_7 CoefficientSpace_Dp;
-  typedef Form_L_FunctionSpace_8 CoefficientSpace_qp;
-  typedef Form_L_FunctionSpace_9 CoefficientSpace_Dn;
-  typedef Form_L_FunctionSpace_10 CoefficientSpace_qn;
-  typedef Form_L_FunctionSpace_11 CoefficientSpace_mu;
-  typedef Form_L_FunctionSpace_12 CoefficientSpace_psi;
+  typedef Form_L_FunctionSpace_6 CoefficientSpace_psi;
+  typedef Form_L_FunctionSpace_7 CoefficientSpace_eps;
+  typedef Form_L_FunctionSpace_8 CoefficientSpace_Dp;
+  typedef Form_L_FunctionSpace_9 CoefficientSpace_qp;
+  typedef Form_L_FunctionSpace_10 CoefficientSpace_Dn;
+  typedef Form_L_FunctionSpace_11 CoefficientSpace_qn;
+  typedef Form_L_FunctionSpace_12 CoefficientSpace_mu;
   typedef Form_L_FunctionSpace_13 CoefficientSpace_alpha1;
   typedef Form_L_FunctionSpace_14 CoefficientSpace_alpha2;
 
@@ -21860,13 +21809,13 @@ public:
   dolfin::CoefficientAssigner EsEs;
   dolfin::CoefficientAssigner uu;
   dolfin::CoefficientAssigner pp;
+  dolfin::CoefficientAssigner psi;
   dolfin::CoefficientAssigner eps;
   dolfin::CoefficientAssigner Dp;
   dolfin::CoefficientAssigner qp;
   dolfin::CoefficientAssigner Dn;
   dolfin::CoefficientAssigner qn;
   dolfin::CoefficientAssigner mu;
-  dolfin::CoefficientAssigner psi;
   dolfin::CoefficientAssigner alpha1;
   dolfin::CoefficientAssigner alpha2;
 };
@@ -21877,7 +21826,7 @@ public:
 
   // Constructor
   MultiMeshForm_L(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0):
-    dolfin::MultiMeshForm(V0), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), pp(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), mu(*this, 10), psi(*this, 11), alpha1(*this, 12), alpha2(*this, 13)
+    dolfin::MultiMeshForm(V0), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), pp(*this, 4), psi(*this, 5), eps(*this, 6), Dp(*this, 7), qp(*this, 8), Dn(*this, 9), qn(*this, 10), mu(*this, 11), alpha1(*this, 12), alpha2(*this, 13)
   {
     // Create and add standard forms
     std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
@@ -21895,8 +21844,8 @@ public:
   }
 
   // Constructor
-  MultiMeshForm_L(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> pp, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> psi, std::shared_ptr<const dolfin::GenericFunction> alpha1, std::shared_ptr<const dolfin::GenericFunction> alpha2):
-    dolfin::MultiMeshForm(V0), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), pp(*this, 4), eps(*this, 5), Dp(*this, 6), qp(*this, 7), Dn(*this, 8), qn(*this, 9), mu(*this, 10), psi(*this, 11), alpha1(*this, 12), alpha2(*this, 13)
+  MultiMeshForm_L(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> CatCat, std::shared_ptr<const dolfin::GenericFunction> AnAn, std::shared_ptr<const dolfin::GenericFunction> EsEs, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> pp, std::shared_ptr<const dolfin::GenericFunction> psi, std::shared_ptr<const dolfin::GenericFunction> eps, std::shared_ptr<const dolfin::GenericFunction> Dp, std::shared_ptr<const dolfin::GenericFunction> qp, std::shared_ptr<const dolfin::GenericFunction> Dn, std::shared_ptr<const dolfin::GenericFunction> qn, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> alpha1, std::shared_ptr<const dolfin::GenericFunction> alpha2):
+    dolfin::MultiMeshForm(V0), CatCat(*this, 0), AnAn(*this, 1), EsEs(*this, 2), uu(*this, 3), pp(*this, 4), psi(*this, 5), eps(*this, 6), Dp(*this, 7), qp(*this, 8), Dn(*this, 9), qn(*this, 10), mu(*this, 11), alpha1(*this, 12), alpha2(*this, 13)
   {
     // Create and add standard forms
     std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
@@ -21915,13 +21864,13 @@ public:
     this->EsEs = EsEs;
     this->uu = uu;
     this->pp = pp;
+    this->psi = psi;
     this->eps = eps;
     this->Dp = Dp;
     this->qp = qp;
     this->Dn = Dn;
     this->qn = qn;
     this->mu = mu;
-    this->psi = psi;
     this->alpha1 = alpha1;
     this->alpha2 = alpha2;
 
@@ -21944,19 +21893,19 @@ public:
       return 3;
     else if (name == "pp")
       return 4;
-    else if (name == "eps")
-      return 5;
-    else if (name == "Dp")
-      return 6;
-    else if (name == "qp")
-      return 7;
-    else if (name == "Dn")
-      return 8;
-    else if (name == "qn")
-      return 9;
-    else if (name == "mu")
-      return 10;
     else if (name == "psi")
+      return 5;
+    else if (name == "eps")
+      return 6;
+    else if (name == "Dp")
+      return 7;
+    else if (name == "qp")
+      return 8;
+    else if (name == "Dn")
+      return 9;
+    else if (name == "qn")
+      return 10;
+    else if (name == "mu")
       return 11;
     else if (name == "alpha1")
       return 12;
@@ -21985,19 +21934,19 @@ public:
     case 4:
       return "pp";
     case 5:
-      return "eps";
-    case 6:
-      return "Dp";
-    case 7:
-      return "qp";
-    case 8:
-      return "Dn";
-    case 9:
-      return "qn";
-    case 10:
-      return "mu";
-    case 11:
       return "psi";
+    case 6:
+      return "eps";
+    case 7:
+      return "Dp";
+    case 8:
+      return "qp";
+    case 9:
+      return "Dn";
+    case 10:
+      return "qn";
+    case 11:
+      return "mu";
     case 12:
       return "alpha1";
     case 13:
@@ -22018,13 +21967,13 @@ public:
   typedef Form_L_FunctionSpace_3 CoefficientSpace_EsEs;
   typedef Form_L_FunctionSpace_4 CoefficientSpace_uu;
   typedef Form_L_FunctionSpace_5 CoefficientSpace_pp;
-  typedef Form_L_FunctionSpace_6 CoefficientSpace_eps;
-  typedef Form_L_FunctionSpace_7 CoefficientSpace_Dp;
-  typedef Form_L_FunctionSpace_8 CoefficientSpace_qp;
-  typedef Form_L_FunctionSpace_9 CoefficientSpace_Dn;
-  typedef Form_L_FunctionSpace_10 CoefficientSpace_qn;
-  typedef Form_L_FunctionSpace_11 CoefficientSpace_mu;
-  typedef Form_L_FunctionSpace_12 CoefficientSpace_psi;
+  typedef Form_L_FunctionSpace_6 CoefficientSpace_psi;
+  typedef Form_L_FunctionSpace_7 CoefficientSpace_eps;
+  typedef Form_L_FunctionSpace_8 CoefficientSpace_Dp;
+  typedef Form_L_FunctionSpace_9 CoefficientSpace_qp;
+  typedef Form_L_FunctionSpace_10 CoefficientSpace_Dn;
+  typedef Form_L_FunctionSpace_11 CoefficientSpace_qn;
+  typedef Form_L_FunctionSpace_12 CoefficientSpace_mu;
   typedef Form_L_FunctionSpace_13 CoefficientSpace_alpha1;
   typedef Form_L_FunctionSpace_14 CoefficientSpace_alpha2;
 
@@ -22034,13 +21983,13 @@ public:
   dolfin::MultiMeshCoefficientAssigner EsEs;
   dolfin::MultiMeshCoefficientAssigner uu;
   dolfin::MultiMeshCoefficientAssigner pp;
+  dolfin::MultiMeshCoefficientAssigner psi;
   dolfin::MultiMeshCoefficientAssigner eps;
   dolfin::MultiMeshCoefficientAssigner Dp;
   dolfin::MultiMeshCoefficientAssigner qp;
   dolfin::MultiMeshCoefficientAssigner Dn;
   dolfin::MultiMeshCoefficientAssigner qn;
   dolfin::MultiMeshCoefficientAssigner mu;
-  dolfin::MultiMeshCoefficientAssigner psi;
   dolfin::MultiMeshCoefficientAssigner alpha1;
   dolfin::MultiMeshCoefficientAssigner alpha2;
 };
