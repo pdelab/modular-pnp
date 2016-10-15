@@ -19,6 +19,7 @@
 #include "L2Error.h"
 #include "GS.h"
 #include "umfpack.h"
+#include "spheres.h"
 extern "C"
 {
   #include "fasp.h"
@@ -56,6 +57,22 @@ using namespace dolfin;
 
   };
 
+  int Numb_spheres = 20;
+
+  class SpheresSubDomain : public dolfin::SubDomain
+  {
+      bool inside(const dolfin::Array<double>& x, bool on_boundary) const
+      {
+        bool flag=false;
+        for (int i=0;i<Numb_spheres;i++){
+            if (on_boundary && (std::pow(x[0]-xc[i],2) + std::pow(x[1]-yc[i],2) + std::pow(x[2]-zc[i],2) < std::pow(rc[i],2)+0.1) )
+                    flag=true;
+                  }
+            return flag;
+      }
+
+  };
+
 int main(int argc, char** argv)
 {
 
@@ -75,7 +92,7 @@ int main(int argc, char** argv)
   // read domain parameters
   printf("domain...\n"); fflush(stdout);
   domain_param domain_par;
-  char domain_param_filename[] = "./benchmarks/pnp_stokes/domain_params.dat";
+  char domain_param_filename[] = "./benchmarks/pnp_stokes/domain_params_battery.dat";
   domain_param_input(domain_param_filename, &domain_par);
   print_domain_param(&domain_par);
 
@@ -87,7 +104,8 @@ int main(int argc, char** argv)
   // mesh
   dolfin::Point p0( -domain_par.length_x/2, -domain_par.length_y/2, -domain_par.length_z/2);
   dolfin::Point p1(  domain_par.length_x/2,  domain_par.length_y/2,  domain_par.length_z/2);
-  auto mesh = std::make_shared<dolfin::BoxMesh>(p0, p1, domain_par.grid_x, domain_par.grid_y, domain_par.grid_z);
+  // auto mesh = std::make_shared<dolfin::BoxMesh>(p0, p1, domain_par.grid_x, domain_par.grid_y, domain_par.grid_z);
+  auto mesh = std::make_shared<dolfin::Mesh>("./benchmarks/pnp_stokes/mesh.xml.gz");
   print_domain_param(&domain_par);
 
   // read coefficients and boundary values
@@ -117,7 +135,7 @@ int main(int argc, char** argv)
   fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
   INT status = FASP_SUCCESS;
   printf("done\n"); fflush(stdout);
-    
+
     // Setup FASP solver for pnp
     printf("FASP solver parameters for pnp..."); fflush(stdout);
     input_param pnp_inpar;
@@ -151,14 +169,16 @@ int main(int argc, char** argv)
 
   // Initialize guess
   printf("intial guess...\n"); fflush(stdout);
-  LogCharge Cation(
+  // LogCharge Cation(
+  LogCharge_SPH Cation(
     coeff_par.cation_lower_val,
     coeff_par.anion_lower_val,
     -domain_par.length_x/2.0,
     domain_par.length_x/2.0,
     coeff_par.bc_coordinate
   );
-  LogCharge Anion(
+  // LogCharge Anion(
+  LogCharge_SPH Anion(
     coeff_par.anion_lower_val,
     coeff_par.anion_upper_val,
     -domain_par.length_x/2.0,
@@ -167,7 +187,8 @@ int main(int argc, char** argv)
   );
 
   // not ideal implementation: replace by a solve for voltage below
-  Voltage Volt(
+  // Voltage Volt(
+  Potential_SPH Volt(
     coeff_par.potential_lower_val,
     coeff_par.potential_upper_val,
     -domain_par.length_x/2.0,
@@ -195,6 +216,13 @@ int main(int argc, char** argv)
   auto penalty1=std::make_shared<Constant>(1.0e-3);
   auto penalty2=std::make_shared<Constant>(1.0e-6);
 
+  auto SPH = std::make_shared<SpheresSubDomain>();
+  auto zero3= std::make_shared<Constant>(0.0,0.0,0.0);
+  auto Phi0 = std::make_shared<Constant>(-1.0);
+  auto g = std::make_shared<Constant>(0.0);
+  auto charge = std::make_shared<Constant>(-50000);
+  auto neg_one = std::make_shared<Constant>(-1.0);
+
 
   // interpolate
   auto V= std::make_shared<pnp_stokes::FunctionSpace>(mesh);
@@ -211,7 +239,25 @@ int main(int argc, char** argv)
   initialAnion->interpolate(Anion);
   initialPotential->interpolate(Volt);
   initialVelocity->interpolate(*vel_vec);
+  // initialVelocity->interpolate(Velocity);
   initialPressure->interpolate(*zero);
+
+  std::vector<std::shared_ptr<const Function>> vvv = {initialCation,initialAnion,initialPotential,initialVelocity,initialPressure};
+  assign(initialFunction , vvv);
+  dolfin::DirichletBC bcCat(V->sub(0), one, SPH);
+  dolfin::DirichletBC bcAn(V->sub(1), neg_one, SPH);
+  dolfin::DirichletBC bcphi(V->sub(2), Phi0, SPH);
+  dolfin::DirichletBC bcvel(V->sub(3), zero3, SPH);
+  bcCat.apply(*(initialFunction->vector()));
+  bcAn.apply(*(initialFunction->vector()));
+  bcphi.apply(*(initialFunction->vector()));
+  bcvel.apply(*(initialFunction->vector()));
+
+  initialCation = std::make_shared<Function>((*initialFunction)[0]);
+  initialAnion = std::make_shared<Function>((*initialFunction)[1]);
+  initialPotential = std::make_shared<Function>((*initialFunction)[2]);
+  initialVelocity = std::make_shared<Function>((*initialFunction)[3]);
+  initialPressure = std::make_shared<Function>((*initialFunction)[4]);
 
 
   // set adaptivity parameters
@@ -239,10 +285,10 @@ int main(int argc, char** argv)
   printf("\tboundary conditions...\n"); fflush(stdout);
   auto boundary = std::make_shared<SymmBoundaries>(coeff_par.bc_coordinate, -domain_par.length_x/2.0, domain_par.length_x/2.0);
   auto bddd = std::make_shared<Bd_all>();
-  dolfin::DirichletBC bc1(V->sub(0), zero, boundary);
-  dolfin::DirichletBC bc2(V->sub(1), zero, boundary);
-  dolfin::DirichletBC bc3(V->sub(2), zero, boundary);
-  dolfin::DirichletBC bc_stokes(V->sub(3), zero_vec3, boundary);
+  dolfin::DirichletBC bc1(V->sub(0), zero, SPH);
+  dolfin::DirichletBC bc2(V->sub(1), zero, SPH);
+  dolfin::DirichletBC bc3(V->sub(2), zero, SPH);
+  dolfin::DirichletBC bc_stokes(V->sub(3), zero_vec3, SPH);
   // dolfin::DirichletBC bc_stokes(Vs, zero_vec4, bddd);
 
 
@@ -266,7 +312,7 @@ int main(int argc, char** argv)
   get_dofs(initialFunction.get(), &velocity_dofs, 3);
   get_dofs(initialFunction.get(), &pressure_dofs, 4);
   int index_fix = pressure_dofs.val[0];
-    
+
   // output dofs
     /*
     fasp_ivec_write("cation_dofs", &cation_dofs);
@@ -284,10 +330,10 @@ int main(int argc, char** argv)
   // Fasp matrices and vectors
   dCSRmat A_fasp;
   dvector b_fasp, solu_fasp;
-    
+
   block_dCSRmat A_fasp_bcsr;
   dvector b_fasp_bcsr, solu_fasp_bcsr;
-    
+
     // allocate
     int i;
     A_fasp_bcsr.brow = 2;
@@ -297,7 +343,7 @@ int main(int argc, char** argv)
     for (i=0; i<4 ;i++) {
         A_fasp_bcsr.blocks[i] = (dCSRmat *)fasp_mem_calloc(1, sizeof(dCSRmat));
     }
-   
+
     // form dof index for PNP and Stokes
     ivector pnp_dofs;
     ivector stokes_dofs;
@@ -365,7 +411,7 @@ int main(int argc, char** argv)
     a.EsEs = initialPotential;
     a.uu = initialVelocity;
     assemble(A, a);
-      
+
     bc1.apply(A);
     bc2.apply(A);
     bc3.apply(A);
@@ -387,7 +433,7 @@ int main(int argc, char** argv)
 
     // list_lu_solver_methods();
     // solve(A, *solutionUpdate->vector(), b, "umfpack");
-      
+
       // --------------------------------------------------------------------------
       // 2 by 2 block solver
       // step 1: get blocks (order: PNP Stokes)
@@ -398,17 +444,17 @@ int main(int argc, char** argv)
 
       // step 2: get right hand side
       fasp_dvec_alloc(b_fasp.row, &b_fasp_bcsr);
-      
+
       for (i=0; i<pnp_dofs.row; i++)
           b_fasp_bcsr.val[i] = b_fasp.val[pnp_dofs.val[i]];
       for (i=0; i<stokes_dofs.row; i++)
           b_fasp_bcsr.val[pnp_dofs.row + i] = b_fasp.val[stokes_dofs.val[i]];
-      
+
       // step 3: solve
       fasp_dvec_alloc(b_fasp.row, &solu_fasp_bcsr);
       fasp_dvec_set(solu_fasp_bcsr.row, &solu_fasp_bcsr, 0.0);
       fasp_solver_bdcsr_krylov_pnp_stokes(&A_fasp_bcsr, &b_fasp_bcsr, &solu_fasp_bcsr, &itpar, &pnp_itpar, &pnp_amgpar, &stokes_itpar, &stokes_amgpar, velocity_dofs.row, pressure_dofs.row);
-      
+
       // step 4: put solution back
       for (i=0; i<pnp_dofs.row; i++)
           solu_fasp.val[pnp_dofs.val[i]] = solu_fasp_bcsr.val[i];
@@ -513,7 +559,16 @@ int main(int argc, char** argv)
       // pressureFile << dPressure;
     }
 
-
+  File cationFile2("./benchmarks/pnp_stokes/output/cation.xml");
+  File anionFile2("./benchmarks/pnp_stokes/output/anion.xml");
+  File potentialFile2("./benchmarks/pnp_stokes/output/potential.xml");
+  File velocityFile2("./benchmarks/pnp_stokes/output/velocity.xml");
+  File pressureFile2("./benchmarks/pnp_stokes/output/pressure.xml");
+  cationFile2 << *initialCation;
+  anionFile2 << *initialAnion;
+  potentialFile2 << *initialPotential;
+  velocityFile2 << *initialVelocity;
+  pressureFile2 << *initialPressure;
 
   printf("\n-----------------------------------------------------------    "); fflush(stdout);
   printf("\n End                                                           "); fflush(stdout);
