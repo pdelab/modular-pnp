@@ -230,7 +230,7 @@ int main (int argc, char** argv) {
     max_residual_tol
   );
 
-  printf("\tinitial relative residual : %10.5e\n", newton.initial_residual);
+  printf("\tinitial residual : %10.5e\n", newton.initial_residual);
   printf("\n");
 
   while (newton.needs_to_iterate()) {
