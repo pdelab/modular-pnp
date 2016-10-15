@@ -19,22 +19,75 @@ extern "C" {
 
 using namespace std;
 
+const double permittivity_const = 1.0;
 const double electric_strength = 1.0;
 const double ref_concentration = 1.0;
+
+std::vector<double> exact_solution (double x) {
+  return {
+    x * electric_strength,
+    std::log(ref_concentration) - x * electric_strength,
+    std::log(ref_concentration) + x * electric_strength
+  };
+};
+
+std::vector<double> exact_derivative (double x) {
+  return {
+    electric_strength,
+    -electric_strength,
+    electric_strength
+  };
+};
+
+std::vector<double> exact_second (double x) {
+  return {
+    0.0,
+    0.0,
+    0.0
+  };
+};
+
+std::vector<double> diffusivities (double x) {
+  return {
+    0.0,
+    1.0, // x > 0.0 ? 1.0 : 0.1,
+    1.0 // x > 0.0 ? 2.0 : 0.1
+  };
+};
+
+double fixed (double x) {
+  std::vector<double> dds(exact_second(x));
+  std::vector<double> s(exact_solution(x));
+
+  return -permittivity_const * dds[0] - (std::exp(s[1]) - std::exp(s[2]));
+};
+
+std::vector<double> reactions (double x) {
+  std::vector<double> diff(diffusivities(x));
+  std::vector<double> dds(exact_second(x));
+  std::vector<double> ds(exact_derivative(x));
+  std::vector<double> s(exact_solution(x));
+  return {
+    0.0,
+    -diff[1] * std::exp(s[1]) * (ds[1] * (ds[1] + ds[0]) + (dds[1] + dds[0])),
+    -diff[2] * std::exp(s[2]) * (ds[2] * (ds[2] - ds[0]) + (dds[2] - dds[0]))
+  };
+};
+
+
+
 
 class Permittivity_Expression : public dolfin::Expression {
   public:
     void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
-      values[0] = 1.0;
+      values[0] = permittivity_const;
     }
 };
 
 class Fixed_Charged_Expression : public dolfin::Expression {
   public:
     void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
-      values[0] = -std::exp(-electric_strength * x[0]);
-      values[0] += std::exp(electric_strength * x[0]);
-      values[0] *= ref_concentration;
+      values[0] = fixed(x[0]);
     }
 };
 
@@ -42,9 +95,21 @@ class Diffusivity_Expression : public dolfin::Expression {
   public:
     Diffusivity_Expression() : dolfin::Expression(3) {}
     void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
-      values[0] = 1.0; // potential diffusivity is not used
-      values[1] = x[0] > 0.0 ? 1.0 : 0.1;
-      values[2] = x[0] > 0.0 ? 2.0 : 0.1;
+      std::vector<double> diff(diffusivities(x[0]));
+      values[0] = diff[0];
+      values[1] = diff[1];
+      values[2] = diff[2];
+    }
+};
+
+class Reaction_Expression : public dolfin::Expression {
+  public:
+    Reaction_Expression() : dolfin::Expression(3) {}
+    void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
+      std::vector<double> reac(reactions(x[0]));
+      values[0] = reac[0];
+      values[1] = reac[1];
+      values[2] = reac[2];
     }
 };
 
@@ -126,11 +191,12 @@ int main (int argc, char** argv) {
     {"valency", {0.0, 1.0, -1.0}}
   };
   std::map<std::string, std::vector<double>> pnp_sources = {
-    {"fixed_charge", {1.0}}
+    {"fixed_charge", {1.0}},
+    {"reaction", {0.0, 0.0, 0.0}}
   };
 
   // build problem
-  Linear_PNP::Linear_PNP pnp_problem (
+  Linear_PNP::Linear_PNP pnp_problem(
     mesh,
     function_space,
     bilinear_form,
@@ -149,9 +215,14 @@ int main (int argc, char** argv) {
   dolfin::Function charges(pnp_problem.fixed_charge_space);
   Fixed_Charged_Expression fc_expr;
   charges.interpolate(fc_expr);
+
   dolfin::Function diffusivity(pnp_problem.diffusivity_space);
   Diffusivity_Expression diff_expr;
   diffusivity.interpolate(diff_expr);
+
+  dolfin::Function reaction(pnp_problem.reaction_space);
+  Reaction_Expression reac_expr;
+  reaction.interpolate(reac_expr);
 
   dolfin::Function valency(pnp_problem.valency_space);
   Valency_Expression valency_expr;
@@ -163,7 +234,8 @@ int main (int argc, char** argv) {
     {"valency", valency}
   };
   std::map<std::string, dolfin::Function> pnp_source_fns = {
-    {"fixed_charge", charges}
+    {"fixed_charge", charges},
+    {"reaction", reaction}
   };
 
   pnp_problem.set_coefficients(
@@ -177,11 +249,14 @@ int main (int argc, char** argv) {
     dolfin::File permittivity_file("./benchmarks/pnp_exact_solution/output/permittivity.pvd");
     dolfin::File charges_file("./benchmarks/pnp_exact_solution/output/charges.pvd");
     dolfin::File diffusivity_file("./benchmarks/pnp_exact_solution/output/diffusivity.pvd");
+    dolfin::File reaction_file("./benchmarks/pnp_exact_solution/output/reaction.pvd");
     dolfin::File valency_file("./benchmarks/pnp_exact_solution/output/valency.pvd");
     permittivity_file << permittivity;
     charges_file << charges;
     diffusivity_file << diffusivity[1];
     diffusivity_file << diffusivity[2];
+    reaction_file << reaction[1];
+    reaction_file << reaction[2];
     valency_file << valency[1];
     valency_file << valency[2];
   }
@@ -195,20 +270,25 @@ int main (int argc, char** argv) {
   dolfin::File solution_file0("./benchmarks/pnp_exact_solution/output/1solution.pvd");
   dolfin::File solution_file1("./benchmarks/pnp_exact_solution/output/2solution.pvd");
   dolfin::File solution_file2("./benchmarks/pnp_exact_solution/output/3solution.pvd");
+  dolfin::File total_charge_file("./benchmarks/pnp_exact_solution/output/total_charge.pvd");
 
   // initial guess for prescibed Dirichlet
   printf("Record interpolant for given Dirichlet BCs (initial guess for solution)\n");
   std::vector<std::size_t> components = {0, 0, 0};
   std::vector<std::vector<double>> bcs;
-  bcs.push_back({-electric_strength,  electric_strength});
-  bcs.push_back({std::log(ref_concentration) + electric_strength, std::log(ref_concentration) - electric_strength});
-  bcs.push_back({std::log(ref_concentration) - electric_strength, std::log(ref_concentration) + electric_strength});
+
+  std::vector<double> left(exact_solution(-1.0));
+  std::vector<double> right(exact_solution(+1.0));
+  bcs.push_back({left[0], right[0]});
+  bcs.push_back({left[1], right[1]});
+  bcs.push_back({left[2], right[2]});
 
   pnp_problem.set_DirichletBC(components, bcs);
   dolfin::Function solutionFn = pnp_problem.get_solution();
   solution_file0 << solutionFn[0];
   solution_file1 << solutionFn[1];
   solution_file2 << solutionFn[2];
+  total_charge_file << pnp_problem.get_total_charge();
   printf("\n");
 
 
@@ -234,6 +314,7 @@ int main (int argc, char** argv) {
   printf("\tinitial max residual : %10.5e\n", initial_max_residual);
   printf("\n");
 
+  newton.update_max_residual(initial_max_residual);
   while (newton.needs_to_iterate()) {
     // solve
     printf("Solving for Newton iterate %lu \n", newton.iteration);
@@ -253,6 +334,7 @@ int main (int argc, char** argv) {
     solution_file0 << solutionFn[0];
     solution_file1 << solutionFn[1];
     solution_file2 << solutionFn[2];
+    total_charge_file << pnp_problem.get_total_charge();
     printf("\n");
   }
 

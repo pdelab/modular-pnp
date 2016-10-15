@@ -5247,7 +5247,7 @@ public:
   /// Tabulate which form coefficients are used by this integral
   virtual const std::vector<bool> & enabled_coefficients() const
   {
-    static const std::vector<bool> enabled({true, true, true, true, true});
+    static const std::vector<bool> enabled({true, true, true, true, true, true});
     return enabled;
   }
 
@@ -5357,18 +5357,18 @@ public:
     } // end loop over 'r'
     // Number of operations to compute geometry constants: 36.
     double G[6];
-    G[0] =  - det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[1] =  - det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[2] =  - det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[3] =  - det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[4] =  - det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[0] =  - det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[1] =  - det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[2] =  - det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[3] =  - det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[4] =  - det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
     G[5] =  - det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
     
     // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 4965
+    // Number of operations to compute element tensor for following IP loop = 5505
     for (unsigned int ip = 0; ip < 15; ip++)
     {
       
@@ -5397,72 +5397,82 @@ public:
       double F21 = 0.0;
       double F22 = 0.0;
       double F23 = 0.0;
+      double F24 = 0.0;
+      double F25 = 0.0;
       
       // Total number of operations to compute function values = 60
       for (unsigned int r = 0; r < 2; r++)
       {
-        F6 += FE1_C0_D001[ip][r]*w[0][nzc3[r]];
-        F7 += FE1_C0_D001[ip][r]*w[0][nzc2[r]];
-        F8 += FE1_C0_D001[ip][r]*w[0][nzc1[r]];
-        F10 += FE1_C0_D001[ip][r]*w[0][nzc7[r]];
-        F11 += FE1_C0_D001[ip][r]*w[0][nzc6[r]];
-        F12 += FE1_C0_D001[ip][r]*w[0][nzc5[r]];
-        F14 += FE1_C0_D001[ip][r]*w[4][nzc7[r]];
-        F15 += FE1_C0_D001[ip][r]*w[4][nzc6[r]];
-        F16 += FE1_C0_D001[ip][r]*w[4][nzc5[r]];
-        F18 += FE1_C0_D001[ip][r]*w[0][nzc11[r]];
-        F19 += FE1_C0_D001[ip][r]*w[0][nzc10[r]];
-        F20 += FE1_C0_D001[ip][r]*w[0][nzc9[r]];
-        F21 += FE1_C0_D001[ip][r]*w[4][nzc11[r]];
-        F22 += FE1_C0_D001[ip][r]*w[4][nzc10[r]];
-        F23 += FE1_C0_D001[ip][r]*w[4][nzc9[r]];
+        F8 += FE1_C0_D001[ip][r]*w[0][nzc3[r]];
+        F9 += FE1_C0_D001[ip][r]*w[0][nzc2[r]];
+        F10 += FE1_C0_D001[ip][r]*w[0][nzc1[r]];
+        F12 += FE1_C0_D001[ip][r]*w[0][nzc7[r]];
+        F13 += FE1_C0_D001[ip][r]*w[0][nzc6[r]];
+        F14 += FE1_C0_D001[ip][r]*w[0][nzc5[r]];
+        F16 += FE1_C0_D001[ip][r]*w[4][nzc7[r]];
+        F17 += FE1_C0_D001[ip][r]*w[4][nzc6[r]];
+        F18 += FE1_C0_D001[ip][r]*w[4][nzc5[r]];
+        F20 += FE1_C0_D001[ip][r]*w[0][nzc11[r]];
+        F21 += FE1_C0_D001[ip][r]*w[0][nzc10[r]];
+        F22 += FE1_C0_D001[ip][r]*w[0][nzc9[r]];
+        F23 += FE1_C0_D001[ip][r]*w[4][nzc11[r]];
+        F24 += FE1_C0_D001[ip][r]*w[4][nzc10[r]];
+        F25 += FE1_C0_D001[ip][r]*w[4][nzc9[r]];
       } // end loop over 'r'
       
-      // Total number of operations to compute function values = 72
+      // Total number of operations to compute function values = 88
       for (unsigned int r = 0; r < 4; r++)
       {
-        F0 += FE0[ip][r]*w[2][r];
-        F1 += FE0[ip][r]*w[4][nzc4[r]];
-        F2 += FE0[ip][r]*w[0][nzc4[r]];
-        F3 += FE0[ip][r]*w[4][nzc8[r]];
-        F4 += FE0[ip][r]*w[0][nzc8[r]];
-        F5 += FE0[ip][r]*w[1][r];
-        F9 += FE0[ip][r]*w[3][nzc4[r]];
-        F13 += FE0[ip][r]*w[0][nzc0[r]];
-        F17 += FE0[ip][r]*w[3][nzc8[r]];
+        F0 += FE0[ip][r]*w[5][nzc4[r]];
+        F1 += FE0[ip][r]*w[5][nzc8[r]];
+        F2 += FE0[ip][r]*w[2][r];
+        F3 += FE0[ip][r]*w[4][nzc4[r]];
+        F4 += FE0[ip][r]*w[0][nzc4[r]];
+        F5 += FE0[ip][r]*w[4][nzc8[r]];
+        F6 += FE0[ip][r]*w[0][nzc8[r]];
+        F7 += FE0[ip][r]*w[1][r];
+        F11 += FE0[ip][r]*w[3][nzc4[r]];
+        F15 += FE0[ip][r]*w[0][nzc0[r]];
+        F19 += FE0[ip][r]*w[3][nzc8[r]];
       } // end loop over 'r'
       
-      // Number of operations to compute ip constants: 155
-      double I[10];
+      // Number of operations to compute ip constants: 159
+      double I[12];
       // Number of operations: 21
-      I[0] = F17*W15[ip]*std::exp(F4)*(G[0]*(F18 + F13*F21 + F3*F6) + G[1]*(F19 + F13*F22 + F3*F7) + G[2]*(F20 + F13*F23 + F3*F8));
+      I[0] = F19*W15[ip]*std::exp(F6)*(G[0]*(F22 + F10*F5 + F15*F25) + G[1]*(F20 + F15*F23 + F5*F8) + G[2]*(F21 + F15*F24 + F5*F9));
       
       // Number of operations: 21
-      I[1] = F17*W15[ip]*std::exp(F4)*(G[0]*(F19 + F13*F22 + F3*F7) + G[3]*(F18 + F13*F21 + F3*F6) + G[4]*(F20 + F13*F23 + F3*F8));
+      I[1] = F19*W15[ip]*std::exp(F6)*(G[1]*(F21 + F15*F24 + F5*F9) + G[3]*(F22 + F10*F5 + F15*F25) + G[4]*(F20 + F15*F23 + F5*F8));
       
       // Number of operations: 7
-      I[2] = F5*W15[ip]*(F6*G[4] + F7*G[2] + F8*G[5]);
+      I[2] = F7*W15[ip]*(F10*G[5] + F8*G[3] + F9*G[0]);
       
       // Number of operations: 7
-      I[3] = F5*W15[ip]*(F6*G[0] + F7*G[1] + F8*G[2]);
+      I[3] = F7*W15[ip]*(F10*G[0] + F8*G[1] + F9*G[2]);
       
       // Number of operations: 7
-      I[4] = F5*W15[ip]*(F6*G[3] + F7*G[0] + F8*G[4]);
+      I[4] = F7*W15[ip]*(F10*G[3] + F8*G[4] + F9*G[1]);
       
       // Number of operations: 21
-      I[5] = F9*W15[ip]*std::exp(F2)*(G[2]*(F11 + F1*F7 + F13*F15) + G[4]*(F10 + F1*F6 + F13*F14) + G[5]*(F12 + F1*F8 + F13*F16));
+      I[5] = F11*W15[ip]*std::exp(F4)*(G[0]*(F13 + F15*F17 + F3*F9) + G[3]*(F12 + F15*F16 + F3*F8) + G[5]*(F14 + F10*F3 + F15*F18));
       
       // Number of operations: 21
-      I[6] = F9*W15[ip]*std::exp(F2)*(G[0]*(F10 + F1*F6 + F13*F14) + G[1]*(F11 + F1*F7 + F13*F15) + G[2]*(F12 + F1*F8 + F13*F16));
+      I[6] = F11*W15[ip]*std::exp(F4)*(G[0]*(F14 + F10*F3 + F15*F18) + G[1]*(F12 + F15*F16 + F3*F8) + G[2]*(F13 + F15*F17 + F3*F9));
       
       // Number of operations: 21
-      I[7] = F9*W15[ip]*std::exp(F2)*(G[0]*(F11 + F1*F7 + F13*F15) + G[3]*(F10 + F1*F6 + F13*F14) + G[4]*(F12 + F1*F8 + F13*F16));
+      I[7] = F11*W15[ip]*std::exp(F4)*(G[1]*(F13 + F15*F17 + F3*F9) + G[3]*(F14 + F10*F3 + F15*F18) + G[4]*(F12 + F15*F16 + F3*F8));
       
       // Number of operations: 21
-      I[8] = F17*W15[ip]*std::exp(F4)*(G[2]*(F19 + F13*F22 + F3*F7) + G[4]*(F18 + F13*F21 + F3*F6) + G[5]*(F20 + F13*F23 + F3*F8));
+      I[8] = F19*W15[ip]*std::exp(F6)*(G[0]*(F21 + F15*F24 + F5*F9) + G[3]*(F20 + F15*F23 + F5*F8) + G[5]*(F22 + F10*F5 + F15*F25));
       
       // Number of operations: 8
-      I[9] = W15[ip]*det*(F0 + F1*std::exp(F2) + F3*std::exp(F4));
+      I[9] = W15[ip]*det*(F2 + F3*std::exp(F4) + F5*std::exp(F6));
+      
+      // Number of operations: 2
+      I[10] = F0*W15[ip]*det;
+      
+      // Number of operations: 2
+      I[11] = F1*W15[ip]*det;
       
       
       // Number of operations for primary indices: 36
@@ -5488,11 +5498,15 @@ public:
         A[nzc9[j]] += FE1_C0_D001[ip][j]*I[8];
       } // end loop over 'j'
       
-      // Number of operations for primary indices: 8
+      // Number of operations for primary indices: 24
       for (unsigned int j = 0; j < 4; j++)
       {
         // Number of operations to compute entry: 2
         A[nzc0[j]] += FE0[ip][j]*I[9];
+        // Number of operations to compute entry: 2
+        A[nzc4[j]] += FE0[ip][j]*I[10];
+        // Number of operations to compute entry: 2
+        A[nzc8[j]] += FE0[ip][j]*I[11];
       } // end loop over 'j'
     } // end loop over 'ip'
   }
@@ -5797,7 +5811,7 @@ public:
   /// Return a string identifying the form
   virtual const char* signature() const
   {
-    return "f6a0fecaf36f583f3bde4637268944bcd3e91cff15ba62f174b532a9be7a49d8cdbe5c51ab29aaf364d59c0a162fa39a61b11ba742e1b29711acd4bbf0130592";
+    return "65ebd5ffd1242e84d011c6a766492ba517f902cbcb36a0e9dc117b9ec8c9b3ca815b2e263065ed93d35bf69034999a45e589c3f8808ddf03677fac598100ec93";
   }
 
 
@@ -5810,13 +5824,13 @@ public:
   /// Return the number of coefficients (n)
   virtual std::size_t num_coefficients() const
   {
-    return 5;
+    return 6;
   }
 
   /// Return original coefficient position for each coefficient (0 <= i < n)
   virtual std::size_t original_coefficient_position(std::size_t i) const
   {
-    static const std::vector<std::size_t> position({0, 1, 2, 3, 4});
+    static const std::vector<std::size_t> position({0, 1, 2, 3, 4, 5});
     return position[i];
   }
 
@@ -5852,6 +5866,11 @@ public:
         break;
       }
     case 5:
+      {
+        return new vector_linear_pnp_forms_finite_element_1();
+        break;
+      }
+    case 6:
       {
         return new vector_linear_pnp_forms_finite_element_1();
         break;
@@ -5892,6 +5911,11 @@ public:
         break;
       }
     case 5:
+      {
+        return new vector_linear_pnp_forms_dofmap_1();
+        break;
+      }
+    case 6:
       {
         return new vector_linear_pnp_forms_dofmap_1();
         break;
@@ -6181,6 +6205,53 @@ public:
     dolfin::FunctionSpace(mesh,
                           std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new vector_linear_pnp_forms_finite_element_0()))),
                           std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new vector_linear_pnp_forms_dofmap_0()), *mesh, constrained_domain)))
+  {
+    // Do nothing
+  }
+
+};
+
+class CoefficientSpace_reaction: public dolfin::FunctionSpace
+{
+public:
+
+  //--- Constructors for standard function space, 2 different versions ---
+
+  // Create standard function space (reference version)
+  CoefficientSpace_reaction(const dolfin::Mesh& mesh):
+    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new vector_linear_pnp_forms_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new vector_linear_pnp_forms_dofmap_1()), mesh)))
+  {
+    // Do nothing
+  }
+
+  // Create standard function space (shared pointer version)
+  CoefficientSpace_reaction(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::FunctionSpace(mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new vector_linear_pnp_forms_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new vector_linear_pnp_forms_dofmap_1()), *mesh)))
+  {
+    // Do nothing
+  }
+
+  //--- Constructors for constrained function space, 2 different versions ---
+
+  // Create standard function space (reference version)
+  CoefficientSpace_reaction(const dolfin::Mesh& mesh, const dolfin::SubDomain& constrained_domain):
+    dolfin::FunctionSpace(dolfin::reference_to_no_delete_pointer(mesh),
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new vector_linear_pnp_forms_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new vector_linear_pnp_forms_dofmap_1()), mesh,
+                              dolfin::reference_to_no_delete_pointer(constrained_domain))))
+  {
+    // Do nothing
+  }
+
+  // Create standard function space (shared pointer version)
+  CoefficientSpace_reaction(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+    dolfin::FunctionSpace(mesh,
+                          std::shared_ptr<const dolfin::FiniteElement>(new dolfin::FiniteElement(std::shared_ptr<ufc::finite_element>(new vector_linear_pnp_forms_finite_element_1()))),
+                          std::shared_ptr<const dolfin::DofMap>(new dolfin::DofMap(std::shared_ptr<ufc::dofmap>(new vector_linear_pnp_forms_dofmap_1()), *mesh, constrained_domain)))
   {
     // Do nothing
   }
@@ -6582,13 +6653,15 @@ typedef CoefficientSpace_diffusivity Form_L_FunctionSpace_4;
 
 typedef CoefficientSpace_valency Form_L_FunctionSpace_5;
 
+typedef CoefficientSpace_reaction Form_L_FunctionSpace_6;
+
 class Form_L: public dolfin::Form
 {
 public:
 
   // Constructor
   Form_L(const dolfin::FunctionSpace& V0):
-    dolfin::Form(1, 5), uu(*this, 0), permittivity(*this, 1), fixed_charge(*this, 2), diffusivity(*this, 3), valency(*this, 4)
+    dolfin::Form(1, 6), uu(*this, 0), permittivity(*this, 1), fixed_charge(*this, 2), diffusivity(*this, 3), valency(*this, 4), reaction(*this, 5)
   {
     _function_spaces[0] = reference_to_no_delete_pointer(V0);
 
@@ -6596,8 +6669,8 @@ public:
   }
 
   // Constructor
-  Form_L(const dolfin::FunctionSpace& V0, const dolfin::GenericFunction& uu, const dolfin::GenericFunction& permittivity, const dolfin::GenericFunction& fixed_charge, const dolfin::GenericFunction& diffusivity, const dolfin::GenericFunction& valency):
-    dolfin::Form(1, 5), uu(*this, 0), permittivity(*this, 1), fixed_charge(*this, 2), diffusivity(*this, 3), valency(*this, 4)
+  Form_L(const dolfin::FunctionSpace& V0, const dolfin::GenericFunction& uu, const dolfin::GenericFunction& permittivity, const dolfin::GenericFunction& fixed_charge, const dolfin::GenericFunction& diffusivity, const dolfin::GenericFunction& valency, const dolfin::GenericFunction& reaction):
+    dolfin::Form(1, 6), uu(*this, 0), permittivity(*this, 1), fixed_charge(*this, 2), diffusivity(*this, 3), valency(*this, 4), reaction(*this, 5)
   {
     _function_spaces[0] = reference_to_no_delete_pointer(V0);
 
@@ -6606,13 +6679,14 @@ public:
     this->fixed_charge = fixed_charge;
     this->diffusivity = diffusivity;
     this->valency = valency;
+    this->reaction = reaction;
 
     _ufc_form = std::shared_ptr<const ufc::form>(new vector_linear_pnp_forms_form_1());
   }
 
   // Constructor
-  Form_L(const dolfin::FunctionSpace& V0, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> permittivity, std::shared_ptr<const dolfin::GenericFunction> fixed_charge, std::shared_ptr<const dolfin::GenericFunction> diffusivity, std::shared_ptr<const dolfin::GenericFunction> valency):
-    dolfin::Form(1, 5), uu(*this, 0), permittivity(*this, 1), fixed_charge(*this, 2), diffusivity(*this, 3), valency(*this, 4)
+  Form_L(const dolfin::FunctionSpace& V0, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> permittivity, std::shared_ptr<const dolfin::GenericFunction> fixed_charge, std::shared_ptr<const dolfin::GenericFunction> diffusivity, std::shared_ptr<const dolfin::GenericFunction> valency, std::shared_ptr<const dolfin::GenericFunction> reaction):
+    dolfin::Form(1, 6), uu(*this, 0), permittivity(*this, 1), fixed_charge(*this, 2), diffusivity(*this, 3), valency(*this, 4), reaction(*this, 5)
   {
     _function_spaces[0] = reference_to_no_delete_pointer(V0);
 
@@ -6621,13 +6695,14 @@ public:
     this->fixed_charge = *fixed_charge;
     this->diffusivity = *diffusivity;
     this->valency = *valency;
+    this->reaction = *reaction;
 
     _ufc_form = std::shared_ptr<const ufc::form>(new vector_linear_pnp_forms_form_1());
   }
 
   // Constructor
   Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0):
-    dolfin::Form(1, 5), uu(*this, 0), permittivity(*this, 1), fixed_charge(*this, 2), diffusivity(*this, 3), valency(*this, 4)
+    dolfin::Form(1, 6), uu(*this, 0), permittivity(*this, 1), fixed_charge(*this, 2), diffusivity(*this, 3), valency(*this, 4), reaction(*this, 5)
   {
     _function_spaces[0] = V0;
 
@@ -6635,8 +6710,8 @@ public:
   }
 
   // Constructor
-  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, const dolfin::GenericFunction& uu, const dolfin::GenericFunction& permittivity, const dolfin::GenericFunction& fixed_charge, const dolfin::GenericFunction& diffusivity, const dolfin::GenericFunction& valency):
-    dolfin::Form(1, 5), uu(*this, 0), permittivity(*this, 1), fixed_charge(*this, 2), diffusivity(*this, 3), valency(*this, 4)
+  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, const dolfin::GenericFunction& uu, const dolfin::GenericFunction& permittivity, const dolfin::GenericFunction& fixed_charge, const dolfin::GenericFunction& diffusivity, const dolfin::GenericFunction& valency, const dolfin::GenericFunction& reaction):
+    dolfin::Form(1, 6), uu(*this, 0), permittivity(*this, 1), fixed_charge(*this, 2), diffusivity(*this, 3), valency(*this, 4), reaction(*this, 5)
   {
     _function_spaces[0] = V0;
 
@@ -6645,13 +6720,14 @@ public:
     this->fixed_charge = fixed_charge;
     this->diffusivity = diffusivity;
     this->valency = valency;
+    this->reaction = reaction;
 
     _ufc_form = std::shared_ptr<const ufc::form>(new vector_linear_pnp_forms_form_1());
   }
 
   // Constructor
-  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> permittivity, std::shared_ptr<const dolfin::GenericFunction> fixed_charge, std::shared_ptr<const dolfin::GenericFunction> diffusivity, std::shared_ptr<const dolfin::GenericFunction> valency):
-    dolfin::Form(1, 5), uu(*this, 0), permittivity(*this, 1), fixed_charge(*this, 2), diffusivity(*this, 3), valency(*this, 4)
+  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> permittivity, std::shared_ptr<const dolfin::GenericFunction> fixed_charge, std::shared_ptr<const dolfin::GenericFunction> diffusivity, std::shared_ptr<const dolfin::GenericFunction> valency, std::shared_ptr<const dolfin::GenericFunction> reaction):
+    dolfin::Form(1, 6), uu(*this, 0), permittivity(*this, 1), fixed_charge(*this, 2), diffusivity(*this, 3), valency(*this, 4), reaction(*this, 5)
   {
     _function_spaces[0] = V0;
 
@@ -6660,6 +6736,7 @@ public:
     this->fixed_charge = *fixed_charge;
     this->diffusivity = *diffusivity;
     this->valency = *valency;
+    this->reaction = *reaction;
 
     _ufc_form = std::shared_ptr<const ufc::form>(new vector_linear_pnp_forms_form_1());
   }
@@ -6681,6 +6758,8 @@ public:
       return 3;
     else if (name == "valency")
       return 4;
+    else if (name == "reaction")
+      return 5;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -6703,6 +6782,8 @@ public:
       return "diffusivity";
     case 4:
       return "valency";
+    case 5:
+      return "reaction";
     }
 
     dolfin::dolfin_error("generated code for class Form",
@@ -6718,6 +6799,7 @@ public:
   typedef Form_L_FunctionSpace_3 CoefficientSpace_fixed_charge;
   typedef Form_L_FunctionSpace_4 CoefficientSpace_diffusivity;
   typedef Form_L_FunctionSpace_5 CoefficientSpace_valency;
+  typedef Form_L_FunctionSpace_6 CoefficientSpace_reaction;
 
   // Coefficients
   dolfin::CoefficientAssigner uu;
@@ -6725,6 +6807,7 @@ public:
   dolfin::CoefficientAssigner fixed_charge;
   dolfin::CoefficientAssigner diffusivity;
   dolfin::CoefficientAssigner valency;
+  dolfin::CoefficientAssigner reaction;
 };
 
 // Class typedefs

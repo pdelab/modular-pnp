@@ -40,6 +40,10 @@ Linear_PNP::Linear_PNP (
     new vector_linear_pnp_forms::CoefficientSpace_diffusivity(*mesh)
   );
 
+  reaction_space.reset(
+    new vector_linear_pnp_forms::CoefficientSpace_reaction(*mesh)
+  );
+
   valency_space.reset(
     new vector_linear_pnp_forms::CoefficientSpace_valency(*mesh)
   );
@@ -310,4 +314,36 @@ std::vector<std::shared_ptr<dolfin::Function>> Linear_PNP::split_mixed_function 
   function_assigner.assign(function_vector, mixed_function);
 
   return function_vector;
+}
+
+//-------------------------------------
+dolfin::Function Linear_PNP::get_total_charge () {
+  dolfin::Function total_charge(fixed_charge_space);
+  total_charge.interpolate(
+    *(_linear_form->coefficient("fixed_charge"))
+  );
+
+  dolfin::Function valencies(valency_space);
+  valencies.interpolate(
+    (*_bilinear_form->coefficient("valency"))
+  );
+
+  dolfin::Function solution(Linear_PNP::get_solution());
+  std::size_t solution_size = Linear_PNP::get_solution_dimension();
+  std::shared_ptr<dolfin::Function> solution_charge;
+
+  double value;
+  for (std::size_t charge = 1; charge < solution_size; charge++) {
+    double q = (*(valencies.vector()))[charge];
+    solution_charge.reset(new dolfin::Function(fixed_charge_space));
+    solution_charge->interpolate(solution[charge]);
+    for (std::size_t index = 0; index < solution_charge->vector()->size(); index++) {
+      value = q * std::exp( (*(solution_charge->vector()))[index] );
+      solution_charge->vector()->setitem(index, value);
+    }
+
+    total_charge = total_charge + (*solution_charge);
+  }
+
+  return total_charge;
 }

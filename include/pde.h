@@ -151,6 +151,10 @@ class PDE {
     );
 
     std::shared_ptr<dolfin::FunctionSpace> _function_space;
+
+    /// Forms
+    std::shared_ptr<dolfin::Form> _linear_form;
+
     std::shared_ptr<dolfin::Form> _bilinear_form;
 
     std::map<std::size_t, std::vector<dolfin::la_index>> _dof_map;
@@ -165,9 +169,6 @@ class PDE {
     std::vector<double> _mesh_max, _mesh_min;
     std::size_t _mesh_dim;
     double _mesh_epsilon;
-
-    /// Forms
-    std::shared_ptr<dolfin::Form> _linear_form;
 
     /// Current solution
     std::shared_ptr<dolfin::Function> _solution_function;
