@@ -26,24 +26,24 @@ const double ref_concentration = 1.0;
 std::vector<double> exact_solution (double x) {
   return {
     x * electric_strength,
-    std::log(ref_concentration) - x * electric_strength,
-    std::log(ref_concentration) + x * electric_strength
+    std::log(ref_concentration) - x * x * electric_strength,
+    std::log(ref_concentration) + x * x * electric_strength
   };
 };
 
 std::vector<double> exact_derivative (double x) {
   return {
     electric_strength,
-    -electric_strength,
-    electric_strength
+    -2.0 * x * electric_strength,
+    2.0 * x * electric_strength
   };
 };
 
 std::vector<double> exact_second (double x) {
   return {
     0.0,
-    0.0,
-    0.0
+    -2.0 * electric_strength,
+    2.0 * electric_strength
   };
 };
 
