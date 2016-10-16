@@ -60,7 +60,7 @@ bool Newton_Status::needs_to_iterate () {
   bool max_res_too_large = max_residual > max_residual_tol;
 
   return iterations_left && (
-    rel_res_too_large || max_res_too_large 
+    rel_res_too_large && max_res_too_large 
   );
 }
 //--------------------------------------
@@ -69,11 +69,11 @@ bool Newton_Status::converged () {
   bool accept_rel_res = relative_residual < rel_residual_tol;
   bool accept_max_res = max_residual < max_residual_tol;
 
-  return !too_many_iters && (accept_rel_res && accept_max_res);
+  return !too_many_iters && (accept_rel_res || accept_max_res);
 }
 //--------------------------------------
 void Newton_Status::print_status () {
-  bool too_many_iters = iteration > max_iterations;
+  bool too_many_iters = iteration > max_iterations + 1;
   bool accept_rel_res = relative_residual < rel_residual_tol;
   bool accept_max_res = max_residual < max_residual_tol;
 
@@ -92,7 +92,7 @@ void Newton_Status::print_status () {
     );
   }
 
-  if (!too_many_iters && (accept_rel_res && accept_max_res)) {
+  if (!too_many_iters && (accept_rel_res || accept_max_res)) {
     printf("\tconverged\n");
   } else {
     printf("\tnot converged\n");
