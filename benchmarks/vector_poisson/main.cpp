@@ -28,7 +28,7 @@ int main (int argc, char** argv)
   // read in parameters
   printf("Reading parameters from files...\n");
 
-  char domain_param_filename[] = "./benchmarks/PNP/domain_params.dat";
+  char domain_param_filename[] = "./benchmarks/vector_poisson/domain.dat";
   printf("\tdomain... %s\n", domain_param_filename);
   domain_param domain;
   domain_param_input(domain_param_filename, &domain);
@@ -37,7 +37,7 @@ int main (int argc, char** argv)
   *mesh = domain_build(domain);
   // print_domain_param(&domain);
 
-  char fasp_params[] = "./benchmarks/PNP/bsr.dat";
+  char fasp_params[] = "./benchmarks/vector_poisson/bsr.dat";
   printf("\tFASP parameters... %s\n", fasp_params);
   input_param input;
   itsolver_param itsolver;
@@ -78,10 +78,10 @@ int main (int argc, char** argv)
   poisson_problem.print_coefficients();
   printf("\n");
 
-  dolfin::File solution_file0("./benchmarks/vector_poisson/1solution.pvd");
-  dolfin::File solution_file1("./benchmarks/vector_poisson/2solution.pvd");
-  dolfin::File solution_file2("./benchmarks/vector_poisson/3solution.pvd");
-  dolfin::File solution_file3("./benchmarks/vector_poisson/4solution.pvd");
+  dolfin::File solution_file0("./benchmarks/vector_poisson/output/1solution.pvd");
+  dolfin::File solution_file1("./benchmarks/vector_poisson/output/2solution.pvd");
+  dolfin::File solution_file2("./benchmarks/vector_poisson/output/3solution.pvd");
+  dolfin::File solution_file3("./benchmarks/vector_poisson/output/4solution.pvd");
 
   dolfin::Function solutionFn = poisson_problem.get_solution();
   solution_file0 << solutionFn[0];

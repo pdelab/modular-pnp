@@ -66,6 +66,8 @@ class Linear_PNP : public PDE {
       std::shared_ptr<const dolfin::Function> mixed_function
     );
 
+    dolfin::Function get_total_charge ();
+
 
     std::shared_ptr<dolfin::FunctionSpace> diffusivity_space;
     std::shared_ptr<dolfin::FunctionSpace> valency_space;

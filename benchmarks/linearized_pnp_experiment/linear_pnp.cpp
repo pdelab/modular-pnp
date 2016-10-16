@@ -78,11 +78,11 @@ void Linear_PNP::setup_fasp_linear_algebra () {
   EigenMatrix_to_dCSRmat(_eigen_matrix, &_fasp_matrix);
   _fasp_bsr_matrix = fasp_format_dcsr_dbsr(&_fasp_matrix, dimension);
 
-  EigenVector_to_dvector(_eigen_vector, &_fasp_vector);
   if (_faps_soln_unallocated) {
     fasp_dvec_alloc(_eigen_vector->size(), &_fasp_soln);
     _faps_soln_unallocated = false;
   }
+  EigenVector_to_dvector(_eigen_vector, &_fasp_vector);
 
   fasp_dvec_set(_fasp_vector.row, &_fasp_soln, 0.0);
 }
@@ -278,8 +278,6 @@ void Linear_PNP::apply_eafe () {
   }
 }
 //--------------------------------------
-
-//--------------------------------------
 std::vector<std::shared_ptr<dolfin::Function>> Linear_PNP::split_mixed_function (
   std::shared_ptr<const dolfin::Function> mixed_function
 ) {
@@ -312,4 +310,36 @@ std::vector<std::shared_ptr<dolfin::Function>> Linear_PNP::split_mixed_function 
   function_assigner.assign(function_vector, mixed_function);
 
   return function_vector;
+}
+
+//-------------------------------------
+dolfin::Function Linear_PNP::get_total_charge () {
+  dolfin::Function total_charge(fixed_charge_space);
+  total_charge.interpolate(
+    *(_linear_form->coefficient("fixed_charge"))
+  );
+
+  dolfin::Function valencies(valency_space);
+  valencies.interpolate(
+    (*_bilinear_form->coefficient("valency"))
+  );
+
+  dolfin::Function solution(Linear_PNP::get_solution());
+  std::size_t solution_size = Linear_PNP::get_solution_dimension();
+  std::shared_ptr<dolfin::Function> solution_charge;
+
+  double value;
+  for (std::size_t charge = 1; charge < solution_size; charge++) {
+    double q = (*(valencies.vector()))[charge];
+    solution_charge.reset(new dolfin::Function(fixed_charge_space));
+    solution_charge->interpolate(solution[charge]);
+    for (std::size_t index = 0; index < solution_charge->vector()->size(); index++) {
+      value = q * std::exp( (*(solution_charge->vector()))[index] );
+      solution_charge->vector()->setitem(index, value);
+    }
+
+    total_charge = total_charge + (*solution_charge);
+  }
+
+  return total_charge;
 }

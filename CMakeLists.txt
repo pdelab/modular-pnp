@@ -56,12 +56,6 @@ target_link_libraries(test_poisson ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRAR
 add_executable(test_vector_poisson ./benchmarks/vector_poisson/main.cpp ./benchmarks/vector_poisson/vector_poisson.cpp ${SRC_DIR})
 target_link_libraries(test_vector_poisson ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
 
-add_executable(test_vector_pnp ./benchmarks/linear_pnp_vector/main.cpp ./benchmarks/linear_pnp_vector/vector_pnp.cpp ${SRC_DIR})
-target_link_libraries(test_vector_pnp ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
-
-add_executable(test_problem ./benchmarks/problem/main.cpp ./benchmarks/problem/linear_pnp.cpp ${SRC_DIR})
-target_link_libraries(test_problem ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
-
 add_executable(linear_experiment ./benchmarks/linearized_pnp_experiment/main.cpp ./benchmarks/linearized_pnp_experiment/linear_pnp.cpp ${SRC_DIR})
 target_link_libraries(linear_experiment ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
 

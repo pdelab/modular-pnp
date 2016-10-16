@@ -299,7 +299,7 @@ int main (int argc, char** argv) {
 
   // set nonlinear solver parameters
   const std::size_t max_newton = 5;
-  const double max_residual_tol = 1.0e-4;
+  const double max_residual_tol = 1.0e-10;
   const double relative_residual_tol = 1.0e-4;
   const double initial_residual = pnp_problem.compute_residual("l2");
   const double initial_max_residual = pnp_problem.compute_residual("max");
