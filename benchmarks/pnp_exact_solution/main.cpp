@@ -20,13 +20,14 @@ extern "C" {
 
 using namespace std;
 
+const double pi = 3.14159265359;
 const double permittivity_const = 1.0;
 const double electric_strength = 1.0;
 const double ref_concentration = 1.0;
 
 std::vector<double> exact_solution (double x) {
   return {
-    x * electric_strength,
+    x * electric_strength + std::sin(pi * x),
     std::log(ref_concentration) - x * x * electric_strength,
     std::log(ref_concentration) + x * x * electric_strength
   };
@@ -34,7 +35,7 @@ std::vector<double> exact_solution (double x) {
 
 std::vector<double> exact_derivative (double x) {
   return {
-    electric_strength,
+    electric_strength + pi * std::cos(pi * x),
     -2.0 * x * electric_strength,
     2.0 * x * electric_strength
   };
@@ -42,7 +43,7 @@ std::vector<double> exact_derivative (double x) {
 
 std::vector<double> exact_second (double x) {
   return {
-    0.0,
+    -(pi * pi) * std::sin(pi * x),
     -2.0 * electric_strength,
     2.0 * electric_strength
   };
@@ -308,9 +309,9 @@ int main (int argc, char** argv) {
   printf("Initializing nonlinear solver\n");
 
   // set nonlinear solver parameters
-  const std::size_t max_newton = 5;
+  const std::size_t max_newton = 15;
   const double max_residual_tol = 1.0e-10;
-  const double relative_residual_tol = 1.0e-4;
+  const double relative_residual_tol = 1.0e-8;
   const double initial_residual = pnp_problem.compute_residual("l2");
   const double initial_max_residual = pnp_problem.compute_residual("max");
   Newton_Status newton(
@@ -355,6 +356,7 @@ int main (int argc, char** argv) {
   } else {
     newton.print_status();
   }
+  printf("\n");
 
 
   // compute error of computed solution
