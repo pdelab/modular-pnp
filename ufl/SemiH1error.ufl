@@ -1,0 +1,11 @@
+# Copyright (C) 2015 PSU CCMA
+#
+# Compute the Semi H1 error of a computed solution.
+#
+# Compile this form with FFC: ffc -O -l dolfin SemiH1Error.ufl.
+
+CG = FiniteElement("CG", tetrahedron, 1)
+
+error = Coefficient(CG)
+
+M = inner( grad(error), grad(error) ) * dx

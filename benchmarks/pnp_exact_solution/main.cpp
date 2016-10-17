@@ -9,6 +9,7 @@
 #include "newton_status.h"
 #include "domain.h"
 #include "dirichlet.h"
+#include "error.h"
 extern "C" {
   #include "fasp.h"
   #include "fasp_functs.h"
@@ -26,24 +27,24 @@ const double ref_concentration = 1.0;
 std::vector<double> exact_solution (double x) {
   return {
     x * electric_strength,
-    std::log(ref_concentration) - x * x * electric_strength,
-    std::log(ref_concentration) + x * x * electric_strength
+    std::log(ref_concentration) - x * electric_strength,
+    std::log(ref_concentration) + x * electric_strength
   };
 };
 
 std::vector<double> exact_derivative (double x) {
   return {
     electric_strength,
-    -2.0 * x * electric_strength,
-    2.0 * x * electric_strength
+    -electric_strength,
+    electric_strength
   };
 };
 
 std::vector<double> exact_second (double x) {
   return {
     0.0,
-    -2.0 * electric_strength,
-    2.0 * electric_strength
+    0.0,
+    0.0
   };
 };
 
@@ -75,7 +76,16 @@ std::vector<double> reactions (double x) {
 };
 
 
-
+class Exact_Solution : public dolfin::Expression {
+  public:
+    Exact_Solution() : dolfin::Expression(3) {}
+    void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
+      std::vector<double> soln(exact_solution(x[0]));
+      values[0] = soln[0];
+      values[1] = soln[1];
+      values[2] = soln[2];
+    }
+};
 
 class Permittivity_Expression : public dolfin::Expression {
   public:
@@ -345,6 +355,33 @@ int main (int argc, char** argv) {
   } else {
     newton.print_status();
   }
+
+
+  // compute error of computed solution
+  printf("Measuring error of computed solution wrt interpolant\n"); fflush(stdout);
+  dolfin::Function computed_solution(pnp_problem.get_solution());
+  std::shared_ptr<dolfin::Function> computed_solution_ptr;
+  computed_solution_ptr.reset(new dolfin::Function(computed_solution.function_space()));
+  *computed_solution_ptr = computed_solution;
+
+  Exact_Solution exact_expr;
+  std::shared_ptr<dolfin::Function> exact_solution_ptr;
+  exact_solution_ptr.reset(new dolfin::Function(computed_solution.function_space()));
+  exact_solution_ptr->interpolate(exact_expr);
+
+  Error error(exact_solution_ptr);
+
+  dolfin::File error_file("./benchmarks/pnp_exact_solution/output/error.pvd");
+  dolfin::Function error_function(computed_solution.function_space());
+  error_function = error.compute_error(computed_solution_ptr);
+  error_file << error_function;
+
+  double l2_error = error.compute_l2_error(computed_solution_ptr);
+  double h1_error = error.compute_h1_error(computed_solution_ptr);
+  printf("\tL2 error: %e\n", l2_error);
+  printf("\tH1 error: %e\n", h1_error);
+  printf("\n");
+
 
   printf("Solver exiting\n"); fflush(stdout);
   return 0;
