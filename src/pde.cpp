@@ -344,11 +344,10 @@ void PDE::remove_Dirichlet_dof (
     );
   }
 }
-
 //--------------------------------------
 void PDE::set_DirichletBC (
   std::vector<std::size_t> component,
-  std::vector<std::vector<double>> boundary
+  std::vector<std::vector<double>> boundary_value
 ) {
 
   PDE::remove_Dirichlet_dof(component);
@@ -359,13 +358,35 @@ void PDE::set_DirichletBC (
      component[i],
      _mesh_min[component[i]],
      _mesh_max[component[i]],
-     boundary[i][0],
-     boundary[i][1]
+     boundary_value[i][0],
+     boundary_value[i][1]
     );
     interpolant_vector.push_back(linear_interpolant);
   }
 
   PDE::set_solution(interpolant_vector);
+}
+//--------------------------------------
+void PDE::add_DirichletBC (
+  std::vector<std::size_t> fn_component,
+  std::vector<std::shared_ptr<dolfin::SubDomain>> boundary
+) {
+  if (fn_component.size() != boundary.size()) {
+    printf("Incompatible boundary conditions... not applying BCs\n"); fflush(stdout);
+  }
+
+  std::shared_ptr<dolfin::Constant> zero_constant;
+  zero_constant.reset(new dolfin::Constant(0.0));
+  for (std::size_t bc = 0; bc < boundary.size(); bc++) {
+    _dirichlet_SubDomain.push_back(std::make_shared<dolfin::SubDomain>());
+    _dirichlet_SubDomain.back() = boundary[bc];
+
+    _dirichletBC.push_back(std::make_shared<dolfin::DirichletBC>(
+      (*_function_space)[bc],
+      zero_constant,
+      _dirichlet_SubDomain.back()
+    ));
+  }
 }
 //--------------------------------------
 std::vector<std::shared_ptr<dolfin::SubDomain>> PDE::get_Dirichlet_SubDomain () {

@@ -60,7 +60,12 @@ class PDE {
     /// Set Dirichlet Boundary condition
     void set_DirichletBC (
       std::vector<std::size_t> component,
-      std::vector<std::vector<double>> boundary
+      std::vector<std::vector<double>> boundary_value
+    );
+
+    void add_DirichletBC (
+      std::vector<std::size_t> fn_component,
+      std::vector<std::shared_ptr<dolfin::SubDomain>> boundary
     );
 
     /// Return the DirichletBC SubDomain
