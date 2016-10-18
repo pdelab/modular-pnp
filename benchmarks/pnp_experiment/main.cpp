@@ -96,6 +96,17 @@ double rc[86] = { 1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,
   0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.833333333333,
   0.833333333333,0.833333333333,0.833333333333,0.833333333333,0.694444444444};
 
+class BC_Interpolant : public dolfin::Expression {
+public:
+  BC_Interpolant() : dolfin::Expression(4) {}
+  void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
+    values[0] = x[0] < -5.0 + 1.0e-8 ? -1.0 : (x[0] > 5.0 - 1.0e-8 ? 1.0 : 0.0);
+    values[1] = x[0] < -5.0 + 1.0e-8 ? std::log(1.0) : (x[0] > 5.0 - 1.0e-8 ? std::log(2.0) : std::log(1.5));
+    values[2] = x[0] < -5.0 + 1.0e-8 ? std::log(1.5) : (x[0] > 5.0 - 1.0e-8 ? std::log(1.0) : std::log(1.0));
+    values[3] = x[0] < -5.0 + 1.0e-8 ? std::log(0.5) : (x[0] > 5.0 - 1.0e-8 ? std::log(2.0) : std::log(1.5));
+  }
+};
+
 class SpheresSubDomain : public dolfin::SubDomain {
   bool inside(const dolfin::Array<double>& x, bool on_boundary) const {
     for (std::size_t i = 0; i < num_spheres; i++) {
@@ -127,7 +138,6 @@ int main (int argc, char** argv) {
   domain_param_input(domain_param_filename, &domain);
   std::shared_ptr<dolfin::Mesh> mesh;
   mesh.reset(new dolfin::Mesh("./benchmarks/pnp_experiment/mesh.xml"));
-
   // *mesh = domain_build(domain);
   // print_domain_param(&domain);
 
@@ -271,6 +281,16 @@ int main (int argc, char** argv) {
   std::vector<std::size_t> bc_fn_component = {0, 1, 2, 3};
   std::vector<std::shared_ptr<dolfin::SubDomain>> bc_vector (4, sphere_boundary_ptr);
   pnp_problem.add_DirichletBC(bc_fn_component, bc_vector);
+
+  BC_Interpolant bc_interpolant_expr;
+  dolfin::Function bc_interpolant_fn(pnp_problem.get_solution().function_space());
+  bc_interpolant_fn.interpolate(bc_interpolant_expr);
+  pnp_problem.set_solution(bc_interpolant_fn);
+  solutionFn = pnp_problem.get_solution();
+  solution_file0 << solutionFn[0];
+  solution_file1 << solutionFn[1];
+  solution_file2 << solutionFn[2];
+  solution_file3 << solutionFn[3];
 
   //------------------------
   // Start nonlinear solver
