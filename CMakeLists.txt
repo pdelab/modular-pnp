@@ -64,3 +64,6 @@ target_link_libraries(pnp_experiment ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBR
 
 add_executable(pnp_exact ./benchmarks/pnp_exact_solution/main.cpp ./benchmarks/pnp_exact_solution/linear_pnp.cpp ${SRC_DIR})
 target_link_libraries(pnp_exact ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
+
+add_executable(pnp_spheres ./benchmarks/pnp_spheres/main.cpp ./benchmarks/pnp_spheres/linear_pnp.cpp ${SRC_DIR})
+target_link_libraries(pnp_spheres ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
