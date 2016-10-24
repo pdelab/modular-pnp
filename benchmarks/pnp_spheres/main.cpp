@@ -132,17 +132,17 @@ int main (int argc, char** argv) {
 
   // read in parameters
   printf("Reading parameters from files...\n");
-  char domain_param_filename[] = "./benchmarks/pnp_experiment/domain.dat";
+  char domain_param_filename[] = "./benchmarks/pnp_spheres/domain.dat";
   printf("\tdomain... %s\n", domain_param_filename);
   domain_param domain;
   domain_param_input(domain_param_filename, &domain);
   std::shared_ptr<dolfin::Mesh> mesh;
-  mesh.reset(new dolfin::Mesh("./benchmarks/pnp_experiment/mesh.xml"));
+  mesh.reset(new dolfin::Mesh("./benchmarks/pnp_spheres/mesh.xml"));
   // *mesh = domain_build(domain);
   // print_domain_param(&domain);
 
 
-  char fasp_params[] = "./benchmarks/pnp_experiment/bsr.dat";
+  char fasp_params[] = "./benchmarks/pnp_spheres/bsr.dat";
   printf("\tFASP parameters... %s\n", fasp_params);
   input_param input;
   itsolver_param itsolver;
@@ -191,7 +191,7 @@ int main (int argc, char** argv) {
   };
 
   // build problem
-  Linear_PNP::Linear_PNP pnp_problem (
+  Linear_PNP pnp_problem (
     mesh,
     function_space,
     bilinear_form,

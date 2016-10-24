@@ -12,7 +12,7 @@ extern "C" {
   #include "fasp_functs.h"
 }
 
-#include "L2error.h"
+#include "L2Error.h"
 #include "SemiH1error.h"
 
 using namespace std;
@@ -23,7 +23,7 @@ Error::Error (
 ) {
   Error::update_exact_solution(exact_solution);
 
-  _l2_form.reset(new L2error::Functional(_function_space->mesh()));
+  _l2_form.reset(new L2Error::Functional(_function_space->mesh()));
   _semi_h1_form.reset(new SemiH1error::Functional(_function_space->mesh()));
 
 }
@@ -63,8 +63,10 @@ double Error::compute_l2_error (
   dolfin::Function error_function(_function_space);
   error_function = Error::compute_error(computed_solution);
 
+  std::shared_ptr<dolfin::Function> error_temp;
   for (std::size_t index = 0; index < _num_subfunctions; index++) {
-    _l2_form->error = error_function[index];
+    error_temp = std::make_shared<dolfin::Function>(error_function[index]);
+    _l2_form->error = error_temp;
     l2_error += assemble(*_l2_form);
   }
 
@@ -79,8 +81,10 @@ double Error::compute_semi_h1_error (
   dolfin::Function error_function(_function_space);
   error_function = Error::compute_error(computed_solution);
 
+  std::shared_ptr<dolfin::Function> error_temp;
   for (std::size_t index = 0; index < _num_subfunctions; index++) {
-    _semi_h1_form->error = error_function[index];
+    error_temp = std::make_shared<dolfin::Function>(error_function[index]);
+    _semi_h1_form->error = error_temp;
     semi_h1_error += assemble(*_semi_h1_form);
  }
 

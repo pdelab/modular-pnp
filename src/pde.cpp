@@ -10,8 +10,8 @@ extern "C" {
   #include "fasp.h"
   #include "fasp_functs.h"
 }
-
-using namespace std;
+// #include <vector>
+// using std::vector;
 
 //--------------------------------------
 PDE::PDE (
@@ -118,7 +118,7 @@ void PDE::set_solution (
 }
 //--------------------------------------
 void PDE::set_solution (
-  const std::vector<Linear_Function::Linear_Function> expression
+  std::vector<Linear_Function> expression
 ) {
 
   std::size_t dimension = PDE::get_solution_dimension();
@@ -332,7 +332,7 @@ void PDE::remove_Dirichlet_dof (
 
   for (std::size_t i = 0; i < dimension; i++) {
     _dirichlet_SubDomain[i].reset(
-      new Dirichlet_Subdomain::Dirichlet_Subdomain(
+      new Dirichlet_Subdomain(
         {coordinates[i]},
         _mesh_min,
         _mesh_max,
@@ -352,9 +352,9 @@ void PDE::set_DirichletBC (
 
   PDE::remove_Dirichlet_dof(component);
 
-  std::vector<Linear_Function::Linear_Function> interpolant_vector;
+  std::vector<Linear_Function> interpolant_vector;
   for (std::size_t i = 0; i < component.size(); i++) {
-    Linear_Function::Linear_Function linear_interpolant(
+    Linear_Function linear_interpolant(
      component[i],
      _mesh_min[component[i]],
      _mesh_max[component[i]],
@@ -528,4 +528,3 @@ void PDE::EigenVector_to_dvector (
   vector->val = (double*) eigen_vector->data();
 }
 //--------------------------------------
-
