@@ -10,8 +10,6 @@ extern "C" {
   #include "fasp.h"
   #include "fasp_functs.h"
 }
-// #include <vector>
-// using std::vector;
 
 //--------------------------------------
 PDE::PDE (

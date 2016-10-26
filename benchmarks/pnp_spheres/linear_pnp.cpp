@@ -100,8 +100,6 @@ dolfin::Function Linear_PNP::fasp_solve () {
     &_amg
   );
 
-  printf("\n### 1.\n");fflush(stdout);
-
   if (status < 0) {
     printf("\n### WARNING: FASP solver failed! Exit status = %d.\n", status);
     fflush(stdout);
@@ -116,8 +114,6 @@ dolfin::Function Linear_PNP::fasp_solve () {
       // printf(" i = %d",i);fflush(stdout);
       array[i] = _fasp_soln.val[i];
     }
-
-  printf("\n### 5.\n");fflush(stdout);
 
     dolfin::Function update (
       Linear_PNP::_convert_EigenVector_to_Function(solution_vector)
