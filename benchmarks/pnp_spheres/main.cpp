@@ -1,4 +1,5 @@
-/// Main file for solving the linearized PNP problem
+/// Main file for solving the PNP Problem with spheres
+#include <boost/filesystem.hpp>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -130,6 +131,9 @@ int main (int argc, char** argv) {
   dolfin::parameters["linear_algebra_backend"] = "Eigen";
   dolfin::parameters["allow_extrapolation"] = true;
 
+  // Deleting the folders:
+  boost::filesystem::remove_all("./benchmarks/pnp_spheres/output");
+
   // read in parameters
   printf("Reading parameters from files...\n");
   char domain_param_filename[] = "./benchmarks/pnp_spheres/domain.dat";
@@ -235,10 +239,10 @@ int main (int argc, char** argv) {
   bool plot_coefficients = false;
   if (plot_coefficients) {
     printf("\toutput coefficients to file\n");
-    dolfin::File permittivity_file("./benchmarks/pnp_experiment/output/permittivity.pvd");
-    dolfin::File charges_file("./benchmarks/pnp_experiment/output/charges.pvd");
-    dolfin::File diffusivity_file("./benchmarks/pnp_experiment/output/diffusivity.pvd");
-    dolfin::File valency_file("./benchmarks/pnp_experiment/output/valency.pvd");
+    dolfin::File permittivity_file("./benchmarks/pnp_spheres/output/permittivity.pvd");
+    dolfin::File charges_file("./benchmarks/pnp_spheres/output/charges.pvd");
+    dolfin::File diffusivity_file("./benchmarks/pnp_spheres/output/diffusivity.pvd");
+    dolfin::File valency_file("./benchmarks/pnp_spheres/output/valency.pvd");
     permittivity_file << permittivity;
     charges_file << charges;
     diffusivity_file << diffusivity[1];
@@ -249,16 +253,13 @@ int main (int argc, char** argv) {
     valency_file << valency[3];
   }
 
-
-
-
   //-------------------------
   // Print various solutions
   //-------------------------
-  dolfin::File solution_file0("./benchmarks/pnp_experiment/output/1solution.pvd");
-  dolfin::File solution_file1("./benchmarks/pnp_experiment/output/2solution.pvd");
-  dolfin::File solution_file2("./benchmarks/pnp_experiment/output/3solution.pvd");
-  dolfin::File solution_file3("./benchmarks/pnp_experiment/output/4solution.pvd");
+  dolfin::File solution_file0("./benchmarks/pnp_spheres/output/1solution.pvd");
+  dolfin::File solution_file1("./benchmarks/pnp_spheres/output/2solution.pvd");
+  dolfin::File solution_file2("./benchmarks/pnp_spheres/output/3solution.pvd");
+  dolfin::File solution_file3("./benchmarks/pnp_spheres/output/4solution.pvd");
 
   // initial guess for prescibed Dirichlet
   printf("Record interpolant for given Dirichlet BCs (initial guess for solution)\n");

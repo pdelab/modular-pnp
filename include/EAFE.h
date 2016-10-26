@@ -3,9 +3,9 @@
 //
 // This code was generated with the option '-l dolfin' and
 // contains DOLFIN-specific wrappers that depend on DOLFIN.
-// 
+//
 // This code was generated with the following parameters:
-// 
+//
 //   convert_exceptions_to_warnings: False
 //   cpp_optimize:                   True
 //   cpp_optimize_flags:             '-O2'
@@ -114,18 +114,18 @@ public:
     // Compute Jacobian
     double J[9];
     compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
-    
+
     // Compute Jacobian inverse and determinant
     double K[9];
     double detJ;
     compute_jacobian_inverse_tetrahedron_3d(K, detJ, J);
-    
-    
+
+
     // Compute constants
     const double C0 = coordinate_dofs[9]  + coordinate_dofs[6] + coordinate_dofs[3]  - coordinate_dofs[0];
     const double C1 = coordinate_dofs[10] + coordinate_dofs[7] + coordinate_dofs[4]  - coordinate_dofs[1];
     const double C2 = coordinate_dofs[11] + coordinate_dofs[8] + coordinate_dofs[5]  - coordinate_dofs[2];
-    
+
     // Compute subdeterminants
     const double d_00 = J[4]*J[8] - J[5]*J[7];
     const double d_01 = J[5]*J[6] - J[3]*J[8];
@@ -136,26 +136,26 @@ public:
     const double d_20 = J[1]*J[5] - J[2]*J[4];
     const double d_21 = J[2]*J[3] - J[0]*J[5];
     const double d_22 = J[0]*J[4] - J[1]*J[3];
-    
+
     // Get coordinates and map to the reference (FIAT) element
     double X = (d_00*(2.0*x[0] - C0) + d_10*(2.0*x[1] - C1) + d_20*(2.0*x[2] - C2)) / detJ;
     double Y = (d_01*(2.0*x[0] - C0) + d_11*(2.0*x[1] - C1) + d_21*(2.0*x[2] - C2)) / detJ;
     double Z = (d_02*(2.0*x[0] - C0) + d_12*(2.0*x[1] - C1) + d_22*(2.0*x[2] - C2)) / detJ;
-    
-    
+
+
     // Reset values
     *values = 0.0;
     switch (i)
     {
     case 0:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -165,11 +165,11 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, -0.182574185835055, -0.105409255338946, -0.074535599249993};
-      
+
       // Compute value(s)
       for (unsigned int r = 0; r < 4; r++)
       {
@@ -179,13 +179,13 @@ public:
       }
     case 1:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -195,11 +195,11 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.182574185835055, -0.105409255338946, -0.074535599249993};
-      
+
       // Compute value(s)
       for (unsigned int r = 0; r < 4; r++)
       {
@@ -209,13 +209,13 @@ public:
       }
     case 2:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -225,11 +225,11 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.0, 0.210818510677892, -0.074535599249993};
-      
+
       // Compute value(s)
       for (unsigned int r = 0; r < 4; r++)
       {
@@ -239,13 +239,13 @@ public:
       }
     case 3:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -255,11 +255,11 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.0, 0.0, 0.223606797749979};
-      
+
       // Compute value(s)
       for (unsigned int r = 0; r < 4; r++)
       {
@@ -268,7 +268,7 @@ public:
         break;
       }
     }
-    
+
   }
 
   void evaluate_basis(std::size_t i,
@@ -287,7 +287,7 @@ public:
   {
     // Helper variable to hold values of a single dof.
     double dof_values = 0.0;
-    
+
     // Loop dofs and call evaluate_basis
     for (unsigned int r = 0; r < 4; r++)
     {
@@ -311,48 +311,48 @@ public:
                                           const double * coordinate_dofs,
                                           int cell_orientation)
   {
-    
+
     // Compute number of derivatives.
     unsigned int num_derivatives = 1;
     for (unsigned int r = 0; r < n; r++)
     {
       num_derivatives *= 3;
     } // end loop over 'r'
-    
+
     // Reset values. Assuming that values is always an array.
     for (unsigned int r = 0; r < num_derivatives; r++)
     {
       values[r] = 0.0;
     } // end loop over 'r'
-    
+
     // Call evaluate_basis if order of derivatives is equal to zero.
     if (n == 0)
     {
       _evaluate_basis(i, values, x, coordinate_dofs, cell_orientation);
       return ;
     }
-    
+
     // If order of derivatives is greater than the maximum polynomial degree, return zeros.
     if (n > 1)
     {
     return ;
     }
-    
+
     // Compute Jacobian
     double J[9];
     compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
-    
+
     // Compute Jacobian inverse and determinant
     double K[9];
     double detJ;
     compute_jacobian_inverse_tetrahedron_3d(K, detJ, J);
-    
-    
+
+
     // Compute constants
     const double C0 = coordinate_dofs[9]  + coordinate_dofs[6] + coordinate_dofs[3]  - coordinate_dofs[0];
     const double C1 = coordinate_dofs[10] + coordinate_dofs[7] + coordinate_dofs[4]  - coordinate_dofs[1];
     const double C2 = coordinate_dofs[11] + coordinate_dofs[8] + coordinate_dofs[5]  - coordinate_dofs[2];
-    
+
     // Compute subdeterminants
     const double d_00 = J[4]*J[8] - J[5]*J[7];
     const double d_01 = J[5]*J[6] - J[3]*J[8];
@@ -363,13 +363,13 @@ public:
     const double d_20 = J[1]*J[5] - J[2]*J[4];
     const double d_21 = J[2]*J[3] - J[0]*J[5];
     const double d_22 = J[0]*J[4] - J[1]*J[3];
-    
+
     // Get coordinates and map to the reference (FIAT) element
     double X = (d_00*(2.0*x[0] - C0) + d_10*(2.0*x[1] - C1) + d_20*(2.0*x[2] - C2)) / detJ;
     double Y = (d_01*(2.0*x[0] - C0) + d_11*(2.0*x[1] - C1) + d_21*(2.0*x[2] - C2)) / detJ;
     double Z = (d_02*(2.0*x[0] - C0) + d_12*(2.0*x[1] - C1) + d_22*(2.0*x[2] - C2)) / detJ;
-    
-    
+
+
     // Declare two dimensional array that holds combinations of derivatives and initialise
     unsigned int combinations[3][1];
     for (unsigned int row = 0; row < 3; row++)
@@ -377,7 +377,7 @@ public:
       for (unsigned int col = 0; col < 1; col++)
         combinations[row][col] = 0;
     }
-    
+
     // Generate combinations of derivatives
     for (unsigned int row = 1; row < num_derivatives; row++)
     {
@@ -395,10 +395,10 @@ public:
         }
       }
     }
-    
+
     // Compute inverse of Jacobian
     const double Jinv[3][3] = {{K[0], K[1], K[2]}, {K[3], K[4], K[5]}, {K[6], K[7], K[8]}};
-    
+
     // Declare transformation matrix
     // Declare pointer to two dimensional array and initialise
     double transform[3][3];
@@ -407,7 +407,7 @@ public:
       for (unsigned int k = 0; k < num_derivatives; k++)
         transform[j][k] = 1;
     }
-    
+
     // Construct transformation matrix
     for (unsigned int row = 0; row < num_derivatives; row++)
     {
@@ -421,13 +421,13 @@ public:
     {
     case 0:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -437,30 +437,30 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, -0.182574185835055, -0.105409255338946, -0.074535599249993};
-      
+
       // Tables of derivatives of the polynomial base (transpose).
       static const double dmats0[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {6.32455532033676, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats1[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {5.47722557505166, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats2[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {1.82574185835055, 0.0, 0.0, 0.0},
       {5.16397779494322, 0.0, 0.0, 0.0}};
-      
+
       // Compute reference derivatives.
       // Declare array of derivatives on FIAT element.
       double derivatives[3];
@@ -468,21 +468,21 @@ public:
       {
         derivatives[r] = 0.0;
       } // end loop over 'r'
-      
+
       // Declare derivative matrix (of polynomial basis).
       double dmats[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Declare (auxiliary) derivative matrix (of polynomial basis).
       double dmats_old[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Loop possible derivatives.
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -496,10 +496,10 @@ public:
             {
             dmats[t][u] = 1.0;
             }
-            
+
           } // end loop over 'u'
         } // end loop over 't'
-        
+
         // Looping derivative order to generate dmats.
         for (unsigned int s = 0; s < n; s++)
         {
@@ -512,7 +512,7 @@ public:
               dmats[t][u] = 0.0;
             } // end loop over 'u'
           } // end loop over 't'
-          
+
           // Update dmats using an inner product.
           if (combinations[r][s] == 0)
           {
@@ -527,7 +527,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 1)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -541,7 +541,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 2)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -555,7 +555,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
         } // end loop over 's'
         for (unsigned int s = 0; s < 4; s++)
         {
@@ -565,7 +565,7 @@ public:
           } // end loop over 't'
         } // end loop over 's'
       } // end loop over 'r'
-      
+
       // Transform derivatives back to physical element
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -578,13 +578,13 @@ public:
       }
     case 1:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -594,30 +594,30 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.182574185835055, -0.105409255338946, -0.074535599249993};
-      
+
       // Tables of derivatives of the polynomial base (transpose).
       static const double dmats0[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {6.32455532033676, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats1[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {5.47722557505166, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats2[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {1.82574185835055, 0.0, 0.0, 0.0},
       {5.16397779494322, 0.0, 0.0, 0.0}};
-      
+
       // Compute reference derivatives.
       // Declare array of derivatives on FIAT element.
       double derivatives[3];
@@ -625,21 +625,21 @@ public:
       {
         derivatives[r] = 0.0;
       } // end loop over 'r'
-      
+
       // Declare derivative matrix (of polynomial basis).
       double dmats[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Declare (auxiliary) derivative matrix (of polynomial basis).
       double dmats_old[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Loop possible derivatives.
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -653,10 +653,10 @@ public:
             {
             dmats[t][u] = 1.0;
             }
-            
+
           } // end loop over 'u'
         } // end loop over 't'
-        
+
         // Looping derivative order to generate dmats.
         for (unsigned int s = 0; s < n; s++)
         {
@@ -669,7 +669,7 @@ public:
               dmats[t][u] = 0.0;
             } // end loop over 'u'
           } // end loop over 't'
-          
+
           // Update dmats using an inner product.
           if (combinations[r][s] == 0)
           {
@@ -684,7 +684,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 1)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -698,7 +698,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 2)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -712,7 +712,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
         } // end loop over 's'
         for (unsigned int s = 0; s < 4; s++)
         {
@@ -722,7 +722,7 @@ public:
           } // end loop over 't'
         } // end loop over 's'
       } // end loop over 'r'
-      
+
       // Transform derivatives back to physical element
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -735,13 +735,13 @@ public:
       }
     case 2:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -751,30 +751,30 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.0, 0.210818510677892, -0.074535599249993};
-      
+
       // Tables of derivatives of the polynomial base (transpose).
       static const double dmats0[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {6.32455532033676, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats1[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {5.47722557505166, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats2[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {1.82574185835055, 0.0, 0.0, 0.0},
       {5.16397779494322, 0.0, 0.0, 0.0}};
-      
+
       // Compute reference derivatives.
       // Declare array of derivatives on FIAT element.
       double derivatives[3];
@@ -782,21 +782,21 @@ public:
       {
         derivatives[r] = 0.0;
       } // end loop over 'r'
-      
+
       // Declare derivative matrix (of polynomial basis).
       double dmats[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Declare (auxiliary) derivative matrix (of polynomial basis).
       double dmats_old[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Loop possible derivatives.
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -810,10 +810,10 @@ public:
             {
             dmats[t][u] = 1.0;
             }
-            
+
           } // end loop over 'u'
         } // end loop over 't'
-        
+
         // Looping derivative order to generate dmats.
         for (unsigned int s = 0; s < n; s++)
         {
@@ -826,7 +826,7 @@ public:
               dmats[t][u] = 0.0;
             } // end loop over 'u'
           } // end loop over 't'
-          
+
           // Update dmats using an inner product.
           if (combinations[r][s] == 0)
           {
@@ -841,7 +841,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 1)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -855,7 +855,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 2)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -869,7 +869,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
         } // end loop over 's'
         for (unsigned int s = 0; s < 4; s++)
         {
@@ -879,7 +879,7 @@ public:
           } // end loop over 't'
         } // end loop over 's'
       } // end loop over 'r'
-      
+
       // Transform derivatives back to physical element
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -892,13 +892,13 @@ public:
       }
     case 3:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -908,30 +908,30 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.0, 0.0, 0.223606797749979};
-      
+
       // Tables of derivatives of the polynomial base (transpose).
       static const double dmats0[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {6.32455532033676, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats1[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {5.47722557505166, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats2[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {1.82574185835055, 0.0, 0.0, 0.0},
       {5.16397779494322, 0.0, 0.0, 0.0}};
-      
+
       // Compute reference derivatives.
       // Declare array of derivatives on FIAT element.
       double derivatives[3];
@@ -939,21 +939,21 @@ public:
       {
         derivatives[r] = 0.0;
       } // end loop over 'r'
-      
+
       // Declare derivative matrix (of polynomial basis).
       double dmats[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Declare (auxiliary) derivative matrix (of polynomial basis).
       double dmats_old[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Loop possible derivatives.
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -967,10 +967,10 @@ public:
             {
             dmats[t][u] = 1.0;
             }
-            
+
           } // end loop over 'u'
         } // end loop over 't'
-        
+
         // Looping derivative order to generate dmats.
         for (unsigned int s = 0; s < n; s++)
         {
@@ -983,7 +983,7 @@ public:
               dmats[t][u] = 0.0;
             } // end loop over 'u'
           } // end loop over 't'
-          
+
           // Update dmats using an inner product.
           if (combinations[r][s] == 0)
           {
@@ -998,7 +998,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 1)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -1012,7 +1012,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 2)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -1026,7 +1026,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
         } // end loop over 's'
         for (unsigned int s = 0; s < 4; s++)
         {
@@ -1036,7 +1036,7 @@ public:
           } // end loop over 't'
         } // end loop over 's'
       } // end loop over 'r'
-      
+
       // Transform derivatives back to physical element
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -1048,7 +1048,7 @@ public:
         break;
       }
     }
-    
+
   }
 
   void evaluate_basis_derivatives(std::size_t i,
@@ -1073,14 +1073,14 @@ public:
       _evaluate_basis_all(values, x, coordinate_dofs, cell_orientation);
       return ;
     }
-    
+
     // Compute number of derivatives.
     unsigned int num_derivatives = 1;
     for (unsigned int r = 0; r < n; r++)
     {
       num_derivatives *= 3;
     } // end loop over 'r'
-    
+
     // Set values equal to zero.
     for (unsigned int r = 0; r < 4; r++)
     {
@@ -1089,20 +1089,20 @@ public:
         values[r*num_derivatives + s] = 0.0;
       } // end loop over 's'
     } // end loop over 'r'
-    
+
     // If order of derivatives is greater than the maximum polynomial degree, return zeros.
     if (n > 1)
     {
       return ;
     }
-    
+
     // Helper variable to hold values of a single dof.
     double dof_values[3];
     for (unsigned int r = 0; r < 3; r++)
     {
       dof_values[r] = 0.0;
     } // end loop over 'r'
-    
+
     // Loop dofs and call evaluate_basis_derivatives.
     for (unsigned int r = 0; r < 4; r++)
     {
@@ -1131,7 +1131,7 @@ public:
   {
     // Declare variables for result of evaluation
     double vals[1];
-    
+
     // Declare variable for physical coordinates
     double y[3];
     switch (i)
@@ -1173,7 +1173,7 @@ public:
         break;
       }
     }
-    
+
     return 0.0;
   }
 
@@ -1185,7 +1185,7 @@ public:
   {
     // Declare variables for result of evaluation
     double vals[1];
-    
+
     // Declare variable for physical coordinates
     double y[3];
     y[0] = coordinate_dofs[0];
@@ -1312,7 +1312,7 @@ public:
         break;
       }
     }
-    
+
     return 0;
   }
 
@@ -1336,7 +1336,7 @@ public:
         break;
       }
     }
-    
+
     return 0;
   }
 
@@ -1364,18 +1364,18 @@ public:
     // Compute Jacobian
     double J[9];
     compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
-    
+
     // Compute Jacobian inverse and determinant
     double K[9];
     double detJ;
     compute_jacobian_inverse_tetrahedron_3d(K, detJ, J);
-    
-    
+
+
     // Compute constants
     const double C0 = coordinate_dofs[9]  + coordinate_dofs[6] + coordinate_dofs[3]  - coordinate_dofs[0];
     const double C1 = coordinate_dofs[10] + coordinate_dofs[7] + coordinate_dofs[4]  - coordinate_dofs[1];
     const double C2 = coordinate_dofs[11] + coordinate_dofs[8] + coordinate_dofs[5]  - coordinate_dofs[2];
-    
+
     // Compute subdeterminants
     const double d_00 = J[4]*J[8] - J[5]*J[7];
     const double d_01 = J[5]*J[6] - J[3]*J[8];
@@ -1386,13 +1386,13 @@ public:
     const double d_20 = J[1]*J[5] - J[2]*J[4];
     const double d_21 = J[2]*J[3] - J[0]*J[5];
     const double d_22 = J[0]*J[4] - J[1]*J[3];
-    
+
     // Get coordinates and map to the reference (FIAT) element
     double X = (d_00*(2.0*x[0] - C0) + d_10*(2.0*x[1] - C1) + d_20*(2.0*x[2] - C2)) / detJ;
     double Y = (d_01*(2.0*x[0] - C0) + d_11*(2.0*x[1] - C1) + d_21*(2.0*x[2] - C2)) / detJ;
     double Z = (d_02*(2.0*x[0] - C0) + d_12*(2.0*x[1] - C1) + d_22*(2.0*x[2] - C2)) / detJ;
-    
-    
+
+
     // Reset values
     values[0] = 0.0;
     values[1] = 0.0;
@@ -1401,13 +1401,13 @@ public:
     {
     case 0:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -1417,11 +1417,11 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, -0.182574185835055, -0.105409255338946, -0.074535599249993};
-      
+
       // Compute value(s)
       for (unsigned int r = 0; r < 4; r++)
       {
@@ -1431,13 +1431,13 @@ public:
       }
     case 1:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -1447,11 +1447,11 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.182574185835055, -0.105409255338946, -0.074535599249993};
-      
+
       // Compute value(s)
       for (unsigned int r = 0; r < 4; r++)
       {
@@ -1461,13 +1461,13 @@ public:
       }
     case 2:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -1477,11 +1477,11 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.0, 0.210818510677892, -0.074535599249993};
-      
+
       // Compute value(s)
       for (unsigned int r = 0; r < 4; r++)
       {
@@ -1491,13 +1491,13 @@ public:
       }
     case 3:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -1507,11 +1507,11 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.0, 0.0, 0.223606797749979};
-      
+
       // Compute value(s)
       for (unsigned int r = 0; r < 4; r++)
       {
@@ -1521,13 +1521,13 @@ public:
       }
     case 4:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -1537,11 +1537,11 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, -0.182574185835055, -0.105409255338946, -0.074535599249993};
-      
+
       // Compute value(s)
       for (unsigned int r = 0; r < 4; r++)
       {
@@ -1551,13 +1551,13 @@ public:
       }
     case 5:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -1567,11 +1567,11 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.182574185835055, -0.105409255338946, -0.074535599249993};
-      
+
       // Compute value(s)
       for (unsigned int r = 0; r < 4; r++)
       {
@@ -1581,13 +1581,13 @@ public:
       }
     case 6:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -1597,11 +1597,11 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.0, 0.210818510677892, -0.074535599249993};
-      
+
       // Compute value(s)
       for (unsigned int r = 0; r < 4; r++)
       {
@@ -1611,13 +1611,13 @@ public:
       }
     case 7:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -1627,11 +1627,11 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.0, 0.0, 0.223606797749979};
-      
+
       // Compute value(s)
       for (unsigned int r = 0; r < 4; r++)
       {
@@ -1641,13 +1641,13 @@ public:
       }
     case 8:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -1657,11 +1657,11 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, -0.182574185835055, -0.105409255338946, -0.074535599249993};
-      
+
       // Compute value(s)
       for (unsigned int r = 0; r < 4; r++)
       {
@@ -1671,13 +1671,13 @@ public:
       }
     case 9:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -1687,11 +1687,11 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.182574185835055, -0.105409255338946, -0.074535599249993};
-      
+
       // Compute value(s)
       for (unsigned int r = 0; r < 4; r++)
       {
@@ -1701,13 +1701,13 @@ public:
       }
     case 10:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -1717,11 +1717,11 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.0, 0.210818510677892, -0.074535599249993};
-      
+
       // Compute value(s)
       for (unsigned int r = 0; r < 4; r++)
       {
@@ -1731,13 +1731,13 @@ public:
       }
     case 11:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -1747,11 +1747,11 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.0, 0.0, 0.223606797749979};
-      
+
       // Compute value(s)
       for (unsigned int r = 0; r < 4; r++)
       {
@@ -1760,7 +1760,7 @@ public:
         break;
       }
     }
-    
+
   }
 
   void evaluate_basis(std::size_t i,
@@ -1779,7 +1779,7 @@ public:
   {
     // Helper variable to hold values of a single dof.
     double dof_values[3] = {0.0, 0.0, 0.0};
-    
+
     // Loop dofs and call evaluate_basis
     for (unsigned int r = 0; r < 12; r++)
     {
@@ -1806,48 +1806,48 @@ public:
                                           const double * coordinate_dofs,
                                           int cell_orientation)
   {
-    
+
     // Compute number of derivatives.
     unsigned int num_derivatives = 1;
     for (unsigned int r = 0; r < n; r++)
     {
       num_derivatives *= 3;
     } // end loop over 'r'
-    
+
     // Reset values. Assuming that values is always an array.
     for (unsigned int r = 0; r < 3*num_derivatives; r++)
     {
       values[r] = 0.0;
     } // end loop over 'r'
-    
+
     // Call evaluate_basis if order of derivatives is equal to zero.
     if (n == 0)
     {
       _evaluate_basis(i, values, x, coordinate_dofs, cell_orientation);
       return ;
     }
-    
+
     // If order of derivatives is greater than the maximum polynomial degree, return zeros.
     if (n > 1)
     {
     return ;
     }
-    
+
     // Compute Jacobian
     double J[9];
     compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
-    
+
     // Compute Jacobian inverse and determinant
     double K[9];
     double detJ;
     compute_jacobian_inverse_tetrahedron_3d(K, detJ, J);
-    
-    
+
+
     // Compute constants
     const double C0 = coordinate_dofs[9]  + coordinate_dofs[6] + coordinate_dofs[3]  - coordinate_dofs[0];
     const double C1 = coordinate_dofs[10] + coordinate_dofs[7] + coordinate_dofs[4]  - coordinate_dofs[1];
     const double C2 = coordinate_dofs[11] + coordinate_dofs[8] + coordinate_dofs[5]  - coordinate_dofs[2];
-    
+
     // Compute subdeterminants
     const double d_00 = J[4]*J[8] - J[5]*J[7];
     const double d_01 = J[5]*J[6] - J[3]*J[8];
@@ -1858,13 +1858,13 @@ public:
     const double d_20 = J[1]*J[5] - J[2]*J[4];
     const double d_21 = J[2]*J[3] - J[0]*J[5];
     const double d_22 = J[0]*J[4] - J[1]*J[3];
-    
+
     // Get coordinates and map to the reference (FIAT) element
     double X = (d_00*(2.0*x[0] - C0) + d_10*(2.0*x[1] - C1) + d_20*(2.0*x[2] - C2)) / detJ;
     double Y = (d_01*(2.0*x[0] - C0) + d_11*(2.0*x[1] - C1) + d_21*(2.0*x[2] - C2)) / detJ;
     double Z = (d_02*(2.0*x[0] - C0) + d_12*(2.0*x[1] - C1) + d_22*(2.0*x[2] - C2)) / detJ;
-    
-    
+
+
     // Declare two dimensional array that holds combinations of derivatives and initialise
     unsigned int combinations[3][1];
     for (unsigned int row = 0; row < 3; row++)
@@ -1872,7 +1872,7 @@ public:
       for (unsigned int col = 0; col < 1; col++)
         combinations[row][col] = 0;
     }
-    
+
     // Generate combinations of derivatives
     for (unsigned int row = 1; row < num_derivatives; row++)
     {
@@ -1890,10 +1890,10 @@ public:
         }
       }
     }
-    
+
     // Compute inverse of Jacobian
     const double Jinv[3][3] = {{K[0], K[1], K[2]}, {K[3], K[4], K[5]}, {K[6], K[7], K[8]}};
-    
+
     // Declare transformation matrix
     // Declare pointer to two dimensional array and initialise
     double transform[3][3];
@@ -1902,7 +1902,7 @@ public:
       for (unsigned int k = 0; k < num_derivatives; k++)
         transform[j][k] = 1;
     }
-    
+
     // Construct transformation matrix
     for (unsigned int row = 0; row < num_derivatives; row++)
     {
@@ -1916,13 +1916,13 @@ public:
     {
     case 0:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -1932,30 +1932,30 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, -0.182574185835055, -0.105409255338946, -0.074535599249993};
-      
+
       // Tables of derivatives of the polynomial base (transpose).
       static const double dmats0[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {6.32455532033676, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats1[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {5.47722557505166, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats2[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {1.82574185835055, 0.0, 0.0, 0.0},
       {5.16397779494322, 0.0, 0.0, 0.0}};
-      
+
       // Compute reference derivatives.
       // Declare array of derivatives on FIAT element.
       double derivatives[3];
@@ -1963,21 +1963,21 @@ public:
       {
         derivatives[r] = 0.0;
       } // end loop over 'r'
-      
+
       // Declare derivative matrix (of polynomial basis).
       double dmats[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Declare (auxiliary) derivative matrix (of polynomial basis).
       double dmats_old[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Loop possible derivatives.
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -1991,10 +1991,10 @@ public:
             {
             dmats[t][u] = 1.0;
             }
-            
+
           } // end loop over 'u'
         } // end loop over 't'
-        
+
         // Looping derivative order to generate dmats.
         for (unsigned int s = 0; s < n; s++)
         {
@@ -2007,7 +2007,7 @@ public:
               dmats[t][u] = 0.0;
             } // end loop over 'u'
           } // end loop over 't'
-          
+
           // Update dmats using an inner product.
           if (combinations[r][s] == 0)
           {
@@ -2022,7 +2022,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 1)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -2036,7 +2036,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 2)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -2050,7 +2050,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
         } // end loop over 's'
         for (unsigned int s = 0; s < 4; s++)
         {
@@ -2060,7 +2060,7 @@ public:
           } // end loop over 't'
         } // end loop over 's'
       } // end loop over 'r'
-      
+
       // Transform derivatives back to physical element
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -2073,13 +2073,13 @@ public:
       }
     case 1:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -2089,30 +2089,30 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.182574185835055, -0.105409255338946, -0.074535599249993};
-      
+
       // Tables of derivatives of the polynomial base (transpose).
       static const double dmats0[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {6.32455532033676, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats1[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {5.47722557505166, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats2[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {1.82574185835055, 0.0, 0.0, 0.0},
       {5.16397779494322, 0.0, 0.0, 0.0}};
-      
+
       // Compute reference derivatives.
       // Declare array of derivatives on FIAT element.
       double derivatives[3];
@@ -2120,21 +2120,21 @@ public:
       {
         derivatives[r] = 0.0;
       } // end loop over 'r'
-      
+
       // Declare derivative matrix (of polynomial basis).
       double dmats[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Declare (auxiliary) derivative matrix (of polynomial basis).
       double dmats_old[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Loop possible derivatives.
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -2148,10 +2148,10 @@ public:
             {
             dmats[t][u] = 1.0;
             }
-            
+
           } // end loop over 'u'
         } // end loop over 't'
-        
+
         // Looping derivative order to generate dmats.
         for (unsigned int s = 0; s < n; s++)
         {
@@ -2164,7 +2164,7 @@ public:
               dmats[t][u] = 0.0;
             } // end loop over 'u'
           } // end loop over 't'
-          
+
           // Update dmats using an inner product.
           if (combinations[r][s] == 0)
           {
@@ -2179,7 +2179,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 1)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -2193,7 +2193,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 2)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -2207,7 +2207,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
         } // end loop over 's'
         for (unsigned int s = 0; s < 4; s++)
         {
@@ -2217,7 +2217,7 @@ public:
           } // end loop over 't'
         } // end loop over 's'
       } // end loop over 'r'
-      
+
       // Transform derivatives back to physical element
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -2230,13 +2230,13 @@ public:
       }
     case 2:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -2246,30 +2246,30 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.0, 0.210818510677892, -0.074535599249993};
-      
+
       // Tables of derivatives of the polynomial base (transpose).
       static const double dmats0[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {6.32455532033676, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats1[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {5.47722557505166, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats2[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {1.82574185835055, 0.0, 0.0, 0.0},
       {5.16397779494322, 0.0, 0.0, 0.0}};
-      
+
       // Compute reference derivatives.
       // Declare array of derivatives on FIAT element.
       double derivatives[3];
@@ -2277,21 +2277,21 @@ public:
       {
         derivatives[r] = 0.0;
       } // end loop over 'r'
-      
+
       // Declare derivative matrix (of polynomial basis).
       double dmats[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Declare (auxiliary) derivative matrix (of polynomial basis).
       double dmats_old[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Loop possible derivatives.
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -2305,10 +2305,10 @@ public:
             {
             dmats[t][u] = 1.0;
             }
-            
+
           } // end loop over 'u'
         } // end loop over 't'
-        
+
         // Looping derivative order to generate dmats.
         for (unsigned int s = 0; s < n; s++)
         {
@@ -2321,7 +2321,7 @@ public:
               dmats[t][u] = 0.0;
             } // end loop over 'u'
           } // end loop over 't'
-          
+
           // Update dmats using an inner product.
           if (combinations[r][s] == 0)
           {
@@ -2336,7 +2336,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 1)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -2350,7 +2350,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 2)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -2364,7 +2364,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
         } // end loop over 's'
         for (unsigned int s = 0; s < 4; s++)
         {
@@ -2374,7 +2374,7 @@ public:
           } // end loop over 't'
         } // end loop over 's'
       } // end loop over 'r'
-      
+
       // Transform derivatives back to physical element
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -2387,13 +2387,13 @@ public:
       }
     case 3:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -2403,30 +2403,30 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.0, 0.0, 0.223606797749979};
-      
+
       // Tables of derivatives of the polynomial base (transpose).
       static const double dmats0[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {6.32455532033676, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats1[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {5.47722557505166, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats2[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {1.82574185835055, 0.0, 0.0, 0.0},
       {5.16397779494322, 0.0, 0.0, 0.0}};
-      
+
       // Compute reference derivatives.
       // Declare array of derivatives on FIAT element.
       double derivatives[3];
@@ -2434,21 +2434,21 @@ public:
       {
         derivatives[r] = 0.0;
       } // end loop over 'r'
-      
+
       // Declare derivative matrix (of polynomial basis).
       double dmats[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Declare (auxiliary) derivative matrix (of polynomial basis).
       double dmats_old[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Loop possible derivatives.
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -2462,10 +2462,10 @@ public:
             {
             dmats[t][u] = 1.0;
             }
-            
+
           } // end loop over 'u'
         } // end loop over 't'
-        
+
         // Looping derivative order to generate dmats.
         for (unsigned int s = 0; s < n; s++)
         {
@@ -2478,7 +2478,7 @@ public:
               dmats[t][u] = 0.0;
             } // end loop over 'u'
           } // end loop over 't'
-          
+
           // Update dmats using an inner product.
           if (combinations[r][s] == 0)
           {
@@ -2493,7 +2493,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 1)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -2507,7 +2507,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 2)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -2521,7 +2521,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
         } // end loop over 's'
         for (unsigned int s = 0; s < 4; s++)
         {
@@ -2531,7 +2531,7 @@ public:
           } // end loop over 't'
         } // end loop over 's'
       } // end loop over 'r'
-      
+
       // Transform derivatives back to physical element
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -2544,13 +2544,13 @@ public:
       }
     case 4:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -2560,30 +2560,30 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, -0.182574185835055, -0.105409255338946, -0.074535599249993};
-      
+
       // Tables of derivatives of the polynomial base (transpose).
       static const double dmats0[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {6.32455532033676, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats1[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {5.47722557505166, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats2[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {1.82574185835055, 0.0, 0.0, 0.0},
       {5.16397779494322, 0.0, 0.0, 0.0}};
-      
+
       // Compute reference derivatives.
       // Declare array of derivatives on FIAT element.
       double derivatives[3];
@@ -2591,21 +2591,21 @@ public:
       {
         derivatives[r] = 0.0;
       } // end loop over 'r'
-      
+
       // Declare derivative matrix (of polynomial basis).
       double dmats[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Declare (auxiliary) derivative matrix (of polynomial basis).
       double dmats_old[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Loop possible derivatives.
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -2619,10 +2619,10 @@ public:
             {
             dmats[t][u] = 1.0;
             }
-            
+
           } // end loop over 'u'
         } // end loop over 't'
-        
+
         // Looping derivative order to generate dmats.
         for (unsigned int s = 0; s < n; s++)
         {
@@ -2635,7 +2635,7 @@ public:
               dmats[t][u] = 0.0;
             } // end loop over 'u'
           } // end loop over 't'
-          
+
           // Update dmats using an inner product.
           if (combinations[r][s] == 0)
           {
@@ -2650,7 +2650,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 1)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -2664,7 +2664,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 2)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -2678,7 +2678,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
         } // end loop over 's'
         for (unsigned int s = 0; s < 4; s++)
         {
@@ -2688,7 +2688,7 @@ public:
           } // end loop over 't'
         } // end loop over 's'
       } // end loop over 'r'
-      
+
       // Transform derivatives back to physical element
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -2701,13 +2701,13 @@ public:
       }
     case 5:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -2717,30 +2717,30 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.182574185835055, -0.105409255338946, -0.074535599249993};
-      
+
       // Tables of derivatives of the polynomial base (transpose).
       static const double dmats0[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {6.32455532033676, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats1[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {5.47722557505166, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats2[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {1.82574185835055, 0.0, 0.0, 0.0},
       {5.16397779494322, 0.0, 0.0, 0.0}};
-      
+
       // Compute reference derivatives.
       // Declare array of derivatives on FIAT element.
       double derivatives[3];
@@ -2748,21 +2748,21 @@ public:
       {
         derivatives[r] = 0.0;
       } // end loop over 'r'
-      
+
       // Declare derivative matrix (of polynomial basis).
       double dmats[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Declare (auxiliary) derivative matrix (of polynomial basis).
       double dmats_old[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Loop possible derivatives.
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -2776,10 +2776,10 @@ public:
             {
             dmats[t][u] = 1.0;
             }
-            
+
           } // end loop over 'u'
         } // end loop over 't'
-        
+
         // Looping derivative order to generate dmats.
         for (unsigned int s = 0; s < n; s++)
         {
@@ -2792,7 +2792,7 @@ public:
               dmats[t][u] = 0.0;
             } // end loop over 'u'
           } // end loop over 't'
-          
+
           // Update dmats using an inner product.
           if (combinations[r][s] == 0)
           {
@@ -2807,7 +2807,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 1)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -2821,7 +2821,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 2)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -2835,7 +2835,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
         } // end loop over 's'
         for (unsigned int s = 0; s < 4; s++)
         {
@@ -2845,7 +2845,7 @@ public:
           } // end loop over 't'
         } // end loop over 's'
       } // end loop over 'r'
-      
+
       // Transform derivatives back to physical element
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -2858,13 +2858,13 @@ public:
       }
     case 6:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -2874,30 +2874,30 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.0, 0.210818510677892, -0.074535599249993};
-      
+
       // Tables of derivatives of the polynomial base (transpose).
       static const double dmats0[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {6.32455532033676, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats1[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {5.47722557505166, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats2[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {1.82574185835055, 0.0, 0.0, 0.0},
       {5.16397779494322, 0.0, 0.0, 0.0}};
-      
+
       // Compute reference derivatives.
       // Declare array of derivatives on FIAT element.
       double derivatives[3];
@@ -2905,21 +2905,21 @@ public:
       {
         derivatives[r] = 0.0;
       } // end loop over 'r'
-      
+
       // Declare derivative matrix (of polynomial basis).
       double dmats[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Declare (auxiliary) derivative matrix (of polynomial basis).
       double dmats_old[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Loop possible derivatives.
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -2933,10 +2933,10 @@ public:
             {
             dmats[t][u] = 1.0;
             }
-            
+
           } // end loop over 'u'
         } // end loop over 't'
-        
+
         // Looping derivative order to generate dmats.
         for (unsigned int s = 0; s < n; s++)
         {
@@ -2949,7 +2949,7 @@ public:
               dmats[t][u] = 0.0;
             } // end loop over 'u'
           } // end loop over 't'
-          
+
           // Update dmats using an inner product.
           if (combinations[r][s] == 0)
           {
@@ -2964,7 +2964,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 1)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -2978,7 +2978,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 2)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -2992,7 +2992,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
         } // end loop over 's'
         for (unsigned int s = 0; s < 4; s++)
         {
@@ -3002,7 +3002,7 @@ public:
           } // end loop over 't'
         } // end loop over 's'
       } // end loop over 'r'
-      
+
       // Transform derivatives back to physical element
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -3015,13 +3015,13 @@ public:
       }
     case 7:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -3031,30 +3031,30 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.0, 0.0, 0.223606797749979};
-      
+
       // Tables of derivatives of the polynomial base (transpose).
       static const double dmats0[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {6.32455532033676, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats1[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {5.47722557505166, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats2[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {1.82574185835055, 0.0, 0.0, 0.0},
       {5.16397779494322, 0.0, 0.0, 0.0}};
-      
+
       // Compute reference derivatives.
       // Declare array of derivatives on FIAT element.
       double derivatives[3];
@@ -3062,21 +3062,21 @@ public:
       {
         derivatives[r] = 0.0;
       } // end loop over 'r'
-      
+
       // Declare derivative matrix (of polynomial basis).
       double dmats[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Declare (auxiliary) derivative matrix (of polynomial basis).
       double dmats_old[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Loop possible derivatives.
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -3090,10 +3090,10 @@ public:
             {
             dmats[t][u] = 1.0;
             }
-            
+
           } // end loop over 'u'
         } // end loop over 't'
-        
+
         // Looping derivative order to generate dmats.
         for (unsigned int s = 0; s < n; s++)
         {
@@ -3106,7 +3106,7 @@ public:
               dmats[t][u] = 0.0;
             } // end loop over 'u'
           } // end loop over 't'
-          
+
           // Update dmats using an inner product.
           if (combinations[r][s] == 0)
           {
@@ -3121,7 +3121,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 1)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -3135,7 +3135,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 2)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -3149,7 +3149,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
         } // end loop over 's'
         for (unsigned int s = 0; s < 4; s++)
         {
@@ -3159,7 +3159,7 @@ public:
           } // end loop over 't'
         } // end loop over 's'
       } // end loop over 'r'
-      
+
       // Transform derivatives back to physical element
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -3172,13 +3172,13 @@ public:
       }
     case 8:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -3188,30 +3188,30 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, -0.182574185835055, -0.105409255338946, -0.074535599249993};
-      
+
       // Tables of derivatives of the polynomial base (transpose).
       static const double dmats0[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {6.32455532033676, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats1[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {5.47722557505166, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats2[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {1.82574185835055, 0.0, 0.0, 0.0},
       {5.16397779494322, 0.0, 0.0, 0.0}};
-      
+
       // Compute reference derivatives.
       // Declare array of derivatives on FIAT element.
       double derivatives[3];
@@ -3219,21 +3219,21 @@ public:
       {
         derivatives[r] = 0.0;
       } // end loop over 'r'
-      
+
       // Declare derivative matrix (of polynomial basis).
       double dmats[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Declare (auxiliary) derivative matrix (of polynomial basis).
       double dmats_old[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Loop possible derivatives.
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -3247,10 +3247,10 @@ public:
             {
             dmats[t][u] = 1.0;
             }
-            
+
           } // end loop over 'u'
         } // end loop over 't'
-        
+
         // Looping derivative order to generate dmats.
         for (unsigned int s = 0; s < n; s++)
         {
@@ -3263,7 +3263,7 @@ public:
               dmats[t][u] = 0.0;
             } // end loop over 'u'
           } // end loop over 't'
-          
+
           // Update dmats using an inner product.
           if (combinations[r][s] == 0)
           {
@@ -3278,7 +3278,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 1)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -3292,7 +3292,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 2)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -3306,7 +3306,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
         } // end loop over 's'
         for (unsigned int s = 0; s < 4; s++)
         {
@@ -3316,7 +3316,7 @@ public:
           } // end loop over 't'
         } // end loop over 's'
       } // end loop over 'r'
-      
+
       // Transform derivatives back to physical element
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -3329,13 +3329,13 @@ public:
       }
     case 9:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -3345,30 +3345,30 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.182574185835055, -0.105409255338946, -0.074535599249993};
-      
+
       // Tables of derivatives of the polynomial base (transpose).
       static const double dmats0[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {6.32455532033676, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats1[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {5.47722557505166, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats2[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {1.82574185835055, 0.0, 0.0, 0.0},
       {5.16397779494322, 0.0, 0.0, 0.0}};
-      
+
       // Compute reference derivatives.
       // Declare array of derivatives on FIAT element.
       double derivatives[3];
@@ -3376,21 +3376,21 @@ public:
       {
         derivatives[r] = 0.0;
       } // end loop over 'r'
-      
+
       // Declare derivative matrix (of polynomial basis).
       double dmats[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Declare (auxiliary) derivative matrix (of polynomial basis).
       double dmats_old[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Loop possible derivatives.
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -3404,10 +3404,10 @@ public:
             {
             dmats[t][u] = 1.0;
             }
-            
+
           } // end loop over 'u'
         } // end loop over 't'
-        
+
         // Looping derivative order to generate dmats.
         for (unsigned int s = 0; s < n; s++)
         {
@@ -3420,7 +3420,7 @@ public:
               dmats[t][u] = 0.0;
             } // end loop over 'u'
           } // end loop over 't'
-          
+
           // Update dmats using an inner product.
           if (combinations[r][s] == 0)
           {
@@ -3435,7 +3435,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 1)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -3449,7 +3449,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 2)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -3463,7 +3463,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
         } // end loop over 's'
         for (unsigned int s = 0; s < 4; s++)
         {
@@ -3473,7 +3473,7 @@ public:
           } // end loop over 't'
         } // end loop over 's'
       } // end loop over 'r'
-      
+
       // Transform derivatives back to physical element
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -3486,13 +3486,13 @@ public:
       }
     case 10:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -3502,30 +3502,30 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.0, 0.210818510677892, -0.074535599249993};
-      
+
       // Tables of derivatives of the polynomial base (transpose).
       static const double dmats0[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {6.32455532033676, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats1[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {5.47722557505166, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats2[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {1.82574185835055, 0.0, 0.0, 0.0},
       {5.16397779494322, 0.0, 0.0, 0.0}};
-      
+
       // Compute reference derivatives.
       // Declare array of derivatives on FIAT element.
       double derivatives[3];
@@ -3533,21 +3533,21 @@ public:
       {
         derivatives[r] = 0.0;
       } // end loop over 'r'
-      
+
       // Declare derivative matrix (of polynomial basis).
       double dmats[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Declare (auxiliary) derivative matrix (of polynomial basis).
       double dmats_old[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Loop possible derivatives.
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -3561,10 +3561,10 @@ public:
             {
             dmats[t][u] = 1.0;
             }
-            
+
           } // end loop over 'u'
         } // end loop over 't'
-        
+
         // Looping derivative order to generate dmats.
         for (unsigned int s = 0; s < n; s++)
         {
@@ -3577,7 +3577,7 @@ public:
               dmats[t][u] = 0.0;
             } // end loop over 'u'
           } // end loop over 't'
-          
+
           // Update dmats using an inner product.
           if (combinations[r][s] == 0)
           {
@@ -3592,7 +3592,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 1)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -3606,7 +3606,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 2)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -3620,7 +3620,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
         } // end loop over 's'
         for (unsigned int s = 0; s < 4; s++)
         {
@@ -3630,7 +3630,7 @@ public:
           } // end loop over 't'
         } // end loop over 's'
       } // end loop over 'r'
-      
+
       // Transform derivatives back to physical element
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -3643,13 +3643,13 @@ public:
       }
     case 11:
       {
-        
+
       // Array of basisvalues
       double basisvalues[4] = {0.0, 0.0, 0.0, 0.0};
-      
+
       // Declare helper variables
       double tmp0 = 0.5*(2.0 + Y + Z + 2.0*X);
-      
+
       // Compute basisvalues
       basisvalues[0] = 1.0;
       basisvalues[1] = tmp0;
@@ -3659,30 +3659,30 @@ public:
       basisvalues[3] *= std::sqrt(1.25);
       basisvalues[2] *= std::sqrt(2.5);
       basisvalues[1] *= std::sqrt(7.5);
-      
+
       // Table(s) of coefficients
       static const double coefficients0[4] = \
       {0.288675134594813, 0.0, 0.0, 0.223606797749979};
-      
+
       // Tables of derivatives of the polynomial base (transpose).
       static const double dmats0[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {6.32455532033676, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats1[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {5.47722557505166, 0.0, 0.0, 0.0},
       {0.0, 0.0, 0.0, 0.0}};
-      
+
       static const double dmats2[4][4] = \
       {{0.0, 0.0, 0.0, 0.0},
       {3.16227766016838, 0.0, 0.0, 0.0},
       {1.82574185835055, 0.0, 0.0, 0.0},
       {5.16397779494322, 0.0, 0.0, 0.0}};
-      
+
       // Compute reference derivatives.
       // Declare array of derivatives on FIAT element.
       double derivatives[3];
@@ -3690,21 +3690,21 @@ public:
       {
         derivatives[r] = 0.0;
       } // end loop over 'r'
-      
+
       // Declare derivative matrix (of polynomial basis).
       double dmats[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Declare (auxiliary) derivative matrix (of polynomial basis).
       double dmats_old[4][4] = \
       {{1.0, 0.0, 0.0, 0.0},
       {0.0, 1.0, 0.0, 0.0},
       {0.0, 0.0, 1.0, 0.0},
       {0.0, 0.0, 0.0, 1.0}};
-      
+
       // Loop possible derivatives.
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -3718,10 +3718,10 @@ public:
             {
             dmats[t][u] = 1.0;
             }
-            
+
           } // end loop over 'u'
         } // end loop over 't'
-        
+
         // Looping derivative order to generate dmats.
         for (unsigned int s = 0; s < n; s++)
         {
@@ -3734,7 +3734,7 @@ public:
               dmats[t][u] = 0.0;
             } // end loop over 'u'
           } // end loop over 't'
-          
+
           // Update dmats using an inner product.
           if (combinations[r][s] == 0)
           {
@@ -3749,7 +3749,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 1)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -3763,7 +3763,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
           if (combinations[r][s] == 2)
           {
           for (unsigned int t = 0; t < 4; t++)
@@ -3777,7 +3777,7 @@ public:
             } // end loop over 'u'
           } // end loop over 't'
           }
-          
+
         } // end loop over 's'
         for (unsigned int s = 0; s < 4; s++)
         {
@@ -3787,7 +3787,7 @@ public:
           } // end loop over 't'
         } // end loop over 's'
       } // end loop over 'r'
-      
+
       // Transform derivatives back to physical element
       for (unsigned int r = 0; r < num_derivatives; r++)
       {
@@ -3799,7 +3799,7 @@ public:
         break;
       }
     }
-    
+
   }
 
   void evaluate_basis_derivatives(std::size_t i,
@@ -3824,14 +3824,14 @@ public:
       _evaluate_basis_all(values, x, coordinate_dofs, cell_orientation);
       return ;
     }
-    
+
     // Compute number of derivatives.
     unsigned int num_derivatives = 1;
     for (unsigned int r = 0; r < n; r++)
     {
       num_derivatives *= 3;
     } // end loop over 'r'
-    
+
     // Set values equal to zero.
     for (unsigned int r = 0; r < 12; r++)
     {
@@ -3840,20 +3840,20 @@ public:
         values[r*3*num_derivatives + s] = 0.0;
       } // end loop over 's'
     } // end loop over 'r'
-    
+
     // If order of derivatives is greater than the maximum polynomial degree, return zeros.
     if (n > 1)
     {
       return ;
     }
-    
+
     // Helper variable to hold values of a single dof.
     double dof_values[9];
     for (unsigned int r = 0; r < 9; r++)
     {
       dof_values[r] = 0.0;
     } // end loop over 'r'
-    
+
     // Loop dofs and call evaluate_basis_derivatives.
     for (unsigned int r = 0; r < 12; r++)
     {
@@ -3882,7 +3882,7 @@ public:
   {
     // Declare variables for result of evaluation
     double vals[3];
-    
+
     // Declare variable for physical coordinates
     double y[3];
     switch (i)
@@ -3996,7 +3996,7 @@ public:
         break;
       }
     }
-    
+
     return 0.0;
   }
 
@@ -4008,7 +4008,7 @@ public:
   {
     // Declare variables for result of evaluation
     double vals[3];
-    
+
     // Declare variable for physical coordinates
     double y[3];
     y[0] = coordinate_dofs[0];
@@ -4162,7 +4162,7 @@ public:
         break;
       }
     }
-    
+
     return 0;
   }
 
@@ -4218,7 +4218,7 @@ public:
         break;
       }
     }
-    
+
     return false;
   }
 
@@ -4268,7 +4268,7 @@ public:
         break;
       }
     }
-    
+
     return 0;
   }
 
@@ -4316,7 +4316,7 @@ public:
         break;
       }
     }
-    
+
   }
 
   void tabulate_entity_dofs(std::size_t * dofs,
@@ -4326,7 +4326,7 @@ public:
     {
     throw std::runtime_error("d is larger than dimension (3)");
     }
-    
+
     switch (d)
     {
     case 0:
@@ -4335,7 +4335,7 @@ public:
       {
       throw std::runtime_error("i is larger than number of entities (3)");
       }
-      
+
       switch (i)
       {
       case 0:
@@ -4359,26 +4359,26 @@ public:
           break;
         }
       }
-      
+
         break;
       }
     case 1:
       {
-        
+
         break;
       }
     case 2:
       {
-        
+
         break;
       }
     case 3:
       {
-        
+
         break;
       }
     }
-    
+
   }
 
 
@@ -4444,7 +4444,7 @@ public:
         break;
       }
     }
-    
+
     return false;
   }
 
@@ -4494,7 +4494,7 @@ public:
         break;
       }
     }
-    
+
     return 0;
   }
 
@@ -4578,7 +4578,7 @@ public:
         break;
       }
     }
-    
+
   }
 
   void tabulate_entity_dofs(std::size_t * dofs,
@@ -4588,7 +4588,7 @@ public:
     {
     throw std::runtime_error("d is larger than dimension (3)");
     }
-    
+
     switch (d)
     {
     case 0:
@@ -4597,7 +4597,7 @@ public:
       {
       throw std::runtime_error("i is larger than number of entities (3)");
       }
-      
+
       switch (i)
       {
       case 0:
@@ -4629,26 +4629,26 @@ public:
           break;
         }
       }
-      
+
         break;
       }
     case 1:
       {
-        
+
         break;
       }
     case 2:
       {
-        
+
         break;
       }
     case 3:
       {
-        
+
         break;
       }
     }
-    
+
   }
 
 
@@ -4677,7 +4677,7 @@ public:
         break;
       }
     }
-    
+
     return 0;
   }
 
@@ -4695,12 +4695,12 @@ public:
 
   eafe_cell_integral_0_otherwise() : ufc::cell_integral()
   {
-    
+
   }
 
   ~eafe_cell_integral_0_otherwise() override
   {
-    
+
   }
 
   const std::vector<bool> & enabled_coefficients() const final override
@@ -4714,28 +4714,31 @@ public:
                        const double * coordinate_dofs,
                        int cell_orientation) const final override
   {
+    // Bernoulli coefficient matrix
+    double bern[16];
+
     // Compute Jacobian
     double J[9];
     compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
-    
+
     // Compute Jacobian inverse and determinant
     double K[9];
     double detJ;
     compute_jacobian_inverse_tetrahedron_3d(K, detJ, J);
-    
+
     // Set scale factor
     const double det = std::abs(detJ);
-    
+
     // Compute cell volume
-    
-    
+
+
     // Compute circumradius
-    
-    
+
+
     // Array of quadrature weights.
     static const double W24[24] = {0.00665379170969465, 0.00665379170969465, 0.00665379170969465, 0.00665379170969465, 0.00167953517588678, 0.00167953517588678, 0.00167953517588678, 0.00167953517588678, 0.0092261969239424, 0.0092261969239424, 0.0092261969239424, 0.0092261969239424, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428};
     // Quadrature points on the UFC reference element: (0.356191386222545, 0.214602871259152, 0.214602871259152), (0.214602871259152, 0.214602871259152, 0.214602871259152), (0.214602871259152, 0.214602871259152, 0.356191386222545), (0.214602871259152, 0.356191386222545, 0.214602871259152), (0.877978124396166, 0.0406739585346113, 0.0406739585346113), (0.0406739585346113, 0.0406739585346113, 0.0406739585346113), (0.0406739585346113, 0.0406739585346113, 0.877978124396166), (0.0406739585346113, 0.877978124396166, 0.0406739585346113), (0.0329863295731731, 0.322337890142276, 0.322337890142276), (0.322337890142276, 0.322337890142276, 0.322337890142276), (0.322337890142276, 0.322337890142276, 0.0329863295731731), (0.322337890142276, 0.0329863295731731, 0.322337890142276), (0.269672331458316, 0.0636610018750175, 0.0636610018750175), (0.0636610018750175, 0.269672331458316, 0.0636610018750175), (0.0636610018750175, 0.0636610018750175, 0.269672331458316), (0.603005664791649, 0.0636610018750175, 0.0636610018750175), (0.0636610018750175, 0.603005664791649, 0.0636610018750175), (0.0636610018750175, 0.0636610018750175, 0.603005664791649), (0.0636610018750175, 0.269672331458316, 0.603005664791649), (0.269672331458316, 0.603005664791649, 0.0636610018750175), (0.603005664791649, 0.0636610018750175, 0.269672331458316), (0.0636610018750175, 0.603005664791649, 0.269672331458316), (0.269672331458316, 0.0636610018750175, 0.603005664791649), (0.603005664791649, 0.269672331458316, 0.0636610018750175)
-    
+
     // Values of basis functions at quadrature points.
     static const double FE0[24][4] = \
     {{0.214602871259152, 0.356191386222545, 0.214602871259152, 0.214602871259152},
@@ -4762,7 +4765,7 @@ public:
     {0.0636610018750176, 0.0636610018750175, 0.603005664791649, 0.269672331458316},
     {0.0636610018750177, 0.269672331458316, 0.0636610018750175, 0.603005664791649},
     {0.0636610018750177, 0.603005664791649, 0.269672331458316, 0.0636610018750175}};
-    
+
     static const double FE0_D001[24][2] = \
     {{-1.0, 1.0},
     {-1.0, 1.0},
@@ -4788,20 +4791,21 @@ public:
     {-1.0, 1.0},
     {-1.0, 1.0},
     {-1.0, 1.0}};
-    
+
     // Array of non-zero columns
     static const unsigned int nzc0[2] = {0, 3};
-    
+
     // Array of non-zero columns
     static const unsigned int nzc1[2] = {0, 2};
-    
+
     // Array of non-zero columns
     static const unsigned int nzc2[2] = {0, 1};
-    
+
     // Reset values in the element tensor.
     for (unsigned int r = 0; r < 16; r++)
     {
       A[r] = 0.0;
+      bern[r] = 0.0;
     } // end loop over 'r'
     // Number of operations to compute geometry constants: 36.
     double G[6];
@@ -4811,122 +4815,98 @@ public:
     G[3] = det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
     G[4] = det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
     G[5] = det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    
+
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
-    
-    // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 7656
-    for (unsigned int ip = 0; ip < 24; ip++)
-    {
-      
-      // Coefficient declarations.
-      double F0 = 0.0;
-      double F1 = 0.0;
-      double F2 = 0.0;
-      double F3 = 0.0;
-      double F4 = 0.0;
-      double F5 = 0.0;
-      
-      // Total number of operations to compute function values = 12
-      for (unsigned int r = 0; r < 2; r++)
-      {
-        F2 += FE0_D001[ip][r]*w[2][nzc2[r]];
-        F3 += FE0_D001[ip][r]*w[2][nzc1[r]];
-        F4 += FE0_D001[ip][r]*w[2][nzc0[r]];
-      } // end loop over 'r'
-      
-      // Total number of operations to compute function values = 24
-      for (unsigned int r = 0; r < 4; r++)
-      {
-        F0 += FE0[ip][r]*w[3][r];
-        F1 += FE0[ip][r]*w[0][r];
-        F5 += FE0[ip][r]*w[1][r];
-      } // end loop over 'r'
-      
-      // Number of operations to compute ip constants: 55
-      double I[10];
-      // Number of operations: 4
-      I[0] = F5*G[0]*W24[ip]*std::exp(F1);
-      
-      // Number of operations: 4
-      I[1] = F5*G[1]*W24[ip]*std::exp(F1);
-      
-      // Number of operations: 4
-      I[2] = F5*G[2]*W24[ip]*std::exp(F1);
-      
-      // Number of operations: 4
-      I[3] = F5*G[3]*W24[ip]*std::exp(F1);
-      
-      // Number of operations: 4
-      I[4] = F5*G[4]*W24[ip]*std::exp(F1);
-      
-      // Number of operations: 4
-      I[5] = F5*G[5]*W24[ip]*std::exp(F1);
-      
-      // Number of operations: 9
-      I[6] = F5*W24[ip]*std::exp(F1)*(F2*G[2] + F3*G[1] + F4*G[0]);
-      
-      // Number of operations: 9
-      I[7] = F5*W24[ip]*std::exp(F1)*(F2*G[4] + F3*G[3] + F4*G[1]);
-      
-      // Number of operations: 9
-      I[8] = F5*W24[ip]*std::exp(F1)*(F2*G[5] + F3*G[4] + F4*G[2]);
-      
-      // Number of operations: 4
-      I[9] = F0*W24[ip]*det*std::exp(F1);
-      
-      
-      // Number of operations for primary indices: 108
-      for (unsigned int j = 0; j < 2; j++)
-      {
-        for (unsigned int k = 0; k < 2; k++)
+
+
+        /// Compute Poisson matrix
+        // Compute geometry tensor
+        const double G0_0_0 = det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+        const double G0_0_1 = det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+        const double G0_0_2 = det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+        const double G0_1_0 = det*(K[3]*K[0] + K[4]*K[1] + K[5]*K[2]);
+        const double G0_1_1 = det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+        const double G0_1_2 = det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+        const double G0_2_0 = det*(K[6]*K[0] + K[7]*K[1] + K[8]*K[2]);
+        const double G0_2_1 = det*(K[6]*K[3] + K[7]*K[4] + K[8]*K[5]);
+        const double G0_2_2 = det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+        A[0] = 0.166666666666667*G0_0_0 + 0.166666666666667*G0_0_1 + 0.166666666666667*G0_0_2 + 0.166666666666667*G0_1_0 + 0.166666666666667*G0_1_1 + 0.166666666666667*G0_1_2 + 0.166666666666667*G0_2_0 + 0.166666666666667*G0_2_1 + 0.166666666666667*G0_2_2;
+        A[1] = -0.166666666666667*G0_0_0 - 0.166666666666667*G0_1_0 - 0.166666666666667*G0_2_0;
+        A[2] = -0.166666666666667*G0_0_1 - 0.166666666666667*G0_1_1 - 0.166666666666667*G0_2_1;
+        A[3] = -0.166666666666667*G0_0_2 - 0.166666666666667*G0_1_2 - 0.166666666666667*G0_2_2;
+        A[4] = -0.166666666666667*G0_0_0 - 0.166666666666667*G0_0_1 - 0.166666666666667*G0_0_2;
+        A[5] = 0.166666666666667*G0_0_0;
+        A[6] = 0.166666666666667*G0_0_1;
+        A[7] = 0.166666666666667*G0_0_2;
+        A[8] = -0.166666666666667*G0_1_0 - 0.166666666666667*G0_1_1 - 0.166666666666667*G0_1_2;
+        A[9] = 0.166666666666667*G0_1_0;
+        A[10] = 0.166666666666667*G0_1_1;
+        A[11] = 0.166666666666667*G0_1_2;
+        A[12] = -0.166666666666667*G0_2_0 - 0.166666666666667*G0_2_1 - 0.166666666666667*G0_2_2;
+        A[13] = 0.166666666666667*G0_2_0;
+        A[14] = 0.166666666666667*G0_2_1;
+        A[15] = 0.166666666666667*G0_2_2;
+
+        /// Compute EAFE-weights for matrix
+        for (unsigned int r = 0; r < 4; r++)
         {
-          // Number of operations to compute entry: 3
-          A[nzc0[j]*4 + nzc0[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[0];
-          // Number of operations to compute entry: 3
-          A[nzc0[j]*4 + nzc1[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[1];
-          // Number of operations to compute entry: 3
-          A[nzc0[j]*4 + nzc2[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[2];
-          // Number of operations to compute entry: 3
-          A[nzc1[j]*4 + nzc0[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[1];
-          // Number of operations to compute entry: 3
-          A[nzc1[j]*4 + nzc1[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[3];
-          // Number of operations to compute entry: 3
-          A[nzc1[j]*4 + nzc2[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[4];
-          // Number of operations to compute entry: 3
-          A[nzc2[j]*4 + nzc0[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[2];
-          // Number of operations to compute entry: 3
-          A[nzc2[j]*4 + nzc1[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[4];
-          // Number of operations to compute entry: 3
-          A[nzc2[j]*4 + nzc2[k]] += FE0_D001[ip][j]*FE0_D001[ip][k]*I[5];
-        } // end loop over 'k'
-      } // end loop over 'j'
-      
-      // Number of operations for primary indices: 72
-      for (unsigned int j = 0; j < 2; j++)
-      {
-        for (unsigned int k = 0; k < 4; k++)
+          for (unsigned int s = 0; s < 4; s++)
+          {
+            // Compute harmonic average on edge E = < x_r , x_s >
+            double fermi_r = w[0][r] - w[2][r];
+            double fermi_s = w[0][s] - w[2][s];
+            double d_eafe = fermi_s-fermi_r;
+
+            double alpha_E = 0.5*(w[1][r]+w[1][s])*std::exp(fermi_s);
+            alpha_E *= (std::fabs(d_eafe)<DOLFIN_EPS)? 1.0 - 0.5*d_eafe
+              :  d_eafe / (std::exp(d_eafe)-1.0);
+
+            double beta_s = w[2][s];
+            bern[r*4 + s] = (r==s)? 0.0 : alpha_E * std::exp(beta_s);
+          } // end loop over 's'
+        } // end loop over 'r'
+
+        /// direct product
+        for (unsigned int r = 0; r < 4; r++)
+          for (unsigned int s = 0; s < 4; s++)
+            A[r*4 + s] *= bern[r*4 + s];
+
+        /// ensure column sum is zero
+        for (unsigned int r = 0; r < 4; r++)
         {
-          // Number of operations to compute entry: 3
-          A[nzc0[j]*4 + k] += FE0[ip][k]*FE0_D001[ip][j]*I[6];
-          // Number of operations to compute entry: 3
-          A[nzc1[j]*4 + k] += FE0[ip][k]*FE0_D001[ip][j]*I[7];
-          // Number of operations to compute entry: 3
-          A[nzc2[j]*4 + k] += FE0[ip][k]*FE0_D001[ip][j]*I[8];
-        } // end loop over 'k'
-      } // end loop over 'j'
-      
-      // Number of operations for primary indices: 48
-      for (unsigned int j = 0; j < 4; j++)
-      {
-        for (unsigned int k = 0; k < 4; k++)
+          A[r*4 + r] = -A[0*4+r] -A[1*4+r] -A[2*4+r] -A[3*4+r];
+        } // end loop over 'r'
+
+        // Compute element tensor using UFL quadrature representation
+        // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
+
+        // Loop quadrature points for integral.
+        // Number of operations to compute element tensor for following IP loop = 7656
+        for (unsigned int ip = 0; ip < 24; ip++)
         {
-          // Number of operations to compute entry: 3
-          A[j*4 + k] += FE0[ip][j]*FE0[ip][k]*I[9];
-        } // end loop over 'k'
-      } // end loop over 'j'
-    } // end loop over 'ip'
+
+          // Coefficient declarations.
+          double F0 = 0.0;
+          double F1 = 0.0;
+
+          // Total number of operations to compute function values = 24
+          for (unsigned int r = 0; r < 4; r++)
+          {
+            F0 += FE0[ip][r]*w[3][r];   // evaluate gamma
+            F1 += FE0[ip][r]*w[0][r];   // evaluate eta
+          } // end loop over 'r'
+
+          // Number of operations: 4
+          double reaction = F0*W24[ip]*det*std::exp(F1);
+
+          /// Reaction term: mass lumping
+          // Number of operations for primary indices: 8
+          for (unsigned int j = 0; j < 4; j++)
+          {
+            A[j*4 + j] += FE0[ip][j]*reaction;
+          } // end loop over 'j'
+        } // end loop over 'ip'
   }
 
 };
@@ -4938,12 +4918,12 @@ public:
 
   eafe_cell_integral_1_otherwise() : ufc::cell_integral()
   {
-    
+
   }
 
   ~eafe_cell_integral_1_otherwise() override
   {
-    
+
   }
 
   const std::vector<bool> & enabled_coefficients() const final override
@@ -4961,25 +4941,25 @@ public:
     // Number of operations (multiply-add pairs) for geometry tensor:    4
     // Number of operations (multiply-add pairs) for tensor contraction: 14
     // Total number of operations (multiply-add pairs):                  21
-    
+
     // Compute Jacobian
     double J[9];
     compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
-    
+
     // Compute Jacobian inverse and determinant
     double K[9];
     double detJ;
     compute_jacobian_inverse_tetrahedron_3d(K, detJ, J);
-    
+
     // Set scale factor
     const double det = std::abs(detJ);
-    
+
     // Compute geometry tensor
     const double G0_0 = det*w[0][0]*(1.0);
     const double G0_1 = det*w[0][1]*(1.0);
     const double G0_2 = det*w[0][2]*(1.0);
     const double G0_3 = det*w[0][3]*(1.0);
-    
+
     // Compute element tensor
     A[0] = 0.0166666666666666*G0_0 + 0.0083333333333333*G0_1 + 0.0083333333333333*G0_2 + 0.0083333333333333*G0_3;
     A[1] = 0.0083333333333333*G0_0 + 0.0166666666666667*G0_1 + 0.00833333333333337*G0_2 + 0.00833333333333337*G0_3;
@@ -5075,7 +5055,7 @@ public:
         break;
       }
     }
-    
+
     return 0;
   }
 
@@ -5114,7 +5094,7 @@ public:
         break;
       }
     }
-    
+
     return 0;
   }
 
@@ -5346,7 +5326,7 @@ public:
         break;
       }
     }
-    
+
     return 0;
   }
 
@@ -5365,7 +5345,7 @@ public:
         break;
       }
     }
-    
+
     return 0;
   }
 

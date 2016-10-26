@@ -26,7 +26,7 @@ Vector_Poisson::Vector_Poisson (
   Vector_Poisson::update_mesh(mesh);
 
   _function_space.reset(
-    new vector_poisson_forms::FunctionSpace(*_mesh)
+    new vector_poisson_forms::FunctionSpace(_mesh)
   );
 
   _bilinear_form.reset(
@@ -109,7 +109,7 @@ void Vector_Poisson::set_solution (
     _solution_function->interpolate(*constant_fn);
   }
 
-  _linear_form->uu = *(_solution_function);
+  _linear_form->uu = _solution_function;
 }
 //--------------------------------------
 void Vector_Poisson::set_solution (
@@ -130,11 +130,11 @@ void Vector_Poisson::set_solution (
     _solution_function->interpolate(*constant_fn);
   }
 
-  _linear_form->uu = *(_solution_function);
+  _linear_form->uu = _solution_function;
 }
 //--------------------------------------
 void Vector_Poisson::set_solution (
-  const std::vector<Linear_Function::Linear_Function> expression
+  const std::vector<Linear_Function> expression
 ) {
 
   std::size_t dimension = Vector_Poisson::_get_solution_dimension();
@@ -169,7 +169,7 @@ void Vector_Poisson::set_solution (
     _solution_function->interpolate(*constant_fn);
   }
 
-  _linear_form->uu = *_solution_function;
+  _linear_form->uu = _solution_function;
 }
 //--------------------------------------
 dolfin::Function Vector_Poisson::get_solution () {
@@ -245,7 +245,7 @@ void Vector_Poisson::remove_Dirichlet_dof (
 
   for (std::size_t i = 0; i < dimension; i++) {
     _dirichlet_SubDomain[i].reset(
-      new Dirichlet_Subdomain::Dirichlet_Subdomain({coordinates[i]}, _mesh_min, _mesh_max, _mesh_epsilon)
+      new Dirichlet_Subdomain({coordinates[i]}, _mesh_min, _mesh_max, _mesh_epsilon)
     );
     _dirichletBC[i].reset(
       new dolfin::DirichletBC((*_function_space)[i], zero_constant, _dirichlet_SubDomain[i])
@@ -260,9 +260,9 @@ void Vector_Poisson::set_DirichletBC (
 
   Vector_Poisson::remove_Dirichlet_dof(component);
 
-  std::vector<Linear_Function::Linear_Function> interpolant_vector;
+  std::vector<Linear_Function> interpolant_vector;
   for (std::size_t i = 0; i < component.size(); i++) {
-    Linear_Function::Linear_Function linear_interpolant(
+    Linear_Function linear_interpolant(
      component[i],
      _mesh_min[component[i]],
      _mesh_max[component[i]],
@@ -287,7 +287,7 @@ dolfin::Function Vector_Poisson::dolfin_solve () {
   dolfin::solve(equation, solution_update, dirichletBC_vector);
   *(_solution_function->vector()) += *(solution_update.vector());
 
-  _linear_form->uu = *_solution_function;
+  _linear_form->uu = _solution_function;
   return *_solution_function;
 }
 //--------------------------------------

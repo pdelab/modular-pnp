@@ -100,6 +100,8 @@ dolfin::Function Linear_PNP::fasp_solve () {
     &_amg
   );
 
+  printf("\n### 1.\n");fflush(stdout);
+
   if (status < 0) {
     printf("\n### WARNING: FASP solver failed! Exit status = %d.\n", status);
     fflush(stdout);
@@ -108,11 +110,14 @@ dolfin::Function Linear_PNP::fasp_solve () {
     printf("Successfully solved the linear system\n");
     fflush(stdout);
 
-    dolfin::EigenVector solution_vector(_eigen_vector->size());
+    dolfin::EigenVector solution_vector(_eigen_vector->mpi_comm(),_eigen_vector->size());
     double* array = solution_vector.data();
     for (std::size_t i = 0; i < _fasp_soln.row; ++i) {
+      // printf(" i = %d",i);fflush(stdout);
       array[i] = _fasp_soln.val[i];
     }
+
+  printf("\n### 5.\n");fflush(stdout);
 
     dolfin::Function update (
       Linear_PNP::_convert_EigenVector_to_Function(solution_vector)
@@ -132,7 +137,7 @@ dolfin::EigenVector Linear_PNP::fasp_test_solver (
 
   printf("Compute RHS...\n"); fflush(stdout);
   std::shared_ptr<dolfin::EigenVector> rhs_vector;
-  rhs_vector.reset( new dolfin::EigenVector(target_vector.size()) );
+  rhs_vector.reset( new dolfin::EigenVector(target_vector.mpi_comm(), target_vector.size()) );
 
 
   _eigen_matrix->mult(target_vector, *rhs_vector);
@@ -159,7 +164,7 @@ dolfin::EigenVector Linear_PNP::fasp_test_solver (
   printf("Successfully solved the linear system\n");
   fflush(stdout);
 
-  dolfin::EigenVector solution_vector(_eigen_vector->size());
+  dolfin::EigenVector solution_vector(_eigen_vector->mpi_comm(),_eigen_vector->size());
   double* array = solution_vector.data();
   for (std::size_t i = 0; i < _fasp_soln.row; ++i) {
     array[i] = _fasp_soln.val[i];

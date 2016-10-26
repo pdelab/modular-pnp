@@ -1,4 +1,5 @@
 /// Main file for solving the linearized PNP problem
+#include <boost/filesystem.hpp>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -145,6 +146,9 @@ int main (int argc, char** argv) {
   dolfin::parameters["linear_algebra_backend"] = "Eigen";
   dolfin::parameters["allow_extrapolation"] = true;
 
+  // Deleting the folders:
+  boost::filesystem::remove_all("./benchmarks/pnp_exact_solution/output");
+
   // read in parameters
   printf("Reading parameters from files...\n");
   char domain_param_filename[] = "./benchmarks/pnp_exact_solution/domain.dat";
@@ -207,7 +211,7 @@ int main (int argc, char** argv) {
   };
 
   // build problem
-  Linear_PNP::Linear_PNP pnp_problem(
+  Linear_PNP pnp_problem(
     mesh,
     function_space,
     bilinear_form,
@@ -329,6 +333,7 @@ int main (int argc, char** argv) {
   while (newton.needs_to_iterate()) {
     // solve
     printf("Solving for Newton iterate %lu \n", newton.iteration);
+    pnp_problem.use_eafe();
     solutionFn = pnp_problem.fasp_solve();
 
     // update newton measurements
