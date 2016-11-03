@@ -37,19 +37,19 @@ Linear_PNP::Linear_PNP (
 ) {
 
   diffusivity_space.reset(
-    new vector_linear_pnp_forms::CoefficientSpace_diffusivity(*mesh)
+    new vector_linear_pnp_forms::CoefficientSpace_diffusivity(mesh)
   );
 
   valency_space.reset(
-    new vector_linear_pnp_forms::CoefficientSpace_valency(*mesh)
+    new vector_linear_pnp_forms::CoefficientSpace_valency(mesh)
   );
 
   fixed_charge_space.reset(
-    new vector_linear_pnp_forms::CoefficientSpace_fixed_charge(*mesh)
+    new vector_linear_pnp_forms::CoefficientSpace_fixed_charge(mesh)
   );
 
   permittivity_space.reset(
-    new vector_linear_pnp_forms::CoefficientSpace_permittivity(*mesh)
+    new vector_linear_pnp_forms::CoefficientSpace_permittivity(mesh)
   );
 
   _itsolver = itsolver;
@@ -108,7 +108,7 @@ dolfin::Function Linear_PNP::fasp_solve () {
     printf("Successfully solved the linear system\n");
     fflush(stdout);
 
-    dolfin::EigenVector solution_vector(_eigen_vector->size());
+    dolfin::EigenVector solution_vector(_eigen_vector->mpi_comm(),_eigen_vector->size());
     double* array = solution_vector.data();
     for (std::size_t i = 0; i < _fasp_soln.row; ++i) {
       array[i] = _fasp_soln.val[i];
@@ -132,7 +132,7 @@ dolfin::EigenVector Linear_PNP::fasp_test_solver (
 
   printf("Compute RHS...\n"); fflush(stdout);
   std::shared_ptr<dolfin::EigenVector> rhs_vector;
-  rhs_vector.reset( new dolfin::EigenVector(target_vector.size()) );
+  rhs_vector.reset( new dolfin::EigenVector(target_vector.mpi_comm(),target_vector.size()) );
 
 
   _eigen_matrix->mult(target_vector, *rhs_vector);
@@ -159,7 +159,7 @@ dolfin::EigenVector Linear_PNP::fasp_test_solver (
   printf("Successfully solved the linear system\n");
   fflush(stdout);
 
-  dolfin::EigenVector solution_vector(_eigen_vector->size());
+  dolfin::EigenVector solution_vector(_eigen_vector->mpi_comm(),_eigen_vector->size());
   double* array = solution_vector.data();
   for (std::size_t i = 0; i < _fasp_soln.row; ++i) {
     array[i] = _fasp_soln.val[i];
@@ -222,7 +222,7 @@ void Linear_PNP::apply_eafe () {
   solution_ptr.reset( new dolfin::Function(solution_function.function_space()) );
   *solution_ptr = solution_function;
 
-  const dolfin::Constant zero(0.0);
+  auto zero=std::make_shared<const dolfin::Constant>(0.0);
   std::vector<std::shared_ptr<dolfin::Function>> solution_vector;
   solution_vector = Linear_PNP::split_mixed_function(solution_ptr);
   std::shared_ptr<dolfin::Function> beta, eta, phi;
@@ -242,9 +242,9 @@ void Linear_PNP::apply_eafe () {
       *beta = *beta + *phi;
     }
 
-    _eafe_bilinear_form->alpha = *(_split_diffusivity[eqn_idx]);
-    _eafe_bilinear_form->beta = *beta;
-    _eafe_bilinear_form->eta = *eta;
+    _eafe_bilinear_form->alpha = (_split_diffusivity[eqn_idx]);
+    _eafe_bilinear_form->beta = beta;
+    _eafe_bilinear_form->eta = eta;
     _eafe_bilinear_form->gamma = zero;
 
     dolfin::assemble(*_eafe_matrix, *_eafe_bilinear_form);

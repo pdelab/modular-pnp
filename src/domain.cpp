@@ -288,12 +288,12 @@ void print_domain_param (const domain_param &inparam) {
 
 
 dolfin::Mesh domain_build(const domain_param &domain) {
-  if (isnan(domain.length_x) || isnan(domain.length_y) || isnan(domain.length_z)) {
+  if (std::isnan(domain.length_x) || std::isnan(domain.length_y) || std::isnan(domain.length_z)) {
     printf("### WARNING : invalid domain lengths!\n");
     return dolfin::Mesh();
   }
 
-  if (isnan(domain.length_x) || isnan(domain.length_y) || isnan(domain.length_z)) {
+  if (std::isnan(domain.length_x) || std::isnan(domain.length_y) || std::isnan(domain.length_z)) {
     printf("### WARNING : invalid domain grid!\n");
     return dolfin::Mesh();
   }

@@ -1,4 +1,5 @@
 /// Main file for solving the linearized PNP problem
+#include <boost/filesystem.hpp>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -65,6 +66,9 @@ int main (int argc, char** argv) {
   dolfin::parameters["linear_algebra_backend"] = "Eigen";
   dolfin::parameters["allow_extrapolation"] = true;
 
+  // Deleting the folders:
+  boost::filesystem::remove_all("./benchmarks/linearized_pnp_experiment/output");
+
   // read in parameters
   printf("Reading parameters from files...\n");
   char domain_param_filename[] = "./benchmarks/linearized_pnp_experiment/domain.dat";
@@ -126,7 +130,7 @@ int main (int argc, char** argv) {
   };
 
   // build problem
-  Linear_PNP::Linear_PNP pnp_problem (
+  Linear_PNP pnp_problem (
     mesh,
     function_space,
     bilinear_form,
@@ -279,6 +283,7 @@ int main (int argc, char** argv) {
   pnp_problem.no_eafe();
   pnp_problem.set_DirichletBC(components, bcs);
   std::size_t problem_size = fasp_solution.vector()->size();
+  MPI_Comm Comm = fasp_solution.vector()->mpi_comm();
 
   srand(time(NULL));
   std::vector<double> random_values;
@@ -287,13 +292,13 @@ int main (int argc, char** argv) {
     random_values[i] = (double) rand() / RAND_MAX;
   }
 
-  dolfin::EigenVector target_vector(problem_size);
+  dolfin::EigenVector target_vector(Comm, problem_size);
   target_vector.set_local(random_values);
 
-  dolfin::EigenVector fasp_vector(problem_size);
+  dolfin::EigenVector fasp_vector(Comm, problem_size);
   fasp_vector = pnp_problem.fasp_test_solver(target_vector);
 
-  dolfin::EigenVector error_vector(problem_size);
+  dolfin::EigenVector error_vector(Comm, problem_size);
   error_vector = target_vector;
   error_vector -= fasp_vector;
 
@@ -311,10 +316,10 @@ int main (int argc, char** argv) {
   pnp_problem.set_DirichletBC(components, bcs);
   pnp_problem.use_eafe();
 
-  dolfin::EigenVector fasp_vector_eafe(problem_size);
+  dolfin::EigenVector fasp_vector_eafe(Comm, problem_size);
   fasp_vector_eafe = pnp_problem.fasp_test_solver(target_vector);
 
-  dolfin::EigenVector error_vector_eafe(problem_size);
+  dolfin::EigenVector error_vector_eafe(Comm, problem_size);
   error_vector_eafe = target_vector;
   error_vector_eafe -= fasp_vector_eafe;
 

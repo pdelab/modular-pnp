@@ -20,21 +20,21 @@
 //   representation:                 'auto'
 //   split:                          False
 
-#ifndef __SEMIH1ERROR_H
-#define __SEMIH1ERROR_H
+#ifndef __ELECTRIC_CELL_MARKER_H
+#define __ELECTRIC_CELL_MARKER_H
 #include <stdexcept>
 #include <ufc.h>
 
-class semih1error_finite_element_0: public ufc::finite_element
+class electric_cell_marker_finite_element_0: public ufc::finite_element
 {
 public:
 
-  semih1error_finite_element_0() : ufc::finite_element()
+  electric_cell_marker_finite_element_0() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~semih1error_finite_element_0() override
+  ~electric_cell_marker_finite_element_0() override
   {
     // Do nothing
   }
@@ -1251,22 +1251,22 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new semih1error_finite_element_0();
+    return new electric_cell_marker_finite_element_0();
   }
 
 };
 
 
-class semih1error_finite_element_1: public ufc::finite_element
+class electric_cell_marker_finite_element_1: public ufc::finite_element
 {
 public:
 
-  semih1error_finite_element_1() : ufc::finite_element()
+  electric_cell_marker_finite_element_1() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~semih1error_finite_element_1() override
+  ~electric_cell_marker_finite_element_1() override
   {
     // Do nothing
   }
@@ -4147,17 +4147,17 @@ public:
     {
     case 0:
       {
-        return new semih1error_finite_element_0();
+        return new electric_cell_marker_finite_element_0();
         break;
       }
     case 1:
       {
-        return new semih1error_finite_element_0();
+        return new electric_cell_marker_finite_element_0();
         break;
       }
     case 2:
       {
-        return new semih1error_finite_element_0();
+        return new electric_cell_marker_finite_element_0();
         break;
       }
     }
@@ -4167,22 +4167,321 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new semih1error_finite_element_1();
+    return new electric_cell_marker_finite_element_1();
   }
 
 };
 
 
-class semih1error_dofmap_0: public ufc::dofmap
+class electric_cell_marker_finite_element_2: public ufc::finite_element
 {
 public:
 
-  semih1error_dofmap_0() : ufc::dofmap()
+  electric_cell_marker_finite_element_2() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~semih1error_dofmap_0() override
+  ~electric_cell_marker_finite_element_2() override
+  {
+    // Do nothing
+  }
+
+  const char * signature() const final override
+  {
+    return "FiniteElement('Discontinuous Lagrange', tetrahedron, 0)";
+  }
+
+  ufc::shape cell_shape() const final override
+  {
+    return ufc::shape::tetrahedron;
+  }
+
+  std::size_t topological_dimension() const final override
+  {
+    return 3;
+  }
+
+  std::size_t geometric_dimension() const final override
+  {
+    return 3;
+  }
+
+  std::size_t space_dimension() const final override
+  {
+    return 1;
+  }
+
+  std::size_t value_rank() const final override
+  {
+    return 0;
+  }
+
+  std::size_t value_dimension(std::size_t i) const final override
+  {
+    return 1;
+  }
+
+  std::size_t value_size() const final override
+  {
+    return 1;
+  }
+
+  std::size_t reference_value_rank() const final override
+  {
+    return 0;
+  }
+
+  std::size_t reference_value_dimension(std::size_t i) const final override
+  {
+    return 1;
+  }
+
+  std::size_t reference_value_size() const final override
+  {
+    return 1;
+  }
+
+  std::size_t degree() const final override
+  {
+    return 0;
+  }
+
+  const char * family() const final override
+  {
+    return "Discontinuous Lagrange";
+  }
+
+  static void _evaluate_basis(std::size_t i,
+                              double * values,
+                              const double * x,
+                              const double * coordinate_dofs,
+                              int cell_orientation)
+  {
+    // Compute Jacobian
+    double J[9];
+    compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
+    
+    // Compute Jacobian inverse and determinant
+    double K[9];
+    double detJ;
+    compute_jacobian_inverse_tetrahedron_3d(K, detJ, J);
+    
+    
+    // Compute constants
+    
+    // Compute subdeterminants
+    
+    // Get coordinates and map to the reference (FIAT) element
+    
+    
+    // Reset values
+    *values = 0.0;
+    
+    // Array of basisvalues
+    double basisvalues[1] = {0.0};
+    
+    // Declare helper variables
+    
+    // Compute basisvalues
+    basisvalues[0] = 1.0;
+    
+    // Table(s) of coefficients
+    static const double coefficients0[1] = \
+    {1.0};
+    
+    // Compute value(s)
+    for (unsigned int r = 0; r < 1; r++)
+    {
+      *values += coefficients0[r]*basisvalues[r];
+    } // end loop over 'r'
+  }
+
+  void evaluate_basis(std::size_t i,
+                      double * values,
+                      const double * x,
+                      const double * coordinate_dofs,
+                      int cell_orientation) const final override
+  {
+    _evaluate_basis(i, values, x, coordinate_dofs, cell_orientation);
+  }
+
+  static void _evaluate_basis_all(double * values,
+                                  const double * x,
+                                  const double * coordinate_dofs,
+                                  int cell_orientation)
+  {
+    // Element is constant, calling evaluate_basis.
+    _evaluate_basis(0, values, x, coordinate_dofs, cell_orientation);
+  }
+
+  void evaluate_basis_all(double * values,
+                          const double * x,
+                          const double * coordinate_dofs,
+                          int cell_orientation) const final override
+  {
+    _evaluate_basis_all(values, x, coordinate_dofs, cell_orientation);
+  }
+
+  static void _evaluate_basis_derivatives(std::size_t i,
+                                          std::size_t n,
+                                          double * values,
+                                          const double * x,
+                                          const double * coordinate_dofs,
+                                          int cell_orientation)
+  {
+    
+    // Compute number of derivatives.
+    unsigned int num_derivatives = 1;
+    for (unsigned int r = 0; r < n; r++)
+    {
+      num_derivatives *= 3;
+    } // end loop over 'r'
+    
+    // Reset values. Assuming that values is always an array.
+    for (unsigned int r = 0; r < num_derivatives; r++)
+    {
+      values[r] = 0.0;
+    } // end loop over 'r'
+    
+    // Call evaluate_basis if order of derivatives is equal to zero.
+    if (n == 0)
+    {
+      _evaluate_basis(i, values, x, coordinate_dofs, cell_orientation);
+      return ;
+    }
+    
+    // If order of derivatives is greater than the maximum polynomial degree, return zeros.
+    if (n > 0)
+    {
+    return ;
+    }
+    
+  }
+
+  void evaluate_basis_derivatives(std::size_t i,
+                                  std::size_t n,
+                                  double * values,
+                                  const double * x,
+                                  const double * coordinate_dofs,
+                                  int cell_orientation) const final override
+  {
+    _evaluate_basis_derivatives(i, n, values, x, coordinate_dofs, cell_orientation);
+  }
+
+  static void _evaluate_basis_derivatives_all(std::size_t n,
+                                              double * values,
+                                              const double * x,
+                                              const double * coordinate_dofs,
+                                              int cell_orientation)
+  {
+    // Element is constant, calling evaluate_basis_derivatives.
+    _evaluate_basis_derivatives(0, n, values, x, coordinate_dofs, cell_orientation);
+  }
+
+  void evaluate_basis_derivatives_all(std::size_t n,
+                                      double * values,
+                                      const double * x,
+                                      const double * coordinate_dofs,
+                                      int cell_orientation) const final override
+  {
+    _evaluate_basis_derivatives_all(n, values, x, coordinate_dofs, cell_orientation);
+  }
+
+  double evaluate_dof(std::size_t i,
+                      const ufc::function& f,
+                      const double * coordinate_dofs,
+                      int cell_orientation,
+                      const ufc::cell& c) const final override
+  {
+    // Declare variables for result of evaluation
+    double vals[1];
+    
+    // Declare variable for physical coordinates
+    double y[3];
+    switch (i)
+    {
+    case 0:
+      {
+        y[0] = 0.25*coordinate_dofs[0] + 0.25*coordinate_dofs[3] + 0.25*coordinate_dofs[6] + 0.25*coordinate_dofs[9];
+      y[1] = 0.25*coordinate_dofs[1] + 0.25*coordinate_dofs[4] + 0.25*coordinate_dofs[7] + 0.25*coordinate_dofs[10];
+      y[2] = 0.25*coordinate_dofs[2] + 0.25*coordinate_dofs[5] + 0.25*coordinate_dofs[8] + 0.25*coordinate_dofs[11];
+      f.evaluate(vals, y, c);
+      return vals[0];
+        break;
+      }
+    }
+    
+    return 0.0;
+  }
+
+  void evaluate_dofs(double * values,
+                             const ufc::function& f,
+                             const double * coordinate_dofs,
+                             int cell_orientation,
+                             const ufc::cell& c) const final override
+  {
+    // Declare variables for result of evaluation
+    double vals[1];
+    
+    // Declare variable for physical coordinates
+    double y[3];
+    y[0] = 0.25*coordinate_dofs[0] + 0.25*coordinate_dofs[3] + 0.25*coordinate_dofs[6] + 0.25*coordinate_dofs[9];
+    y[1] = 0.25*coordinate_dofs[1] + 0.25*coordinate_dofs[4] + 0.25*coordinate_dofs[7] + 0.25*coordinate_dofs[10];
+    y[2] = 0.25*coordinate_dofs[2] + 0.25*coordinate_dofs[5] + 0.25*coordinate_dofs[8] + 0.25*coordinate_dofs[11];
+    f.evaluate(vals, y, c);
+    values[0] = vals[0];
+  }
+
+  void interpolate_vertex_values(double * vertex_values,
+                                 const double * dof_values,
+                                 const double * coordinate_dofs,
+                                 int cell_orientation,
+                                 const ufc::cell& c) const final override
+  {
+    // Evaluate function and change variables
+    vertex_values[0] = dof_values[0];
+    vertex_values[1] = dof_values[0];
+    vertex_values[2] = dof_values[0];
+    vertex_values[3] = dof_values[0];
+  }
+
+  void tabulate_dof_coordinates(double * dof_coordinates,
+                                const double * coordinate_dofs) const final override
+  {
+    dof_coordinates[0] = 0.25*coordinate_dofs[0] + 0.25*coordinate_dofs[3] + 0.25*coordinate_dofs[6] + 0.25*coordinate_dofs[9];
+    dof_coordinates[1] = 0.25*coordinate_dofs[1] + 0.25*coordinate_dofs[4] + 0.25*coordinate_dofs[7] + 0.25*coordinate_dofs[10];
+    dof_coordinates[2] = 0.25*coordinate_dofs[2] + 0.25*coordinate_dofs[5] + 0.25*coordinate_dofs[8] + 0.25*coordinate_dofs[11];
+  }
+
+  std::size_t num_sub_elements() const final override
+  {
+    return 0;
+  }
+
+  ufc::finite_element * create_sub_element(std::size_t i) const final override
+  {
+    return 0;
+  }
+
+  ufc::finite_element * create() const final override
+  {
+    return new electric_cell_marker_finite_element_2();
+  }
+
+};
+
+
+class electric_cell_marker_dofmap_0: public ufc::dofmap
+{
+public:
+
+  electric_cell_marker_dofmap_0() : ufc::dofmap()
+  {
+    // Do nothing
+  }
+
+  ~electric_cell_marker_dofmap_0() override
   {
     // Do nothing
   }
@@ -4393,22 +4692,22 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new semih1error_dofmap_0();
+    return new electric_cell_marker_dofmap_0();
   }
 
 };
 
 
-class semih1error_dofmap_1: public ufc::dofmap
+class electric_cell_marker_dofmap_1: public ufc::dofmap
 {
 public:
 
-  semih1error_dofmap_1() : ufc::dofmap()
+  electric_cell_marker_dofmap_1() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~semih1error_dofmap_1() override
+  ~electric_cell_marker_dofmap_1() override
   {
     // Do nothing
   }
@@ -4662,17 +4961,17 @@ public:
     {
     case 0:
       {
-        return new semih1error_dofmap_0();
+        return new electric_cell_marker_dofmap_0();
         break;
       }
     case 1:
       {
-        return new semih1error_dofmap_0();
+        return new electric_cell_marker_dofmap_0();
         break;
       }
     case 2:
       {
-        return new semih1error_dofmap_0();
+        return new electric_cell_marker_dofmap_0();
         break;
       }
     }
@@ -4682,29 +4981,221 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new semih1error_dofmap_1();
+    return new electric_cell_marker_dofmap_1();
   }
 
 };
 
 
-class semih1error_cell_integral_0_otherwise: public ufc::cell_integral
+class electric_cell_marker_dofmap_2: public ufc::dofmap
 {
 public:
 
-  semih1error_cell_integral_0_otherwise() : ufc::cell_integral()
+  electric_cell_marker_dofmap_2() : ufc::dofmap()
+  {
+    // Do nothing
+  }
+
+  ~electric_cell_marker_dofmap_2() override
+  {
+    // Do nothing
+  }
+
+  const char * signature() const final override
+  {
+    return "FFC dofmap for FiniteElement('Discontinuous Lagrange', tetrahedron, 0)";
+  }
+
+  bool needs_mesh_entities(std::size_t d) const final override
+  {
+    switch (d)
+    {
+    case 0:
+      {
+        return false;
+        break;
+      }
+    case 1:
+      {
+        return false;
+        break;
+      }
+    case 2:
+      {
+        return false;
+        break;
+      }
+    case 3:
+      {
+        return true;
+        break;
+      }
+    }
+    
+    return false;
+  }
+
+  std::size_t topological_dimension() const final override
+  {
+    return 3;
+  }
+
+  std::size_t global_dimension(const std::vector<std::size_t>&
+                               num_global_entities) const final override
+  {
+    return num_global_entities[3];
+  }
+
+  std::size_t num_element_dofs() const final override
+  {
+    return 1;
+  }
+
+  std::size_t num_facet_dofs() const final override
+  {
+    return 0;
+  }
+
+  std::size_t num_entity_dofs(std::size_t d) const final override
+  {
+    switch (d)
+    {
+    case 0:
+      {
+        return 0;
+        break;
+      }
+    case 1:
+      {
+        return 0;
+        break;
+      }
+    case 2:
+      {
+        return 0;
+        break;
+      }
+    case 3:
+      {
+        return 1;
+        break;
+      }
+    }
+    
+    return 0;
+  }
+
+  void tabulate_dofs(std::size_t * dofs,
+                     const std::vector<std::size_t>& num_global_entities,
+                     const std::vector<std::vector<std::size_t>>& entity_indices) const final override
+  {
+    dofs[0] = entity_indices[3][0];
+  }
+
+  void tabulate_facet_dofs(std::size_t * dofs,
+                           std::size_t facet) const final override
+  {
+    switch (facet)
+    {
+    case 0:
+      {
+        
+        break;
+      }
+    case 1:
+      {
+        
+        break;
+      }
+    case 2:
+      {
+        
+        break;
+      }
+    case 3:
+      {
+        
+        break;
+      }
+    }
+    
+  }
+
+  void tabulate_entity_dofs(std::size_t * dofs,
+                            std::size_t d, std::size_t i) const final override
+  {
+    if (d > 3)
+    {
+    throw std::runtime_error("d is larger than dimension (3)");
+    }
+    
+    switch (d)
+    {
+    case 0:
+      {
+        
+        break;
+      }
+    case 1:
+      {
+        
+        break;
+      }
+    case 2:
+      {
+        
+        break;
+      }
+    case 3:
+      {
+        if (i > 0)
+      {
+      throw std::runtime_error("i is larger than number of entities (0)");
+      }
+      
+      dofs[0] = 0;
+        break;
+      }
+    }
+    
+  }
+
+
+  std::size_t num_sub_dofmaps() const final override
+  {
+    return 0;
+  }
+
+  ufc::dofmap * create_sub_dofmap(std::size_t i) const final override
+  {
+    return 0;
+  }
+
+  ufc::dofmap * create() const final override
+  {
+    return new electric_cell_marker_dofmap_2();
+  }
+
+};
+
+
+class electric_cell_marker_cell_integral_0_otherwise: public ufc::cell_integral
+{
+public:
+
+  electric_cell_marker_cell_integral_0_otherwise() : ufc::cell_integral()
   {
     
   }
 
-  ~semih1error_cell_integral_0_otherwise() override
+  ~electric_cell_marker_cell_integral_0_otherwise() override
   {
     
   }
 
   const std::vector<bool> & enabled_coefficients() const final override
   {
-    static const std::vector<bool> enabled({true});
+    static const std::vector<bool> enabled({true, true});
     return enabled;
   }
 
@@ -4732,12 +5223,30 @@ public:
     
     
     // Array of quadrature weights.
-    static const double W1 = 0.166666666666667;
-    // Quadrature points on the UFC reference element: (0.25, 0.25, 0.25)
+    static const double W4[4] = {0.0416666666666667, 0.0416666666666667, 0.0416666666666667, 0.0416666666666667};
+    // Quadrature points on the UFC reference element: (0.585410196624969, 0.138196601125011, 0.138196601125011), (0.138196601125011, 0.585410196624969, 0.138196601125011), (0.138196601125011, 0.138196601125011, 0.585410196624969), (0.138196601125011, 0.138196601125011, 0.138196601125011)
     
     // Values of basis functions at quadrature points.
-    static const double FE0_D001[1][2] = \
-    {{-1.0, 1.0}};
+    static const double FE0[4][4] = \
+    {{0.138196601125009, 0.585410196624969, 0.138196601125011, 0.138196601125011},
+    {0.138196601125009, 0.138196601125011, 0.585410196624969, 0.138196601125011},
+    {0.138196601125009, 0.138196601125011, 0.138196601125011, 0.585410196624969},
+    {0.585410196624967, 0.138196601125011, 0.138196601125011, 0.138196601125011}};
+    
+    // Array of non-zero columns
+    static const unsigned int nzc3[4] = {0, 1, 2, 3};
+    
+    // Array of non-zero columns
+    static const unsigned int nzc7[4] = {4, 5, 6, 7};
+    
+    // Array of non-zero columns
+    static const unsigned int nzc11[4] = {8, 9, 10, 11};
+    
+    static const double FE0_D001[4][2] = \
+    {{-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0},
+    {-1.0, 1.0}};
     
     // Array of non-zero columns
     static const unsigned int nzc0[2] = {0, 3};
@@ -4749,41 +5258,64 @@ public:
     static const unsigned int nzc2[2] = {0, 1};
     
     // Reset values in the element tensor.
-    A[0] = 0.0;
-    // Number of operations to compute geometry constants: 45.
-    double G[6];
-    G[0] = W1*det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[1] = 2.0*W1*det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[2] = 2.0*W1*det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[3] = W1*det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[4] = 2.0*W1*det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[5] = W1*det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    for (unsigned int r = 0; r < 1; r++)
+    {
+      A[r] = 0.0;
+    } // end loop over 'r'
+    // Number of operations to compute geometry constants: 57.
+    double G[15];
+    G[0] = -2.0*K[0]*det;
+    G[1] = -2.0*K[3]*det;
+    G[2] = -2.0*K[6]*det;
+    G[3] = det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[4] = 2.0*det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[5] = 2.0*det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[6] = -2.0*K[1]*det;
+    G[7] = -2.0*K[2]*det;
+    G[8] = det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[9] = 2.0*det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[10] = -2.0*K[4]*det;
+    G[11] = -2.0*K[5]*det;
+    G[12] = det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[13] = -2.0*K[7]*det;
+    G[14] = -2.0*K[8]*det;
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
     
     // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 27
-    for (unsigned int ip = 0; ip < 1; ip++)
+    // Number of operations to compute element tensor for following IP loop = 308
+    for (unsigned int ip = 0; ip < 4; ip++)
     {
       
       // Coefficient declarations.
       double F0 = 0.0;
       double F1 = 0.0;
       double F2 = 0.0;
+      double F3 = 0.0;
+      double F4 = 0.0;
+      double F5 = 0.0;
       
       // Total number of operations to compute function values = 12
       for (unsigned int r = 0; r < 2; r++)
       {
-        F0 += FE0_D001[0][r]*w[0][nzc2[r]];
-        F1 += FE0_D001[0][r]*w[0][nzc1[r]];
-        F2 += FE0_D001[0][r]*w[0][nzc0[r]];
+        F1 += FE0_D001[ip][r]*w[0][nzc2[r]];
+        F2 += FE0_D001[ip][r]*w[0][nzc1[r]];
+        F3 += FE0_D001[ip][r]*w[0][nzc0[r]];
       } // end loop over 'r'
       
-      // Number of operations to compute ip constants: 14
+      // Total number of operations to compute function values = 24
+      for (unsigned int r = 0; r < 4; r++)
+      {
+        F0 += FE0[ip][r]*w[1][nzc3[r]];
+        F4 += FE0[ip][r]*w[1][nzc7[r]];
+        F5 += FE0[ip][r]*w[1][nzc11[r]];
+      } // end loop over 'r'
+      
+      // Number of operations to compute ip constants: 40
       double I[1];
-      // Number of operations: 14
-      I[0] = (F0*F0*G[0] + F1*(F0*G[1] + F1*G[3]) + F2*(F0*G[2] + F1*G[4] + F2*G[5]));
+      // Number of operations: 40
+      I[0] = W4[ip]*(F1*(F0*G[0] + F1*G[3] + F4*G[6] + F5*G[7]) + F2*(F0*G[1] + F1*G[4] + F2*G[8] + F4*G[10] + F5*G[11]) + F3*(F0*G[2] + F1*G[5] + F2*G[9] + F3*G[12] + F4*G[13] + F5*G[14]) + det*(F0*F0 + F4*F4 + F5*F5));
       
       
       // Number of operations for primary indices: 1
@@ -4795,49 +5327,49 @@ public:
 };
 
 
-class semih1error_form_0: public ufc::form
+class electric_cell_marker_form_0: public ufc::form
 {
 public:
 
-  semih1error_form_0() : ufc::form()
+  electric_cell_marker_form_0() : ufc::form()
   {
     // Do nothing
   }
 
-  ~semih1error_form_0() override
+  ~electric_cell_marker_form_0() override
   {
     // Do nothing
   }
 
   const char * signature() const final override
   {
-    return "0fcc81278f19176cb96b4a96d60483e972051bd886858c61add61190bee99ba3e50e674a7d80621d4fa8c39663bb040dbef69e0d1cbc3d5c1a26c985bcd07a9f";
+    return "4762101aec418180f1c779897d5418af6b56cdd6126f4a74061a7fec126c9bd44f868713cfff36e8c17389d7b01f2e26a87c172357fefd285546c29a5d01448a";
   }
 
   std::size_t rank() const final override
   {
-    return 0;
+    return 1;
   }
 
   std::size_t num_coefficients() const final override
   {
-    return 1;
+    return 2;
   }
 
   std::size_t original_coefficient_position(std::size_t i) const final override
   {
-    static const std::vector<std::size_t> position({0});
+    static const std::vector<std::size_t> position({0, 1});
     return position[i];
   }
 
   ufc::finite_element * create_coordinate_finite_element() const final override
   {
-    return new semih1error_finite_element_1();
+    return new electric_cell_marker_finite_element_1();
   }
 
   ufc::dofmap * create_coordinate_dofmap() const final override
   {
-    return new semih1error_dofmap_1();
+    return new electric_cell_marker_dofmap_1();
    }
 
   ufc::coordinate_mapping * create_coordinate_mapping() const final override
@@ -4851,7 +5383,17 @@ public:
     {
     case 0:
       {
-        return new semih1error_finite_element_0();
+        return new electric_cell_marker_finite_element_2();
+        break;
+      }
+    case 1:
+      {
+        return new electric_cell_marker_finite_element_0();
+        break;
+      }
+    case 2:
+      {
+        return new electric_cell_marker_finite_element_1();
         break;
       }
     }
@@ -4865,7 +5407,17 @@ public:
     {
     case 0:
       {
-        return new semih1error_dofmap_0();
+        return new electric_cell_marker_dofmap_2();
+        break;
+      }
+    case 1:
+      {
+        return new electric_cell_marker_dofmap_0();
+        break;
+      }
+    case 2:
+      {
+        return new electric_cell_marker_dofmap_1();
         break;
       }
     }
@@ -4995,7 +5547,7 @@ public:
 
   ufc::cell_integral * create_default_cell_integral() const final override
   {
-    return new semih1error_cell_integral_0_otherwise();
+    return new electric_cell_marker_cell_integral_0_otherwise();
   }
 
   ufc::exterior_facet_integral * create_default_exterior_facet_integral() const final override
@@ -5057,66 +5609,141 @@ public:
 #include <dolfin/adaptivity/GoalFunctional.h>
 #include <dolfin/la/GenericVector.h>
 
-namespace SemiH1error
+namespace electric_cell_marker
 {
 
-class CoefficientSpace_error: public dolfin::FunctionSpace
+class CoefficientSpace_gradpot: public dolfin::FunctionSpace
 {
 public:
 
   // Constructor for standard function space
-  CoefficientSpace_error(std::shared_ptr<const dolfin::Mesh> mesh):
+  CoefficientSpace_gradpot(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<semih1error_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<semih1error_dofmap_0>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<electric_cell_marker_finite_element_1>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<electric_cell_marker_dofmap_1>(), *mesh))
   {
     // Do nothing
   }
 
   // Constructor for constrained function space
-  CoefficientSpace_error(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+  CoefficientSpace_gradpot(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<semih1error_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<semih1error_dofmap_0>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<electric_cell_marker_finite_element_1>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<electric_cell_marker_dofmap_1>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
 
 };
 
-typedef CoefficientSpace_error Form_M_FunctionSpace_0;
+class CoefficientSpace_pot: public dolfin::FunctionSpace
+{
+public:
 
-class Form_M: public dolfin::Form
+  // Constructor for standard function space
+  CoefficientSpace_pot(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<electric_cell_marker_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<electric_cell_marker_dofmap_0>(), *mesh))
+  {
+    // Do nothing
+  }
+
+  // Constructor for constrained function space
+  CoefficientSpace_pot(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<electric_cell_marker_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<electric_cell_marker_dofmap_0>(), *mesh, constrained_domain))
+  {
+    // Do nothing
+  }
+
+};
+
+class Form_L_FunctionSpace_0: public dolfin::FunctionSpace
+{
+public:
+
+  // Constructor for standard function space
+  Form_L_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<electric_cell_marker_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<electric_cell_marker_dofmap_2>(), *mesh))
+  {
+    // Do nothing
+  }
+
+  // Constructor for constrained function space
+  Form_L_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<electric_cell_marker_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<electric_cell_marker_dofmap_2>(), *mesh, constrained_domain))
+  {
+    // Do nothing
+  }
+
+};
+
+class Form_L_MultiMeshFunctionSpace_0: public dolfin::MultiMeshFunctionSpace
+{
+public:
+
+  // Constructor for multimesh function space
+  Form_L_MultiMeshFunctionSpace_0(std::shared_ptr<const dolfin::MultiMesh> multimesh): dolfin::MultiMeshFunctionSpace(multimesh)
+  {
+    // Create and add standard function spaces
+    for (std::size_t part = 0; part < multimesh->num_parts(); part++)
+    {
+      std::shared_ptr<const dolfin::FunctionSpace> V(new Form_L_FunctionSpace_0(multimesh->part(part)));
+      add(V);
+    }
+
+    // Build multimesh function space
+    build();
+  }
+
+};
+
+typedef CoefficientSpace_pot Form_L_FunctionSpace_1;
+
+typedef CoefficientSpace_gradpot Form_L_FunctionSpace_2;
+
+class Form_L: public dolfin::Form
 {
 public:
 
   // Constructor
-  Form_M(std::shared_ptr<const dolfin::Mesh> mesh):
-    dolfin::Form(0, 1), error(*this, 0)
+  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0):
+    dolfin::Form(1, 2), pot(*this, 0), gradpot(*this, 1)
   {
-    _mesh = mesh;
-    _ufc_form = std::make_shared<const semih1error_form_0>();
+    _function_spaces[0] = V0;
+
+    _ufc_form = std::make_shared<const electric_cell_marker_form_0>();
   }
 
   // Constructor
-  Form_M(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::GenericFunction> error):
-    dolfin::Form(0, 1), error(*this, 0)
+  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> pot, std::shared_ptr<const dolfin::GenericFunction> gradpot):
+    dolfin::Form(1, 2), pot(*this, 0), gradpot(*this, 1)
   {
-    _mesh = mesh;
-    this->error = error;
+    _function_spaces[0] = V0;
 
-    _ufc_form = std::make_shared<const semih1error_form_0>();
+    this->pot = pot;
+    this->gradpot = gradpot;
+
+    _ufc_form = std::make_shared<const electric_cell_marker_form_0>();
   }
 
   // Destructor
-  ~Form_M()
+  ~Form_L()
   {}
 
   /// Return the number of the coefficient with this name
   virtual std::size_t coefficient_number(const std::string& name) const
   {
-    if (name == "error")
+    if (name == "pot")
       return 0;
+    else if (name == "gradpot")
+      return 1;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -5130,7 +5757,9 @@ public:
     switch (i)
     {
     case 0:
-      return "error";
+      return "pot";
+    case 1:
+      return "gradpot";
     }
 
     dolfin::dolfin_error("generated code for class Form",
@@ -5140,43 +5769,71 @@ public:
   }
 
   // Typedefs
-  typedef Form_M_FunctionSpace_0 CoefficientSpace_error;
+  typedef Form_L_FunctionSpace_0 TestSpace;
+  typedef Form_L_MultiMeshFunctionSpace_0 MultiMeshTestSpace;
+  typedef Form_L_FunctionSpace_1 CoefficientSpace_pot;
+  typedef Form_L_FunctionSpace_2 CoefficientSpace_gradpot;
 
   // Coefficients
-  dolfin::CoefficientAssigner error;
+  dolfin::CoefficientAssigner pot;
+  dolfin::CoefficientAssigner gradpot;
 };
 
-class MultiMeshForm_M: public dolfin::MultiMeshForm
+class MultiMeshForm_L: public dolfin::MultiMeshForm
 {
 public:
 
   // Constructor
-  MultiMeshForm_M(std::shared_ptr<const dolfin::Mesh> mesh):
-    dolfin::MultiMeshForm(), error(*this, 0)
+  MultiMeshForm_L(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0):
+    dolfin::MultiMeshForm(V0), pot(*this, 0), gradpot(*this, 1)
   {
+    // Create and add standard forms
+    std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
+    for (std::size_t part = 0; part < num_parts; part++)
+    {
+      std::shared_ptr<const dolfin::Form> a(new Form_L(V0->part(part)));
+      add(a);
+    }
+
+    // Build multimesh form
+    build();
 
     /// Assign coefficients
 
   }
 
   // Constructor
-  MultiMeshForm_M(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::GenericFunction> error):
-    dolfin::MultiMeshForm(), error(*this, 0)
+  MultiMeshForm_L(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> pot, std::shared_ptr<const dolfin::GenericFunction> gradpot):
+    dolfin::MultiMeshForm(V0), pot(*this, 0), gradpot(*this, 1)
   {
+    // Create and add standard forms
+    std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
+    for (std::size_t part = 0; part < num_parts; part++)
+    {
+      std::shared_ptr<const dolfin::Form> a(new Form_L(V0->part(part)));
+      add(a);
+    }
 
-    /// Assign coefficients    this->error = error;
+    // Build multimesh form
+    build();
+
+    /// Assign coefficients
+    this->pot = pot;
+    this->gradpot = gradpot;
 
   }
 
   // Destructor
-  ~MultiMeshForm_M()
+  ~MultiMeshForm_L()
   {}
 
   /// Return the number of the coefficient with this name
   virtual std::size_t coefficient_number(const std::string& name) const
   {
-    if (name == "error")
+    if (name == "pot")
       return 0;
+    else if (name == "gradpot")
+      return 1;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -5190,7 +5847,9 @@ public:
     switch (i)
     {
     case 0:
-      return "error";
+      return "pot";
+    case 1:
+      return "gradpot";
     }
 
     dolfin::dolfin_error("generated code for class Form",
@@ -5200,15 +5859,23 @@ public:
   }
 
   // Typedefs
-  typedef Form_M_FunctionSpace_0 CoefficientSpace_error;
+  typedef Form_L_FunctionSpace_0 TestSpace;
+  typedef Form_L_MultiMeshFunctionSpace_0 MultiMeshTestSpace;
+  typedef Form_L_FunctionSpace_1 CoefficientSpace_pot;
+  typedef Form_L_FunctionSpace_2 CoefficientSpace_gradpot;
 
   // Coefficients
-  dolfin::MultiMeshCoefficientAssigner error;
+  dolfin::MultiMeshCoefficientAssigner pot;
+  dolfin::MultiMeshCoefficientAssigner gradpot;
 };
 
 // Class typedefs
-typedef Form_M Functional;
-typedef MultiMeshForm_M MultiMeshFunctional;
+typedef Form_L LinearForm;
+typedef MultiMeshForm_L MultiMeshLinearForm;
+typedef Form_L ResidualForm;
+typedef MultiMeshForm_L MultiMeshResidualForm;
+typedef Form_L::TestSpace FunctionSpace;
+typedef Form_L::MultiMeshTestSpace MultiMeshFunctionSpace;
 
 }
 

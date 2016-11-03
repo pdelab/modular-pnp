@@ -1,6 +1,7 @@
 #ifndef __ERROR_H
 #define __ERROR_H
 
+
 #include <iostream>
 #include <fstream>
 #include <string.h>
@@ -13,7 +14,7 @@ extern "C" {
   #include "fasp_functs.h"
 }
 
-#include "L2error.h"
+#include "L2Error.h"
 #include "SemiH1error.h"
 
 class Error {
@@ -50,7 +51,7 @@ class Error {
     );
 
   private:
-    std::shared_ptr<L2error::Functional> _l2_form;
+    std::shared_ptr<L2Error::Functional> _l2_form;
     std::shared_ptr<SemiH1error::Functional> _semi_h1_form;
 
     std::shared_ptr<const dolfin::Function> _exact_solution;
