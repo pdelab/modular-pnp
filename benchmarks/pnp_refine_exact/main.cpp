@@ -233,8 +233,6 @@ int main (int argc, char** argv) {
       printf("Adaptivity loop needs to run again\n");
       mesh_adapt.refine_mesh();
     }
-
-    mesh_adapt.needs_to_solve = mesh_adapt.needs_refinement;
   }
 
   printf("\nCompleted adaptivity loop\n\n");

@@ -26,7 +26,7 @@ Mesh_Refiner::Mesh_Refiner (
   _semi_h1_form.reset(new SemiH1error::Functional(_mesh));
 
   iteration = 0;
-  needs_to_solve = true;
+  Mesh_Refiner::needs_to_solve = true;
   Mesh_Refiner::needs_refinement = false;
 
   Mesh_Refiner::max_elements = max_elements_in;
@@ -47,6 +47,7 @@ void Mesh_Refiner::mark_for_refinement (
   if (Mesh_Refiner::max_refine_depth == 0 || _mesh->num_cells() > Mesh_Refiner::max_elements) {
     printf("Mesh refinement is attempting to over-refine...\n");
     Mesh_Refiner::needs_refinement = false;
+    Mesh_Refiner::needs_to_solve = false;
     return;
   }
 
@@ -63,6 +64,9 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::refine_mesh () {
 
   _l2_form.reset(new L2Error::Functional(_mesh));
   _semi_h1_form.reset(new SemiH1error::Functional(_mesh));
+
+  Mesh_Refiner::needs_refinement = false;
+  Mesh_Refiner::needs_to_solve = true;
   return _mesh;
 };
 //--------------------------------
@@ -72,6 +76,9 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::refine_uniformly () {
 
   _l2_form.reset(new L2Error::Functional(_mesh));
   _semi_h1_form.reset(new SemiH1error::Functional(_mesh));
+
+  Mesh_Refiner::needs_refinement = false;
+  Mesh_Refiner::needs_to_solve = true;
   return _mesh;
 };
 //--------------------------------
