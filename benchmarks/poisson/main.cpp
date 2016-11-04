@@ -1,4 +1,5 @@
 /// Main file for solving the Poisson problem
+#include <boost/filesystem.hpp>
 #include <iostream>
 #include <fstream>
 #include <iostream>
@@ -24,6 +25,9 @@ int main (int argc, char** argv)
   // Need to use Eigen for linear algebra
   dolfin::parameters["linear_algebra_backend"] = "Eigen";
   dolfin::parameters["allow_extrapolation"] = true;
+
+  // Deleting the folders:
+  boost::filesystem::remove_all("./benchmarks/pnp_spheres/output");
 
   // read in parameters
   printf("Reading parameters from files...\n");
@@ -67,7 +71,7 @@ int main (int argc, char** argv)
   }
 
   printf("\nConstructing the Poisson problem\n");
-  Poisson::Poisson poisson_problem (
+  Poisson poisson_problem (
     mesh,
     domain,
     poisson_coefficients,

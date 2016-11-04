@@ -26,7 +26,7 @@ Poisson::Poisson (
   Poisson::update_mesh(mesh);
 
   _function_space.reset(
-    new poisson_forms::FunctionSpace(*_mesh)
+    new poisson_forms::FunctionSpace(_mesh)
   );
 
   _bilinear_form.reset(
@@ -97,16 +97,16 @@ void Poisson::set_solution (
   }
   _solution_function->interpolate(*constant_fn);
 
-  _linear_form->uu = *(_solution_function);
+  _linear_form->uu = _solution_function;
 }
 //--------------------------------------
 void Poisson::set_solution (
-  const std::vector<Linear_Function::Linear_Function> expression
+  const std::vector<Linear_Function> expression
 ) {
   if (_function_space->component().size() == 0) {
     _solution_function.reset( new dolfin::Function(_function_space) );
     _solution_function->interpolate(expression[0]);
-    _linear_form->uu = *(_solution_function);
+    _linear_form->uu = _solution_function;
   }
   else {
     printf("Need to implement for vector functions still...\n3");
@@ -173,7 +173,7 @@ void Poisson::remove_Dirichlet_dof (
   std::vector<std::size_t> coordinates
 ) {
   _dirichlet_SubDomain.reset(
-    new Dirichlet_Subdomain::Dirichlet_Subdomain(coordinates, _mesh_min, _mesh_max, _mesh_epsilon)
+    new Dirichlet_Subdomain(coordinates, _mesh_min, _mesh_max, _mesh_epsilon)
   );
 
   std::shared_ptr<dolfin::Constant> zero_constant;
@@ -197,7 +197,7 @@ void Poisson::set_DirichletBC (
 ) {
   Poisson::remove_Dirichlet_dof( {coordinate} );
 
-  Linear_Function::Linear_Function linear_interpolant(
+  Linear_Function linear_interpolant(
    coordinate,
    _mesh_min[coordinate],
    _mesh_max[coordinate],
@@ -205,7 +205,7 @@ void Poisson::set_DirichletBC (
    upper_value
   );
 
-  std::vector<Linear_Function::Linear_Function> interpolant_vector;
+  std::vector<Linear_Function> interpolant_vector;
   interpolant_vector.push_back(linear_interpolant);
   Poisson::set_solution(interpolant_vector);
 }

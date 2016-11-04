@@ -81,7 +81,7 @@ class Poisson {
 
     /// Set the solution to interpolate an expression
     void set_solution (
-      std::vector<Linear_Function::Linear_Function> expression
+      std::vector<Linear_Function> expression
     );
 
     /// Get the current solution

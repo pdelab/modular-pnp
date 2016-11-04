@@ -20,21 +20,21 @@
 //   representation:                 'auto'
 //   split:                          False
 
-#ifndef __SEMIH1ERROR_H
-#define __SEMIH1ERROR_H
+#ifndef __L2ERROR_H
+#define __L2ERROR_H
 #include <stdexcept>
 #include <ufc.h>
 
-class semih1error_finite_element_0: public ufc::finite_element
+class l2error_finite_element_0: public ufc::finite_element
 {
 public:
 
-  semih1error_finite_element_0() : ufc::finite_element()
+  l2error_finite_element_0() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~semih1error_finite_element_0() override
+  ~l2error_finite_element_0() override
   {
     // Do nothing
   }
@@ -1251,22 +1251,22 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new semih1error_finite_element_0();
+    return new l2error_finite_element_0();
   }
 
 };
 
 
-class semih1error_finite_element_1: public ufc::finite_element
+class l2error_finite_element_1: public ufc::finite_element
 {
 public:
 
-  semih1error_finite_element_1() : ufc::finite_element()
+  l2error_finite_element_1() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~semih1error_finite_element_1() override
+  ~l2error_finite_element_1() override
   {
     // Do nothing
   }
@@ -4147,17 +4147,17 @@ public:
     {
     case 0:
       {
-        return new semih1error_finite_element_0();
+        return new l2error_finite_element_0();
         break;
       }
     case 1:
       {
-        return new semih1error_finite_element_0();
+        return new l2error_finite_element_0();
         break;
       }
     case 2:
       {
-        return new semih1error_finite_element_0();
+        return new l2error_finite_element_0();
         break;
       }
     }
@@ -4167,22 +4167,22 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new semih1error_finite_element_1();
+    return new l2error_finite_element_1();
   }
 
 };
 
 
-class semih1error_dofmap_0: public ufc::dofmap
+class l2error_dofmap_0: public ufc::dofmap
 {
 public:
 
-  semih1error_dofmap_0() : ufc::dofmap()
+  l2error_dofmap_0() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~semih1error_dofmap_0() override
+  ~l2error_dofmap_0() override
   {
     // Do nothing
   }
@@ -4393,22 +4393,22 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new semih1error_dofmap_0();
+    return new l2error_dofmap_0();
   }
 
 };
 
 
-class semih1error_dofmap_1: public ufc::dofmap
+class l2error_dofmap_1: public ufc::dofmap
 {
 public:
 
-  semih1error_dofmap_1() : ufc::dofmap()
+  l2error_dofmap_1() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~semih1error_dofmap_1() override
+  ~l2error_dofmap_1() override
   {
     // Do nothing
   }
@@ -4662,17 +4662,17 @@ public:
     {
     case 0:
       {
-        return new semih1error_dofmap_0();
+        return new l2error_dofmap_0();
         break;
       }
     case 1:
       {
-        return new semih1error_dofmap_0();
+        return new l2error_dofmap_0();
         break;
       }
     case 2:
       {
-        return new semih1error_dofmap_0();
+        return new l2error_dofmap_0();
         break;
       }
     }
@@ -4682,22 +4682,22 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new semih1error_dofmap_1();
+    return new l2error_dofmap_1();
   }
 
 };
 
 
-class semih1error_cell_integral_0_otherwise: public ufc::cell_integral
+class l2error_cell_integral_0_otherwise: public ufc::cell_integral
 {
 public:
 
-  semih1error_cell_integral_0_otherwise() : ufc::cell_integral()
+  l2error_cell_integral_0_otherwise() : ufc::cell_integral()
   {
     
   }
 
-  ~semih1error_cell_integral_0_otherwise() override
+  ~l2error_cell_integral_0_otherwise() override
   {
     
   }
@@ -4713,6 +4713,11 @@ public:
                        const double * coordinate_dofs,
                        int cell_orientation) const final override
   {
+    // Number of operations (multiply-add pairs) for Jacobian data:      3
+    // Number of operations (multiply-add pairs) for geometry tensor:    24
+    // Number of operations (multiply-add pairs) for tensor contraction: 15
+    // Total number of operations (multiply-add pairs):                  42
+    
     // Compute Jacobian
     double J[9];
     compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
@@ -4725,93 +4730,48 @@ public:
     // Set scale factor
     const double det = std::abs(detJ);
     
-    // Compute cell volume
+    // Compute geometry tensor
+    const double G0_0_0 = det*w[0][0]*w[0][0]*(1.0);
+    const double G0_0_1 = det*w[0][0]*w[0][1]*(1.0);
+    const double G0_0_2 = det*w[0][0]*w[0][2]*(1.0);
+    const double G0_0_3 = det*w[0][0]*w[0][3]*(1.0);
+    const double G0_1_0 = det*w[0][1]*w[0][0]*(1.0);
+    const double G0_1_1 = det*w[0][1]*w[0][1]*(1.0);
+    const double G0_1_2 = det*w[0][1]*w[0][2]*(1.0);
+    const double G0_1_3 = det*w[0][1]*w[0][3]*(1.0);
+    const double G0_2_0 = det*w[0][2]*w[0][0]*(1.0);
+    const double G0_2_1 = det*w[0][2]*w[0][1]*(1.0);
+    const double G0_2_2 = det*w[0][2]*w[0][2]*(1.0);
+    const double G0_2_3 = det*w[0][2]*w[0][3]*(1.0);
+    const double G0_3_0 = det*w[0][3]*w[0][0]*(1.0);
+    const double G0_3_1 = det*w[0][3]*w[0][1]*(1.0);
+    const double G0_3_2 = det*w[0][3]*w[0][2]*(1.0);
+    const double G0_3_3 = det*w[0][3]*w[0][3]*(1.0);
     
-    
-    // Compute circumradius
-    
-    
-    // Array of quadrature weights.
-    static const double W1 = 0.166666666666667;
-    // Quadrature points on the UFC reference element: (0.25, 0.25, 0.25)
-    
-    // Values of basis functions at quadrature points.
-    static const double FE0_D001[1][2] = \
-    {{-1.0, 1.0}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc0[2] = {0, 3};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc1[2] = {0, 2};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc2[2] = {0, 1};
-    
-    // Reset values in the element tensor.
-    A[0] = 0.0;
-    // Number of operations to compute geometry constants: 45.
-    double G[6];
-    G[0] = W1*det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[1] = 2.0*W1*det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[2] = 2.0*W1*det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[3] = W1*det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[4] = 2.0*W1*det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[5] = W1*det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    
-    // Compute element tensor using UFL quadrature representation
-    // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
-    
-    // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 27
-    for (unsigned int ip = 0; ip < 1; ip++)
-    {
-      
-      // Coefficient declarations.
-      double F0 = 0.0;
-      double F1 = 0.0;
-      double F2 = 0.0;
-      
-      // Total number of operations to compute function values = 12
-      for (unsigned int r = 0; r < 2; r++)
-      {
-        F0 += FE0_D001[0][r]*w[0][nzc2[r]];
-        F1 += FE0_D001[0][r]*w[0][nzc1[r]];
-        F2 += FE0_D001[0][r]*w[0][nzc0[r]];
-      } // end loop over 'r'
-      
-      // Number of operations to compute ip constants: 14
-      double I[1];
-      // Number of operations: 14
-      I[0] = (F0*F0*G[0] + F1*(F0*G[1] + F1*G[3]) + F2*(F0*G[2] + F1*G[4] + F2*G[5]));
-      
-      
-      // Number of operations for primary indices: 1
-      // Number of operations to compute entry: 1
-      A[0] += I[0];
-    } // end loop over 'ip'
+    // Compute element tensor
+    A[0] = 0.0166666666666666*G0_0_0 + 0.0083333333333333*G0_0_1 + 0.0083333333333333*G0_0_2 + 0.0083333333333333*G0_0_3 + 0.0083333333333333*G0_1_0 + 0.0166666666666667*G0_1_1 + 0.00833333333333337*G0_1_2 + 0.00833333333333337*G0_1_3 + 0.0083333333333333*G0_2_0 + 0.00833333333333337*G0_2_1 + 0.0166666666666667*G0_2_2 + 0.00833333333333337*G0_2_3 + 0.0083333333333333*G0_3_0 + 0.00833333333333337*G0_3_1 + 0.00833333333333337*G0_3_2 + 0.0166666666666667*G0_3_3;
   }
 
 };
 
 
-class semih1error_form_0: public ufc::form
+class l2error_form_0: public ufc::form
 {
 public:
 
-  semih1error_form_0() : ufc::form()
+  l2error_form_0() : ufc::form()
   {
     // Do nothing
   }
 
-  ~semih1error_form_0() override
+  ~l2error_form_0() override
   {
     // Do nothing
   }
 
   const char * signature() const final override
   {
-    return "0fcc81278f19176cb96b4a96d60483e972051bd886858c61add61190bee99ba3e50e674a7d80621d4fa8c39663bb040dbef69e0d1cbc3d5c1a26c985bcd07a9f";
+    return "a32e053b6535e57f59f5df8074bb59aa282c477db2bfe9840911573c98beea274544846b5d18bfa55b6211c4435c4089cda97b621a5f7c7f5035949f472e7ee2";
   }
 
   std::size_t rank() const final override
@@ -4832,12 +4792,12 @@ public:
 
   ufc::finite_element * create_coordinate_finite_element() const final override
   {
-    return new semih1error_finite_element_1();
+    return new l2error_finite_element_1();
   }
 
   ufc::dofmap * create_coordinate_dofmap() const final override
   {
-    return new semih1error_dofmap_1();
+    return new l2error_dofmap_1();
    }
 
   ufc::coordinate_mapping * create_coordinate_mapping() const final override
@@ -4851,7 +4811,7 @@ public:
     {
     case 0:
       {
-        return new semih1error_finite_element_0();
+        return new l2error_finite_element_0();
         break;
       }
     }
@@ -4865,7 +4825,7 @@ public:
     {
     case 0:
       {
-        return new semih1error_dofmap_0();
+        return new l2error_dofmap_0();
         break;
       }
     }
@@ -4995,7 +4955,7 @@ public:
 
   ufc::cell_integral * create_default_cell_integral() const final override
   {
-    return new semih1error_cell_integral_0_otherwise();
+    return new l2error_cell_integral_0_otherwise();
   }
 
   ufc::exterior_facet_integral * create_default_exterior_facet_integral() const final override
@@ -5057,7 +5017,7 @@ public:
 #include <dolfin/adaptivity/GoalFunctional.h>
 #include <dolfin/la/GenericVector.h>
 
-namespace SemiH1error
+namespace L2Error
 {
 
 class CoefficientSpace_error: public dolfin::FunctionSpace
@@ -5067,8 +5027,8 @@ public:
   // Constructor for standard function space
   CoefficientSpace_error(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<semih1error_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<semih1error_dofmap_0>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<l2error_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<l2error_dofmap_0>(), *mesh))
   {
     // Do nothing
   }
@@ -5076,8 +5036,8 @@ public:
   // Constructor for constrained function space
   CoefficientSpace_error(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<semih1error_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<semih1error_dofmap_0>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<l2error_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<l2error_dofmap_0>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -5095,7 +5055,7 @@ public:
     dolfin::Form(0, 1), error(*this, 0)
   {
     _mesh = mesh;
-    _ufc_form = std::make_shared<const semih1error_form_0>();
+    _ufc_form = std::make_shared<const l2error_form_0>();
   }
 
   // Constructor
@@ -5105,7 +5065,7 @@ public:
     _mesh = mesh;
     this->error = error;
 
-    _ufc_form = std::make_shared<const semih1error_form_0>();
+    _ufc_form = std::make_shared<const l2error_form_0>();
   }
 
   // Destructor
