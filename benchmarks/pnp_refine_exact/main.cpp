@@ -146,6 +146,10 @@ dolfin::Function solve_pnp (
   AMG_param amg
 );
 
+void print_error (
+  dolfin::Function computed_solution
+);
+
 int main (int argc, char** argv) {
   printf("\n");
   printf("----------------------------------------------------\n");
@@ -170,7 +174,7 @@ int main (int argc, char** argv) {
   initial_mesh.reset(new dolfin::Mesh(domain_build(domain)));
   // print_domain_param(&domain);
 
-
+  // set parameters for FASP solver
   char fasp_params[] = "./benchmarks/pnp_refine_exact/bsr.dat";
   printf("\tFASP parameters... %s\n", fasp_params);
   input_param input;
@@ -201,7 +205,9 @@ int main (int argc, char** argv) {
   //-------------------------
   // Mesh Adaptivity Loop
   //-------------------------
-  Mesh_Refiner mesh_adapt(initial_mesh);
+  std::size_t max_elements = 5000;
+  std::size_t max_refine_depth = 3;
+  Mesh_Refiner mesh_adapt(initial_mesh, max_elements, max_refine_depth);
   bool use_eafe_approximation = true;
 
   while (mesh_adapt.needs_to_solve) {
@@ -216,15 +222,22 @@ int main (int argc, char** argv) {
       amg
     );
 
-    if (mesh_adapt.iteration > 1) {
-      mesh_adapt.needs_to_solve = false;
-    } else {
+    // print error of computed solution
+    print_error(computed_solution);
+
+    // compute entropy terms
+    auto entropy = make_shared<dolfin::Function>(computed_solution[0]);
+    mesh_adapt.mark_for_refinement(entropy);
+
+    if (mesh_adapt.needs_refinement) {
       printf("Adaptivity loop needs to run again\n");
-      mesh_adapt.refine_uniformly();
+      mesh_adapt.refine_mesh();
     }
+
+    mesh_adapt.needs_to_solve = mesh_adapt.needs_refinement;
   }
 
-  printf("\nCompleted adaptivity loop\n");
+  printf("\nCompleted adaptivity loop\n\n");
   return 0;
 }
 
@@ -393,35 +406,7 @@ dolfin::Function solve_pnp (
   } else {
     newton.print_status();
   }
-  printf("\n");
-
-
-  // compute error of computed solution
-  printf("Measuring error of computed solution wrt interpolant\n"); fflush(stdout);
-  dolfin::Function computed_solution(pnp_problem.get_solution());
-  std::shared_ptr<dolfin::Function> computed_solution_ptr;
-  computed_solution_ptr.reset(new dolfin::Function(computed_solution.function_space()));
-  *computed_solution_ptr = computed_solution;
-
-  Exact_Solution exact_expr;
-  std::shared_ptr<dolfin::Function> exact_solution_ptr;
-  exact_solution_ptr.reset(new dolfin::Function(computed_solution.function_space()));
-  exact_solution_ptr->interpolate(exact_expr);
-
-  Error error(exact_solution_ptr);
-  dolfin::File error_file(path + "_error.pvd");
-  dolfin::Function error_function(computed_solution.function_space());
-  error_function = error.compute_error(computed_solution_ptr);
-  error_file << error_function;
-
-  double l2_error = error.compute_l2_error(computed_solution_ptr);
-  double h1_error = error.compute_h1_error(computed_solution_ptr);
-  printf("\tL2 error: %e\n", l2_error);
-  printf("\tH1 error: %e\n", h1_error);
-  printf("\n");
-
-
-  printf("Solver exiting\n"); fflush(stdout);
+  printf("\nSolver exiting\n"); fflush(stdout);
 
   // plot coefficients if requested
   bool plot_coefficients = false;
@@ -442,5 +427,30 @@ dolfin::Function solve_pnp (
     valency_file << valency[2];
   }
 
-  return computed_solution;
+  return pnp_problem.get_solution();
+}
+
+void print_error (
+  dolfin::Function computed_solution
+) {
+  printf("Measuring error of computed solution wrt interpolant\n"); fflush(stdout);
+  auto computed_solution_ptr = make_shared<dolfin::Function>(computed_solution);
+  computed_solution_ptr.reset(new dolfin::Function(computed_solution.function_space()));
+  *computed_solution_ptr = computed_solution;
+
+  Exact_Solution exact_expr;
+  std::shared_ptr<dolfin::Function> exact_solution_ptr;
+  exact_solution_ptr.reset(new dolfin::Function(computed_solution.function_space()));
+  exact_solution_ptr->interpolate(exact_expr);
+
+  Error error(exact_solution_ptr);
+  dolfin::File error_file("./benchmarks/pnp_refine_exact/output/error.pvd");
+  dolfin::Function error_function(computed_solution.function_space());
+  error_function = error.compute_error(computed_solution_ptr);
+  error_file << error_function;
+
+  double l2_error = error.compute_l2_error(computed_solution_ptr);
+  double h1_error = error.compute_h1_error(computed_solution_ptr);
+  printf("\tL2 error: %e\n", l2_error);
+  printf("\tH1 error: %e\n\n", h1_error);
 }

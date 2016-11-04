@@ -16,7 +16,9 @@ extern "C" {
 
 //--------------------------------
 Mesh_Refiner::Mesh_Refiner (
-  const std::shared_ptr<const dolfin::Mesh> initial_mesh
+  const std::shared_ptr<const dolfin::Mesh> initial_mesh,
+  const std::size_t max_elements_in,
+  const std::size_t max_refine_depth_in
 ) {
   _mesh.reset(new const dolfin::Mesh(*initial_mesh));
 
@@ -25,69 +27,44 @@ Mesh_Refiner::Mesh_Refiner (
 
   iteration = 0;
   needs_to_solve = true;
+  Mesh_Refiner::needs_refinement = false;
+
+  Mesh_Refiner::max_elements = max_elements_in;
+  Mesh_Refiner::max_refine_depth = max_refine_depth_in;
 };
 //--------------------------------
 Mesh_Refiner::~Mesh_Refiner () {};
 //--------------------------------
 
-// //--------------------------------
-// void Mesh_Refiner::add_Dirichlet_BC (
-//   std::vector<std::size_t> fn_component,
-//   std::vector<std::shared_ptr<dolfin::SubDomain>> boundary
-// ) {
-//   if (fn_component.size() != boundary.size()) {
-//     printf("Incompatible boundary conditions... not applying BCs\n"); fflush(stdout);
-//   }
-
-//   std::shared_ptr<dolfin::Constant> zero_constant;
-//   zero_constant.reset(new dolfin::Constant(0.0));
-//   for (std::size_t bc = 0; bc < boundary.size(); bc++) {
-//     _dirichlet_SubDomain.push_back(std::make_shared<dolfin::SubDomain>());
-//     _dirichlet_SubDomain.back() = boundary[bc];
-
-//     _dirichletBC.push_back(std::make_shared<dolfin::DirichletBC>(
-//       (*_function_space)[bc],
-//       zero_constant,
-//       _dirichlet_SubDomain.back()
-//     ));
-//   }
-// };
-// //--------------------------------
-// std::vector<std::shared_ptr<dolfin::DirichletBC>> Mesh_Refiner::get_Dirichlet_BCs () {
-//   return _dirichlet_SubDomain;
-// };
-// //--------------------------------
-
-// //--------------------------------
-// // void Mesh_Refiner::add_marked_surfaces (
-// //   std::vector<std::size_t> surface_index,
-// //   std::vector<std::shared_ptr<dolfin::SubDomain>> surface
-// // ) {};
-// //--------------------------------
-
 //--------------------------------
 std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::get_mesh () {
   return _mesh;
 };
-// //--------------------------------
-// void Mesh_Refiner::mark_for_refinement (
-//   std::vector<std::shared_ptr<const dolfin::Function>> weights,
-//   std::shared_ptr<const dolfin::Function> solution,
-//   std::string norm
-// ) {
-//   _cell_marker.reset(new dolfin::MeshFunction<bool>(*_mesh, _mesh->topology().dim(), true));
-// };
-// //--------------------------------
-// std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::refine_mesh () {
-//   dolfin::Mesh refined_mesh(_mesh);
-//   _mesh.reset(new const dolfin::Mesh(
-//     std::make_shared<const dolfin::Mesh>(refine_mesh)
-//   ));
+//--------------------------------
+void Mesh_Refiner::mark_for_refinement (
+  std::shared_ptr<const dolfin::Function> entropy
+) {
+  if (Mesh_Refiner::max_refine_depth == 0 || _mesh->num_cells() > Mesh_Refiner::max_elements) {
+    printf("Mesh refinement is attempting to over-refine...\n");
+    Mesh_Refiner::needs_refinement = false;
+    return;
+  }
 
-//   _l2_form.reset(new L2Error::Functional(_mesh));
-//   _semi_h1_form.reset(new SemiH1error::Functional(_mesh));
-//   return _mesh;
-// };
+  _cell_marker.reset(
+    new dolfin::MeshFunction<bool>(_mesh, _mesh->topology().dim(), true)
+  );
+
+  Mesh_Refiner::needs_refinement = true;
+};
+//--------------------------------
+std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::refine_mesh () {
+  auto refined_mesh = adapt(*_mesh, *_cell_marker);
+  _mesh = refined_mesh;
+
+  _l2_form.reset(new L2Error::Functional(_mesh));
+  _semi_h1_form.reset(new SemiH1error::Functional(_mesh));
+  return _mesh;
+};
 //--------------------------------
 std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::refine_uniformly () {
   auto refined_mesh = adapt(*_mesh);
