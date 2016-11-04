@@ -218,12 +218,11 @@ int main (int argc, char** argv) {
   );
 
   printf("Ran through solver\n");
-
   return 0;
 }
 
 dolfin::Function solve_pnp (
-  std::size_t iteration,
+  std::size_t adaptivity_iteration,
   std::shared_ptr<const dolfin::Mesh> mesh,
   std::map<std::string, std::vector<double>> pnp_coefficients,
   std::map<std::string, std::vector<double>> pnp_sources,
@@ -294,34 +293,16 @@ dolfin::Function solve_pnp (
     pnp_source_fns
   );
 
-  bool plot_coefficients = false;
-  if (plot_coefficients) {
-    printf("\toutput coefficients to file\n");
-    dolfin::File permittivity_file("./benchmarks/pnp_refine_exact/output/permittivity.pvd");
-    dolfin::File charges_file("./benchmarks/pnp_refine_exact/output/charges.pvd");
-    dolfin::File diffusivity_file("./benchmarks/pnp_refine_exact/output/diffusivity.pvd");
-    dolfin::File reaction_file("./benchmarks/pnp_refine_exact/output/reaction.pvd");
-    dolfin::File valency_file("./benchmarks/pnp_refine_exact/output/valency.pvd");
-    permittivity_file << permittivity;
-    charges_file << charges;
-    diffusivity_file << diffusivity[1];
-    diffusivity_file << diffusivity[2];
-    reaction_file << reaction[1];
-    reaction_file << reaction[2];
-    valency_file << valency[1];
-    valency_file << valency[2];
-  }
-
-
-
 
   //-------------------------
   // Print various solutions
   //-------------------------
-  dolfin::File solution_file0("./benchmarks/pnp_refine_exact/output/1solution.pvd");
-  dolfin::File solution_file1("./benchmarks/pnp_refine_exact/output/2solution.pvd");
-  dolfin::File solution_file2("./benchmarks/pnp_refine_exact/output/3solution.pvd");
-  dolfin::File total_charge_file("./benchmarks/pnp_refine_exact/output/total_charge.pvd");
+  std::string path("./benchmarks/pnp_refine_exact/output/adapt_");
+  path += std::to_string(adaptivity_iteration);
+  dolfin::File solution_file0(path + "_1solution.pvd");
+  dolfin::File solution_file1(path + "_2solution.pvd");
+  dolfin::File solution_file2(path + "_3solution.pvd");
+  dolfin::File total_charge_file(path + "_total_charge.pvd");
 
   // initial guess for prescibed Dirichlet
   printf("Record interpolant for given Dirichlet BCs (initial guess for solution)\n");
@@ -426,5 +407,25 @@ dolfin::Function solve_pnp (
 
 
   printf("Solver exiting\n"); fflush(stdout);
+
+  // plot coefficients if requested
+  bool plot_coefficients = false;
+  if (plot_coefficients) {
+    printf("\toutput coefficients to file\n");
+    dolfin::File permittivity_file("./benchmarks/pnp_refine_exact/output/permittivity.pvd");
+    dolfin::File charges_file("./benchmarks/pnp_refine_exact/output/charges.pvd");
+    dolfin::File diffusivity_file("./benchmarks/pnp_refine_exact/output/diffusivity.pvd");
+    dolfin::File reaction_file("./benchmarks/pnp_refine_exact/output/reaction.pvd");
+    dolfin::File valency_file("./benchmarks/pnp_refine_exact/output/valency.pvd");
+    permittivity_file << permittivity;
+    charges_file << charges;
+    diffusivity_file << diffusivity[1];
+    diffusivity_file << diffusivity[2];
+    reaction_file << reaction[1];
+    reaction_file << reaction[2];
+    valency_file << valency[1];
+    valency_file << valency[2];
+  }
+
   return computed_solution;
 }
