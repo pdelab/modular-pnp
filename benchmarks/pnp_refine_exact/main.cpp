@@ -139,6 +139,7 @@ class Valency_Expression : public dolfin::Expression {
 dolfin::Function solve_pnp (
   std::size_t iteration,
   std::shared_ptr<const dolfin::Mesh> mesh,
+  bool use_eafe_approximation,
   std::map<std::string, std::vector<double>> pnp_coefficients,
   std::map<std::string, std::vector<double>> pnp_sources,
   itsolver_param itsolver,
@@ -201,29 +202,39 @@ int main (int argc, char** argv) {
   // Mesh Adaptivity Loop
   //-------------------------
   Mesh_Refiner mesh_adapt(initial_mesh);
+  bool use_eafe_approximation = true;
 
-  //-------------------------
-  // Construct Problem
-  //-------------------------
+  while (mesh_adapt.needs_to_solve) {
+    auto mesh = mesh_adapt.get_mesh();
+    dolfin::Function computed_solution = solve_pnp(
+      mesh_adapt.iteration++,
+      mesh,
+      use_eafe_approximation,
+      pnp_coefficients,
+      pnp_sources,
+      itsolver,
+      amg
+    );
 
-  // Copy mesh
-  auto mesh = mesh_adapt.get_mesh();
-  dolfin::Function computed_solution = solve_pnp(
-    mesh_adapt.iteration++,
-    mesh,
-    pnp_coefficients,
-    pnp_sources,
-    itsolver,
-    amg
-  );
+    if (mesh_adapt.iteration > 1) {
+      mesh_adapt.needs_to_solve = false;
+    } else {
+      printf("Adaptivity loop needs to run again\n");
+      mesh_adapt.refine_uniformly();
+    }
+  }
 
-  printf("Ran through solver\n");
+  printf("\nCompleted adaptivity loop\n");
   return 0;
 }
 
+
+/// compute solution to PNP equation
+/// using a Newton solver on the given mesh
 dolfin::Function solve_pnp (
   std::size_t adaptivity_iteration,
   std::shared_ptr<const dolfin::Mesh> mesh,
+  bool use_eafe_approximation,
   std::map<std::string, std::vector<double>> pnp_coefficients,
   std::map<std::string, std::vector<double>> pnp_sources,
   itsolver_param itsolver,
@@ -256,6 +267,11 @@ dolfin::Function solve_pnp (
     amg
   );
 
+  // set eafe flag
+  if (use_eafe_approximation) {
+  printf("Setting solver to use EAFE approximation\n");
+    pnp_problem.use_eafe();
+  }
 
   printf("Define PNP coefficients from expressions\n");
   dolfin::Function permittivity(pnp_problem.fixed_charge_space);
@@ -350,7 +366,6 @@ dolfin::Function solve_pnp (
   while (newton.needs_to_iterate()) {
     // solve
     printf("Solving for Newton iterate %lu \n", newton.iteration);
-    pnp_problem.use_eafe();
     solutionFn = pnp_problem.fasp_solve();
 
     // update newton measurements
@@ -394,7 +409,7 @@ dolfin::Function solve_pnp (
   exact_solution_ptr->interpolate(exact_expr);
 
   Error error(exact_solution_ptr);
-  dolfin::File error_file("./benchmarks/pnp_refine_exact/output/error.pvd");
+  dolfin::File error_file(path + "_error.pvd");
   dolfin::Function error_function(computed_solution.function_space());
   error_function = error.compute_error(computed_solution_ptr);
   error_file << error_function;

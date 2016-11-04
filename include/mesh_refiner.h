@@ -65,6 +65,9 @@ class Mesh_Refiner {
     /// iteration count
     std::size_t iteration;
 
+    /// solve flag
+    bool needs_to_solve;
+
   private:
     std::shared_ptr<const dolfin::Mesh> _mesh;
     std::shared_ptr<const L2Error::Functional> _l2_form;

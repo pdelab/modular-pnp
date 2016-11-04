@@ -24,6 +24,7 @@ Mesh_Refiner::Mesh_Refiner (
   _semi_h1_form.reset(new SemiH1error::Functional(_mesh));
 
   iteration = 0;
+  needs_to_solve = true;
 };
 //--------------------------------
 Mesh_Refiner::~Mesh_Refiner () {};
