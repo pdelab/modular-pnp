@@ -15,6 +15,8 @@ extern "C" {
 
 #include "L2Error.h"
 #include "SemiH1error.h"
+#include "gradient_recovery.h"
+#include "poisson_cell_marker.h"
 
 class Mesh_Refiner {
   public:
@@ -34,13 +36,19 @@ class Mesh_Refiner {
 
     /// mark for refinement
     void mark_for_refinement (
-      std::shared_ptr<const dolfin::Function> solution
+      std::shared_ptr<const dolfin::Function> entropy_potential
     );
 
     /// mesh refinement
     std::shared_ptr<const dolfin::Mesh> refine_mesh ();
 
     std::shared_ptr<const dolfin::Mesh> refine_uniformly ();
+
+    void mass_lumping_solver (
+      dolfin::EigenMatrix* A,
+      dolfin::EigenVector* b,
+      dolfin::Function* solution
+    );
 
     /// iteration count
     std::size_t iteration;
