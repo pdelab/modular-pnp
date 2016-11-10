@@ -20,7 +20,8 @@ extern "C" {
 Mesh_Refiner::Mesh_Refiner (
   const std::shared_ptr<const dolfin::Mesh> initial_mesh,
   const std::size_t max_elements_in,
-  const std::size_t max_refine_depth_in
+  const std::size_t max_refine_depth_in,
+  const double entropy_per_cell
 ) {
   _mesh.reset(new const dolfin::Mesh(*initial_mesh));
 
@@ -33,6 +34,7 @@ Mesh_Refiner::Mesh_Refiner (
 
   Mesh_Refiner::max_elements = max_elements_in;
   Mesh_Refiner::max_refine_depth = max_refine_depth_in;
+  Mesh_Refiner::entropy_tolerance_per_cell = entropy_per_cell;
 };
 //--------------------------------
 Mesh_Refiner::~Mesh_Refiner () {};
@@ -60,21 +62,17 @@ void Mesh_Refiner::mark_for_refinement (
   gradient_form.weight = std::make_shared<dolfin::Constant>(1.0);
   gradient_form.potential = entropy_potential;
 
-  dolfin::EigenMatrix recovery_matrix;
-  dolfin::assemble(recovery_matrix, bilinear_lumping);
+  auto recovery_matrix = std::make_shared<dolfin::EigenMatrix>();
+  dolfin::assemble(*recovery_matrix, bilinear_lumping);
 
-  dolfin::EigenVector recovery_vector(
+  auto recovery_vector = std::make_shared<dolfin::EigenVector>(
     entropy_potential->vector()->mpi_comm(),
-    recovery_matrix.size(0)
+    recovery_matrix->size(0)
   );
-  dolfin::assemble(recovery_vector, gradient_form);
+  dolfin::assemble(*recovery_vector, gradient_form);
 
   auto entropy = std::make_shared<dolfin::Function>(gradient_space);
-  Mesh_Refiner::mass_lumping_solver(
-    &recovery_matrix,
-    &recovery_vector,
-    &(*entropy)
-  );
+  Mesh_Refiner::mass_lumping_solver(recovery_matrix, recovery_vector, entropy);
 
   dolfin::File gradient_file("./benchmarks/pnp_refine_exact/output/entropy.pvd");
   gradient_file << *entropy;
@@ -95,7 +93,7 @@ void Mesh_Refiner::mark_for_refinement (
   );
   std::size_t marked_count = 0;
   for (std::size_t index = 0; index < error_vector.size(); index++) {
-    if (error_vector[index] > 1.0e-5) {
+    if (error_vector[index] > Mesh_Refiner::entropy_tolerance_per_cell) {
       _cell_marker->set_value(index, true);
       marked_count++;
     }
@@ -130,9 +128,9 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::refine_uniformly () {
 };
 //--------------------------------
 void Mesh_Refiner::mass_lumping_solver (
-  dolfin::EigenMatrix* A,
-  dolfin::EigenVector* b,
-  dolfin::Function* solution
+  std::shared_ptr<dolfin::EigenMatrix> A,
+  std::shared_ptr<dolfin::EigenVector> b,
+  std::shared_ptr<dolfin::Function> solution
 ) {
   uint i, j;
   uint row_entries;

@@ -25,7 +25,8 @@ class Mesh_Refiner {
     Mesh_Refiner (
       const std::shared_ptr<const dolfin::Mesh> initial_mesh,
       const std::size_t max_elements_in,
-      const std::size_t max_refine_depth_in
+      const std::size_t max_refine_depth_in,
+      const double entropy_per_cell
     );
 
     /// Destructor
@@ -45,9 +46,9 @@ class Mesh_Refiner {
     std::shared_ptr<const dolfin::Mesh> refine_uniformly ();
 
     void mass_lumping_solver (
-      dolfin::EigenMatrix* A,
-      dolfin::EigenVector* b,
-      dolfin::Function* solution
+      std::shared_ptr<dolfin::EigenMatrix> A,
+      std::shared_ptr<dolfin::EigenVector> b,
+      std::shared_ptr<dolfin::Function> solution
     );
 
     /// iteration count
@@ -59,6 +60,7 @@ class Mesh_Refiner {
 
   private:
     std::size_t max_elements, max_refine_depth;
+    double entropy_tolerance_per_cell;
     std::shared_ptr<const dolfin::Mesh> _mesh;
     std::shared_ptr<const L2Error::Functional> _l2_form;
     std::shared_ptr<const SemiH1error::Functional> _semi_h1_form;

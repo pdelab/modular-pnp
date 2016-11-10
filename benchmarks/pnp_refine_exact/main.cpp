@@ -205,10 +205,17 @@ int main (int argc, char** argv) {
   //-------------------------
   // Mesh Adaptivity Loop
   //-------------------------
+  bool use_eafe_approximation = true;
+
   std::size_t max_elements = 5000;
   std::size_t max_refine_depth = 3;
-  Mesh_Refiner mesh_adapt(initial_mesh, max_elements, max_refine_depth);
-  bool use_eafe_approximation = true;
+  double entropy_per_cell = 1.0e-5;
+  Mesh_Refiner mesh_adapt(
+    initial_mesh,
+    max_elements,
+    max_refine_depth,
+    entropy_per_cell
+  );
 
   while (mesh_adapt.needs_to_solve) {
     auto mesh = mesh_adapt.get_mesh();
