@@ -1,0 +1,71 @@
+# Copyright (C) 2014 CCMA@PSU Maximilian Metti, Arthur Bousquet
+#
+#   Define bilinear and linear forms for 
+#   the linearized Poisson-Nernst-Planck equations
+#
+# Compile this form with FFC: ffc -O -l dolfin vector_linear_pnp_forms.ufl.
+
+##  Finite Element Space
+CG = FiniteElement("Lagrange", tetrahedron, 1)
+CG = FiniteElement("Lagrange", tetrahedron, 1)
+RT = FiniteElement("RT", tetrahedron, 1)
+DG  = FiniteElement("Discontinuous Lagrange", tetrahedron, 0)
+V1 = MixedElement([CG,CG,CG])
+V  = MixedElement([CG,CG,CG,RT,DG])        # Solution Space
+
+
+(u0,u1,u2,u3,u4) = TrialFunctions(V)
+(v0,v1,v2,v3,v4) = TestFunctions(V)
+
+##  Previous Iterates
+uu = Coefficient(V)
+uu3 = Coefficient(RT)
+uu4 = Coefficient(DG)
+
+##  Coefficients
+permittivity = Coefficient(CG)
+fixed_charge = Coefficient(CG)
+diffusivity = Coefficient(V1)
+valency = Coefficient(V1)
+
+mu = Constant(tetrahedron)
+penalty1 = Constant(tetrahedron)
+penalty2 = Constant(tetrahedron)
+h     = 2.0*Circumradius(tetrahedron)
+h_avg = ( h('+')+h('-') )/2.0
+n_vec = FacetNormal(tetrahedron)
+
+a = \
+  + ( permittivity * inner(grad(u0), grad(v0)) ) * dx \
+  + ( -valency[1] * exp(uu[1]) * u1 * v0 ) * dx \
+  + ( -valency[2] * exp(uu[1]) * u1 * v0 ) * dx \
+  + ( diffusivity[1] * exp(uu[1]) * inner(grad(u1) + grad(uu[1] + valency[1] * uu[0]) * u1, grad(v1)) ) * dx \
+  + ( valency[1] * diffusivity[1] * exp(uu[1]) * inner(grad(u0), grad(v1)) ) * dx \
+  + ( diffusivity[2] * exp(uu[1]) * inner(grad(u1) + grad(uu[1] + valency[2] * uu[0]) * u1, grad(v2)) ) * dx \
+  + ( valency[2] * diffusivity[2] * exp(uu[1]) * inner(grad(u0), grad(v2)) ) * dx \
+  - ( exp(uu[1])*u1*(inner(uu3,grad(v1))) )*dx \
+  - ( exp(uu[2])*u2*(inner(uu3,grad(v2)))  )*dx \
+  - ( exp(uu[1])*(inner(u3,grad(v1))) )*dx \
+  - ( exp(uu[2])*(inner(u3,grad(v2)))  )*dx \
+  + ( 2.0*mu* inner( sym(grad(u3)), sym(grad(v3)) ) )*dx    -    ( u4*div(v3) )*dx   +   ( div(u3)*v4 )*dx \
+  + ( 2.0*mu*(penalty1)* inner( avg(sym(grad(u3))), sym(outer(v3('+'),n_vec('+')) + outer(v3('-'),n_vec('-'))) ) )*dS \
+  + ( 2.0*mu*(penalty1)* inner( sym(outer(u3('+'),n_vec('+')) + outer(u3('-'),n_vec('-'))), avg(sym(grad(v3))) ) )*dS \
+  + ( 2.0*mu*(penalty2/h_avg)* inner( jump(u3),jump(v3) ) )*dS \
+  + ( 2.0*mu*(penalty2/h)*(inner(u3,n_vec)*inner(v3,n_vec) ) )*ds \
+  + permittivity*inner(outer(grad(u0),grad(uu[0])) , grad(v3) )*dx
+
+L = \
+  + ( fixed_charge * v0 ) * dx \
+  - ( permittivity * inner(grad(uu[0]), grad(v0)) ) * dx \
+  - ( -valency[1] * exp(uu[1]) * v0 ) * dx \
+  - ( -valency[2] * exp(uu[1]) * v0 ) * dx \
+  - ( diffusivity[1] * exp(uu[1]) * inner(grad(uu[1] + valency[1] * uu[0]), grad(v1)) ) * dx \
+  - ( diffusivity[2] * exp(uu[1]) * inner(grad(uu[1] + valency[2] * uu[0]), grad(v2)) ) * dx \
+  + ( exp(uu[1])*(inner(uu3,grad(v1))) )*dx \
+  + ( exp(uu[2])*(inner(uu3,grad(v2)))  )*dx \
+  - ( 2.0*mu* inner( sym(grad(uu3)), sym(grad(v3)) ) )*dx   +   ( uu4*div(v3) )*dx   -   ( div(uu3)*v4 )*dx \
+  - ( 2.0*mu*(penalty1)* inner( avg(sym(grad(uu3))),  sym(outer(v3('+'),n_vec('+')) + outer(v3('-'),n_vec('-'))) ) )*dS \
+  - ( 2.0*mu*(penalty1)* inner( sym(outer(uu3('+'),n_vec('+')) + outer(uu3('-'),n_vec('-'))), avg(sym(grad(v3))) ) )*dS \
+  - ( 2.0*mu*(penalty2/h_avg)* inner( jump(uu3),jump(v3) ) )*dS \
+  - ( 2.0*mu*(penalty2/h)*(inner(uu3,n_vec)*inner(v3,n_vec) ) )*ds \
+  - permittivity/2.0*inner( outer(grad(uu[0]),grad(uu[3])) , grad(v3) )*dx
