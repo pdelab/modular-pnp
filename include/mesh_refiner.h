@@ -35,9 +35,21 @@ class Mesh_Refiner {
     /// Return mesh from the Poisson object
     std::shared_ptr<const dolfin::Mesh> get_mesh ();
 
-    /// mark for refinement
-    void mark_for_refinement (
+    /// refine mesh recursively
+    std::shared_ptr<const dolfin::Mesh> multilevel_refinement (
       std::shared_ptr<const dolfin::Function> entropy_potential
+    );
+
+    std::shared_ptr<const dolfin::Mesh> recursive_refinement (
+      std::shared_ptr<const dolfin::Function> entropy_potential,
+      double entropy_tolerance,
+      std::size_t depth
+    );
+
+    /// mark for refinement
+    std::size_t mark_for_refinement (
+      std::shared_ptr<const dolfin::Function> entropy_potential,
+      double entropy_tolerance
     );
 
     /// mesh refinement

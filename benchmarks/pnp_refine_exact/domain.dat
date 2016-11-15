@@ -15,6 +15,6 @@ length_x = 2.0e-0
 length_y = 4.0e-1
 length_z = 4.0e-1
 
-grid_x = 25
-grid_y = 5
-grid_z = 5
+grid_x = 20
+grid_y = 4
+grid_z = 4

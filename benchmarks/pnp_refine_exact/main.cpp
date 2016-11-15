@@ -207,9 +207,9 @@ int main (int argc, char** argv) {
   //-------------------------
   bool use_eafe_approximation = true;
 
-  std::size_t max_elements = 5000;
+  std::size_t max_elements = 20000;
   std::size_t max_refine_depth = 3;
-  double entropy_per_cell = 1.0e-5;
+  double entropy_per_cell = 1.0e-6;
   Mesh_Refiner mesh_adapt(
     initial_mesh,
     max_elements,
@@ -234,12 +234,7 @@ int main (int argc, char** argv) {
 
     // compute entropy terms
     auto entropy = make_shared<dolfin::Function>(computed_solution[0]);
-    mesh_adapt.mark_for_refinement(entropy);
-
-    if (mesh_adapt.needs_refinement) {
-      printf("Adaptivity loop needs to run again\n");
-      mesh_adapt.refine_mesh();
-    }
+    mesh_adapt.multilevel_refinement(entropy);
   }
 
   printf("\nCompleted adaptivity loop\n\n");
