@@ -10,7 +10,6 @@
 #include "newton_status.h"
 #include "mesh_refiner.h"
 #include "domain.h"
-#include "dirichlet.h"
 #include "error.h"
 extern "C" {
   #include "fasp.h"
@@ -90,6 +89,18 @@ class Exact_Solution : public dolfin::Expression {
     }
 };
 
+class Initial_Guess : public dolfin::Expression {
+  public:
+    Initial_Guess() : dolfin::Expression(3) {}
+    void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
+      std::vector<double> left(exact_solution(-1.0));
+      std::vector<double> right(exact_solution(+1.0));
+      values[0] = 0.5 * (left[0] * (1.0 - x[0]) + right[0] * (x[0] + 1.0));
+      values[1] = 0.5 * (left[1] * (1.0 - x[0]) + right[1] * (x[0] + 1.0));
+      values[2] = 0.5 * (left[2] * (1.0 - x[0]) + right[2] * (x[0] + 1.0));
+    }
+};
+
 class Permittivity_Expression : public dolfin::Expression {
   public:
     void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
@@ -136,12 +147,11 @@ class Valency_Expression : public dolfin::Expression {
     }
 };
 
-dolfin::Function solve_pnp (
+std::shared_ptr<dolfin::Function> solve_pnp (
   std::size_t iteration,
   std::shared_ptr<const dolfin::Mesh> mesh,
+  std::shared_ptr<dolfin::Function> initial_guess,
   bool use_eafe_approximation,
-  std::map<std::string, std::vector<double>> pnp_coefficients,
-  std::map<std::string, std::vector<double>> pnp_sources,
   itsolver_param itsolver,
   AMG_param amg
 );
@@ -182,25 +192,7 @@ int main (int argc, char** argv) {
   AMG_param amg;
   ILU_param ilu;
   fasp_param_input(fasp_params, &input);
-  fasp_param_init(
-    &input,
-    &itsolver,
-    &amg,
-    &ilu,
-    NULL
-  );
-
-  // set initializer for PDE coefficients
-  printf("Initialize coefficients\n");
-  std::map<std::string, std::vector<double>> pnp_coefficients = {
-    {"permittivity", {1.0}},
-    {"diffusivity", {0.0, 2.0, 2.0}},
-    {"valency", {0.0, 1.0, -1.0}}
-  };
-  std::map<std::string, std::vector<double>> pnp_sources = {
-    {"fixed_charge", {1.0}},
-    {"reaction", {0.0, 0.0, 0.0}}
-  };
+  fasp_param_init(&input, &itsolver, &amg, &ilu, NULL);
 
   //-------------------------
   // Mesh Adaptivity Loop
@@ -217,24 +209,38 @@ int main (int argc, char** argv) {
     entropy_per_cell
   );
 
+  // construct initial guess
+  Initial_Guess initial_guess_expression;
+  auto adaptive_solution = std::make_shared<dolfin::Function>(
+    std::make_shared<vector_linear_pnp_forms::FunctionSpace>(mesh_adapt.get_mesh())
+  );
+  adaptive_solution->interpolate(initial_guess_expression);
+
+  dolfin::File initial_guess_file("./benchmarks/pnp_refine_exact/output/initial_guess.pvd");
+  initial_guess_file << *adaptive_solution;
+
   while (mesh_adapt.needs_to_solve) {
     auto mesh = mesh_adapt.get_mesh();
-    dolfin::Function computed_solution = solve_pnp(
+    auto computed_solution = solve_pnp(
       mesh_adapt.iteration++,
       mesh,
+      adaptive_solution,
       use_eafe_approximation,
-      pnp_coefficients,
-      pnp_sources,
       itsolver,
       amg
     );
 
     // print error of computed solution
-    print_error(computed_solution);
+    print_error(*computed_solution);
 
     // compute entropy terms
-    auto entropy = make_shared<dolfin::Function>(computed_solution[0]);
+    auto entropy = std::make_shared<dolfin::Function>((*computed_solution)[0]);
     mesh_adapt.multilevel_refinement(entropy);
+
+    // update solution
+    adaptive_solution.reset( new dolfin::Function(computed_solution->function_space()) );
+    adaptive_solution->interpolate(*computed_solution);
+    initial_guess_file << *adaptive_solution;
   }
 
   printf("\nCompleted adaptivity loop\n\n");
@@ -244,12 +250,11 @@ int main (int argc, char** argv) {
 
 /// compute solution to PNP equation
 /// using a Newton solver on the given mesh
-dolfin::Function solve_pnp (
+std::shared_ptr<dolfin::Function> solve_pnp (
   std::size_t adaptivity_iteration,
   std::shared_ptr<const dolfin::Mesh> mesh,
+  std::shared_ptr<dolfin::Function> initial_guess,
   bool use_eafe_approximation,
-  std::map<std::string, std::vector<double>> pnp_coefficients,
-  std::map<std::string, std::vector<double>> pnp_sources,
   itsolver_param itsolver,
   AMG_param amg
 ) {
@@ -267,6 +272,18 @@ dolfin::Function solve_pnp (
   linear_form.reset(
     new vector_linear_pnp_forms::Form_L(function_space)
   );
+
+  // set initializer for PDE coefficients
+  printf("Initialize coefficients\n");
+  std::map<std::string, std::vector<double>> pnp_coefficients = {
+    {"permittivity", {1.0}},
+    {"diffusivity", {0.0, 2.0, 2.0}},
+    {"valency", {0.0, 1.0, -1.0}}
+  };
+  std::map<std::string, std::vector<double>> pnp_sources = {
+    {"fixed_charge", {1.0}},
+    {"reaction", {0.0, 0.0, 0.0}}
+  };
 
   // build problem
   Linear_PNP pnp_problem(
@@ -346,11 +363,17 @@ dolfin::Function solve_pnp (
 
   pnp_problem.set_DirichletBC(components, bcs);
   dolfin::Function solutionFn = pnp_problem.get_solution();
+  solutionFn.interpolate(*initial_guess);
+  pnp_problem.set_solution(solutionFn);
+
+  // output to file
+  solutionFn = pnp_problem.get_solution();
   solution_file0 << solutionFn[0];
   solution_file1 << solutionFn[1];
   solution_file2 << solutionFn[2];
   total_charge_file << pnp_problem.get_total_charge();
   printf("\n");
+
 
 
   //------------------------
@@ -427,7 +450,7 @@ dolfin::Function solve_pnp (
     valency_file << valency[2];
   }
 
-  return pnp_problem.get_solution();
+  return std::make_shared<dolfin::Function>(pnp_problem.get_solution());
 }
 
 void print_error (
