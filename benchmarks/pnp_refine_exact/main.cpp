@@ -147,6 +147,8 @@ class Valency_Expression : public dolfin::Expression {
     }
 };
 
+
+// auxiliary functions for main
 std::shared_ptr<dolfin::Function> solve_pnp (
   std::size_t iteration,
   std::shared_ptr<const dolfin::Mesh> mesh,
@@ -156,10 +158,16 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   AMG_param amg
 );
 
+std::vector<std::shared_ptr<dolfin::Function>> compute_entropy(
+  std::shared_ptr<dolfin::Function> solution
+);
+
 void print_error (
   dolfin::Function computed_solution
 );
 
+
+// the main body of the script
 int main (int argc, char** argv) {
   printf("\n");
   printf("----------------------------------------------------\n");
@@ -220,6 +228,7 @@ int main (int argc, char** argv) {
   initial_guess_file << *adaptive_solution;
 
   while (mesh_adapt.needs_to_solve) {
+    // compute solution on current mesh
     auto mesh = mesh_adapt.get_mesh();
     auto computed_solution = solve_pnp(
       mesh_adapt.iteration++,
@@ -234,8 +243,12 @@ int main (int argc, char** argv) {
     print_error(*computed_solution);
 
     // compute entropy terms
-    auto entropy = std::make_shared<dolfin::Function>((*computed_solution)[0]);
-    mesh_adapt.multilevel_refinement(entropy);
+    auto test_entropy = compute_entropy(computed_solution);
+
+    auto entropy = std::make_shared<const dolfin::Function>((*computed_solution)[0]);
+
+    std::vector<std::shared_ptr<const dolfin::Function>> entropy_vector = { entropy };
+    mesh_adapt.multilevel_refinement(entropy_vector);
 
     // update solution
     adaptive_solution.reset( new dolfin::Function(computed_solution->function_space()) );
@@ -246,6 +259,40 @@ int main (int argc, char** argv) {
   printf("\nCompleted adaptivity loop\n\n");
   return 0;
 }
+
+
+std::vector<std::shared_ptr<dolfin::Function>> compute_entropy (
+  std::shared_ptr<dolfin::Function> solution
+) {
+  std::size_t component_count = solution->function_space()->element()->num_sub_elements();
+
+  ///////////////// LAZINESSSSSSSSSS ??????????
+  std::vector<double> valency = { 0.0, 1.0, -1.0 };
+
+  dolfin::File out("./benchmarks/pnp_refine_exact/output/entro.pvd");
+
+  std::vector<std::shared_ptr<dolfin::Function>> function_vec;
+  for (std::size_t comp = 1; comp < component_count; comp++) {
+    auto subfunction_space = (*solution)[comp].function_space()->collapse();
+    auto potential = std::make_shared<dolfin::Function>(subfunction_space);
+    auto log_density = std::make_shared<dolfin::Function>(subfunction_space);
+
+    potential->interpolate((*solution)[0]);
+    log_density->interpolate((*solution)[comp]);
+    *(potential->vector()) *= valency[comp];
+    *log_density = *log_density + *potential;
+
+    out << *log_density;
+
+    function_vec.push_back(log_density);
+  }
+
+  return function_vec;
+}
+
+
+
+
 
 
 /// compute solution to PNP equation

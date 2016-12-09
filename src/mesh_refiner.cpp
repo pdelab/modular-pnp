@@ -46,17 +46,17 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::get_mesh () {
 };
 //--------------------------------
 std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::multilevel_refinement (
-  std::shared_ptr<const dolfin::Function> entropy_potential
+  std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector
 ) {
   return Mesh_Refiner::recursive_refinement(
-    entropy_potential,
+    entropy_potential_vector,
     Mesh_Refiner::entropy_tolerance_per_cell,
     0
   );
 }
 //--------------------------------
 std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
-  std::shared_ptr<const dolfin::Function> entropy_potential,
+  std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
   double entropy_tolerance,
   std::size_t depth
 ) {
@@ -69,7 +69,7 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
   }
 
   // mark cells and see if cells were marked
-  Mesh_Refiner::mark_for_refinement(entropy_potential, entropy_tolerance);
+  Mesh_Refiner::mark_for_refinement(entropy_potential_vector, entropy_tolerance);
   if (!Mesh_Refiner::needs_refinement) {
     Mesh_Refiner::needs_to_solve = depth > 0;
     return _mesh;
@@ -83,15 +83,15 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
   bool too_many_resulting_cells = adapted_mesh_size > Mesh_Refiner::max_elements;
 
   if (too_many_resulting_cells) {
-    return Mesh_Refiner::recursive_refinement(entropy_potential, 2.5 * entropy_tolerance, depth);
+    return Mesh_Refiner::recursive_refinement(entropy_potential_vector, 2.5 * entropy_tolerance, depth);
   }
 
   _mesh = adapted_mesh;
-  return Mesh_Refiner::recursive_refinement(entropy_potential, entropy_tolerance, depth + 1);
+  return Mesh_Refiner::recursive_refinement(entropy_potential_vector, entropy_tolerance, depth + 1);
 }
 //--------------------------------
 std::size_t Mesh_Refiner::mark_for_refinement (
-  std::shared_ptr<const dolfin::Function> entropy_potential,
+  std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
   double entropy_tolerance
 ) {
   // setup forms for gradient recovery
@@ -99,32 +99,42 @@ std::size_t Mesh_Refiner::mark_for_refinement (
   gradient_recovery::BilinearForm bilinear_lumping(gradient_space, gradient_space);
   gradient_recovery::LinearForm gradient_form(gradient_space);
 
-  auto potential_interpolant = std::make_shared<dolfin::Function>(
-    dolfin::adapt(*(entropy_potential->function_space()), _mesh)
-  );
-  potential_interpolant->interpolate(*entropy_potential);
-  gradient_form.potential = potential_interpolant;
-
-  gradient_form.weight = std::make_shared<dolfin::Constant>(1.0);
-
-  auto recovery_matrix = std::make_shared<dolfin::EigenMatrix>();
-  dolfin::assemble(*recovery_matrix, bilinear_lumping);
-
-  auto recovery_vector = std::make_shared<dolfin::EigenVector>(
-    potential_interpolant->vector()->mpi_comm(),
-    recovery_matrix->size(0)
-  );
-  dolfin::assemble(*recovery_vector, gradient_form);
-  auto entropy = std::make_shared<dolfin::Function>(gradient_space);
-  Mesh_Refiner::mass_lumping_solver(recovery_matrix, recovery_vector, entropy);
-
-  // compute entropic error
-  auto DG = std::make_shared<poisson_cell_marker::FunctionSpace>(_mesh);
-  poisson_cell_marker::LinearForm error_form(DG);
-  error_form.entropy_potential = potential_interpolant;
-  error_form.entropy = entropy;
+  // loop over subfunctions of entropy potential
   dolfin::EigenVector error_vector;
-  dolfin::assemble(error_vector, error_form);
+  std::size_t component_count = entropy_potential_vector.size();
+  for (std::size_t comp = 0; comp < component_count; comp++) {
+    auto potential_interpolant = std::make_shared<dolfin::Function>(
+      dolfin::adapt(*(entropy_potential_vector[comp]->function_space()), _mesh)
+    );
+    potential_interpolant->interpolate( *(entropy_potential_vector[comp]) );
+    gradient_form.potential = potential_interpolant;
+
+    gradient_form.weight = std::make_shared<dolfin::Constant>(1.0);
+
+    auto recovery_matrix = std::make_shared<dolfin::EigenMatrix>();
+    dolfin::assemble(*recovery_matrix, bilinear_lumping);
+
+    auto recovery_vector = std::make_shared<dolfin::EigenVector>(
+      potential_interpolant->vector()->mpi_comm(),
+      recovery_matrix->size(0)
+    );
+    dolfin::assemble(*recovery_vector, gradient_form);
+    auto entropy = std::make_shared<dolfin::Function>(gradient_space);
+    Mesh_Refiner::mass_lumping_solver(recovery_matrix, recovery_vector, entropy);
+
+    // compute entropic error
+    auto DG = std::make_shared<poisson_cell_marker::FunctionSpace>(_mesh);
+    poisson_cell_marker::LinearForm error_form(DG);
+    error_form.entropy_potential = potential_interpolant;
+    error_form.entropy = entropy;
+
+    if (error_vector.size() < 1) { dolfin::assemble(error_vector, error_form); }
+    else {
+      dolfin::EigenVector local_error_vector;
+      dolfin::assemble(local_error_vector, error_form);
+      error_vector += local_error_vector;
+    }
+  }
 
   // mark cells according to entropic error
   std::size_t marked_count = 0;
