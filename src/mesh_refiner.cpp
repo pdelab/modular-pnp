@@ -46,10 +46,12 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::get_mesh () {
 };
 //--------------------------------
 std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::multilevel_refinement (
-  std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector
+  std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
+  std::vector<std::shared_ptr<const dolfin::Function>> entropy_log_weight_vector
 ) {
   return Mesh_Refiner::recursive_refinement(
     entropy_potential_vector,
+    entropy_log_weight_vector,
     Mesh_Refiner::entropy_tolerance_per_cell,
     0
   );
@@ -57,6 +59,7 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::multilevel_refinement (
 //--------------------------------
 std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
+  std::vector<std::shared_ptr<const dolfin::Function>> entropy_log_weight_vector,
   double entropy_tolerance,
   std::size_t depth
 ) {
@@ -69,7 +72,11 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
   }
 
   // mark cells and see if cells were marked
-  Mesh_Refiner::mark_for_refinement(entropy_potential_vector, entropy_tolerance);
+  Mesh_Refiner::mark_for_refinement(
+    entropy_potential_vector,
+    entropy_log_weight_vector,
+    entropy_tolerance
+  );
   if (!Mesh_Refiner::needs_refinement) {
     Mesh_Refiner::needs_to_solve = depth > 0;
     return _mesh;
@@ -83,15 +90,28 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
   bool too_many_resulting_cells = adapted_mesh_size > Mesh_Refiner::max_elements;
 
   if (too_many_resulting_cells) {
-    return Mesh_Refiner::recursive_refinement(entropy_potential_vector, 2.5 * entropy_tolerance, depth);
+    double relaxed_tolerance = 2.5 * entropy_tolerance;
+    printf("\tover-refinement... relaxing tolerance to %e\n", relaxed_tolerance);
+    return Mesh_Refiner::recursive_refinement(
+      entropy_potential_vector,
+      entropy_log_weight_vector,
+      relaxed_tolerance,
+      depth
+    );
   }
 
   _mesh = adapted_mesh;
-  return Mesh_Refiner::recursive_refinement(entropy_potential_vector, entropy_tolerance, depth + 1);
+  return Mesh_Refiner::recursive_refinement(
+    entropy_potential_vector,
+    entropy_log_weight_vector,
+    entropy_tolerance,
+    depth + 1
+  );
 }
 //--------------------------------
 std::size_t Mesh_Refiner::mark_for_refinement (
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
+  std::vector<std::shared_ptr<const dolfin::Function>> entropy_log_weight_vector,
   double entropy_tolerance
 ) {
   // setup forms for gradient recovery
@@ -102,6 +122,7 @@ std::size_t Mesh_Refiner::mark_for_refinement (
   // loop over subfunctions of entropy potential
   dolfin::EigenVector error_vector;
   std::size_t component_count = entropy_potential_vector.size();
+
   for (std::size_t comp = 0; comp < component_count; comp++) {
     auto potential_interpolant = std::make_shared<dolfin::Function>(
       dolfin::adapt(*(entropy_potential_vector[comp]->function_space()), _mesh)
@@ -109,7 +130,11 @@ std::size_t Mesh_Refiner::mark_for_refinement (
     potential_interpolant->interpolate( *(entropy_potential_vector[comp]) );
     gradient_form.potential = potential_interpolant;
 
-    gradient_form.weight = std::make_shared<dolfin::Constant>(1.0);
+    auto log_weight_interpolant = std::make_shared<dolfin::Function>(
+      dolfin::adapt(*(entropy_log_weight_vector[comp]->function_space()), _mesh)
+    );
+    log_weight_interpolant->interpolate( *(entropy_log_weight_vector[comp]) );;
+    gradient_form.log_weight = log_weight_interpolant;
 
     auto recovery_matrix = std::make_shared<dolfin::EigenMatrix>();
     dolfin::assemble(*recovery_matrix, bilinear_lumping);
@@ -128,8 +153,9 @@ std::size_t Mesh_Refiner::mark_for_refinement (
     error_form.entropy_potential = potential_interpolant;
     error_form.entropy = entropy;
 
-    if (error_vector.size() < 1) { dolfin::assemble(error_vector, error_form); }
-    else {
+    if (error_vector.size() < 1) {
+      dolfin::assemble(error_vector, error_form);
+    } else {
       dolfin::EigenVector local_error_vector;
       dolfin::assemble(local_error_vector, error_form);
       error_vector += local_error_vector;

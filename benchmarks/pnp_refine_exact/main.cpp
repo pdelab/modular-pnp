@@ -26,6 +26,9 @@ const double permittivity_const = 1.0;
 const double electric_strength = 1.0;
 const double ref_concentration = 1.0;
 
+// potential "valency" is at valencies[0] and should be zero
+std::vector<double> valencies = { 0.0, 1.0, -1.0 };
+
 std::vector<double> exact_solution (double x) {
   return {
     x * electric_strength + std::sin(pi * x),
@@ -141,9 +144,9 @@ class Valency_Expression : public dolfin::Expression {
   public:
     Valency_Expression() : dolfin::Expression(3) {}
     void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
-      values[0] =  0.0; // potential valency is not used
-      values[1] =  1.0;
-      values[2] = -1.0;
+      values[0] = valencies[0]; // potential valency is not used and should be zero
+      values[1] = valencies[1];
+      values[2] = valencies[2];
     }
 };
 
@@ -158,7 +161,11 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   AMG_param amg
 );
 
-std::vector<std::shared_ptr<dolfin::Function>> compute_entropy(
+std::vector<std::shared_ptr<const dolfin::Function>> extract_log_densities (
+  std::shared_ptr<dolfin::Function> solution
+);
+
+std::vector<std::shared_ptr<const dolfin::Function>> compute_entropy_potential(
   std::shared_ptr<dolfin::Function> solution
 );
 
@@ -207,7 +214,7 @@ int main (int argc, char** argv) {
   //-------------------------
   bool use_eafe_approximation = true;
 
-  std::size_t max_elements = 20000;
+  std::size_t max_elements = 25000;
   std::size_t max_refine_depth = 3;
   double entropy_per_cell = 1.0e-6;
   Mesh_Refiner mesh_adapt(
@@ -243,12 +250,9 @@ int main (int argc, char** argv) {
     print_error(*computed_solution);
 
     // compute entropy terms
-    auto test_entropy = compute_entropy(computed_solution);
-
-    auto entropy = std::make_shared<const dolfin::Function>((*computed_solution)[0]);
-
-    std::vector<std::shared_ptr<const dolfin::Function>> entropy_vector = { entropy };
-    mesh_adapt.multilevel_refinement(entropy_vector);
+    auto entropy_potential = compute_entropy_potential(computed_solution);
+    auto log_densities = extract_log_densities(computed_solution);
+    mesh_adapt.multilevel_refinement(entropy_potential, log_densities);
 
     // update solution
     adaptive_solution.reset( new dolfin::Function(computed_solution->function_space()) );
@@ -260,40 +264,48 @@ int main (int argc, char** argv) {
   return 0;
 }
 
-
-std::vector<std::shared_ptr<dolfin::Function>> compute_entropy (
+/// Extract log-densities from computed solution
+std::vector<std::shared_ptr<const dolfin::Function>> extract_log_densities (
   std::shared_ptr<dolfin::Function> solution
 ) {
   std::size_t component_count = solution->function_space()->element()->num_sub_elements();
 
-  ///////////////// LAZINESSSSSSSSSS ??????????
-  std::vector<double> valency = { 0.0, 1.0, -1.0 };
-
-  dolfin::File out("./benchmarks/pnp_refine_exact/output/entro.pvd");
-
-  std::vector<std::shared_ptr<dolfin::Function>> function_vec;
+  std::vector<std::shared_ptr<const dolfin::Function>> function_vec;
   for (std::size_t comp = 1; comp < component_count; comp++) {
     auto subfunction_space = (*solution)[comp].function_space()->collapse();
-    auto potential = std::make_shared<dolfin::Function>(subfunction_space);
-    auto log_density = std::make_shared<dolfin::Function>(subfunction_space);
+    dolfin::Function log_density(subfunction_space);
+    log_density.interpolate((*solution)[comp]);
 
-    potential->interpolate((*solution)[0]);
-    log_density->interpolate((*solution)[comp]);
-    *(potential->vector()) *= valency[comp];
-    *log_density = *log_density + *potential;
-
-    out << *log_density;
-
-    function_vec.push_back(log_density);
+    auto const_log_density = std::make_shared<const dolfin::Function>(log_density);
+    function_vec.push_back(const_log_density);
   }
 
   return function_vec;
 }
 
+/// Compute potential functions for components of the entropy
+std::vector<std::shared_ptr<const dolfin::Function>> compute_entropy_potential (
+  std::shared_ptr<dolfin::Function> solution
+) {
+  std::vector<std::shared_ptr<const dolfin::Function>> function_vec;
+  std::size_t component_count = solution->function_space()->element()->num_sub_elements();
 
+  for (std::size_t comp = 1; comp < component_count; comp++) {
+    auto subfunction_space = (*solution)[comp].function_space()->collapse();
+    dolfin::Function potential(subfunction_space);
+    dolfin::Function entropy_potential(subfunction_space);
 
+    potential.interpolate((*solution)[0]);
+    entropy_potential.interpolate((*solution)[comp]);
+    *(potential.vector()) *= valencies[comp];
+    entropy_potential = entropy_potential + potential;
 
+    auto const_entropy_potential = std::make_shared<const dolfin::Function>(entropy_potential);
+    function_vec.push_back(const_entropy_potential);
+  }
 
+  return function_vec;
+}
 
 /// compute solution to PNP equation
 /// using a Newton solver on the given mesh
@@ -500,6 +512,7 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   return std::make_shared<dolfin::Function>(pnp_problem.get_solution());
 }
 
+/// Compute and log L2 and H1 norm of error
 void print_error (
   dolfin::Function computed_solution
 ) {

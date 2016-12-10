@@ -37,11 +37,13 @@ class Mesh_Refiner {
 
     /// refine mesh recursively
     std::shared_ptr<const dolfin::Mesh> multilevel_refinement (
-      std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector
+      std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
+      std::vector<std::shared_ptr<const dolfin::Function>> entropy_weight_vector
     );
 
     std::shared_ptr<const dolfin::Mesh> recursive_refinement (
       std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
+      std::vector<std::shared_ptr<const dolfin::Function>> entropy_weight_vector,
       double entropy_tolerance,
       std::size_t depth
     );
@@ -49,6 +51,7 @@ class Mesh_Refiner {
     /// mark for refinement
     std::size_t mark_for_refinement (
       std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
+      std::vector<std::shared_ptr<const dolfin::Function>> entropy_weight_vector,
       double entropy_tolerance
     );
 
