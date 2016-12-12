@@ -70,3 +70,6 @@ target_link_libraries(pnp_spheres ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARI
 
 add_executable(pnp_refine ./benchmarks/pnp_refine_exact/main.cpp ./benchmarks/pnp_refine_exact/linear_pnp.cpp ${SRC_DIR})
 target_link_libraries(pnp_refine ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
+
+add_executable(pnp_diode ./benchmarks/pnp_diode/main.cpp ./benchmarks/pnp_diode/linear_pnp.cpp ${SRC_DIR})
+target_link_libraries(pnp_diode ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
