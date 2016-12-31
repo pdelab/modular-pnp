@@ -69,12 +69,15 @@ class Mesh_Refiner {
     /// iteration count
     std::size_t iteration;
 
+    /// maximum mesh size
+    std::size_t max_elements;
+
     /// solve flags
     bool needs_to_solve;
     bool needs_refinement;
 
   private:
-    std::size_t max_elements, max_refine_depth;
+    std::size_t max_refine_depth;
     double entropy_tolerance_per_cell;
     std::shared_ptr<const dolfin::Mesh> _mesh;
     std::shared_ptr<const L2Error::Functional> _l2_form;

@@ -28,13 +28,13 @@ const double elementary_charge = 1.60217662e-19; // C
 const double boltzmann = 1.38064852e-23; // J / K
 const double temperature = 3e+2; // K
 const double thermodynamic_beta = elementary_charge / (temperature * boltzmann); // V
-const double vacuum_permittivity = 8.854187817e-12; // C / V * m
+const double vacuum_permittivity = 8.854187817e-12; // C / V
 
 const double reference_length = 1e-6; // m
-const double voltage_ground = 0.5 * (1.0 - 1.0);
+const double voltage_ground = 0.0;
 const double reference_density = 1.5e+22; // mM = 1 / m^3
 const double reference_diffusivity = 2.87e+1; // cm^2 / s
-const double reference_relative_permittivity = 1.17e+1; // C / V * m
+const double reference_relative_permittivity = 1.17e+1; // dimensionless
 
 const double permittivity_factor = reference_relative_permittivity * vacuum_permittivity /
   (elementary_charge * thermodynamic_beta * reference_density * reference_length * reference_length);
@@ -42,7 +42,7 @@ const double permittivity_factor = reference_relative_permittivity * vacuum_perm
 double scale_density (double density) { return density / reference_density; };
 double scale_potential (double phi) { return (phi - voltage_ground) * thermodynamic_beta; };
 double scale_diffusivity (double diff) { return diff / reference_diffusivity; };
-double scale_permittivity (double rel_perm) { return rel_perm / reference_relative_permittivity; };
+double scale_rel_permittivity (double rel_perm) { return rel_perm / reference_relative_permittivity; };
 
 
 ///
@@ -59,7 +59,7 @@ std::vector<double> diffusivities (double x) {
     x < 0.0 ? scale_diffusivity(2.69e+1) : scale_diffusivity(2.87e+1) // cm^2 / s
   };
 };
-double relative_permittivity (double x) { return scale_permittivity(1.17); };
+double relative_permittivity (double x) { return scale_rel_permittivity(1.17e+1); }; // dimensionless
 double fixed (double x) {
   return x < 0.0 ? scale_density(majority_carrier) : -scale_density(majority_carrier); // mM = 1 / m^3
 };
@@ -213,9 +213,10 @@ int main (int argc, char** argv) {
   //-------------------------
   bool use_eafe_approximation = true;
 
-  std::size_t max_elements = 100000;
-  std::size_t max_refine_depth = 5;
-  double entropy_per_cell = 1.0e-5;
+  double growth_factor = 1.5;
+  double entropy_per_cell = 1.0e-6;
+  std::size_t max_refine_depth = 3;
+  std::size_t max_elements = 750000;
   Mesh_Refiner mesh_adapt(
     initial_mesh,
     max_elements,
@@ -251,6 +252,9 @@ int main (int argc, char** argv) {
     // compute entropy terms
     auto entropy_potential = compute_entropy_potential(computed_solution);
     auto log_densities = extract_log_densities(computed_solution);
+
+    // adapt mesh
+    mesh_adapt.max_elements = (std::size_t) std::floor( growth_factor * mesh->num_cells() );
     mesh_adapt.multilevel_refinement(entropy_potential, log_densities);
 
     // update solution
@@ -475,6 +479,29 @@ std::shared_ptr<dolfin::Function> solve_pnp (
     printf("Newton measurements for iteration :\n");
     double residual_check = pnp_problem.compute_residual("l2");
     std::size_t backtrack_count = 0;
+
+    // ensure L_infinity norm has bounded growth at each iteration
+    double prev_max_dof = std::abs(previous_solution.vector()->max());
+    double prev_min_dof = std::abs(previous_solution.vector()->min());
+    double prev_L_infty = prev_max_dof > prev_min_dof ? prev_max_dof : prev_min_dof;
+
+    double max_dof = std::abs(computed_solution.vector()->max());
+    double min_dof = std::abs(computed_solution.vector()->min());
+    double L_infty = max_dof > min_dof ? max_dof : min_dof;
+
+    if (L_infty > 1.1 * prev_L_infty) {
+      printf("\tupdate causes too much growth in solution : %e\n", L_infty / prev_L_infty);
+      dolfin::Function newton_update(computed_solution.function_space());
+      newton_update = computed_solution - previous_solution;
+
+      double update_max_dof = std::abs(newton_update.vector()->max());
+      double update_min_dof = std::abs(newton_update.vector()->min());
+      double update_L_infty = update_max_dof > update_min_dof ? update_max_dof : update_min_dof;
+
+      double factor = prev_L_infty / (update_L_infty + 1E-12);
+      newton_update = newton_update * factor;
+      computed_solution = previous_solution + newton_update;
+    }
 
     // dolfin::File backFile("./benchmarks/pnp_diode/output/backtrack.pvd");
     while (residual_check > previous_residual || isnan(residual_check)) {

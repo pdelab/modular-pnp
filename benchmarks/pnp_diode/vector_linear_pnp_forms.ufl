@@ -26,8 +26,8 @@ reaction = Coefficient(V)
 
 a = \
   + ( permittivity * inner(grad(u[0]), grad(v[0])) ) * dx \
-  + ( -valency[1] * poisson_scale * exp(uu[1]) * u[1] * v[0] ) * dx \
-  + ( -valency[2] * poisson_scale * exp(uu[2]) * u[2] * v[0] ) * dx \
+  + ( -poisson_scale * valency[1] * exp(uu[1]) * u[1] * v[0] ) * dx \
+  + ( -poisson_scale * valency[2] * exp(uu[2]) * u[2] * v[0] ) * dx \
   + ( diffusivity[1] * exp(uu[1]) * inner(grad(u[1]) + grad(uu[1] + valency[1] * uu[0]) * u[1], grad(v[1])) ) * dx \
   + ( valency[1] * diffusivity[1] * exp(uu[1]) * inner(grad(u[0]), grad(v[1])) ) * dx \
   + ( diffusivity[2] * exp(uu[2]) * inner(grad(u[2]) + grad(uu[2] + valency[2] * uu[0]) * u[2], grad(v[2])) ) * dx \
@@ -36,8 +36,8 @@ a = \
 L = \
   + ( poisson_scale * fixed_charge * v[0] ) * dx \
   - ( permittivity * inner(grad(uu[0]), grad(v[0])) ) * dx \
-  - ( -valency[1] * poisson_scale * exp(uu[1]) * v[0] ) * dx \
-  - ( -valency[2] * poisson_scale * exp(uu[2]) * v[0] ) * dx \
+  - ( -poisson_scale * valency[1] * exp(uu[1]) * v[0] ) * dx \
+  - ( -poisson_scale * valency[2] * exp(uu[2]) * v[0] ) * dx \
   + ( reaction[1] * v[1]) * dx \
   - ( diffusivity[1] * exp(uu[1]) * inner(grad(uu[1] + valency[1] * uu[0]), grad(v[1])) ) * dx \
   + ( reaction[2] * v[2]) * dx \
