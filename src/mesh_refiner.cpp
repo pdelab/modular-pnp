@@ -90,7 +90,7 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
   bool too_many_resulting_cells = adapted_mesh_size > Mesh_Refiner::max_elements;
 
   if (too_many_resulting_cells) {
-    double relaxed_tolerance = 1.5 * entropy_tolerance;
+    double relaxed_tolerance = 1.1 * entropy_tolerance;
     printf("\tover-refinement... relaxing tolerance to %e\n", relaxed_tolerance);
     return Mesh_Refiner::recursive_refinement(
       entropy_potential_vector,

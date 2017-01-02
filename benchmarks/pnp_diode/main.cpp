@@ -67,14 +67,14 @@ double fixed (double x) {
 // boundary conditions
 std::vector<double> left_contact (double x) {
   return {
-    scale_potential(-1.0), // V
+    scale_potential(+1.0), // V
     std::log(scale_density(minority_carrier)), // log(mM)
     std::log(scale_density(majority_carrier)) // log(mM)
   };
 };
 std::vector<double> right_contact (double x) {
   return {
-    scale_potential(+1.0), // V
+    scale_potential(-1.0), // V
     std::log(scale_density(majority_carrier)), // log(mM)
     std::log(scale_density(minority_carrier)) // log(mM)
   };
@@ -213,7 +213,7 @@ int main (int argc, char** argv) {
   //-------------------------
   bool use_eafe_approximation = true;
 
-  double growth_factor = 1.5;
+  double growth_factor = 1.2;
   double entropy_per_cell = 1.0e-6;
   std::size_t max_refine_depth = 3;
   std::size_t max_elements = 750000;
@@ -451,7 +451,7 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   printf("Initializing nonlinear solver\n");
 
   // set nonlinear solver parameters
-  const std::size_t max_newton = 150;
+  const std::size_t max_newton = 50;
   const double max_residual_tol = 1.0e-10;
   const double relative_residual_tol = 1.0e-8;
   const double initial_residual = pnp_problem.compute_residual("l2");
