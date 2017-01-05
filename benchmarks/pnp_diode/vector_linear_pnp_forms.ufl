@@ -25,7 +25,7 @@ valency = Coefficient(V)
 reaction = Coefficient(V)
 
 def conc(w):
-  return conditional(gt(w, -8.0), exp(w), exp(w) / (1 - w - 8.0))
+  return conditional(gt(w, -8.0), exp(w), exp(-8.0) / (1 - w - 8.0))
 
 a = \
   + ( permittivity * inner(grad(u[0]), grad(v[0])) ) * dx \
