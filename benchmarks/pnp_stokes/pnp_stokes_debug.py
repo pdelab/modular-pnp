@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from ufl import *
+set_level(DEBUG)
 # Copyright (C) 2014 CCMA@PSU Maximilian Metti, Xiaozhe Hu
 #
 #   Define bilinear and linear forms for 
@@ -62,7 +66,8 @@ a   = ( Dp*exp(CatCat) * ( inner(grad(Cat),grad(cat)) + inner(grad(CatCat)+qp*gr
     + ( 2.0*mu*(alpha1)* inner( sym(outer(u('+'),n_vec('+')) + outer(u('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
     + ( 2.0*mu*(alpha2/h_avg)* inner( jump(u),jump(v) ) )*dS \
     + ( 2.0*mu*(alpha2/h)*(inner(u,n_vec)*inner(v,n_vec) ) )*ds \
-    + eps*inner( 2*outer(grad(Phi),grad(EsEs)) , grad(v) )*dx
+    + ( (qp*Cat*exp(CatCat)+qn*An*exp(AnAn))*inner(grad(EsEs),v) )*dx \
+    + ( (qp*exp(CatCat)+qn*exp(CatCat))*inner(grad(Phi),v) )*dx
     
 
 L   = - ( Dp*exp(CatCat)* (inner(grad(CatCat),grad(cat)) + qp*inner(grad(EsEs),grad(cat))) )*dx \
@@ -76,4 +81,5 @@ L   = - ( Dp*exp(CatCat)* (inner(grad(CatCat),grad(cat)) + qp*inner(grad(EsEs),g
     - ( 2.0*mu*(alpha1)* inner( sym(outer(uu('+'),n_vec('+')) + outer(uu('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
     - ( 2.0*mu*(alpha2/h_avg)* inner( jump(uu),jump(v) ) )*dS \
     - ( 2.0*mu*(alpha2/h)*(inner(uu,n_vec)*inner(v,n_vec) ) )*ds \
-    - eps*inner( outer(grad(EsEs),grad(EsEs)) , grad(v) )*dx
+    - ( (qp*exp(CatCat)+qn*exp(AnAn))*inner(grad(EsEs),v) )*dx \
+    + eps*inner( div(inner(grad(EsEs),grad(EsEs))), v )*dx

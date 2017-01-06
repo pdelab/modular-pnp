@@ -89,6 +89,8 @@ int main(int argc, char** argv)
   dolfin::Point p1(  domain_par.length_x/2,  domain_par.length_y/2,  domain_par.length_z/2);
   auto mesh = std::make_shared<dolfin::BoxMesh>(p0, p1, domain_par.grid_x, domain_par.grid_y, domain_par.grid_z);
   print_domain_param(&domain_par);
+  File MeshFileXML("./benchmarks/pnp_stokes/XML/mesh.xml");
+  MeshFileXML << *mesh;
 
   // read coefficients and boundary values
   printf("coefficients...\n"); fflush(stdout);
@@ -117,7 +119,7 @@ int main(int argc, char** argv)
   fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
   INT status = FASP_SUCCESS;
   printf("done\n"); fflush(stdout);
-    
+
     // Setup FASP solver for pnp
     printf("FASP solver parameters for pnp..."); fflush(stdout);
     input_param pnp_inpar;
@@ -148,6 +150,13 @@ int main(int argc, char** argv)
   File potentialFile("./benchmarks/pnp_stokes/output/potential.pvd");
   File velocityFile("./benchmarks/pnp_stokes/output/velocity.pvd");
   File pressureFile("./benchmarks/pnp_stokes/output/pressure.pvd");
+
+
+  File cationFileXML("./benchmarks/pnp_stokes/XML/cation.xml");
+  File anionFileXML("./benchmarks/pnp_stokes/XML/anion.xml");
+  File potentialFileXML("./benchmarks/pnp_stokes/XML/potential.xml");
+  File velocityFileXML("./benchmarks/pnp_stokes/XML/velocity.xml");
+  File pressureFileXML("./benchmarks/pnp_stokes/XML/pressure.xml");
 
   // Initialize guess
   printf("intial guess...\n"); fflush(stdout);
@@ -192,23 +201,47 @@ int main(int argc, char** argv)
   auto zero_vec4=std::make_shared<zerovec4>();
   auto CU_init=std::make_shared<Constant>(0.1);
   auto mu=std::make_shared<Constant>(0.1);
-  auto penalty1=std::make_shared<Constant>(1.0e-3);
-  auto penalty2=std::make_shared<Constant>(1.0e-6);
+  auto penalty1=std::make_shared<Constant>(1.0e-6);
+  auto penalty2=std::make_shared<Constant>(1.0e-12);
 
 
   // interpolate
-  auto V= std::make_shared<pnp_stokes::FunctionSpace>(mesh);
+  auto V = std::make_shared<pnp_stokes::FunctionSpace>(mesh);
   auto initialFunction = std::make_shared<Function>(V);
   auto initialCation = std::make_shared<Function>((*initialFunction)[0]);
   auto initialAnion = std::make_shared<Function>((*initialFunction)[1]);
   auto initialPotential = std::make_shared<Function>((*initialFunction)[2]);
   auto initialVelocity = std::make_shared<Function>((*initialFunction)[3]);
   auto initialPressure = std::make_shared<Function>((*initialFunction)[4]);
+
+
+  // std::string s1("./benchmarks/pnp_stokes/XML_2/cation.xml");
+  // std::string s2("./benchmarks/pnp_stokes/XML_2/anion.xml");
+  // std::string s3("./benchmarks/pnp_stokes/XML_2/potential.xml");
+  // std::string s4("./benchmarks/pnp_stokes/XML_2/velocity.xml");
+  // std::string s5("./benchmarks/pnp_stokes/XML_2/pressure.xml");
+  //
+  // std::shared_ptr<FunctionSpace> VC = V->sub(0);
+  // std::shared_ptr<FunctionSpace> CG = VC->collapse();
+  // VC = V->sub(3);
+  // std::shared_ptr<FunctionSpace> RT = VC->collapse();
+  // VC = V->sub(4);
+  // std::shared_ptr<FunctionSpace> DG = VC->collapse();
+  // // auto V1 = std::make_shared<pnp_stokes::Form_a_FunctionSpace_2>(mesh);
+  //
+  // auto initialCation = std::make_shared<Function>(CG,s1);
+  // auto initialAnion = std::make_shared<Function>(CG,s2);
+  // auto initialPotential = std::make_shared<Function>(CG,s3);
+  // auto initialVelocity = std::make_shared<Function>(RT,s4);
+  // auto initialPressure = std::make_shared<Function>(DG,s5);
+
   auto one_vec3 = std::make_shared<Constant>(1.0,1.0,1.0);
   auto vel_vec = std::make_shared<Constant>(0.0,0.0,0.0);
 
   initialCation->interpolate(Cation);
+  // initialAnion->interpolate(Cation);
   initialAnion->interpolate(Anion);
+  // initialPotential->interpolate(*zero);
   initialPotential->interpolate(Volt);
   initialVelocity->interpolate(*vel_vec);
   initialPressure->interpolate(*zero);
@@ -254,6 +287,7 @@ int main(int argc, char** argv)
   velocityFile << *initialVelocity;
   pressureFile << *initialPressure;
 
+
   // map dofs
   ivector cation_dofs;
   ivector anion_dofs;
@@ -266,7 +300,7 @@ int main(int argc, char** argv)
   get_dofs(initialFunction.get(), &velocity_dofs, 3);
   get_dofs(initialFunction.get(), &pressure_dofs, 4);
   int index_fix = pressure_dofs.val[0];
-    
+
   // output dofs
     /*
     fasp_ivec_write("cation_dofs", &cation_dofs);
@@ -284,10 +318,10 @@ int main(int argc, char** argv)
   // Fasp matrices and vectors
   dCSRmat A_fasp;
   dvector b_fasp, solu_fasp;
-    
+
   block_dCSRmat A_fasp_bcsr;
   dvector b_fasp_bcsr, solu_fasp_bcsr;
-    
+
     // allocate
     int i;
     A_fasp_bcsr.brow = 2;
@@ -297,7 +331,7 @@ int main(int argc, char** argv)
     for (i=0; i<4 ;i++) {
         A_fasp_bcsr.blocks[i] = (dCSRmat *)fasp_mem_calloc(1, sizeof(dCSRmat));
     }
-   
+
     // form dof index for PNP and Stokes
     ivector pnp_dofs;
     ivector stokes_dofs;
@@ -347,6 +381,9 @@ int main(int argc, char** argv)
   printf("Initial rez = %e\n",initial_residual);
   fasp_dvec_alloc(b.size(), &solu_fasp);
 
+  // return 0;
+
+
   //*************************************************************
   //  Newton solver
   //*************************************************************
@@ -365,7 +402,7 @@ int main(int argc, char** argv)
     a.EsEs = initialPotential;
     a.uu = initialVelocity;
     assemble(A, a);
-      
+
     bc1.apply(A);
     bc2.apply(A);
     bc3.apply(A);
@@ -387,7 +424,7 @@ int main(int argc, char** argv)
 
     // list_lu_solver_methods();
     // solve(A, *solutionUpdate->vector(), b, "umfpack");
-      
+
       // --------------------------------------------------------------------------
       // 2 by 2 block solver
       // step 1: get blocks (order: PNP Stokes)
@@ -398,17 +435,17 @@ int main(int argc, char** argv)
 
       // step 2: get right hand side
       fasp_dvec_alloc(b_fasp.row, &b_fasp_bcsr);
-      
+
       for (i=0; i<pnp_dofs.row; i++)
           b_fasp_bcsr.val[i] = b_fasp.val[pnp_dofs.val[i]];
       for (i=0; i<stokes_dofs.row; i++)
           b_fasp_bcsr.val[pnp_dofs.row + i] = b_fasp.val[stokes_dofs.val[i]];
-      
+
       // step 3: solve
       fasp_dvec_alloc(b_fasp.row, &solu_fasp_bcsr);
       fasp_dvec_set(solu_fasp_bcsr.row, &solu_fasp_bcsr, 0.0);
       fasp_solver_bdcsr_krylov_pnp_stokes(&A_fasp_bcsr, &b_fasp_bcsr, &solu_fasp_bcsr, &itpar, &pnp_itpar, &pnp_amgpar, &stokes_itpar, &stokes_amgpar, velocity_dofs.row, pressure_dofs.row);
-      
+
       // step 4: put solution back
       for (i=0; i<pnp_dofs.row; i++)
           solu_fasp.val[pnp_dofs.val[i]] = solu_fasp_bcsr.val[i];
@@ -477,6 +514,12 @@ int main(int argc, char** argv)
     velocityFile << *initialVelocity;
     pressureFile << *initialPressure;
 
+    cationFileXML << *initialCation;
+    anionFileXML << *initialAnion;
+    potentialFileXML << *initialPotential;
+    velocityFileXML << *initialVelocity;
+    pressureFileXML << *initialPressure;
+
     // update nonlinear residual
     L.CatCat = initialCation;
     L.AnAn = initialAnion;
@@ -491,7 +534,7 @@ int main(int argc, char** argv)
     b[index_fix]=0.0;
 
 
-    double relative_residual = b.norm("l2")/ initial_residual;
+    relative_residual = b.norm("l2")/ initial_residual;
     printf("\t\trel_res after: %e\n", relative_residual);
     if (relative_residual < 0.0) {
       printf("Newton backtracking failed!\n");

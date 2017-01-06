@@ -53,27 +53,30 @@ a   = ( Dp*exp(CatCat) * ( inner(grad(Cat),grad(cat)) + inner(grad(CatCat)+qp*gr
     + ( qn*Dn*exp(AnAn) * inner(grad(Phi),grad(an)) )*dx \
     + ( eps * inner(grad(Phi),grad(phi)) )*dx \
     + ( -(qp*exp(CatCat)*Cat + qn*exp(AnAn)*An)*phi )*dx \
-    - ( exp(CatCat)*Cat*(inner(uu,grad(cat))) )*dx \
-    - ( exp(AnAn)   *An*(inner(uu,grad(an)))  )*dx \
-    - ( exp(CatCat)*(inner(u,grad(cat))) )*dx \
-    - ( exp(AnAn)*(inner(u,grad(an)))  )*dx \
+    + ( exp(CatCat)*cat*(inner(uu,grad(Cat))) )*dx \
+    + ( exp(AnAn)   *an*(inner(uu,grad(An)))  )*dx \
+    + ( exp(CatCat)*cat*(inner(u,grad(CatCat))) )*dx \
+    + ( exp(AnAn)*an*(inner(u,grad(AnAn)))  )*dx \
+    + ( exp(CatCat)*cat*Cat*(inner(uu,grad(CatCat))) )*dx \
+    + ( exp(AnAn)*an*An*(inner(uu,grad(AnAn)))  )*dx \
     + ( 2.0*mu* inner( sym(grad(u)), sym(grad(v)) ) )*dx    -    ( p*div(v) )*dx   +   ( div(u)*q )*dx \
     + ( 2.0*mu*(alpha1)* inner( avg(sym(grad(u))), sym(outer(v('+'),n_vec('+')) + outer(v('-'),n_vec('-'))) ) )*dS \
     + ( 2.0*mu*(alpha1)* inner( sym(outer(u('+'),n_vec('+')) + outer(u('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
     + ( 2.0*mu*(alpha2/h_avg)* inner( jump(u),jump(v) ) )*dS \
     + ( 2.0*mu*(alpha2/h)*(inner(u,n_vec)*inner(v,n_vec) ) )*ds \
-    + eps*inner( 2*outer(grad(Phi),grad(EsEs)) , grad(v) )*dx
+    + ( (qp*Cat*exp(CatCat)+qn*An*exp(AnAn))*inner(grad(EsEs),v) )*dx \
+    + ( (qp*exp(CatCat)+qn*exp(CatCat))*inner(grad(Phi),v) )*dx
     
 
 L   = - ( Dp*exp(CatCat)* (inner(grad(CatCat),grad(cat)) + qp*inner(grad(EsEs),grad(cat))) )*dx \
     - ( Dn*exp(AnAn  )* (inner(grad(AnAn  ),grad(an )) + qn*inner(grad(EsEs), grad(an))) )*dx \
     - ( eps * inner(grad(EsEs),grad(phi)) )*dx \
     - ( -(qp*exp(CatCat) + qn*exp(AnAn))*phi )*dx \
-    + ( exp(CatCat)*(inner(uu,grad(cat))) )*dx \
-    + ( exp(AnAn)*(inner(uu,grad(an)))  )*dx \
+    - ( exp(CatCat)*cat*(inner(uu,grad(CatCat))) )*dx \
+    - ( exp(AnAn)*an*(inner(uu,grad(AnAn)))  )*dx \
     - ( 2.0*mu* inner( sym(grad(uu)), sym(grad(v)) ) )*dx   +   ( pp*div(v) )*dx   -   ( div(uu)*q )*dx \
     - ( 2.0*mu*(alpha1)* inner( avg(sym(grad(uu))),  sym(outer(v('+'),n_vec('+')) + outer(v('-'),n_vec('-'))) ) )*dS \
     - ( 2.0*mu*(alpha1)* inner( sym(outer(uu('+'),n_vec('+')) + outer(uu('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
     - ( 2.0*mu*(alpha2/h_avg)* inner( jump(uu),jump(v) ) )*dS \
     - ( 2.0*mu*(alpha2/h)*(inner(uu,n_vec)*inner(v,n_vec) ) )*ds \
-    - eps*inner( outer(grad(EsEs),grad(EsEs)) , grad(v) )*dx
+    - ( (qp*exp(CatCat)+qn*exp(AnAn))*inner(grad(EsEs),v) )*dx
