@@ -55,6 +55,19 @@ class Mesh_Refiner {
       double entropy_tolerance
     );
 
+    /// refine to get close to target size
+    std::size_t mark_for_refinement_with_target_size (
+      std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
+      std::vector<std::shared_ptr<const dolfin::Function>> entropy_log_weight_vector,
+      std::size_t target_size
+    );
+
+    /// compute interpolation error of entropy function
+    dolfin::EigenVector compute_entropy_error_vector (
+      std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
+      std::vector<std::shared_ptr<const dolfin::Function>> entropy_log_weight_vector
+    );
+
     /// mesh refinement
     std::shared_ptr<const dolfin::Mesh> refine_mesh ();
 

@@ -56,14 +56,14 @@ double fixed (double x) {
  */
 std::vector<double> left_contact (double x) {
   return {
-    scale_potential(+0.0), // V
+    scale_potential(+1.0), // V
     std::log(scale_density(minority_carrier)), // log(mM)
     std::log(scale_density(majority_carrier)) // log(mM)
   };
 };
 std::vector<double> right_contact (double x) {
   return {
-    scale_potential(-0.0), // V
+    scale_potential(-1.0), // V
     std::log(scale_density(majority_carrier)), // log(mM)
     std::log(scale_density(minority_carrier)) // log(mM)
   };

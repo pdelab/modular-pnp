@@ -78,7 +78,7 @@ int main (int argc, char** argv) {
   );
 
   // parameters for PNP Newton solver
-  const std::size_t max_newton = 100;
+  const std::size_t max_newton = 10;
   const double max_residual_tol = 1.0e-10;
   const double relative_residual_tol = 1.0e-8;
   const bool use_eafe_approximation = true;

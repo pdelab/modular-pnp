@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 #include <string.h>
 #include <dolfin.h>
 #include <ufc.h>
@@ -49,6 +50,7 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::multilevel_refinement (
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_log_weight_vector
 ) {
+  printf("Entering mesh adaptation routine\n");
   return Mesh_Refiner::recursive_refinement(
     entropy_potential_vector,
     entropy_log_weight_vector,
@@ -63,9 +65,8 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
   double entropy_tolerance,
   std::size_t depth
 ) {
-
   if (depth > Mesh_Refiner::max_refine_depth || _mesh->num_cells() > Mesh_Refiner::max_elements) {
-    printf("Mesh refinement is attempting to over-refine...\n");
+    printf("\nMesh refinement is attempting to over-refine...\n");
     Mesh_Refiner::needs_to_solve = depth > 0;
     Mesh_Refiner::needs_refinement = false;
     return _mesh;
@@ -87,32 +88,101 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
   auto temp_mesh = std::make_shared<dolfin::Mesh>(*_mesh);
   auto adapted_mesh = dolfin::adapt(*temp_mesh, *_cell_marker);
   std::size_t adapted_mesh_size = adapted_mesh->num_cells();
-  bool too_many_resulting_cells = adapted_mesh_size > Mesh_Refiner::max_elements;
+  bool accept_refinement = adapted_mesh_size < (Mesh_Refiner::max_elements + 1);
 
-  if (too_many_resulting_cells) {
-    double relaxed_tolerance = 1.1 * entropy_tolerance;
-    printf("\tover-refinement... relaxing tolerance to %e\n", relaxed_tolerance);
+  if (accept_refinement) {
+    _mesh = adapted_mesh;
     return Mesh_Refiner::recursive_refinement(
       entropy_potential_vector,
       entropy_log_weight_vector,
-      relaxed_tolerance,
-      depth
+      entropy_tolerance,
+      depth + 1
     );
   }
 
-  _mesh = adapted_mesh;
-  return Mesh_Refiner::recursive_refinement(
+  // aim for a twenty percent update in mesh size
+  printf("\tmesh refinement is too aggressive... mark elements to have proportional refinement\n");
+  std::size_t target_size = (std::size_t) std::round(_mesh->num_cells() * 1.2);
+  Mesh_Refiner::mark_for_refinement_with_target_size(
     entropy_potential_vector,
     entropy_log_weight_vector,
-    entropy_tolerance,
-    depth + 1
+    target_size
   );
+
+  auto conservative_temp_mesh = std::make_shared<dolfin::Mesh>(*_mesh);
+  auto conservative_mesh = dolfin::adapt(*conservative_temp_mesh, *_cell_marker);
+  _mesh = conservative_mesh;
+  return _mesh;
+
 }
+//--------------------------------
+std::size_t Mesh_Refiner::mark_for_refinement_with_target_size (
+  std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
+  std::vector<std::shared_ptr<const dolfin::Function>> entropy_log_weight_vector,
+  std::size_t target_size
+) {
+  // compute error vector of interpolant
+  dolfin::EigenVector error_eigenvector = Mesh_Refiner::compute_entropy_error_vector(
+    entropy_potential_vector,
+    entropy_log_weight_vector
+  );
+
+  // sort errors and estimate corresponding entropy_tolerance
+  std::size_t permissible_cells = (std::size_t) std::round(((double) target_size) * 0.125);
+  std::vector<double> error_vector;
+  for (std::size_t i = 0; i < error_eigenvector.size(); i++) {
+    error_vector.push_back(error_eigenvector[i]);
+  }
+  std::sort(error_vector.begin(), error_vector.end());
+  int toleranceIndex = error_vector.size() - permissible_cells;
+  toleranceIndex = toleranceIndex < 0 ? 0 : toleranceIndex;
+  const double entropy_tolerance = error_vector[toleranceIndex];
+
+  // mark cells according to entropic error
+  std::size_t marked_count = 0;
+  _cell_marker.reset( new dolfin::MeshFunction<bool>(_mesh, _mesh->topology().dim(), false) );
+
+  for (std::size_t index = 0; index < error_eigenvector.size(); index++) {
+    if (error_eigenvector[index] > entropy_tolerance) {
+      _cell_marker->set_value(index, true);
+      marked_count++;
+    }
+  }
+
+  Mesh_Refiner::needs_refinement = marked_count > 0 ? true : false;
+  return marked_count;
+};
 //--------------------------------
 std::size_t Mesh_Refiner::mark_for_refinement (
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_log_weight_vector,
   double entropy_tolerance
+) {
+  // compute error vector of interpolant
+  dolfin::EigenVector error_vector = Mesh_Refiner::compute_entropy_error_vector(
+    entropy_potential_vector,
+    entropy_log_weight_vector
+  );
+
+  // mark cells according to entropic error
+  std::size_t marked_count = 0;
+  _cell_marker.reset(
+    new dolfin::MeshFunction<bool>(_mesh, _mesh->topology().dim(), false)
+  );
+  for (std::size_t index = 0; index < error_vector.size(); index++) {
+    if (error_vector[index] > entropy_tolerance) {
+      _cell_marker->set_value(index, true);
+      marked_count++;
+    }
+  }
+
+  Mesh_Refiner::needs_refinement = marked_count > 0 ? true : false;
+  return marked_count;
+};
+//--------------------------------
+dolfin::EigenVector Mesh_Refiner::compute_entropy_error_vector (
+  std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
+  std::vector<std::shared_ptr<const dolfin::Function>> entropy_log_weight_vector
 ) {
   // setup forms for gradient recovery
   auto gradient_space = std::make_shared<gradient_recovery::FunctionSpace>(_mesh);
@@ -162,20 +232,7 @@ std::size_t Mesh_Refiner::mark_for_refinement (
     }
   }
 
-  // mark cells according to entropic error
-  std::size_t marked_count = 0;
-  _cell_marker.reset(
-    new dolfin::MeshFunction<bool>(_mesh, _mesh->topology().dim(), false)
-  );
-  for (std::size_t index = 0; index < error_vector.size(); index++) {
-    if (error_vector[index] > entropy_tolerance) {
-      _cell_marker->set_value(index, true);
-      marked_count++;
-    }
-  }
-
-  Mesh_Refiner::needs_refinement = marked_count > 0 ? true : false;
-  return marked_count;
+  return error_vector;
 };
 //--------------------------------
 std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::refine_mesh () {
