@@ -40,8 +40,10 @@ class Linear_PNP : public PDE {
       const std::shared_ptr<dolfin::Form> linear_form,
       const std::map<std::string, std::vector<double>> coefficients,
       const std::map<std::string, std::vector<double>> sources,
-      const itsolver_param &itsolver,
-      const AMG_param &amg
+      const itsolver_param &pnpitsolver,
+      const AMG_param &pnpamg
+      const itsolver_param &nsitsolver,
+      const AMG_param &nsamg,
     );
 
     /// Destructor
@@ -76,10 +78,17 @@ class Linear_PNP : public PDE {
 
   private:
     // FASP
-    itsolver_param _itsolver;
-    AMG_param _amg;
+    ivector _cation_dofs;
+    ivector _anion_dofs;
+    ivector _potential_dofs;
+    ivector _velocity_dofs;
+    ivector _pressure_dofs;
+    ivector _pnp_dofs;
+    ivector _stokes_dofs;
+    itsolver_param _pnpitsolver, _nsitsolver;
+    AMG_param _pnpamg, _nsamg;
     dCSRmat _fasp_matrix;
-    dBSRmat _fasp_bsr_matrix;
+    block_dCSRmat _fasp_block_matrix;
     dvector _fasp_vector;
     dvector _fasp_soln;
     bool _faps_soln_unallocated = true;

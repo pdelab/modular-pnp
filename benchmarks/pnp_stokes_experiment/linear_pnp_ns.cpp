@@ -12,13 +12,13 @@ extern "C" {
   #include "fasp_functs.h"
 }
 
-#include "vector_linear_pnp_forms.h"
+#include "vector_linear_pnp_ns_forms.h"
 #include "linear_pnp.h"
 
 using namespace std;
 
 //--------------------------------------
-Linear_PNP::Linear_PNP (
+Linear_PNP_NS::Linear_PNP_NS (
   const std::shared_ptr<const dolfin::Mesh> mesh,
   const std::shared_ptr<dolfin::FunctionSpace> function_space,
   const std::shared_ptr<dolfin::Form> bilinear_form,
@@ -37,68 +37,92 @@ Linear_PNP::Linear_PNP (
 ) {
 
   diffusivity_space.reset(
-    new vector_linear_pnp_forms::CoefficientSpace_diffusivity(mesh)
+    new vector_linear_pnp_ns_forms::CoefficientSpace_diffusivity(mesh)
   );
 
   valency_space.reset(
-    new vector_linear_pnp_forms::CoefficientSpace_valency(mesh)
+    new vector_linear_pnp_ns_forms::CoefficientSpace_valency(mesh)
   );
 
   fixed_charge_space.reset(
-    new vector_linear_pnp_forms::CoefficientSpace_fixed_charge(mesh)
+    new vector_linear_pnp_ns_forms::CoefficientSpace_fixed_charge(mesh)
   );
 
   permittivity_space.reset(
-    new vector_linear_pnp_forms::CoefficientSpace_permittivity(mesh)
+    new vector_linear_pnp_ns_forms::CoefficientSpace_permittivity(mesh)
   );
 
-  _itsolver = itsolver;
-  _amg = amg;
+  penalty1_space.reset(
+    new vector_linear_pnp_ns_forms::CoefficientSpace_penalty1(mesh)
+  );
+
+  penalty2_space.reset(
+    new vector_linear_pnp_ns_forms::CoefficientSpace_penalty2(mesh)
+  );
+
+  _pnpitsolver = pnpitsolver;
+  _pnpamg = pnpamg;
+  _nsitsolver = nsitsolver;
+   _nsamg = nsamg;
 }
 //--------------------------------------
-Linear_PNP::~Linear_PNP () {}
+Linear_PNP_NS::~Linear_PNP_NS () {}
 //--------------------------------------
 
 
 
-
-
 //--------------------------------------
-void Linear_PNP::setup_fasp_linear_algebra () {
-  Linear_PNP::setup_linear_algebra();
+void Linear_PNP_NS::setup_fasp_linear_algebra () {
+  Linear_PNP_NS::setup_linear_algebra();
 
-  if (_use_eafe) {
-    Linear_PNP::apply_eafe();
-    for (std::size_t i = 0; i < _dirichletBC.size(); i++) {
-      _dirichletBC[i]->apply(*_eigen_matrix);
-    }
-  }
+  // if (_use_eafe) {
+  //   Linear_PNP_NS::apply_eafe();
+  //   for (std::size_t i = 0; i < _dirichletBC.size(); i++) {
+  //     _dirichletBC[i]->apply(*_eigen_matrix);
+  //   }
+  // }
 
-  std::size_t dimension = Linear_PNP::get_solution_dimension();
+  std::size_t dimension = Linear_PNP_NS::get_solution_dimension();
   EigenMatrix_to_dCSRmat(_eigen_matrix, &_fasp_matrix);
-  _fasp_bsr_matrix = fasp_format_dcsr_dbsr(&_fasp_matrix, dimension);
+  // _fasp_bsr_matrix = fasp_format_dcsr_dbsr(&_fasp_matrix, dimension);
+   _fasp_block_matrix.brow = 2;
+   _fasp_block_matrix.bcol = 2;
+   _fasp_block_matrix.blocks = (dCSRmat **)calloc(4, sizeof(dCSRmat *));
+  fasp_dcsr_getblk(&_fasp_matrix, pnp_dofs.val,    pnp_dofs.val,    pnp_dofs.row,
+      pnp_dofs.row,    _fasp_block_matrix[0]);
+  fasp_dcsr_getblk(&_fasp_matrix, pnp_dofs.val,    stokes_dofs.val, pnp_dofs.row,
+       stokes_dofs.row, _fasp_block_matrix[1]);
+  fasp_dcsr_getblk(&_fasp_matrix, stokes_dofs.val, pnp_dofs.val,    stokes_dofs.row,
+     pnp_dofs.row,    _fasp_block_matrix[2]);
+  fasp_dcsr_getblk(&_fasp_matrix, stokes_dofs.val, stokes_dofs.val, stokes_dofs.row,
+     stokes_dofs.row, _fasp_block_matrix[3]);
+
 
   if (_faps_soln_unallocated) {
     fasp_dvec_alloc(_eigen_vector->size(), &_fasp_soln);
     _faps_soln_unallocated = false;
   }
-  EigenVector_to_dvector(_eigen_vector, &_fasp_vector);
+  EigenVector_to_dvector_block(_eigen_vector, &_fasp_vector) // to do;
 
   fasp_dvec_set(_fasp_vector.row, &_fasp_soln, 0.0);
 }
 //--------------------------------------
-dolfin::Function Linear_PNP::fasp_solve () {
-  Linear_PNP::setup_fasp_linear_algebra();
+dolfin::Function Linear_PNP_NS::fasp_solve () {
+  Linear_PNP_NS::setup_fasp_linear_algebra();
   dolfin::Function solution(Linear_PNP::get_solution());
 
   printf("Solving linear system using FASP solver...\n"); fflush(stdout);
-  INT status = fasp_solver_dbsr_krylov_amg (
-    &_fasp_bsr_matrix,
+  INT status = fasp_solver_bdcsr_krylov_pnp_stokes(
+    &_fasp_block_matrix,
     &_fasp_vector,
     &_fasp_soln,
     &_itsolver,
-    &_amg
-  );
+    &_pnpitsolver,
+    &_pnpamg,
+    &_nsitsolver,
+    &_nsamg,
+    velocity_dofs.row,
+    pressure_dofs.row);
 
   if (status < 0) {
     printf("\n### WARNING: FASP solver failed! Exit status = %d.\n", status);
@@ -141,13 +165,17 @@ dolfin::EigenVector Linear_PNP::fasp_test_solver (
   dolfin::Function solution(Linear_PNP::get_solution());
 
   printf("Solving linear system using FASP solver...\n"); fflush(stdout);
-  INT status = fasp_solver_dbsr_krylov_amg (
-    &_fasp_bsr_matrix,
+  INT status = fasp_solver_bdcsr_krylov_pnp_stokes(
+    &_fasp_block_matrix,
     &_fasp_vector,
     &_fasp_soln,
     &_itsolver,
-    &_amg
-  );
+    &_pnpitsolver,
+    &_pnpamg,
+    &_nsitsolver,
+    &_nsamg,
+    velocity_dofs.row,
+    pressure_dofs.row);
 
   if (status < 0) {
     printf("\n### WARNING: FASP solver failed! Exit status = %d.\n", status);
