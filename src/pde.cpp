@@ -18,12 +18,14 @@ PDE::PDE (
   const std::shared_ptr<dolfin::Form> bilinear_form,
   const std::shared_ptr<dolfin::Form> linear_form,
   const std::map<std::string, std::vector<double>> coefficients,
-  const std::map<std::string, std::vector<double>> sources
+  const std::map<std::string, std::vector<double>> sources,
+  const std::string variable
 ) {
   PDE::update_mesh(mesh);
   _function_space = function_space;
   _bilinear_form = bilinear_form;
   _linear_form = linear_form;
+  _variable = variable;
 
   PDE::get_dofs();
   PDE::set_solution(0.0);
@@ -89,8 +91,8 @@ void PDE::set_solution (
     _solution_function->interpolate(*constant_fn);
   }
 
-  _bilinear_form->set_coefficient("uu", (_solution_function));
-  _linear_form->set_coefficient("uu", (_solution_function));
+  _bilinear_form->set_coefficient(_variable, (_solution_function));
+  _linear_form->set_coefficient(_variable, (_solution_function));
 }
 //--------------------------------------
 void PDE::set_solution (
@@ -111,8 +113,8 @@ void PDE::set_solution (
     _solution_function->interpolate(*constant_fn);
   }
 
-  _bilinear_form->set_coefficient("uu", (_solution_function));
-  _linear_form->set_coefficient("uu", (_solution_function));
+  _bilinear_form->set_coefficient(_variable, (_solution_function));
+  _linear_form->set_coefficient(_variable, (_solution_function));
 }
 //--------------------------------------
 void PDE::set_solution (
@@ -151,8 +153,36 @@ void PDE::set_solution (
     _solution_function->interpolate(*constant_fn);
   }
 
-  _bilinear_form->set_coefficient("uu", _solution_function);
-  _linear_form->set_coefficient("uu", _solution_function);
+  _bilinear_form->set_coefficient(_variable, _solution_function);
+  _linear_form->set_coefficient(_variable, _solution_function);
+}
+//--------------------------------------
+void PDE::set_solutions (
+  std::vector<Linear_Function> expression
+) {
+
+  std::size_t dimension = expression.size();
+
+  if ( (_solution_functions.size() == dimension) \
+      && (_variables.size() == dimension) ){
+
+    std::shared_ptr<const dolfin::FunctionSpace> sub_space;
+    std::shared_ptr<const dolfin::Function> const_sub_expression;
+    std::shared_ptr<dolfin::Function> sub_expression;
+
+    for (std::size_t i = 0; i < dimension; i++) {
+      _solution_functions[i]->interpolate(expression[i]);
+      _bilinear_form->set_coefficient(_variables[i], _solution_functions[i]);
+      _linear_form->set_coefficient(_variables[i], _solution_functions[i]);
+    }
+  }
+  else {
+    printf("Dimension mismatch!!\n");
+    // printf("\tsetting solution to zeros %lu \n", dimension);
+    // std::shared_ptr<dolfin::Constant> constant_fn;
+    // constant_fn.reset( new dolfin::Constant(dimension, 0.0) );
+    // _solution_function->interpolate(*constant_fn);
+  }
 }
 //--------------------------------------
 void PDE::set_solution (
@@ -174,8 +204,8 @@ void PDE::set_solution (
     _solution_function->interpolate(*constant_fn);
   }
 
-  _bilinear_form->set_coefficient("uu", _solution_function);
-  _linear_form->set_coefficient("uu", _solution_function);
+  _bilinear_form->set_coefficient(_variable, _solution_function);
+  _linear_form->set_coefficient(_variable, _solution_function);
 }
 //--------------------------------------
 dolfin::Function PDE::get_solution () {
@@ -409,8 +439,8 @@ dolfin::Function PDE::dolfin_solve () {
   dolfin::solve(equation, solution_update, dirichletBC_vector);
   *(_solution_function->vector()) += *(solution_update.vector());
 
-  _bilinear_form->set_coefficient("uu", _solution_function);
-  _linear_form->set_coefficient("uu", _solution_function);
+  _bilinear_form->set_coefficient(_variable, _solution_function);
+  _linear_form->set_coefficient(_variable, _solution_function);
 
   return *_solution_function;
 }

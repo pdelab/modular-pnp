@@ -35,7 +35,8 @@ class PDE {
       const std::shared_ptr<dolfin::Form> bilinear_form,
       const std::shared_ptr<dolfin::Form> linear_form,
       const std::map<std::string, std::vector<double>> coefficients,
-      const std::map<std::string, std::vector<double>> sources
+      const std::map<std::string, std::vector<double>> sources,
+      const std::string variable
     );
 
     /// Destructor
@@ -88,6 +89,11 @@ class PDE {
     void set_solution (
       std::vector<Linear_Function> expression
     );
+
+    void set_solutions (
+      std::vector<Linear_Function> expression
+    );
+
 
     /// Copy function to solution
     void set_solution (
@@ -156,6 +162,7 @@ class PDE {
     );
 
     std::shared_ptr<dolfin::FunctionSpace> _function_space;
+    std::vector<std::shared_ptr<dolfin::FunctionSpace>> _functions_space;
 
     /// Forms
     std::shared_ptr<dolfin::Form> _linear_form;
@@ -167,6 +174,10 @@ class PDE {
     /// Dirichlet boundary conditions
     std::vector<std::shared_ptr<dolfin::DirichletBC>> _dirichletBC;
     std::vector<std::shared_ptr<dolfin::SubDomain>> _dirichlet_SubDomain;
+
+    std::string _variable;
+    std::vector<std::string> _variables;
+    std::vector<std::shared_ptr<dolfin::Function>> _solution_functions;
 
   private:
     /// Mesh

@@ -41,7 +41,8 @@ class Linear_PNP : public PDE {
       const std::map<std::string, std::vector<double>> coefficients,
       const std::map<std::string, std::vector<double>> sources,
       const itsolver_param &itsolver,
-      const AMG_param &amg
+      const AMG_param &amg,
+      const std::string variable
     );
 
     /// Destructor
