@@ -31,6 +31,25 @@ PDE::PDE (
   PDE::set_solution(0.0);
 
   PDE::set_coefficients(coefficients, sources);
+}//--------------------------------------
+PDE::PDE (
+  const std::shared_ptr<const dolfin::Mesh> mesh,
+  const std::shared_ptr<dolfin::FunctionSpace> function_space,
+  const std::shared_ptr<dolfin::Form> bilinear_form,
+  const std::shared_ptr<dolfin::Form> linear_form,
+  const std::map<std::string, std::vector<double>> coefficients,
+  const std::map<std::string, std::vector<double>> sources,
+  const std::vector<std::string> variables
+) {
+  PDE::update_mesh(mesh);
+  _function_space = function_space;
+  _bilinear_form = bilinear_form;
+  _linear_form = linear_form;
+  _variables = variables;
+
+  PDE::get_dofs();
+
+  PDE::set_coefficients(coefficients, sources);
 }
 //--------------------------------------
 PDE::~PDE() {}

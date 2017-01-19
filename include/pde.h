@@ -38,6 +38,15 @@ class PDE {
       const std::map<std::string, std::vector<double>> sources,
       const std::string variable
     );
+    PDE (
+      const std::shared_ptr<const dolfin::Mesh> mesh,
+      const std::shared_ptr<dolfin::FunctionSpace> function_space,
+      const std::shared_ptr<dolfin::Form> bilinear_form,
+      const std::shared_ptr<dolfin::Form> linear_form,
+      const std::map<std::string, std::vector<double>> coefficients,
+      const std::map<std::string, std::vector<double>> sources,
+      const std::vector<std::string> variables
+    );
 
     /// Destructor
     virtual ~PDE ();
