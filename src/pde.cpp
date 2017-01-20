@@ -204,6 +204,34 @@ void PDE::set_solutions (
   }
 }
 //--------------------------------------
+void PDE::set_solutions (
+  std::vector<const dolfin::Function> new_solutions
+) {
+
+  std::size_t dimension = expression.size();
+
+  if ( (_solution_functions.size() == dimension) \
+      && (_variables.size() == dimension) ){
+
+    std::shared_ptr<const dolfin::FunctionSpace> sub_space;
+    std::shared_ptr<const dolfin::Function> const_sub_expression;
+    std::shared_ptr<dolfin::Function> sub_expression;
+
+    for (std::size_t i = 0; i < dimension; i++) {
+      _solution_functions[i]->interpolate(expression[i]);
+      _bilinear_form->set_coefficient(_variables[i], _solution_functions[i]);
+      _linear_form->set_coefficient(_variables[i], _solution_functions[i]);
+    }
+  }
+  else {
+    printf("Dimension mismatch!!\n");
+    // printf("\tsetting solution to zeros %lu \n", dimension);
+    // std::shared_ptr<dolfin::Constant> constant_fn;
+    // constant_fn.reset( new dolfin::Constant(dimension, 0.0) );
+    // _solution_function->interpolate(*constant_fn);
+  }
+}
+//--------------------------------------
 void PDE::set_solution (
   const dolfin::Function& new_solution
 ) {

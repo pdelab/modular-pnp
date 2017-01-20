@@ -79,7 +79,7 @@ Linear_PNP_NS::~Linear_PNP_NS () {}
 void get_dofs_fasp(std::vector<std::size_t> pnp_dimensions,std::vector<std::size_t> ns_dimensions){
 
   int i,d,k,count;
-  // form dof index for PNP and Stokes
+  // form dof index for PNP
   d=0
   for (i=0;i<pnp_dimensions.size();i++) d+=_dof_map[pnp_dimensions[i]].size();
   fasp_ivec_alloc(d, &_pnp_dofs);
@@ -94,6 +94,7 @@ void get_dofs_fasp(std::vector<std::size_t> pnp_dimensions,std::vector<std::size
         _pnp_dofs.val[d*i+k] = _dof_map[pnp_dimensions[k]][i];
   }
 
+  // form dof index for Navier-Stokes
   // Velocity
   count = 0;
   for(k=0;k<ns_dimensions.size()-1,k++)
@@ -112,7 +113,27 @@ void get_dofs_fasp(std::vector<std::size_t> pnp_dimensions,std::vector<std::size
 
 }
 
+//--------------------------------------
+void PDE::EigenVector_to_dvector_block (
+  std::shared_ptr<const dolfin::EigenVector> eigen_vector,
+  dvector* vector
+) {
+  int i;
+  int row = (int) eigen_vector->size();
+  double * val = (double*) eigen_vector->data()
+  if (row < 1) {
+    fasp_chkerr(ERROR_INPUT_PAR, "EigenVector_to_dvector");
+  }
 
+  fasp_dvec_free(&_fasp_vector);
+  _fasp_vector->row = row;
+  fasp_dvec_alloc(row,_fasp_vector->row = row;);
+  for (i=0; i<pnp_dofs.row; i++)
+      _fasp_vector->val[i] = val[pnp_dofs.val[i]];
+  for (i=0; i<stokes_dofs.row; i++)
+      _fasp_vector->val[pnp_dofs.row + i] = val[stokes_dofs.val[i]];
+
+}
 //--------------------------------------
 void Linear_PNP_NS::setup_fasp_linear_algebra () {
   Linear_PNP_NS::setup_linear_algebra();
@@ -127,6 +148,7 @@ void Linear_PNP_NS::setup_fasp_linear_algebra () {
   std::size_t dimension = Linear_PNP_NS::get_solution_dimension();
   EigenMatrix_to_dCSRmat(_eigen_matrix, &_fasp_matrix);
   // _fasp_bsr_matrix = fasp_format_dcsr_dbsr(&_fasp_matrix, dimension);
+  fasp_bdcsr_free(&_fasp_block_matrix);
    _fasp_block_matrix.brow = 2;
    _fasp_block_matrix.bcol = 2;
    _fasp_block_matrix.blocks = (dCSRmat **)calloc(4, sizeof(dCSRmat *));
@@ -149,9 +171,9 @@ void Linear_PNP_NS::setup_fasp_linear_algebra () {
   fasp_dvec_set(_fasp_vector.row, &_fasp_soln, 0.0);
 }
 //--------------------------------------
-dolfin::Function Linear_PNP_NS::fasp_solve () {
+std::vector<dolfin::Function> Linear_PNP_NS::fasp_solve () {
   Linear_PNP_NS::setup_fasp_linear_algebra();
-  dolfin::Function solution(Linear_PNP::get_solution());
+  std::vector<dolfin::Function> solution(Linear_PNP::get_solutions());
 
   printf("Solving linear system using FASP solver...\n"); fflush(stdout);
   INT status = fasp_solver_bdcsr_krylov_pnp_stokes(
@@ -176,17 +198,45 @@ dolfin::Function Linear_PNP_NS::fasp_solve () {
 
     dolfin::EigenVector solution_vector(_eigen_vector->mpi_comm(),_eigen_vector->size());
     double* array = solution_vector.data();
-    for (std::size_t i = 0; i < _fasp_soln.row; ++i) {
-      array[i] = _fasp_soln.val[i];
-    }
+
+    std::size_t i
+    // for (std::size_t i = 0; i < _fasp_soln.row; ++i) {
+    //   array[i] = _fasp_soln.val[i];
+    for (i=0; i<_pnp_dofs.row; i++)
+        array[_pnp_dofs.val[i]] = _fasp_soln.val[i];
+    for (i=0; i<stokes_dofs.row;i++)
+        array[_stokes_dofs.val[i]] = _fasp_soln.val[_pnp_dofs.row + i] ;
 
     dolfin::Function update (
       Linear_PNP::_convert_EigenVector_to_Function(solution_vector)
     );
-    *(solution.vector()) += *(update.vector());
+
+    // *(solutions.vector()) += *(update.vector());
+    Function dAnion = update[0];
+    Function dCation = update[1];
+    Function dPotential = update[2];
+    Function dU = update[3];
+    Function dPressure = update[4];
+
+    std::vector<std::shared_ptr<const Function>> vvv = {dAnion,dCation,dPotential};
+    dolfin::Function update_pnp(_functions_space[0])
+
+    // dolfin::Function update_velocity(_functions_space[1])
+    // dolfin::Function update_pressure(_functions_space[2])
+    assign(update_pnp , vvv);
+
+    std::vector<std::shared_ptr<dolfin::Function>> _solution_functions;
+    for (i=0;i<3;i++)
+      *(solutions[i].vector())+=
+
+    *(initialCation->vector())+=*(dAnion.vector());
+    *(initialAnion->vector())+=*(dCation.vector());
+    *(initialPotential->vector())+=*(dPotential.vector());
+    *(initialVelocity->vector())+=*(dU.vector());
+    *(initialPressure->vector())+=*(dPressure.vector());
   }
 
-  Linear_PNP::set_solution(solution);
+  Linear_PNP::set_solutions(solutions);
 
   return solution;
 }
@@ -239,8 +289,8 @@ dolfin::EigenVector Linear_PNP::fasp_test_solver (
 }
 //--------------------------------------
 void Linear_PNP::free_fasp () {
-  fasp_dcsr_free(&_fasp_matrix);
-  fasp_dbsr_free(&_fasp_bsr_matrix);
+  // fasp_dcsr_free(&_fasp_matrix);
+  fasp_bdcsr_free(&_fasp_block_matrix);
   fasp_dvec_free(&_fasp_vector);
   fasp_dvec_free(&_fasp_soln);
 }
