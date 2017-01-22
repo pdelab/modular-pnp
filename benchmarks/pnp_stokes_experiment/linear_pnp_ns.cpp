@@ -211,7 +211,7 @@ std::vector<dolfin::Function> Linear_PNP_NS::fasp_solve () {
       Linear_PNP::_convert_EigenVector_to_Function(solution_vector)
     );
 
-    // *(solutions.vector()) += *(update.vector());
+    // This need to change, it copies the same vector 3 times.
     Function dAnion = update[0];
     Function dCation = update[1];
     Function dPotential = update[2];
@@ -220,20 +220,11 @@ std::vector<dolfin::Function> Linear_PNP_NS::fasp_solve () {
 
     std::vector<std::shared_ptr<const Function>> vvv = {dAnion,dCation,dPotential};
     dolfin::Function update_pnp(_functions_space[0])
-
-    // dolfin::Function update_velocity(_functions_space[1])
-    // dolfin::Function update_pressure(_functions_space[2])
     assign(update_pnp , vvv);
 
-    std::vector<std::shared_ptr<dolfin::Function>> _solution_functions;
-    for (i=0;i<3;i++)
-      *(solutions[i].vector())+=
-
-    *(initialCation->vector())+=*(dAnion.vector());
-    *(initialAnion->vector())+=*(dCation.vector());
-    *(initialPotential->vector())+=*(dPotential.vector());
-    *(initialVelocity->vector())+=*(dU.vector());
-    *(initialPressure->vector())+=*(dPressure.vector());
+    *(solution[0].vector()) += *(update_pnp.vector());
+    *(solution[1].vector()) += *(dU.vector());
+    *(solution[2].vector()) += *(dPressure.vector());
   }
 
   Linear_PNP::set_solutions(solutions);
