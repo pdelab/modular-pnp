@@ -44,6 +44,16 @@ class Linear_Function : public dolfin::Expression {
       double upper_value
     );
 
+    Linear_Function (
+      std::size_t coordinate,
+      double mesh_min,
+      double mesh_max,
+      std::vector<double> lower_values,
+      std::vector<double> upper_values
+    );
+
+
+
     /// Destructor
     ~Linear_Function ();
 
@@ -57,7 +67,9 @@ class Linear_Function : public dolfin::Expression {
     std::size_t _coordinate;
     double _mesh_min, _mesh_max;
     double _lower_value, _upper_value;
+    std::vector<double> _lower_values, _upper_values;
     double _distance;
+    int dimension;
 };
 
 
