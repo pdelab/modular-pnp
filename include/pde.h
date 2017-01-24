@@ -99,15 +99,19 @@ class PDE {
       std::vector<Linear_Function> expression
     );
 
-    void set_solutions (
-      std::vector<Linear_Function> expression
-    );
-
-
     /// Copy function to solution
     void set_solution (
       const dolfin::Function& new_solution
     );
+
+    void set_solutions (
+      std::vector<Linear_Function> expression
+    );
+
+    void set_solutions (
+      std::vector<dolfin::Function> new_solutions
+    );
+
 
     /// Get the current solution
     dolfin::Function get_solution ();

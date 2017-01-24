@@ -69,7 +69,7 @@ class Linear_Function : public dolfin::Expression {
     double _lower_value, _upper_value;
     std::vector<double> _lower_values, _upper_values;
     double _distance;
-    int dimension;
+    int _dimension;
 };
 
 
