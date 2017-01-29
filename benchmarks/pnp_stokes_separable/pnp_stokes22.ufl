@@ -1,0 +1,47 @@
+# Copyright (C) 2014 CCMA@PSU Maximilian Metti, Xiaozhe Hu
+#
+#   Define bilinear and linear forms for 
+#   the linearized Poisson-Nernst-Planck equations for a MOSFET
+#
+# Compile this form with FFC: ffc -O -l dolfin mosfet.ufl.
+
+##  Finite Element Space
+CG = FiniteElement("Lagrange", tetrahedron, 1)
+Vit  = FiniteElement("RT", tetrahedron, 1)
+Pres  = FiniteElement("Discontinuous Lagrange", tetrahedron, 0)
+V  = MixedElement([Vit,Pres])        # Solution Space
+
+(u, p) = TrialFunctions(V)
+(v, q) = TestFunctions(V)
+
+
+##  Previous Iterates
+EsEs = Coefficient(CG)
+uu  = Coefficient(Vit)
+pp  = Coefficient(Pres)
+
+
+##  Coefficients
+eps = Coefficient(CG)
+
+##  Coefficients
+mu  = Constant(tetrahedron)
+
+##  DG-terms
+alpha1 = Constant(tetrahedron)
+alpha2 = Constant(tetrahedron)
+h     = 2.0*Circumradius(tetrahedron)
+h_avg = ( h('+')+h('-') )/2.0
+n_vec = FacetNormal(tetrahedron)
+
+a   = ( 2.0*mu* inner( sym(grad(u)), sym(grad(v)) ) )*dx    -    ( p*div(v) )*dx   +   ( div(u)*q )*dx \
+    + ( 2.0*mu*(alpha1)* inner( avg(sym(grad(u))), sym(outer(v('+'),n_vec('+')) + outer(v('-'),n_vec('-'))) ) )*dS \
+    + ( 2.0*mu*(alpha1)* inner( sym(outer(u('+'),n_vec('+')) + outer(u('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
+    + ( 2.0*mu*(alpha2/h_avg)* inner( jump(u),jump(v) ) )*dS \
+    
+
+L   = - ( 2.0*mu* inner( sym(grad(uu)), sym(grad(v)) ) )*dx   +   ( pp*div(v) )*dx   -   ( div(uu)*q )*dx \
+    - ( 2.0*mu*(alpha1)* inner( avg(sym(grad(uu))),  sym(outer(v('+'),n_vec('+')) + outer(v('-'),n_vec('-'))) ) )*dS \
+    - ( 2.0*mu*(alpha1)* inner( sym(outer(uu('+'),n_vec('+')) + outer(uu('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
+    - ( 2.0*mu*(alpha2/h_avg)* inner( jump(uu),jump(v) ) )*dS \
+    - eps*inner( outer(grad(EsEs),grad(EsEs)) , grad(v) )*dx

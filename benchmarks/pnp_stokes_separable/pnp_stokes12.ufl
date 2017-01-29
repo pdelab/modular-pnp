@@ -1,0 +1,52 @@
+# Copyright (C) 2014 CCMA@PSU Maximilian Metti, Xiaozhe Hu
+#
+#   Define bilinear and linear forms for 
+#   the linearized Poisson-Nernst-Planck equations for a MOSFET
+#
+# Compile this form with FFC: ffc -O -l dolfin mosfet.ufl.
+
+##  Finite Element Space
+CG = FiniteElement("Lagrange", tetrahedron, 1)
+Vit  = FiniteElement("RT", tetrahedron, 1)
+Pres  = FiniteElement("Discontinuous Lagrange", tetrahedron, 0)
+V  = MixedElement([Vit,Pres])        # Solution Space
+V2  = MixedElement([CG,CG,CG])        # Solution Space
+#V  = MixedElement([CG,CG,CG])*Vit*Pres       # Solution Space
+#V = CG * CG * CG * Vit * Pres
+
+(u, p) = TrialFunctions(V)
+(cat, an, phi) = TestFunctions(V2)
+
+
+##  Previous Iterates
+CatCat = Coefficient(CG)
+AnAn = Coefficient(CG)
+EsEs = Coefficient(CG)
+uu  = Coefficient(Vit)
+pp  = Coefficient(Pres)
+
+
+##  Coefficients
+eps = Coefficient(CG)
+Dp = Coefficient(CG)
+qp = Constant(tetrahedron)
+Dn = Coefficient(CG)
+qn = Constant(tetrahedron)
+
+## Analytic solution
+cation = Coefficient(CG)
+anion = Coefficient(CG)
+potential = Coefficient(CG)
+
+##  Coefficients
+mu  = Constant(tetrahedron)
+
+##  DG-terms
+alpha1 = Constant(tetrahedron)
+alpha2 = Constant(tetrahedron)
+h     = 2.0*Circumradius(tetrahedron)
+h_avg = ( h('+')+h('-') )/2.0
+n_vec = FacetNormal(tetrahedron)
+
+a   = - ( exp(CatCat)*(inner(u,grad(cat))) )*dx \
+    - ( exp(AnAn)*(inner(u,grad(an)))  )*dx
