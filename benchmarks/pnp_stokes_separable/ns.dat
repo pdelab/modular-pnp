@@ -16,7 +16,7 @@ output_type    = 0     % output_type: 0 Standard output | >0 File
 % parameters for solvers for whole system      %
 %----------------------------------------------%
 solver_type    = 5      % Solver type:   | 3 MinRes | 4 GMRES | 5 FGMRES | 6 GCR
-precond_type   = 6     % Precond type:  0 Null | 1 Diag | 2 LOW_TRI | 3 UP_TRI | 4 BLU | 5 SIMPLE | 6 SIMPLER | 7 UZAWA | 8 Projection | 9 DGS | 10 LSCDGS 
+precond_type   = 10     % Precond type:  0 Null | 1 Diag | 2 LOW_TRI | 3 UP_TRI | 4 BLU | 5 SIMPLE | 6 SIMPLER | 7 UZAWA | 8 Projection | 9 DGS | 10 LSCDGS 
 stop_type      = 1      % Stopping type: 1 ||r||/||b|| | 2 ||r||_M/||b||_M | 3 ||r||/||x||
 itsolver_tol   = 1e-6   % Solver tolerance
 itsolver_maxit = 100    % Maximal iteration number

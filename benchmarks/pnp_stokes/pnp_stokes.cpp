@@ -120,17 +120,17 @@ int main(int argc, char** argv)
   INT status = FASP_SUCCESS;
   printf("done\n"); fflush(stdout);
 
-    // Setup FASP solver for pnp
-    printf("FASP solver parameters for pnp..."); fflush(stdout);
-    input_param pnp_inpar;
-    itsolver_param pnp_itpar;
-    AMG_param  pnp_amgpar;
-    ILU_param pnp_ilupar;
-    Schwarz_param pnp_schpar;
-    char fasp_pnp_params[] = "./benchmarks/pnp_stokes/bsr.dat";
-    fasp_param_input(fasp_pnp_params, &pnp_inpar);
-    fasp_param_init(&pnp_inpar, &pnp_itpar, &pnp_amgpar, &pnp_ilupar, &pnp_schpar);
-    printf("done\n"); fflush(stdout);
+  // Setup FASP solver for pnp
+  printf("FASP solver parameters for pnp..."); fflush(stdout);
+  input_param pnp_inpar;
+  itsolver_param pnp_itpar;
+  AMG_param  pnp_amgpar;
+  ILU_param pnp_ilupar;
+  Schwarz_param pnp_schpar;
+  char fasp_pnp_params[] = "./benchmarks/pnp_stokes/bsr.dat";
+  fasp_param_input(fasp_pnp_params, &pnp_inpar);
+  fasp_param_init(&pnp_inpar, &pnp_itpar, &pnp_amgpar, &pnp_ilupar, &pnp_schpar);
+  printf("done\n"); fflush(stdout);
 
   // Setup FASP solver for stokes
   printf("FASP solver parameters for stokes..."); fflush(stdout);
@@ -201,8 +201,8 @@ int main(int argc, char** argv)
   auto zero_vec4=std::make_shared<zerovec4>();
   auto CU_init=std::make_shared<Constant>(0.1);
   auto mu=std::make_shared<Constant>(0.1);
-  auto penalty1=std::make_shared<Constant>(1.0e-6);
-  auto penalty2=std::make_shared<Constant>(1.0e-12);
+  auto penalty1=std::make_shared<Constant>(1.0);
+  auto penalty2=std::make_shared<Constant>(1.0);
 
 
   // interpolate
@@ -432,6 +432,12 @@ int main(int argc, char** argv)
       fasp_dcsr_getblk(&A_fasp, pnp_dofs.val,    stokes_dofs.val, pnp_dofs.row,    stokes_dofs.row, A_fasp_bcsr.blocks[1]);
       fasp_dcsr_getblk(&A_fasp, stokes_dofs.val, pnp_dofs.val,    stokes_dofs.row, pnp_dofs.row,    A_fasp_bcsr.blocks[2]);
       fasp_dcsr_getblk(&A_fasp, stokes_dofs.val, stokes_dofs.val, stokes_dofs.row, stokes_dofs.row, A_fasp_bcsr.blocks[3]);
+
+      // fasp_dcoo_write("11b.txt",A_fasp_bcsr.blocks[0]);
+      // fasp_dcoo_write("12b.txt",A_fasp_bcsr.blocks[1]);
+      // fasp_dcoo_write("21b.txt",A_fasp_bcsr.blocks[2]);
+      // fasp_dcoo_write("22b.txt",A_fasp_bcsr.blocks[3]);
+      // return 0;
 
       // step 2: get right hand side
       fasp_dvec_alloc(b_fasp.row, &b_fasp_bcsr);

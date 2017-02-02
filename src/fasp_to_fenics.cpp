@@ -42,29 +42,29 @@ void EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A, dCSRmat* dCSR_A)
   vals = (double*) std::get<2>(mat_A->data());
 
   // Check for rows of zeros and add a unit diagonal entry
-  bool nonzero_entry = false;
-  for ( uint rowInd=0; rowInd<nrows; rowInd++ ) {
-    // Check for nonzero entry
-    nonzero_entry = false;
-    int diagColInd = -1;
-    if ( IA[rowInd] < IA[rowInd+1] ) {
-      for ( uint colInd=IA[rowInd]; colInd < IA[rowInd+1]; colInd++ ) {
-        if ( vals[colInd] != 0.0 ) nonzero_entry = true;
-        if ( JA[colInd] == rowInd ) diagColInd = colInd;
-      }
-    }
-    if ( diagColInd < 0 ) {
-      printf(" ERROR: diagonal entry not allocated!!\n\n Exiting... \n \n"); fflush(stdout);
-      printf("      for row %d\n",rowInd); fflush(stdout);
-      for ( uint colInd=IA[rowInd]; colInd < IA[rowInd+1]; colInd++ ) {
-        printf("          %d\n",JA[colInd]);
-      }
-    }
-    if ( nonzero_entry == false ) {
-      printf(" Row %d has only zeros! Setting diagonal entry to 1.0 \n", rowInd); fflush(stdout);
-      vals[diagColInd] = 1.0;
-    }
-  }
+  // bool nonzero_entry = false;
+  // for ( uint rowInd=0; rowInd<nrows; rowInd++ ) {
+  //   // Check for nonzero entry
+  //   nonzero_entry = false;
+  //   int diagColInd = -1;
+  //   if ( IA[rowInd] < IA[rowInd+1] ) {
+  //     for ( uint colInd=IA[rowInd]; colInd < IA[rowInd+1]; colInd++ ) {
+  //       if ( vals[colInd] != 0.0 ) nonzero_entry = true;
+  //       if ( JA[colInd] == rowInd ) diagColInd = colInd;
+  //     }
+  //   }
+  //   if ( diagColInd < 0 ) {
+  //     printf(" ERROR: diagonal entry not allocated!!\n\n Exiting... \n \n"); fflush(stdout);
+  //     printf("      for row %d\n",rowInd); fflush(stdout);
+  //     for ( uint colInd=IA[rowInd]; colInd < IA[rowInd+1]; colInd++ ) {
+  //       printf("          %d\n",JA[colInd]);
+  //     }
+  //   }
+  //   if ( nonzero_entry == false ) {
+  //     printf(" Row %d has only zeros! Setting diagonal entry to 1.0 \n", rowInd); fflush(stdout);
+  //     vals[diagColInd] = 1.0;
+  //   }
+  // }
 
   // assign to dCSRmat
   dCSR_A->nnz = nnz;

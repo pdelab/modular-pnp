@@ -388,19 +388,27 @@ int main(int argc, char** argv)
 
     // potential
     for (i=0; i<potential_dofs.row; i++)
-        pnp_dofs.val[3*i] = potential_dofs.val[i];
+        // potential_dofs.val[i] -=1;
+        pnp_dofs.val[3*i+2] = potential_dofs.val[i];
     // cation
     for (i=0; i<cation_dofs.row; i++)
-        pnp_dofs.val[3*i+1] = cation_dofs.val[i];
+        // cation_dofs.val[i]-=1;
+        pnp_dofs.val[3*i] = cation_dofs.val[i];
     // anion
     for (i=0; i<anion_dofs.row; i++)
-        pnp_dofs.val[3*i+2] = anion_dofs.val[i];
+        // anion_dofs.val[i]-=1;
+        pnp_dofs.val[3*i+1] = anion_dofs.val[i];
     // velocity
     for (i=0; i<velocity_dofs.row; i++)
+        // velocity_dofs.val[i]-=1;
         stokes_dofs.val[i] = velocity_dofs.val[i];
     // pressure
     for (i=0; i<pressure_dofs.row; i++)
+        // pressure_dofs.val[i]-=1;
         stokes_dofs.val[velocity_dofs.row+i] = pressure_dofs.val[i];
+
+    fasp_ivec_write("pnp.txt",&pnp_dofs);
+    fasp_ivec_write("stokes.txt",&stokes_dofs);
 
   //*************************************************************
   //  Initialize Newton solver
@@ -497,7 +505,7 @@ int main(int argc, char** argv)
 
     // list_lu_solver_methods();
     // solve(A, *solutionUpdate->vector(), b, "umfpack");
-    // 
+    //
     // std::cout << A.size(0) << "\t" <<A.size(1) << "\n";
     // std::cout << A12.size(0) << "\t" <<A12.size(1) << "\n";
     // std::cout << A21.size(0) << "\t" <<A21.size(1) << "\n";
@@ -516,6 +524,10 @@ int main(int argc, char** argv)
       //  A_fasp_bcsr.blocks[3] = &A_fasp22;
 
       // fasp_dcoo_write("11.txt",A_fasp_bcsr.blocks[0]);
+      // fasp_dcoo_write("12.txt",A_fasp_bcsr.blocks[1]);
+      // fasp_dcoo_write("21.txt",A_fasp_bcsr.blocks[2]);
+      // fasp_dcoo_write("22.txt",A_fasp_bcsr.blocks[3]);
+      // return 0;
 
       // step 2: get right hand side
       fasp_dvec_alloc(b_fasp.row+b_fasp2.row, &b_fasp_bcsr);
