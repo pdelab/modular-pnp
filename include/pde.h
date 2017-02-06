@@ -41,6 +41,7 @@ class PDE {
     PDE (
       const std::shared_ptr<const dolfin::Mesh> mesh,
       const std::shared_ptr<dolfin::FunctionSpace> function_space,
+      const std::vector<std::shared_ptr<dolfin::FunctionSpace>> functions_space,
       const std::shared_ptr<dolfin::Form> bilinear_form,
       const std::shared_ptr<dolfin::Form> linear_form,
       const std::map<std::string, std::vector<double>> coefficients,
@@ -115,6 +116,7 @@ class PDE {
 
     /// Get the current solution
     dolfin::Function get_solution ();
+    std::vector<dolfin::Function> get_solutions ();
 
 
 
@@ -150,6 +152,9 @@ class PDE {
     void set_coefficients (
       std::map<std::string, std::vector<double>> coefficients,
       std::map<std::string, std::vector<double>> sources
+    );
+    void set_coefficients (
+      std::map<std::string, std::vector<double>> coefficients
     );
 
     void set_coefficients (
@@ -193,14 +198,15 @@ class PDE {
     std::vector<std::shared_ptr<dolfin::Function>> _solution_functions;
 
   private:
+
+    /// Current solution
+    std::shared_ptr<dolfin::Function> _solution_function;
+
     /// Mesh
     std::shared_ptr<dolfin::Mesh> _mesh;
     std::vector<double> _mesh_max, _mesh_min;
     std::size_t _mesh_dim;
     double _mesh_epsilon;
-
-    /// Current solution
-    std::shared_ptr<dolfin::Function> _solution_function;
 
     /// Coefficients
     std::map<std::string, std::shared_ptr<const dolfin::Constant>> _bilinear_coefficient;

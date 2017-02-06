@@ -58,7 +58,7 @@ Linear_Function::Linear_Function (
   double mesh_max,
   std::vector<double> lower_values,
   std::vector<double> upper_values
-) {
+) : Expression(3) {
   _coordinate = coordinate;
   _mesh_min = mesh_min;
   _mesh_max = mesh_max;
