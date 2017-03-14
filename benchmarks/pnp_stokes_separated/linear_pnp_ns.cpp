@@ -183,15 +183,6 @@ void Linear_PNP_NS::setup_fasp_linear_algebra () {
 
   fasp_dvec_set(_fasp_vector.row, &_fasp_soln, 0.0);
 
-  // fasp_dcoo_write("Matrix.txt",&_fasp_matrix);
-  // fasp_dcoo_write("Matrix11.txt",_fasp_block_matrix.blocks[0]);
-  // fasp_dcoo_write("Matrix12.txt",_fasp_block_matrix.blocks[1]);
-  // fasp_dcoo_write("Matrix21.txt",_fasp_block_matrix.blocks[2]);
-  // fasp_dcoo_write("Matrix22.txt",_fasp_block_matrix.blocks[3]);
-  // fasp_ivec_write("pnp_dofs.txt",&(_pnp_dofs));
-  // fasp_ivec_write("stokes_dofs.txt",&(_stokes_dofs));
-  // fasp_dvec_write("RHS.txt",&(_fasp_vector));
-
 }
 //--------------------------------------
 std::vector<dolfin::Function> Linear_PNP_NS::fasp_solve () {

@@ -186,10 +186,6 @@ void PDE::set_solutions (
 ) {
 
   std::size_t dimension = expression.size();
-  //
-  // printf("\t\t SIZE = %d \n",expression.size());
-  // printf("\t\t SIZE = %d \n",_variables.size());
-  // printf("\t\t SIZE = %d \n",_solution_functions.size());
 
   if ( (_variables.size() == dimension) && (_solution_functions.size() == dimension) ){
 
@@ -299,17 +295,17 @@ void PDE::set_coefficients (
     _linear_coefficient.emplace(bc->first, constant_fn);
   }
 
-  std::map<std::string, std::vector<double>>::iterator lc;
-  for (lc = sources.begin(); lc != sources.end(); ++lc) {
-    if (sources.find(lc->first)->second.size() == 1) {
-      constant_fn.reset( new dolfin::Constant(sources.find(lc->first)->second[0]) );
-    } else {
-      constant_fn.reset( new dolfin::Constant(sources.find(lc->first)->second) );
-    }
-
-    _linear_form->set_coefficient(lc->first, constant_fn);
-    _linear_coefficient.emplace(lc->first, constant_fn);
-  }
+  // std::map<std::string, std::vector<double>>::iterator lc;
+  // for (lc = sources.begin(); lc != sources.end(); ++lc) {
+  //   if (sources.find(lc->first)->second.size() == 1) {
+  //     constant_fn.reset( new dolfin::Constant(sources.find(lc->first)->second[0]) );
+  //   } else {
+  //     constant_fn.reset( new dolfin::Constant(sources.find(lc->first)->second) );
+  //   }
+  //
+  //   _linear_form->set_coefficient(lc->first, constant_fn);
+  //   _linear_coefficient.emplace(lc->first, constant_fn);
+  // }
 
 }
 //--------------------------------------
@@ -541,16 +537,10 @@ dolfin::Function PDE::_convert_EigenVector_to_Function (
 ) {
   dolfin::Function fn(_function_space);
 
-  // printf("\t\t a\n");fflush(stdout);
-  // printf("\t\t %d\n",eigen_vector.size());fflush(stdout);
-  // printf("\t\t aa\n");fflush(stdout);
-  // printf("\t\t %d\n",_solution_function->vector()->size());fflush(stdout);
-  // printf("\t\t aaa\n");fflush(stdout);
   // if (eigen_vector.size() != _solution_function->vector()->size()) {
   //   printf("Cannot convert EigenVector to Function...\n");
   //   printf("\tincompatible dimensions!\n");
   // }
-  // printf("\t\t b\n");fflush(stdout);
   dolfin::la_index dof_index;
   for (std::size_t component = 0; component < _dof_map.size(); component++) {
     for (std::size_t index = 0; index < _dof_map[component].size(); index++) {
@@ -562,7 +552,7 @@ dolfin::Function PDE::_convert_EigenVector_to_Function (
   return fn;
 }
 //--------------------------------------
-void PDE::EigenMatrix_to_dCSRmat (
+void EigenMatrix_to_dCSRmat (
   std::shared_ptr<const dolfin::EigenMatrix> eigen_matrix,
   dCSRmat* dCSR_matrix
 ) {
@@ -616,8 +606,42 @@ void PDE::EigenMatrix_to_dCSRmat (
   dCSR_matrix->JA = JA;
   dCSR_matrix->val = val;
 }
+
 //--------------------------------------
-void PDE::EigenVector_to_dvector (
+void EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A, dCSRmat* dCSR_A)
+{
+  // dimensions of matrix
+  int nrows = mat_A->size(0);
+  int ncols = mat_A->size(1);
+  int nnz = mat_A->nnz();
+  // check for uninitialized EigenMatrix
+  if ( nrows<1 || ncols<1 || nnz<1 ) {
+    fasp_chkerr(ERROR_INPUT_PAR, "EigenMatrix_to_dCSRmat");
+  }
+
+  // point to JA array
+  int* JA;
+  JA = (int*) std::get<1>(mat_A->data());
+
+  int *IA;
+  IA = (int*) std::get<0>(mat_A->data());
+
+  // point to values array
+  double* vals;
+  vals = (double*) std::get<2>(mat_A->data());
+
+  // assign to dCSRmat
+  dCSR_A->nnz = nnz;
+  dCSR_A->row = nrows;
+  dCSR_A->col = ncols;
+  dCSR_A->IA = IA;
+  dCSR_A->JA = JA;
+  dCSR_A->val = vals;
+}
+
+
+//--------------------------------------
+void EigenVector_to_dvector (
   std::shared_ptr<const dolfin::EigenVector> eigen_vector,
   dvector* vector
 ) {

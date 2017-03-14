@@ -24,10 +24,12 @@ pp  = Coefficient(Pres)
 
 
 ##  Coefficients
-permittivity = Coefficient(CG)
+permittivity = Constant(tetrahedron)
 fixed_charge = Coefficient(CG)
-diffusivity = Coefficient(Vc2)
-valency = Coefficient(Vc2)
+diffusivity0 = Constant(tetrahedron)
+valency0 = Constant(tetrahedron)
+diffusivity1 = Constant(tetrahedron)
+valency1 = Constant(tetrahedron)
 
 
 ##  Coefficients
@@ -41,12 +43,12 @@ h_avg = ( h('+')+h('-') )/2.0
 n_vec = FacetNormal(tetrahedron)
 
 
-a   = ( diffusivity[0]*exp(cc[0]) * ( inner(grad(Cat),grad(cat)) + inner(grad(cc[0])+valency[0]*grad(cc[2]),grad(cat)) * Cat ) )*dx \
-    + ( valency[0]*diffusivity[0]*exp(cc[0]) * inner(grad(Phi),grad(cat)) )*dx \
-    + ( diffusivity[1]*exp(cc[1]) * ( inner(grad(An),grad(an)) + inner(grad(cc[1])+valency[1]*grad(cc[2]), grad(an)) * An ) )*dx \
-    + ( valency[1]*diffusivity[1]*exp(cc[1]) * inner(grad(Phi),grad(an)) )*dx \
+a   = ( diffusivity0*exp(cc[0]) * ( inner(grad(Cat),grad(cat)) + inner(grad(cc[0])+valency0*grad(cc[2]),grad(cat)) * Cat ) )*dx \
+    + ( valency0*diffusivity0*exp(cc[0]) * inner(grad(Phi),grad(cat)) )*dx \
+    + ( diffusivity1*exp(cc[1]) * ( inner(grad(An),grad(an)) + inner(grad(cc[1])+valency1*grad(cc[2]), grad(an)) * An ) )*dx \
+    + ( valency1*diffusivity1*exp(cc[1]) * inner(grad(Phi),grad(an)) )*dx \
     + ( permittivity * inner(grad(Phi),grad(phi)) )*dx \
-    + ( -(valency[0]*exp(cc[0])*Cat + valency[1]*exp(cc[1])*An)*phi )*dx \
+    + ( -(valency0*exp(cc[0])*Cat + valency1*exp(cc[1])*An)*phi )*dx \
     - ( exp(cc[0])*Cat*(inner(uu,grad(cat))) )*dx \
     - ( exp(cc[1])   *An*(inner(uu,grad(an)))  )*dx \
     - ( exp(cc[0])*(inner(u,grad(cat))) )*dx \
@@ -55,19 +57,19 @@ a   = ( diffusivity[0]*exp(cc[0]) * ( inner(grad(Cat),grad(cat)) + inner(grad(cc
     + ( 2.0*mu*(penalty1)* inner( avg(sym(grad(u))), sym(outer(v('+'),n_vec('+')) + outer(v('-'),n_vec('-'))) ) )*dS \
     + ( 2.0*mu*(penalty1)* inner( sym(outer(u('+'),n_vec('+')) + outer(u('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
     + ( 2.0*mu*(penalty2/h_avg)* inner( jump(u),jump(v) ) )*dS \
+    + ( 2.0*mu*(penalty2/h)*(inner(u,n_vec)*inner(v,n_vec) ) )*ds \
     + permittivity*inner( 2*outer(grad(Phi),grad(cc[2])) , grad(v) )*dx
     
 
-L   = \
-    + ( fixed_charge * phi ) * dx \
-    - ( diffusivity[0]*exp(cc[0])* (inner(grad(cc[0]),grad(cat)) + valency[0]*inner(grad(cc[2]),grad(cat))) )*dx \
-    - ( diffusivity[1]*exp(cc[1]  )* (inner(grad(cc[1]  ),grad(an )) + valency[1]*inner(grad(cc[2]), grad(an))) )*dx \
+L   = - ( diffusivity0*exp(cc[0])* (inner(grad(cc[0]),grad(cat)) + valency0*inner(grad(cc[2]),grad(cat))) )*dx \
+    - ( diffusivity1*exp(cc[1]  )* (inner(grad(cc[1]  ),grad(an )) + valency1*inner(grad(cc[2]), grad(an))) )*dx \
     - ( permittivity * inner(grad(cc[2]),grad(phi)) )*dx \
-    - ( -(valency[0]*exp(cc[0]) + valency[1]*exp(cc[1]))*phi )*dx \
+    - ( -(valency0*exp(cc[0]) + valency1*exp(cc[1]))*phi )*dx \
     + ( exp(cc[0])*(inner(uu,grad(cat))) )*dx \
     + ( exp(cc[1])*(inner(uu,grad(an)))  )*dx \
     - ( 2.0*mu* inner( sym(grad(uu)), sym(grad(v)) ) )*dx   +   ( pp*div(v) )*dx   -   ( div(uu)*q )*dx \
     - ( 2.0*mu*(penalty1)* inner( avg(sym(grad(uu))),  sym(outer(v('+'),n_vec('+')) + outer(v('-'),n_vec('-'))) ) )*dS \
     - ( 2.0*mu*(penalty1)* inner( sym(outer(uu('+'),n_vec('+')) + outer(uu('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
     - ( 2.0*mu*(penalty2/h_avg)* inner( jump(uu),jump(v) ) )*dS \
+    - ( 2.0*mu*(penalty2/h)*(inner(uu,n_vec)*inner(v,n_vec) ) )*ds \
     - permittivity*inner( outer(grad(cc[2]),grad(cc[2])) , grad(v) )*dx

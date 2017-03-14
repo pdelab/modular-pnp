@@ -24,6 +24,21 @@ extern "C" {
 using namespace std;
 
 
+class pnppart : public dolfin::Expression
+{
+public:
+
+  pnppart() : Expression(3) {}
+
+  void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const
+  {
+    values[0] = 0.0;
+    values[1] = 0.0;
+    values[2] = 0.0;
+  }
+
+};
+
 
 int main (int argc, char** argv) {
   printf("\n");
@@ -155,10 +170,6 @@ int main (int argc, char** argv) {
     variables
   );
 
-  // pnp_ns_problem.set_coefficients(
-    // coefficients
-    // pnp_source_fns
-  // );
 
   //-------------------------
   // Print various solutions
@@ -191,7 +202,6 @@ int main (int argc, char** argv) {
   solution_file2 << solutionFn[0][2];
   solution_file3 << solutionFn[1];
 
-
   //------------------------
   // Start nonlinear solver
   //------------------------
@@ -217,6 +227,8 @@ int main (int argc, char** argv) {
     printf("Solving for Newton iterate %lu \n", newton.iteration);
     solutionFn = pnp_ns_problem.fasp_solve();
 
+    // return 0;
+
     // update newton measurements
     printf("Newton measurements for iteration :\n");
     double residual = pnp_ns_problem.compute_residual("l2");
@@ -233,6 +245,7 @@ int main (int argc, char** argv) {
     solution_file2 << solutionFn[0][2];
     solution_file3 << solutionFn[1];
     printf("\n");
+    // return 0;
   }
 
 

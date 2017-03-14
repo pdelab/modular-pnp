@@ -139,7 +139,8 @@ int main (int argc, char** argv) {
     pnp_coefficients,
     pnp_sources,
     itsolver,
-    amg
+    amg,
+    "uu"
   );
 
   printf("Define PNP coefficients from expressions\n");
