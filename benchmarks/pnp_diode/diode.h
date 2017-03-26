@@ -11,6 +11,8 @@
 /**
  * dimensional analysis
  */
+const double VOLTAGE_DROP = +1.0;
+
 const double elementary_charge = 1.60217662e-19; // C
 const double boltzmann = 1.38064852e-23; // J / K
 const double temperature = 3e+2; // K
@@ -56,14 +58,14 @@ double fixed (double x) {
  */
 std::vector<double> left_contact (double x) {
   return {
-    scale_potential(+1.0), // V
+    scale_potential(0.5 * VOLTAGE_DROP - voltage_ground), // V
     std::log(scale_density(minority_carrier)), // log(mM)
     std::log(scale_density(majority_carrier)) // log(mM)
   };
 };
 std::vector<double> right_contact (double x) {
   return {
-    scale_potential(-1.0), // V
+    scale_potential(-0.5 * VOLTAGE_DROP - voltage_ground), // V
     std::log(scale_density(majority_carrier)), // log(mM)
     std::log(scale_density(minority_carrier)) // log(mM)
   };
@@ -80,8 +82,8 @@ class Initial_Guess : public dolfin::Expression {
       std::vector<double> left(left_contact(-1.0));
       std::vector<double> right(right_contact(+1.0));
       values[0] = 0.5 * (left[0] * (1.0 - x[0]) + right[0] * (x[0] + 1.0));
-      values[1] = 0.5 * (left[1] * (1.0 - x[0]) + right[1] * (x[0] + 1.0));
-      values[2] = 0.5 * (left[2] * (1.0 - x[0]) + right[2] * (x[0] + 1.0));
+      values[1] = x[0] < 0.0 ? left[1] : right[1];
+      values[2] = x[0] < 0.0 ? left[2] : right[2];
     }
 };
 

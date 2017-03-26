@@ -111,18 +111,19 @@ dolfin::Function Linear_PNP::fasp_solve () {
   else {
     printf("Successfully solved the linear system\n");
     fflush(stdout);
-
-    dolfin::EigenVector solution_vector(_eigen_vector->mpi_comm(),_eigen_vector->size());
-    double* array = solution_vector.data();
-    for (std::size_t i = 0; i < _fasp_soln.row; ++i) {
-      array[i] = _fasp_soln.val[i];
-    }
-
-    dolfin::Function update (
-      Linear_PNP::_convert_EigenVector_to_Function(solution_vector)
-    );
-    *(solution.vector()) += *(update.vector());
   }
+
+  // update solution regardless of successful solve
+  dolfin::EigenVector solution_vector(_eigen_vector->mpi_comm(),_eigen_vector->size());
+  double* array = solution_vector.data();
+  for (std::size_t i = 0; i < _fasp_soln.row; ++i) {
+    array[i] = _fasp_soln.val[i];
+  }
+
+  dolfin::Function update (
+    Linear_PNP::_convert_EigenVector_to_Function(solution_vector)
+  );
+  *(solution.vector()) += *(update.vector());
 
   Linear_PNP::set_solution(solution);
 

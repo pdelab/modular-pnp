@@ -204,7 +204,7 @@ std::shared_ptr<dolfin::Function> solve_pnp (
     double min_dof = std::abs(computed_solution.vector()->min());
     double L_infty = max_dof > min_dof ? max_dof : min_dof;
 
-    if (L_infty > 1.1 * prev_L_infty) {
+    if (L_infty > 1.05 * prev_L_infty) {
       printf("\tupdate causes too much growth in solution : %e\n", L_infty / prev_L_infty);
       dolfin::Function newton_update(computed_solution.function_space());
       newton_update = computed_solution - previous_solution;
@@ -258,7 +258,7 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   printf("\nSolver exiting\n"); fflush(stdout);
 
   // plot coefficients if requested
-  bool plot_coefficients = true;
+  bool plot_coefficients = false;
   if (plot_coefficients) {
     printf("\toutput coefficients to file\n");
     dolfin::File permittivity_file(output_dir + "permittivity.pvd");

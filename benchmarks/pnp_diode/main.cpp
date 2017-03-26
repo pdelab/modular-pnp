@@ -66,10 +66,10 @@ int main (int argc, char** argv) {
   //-------------------------
 
   // parameters for mesh adaptivity
-  double growth_factor = 1.2;
-  double entropy_per_cell = 1.0e-6;
+  double growth_factor = 1.1;
+  double entropy_per_cell = 1.0e-4;
   std::size_t max_refine_depth = 3;
-  std::size_t max_elements = 750000;
+  std::size_t max_elements = 250000;
   Mesh_Refiner mesh_adapt(
     initial_mesh,
     max_elements,
@@ -78,9 +78,9 @@ int main (int argc, char** argv) {
   );
 
   // parameters for PNP Newton solver
-  const std::size_t max_newton = 10;
+  const std::size_t max_newton = 25;
   const double max_residual_tol = 1.0e-10;
-  const double relative_residual_tol = 1.0e-8;
+  const double relative_residual_tol = 1.0e-7;
   const bool use_eafe_approximation = true;
   std::shared_ptr<double> initial_residual_ptr = std::make_shared<double>(-1.0);
 
@@ -92,10 +92,12 @@ int main (int argc, char** argv) {
   adaptive_solution->interpolate(initial_guess_expression);
 
   dolfin::File initial_guess_file("./benchmarks/pnp_diode/output/initial_guess.pvd");
-  initial_guess_file << *adaptive_solution;
 
   while (mesh_adapt.needs_to_solve) {
     auto mesh = mesh_adapt.get_mesh();
+
+    initial_guess_file << *adaptive_solution;
+
     auto computed_solution = solve_pnp(
       mesh_adapt.iteration++,
       mesh,
@@ -120,7 +122,7 @@ int main (int argc, char** argv) {
     // update solution
     adaptive_solution.reset( new dolfin::Function(computed_solution->function_space()) );
     adaptive_solution->interpolate(*computed_solution);
-    initial_guess_file << *adaptive_solution;
+    // initial_guess_file << *adaptive_solution;
   }
 
   printf("\nCompleted adaptivity loop\n\n");

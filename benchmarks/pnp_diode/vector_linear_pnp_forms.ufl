@@ -24,14 +24,15 @@ diffusivity = Coefficient(V)
 valency = Coefficient(V)
 reaction = Coefficient(V)
 
+cutoff = -5.0
 def conc(w):
-  return conditional(gt(w, -8.0), exp(w), exp(-8.0) / (1 - w - 8.0))
+  return conditional(gt(w, cutoff), exp(w), exp(cutoff) / (1 - w + cutoff))
 
 a = \
   + ( permittivity * inner(grad(u[0]), grad(v[0])) ) * dx \
   + ( -poisson_scale * valency[1] * exp(uu[1]) * u[1] * v[0] ) * dx \
   + ( -poisson_scale * valency[2] * exp(uu[2]) * u[2] * v[0] ) * dx \
-  + ( diffusivity[1] * exp(uu[1]) * inner(grad(u[1]) + grad(uu[1] + valency[1] * uu[0]) * u[1], grad(v[1])) ) * dx \
+  + ( diffusivity[1] * conc(uu[1]) * inner(grad(u[1]) + grad(uu[1] + valency[1] * uu[0]) * u[1], grad(v[1])) ) * dx \
   + ( valency[1] * diffusivity[1] * conc(uu[1]) * inner(grad(u[0]), grad(v[1])) ) * dx \
   + ( diffusivity[2] * conc(uu[2]) * inner(grad(u[2]) + grad(uu[2] + valency[2] * uu[0]) * u[2], grad(v[2])) ) * dx \
   + ( valency[2] * diffusivity[2] * conc(uu[2]) * inner(grad(u[0]), grad(v[2])) ) * dx
