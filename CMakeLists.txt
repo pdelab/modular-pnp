@@ -71,9 +71,6 @@ target_link_libraries(pnp_spheres ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARI
 add_executable(pnp_stokes_experiment ./benchmarks/pnp_stokes_experiment/main.cpp ./benchmarks/pnp_stokes_experiment/linear_pnp_ns.cpp ${SRC_DIR})
 target_link_libraries(pnp_stokes_experiment ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP4NS_LIB} ${FASP_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
 
-add_executable(pnp_stokes_separated ./benchmarks/pnp_stokes_separated/main.cpp ./benchmarks/pnp_stokes_separated/linear_pnp_ns.cpp ${SRC_DIR})
-target_link_libraries(pnp_stokes_separated ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP4NS_LIB} ${FASP_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
-
 add_executable(pnp_refine ./benchmarks/pnp_refine_exact/main.cpp ./benchmarks/pnp_refine_exact/linear_pnp.cpp ${SRC_DIR})
 target_link_libraries(pnp_refine ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
 
