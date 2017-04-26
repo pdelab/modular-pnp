@@ -167,6 +167,11 @@ class PDE {
       dCSRmat* dCSR_matrix
     );
 
+    void EigenMatrix_to_dCSRmat(
+      const dolfin::EigenMatrix* mat_A,
+      dCSRmat* dCSR_A
+    );
+
     void EigenVector_to_dvector (
       std::shared_ptr<const dolfin::EigenVector> eigen_vector,
       dvector* vector

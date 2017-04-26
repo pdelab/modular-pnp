@@ -14,7 +14,7 @@ extern "C" {
   #include "fasp4ns_functs.h"
 }
 
-#include "vector_linear_pnp_ns_forms.h"
+#include "../pnp_stokes_experiment/vector_linear_pnp_ns_forms.h"
 #include "linear_pnp_ns.h"
 
 using namespace std;

@@ -5,8 +5,8 @@ vector  = VectorElement("Lagrange", tetrahedron, 1)
 
 entropy = TrialFunction(vector)
 v = TestFunction(vector)
-eta = Coefficient(element)
 potential = Coefficient(element)
+log_weight = Coefficient(element)
 
-a = inner(entropy,v)*dx
-L = inner(exp(eta)*grad(potential),v)*dx
+a = inner(entropy, v) * dx
+L = inner(exp(log_weight) * grad(potential), v) * dx

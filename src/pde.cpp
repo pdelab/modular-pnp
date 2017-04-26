@@ -552,7 +552,7 @@ dolfin::Function PDE::_convert_EigenVector_to_Function (
   return fn;
 }
 //--------------------------------------
-void EigenMatrix_to_dCSRmat (
+void PDE::EigenMatrix_to_dCSRmat (
   std::shared_ptr<const dolfin::EigenMatrix> eigen_matrix,
   dCSRmat* dCSR_matrix
 ) {
@@ -608,7 +608,7 @@ void EigenMatrix_to_dCSRmat (
 }
 
 //--------------------------------------
-void EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A, dCSRmat* dCSR_A)
+void PDE::EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A, dCSRmat* dCSR_A)
 {
   // dimensions of matrix
   int nrows = mat_A->size(0);
@@ -641,7 +641,7 @@ void EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A, dCSRmat* dCSR_A)
 
 
 //--------------------------------------
-void EigenVector_to_dvector (
+void PDE::EigenVector_to_dvector (
   std::shared_ptr<const dolfin::EigenVector> eigen_vector,
   dvector* vector
 ) {

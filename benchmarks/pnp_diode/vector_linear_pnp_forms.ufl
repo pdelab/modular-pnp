@@ -1,0 +1,48 @@
+# Copyright (C) 2014 CCMA@PSU Maximilian Metti, Arthur Bousquet
+#
+#   Define bilinear and linear forms for 
+#   the linearized Poisson-Nernst-Planck equations
+#
+# Compile this form with FFC: ffc -O -l dolfin vector_linear_pnp_forms.ufl.
+
+##  Finite Element Space
+CG = FiniteElement("Lagrange", tetrahedron, 1)
+V  = MixedElement([CG, CG, CG])
+
+
+u = TrialFunction(V)
+v = TestFunction(V)
+
+##  Previous Iterates
+uu = Coefficient(V)
+
+##  Coefficients
+permittivity = Coefficient(CG)
+poisson_scale = Constant(tetrahedron)
+fixed_charge = Coefficient(CG)
+diffusivity = Coefficient(V)
+valency = Coefficient(V)
+reaction = Coefficient(V)
+
+cutoff = -5.0
+def conc(w):
+  return conditional(gt(w, cutoff), exp(w), exp(cutoff) / (1 - w + cutoff))
+
+a = \
+  + ( permittivity * inner(grad(u[0]), grad(v[0])) ) * dx \
+  + ( -poisson_scale * valency[1] * exp(uu[1]) * u[1] * v[0] ) * dx \
+  + ( -poisson_scale * valency[2] * exp(uu[2]) * u[2] * v[0] ) * dx \
+  + ( diffusivity[1] * conc(uu[1]) * inner(grad(u[1]) + grad(uu[1] + valency[1] * uu[0]) * u[1], grad(v[1])) ) * dx \
+  + ( valency[1] * diffusivity[1] * conc(uu[1]) * inner(grad(u[0]), grad(v[1])) ) * dx \
+  + ( diffusivity[2] * conc(uu[2]) * inner(grad(u[2]) + grad(uu[2] + valency[2] * uu[0]) * u[2], grad(v[2])) ) * dx \
+  + ( valency[2] * diffusivity[2] * conc(uu[2]) * inner(grad(u[0]), grad(v[2])) ) * dx
+
+L = \
+  + ( poisson_scale * fixed_charge * v[0] ) * dx \
+  - ( permittivity * inner(grad(uu[0]), grad(v[0])) ) * dx \
+  - ( -poisson_scale * valency[1] * exp(uu[1]) * v[0] ) * dx \
+  - ( -poisson_scale * valency[2] * exp(uu[2]) * v[0] ) * dx \
+  + ( reaction[1] * v[1]) * dx \
+  - ( diffusivity[1] * exp(uu[1]) * inner(grad(uu[1] + valency[1] * uu[0]), grad(v[1])) ) * dx \
+  + ( reaction[2] * v[2]) * dx \
+  - ( diffusivity[2] * exp(uu[2]) * inner(grad(uu[2] + valency[2] * uu[0]), grad(v[2])) ) * dx
