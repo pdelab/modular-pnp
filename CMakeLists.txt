@@ -31,7 +31,9 @@ add_definitions(${DOLFIN_CXX_DEFINITIONS})
 set(CMAKE_CXX_FLAGS "${DOLFIN_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
 
 # BOOST lib
-find_package(Boost)
+# find_package(Boost)
+# include_directories(${Boost_INCLUDE_DIRS})
+find_package(Boost COMPONENTS system filesystem REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 # Set FASP directories and libraries
@@ -46,8 +48,12 @@ set(FASP4NS_INCLUDE_DIR ${FASP4NS_DIR}/include)
 include_directories(${DOLFIN_INCLUDE_DIRS} ${FASP_INCLUDE_DIR} ${FASP4NS_INCLUDE_DIR} ./include)
 include_directories(SYSTEM ${DOLFIN_3RD_PARTY_INCLUDE_DIRS})
 
+set(CMAKE_MODULE_PATH /usr/local/faspsolver/modules)
+find_package(UMFPACK REQUIRED)
+include_directories(${UMFPACK_INCLUDE_DIRS})
+
 # Awesome OSX TARGET
-set(OSX_TARGET "/opt/local/lib/gcc6/gcc/x86_64-apple-darwin16/6.3.0/libgcc.a" "/opt/local/lib/gcc6/libquadmath.a" "/opt/local/lib/gcc6/libgfortran.a")
+# set(OSX_TARGET "/opt/local/lib/gcc6/gcc/x86_64-apple-darwin16/6.3.0/libgcc.a" "/opt/local/lib/gcc6/libquadmath.a" "/opt/local/lib/gcc6/libgfortran.a")
 set(SRC_DIR ./src/domain.cpp ./src/dirichlet.cpp ./src/pde.cpp ./src/newton_status.cpp ./src/error.cpp ./src/mesh_refiner.cpp)
 
 add_executable(test_poisson ./benchmarks/poisson/main.cpp ./benchmarks/poisson/poisson.cpp ${SRC_DIR})
@@ -69,7 +75,7 @@ add_executable(pnp_spheres ./benchmarks/pnp_spheres/main.cpp ./benchmarks/pnp_sp
 target_link_libraries(pnp_spheres ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
 
 add_executable(pnp_stokes_experiment ./benchmarks/pnp_stokes_experiment/main.cpp ./benchmarks/pnp_stokes_experiment/linear_pnp_ns.cpp ${SRC_DIR})
-target_link_libraries(pnp_stokes_experiment ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP4NS_LIB} ${FASP_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
+target_link_libraries(pnp_stokes_experiment ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP4NS_LIB} ${FASP_LIB} ${OSX_TARGET} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${UMFPACK_LIBRARY})
 
 add_executable(pnp_refine ./benchmarks/pnp_refine_exact/main.cpp ./benchmarks/pnp_refine_exact/linear_pnp.cpp ${SRC_DIR})
 target_link_libraries(pnp_refine ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
