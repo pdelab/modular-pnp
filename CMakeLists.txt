@@ -52,33 +52,38 @@ set(CMAKE_MODULE_PATH /usr/local/faspsolver/modules)
 find_package(UMFPACK REQUIRED)
 include_directories(${UMFPACK_INCLUDE_DIRS})
 
+
+
 # Awesome OSX TARGET
 # set(OSX_TARGET "/opt/local/lib/gcc6/gcc/x86_64-apple-darwin16/6.3.0/libgcc.a" "/opt/local/lib/gcc6/libquadmath.a" "/opt/local/lib/gcc6/libgfortran.a")
+set(PNP_LIBRARY ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${OSX_TARGET} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${UMFPACK_LIBRARY})
+set(PNP_STOKES_LIBRARY ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP4NS_LIB} ${FASP_LIB} ${OSX_TARGET} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${UMFPACK_LIBRARY})
+
 set(SRC_DIR ./src/domain.cpp ./src/dirichlet.cpp ./src/pde.cpp ./src/newton_status.cpp ./src/error.cpp ./src/mesh_refiner.cpp)
 
 add_executable(test_poisson ./benchmarks/poisson/main.cpp ./benchmarks/poisson/poisson.cpp ${SRC_DIR})
-target_link_libraries(test_poisson ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
+target_link_libraries(test_poisson ${PNP_LIBRARY})
 
 add_executable(test_vector_poisson ./benchmarks/vector_poisson/main.cpp ./benchmarks/vector_poisson/vector_poisson.cpp ${SRC_DIR})
-target_link_libraries(test_vector_poisson ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
+target_link_libraries(test_vector_poisson ${PNP_LIBRARY})
 
 add_executable(linear_experiment ./benchmarks/linearized_pnp_experiment/main.cpp ./benchmarks/linearized_pnp_experiment/linear_pnp.cpp ${SRC_DIR})
-target_link_libraries(linear_experiment ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
+target_link_libraries(linear_experiment ${PNP_LIBRARY})
 
 add_executable(pnp_experiment ./benchmarks/pnp_experiment/main.cpp ./benchmarks/pnp_experiment/linear_pnp.cpp ${SRC_DIR})
-target_link_libraries(pnp_experiment ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
+target_link_libraries(pnp_experiment ${PNP_LIBRARY})
 
 add_executable(pnp_exact ./benchmarks/pnp_exact_solution/main.cpp ./benchmarks/pnp_exact_solution/linear_pnp.cpp ${SRC_DIR})
-target_link_libraries(pnp_exact ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
+target_link_libraries(pnp_exact ${PNP_LIBRARY})
 
 add_executable(pnp_spheres ./benchmarks/pnp_spheres/main.cpp ./benchmarks/pnp_spheres/linear_pnp.cpp ${SRC_DIR})
-target_link_libraries(pnp_spheres ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
+target_link_libraries(pnp_spheres ${PNP_LIBRARY})
 
 add_executable(pnp_stokes_experiment ./benchmarks/pnp_stokes_experiment/main.cpp ./benchmarks/pnp_stokes_experiment/linear_pnp_ns.cpp ${SRC_DIR})
-target_link_libraries(pnp_stokes_experiment ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP4NS_LIB} ${FASP_LIB} ${OSX_TARGET} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${UMFPACK_LIBRARY})
+target_link_libraries(pnp_stokes_experiment ${PNP_STOKES_LIBRARY})
 
 add_executable(pnp_refine ./benchmarks/pnp_refine_exact/main.cpp ./benchmarks/pnp_refine_exact/linear_pnp.cpp ${SRC_DIR})
-target_link_libraries(pnp_refine ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
+target_link_libraries(pnp_refine ${PNP_LIBRARY})
 
 add_executable(pnp_diode ./benchmarks/pnp_diode/main.cpp ./benchmarks/pnp_diode/linear_pnp.cpp ${SRC_DIR})
-target_link_libraries(pnp_diode ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${FASP4NS_LIB} ${OSX_TARGET} ${Boost_LIBRARIES})
+target_link_libraries(pnp_diode ${PNP_LIBRARY})
