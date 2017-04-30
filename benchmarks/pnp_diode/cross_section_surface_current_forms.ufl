@@ -1,0 +1,22 @@
+# Copyright (C) 2017 CCMA@PSU Maximilian Metti, Arthur Bousquet, Xiaozhe Hu
+#
+#   Define bilinear and linear forms for 
+#   the linearized Poisson-Nernst-Planck equations
+#
+# Compile this form with FFC: ffc -O -l dolfin cross_section_surface_current_forms.ufl
+
+## Finite Element Space
+CG = FiniteElement("Lagrange", tetrahedron, 1)
+VCG = VectorElement("R", tetrahedron, 0)
+
+normal_vector = Coefficient(VCG)
+cation_diff = Coefficient(CG)
+anion_diff = Coefficient(CG)
+log_cation = Coefficient(CG)
+log_anion = Coefficient(CG)
+cation_flux = Coefficient(CG)
+anion_flux = Coefficient(CG)
+
+M = \
+  + ( cation_diff * exp(log_cation('+')) * inner( avg(grad(cation_flux)), normal_vector ) ) * dS(1) \
+  - ( anion_diff * exp(log_anion('+')) * inner( avg(grad(anion_flux)), normal_vector ) ) * dS(1)

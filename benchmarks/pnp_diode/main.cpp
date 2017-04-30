@@ -13,18 +13,39 @@ extern "C" {
   #include "fasp_functs.h"
 }
 
+#include "diode.h"
 #include "vector_linear_pnp_forms.h"
 #include "pnp_newton_solver.h"
+
+#include "cross_section_surface_area_forms.h"
+#include "cross_section_surface_current_forms.h"
 
 using namespace std;
 
 // helper functions for marking cells for refinement
+std::vector<std::shared_ptr<const dolfin::Function>> get_diode_diffusivity(
+  std::shared_ptr<const dolfin::FunctionSpace> function_space
+);
+
 std::vector<std::shared_ptr<const dolfin::Function>> extract_log_densities (
   std::shared_ptr<dolfin::Function> solution
 );
 std::vector<std::shared_ptr<const dolfin::Function>> compute_entropy_potential(
   std::shared_ptr<dolfin::Function> solution
 );
+
+// cross-section for estimating the current
+double computeCurrentFlux(
+  std::vector<std::shared_ptr<const dolfin::Function>> diffusivity,
+  std::vector<std::shared_ptr<const dolfin::Function>> log_density,
+  std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential
+);
+
+class CrossSection : public dolfin::SubDomain {
+  bool inside(const dolfin::Array<double>& x, bool on_boundary) const {
+    return fabs(x[0]) < 1.0e-8;
+  }
+};
 
 // the main body of the script
 int main (int argc, char** argv) {
@@ -78,7 +99,7 @@ int main (int argc, char** argv) {
   );
 
   // parameters for PNP Newton solver
-  const std::size_t max_newton = 25;
+  const std::size_t max_newton = 5;
   const double max_residual_tol = 1.0e-10;
   const double relative_residual_tol = 1.0e-7;
   const bool use_eafe_approximation = true;
@@ -112,14 +133,17 @@ int main (int argc, char** argv) {
       "./benchmarks/pnp_diode/output/"
     );
 
-    // compute entropy terms to mark cells for refinement
+    // compute current / entropy terms
+    auto diffusivity = get_diode_diffusivity(computed_solution->function_space());
     auto entropy_potential = compute_entropy_potential(computed_solution);
     auto log_densities = extract_log_densities(computed_solution);
 
-    mesh_adapt.max_elements = (std::size_t) std::floor( growth_factor * mesh->num_cells() );
-    mesh_adapt.multilevel_refinement(entropy_potential, log_densities);
+    // Compute current flux through cross section
+    double surfaceFlux = computeCurrentFlux(diffusivity, log_densities, entropy_potential);
 
-    // update solution
+    // adapt computed solutions
+    mesh_adapt.max_elements = (std::size_t) std::floor(growth_factor * mesh->num_cells());
+    mesh_adapt.multilevel_refinement(entropy_potential, log_densities);
     adaptive_solution.reset( new dolfin::Function(computed_solution->function_space()) );
     adaptive_solution->interpolate(*computed_solution);
     // initial_guess_file << *adaptive_solution;
@@ -132,6 +156,30 @@ int main (int argc, char** argv) {
 /**
  * Helper functions for marking elements in need of refinement
  */
+std::vector<std::shared_ptr<const dolfin::Function>> get_diode_diffusivity(
+  std::shared_ptr<const dolfin::FunctionSpace> function_space
+) {
+  // get analytic diffusivity
+  dolfin::Function diffusivity(function_space);
+  Diffusivity_Expression diff_expr;
+  diffusivity.interpolate(diff_expr);
+
+  // transfer to vector of functions
+  std::size_t component_count = function_space->element()->num_sub_elements();
+  std::vector<std::shared_ptr<const dolfin::Function>> function_vec;
+  for (std::size_t comp = 1; comp < component_count; comp++) {
+    auto subfunction_space = diffusivity[comp].function_space()->collapse();
+    dolfin::Function diffusivity_comp(subfunction_space);
+    diffusivity_comp.interpolate(diffusivity[comp]);
+
+    auto const_diffusivity_ptr = std::make_shared<const dolfin::Function>(diffusivity_comp);
+    function_vec.push_back(const_diffusivity_ptr);
+  }
+
+  return function_vec;
+}
+
+
 std::vector<std::shared_ptr<const dolfin::Function>> extract_log_densities (
   std::shared_ptr<dolfin::Function> solution
 ) {
@@ -146,8 +194,10 @@ std::vector<std::shared_ptr<const dolfin::Function>> extract_log_densities (
     auto const_log_density = std::make_shared<const dolfin::Function>(log_density);
     function_vec.push_back(const_log_density);
   }
+
   return function_vec;
 }
+
 
 std::vector<std::shared_ptr<const dolfin::Function>> compute_entropy_potential (
   std::shared_ptr<dolfin::Function> solution
@@ -170,4 +220,45 @@ std::vector<std::shared_ptr<const dolfin::Function>> compute_entropy_potential (
   }
 
   return function_vec;
+}
+
+
+/**
+ * Compute the current determined by the finite element solution
+ */
+double computeCurrentFlux(
+  std::vector<std::shared_ptr<const dolfin::Function>> diffusivity,
+  std::vector<std::shared_ptr<const dolfin::Function>> log_density,
+  std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential
+) {
+  auto mesh_ptr = log_density[0]->function_space()->mesh();
+  dolfin::FacetFunction<std::size_t> cross_section_facets(mesh_ptr);
+
+  // define cross section
+  CrossSection cross_section;
+  cross_section_facets.set_all(0);
+  cross_section.mark(cross_section_facets, 1);
+
+  // compute average current flux through the surface
+  cross_section_surface_area_forms::Functional surface_area_form(mesh_ptr);
+  const dolfin::Constant area_scale(1.0);
+  surface_area_form.scale = std::make_shared<dolfin::Constant>(area_scale);
+  surface_area_form.dS = std::make_shared<dolfin::FacetFunction<std::size_t>>(cross_section_facets);
+  const double surface_area = assemble(surface_area_form);
+
+  // compute relevant functions
+  cross_section_surface_current_forms::Functional current_form(mesh_ptr);
+  const dolfin::Constant n_vector(1.0, 0.0, 0.0);
+  current_form.normal_vector = std::make_shared<dolfin::Constant>(n_vector);
+  current_form.dS = std::make_shared<dolfin::FacetFunction<std::size_t>>(cross_section_facets);
+  current_form.cation_diff = diffusivity[0];
+  current_form.anion_diff = diffusivity[1];
+  current_form.log_cation = log_density[0];
+  current_form.log_anion = log_density[1];
+  current_form.cation_flux = entropy_potential[0];
+  current_form.anion_flux = entropy_potential[1];
+  double current = assemble(current_form);
+
+  printf("current flux: %e units?\n", current / surface_area);
+  return current / surface_area;
 }
