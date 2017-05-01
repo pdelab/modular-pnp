@@ -47,11 +47,13 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::get_mesh () {
 };
 //--------------------------------
 std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::multilevel_refinement (
+  std::vector<std::shared_ptr<const dolfin::Function>> diffusivity_vector,
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_log_weight_vector
 ) {
   printf("Entering mesh adaptation routine\n");
   return Mesh_Refiner::recursive_refinement(
+    diffusivity_vector,
     entropy_potential_vector,
     entropy_log_weight_vector,
     Mesh_Refiner::entropy_tolerance_per_cell,
@@ -60,6 +62,7 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::multilevel_refinement (
 }
 //--------------------------------
 std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
+  std::vector<std::shared_ptr<const dolfin::Function>> diffusivity_vector,
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_log_weight_vector,
   double entropy_tolerance,
@@ -74,6 +77,7 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
 
   // mark cells and see if cells were marked
   Mesh_Refiner::mark_for_refinement(
+    diffusivity_vector,
     entropy_potential_vector,
     entropy_log_weight_vector,
     entropy_tolerance
@@ -93,6 +97,7 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
   if (accept_refinement) {
     _mesh = adapted_mesh;
     return Mesh_Refiner::recursive_refinement(
+      diffusivity_vector,
       entropy_potential_vector,
       entropy_log_weight_vector,
       entropy_tolerance,
@@ -104,6 +109,7 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
   printf("\tmesh refinement is too aggressive... mark elements to have proportional refinement\n");
   std::size_t target_size = (std::size_t) std::round(_mesh->num_cells() * 1.2);
   Mesh_Refiner::mark_for_refinement_with_target_size(
+    diffusivity_vector,
     entropy_potential_vector,
     entropy_log_weight_vector,
     target_size
@@ -117,12 +123,14 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
 }
 //--------------------------------
 std::size_t Mesh_Refiner::mark_for_refinement_with_target_size (
+  std::vector<std::shared_ptr<const dolfin::Function>> diffusivity_vector,
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_log_weight_vector,
   std::size_t target_size
 ) {
   // compute error vector of interpolant
   dolfin::EigenVector error_eigenvector = Mesh_Refiner::compute_entropy_error_vector(
+    diffusivity_vector,
     entropy_potential_vector,
     entropy_log_weight_vector
   );
@@ -154,12 +162,14 @@ std::size_t Mesh_Refiner::mark_for_refinement_with_target_size (
 };
 //--------------------------------
 std::size_t Mesh_Refiner::mark_for_refinement (
+  std::vector<std::shared_ptr<const dolfin::Function>> diffusivity_vector,
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_log_weight_vector,
   double entropy_tolerance
 ) {
   // compute error vector of interpolant
   dolfin::EigenVector error_vector = Mesh_Refiner::compute_entropy_error_vector(
+    diffusivity_vector,
     entropy_potential_vector,
     entropy_log_weight_vector
   );
@@ -181,6 +191,7 @@ std::size_t Mesh_Refiner::mark_for_refinement (
 };
 //--------------------------------
 dolfin::EigenVector Mesh_Refiner::compute_entropy_error_vector (
+  std::vector<std::shared_ptr<const dolfin::Function>> diffusivity_vector,
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_log_weight_vector
 ) {
@@ -205,6 +216,12 @@ dolfin::EigenVector Mesh_Refiner::compute_entropy_error_vector (
     );
     log_weight_interpolant->interpolate( *(entropy_log_weight_vector[comp]) );;
     gradient_form.log_weight = log_weight_interpolant;
+
+    auto diffusivity_interpolant = std::make_shared<dolfin::Function>(
+      dolfin::adapt(*(diffusivity_vector[comp]->function_space()), _mesh)
+    );
+    diffusivity_interpolant->interpolate( *(diffusivity_vector[comp]) );
+    gradient_form.diffusivity = diffusivity_interpolant;
 
     auto recovery_matrix = std::make_shared<dolfin::EigenMatrix>();
     dolfin::assemble(*recovery_matrix, bilinear_lumping);

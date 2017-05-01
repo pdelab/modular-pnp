@@ -4900,7 +4900,7 @@ public:
 
   const std::vector<bool> & enabled_coefficients() const final override
   {
-    static const std::vector<bool> enabled({true, true});
+    static const std::vector<bool> enabled({true, true, true});
     return enabled;
   }
 
@@ -4928,25 +4928,26 @@ public:
     
     
     // Array of quadrature weights.
-    static const double W14[14] = {0.00317460317460317, 0.00317460317460317, 0.00317460317460317, 0.00317460317460317, 0.00317460317460317, 0.00317460317460317, 0.0147649707904968, 0.0147649707904968, 0.0147649707904968, 0.0147649707904968, 0.0221397911142651, 0.0221397911142651, 0.0221397911142651, 0.0221397911142651};
-    // Quadrature points on the UFC reference element: (0.0, 0.5, 0.5), (0.5, 0.0, 0.5), (0.5, 0.5, 0.0), (0.5, 0.0, 0.0), (0.0, 0.5, 0.0), (0.0, 0.0, 0.5), (0.698419704324387, 0.100526765225204, 0.100526765225204), (0.100526765225204, 0.100526765225204, 0.100526765225204), (0.100526765225204, 0.100526765225204, 0.698419704324387), (0.100526765225204, 0.698419704324387, 0.100526765225204), (0.0568813795204234, 0.314372873493192, 0.314372873493192), (0.314372873493192, 0.314372873493192, 0.314372873493192), (0.314372873493192, 0.314372873493192, 0.0568813795204234), (0.314372873493192, 0.0568813795204234, 0.314372873493192)
+    static const double W15[15] = {0.0302836780970892, 0.00602678571428572, 0.00602678571428572, 0.00602678571428572, 0.00602678571428572, 0.011645249086029, 0.011645249086029, 0.011645249086029, 0.011645249086029, 0.0109491415613864, 0.0109491415613864, 0.0109491415613864, 0.0109491415613864, 0.0109491415613864, 0.0109491415613864};
+    // Quadrature points on the UFC reference element: (0.25, 0.25, 0.25), (0.0, 0.333333333333333, 0.333333333333333), (0.333333333333333, 0.333333333333333, 0.333333333333333), (0.333333333333333, 0.333333333333333, 0.0), (0.333333333333333, 0.0, 0.333333333333333), (0.727272727272727, 0.0909090909090909, 0.0909090909090909), (0.0909090909090909, 0.0909090909090909, 0.0909090909090909), (0.0909090909090909, 0.0909090909090909, 0.727272727272727), (0.0909090909090909, 0.727272727272727, 0.0909090909090909), (0.433449846426336, 0.0665501535736643, 0.0665501535736643), (0.0665501535736643, 0.433449846426336, 0.0665501535736643), (0.0665501535736643, 0.0665501535736643, 0.433449846426336), (0.0665501535736643, 0.433449846426336, 0.433449846426336), (0.433449846426336, 0.0665501535736643, 0.433449846426336), (0.433449846426336, 0.433449846426336, 0.0665501535736643)
     
     // Values of basis functions at quadrature points.
-    static const double FE0[14][4] = \
-    {{0.0, 0.0, 0.5, 0.5},
-    {0.0, 0.5, 0.0, 0.5},
-    {0.0, 0.5, 0.5, 0.0},
-    {0.5, 0.5, 0.0, 0.0},
-    {0.5, 0.0, 0.5, 0.0},
-    {0.5, 0.0, 0.0, 0.5},
-    {0.100526765225205, 0.698419704324386, 0.100526765225205, 0.100526765225205},
-    {0.698419704324387, 0.100526765225204, 0.100526765225205, 0.100526765225205},
-    {0.100526765225205, 0.100526765225204, 0.100526765225205, 0.698419704324386},
-    {0.100526765225205, 0.100526765225204, 0.698419704324386, 0.100526765225205},
-    {0.314372873493192, 0.0568813795204234, 0.314372873493192, 0.314372873493192},
-    {0.0568813795204235, 0.314372873493192, 0.314372873493192, 0.314372873493192},
-    {0.314372873493192, 0.314372873493192, 0.314372873493192, 0.0568813795204234},
-    {0.314372873493192, 0.314372873493192, 0.0568813795204234, 0.314372873493192}};
+    static const double FE0[15][4] = \
+    {{0.25, 0.25, 0.25, 0.25},
+    {0.333333333333333, 0.0, 0.333333333333333, 0.333333333333333},
+    {0.0, 0.333333333333333, 0.333333333333333, 0.333333333333333},
+    {0.333333333333333, 0.333333333333333, 0.333333333333333, 0.0},
+    {0.333333333333333, 0.333333333333333, 0.0, 0.333333333333333},
+    {0.0909090909090911, 0.727272727272727, 0.0909090909090909, 0.0909090909090909},
+    {0.727272727272727, 0.0909090909090908, 0.0909090909090909, 0.0909090909090909},
+    {0.0909090909090909, 0.0909090909090909, 0.0909090909090909, 0.727272727272727},
+    {0.090909090909091, 0.0909090909090908, 0.727272727272727, 0.0909090909090909},
+    {0.433449846426336, 0.433449846426336, 0.0665501535736643, 0.0665501535736643},
+    {0.433449846426336, 0.0665501535736643, 0.433449846426336, 0.0665501535736643},
+    {0.433449846426336, 0.0665501535736643, 0.0665501535736643, 0.433449846426336},
+    {0.0665501535736644, 0.0665501535736643, 0.433449846426336, 0.433449846426336},
+    {0.0665501535736644, 0.433449846426336, 0.0665501535736643, 0.433449846426336},
+    {0.0665501535736643, 0.433449846426336, 0.433449846426336, 0.0665501535736643}};
     
     // Array of non-zero columns
     static const unsigned int nzc3[4] = {0, 1, 2, 3};
@@ -4957,8 +4958,9 @@ public:
     // Array of non-zero columns
     static const unsigned int nzc11[4] = {8, 9, 10, 11};
     
-    static const double FE0_D001[14][2] = \
+    static const double FE0_D001[15][2] = \
     {{-1.0, 1.0},
+    {-1.0, 1.0},
     {-1.0, 1.0},
     {-1.0, 1.0},
     {-1.0, 1.0},
@@ -5003,8 +5005,8 @@ public:
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
     
     // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 952
-    for (unsigned int ip = 0; ip < 14; ip++)
+    // Number of operations to compute element tensor for following IP loop = 1185
+    for (unsigned int ip = 0; ip < 15; ip++)
     {
       
       // Coefficient declarations.
@@ -5012,6 +5014,7 @@ public:
       double F1 = 0.0;
       double F2 = 0.0;
       double F3 = 0.0;
+      double F4 = 0.0;
       
       // Total number of operations to compute function values = 12
       for (unsigned int r = 0; r < 2; r++)
@@ -5021,22 +5024,23 @@ public:
         F2 += FE0_D001[ip][r]*w[0][nzc0[r]];
       } // end loop over 'r'
       
-      // Total number of operations to compute function values = 8
+      // Total number of operations to compute function values = 16
       for (unsigned int r = 0; r < 4; r++)
       {
-        F3 += FE0[ip][r]*w[1][r];
+        F3 += FE0[ip][r]*w[2][r];
+        F4 += FE0[ip][r]*w[1][r];
       } // end loop over 'r'
       
-      // Number of operations to compute ip constants: 24
+      // Number of operations to compute ip constants: 27
       double I[3];
-      // Number of operations: 8
-      I[0] = W14[ip]*std::exp(F3)*(F0*G[0] + F1*G[1] + F2*G[2]);
+      // Number of operations: 9
+      I[0] = F3*W15[ip]*std::exp(F4)*(F0*G[0] + F1*G[1] + F2*G[2]);
       
-      // Number of operations: 8
-      I[1] = W14[ip]*std::exp(F3)*(F0*G[3] + F1*G[4] + F2*G[5]);
+      // Number of operations: 9
+      I[1] = F3*W15[ip]*std::exp(F4)*(F0*G[3] + F1*G[4] + F2*G[5]);
       
-      // Number of operations: 8
-      I[2] = W14[ip]*std::exp(F3)*(F0*G[6] + F1*G[7] + F2*G[8]);
+      // Number of operations: 9
+      I[2] = F3*W15[ip]*std::exp(F4)*(F0*G[6] + F1*G[7] + F2*G[8]);
       
       
       // Number of operations for primary indices: 24
@@ -5322,7 +5326,7 @@ public:
 
   const char * signature() const final override
   {
-    return "ee8074f24e1c7cade1c8b8dd4eda36739ff2c93aa92b90def8a1b209c708e86a15e07b62e12bb31ef23b7d71936356591030b86b2453a19201bb1d80a4929c1c";
+    return "3424040bec7e1754ec54737725929dbb1696698f3b6d9d45584aa411a0b2a4bc4adf9462b38bc62de737802d7ef466faf986497ace3e1c284b65f7cfb74c2b4e";
   }
 
   std::size_t rank() const final override
@@ -5332,12 +5336,12 @@ public:
 
   std::size_t num_coefficients() const final override
   {
-    return 2;
+    return 3;
   }
 
   std::size_t original_coefficient_position(std::size_t i) const final override
   {
-    static const std::vector<std::size_t> position({0, 1});
+    static const std::vector<std::size_t> position({0, 1, 2});
     return position[i];
   }
 
@@ -5375,6 +5379,11 @@ public:
         return new gradient_recovery_finite_element_0();
         break;
       }
+    case 3:
+      {
+        return new gradient_recovery_finite_element_0();
+        break;
+      }
     }
     
     return 0;
@@ -5395,6 +5404,11 @@ public:
         break;
       }
     case 2:
+      {
+        return new gradient_recovery_dofmap_0();
+        break;
+      }
+    case 3:
       {
         return new gradient_recovery_dofmap_0();
         break;
@@ -5590,6 +5604,30 @@ public:
 
 namespace gradient_recovery
 {
+
+class CoefficientSpace_diffusivity: public dolfin::FunctionSpace
+{
+public:
+
+  // Constructor for standard function space
+  CoefficientSpace_diffusivity(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<gradient_recovery_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<gradient_recovery_dofmap_0>(), *mesh))
+  {
+    // Do nothing
+  }
+
+  // Constructor for constrained function space
+  CoefficientSpace_diffusivity(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<gradient_recovery_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<gradient_recovery_dofmap_0>(), *mesh, constrained_domain))
+  {
+    // Do nothing
+  }
+
+};
 
 class CoefficientSpace_log_weight: public dolfin::FunctionSpace
 {
@@ -5878,13 +5916,15 @@ typedef CoefficientSpace_potential Form_L_FunctionSpace_1;
 
 typedef CoefficientSpace_log_weight Form_L_FunctionSpace_2;
 
+typedef CoefficientSpace_diffusivity Form_L_FunctionSpace_3;
+
 class Form_L: public dolfin::Form
 {
 public:
 
   // Constructor
   Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0):
-    dolfin::Form(1, 2), potential(*this, 0), log_weight(*this, 1)
+    dolfin::Form(1, 3), potential(*this, 0), log_weight(*this, 1), diffusivity(*this, 2)
   {
     _function_spaces[0] = V0;
 
@@ -5892,13 +5932,14 @@ public:
   }
 
   // Constructor
-  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> potential, std::shared_ptr<const dolfin::GenericFunction> log_weight):
-    dolfin::Form(1, 2), potential(*this, 0), log_weight(*this, 1)
+  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> potential, std::shared_ptr<const dolfin::GenericFunction> log_weight, std::shared_ptr<const dolfin::GenericFunction> diffusivity):
+    dolfin::Form(1, 3), potential(*this, 0), log_weight(*this, 1), diffusivity(*this, 2)
   {
     _function_spaces[0] = V0;
 
     this->potential = potential;
     this->log_weight = log_weight;
+    this->diffusivity = diffusivity;
 
     _ufc_form = std::make_shared<const gradient_recovery_form_1>();
   }
@@ -5914,6 +5955,8 @@ public:
       return 0;
     else if (name == "log_weight")
       return 1;
+    else if (name == "diffusivity")
+      return 2;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -5930,6 +5973,8 @@ public:
       return "potential";
     case 1:
       return "log_weight";
+    case 2:
+      return "diffusivity";
     }
 
     dolfin::dolfin_error("generated code for class Form",
@@ -5943,10 +5988,12 @@ public:
   typedef Form_L_MultiMeshFunctionSpace_0 MultiMeshTestSpace;
   typedef Form_L_FunctionSpace_1 CoefficientSpace_potential;
   typedef Form_L_FunctionSpace_2 CoefficientSpace_log_weight;
+  typedef Form_L_FunctionSpace_3 CoefficientSpace_diffusivity;
 
   // Coefficients
   dolfin::CoefficientAssigner potential;
   dolfin::CoefficientAssigner log_weight;
+  dolfin::CoefficientAssigner diffusivity;
 };
 
 class MultiMeshForm_L: public dolfin::MultiMeshForm
@@ -5955,7 +6002,7 @@ public:
 
   // Constructor
   MultiMeshForm_L(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0):
-    dolfin::MultiMeshForm(V0), potential(*this, 0), log_weight(*this, 1)
+    dolfin::MultiMeshForm(V0), potential(*this, 0), log_weight(*this, 1), diffusivity(*this, 2)
   {
     // Create and add standard forms
     std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
@@ -5973,8 +6020,8 @@ public:
   }
 
   // Constructor
-  MultiMeshForm_L(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> potential, std::shared_ptr<const dolfin::GenericFunction> log_weight):
-    dolfin::MultiMeshForm(V0), potential(*this, 0), log_weight(*this, 1)
+  MultiMeshForm_L(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> potential, std::shared_ptr<const dolfin::GenericFunction> log_weight, std::shared_ptr<const dolfin::GenericFunction> diffusivity):
+    dolfin::MultiMeshForm(V0), potential(*this, 0), log_weight(*this, 1), diffusivity(*this, 2)
   {
     // Create and add standard forms
     std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
@@ -5990,6 +6037,7 @@ public:
     /// Assign coefficients
     this->potential = potential;
     this->log_weight = log_weight;
+    this->diffusivity = diffusivity;
 
   }
 
@@ -6004,6 +6052,8 @@ public:
       return 0;
     else if (name == "log_weight")
       return 1;
+    else if (name == "diffusivity")
+      return 2;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -6020,6 +6070,8 @@ public:
       return "potential";
     case 1:
       return "log_weight";
+    case 2:
+      return "diffusivity";
     }
 
     dolfin::dolfin_error("generated code for class Form",
@@ -6033,10 +6085,12 @@ public:
   typedef Form_L_MultiMeshFunctionSpace_0 MultiMeshTestSpace;
   typedef Form_L_FunctionSpace_1 CoefficientSpace_potential;
   typedef Form_L_FunctionSpace_2 CoefficientSpace_log_weight;
+  typedef Form_L_FunctionSpace_3 CoefficientSpace_diffusivity;
 
   // Coefficients
   dolfin::MultiMeshCoefficientAssigner potential;
   dolfin::MultiMeshCoefficientAssigner log_weight;
+  dolfin::MultiMeshCoefficientAssigner diffusivity;
 };
 
 // Class typedefs

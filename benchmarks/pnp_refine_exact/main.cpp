@@ -161,6 +161,10 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   AMG_param amg
 );
 
+std::vector<std::shared_ptr<const dolfin::Function>> get_diode_diffusivity(
+  std::shared_ptr<const dolfin::FunctionSpace> function_space
+);
+
 std::vector<std::shared_ptr<const dolfin::Function>> extract_log_densities (
   std::shared_ptr<dolfin::Function> solution
 );
@@ -250,9 +254,10 @@ int main (int argc, char** argv) {
     print_error(*computed_solution);
 
     // compute entropy terms
+    auto diffusivity = get_diode_diffusivity(computed_solution->function_space());
     auto entropy_potential = compute_entropy_potential(computed_solution);
     auto log_densities = extract_log_densities(computed_solution);
-    mesh_adapt.multilevel_refinement(entropy_potential, log_densities);
+    mesh_adapt.multilevel_refinement(diffusivity, entropy_potential, log_densities);
 
     // update solution
     adaptive_solution.reset( new dolfin::Function(computed_solution->function_space()) );
@@ -262,6 +267,30 @@ int main (int argc, char** argv) {
 
   printf("\nCompleted adaptivity loop\n\n");
   return 0;
+}
+
+/// Get diffusivity
+std::vector<std::shared_ptr<const dolfin::Function>> get_diode_diffusivity(
+  std::shared_ptr<const dolfin::FunctionSpace> function_space
+) {
+  // get analytic diffusivity
+  dolfin::Function diffusivity(function_space);
+  Diffusivity_Expression diff_expr;
+  diffusivity.interpolate(diff_expr);
+
+  // transfer to vector of functions
+  std::size_t component_count = function_space->element()->num_sub_elements();
+  std::vector<std::shared_ptr<const dolfin::Function>> function_vec;
+  for (std::size_t comp = 1; comp < component_count; comp++) {
+    auto subfunction_space = diffusivity[comp].function_space()->collapse();
+    dolfin::Function diffusivity_comp(subfunction_space);
+    diffusivity_comp.interpolate(diffusivity[comp]);
+
+    auto const_diffusivity_ptr = std::make_shared<const dolfin::Function>(diffusivity_comp);
+    function_vec.push_back(const_diffusivity_ptr);
+  }
+
+  return function_vec;
 }
 
 /// Extract log-densities from computed solution

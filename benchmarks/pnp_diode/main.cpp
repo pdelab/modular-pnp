@@ -99,7 +99,7 @@ int main (int argc, char** argv) {
   );
 
   // parameters for PNP Newton solver
-  const std::size_t max_newton = 5;
+  const std::size_t max_newton = 25;
   const double max_residual_tol = 1.0e-10;
   const double relative_residual_tol = 1.0e-7;
   const bool use_eafe_approximation = true;
@@ -143,7 +143,7 @@ int main (int argc, char** argv) {
 
     // adapt computed solutions
     mesh_adapt.max_elements = (std::size_t) std::floor(growth_factor * mesh->num_cells());
-    mesh_adapt.multilevel_refinement(entropy_potential, log_densities);
+    mesh_adapt.multilevel_refinement(diffusivity, entropy_potential, log_densities);
     adaptive_solution.reset( new dolfin::Function(computed_solution->function_space()) );
     adaptive_solution->interpolate(*computed_solution);
     // initial_guess_file << *adaptive_solution;
@@ -152,6 +152,8 @@ int main (int argc, char** argv) {
   printf("\nCompleted adaptivity loop\n\n");
   return 0;
 }
+
+
 
 /**
  * Helper functions for marking elements in need of refinement
@@ -257,8 +259,15 @@ double computeCurrentFlux(
   current_form.log_anion = log_density[1];
   current_form.cation_flux = entropy_potential[0];
   current_form.anion_flux = entropy_potential[1];
-  double current = assemble(current_form);
+  const double current = assemble(current_form);
 
-  printf("current flux: %e units?\n", current / surface_area);
-  return current / surface_area;
+  // scaling
+  const double elementary_charge = 1.60217662e-19; // C
+  const double reference_length = 1e-6; // m
+  const double reference_diffusivity = 2.87e-3; // m^2 / s
+  const double reference_density = 1.5e+22; // mM = 1 / m^3
+  const double microamp_scale_factor = 1.0e+6 * elementary_charge * reference_diffusivity * reference_density * reference_length;
+
+  printf("current flux: %e micro-amps\n", microamp_scale_factor * current / surface_area);
+  return microamp_scale_factor * current / surface_area;
 }
