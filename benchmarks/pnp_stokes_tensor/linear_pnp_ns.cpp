@@ -325,6 +325,7 @@ void Linear_PNP_NS::init_BC (std::size_t component, double L) {
 void Linear_PNP_NS::init_measure (std::shared_ptr<const dolfin::Mesh> mesh,
   double Lx, double Ly, double Lz) {
   auto markers = std::make_shared<dolfin::FacetFunction<std::size_t>>(mesh, 1);
+  markers->set_all(0);
 
   // X Boundaries
   std::vector<std::size_t> v1x = {0};
