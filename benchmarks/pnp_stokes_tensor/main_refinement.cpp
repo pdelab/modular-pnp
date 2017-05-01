@@ -208,7 +208,7 @@ std::vector<std::shared_ptr<const dolfin::Function>> extract_log_densities (
   std::size_t component_count = solution->function_space()->element()->num_sub_elements();
 
   std::vector<std::shared_ptr<const dolfin::Function>> function_vec;
-  for (std::size_t comp = 1; comp < component_count; comp++) {
+  for (std::size_t comp = 0; comp < component_count-1; comp++) {
     auto subfunction_space = (*solution)[comp].function_space()->collapse();
     dolfin::Function log_density(subfunction_space);
     log_density.interpolate((*solution)[comp]);
@@ -230,7 +230,7 @@ std::vector<std::shared_ptr<const dolfin::Function>> compute_entropy_potential (
     dolfin::Function potential(subfunction_space);
     dolfin::Function entropy_potential(subfunction_space);
 
-    potential.interpolate((*solution)[0]);
+    potential.interpolate((*solution)[2]);
     entropy_potential.interpolate((*solution)[comp]);
     *(potential.vector()) *= valencies[comp];
      *entropy_potential.vector() += *potential.vector();
