@@ -209,16 +209,38 @@ void PDE::set_solutions (
 
   std::size_t dimension = new_solutions.size();
 
-  if (_solution_functions.size() == dimension) {
+  if ( (_variables.size() == dimension) && (_solution_functions.size() == dimension) ){
 
     for (std::size_t i = 0; i < dimension; i++) {
-      _solution_function.reset(new dolfin::Function(_functions_space[i]));
-      *(_solution_functions[i])= new_solutions[i];
-      // _bilinear_form->set_coefficient(_variables[i], _solution_functions[i]);
+      _solution_functions[i].reset(new dolfin::Function(_functions_space[i]));
+      _solution_functions[i]->interpolate(new_solutions[i]);
       _linear_form->set_coefficient(_variables[i], _solution_functions[i]);
     }
     _bilinear_form->set_coefficient(_variables[0], _solution_functions[0]);
     _bilinear_form->set_coefficient(_variables[1], _solution_functions[1]);
+
+  }
+  else {
+    printf("Dimension mismatch!!\n");
+  }
+}
+//--------------------------------------
+void PDE::set_solutions (
+  std::vector<std::shared_ptr<dolfin::Function>> new_solutions
+) {
+
+  std::size_t dimension = new_solutions.size();
+
+  if ( (_variables.size() == dimension) && (_solution_functions.size() == dimension) ){
+
+    for (std::size_t i = 0; i < dimension; i++) {
+      _solution_functions[i].reset(new dolfin::Function(_functions_space[i]));
+      _solution_functions[i]->interpolate(*(new_solutions[i]));
+      _linear_form->set_coefficient(_variables[i], _solution_functions[i]);
+    }
+    _bilinear_form->set_coefficient(_variables[0], _solution_functions[0]);
+    _bilinear_form->set_coefficient(_variables[1], _solution_functions[1]);
+
   }
   else {
     printf("Dimension mismatch!!\n");
@@ -295,17 +317,17 @@ void PDE::set_coefficients (
     _linear_coefficient.emplace(bc->first, constant_fn);
   }
 
-  // std::map<std::string, std::vector<double>>::iterator lc;
-  // for (lc = sources.begin(); lc != sources.end(); ++lc) {
-  //   if (sources.find(lc->first)->second.size() == 1) {
-  //     constant_fn.reset( new dolfin::Constant(sources.find(lc->first)->second[0]) );
-  //   } else {
-  //     constant_fn.reset( new dolfin::Constant(sources.find(lc->first)->second) );
-  //   }
-  //
-  //   _linear_form->set_coefficient(lc->first, constant_fn);
-  //   _linear_coefficient.emplace(lc->first, constant_fn);
-  // }
+  std::map<std::string, std::vector<double>>::iterator lc;
+  for (lc = sources.begin(); lc != sources.end(); ++lc) {
+    if (sources.find(lc->first)->second.size() == 1) {
+      constant_fn.reset( new dolfin::Constant(sources.find(lc->first)->second[0]) );
+    } else {
+      constant_fn.reset( new dolfin::Constant(sources.find(lc->first)->second) );
+    }
+
+    _linear_form->set_coefficient(lc->first, constant_fn);
+    _linear_coefficient.emplace(lc->first, constant_fn);
+  }
 
 }
 //--------------------------------------

@@ -18,7 +18,6 @@ extern "C" {
 }
 
 #include "vector_linear_pnp_ns_forms.h"
-// #include "vector_linear_pnp_ns_forms2.h"
 #include "linear_pnp_ns.h"
 
 using namespace std;
@@ -28,7 +27,7 @@ using namespace std;
 int main (int argc, char** argv) {
   printf("\n");
   printf("----------------------------------------------------\n");
-  printf(" Setting up the linearized PNP problem\n");
+  printf(" Setting up the PNP+Stokes problem\n");
   printf("----------------------------------------------------\n\n");
   fflush(stdout);
 
@@ -37,11 +36,11 @@ int main (int argc, char** argv) {
   dolfin::parameters["allow_extrapolation"] = true;
 
   // Deleting the folders:
-  boost::filesystem::remove_all("./benchmarks/pnp_stokes_experiment/output");
+  boost::filesystem::remove_all("./benchmarks/pnp_stokes/output");
 
   // read in parameters
   printf("Reading parameters from files...\n");
-  char domain_param_filename[] = "./benchmarks/pnp_stokes_experiment/domain.dat";
+  char domain_param_filename[] = "./benchmarks/pnp_stokes/domain.dat";
   printf("\tdomain... %s\n", domain_param_filename);
   domain_param domain;
   domain_param_input(domain_param_filename, &domain);
@@ -57,7 +56,7 @@ int main (int argc, char** argv) {
   itsolver_param itpar;
   AMG_param amgpar;
   ILU_param ilupar;
-  char fasp_params[] = "./benchmarks/pnp_stokes_experiment/bcsr.dat";
+  char fasp_params[] = "./benchmarks/pnp_stokes/bcsr.dat";
   fasp_param_input(fasp_params, &inpar);
   fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
   INT status = FASP_SUCCESS;
@@ -70,7 +69,7 @@ int main (int argc, char** argv) {
   AMG_param  pnp_amgpar;
   ILU_param pnp_ilupar;
   Schwarz_param pnp_schpar;
-  char fasp_pnp_params[] = "./benchmarks/pnp_stokes_experiment/bsr.dat";
+  char fasp_pnp_params[] = "./benchmarks/pnp_stokes/bsr.dat";
   fasp_param_input(fasp_pnp_params, &pnp_inpar);
   fasp_param_init(&pnp_inpar, &pnp_itpar, &pnp_amgpar, &pnp_ilupar, &pnp_schpar);
   printf("done\n"); fflush(stdout);
@@ -82,7 +81,7 @@ int main (int argc, char** argv) {
   AMG_ns_param  ns_amgpar;
   ILU_param ns_ilupar;
   Schwarz_param ns_schpar;
-  char fasp_ns_params[] = "./benchmarks/pnp_stokes_experiment/ns.dat";
+  char fasp_ns_params[] = "./benchmarks/pnp_stokes/ns.dat";
   fasp_ns_param_input(fasp_ns_params, &ns_inpar);
   fasp_ns_param_init(&ns_inpar, &ns_itpar, &ns_amgpar, &ns_ilupar, &ns_schpar);
   printf("done\n"); fflush(stdout);
@@ -133,7 +132,7 @@ int main (int argc, char** argv) {
   };
 
   std::map<std::string, std::vector<double>> sources = {
-    {"fixed_charge", {0.0}}
+    {"g", {0.0}}
   };
 
   const std::vector<std::string> variables = {"cc","uu","pp"};
@@ -155,25 +154,21 @@ int main (int argc, char** argv) {
     variables
   );
 
-  // pnp_ns_problem.set_coefficients(
-    // coefficients
-    // pnp_source_fns
-  // );
-
   //-------------------------
   // Print various solutions
   //-------------------------
-  dolfin::File solution_file0("./benchmarks/pnp_stokes_experiment/output/cation_solution.pvd");
-  dolfin::File solution_file1("./benchmarks/pnp_stokes_experiment/output/anion_solution.pvd");
-  dolfin::File solution_file2("./benchmarks/pnp_stokes_experiment/output/potential_solution.pvd");
-  dolfin::File solution_file3("./benchmarks/pnp_stokes_experiment/output/velocity_solution.pvd");
+  dolfin::File solution_file0("./benchmarks/pnp_stokes/output/cation_solution.pvd");
+  dolfin::File solution_file1("./benchmarks/pnp_stokes/output/anion_solution.pvd");
+  dolfin::File solution_file2("./benchmarks/pnp_stokes/output/potential_solution.pvd");
+  dolfin::File solution_file3("./benchmarks/pnp_stokes/output/velocity_solution.pvd");
 
   // initial guess for prescibed Dirichlet
   printf("Initialize Dirichlet BCs & Initial Guess\n");
   pnp_ns_problem.get_dofs();
   pnp_ns_problem.get_dofs_fasp({0,1,2},{3,4});
 
-  pnp_ns_problem.init_BC(0.0);
+  pnp_ns_problem.init_measure(mesh,domain.length_x,domain.length_y,domain.length_z);
+  pnp_ns_problem.init_BC(0.0,domain.length_x);
   std::vector<Linear_Function> InitialGuess;
   Linear_Function PNP(0,-5.0,5.0,{0.0,-2.30258509299,1.0},{-2.30258509299,0.0,-1.0});
   Linear_Function Vel(0,-5.0,5.0,{0.0,0.0,0.0},{0.0,0.0,0.0});
@@ -198,7 +193,7 @@ int main (int argc, char** argv) {
   printf("Initializing nonlinear solver\n");
 
   // set nonlinear solver parameters
-  const std::size_t max_newton = 5;
+  const std::size_t max_newton = 20;
   const double max_residual_tol = 1.0e-10;
   const double relative_residual_tol = 1.0e-4;
   const double initial_residual = pnp_ns_problem.compute_residual("l2");

@@ -79,11 +79,20 @@ target_link_libraries(pnp_exact ${PNP_LIBRARY})
 add_executable(pnp_spheres ./benchmarks/pnp_spheres/main.cpp ./benchmarks/pnp_spheres/linear_pnp.cpp ${SRC_DIR})
 target_link_libraries(pnp_spheres ${PNP_LIBRARY})
 
-add_executable(pnp_stokes_experiment ./benchmarks/pnp_stokes_experiment/main.cpp ./benchmarks/pnp_stokes_experiment/linear_pnp_ns.cpp ${SRC_DIR})
-target_link_libraries(pnp_stokes_experiment ${PNP_STOKES_LIBRARY})
+add_executable(pnp_stokes_tensor ./benchmarks/pnp_stokes_tensor/main.cpp ./benchmarks/pnp_stokes_tensor/linear_pnp_ns.cpp ${SRC_DIR})
+target_link_libraries(pnp_stokes_tensor ${PNP_STOKES_LIBRARY})
+
+add_executable(pnp_stokes_refine_tensor ./benchmarks/pnp_stokes_tensor/main_refinement.cpp ./benchmarks/pnp_stokes_tensor/linear_pnp_ns.cpp ${SRC_DIR})
+target_link_libraries(pnp_stokes_refine_tensor ${PNP_STOKES_LIBRARY})
 
 add_executable(pnp_refine ./benchmarks/pnp_refine_exact/main.cpp ./benchmarks/pnp_refine_exact/linear_pnp.cpp ${SRC_DIR})
 target_link_libraries(pnp_refine ${PNP_LIBRARY})
 
 add_executable(pnp_diode ./benchmarks/pnp_diode/main.cpp ./benchmarks/pnp_diode/linear_pnp.cpp ${SRC_DIR})
 target_link_libraries(pnp_diode ${PNP_LIBRARY})
+
+add_executable(pnp_stokes ./benchmarks/pnp_stokes/main.cpp ./benchmarks/pnp_stokes/linear_pnp_ns.cpp ${SRC_DIR})
+target_link_libraries(pnp_stokes ${PNP_STOKES_LIBRARY})
+
+add_executable(pnp_stokes_refine ./benchmarks/pnp_stokes/main_refinement.cpp ./benchmarks/pnp_stokes/linear_pnp_ns.cpp ${SRC_DIR})
+target_link_libraries(pnp_stokes_refine ${PNP_STOKES_LIBRARY})

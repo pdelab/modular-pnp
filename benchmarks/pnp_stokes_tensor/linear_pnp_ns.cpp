@@ -45,30 +45,11 @@ Linear_PNP_NS::Linear_PNP_NS (
   variables
 ) {
 
-  //
-  // diffusivity_space.reset(
-  //   new vector_linear_pnp_ns_forms::CoefficientSpace_diffusivity(mesh)
-  // );
-  //
-  // valency_space.reset(
-  //   new vector_linear_pnp_ns_forms::CoefficientSpace_valency(mesh)
-  // );
-  //
-  // fixed_charge_space.reset(
-  //   // new vector_linear_pnp_ns_forms::CoefficientSpace_fixed_charge(mesh)
-  // );
-  //
-  // permittivity_space.reset(
-  //   new vector_linear_pnp_ns_forms::CoefficientSpace_permittivity(mesh)
-  // );
 
-  // penalty1_space.reset(
+  // g_space.reset(
   //   new vector_linear_pnp_ns_forms::CoefficientSpace_penalty1(mesh)
   // );
-  //
-  // penalty2_space.reset(
-  //   new vector_linear_pnp_ns_forms::CoefficientSpace_penalty2(mesh)
-  // );
+
 
   _itsolver = itsolver;
   _pnpitsolver = pnpitsolver;
@@ -197,7 +178,6 @@ void Linear_PNP_NS::setup_fasp_linear_algebra () {
 std::vector<dolfin::Function> Linear_PNP_NS::fasp_solve () {
   Linear_PNP_NS::setup_fasp_linear_algebra();
   std::vector<dolfin::Function> solutions(Linear_PNP_NS::get_solutions());
-  printf("\t\t init done");fflush(stdout);
 
   printf("Solving linear system using FASP solver...\n"); fflush(stdout);
   INT status = fasp_solver_bdcsr_krylov_pnp_stokes(
@@ -310,10 +290,10 @@ void Linear_PNP_NS::free_fasp () {
 //--------------------------------------
 
 //--------------------------------------
-void Linear_PNP_NS::init_BC (std::size_t component) {
+void Linear_PNP_NS::init_BC (std::size_t component, double L) {
   std::vector<std::size_t> v1 = {component};
-  std::vector<double> v2 = {-5.0};
-  std::vector<double> v3 = {5.0};
+  std::vector<double> v2 = {-L/2.0};
+  std::vector<double> v3 = {L/2.0};
   auto BCdomain = std::make_shared<Dirichlet_Subdomain>(v1,v2,v3,1E-5);
   // Dirichlet_Subdomain BCdomain({component},{-5.0},{5.0},1E-5);
 
@@ -341,34 +321,25 @@ void Linear_PNP_NS::init_BC (std::size_t component) {
 //--------------------------------------
 
 
-//-------------------------------------
-// dolfin::Function Linear_PNP_NS::get_total_charge () {
-//   dolfin::Function total_charge(fixed_charge_space);
-//   total_charge.interpolate(
-//     *(_linear_form->coefficient("fixed_charge"))
-//   );
-//
-//   dolfin::Function valencies(valency_space);
-//   valencies.interpolate(
-//     (*_bilinear_form->coefficient("valency"))
-//   );
-//
-//   dolfin::Function solution(Linear_PNP_NS::get_solution());
-//   std::size_t solution_size = Linear_PNP_NS::get_solution_dimension();
-//   std::shared_ptr<dolfin::Function> solution_charge;
-//
-//   double value;
-//   for (std::size_t charge = 1; charge < solution_size; charge++) {
-//     double q = (*(valencies.vector()))[charge];
-//     solution_charge.reset(new dolfin::Function(fixed_charge_space));
-//     solution_charge->interpolate(solution[charge]);
-//     for (std::size_t index = 0; index < solution_charge->vector()->size(); index++) {
-//       value = q * std::exp( (*(solution_charge->vector()))[index] );
-//       solution_charge->vector()->setitem(index, value);
-//     }
-//
-//     total_charge = total_charge + (*solution_charge);
-//   }
-//
-//   return total_charge;
-// }
+//--------------------------------------
+void Linear_PNP_NS::init_measure (std::shared_ptr<const dolfin::Mesh> mesh,
+  double Lx, double Ly, double Lz) {
+  auto markers = std::make_shared<dolfin::FacetFunction<std::size_t>>(mesh, 1);
+
+  // X Boundaries
+  std::vector<std::size_t> v1x = {0};
+  std::vector<double> v2x = {-Lx/2.0};
+  std::vector<double> v3x = {Lx/2.0};
+  Dirichlet_Subdomain BCdomain_x(v1x,v2x,v3x,1E-5);
+  BCdomain_x.mark(*markers,1);
+
+  // Y and X Boundaries
+  // std::vector<std::size_t> v1yz = {1,2};
+  // std::vector<double> v2yz = {-Ly/2.0,-Lz/2.0};
+  // std::vector<double> v3yz = { Ly/2.0,Lz/2.0};
+  // Dirichlet_Subdomain BCdomain_yz(v1yz,v2yz,v3yz,1E-5);
+  // BCdomain_yz.mark(*markers,2);
+
+  _linear_form->set_exterior_facet_domains(markers);
+}
+//--------------------------------------

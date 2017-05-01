@@ -112,7 +112,9 @@ class PDE {
     void set_solutions (
       std::vector<dolfin::Function> new_solutions
     );
-
+    void set_solutions (
+      std::vector<std::shared_ptr<dolfin::Function>> new_solutions
+    );
 
     /// Get the current solution
     dolfin::Function get_solution ();

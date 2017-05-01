@@ -76,7 +76,9 @@ class Linear_PNP_NS : public PDE {
     void apply_eafe ();
     void use_eafe ();
     void no_eafe ();
-    void init_BC (std::size_t component);
+    void init_BC (std::size_t component, double L);
+    void init_measure (std::shared_ptr<const dolfin::Mesh> mesh,
+      double Lx, double Ly, double Lz);
 
     std::vector<std::shared_ptr<dolfin::Function>> split_mixed_function (
       std::shared_ptr<const dolfin::Function> mixed_function
@@ -88,8 +90,6 @@ class Linear_PNP_NS : public PDE {
     std::shared_ptr<dolfin::FunctionSpace> diffusivity_space;
     std::shared_ptr<dolfin::FunctionSpace> valency_space;
     std::shared_ptr<dolfin::FunctionSpace> permittivity_space;
-    // std::shared_ptr<dolfin::FunctionSpace> penalty1_space;
-    // std::shared_ptr<dolfin::FunctionSpace> penalty2_space;
     std::shared_ptr<dolfin::FunctionSpace> fixed_charge_space;
 
     ivector _velocity_dofs;
