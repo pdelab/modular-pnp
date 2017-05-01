@@ -1,5 +1,5 @@
-#ifndef __LINEAR_PNP_H
-#define __LINEAR_PNP_H
+#ifndef __LINEAR_PNP_NS_H
+#define __LINEAR_PNP_NS_H
 
 #include <iostream>
 #include <fstream>
@@ -13,11 +13,13 @@
 extern "C" {
   #include "fasp.h"
   #include "fasp_functs.h"
+  #include "fasp4ns.h"
+  #include "fasp4ns_functs.h"
 }
 
-#include "vector_linear_pnp_forms.h"
+#include "vector_linear_pnp_ns_forms.h"
 
-class Linear_PNP : public PDE {
+class Linear_PNP_NS : public PDE {
   public:
 
     /// Create a PNP problem equipped with necessary
@@ -33,25 +35,29 @@ class Linear_PNP : public PDE {
     ///    Parameters for iterative linear solver
     ///  amg (_AMG_param_)
     ///    Parameters for AMG linear solver
-    Linear_PNP (
+    Linear_PNP_NS (
       const std::shared_ptr<const dolfin::Mesh> mesh,
       const std::shared_ptr<dolfin::FunctionSpace> function_space,
+      const std::vector<std::shared_ptr<dolfin::FunctionSpace>> functions_space,
       const std::shared_ptr<dolfin::Form> bilinear_form,
       const std::shared_ptr<dolfin::Form> linear_form,
       const std::map<std::string, std::vector<double>> coefficients,
       const std::map<std::string, std::vector<double>> sources,
       const itsolver_param &itsolver,
-      const AMG_param &amg,
-      const std::string variable
+      const itsolver_param &pnpitsolver,
+      const AMG_param &pnpamg,
+      const itsolver_ns_param &nsitsolver,
+      const AMG_ns_param &nsamg,
+      const std::vector<std::string> variables
     );
 
     /// Destructor
-    virtual ~Linear_PNP ();
+    virtual ~Linear_PNP_NS ();
 
     /// FASP interface
     void setup_fasp_linear_algebra ();
 
-    dolfin::Function fasp_solve ();
+    std::vector<dolfin::Function> fasp_solve ();
 
     dolfin::EigenVector fasp_test_solver (
       const dolfin::EigenVector& target_vector
@@ -59,29 +65,51 @@ class Linear_PNP : public PDE {
 
     void free_fasp ();
 
+    void get_dofs_fasp(
+      std::vector<std::size_t> pnp_dimensions,
+      std::vector<std::size_t> ns_dimensions);
+
+    void EigenVector_to_dvector_block (
+      std::shared_ptr<const dolfin::EigenVector> eigen_vector,
+      dvector* vector);
+
     void apply_eafe ();
     void use_eafe ();
     void no_eafe ();
+    void init_BC (std::size_t component, double L);
+    void init_measure (std::shared_ptr<const dolfin::Mesh> mesh,
+      double Lx, double Ly, double Lz);
 
     std::vector<std::shared_ptr<dolfin::Function>> split_mixed_function (
       std::shared_ptr<const dolfin::Function> mixed_function
     );
 
-    dolfin::Function get_total_charge ();
+    // dolfin::Function get_total_charge ();
 
 
     std::shared_ptr<dolfin::FunctionSpace> diffusivity_space;
-    std::shared_ptr<dolfin::FunctionSpace> reaction_space;
     std::shared_ptr<dolfin::FunctionSpace> valency_space;
     std::shared_ptr<dolfin::FunctionSpace> permittivity_space;
     std::shared_ptr<dolfin::FunctionSpace> fixed_charge_space;
 
+    ivector _velocity_dofs;
+    ivector _pressure_dofs;
+    ivector _pnp_dofs;
+    ivector _stokes_dofs;
+
   private:
     // FASP
+    // ivector _cation_dofs;
+    // ivector _anion_dofs;
+    // ivector _potential_dofs;
+
     itsolver_param _itsolver;
-    AMG_param _amg;
+    itsolver_param _pnpitsolver;
+    itsolver_ns_param _nsitsolver;
+    AMG_param _pnpamg;
+    AMG_ns_param _nsamg;
     dCSRmat _fasp_matrix;
-    dBSRmat _fasp_bsr_matrix;
+    block_dCSRmat _fasp_block_matrix;
     dvector _fasp_vector;
     dvector _fasp_soln;
     bool _faps_soln_unallocated = true;

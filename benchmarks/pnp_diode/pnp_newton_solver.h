@@ -74,7 +74,8 @@ std::shared_ptr<dolfin::Function> solve_pnp (
     pnp_coefficients,
     pnp_sources,
     itsolver,
-    amg
+    amg,
+    "uu"
   );
 
   // set eafe flag

@@ -35,7 +35,18 @@ class PDE {
       const std::shared_ptr<dolfin::Form> bilinear_form,
       const std::shared_ptr<dolfin::Form> linear_form,
       const std::map<std::string, std::vector<double>> coefficients,
-      const std::map<std::string, std::vector<double>> sources
+      const std::map<std::string, std::vector<double>> sources,
+      const std::string variable
+    );
+    PDE (
+      const std::shared_ptr<const dolfin::Mesh> mesh,
+      const std::shared_ptr<dolfin::FunctionSpace> function_space,
+      const std::vector<std::shared_ptr<dolfin::FunctionSpace>> functions_space,
+      const std::shared_ptr<dolfin::Form> bilinear_form,
+      const std::shared_ptr<dolfin::Form> linear_form,
+      const std::map<std::string, std::vector<double>> coefficients,
+      const std::map<std::string, std::vector<double>> sources,
+      const std::vector<std::string> variables
     );
 
     /// Destructor
@@ -94,8 +105,20 @@ class PDE {
       const dolfin::Function& new_solution
     );
 
+    void set_solutions (
+      std::vector<Linear_Function> expression
+    );
+
+    void set_solutions (
+      std::vector<dolfin::Function> new_solutions
+    );
+    void set_solutions (
+      std::vector<std::shared_ptr<dolfin::Function>> new_solutions
+    );
+
     /// Get the current solution
     dolfin::Function get_solution ();
+    std::vector<dolfin::Function> get_solutions ();
 
 
 
@@ -132,6 +155,9 @@ class PDE {
       std::map<std::string, std::vector<double>> coefficients,
       std::map<std::string, std::vector<double>> sources
     );
+    void set_coefficients (
+      std::map<std::string, std::vector<double>> coefficients
+    );
 
     void set_coefficients (
       std::map<std::string, dolfin::Function> coefficients,
@@ -141,6 +167,11 @@ class PDE {
     void EigenMatrix_to_dCSRmat (
       std::shared_ptr<const dolfin::EigenMatrix> eigen_matrix,
       dCSRmat* dCSR_matrix
+    );
+
+    void EigenMatrix_to_dCSRmat(
+      const dolfin::EigenMatrix* mat_A,
+      dCSRmat* dCSR_A
     );
 
     void EigenVector_to_dvector (
@@ -156,6 +187,7 @@ class PDE {
     );
 
     std::shared_ptr<dolfin::FunctionSpace> _function_space;
+    std::vector<std::shared_ptr<dolfin::FunctionSpace>> _functions_space;
 
     /// Forms
     std::shared_ptr<dolfin::Form> _linear_form;
@@ -168,15 +200,20 @@ class PDE {
     std::vector<std::shared_ptr<dolfin::DirichletBC>> _dirichletBC;
     std::vector<std::shared_ptr<dolfin::SubDomain>> _dirichlet_SubDomain;
 
+    std::string _variable;
+    std::vector<std::string> _variables;
+    std::vector<std::shared_ptr<dolfin::Function>> _solution_functions;
+
   private:
+
+    /// Current solution
+    std::shared_ptr<dolfin::Function> _solution_function;
+
     /// Mesh
     std::shared_ptr<dolfin::Mesh> _mesh;
     std::vector<double> _mesh_max, _mesh_min;
     std::size_t _mesh_dim;
     double _mesh_epsilon;
-
-    /// Current solution
-    std::shared_ptr<dolfin::Function> _solution_function;
 
     /// Coefficients
     std::map<std::string, std::shared_ptr<const dolfin::Constant>> _bilinear_coefficient;

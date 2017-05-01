@@ -26,14 +26,16 @@ Linear_PNP::Linear_PNP (
   const std::map<std::string, std::vector<double>> coefficients,
   const std::map<std::string, std::vector<double>> sources,
   const itsolver_param &itsolver,
-  const AMG_param &amg
+  const AMG_param &amg,
+  const std::string variable
 ) : PDE (
   mesh,
   function_space,
   bilinear_form,
   linear_form,
   coefficients,
-  sources
+  sources,
+  variable
 ) {
 
   diffusivity_space.reset(

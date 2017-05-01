@@ -50,7 +50,7 @@ dolfin::Function Error::compute_error (
 ) {
   dolfin::Function error(_function_space);
   error.interpolate(*computed_solution);
-  error = error - *_exact_solution;
+  *error.vector() -= *_exact_solution->vector();
 
   return error;
 }
