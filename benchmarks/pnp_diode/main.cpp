@@ -43,7 +43,7 @@ double computeCurrentFlux(
 
 class CrossSection : public dolfin::SubDomain {
   bool inside(const dolfin::Array<double>& x, bool on_boundary) const {
-    return fabs(x[0]) < 1.0e-8;
+    return (fabs(x[0] - 0.5) < 1.0e-8) or (fabs(x[0] + 0.5) < 1.0e-8);
   }
 };
 
@@ -86,70 +86,77 @@ int main (int argc, char** argv) {
   // Mesh Adaptivity Loop
   //-------------------------
 
-  // parameters for mesh adaptivity
-  double growth_factor = 1.1;
-  double entropy_per_cell = 1.0e-4;
-  std::size_t max_refine_depth = 3;
-  std::size_t max_elements = 250000;
-  Mesh_Refiner mesh_adapt(
-    initial_mesh,
-    max_elements,
-    max_refine_depth,
-    entropy_per_cell
-  );
+  double max_volts = 0.1;
+  double delta_volts = 0.1;
+  for (double voltage_drop = -max_volts; voltage_drop < max_volts + 1.e-5; voltage_drop += delta_volts) {
+    printf("Solving for voltage drop : %5.2e\n\n", voltage_drop);
 
-  // parameters for PNP Newton solver
-  const std::size_t max_newton = 25;
-  const double max_residual_tol = 1.0e-10;
-  const double relative_residual_tol = 1.0e-7;
-  const bool use_eafe_approximation = true;
-  std::shared_ptr<double> initial_residual_ptr = std::make_shared<double>(-1.0);
-
-  // construct initial guess
-  Initial_Guess initial_guess_expression;
-  auto adaptive_solution = std::make_shared<dolfin::Function>(
-    std::make_shared<vector_linear_pnp_forms::FunctionSpace>(mesh_adapt.get_mesh())
-  );
-  adaptive_solution->interpolate(initial_guess_expression);
-
-  dolfin::File initial_guess_file("./benchmarks/pnp_diode/output/initial_guess.pvd");
-
-  while (mesh_adapt.needs_to_solve) {
-    auto mesh = mesh_adapt.get_mesh();
-
-    initial_guess_file << *adaptive_solution;
-
-    auto computed_solution = solve_pnp(
-      mesh_adapt.iteration++,
-      mesh,
-      adaptive_solution,
-      max_newton,
-      max_residual_tol,
-      relative_residual_tol,
-      initial_residual_ptr,
-      use_eafe_approximation,
-      itsolver,
-      amg,
-      "./benchmarks/pnp_diode/output/"
+    // parameters for mesh adaptivity
+    double growth_factor = 1.1;
+    double entropy_per_cell = 1.0e-4;
+    std::size_t max_refine_depth = 3;
+    std::size_t max_elements = 250000;
+    Mesh_Refiner mesh_adapt(
+      initial_mesh,
+      max_elements,
+      max_refine_depth,
+      entropy_per_cell
     );
 
-    // compute current / entropy terms
-    auto diffusivity = get_diode_diffusivity(computed_solution->function_space());
-    auto entropy_potential = compute_entropy_potential(computed_solution);
-    auto log_densities = extract_log_densities(computed_solution);
+    // parameters for PNP Newton solver
+    const std::size_t max_newton = 25;
+    const double max_residual_tol = 1.0e-10;
+    const double relative_residual_tol = 1.0e-4;
+    const bool use_eafe_approximation = true;
+    std::shared_ptr<double> initial_residual_ptr = std::make_shared<double>(-1.0);
 
-    // Compute current flux through cross section
-    double surfaceFlux = computeCurrentFlux(diffusivity, log_densities, entropy_potential);
+    // construct initial guess
+    Initial_Guess initial_guess_expression(voltage_drop);
+    auto adaptive_solution = std::make_shared<dolfin::Function>(
+      std::make_shared<vector_linear_pnp_forms::FunctionSpace>(mesh_adapt.get_mesh())
+    );
+    adaptive_solution->interpolate(initial_guess_expression);
 
-    // adapt computed solutions
-    mesh_adapt.max_elements = (std::size_t) std::floor(growth_factor * mesh->num_cells());
-    mesh_adapt.multilevel_refinement(diffusivity, entropy_potential, log_densities);
-    adaptive_solution.reset( new dolfin::Function(computed_solution->function_space()) );
-    adaptive_solution->interpolate(*computed_solution);
-    // initial_guess_file << *adaptive_solution;
+    dolfin::File initial_guess_file("./benchmarks/pnp_diode/output/initial_guess.pvd");
+
+    while (mesh_adapt.needs_to_solve) {
+      auto mesh = mesh_adapt.get_mesh();
+
+      initial_guess_file << *adaptive_solution;
+
+      auto computed_solution = solve_pnp(
+        mesh_adapt.iteration++,
+        mesh,
+        adaptive_solution,
+        max_newton,
+        max_residual_tol,
+        relative_residual_tol,
+        initial_residual_ptr,
+        use_eafe_approximation,
+        itsolver,
+        amg,
+        "./benchmarks/pnp_diode/output/"
+      );
+
+      // compute current / entropy terms
+      auto diffusivity = get_diode_diffusivity(computed_solution->function_space());
+      auto entropy_potential = compute_entropy_potential(computed_solution);
+      auto log_densities = extract_log_densities(computed_solution);
+
+      // Compute current flux through cross section
+      double surfaceFlux = computeCurrentFlux(diffusivity, log_densities, entropy_potential);
+
+      // adapt computed solutions
+      mesh_adapt.max_elements = (std::size_t) std::floor(growth_factor * mesh->num_cells());
+      mesh_adapt.multilevel_refinement(diffusivity, entropy_potential, log_densities);
+      adaptive_solution.reset( new dolfin::Function(computed_solution->function_space()) );
+      adaptive_solution->interpolate(*computed_solution);
+      // initial_guess_file << *adaptive_solution;
+    }
+
+    printf("\nCompleted adaptivity loop for %eV\n\n", voltage_drop);
   }
 
-  printf("\nCompleted adaptivity loop\n\n");
   return 0;
 }
 
@@ -241,6 +248,9 @@ double computeCurrentFlux(
   cross_section_facets.set_all(0);
   cross_section.mark(cross_section_facets, 1);
 
+  dolfin::File cross_section_file("./benchmarks/pnp_diode/output/cross_section.pvd");
+  cross_section_file << cross_section_facets;
+
   // compute average current flux through the surface
   cross_section_surface_area_forms::Functional surface_area_form(mesh_ptr);
   const dolfin::Constant area_scale(1.0);
@@ -268,6 +278,6 @@ double computeCurrentFlux(
   const double reference_density = 1.5e+22; // mM = 1 / m^3
   const double microamp_scale_factor = 1.0e+6 * elementary_charge * reference_diffusivity * reference_density * reference_length;
 
-  printf("current flux: %e micro-amps\n", microamp_scale_factor * current / surface_area);
+  printf("current flux: %5.3e mA\n", microamp_scale_factor * current / surface_area);
   return microamp_scale_factor * current / surface_area;
 }

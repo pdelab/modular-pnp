@@ -11,7 +11,7 @@
 /**
  * dimensional analysis
  */
-const double VOLTAGE_DROP = +0.2;
+const double VOLTAGE_DROP = +0.1;
 
 const double elementary_charge = 1.60217662e-19; // C
 const double boltzmann = 1.38064852e-23; // J / K
@@ -71,22 +71,23 @@ std::vector<double> right_contact (double x) {
   };
 };
 
-
 /**
  * define expressions from coefficients
  */
 class Initial_Guess : public dolfin::Expression {
   public:
-    Initial_Guess() : dolfin::Expression(3) {}
+    Initial_Guess (double voltage_drop) : dolfin::Expression(3), volt(voltage_drop) {}
     void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
       std::vector<double> left(left_contact(-1.0));
       std::vector<double> right(right_contact(+1.0));
-      values[0] = 0.5 * (left[0] * (1.0 - x[0]) + right[0] * (x[0] + 1.0));
+      values[0] = 0.25 * (volt * (1.0 - x[0]) - volt * (x[0] + 1.0));
       values[1] = 0.5 * (left[1] * (1.0 - x[0]) + right[1] * (x[0] + 1.0));
       values[2] = 0.5 * (left[2] * (1.0 - x[0]) + right[2] * (x[0] + 1.0));
       // values[1] = x[0] < 0.0 ? left[1] : right[1];
       // values[2] = x[0] < 0.0 ? left[2] : right[2];
     }
+  private:
+    double volt;
 };
 
 class Permittivity_Expression : public dolfin::Expression {
