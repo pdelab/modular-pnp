@@ -134,6 +134,7 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   dolfin::File solution_file1(path + "_2solution.pvd");
   dolfin::File solution_file2(path + "_3solution.pvd");
   dolfin::File total_charge_file(path + "_total_charge.pvd");
+  dolfin::File total_solution_file(path + "_total_solution.pvd");
 
   // initial guess for prescibed Dirichlet
   printf("Record interpolant for given Dirichlet BCs (initial guess for solution)\n");
@@ -156,6 +157,7 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   solution_file0 << initial_guess_function[0];
   solution_file1 << initial_guess_function[1];
   solution_file2 << initial_guess_function[2];
+  total_solution_file << initial_guess_function;
   total_charge_file << pnp_problem.get_total_charge();
   printf("\n");
 
@@ -196,25 +198,26 @@ std::shared_ptr<dolfin::Function> solve_pnp (
     std::size_t backtrack_count = 0;
 
     // ensure L_infinity norm has bounded growth at each iteration
-    double prev_max_dof = std::abs(previous_solution.vector()->max());
-    double prev_min_dof = std::abs(previous_solution.vector()->min());
-    double prev_L_infty = prev_max_dof > prev_min_dof ? prev_max_dof : prev_min_dof;
+    double prev_max_dof = previous_solution.vector()->max();
+    double prev_min_dof = previous_solution.vector()->min();
+    double prev_range = prev_max_dof - prev_min_dof + 1E-12;
 
-    double max_dof = std::abs(computed_solution.vector()->max());
-    double min_dof = std::abs(computed_solution.vector()->min());
-    double L_infty = max_dof > min_dof ? max_dof : min_dof;
+    double max_dof = computed_solution.vector()->max();
+    double min_dof = computed_solution.vector()->min();
+    double range = max_dof - min_dof;
 
-    if (L_infty > 1.05 * prev_L_infty) {
-      printf("\tupdate causes too much growth in solution : %e\n", L_infty / prev_L_infty);
+    // avoid updates that cause more than than 1% growth in the solution
+    double increase_tolerance = 1E-1;
+    if (range > (1.0 + increase_tolerance) * prev_range) {
+      printf("\tupdate causes too much growth in solution : %e / %e = %e\n", range, prev_range, range / prev_range);
       dolfin::Function newton_update(computed_solution.function_space());
       newton_update = computed_solution - previous_solution;
 
-      double update_max_dof = std::abs(newton_update.vector()->max());
-      double update_min_dof = std::abs(newton_update.vector()->min());
-      double update_L_infty = update_max_dof > update_min_dof ? update_max_dof : update_min_dof;
+      double max_update = newton_update.vector()->max();
+      double min_update = newton_update.vector()->min();
+      double growth_factor = increase_tolerance * prev_range / (max_update - min_update + 1E-12);
+      newton_update = newton_update * growth_factor;
 
-      double factor = prev_L_infty / (update_L_infty + 1E-12);
-      newton_update = newton_update * factor;
       computed_solution = previous_solution + newton_update;
     }
 
@@ -244,6 +247,7 @@ std::shared_ptr<dolfin::Function> solve_pnp (
     solution_file0 << computed_solution[0];
     solution_file1 << computed_solution[1];
     solution_file2 << computed_solution[2];
+    total_solution_file << computed_solution;
     total_charge_file << pnp_problem.get_total_charge();
     printf("\n");
   }

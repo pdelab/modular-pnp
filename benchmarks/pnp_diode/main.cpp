@@ -88,13 +88,15 @@ int main (int argc, char** argv) {
 
   double max_volts = 0.1;
   double delta_volts = 0.1;
+  dolfin::File accepted_solution_file("./benchmarks/pnp_diode/output/accepted_solution.pvd");
+
   for (double voltage_drop = -max_volts; voltage_drop < max_volts + 1.e-5; voltage_drop += delta_volts) {
     printf("Solving for voltage drop : %5.2e\n\n", voltage_drop);
 
     // parameters for mesh adaptivity
-    double growth_factor = 1.1;
-    double entropy_per_cell = 1.0e-4;
-    std::size_t max_refine_depth = 3;
+    double growth_factor = 1.2;
+    double entropy_per_cell = 5.0e-3;
+    std::size_t max_refine_depth = 4;
     std::size_t max_elements = 250000;
     Mesh_Refiner mesh_adapt(
       initial_mesh,
@@ -104,13 +106,14 @@ int main (int argc, char** argv) {
     );
 
     // parameters for PNP Newton solver
-    const std::size_t max_newton = 25;
+    const std::size_t max_newton = 50;
     const double max_residual_tol = 1.0e-10;
     const double relative_residual_tol = 1.0e-4;
     const bool use_eafe_approximation = true;
     std::shared_ptr<double> initial_residual_ptr = std::make_shared<double>(-1.0);
 
     // construct initial guess
+    double induced_current;
     Initial_Guess initial_guess_expression(voltage_drop);
     auto adaptive_solution = std::make_shared<dolfin::Function>(
       std::make_shared<vector_linear_pnp_forms::FunctionSpace>(mesh_adapt.get_mesh())
@@ -118,7 +121,6 @@ int main (int argc, char** argv) {
     adaptive_solution->interpolate(initial_guess_expression);
 
     dolfin::File initial_guess_file("./benchmarks/pnp_diode/output/initial_guess.pvd");
-
     while (mesh_adapt.needs_to_solve) {
       auto mesh = mesh_adapt.get_mesh();
 
@@ -144,17 +146,17 @@ int main (int argc, char** argv) {
       auto log_densities = extract_log_densities(computed_solution);
 
       // Compute current flux through cross section
-      double surfaceFlux = computeCurrentFlux(diffusivity, log_densities, entropy_potential);
+      induced_current = computeCurrentFlux(diffusivity, log_densities, entropy_potential);
 
       // adapt computed solutions
       mesh_adapt.max_elements = (std::size_t) std::floor(growth_factor * mesh->num_cells());
       mesh_adapt.multilevel_refinement(diffusivity, entropy_potential, log_densities);
-      adaptive_solution.reset( new dolfin::Function(computed_solution->function_space()) );
-      adaptive_solution->interpolate(*computed_solution);
-      // initial_guess_file << *adaptive_solution;
+      adaptive_solution = adapt( *computed_solution, mesh_adapt.get_mesh() );
     }
 
-    printf("\nCompleted adaptivity loop for %eV\n\n", voltage_drop);
+
+    printf("\nCompleted adaptivity loop for %eV with induced current %emA\n\n", voltage_drop, induced_current);
+    accepted_solution_file << *adaptive_solution;
   }
 
   return 0;

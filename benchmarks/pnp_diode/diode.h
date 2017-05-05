@@ -11,8 +11,6 @@
 /**
  * dimensional analysis
  */
-const double VOLTAGE_DROP = +0.1;
-
 const double elementary_charge = 1.60217662e-19; // C
 const double boltzmann = 1.38064852e-23; // J / K
 const double temperature = 3e+2; // K
@@ -56,6 +54,7 @@ double fixed (double x) {
 /**
  * boundary conditions
  */
+const double VOLTAGE_DROP = +0.0;
 std::vector<double> left_contact (double x) {
   return {
     scale_potential(0.5 * VOLTAGE_DROP - voltage_ground), // V
