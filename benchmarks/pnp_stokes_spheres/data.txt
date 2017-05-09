@@ -1,0 +1,2 @@
+starting mesh size =104383
+t	NewtonIteration	RelativeResidual	Cation	Anion	Potential	Energy	TimeElaspsed	MeshSize
