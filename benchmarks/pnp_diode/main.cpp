@@ -93,6 +93,10 @@ int main (int argc, char** argv) {
   for (double voltage_drop = -max_volts; voltage_drop < max_volts + 1.e-5; voltage_drop += delta_volts) {
     printf("Solving for voltage drop : %5.2e\n\n", voltage_drop);
 
+    std::string output_path("./benchmarks/pnp_diode/output/voltage_");
+    output_path += std::to_string(voltage_drop);
+    output_path += "/";
+
     // parameters for mesh adaptivity
     double growth_factor = 1.2;
     double entropy_per_cell = 1.0e-4;
@@ -137,7 +141,7 @@ int main (int argc, char** argv) {
         use_eafe_approximation,
         itsolver,
         amg,
-        "./benchmarks/pnp_diode/output/"
+        output_path
       );
 
       // compute current / entropy terms
