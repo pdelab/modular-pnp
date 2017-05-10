@@ -18,17 +18,43 @@ PDE::PDE (
   const std::shared_ptr<dolfin::Form> bilinear_form,
   const std::shared_ptr<dolfin::Form> linear_form,
   const std::map<std::string, std::vector<double>> coefficients,
-  const std::map<std::string, std::vector<double>> sources
+  const std::map<std::string, std::vector<double>> sources,
+  const std::string variable
 ) {
   PDE::update_mesh(mesh);
   _function_space = function_space;
   _bilinear_form = bilinear_form;
   _linear_form = linear_form;
+  _variable = variable;
 
   PDE::get_dofs();
   PDE::set_solution(0.0);
 
   PDE::set_coefficients(coefficients, sources);
+}//--------------------------------------
+PDE::PDE (
+  const std::shared_ptr<const dolfin::Mesh> mesh,
+  const std::shared_ptr<dolfin::FunctionSpace> function_space,
+  const std::vector<std::shared_ptr<dolfin::FunctionSpace>> functions_space,
+  const std::shared_ptr<dolfin::Form> bilinear_form,
+  const std::shared_ptr<dolfin::Form> linear_form,
+  const std::map<std::string, std::vector<double>> coefficients,
+  const std::map<std::string, std::vector<double>> sources,
+  const std::vector<std::string> variables
+) {
+  PDE::update_mesh(mesh);
+  _function_space = function_space;
+  _functions_space = functions_space;
+  _bilinear_form = bilinear_form;
+  _linear_form = linear_form;
+  _variables = variables;
+  _solution_functions.reserve(variables.size());
+  _solution_functions.resize(variables.size());
+
+  PDE::get_dofs();
+
+  // PDE::set_coefficients(coefficients, sources);
+  PDE::set_coefficients(coefficients,sources);
 }
 //--------------------------------------
 PDE::~PDE() {}
@@ -89,8 +115,8 @@ void PDE::set_solution (
     _solution_function->interpolate(*constant_fn);
   }
 
-  _bilinear_form->set_coefficient("uu", (_solution_function));
-  _linear_form->set_coefficient("uu", (_solution_function));
+  _bilinear_form->set_coefficient(_variable, (_solution_function));
+  _linear_form->set_coefficient(_variable, (_solution_function));
 }
 //--------------------------------------
 void PDE::set_solution (
@@ -111,8 +137,8 @@ void PDE::set_solution (
     _solution_function->interpolate(*constant_fn);
   }
 
-  _bilinear_form->set_coefficient("uu", (_solution_function));
-  _linear_form->set_coefficient("uu", (_solution_function));
+  _bilinear_form->set_coefficient(_variable, (_solution_function));
+  _linear_form->set_coefficient(_variable, (_solution_function));
 }
 //--------------------------------------
 void PDE::set_solution (
@@ -151,8 +177,74 @@ void PDE::set_solution (
     _solution_function->interpolate(*constant_fn);
   }
 
-  _bilinear_form->set_coefficient("uu", _solution_function);
-  _linear_form->set_coefficient("uu", _solution_function);
+  _bilinear_form->set_coefficient(_variable, _solution_function);
+  _linear_form->set_coefficient(_variable, _solution_function);
+}
+//--------------------------------------
+void PDE::set_solutions (
+  std::vector<Linear_Function> expression
+) {
+
+  std::size_t dimension = expression.size();
+
+  if ( (_variables.size() == dimension) && (_solution_functions.size() == dimension) ){
+
+    for (std::size_t i = 0; i < dimension; i++) {
+      _solution_functions[i].reset(new dolfin::Function(_functions_space[i]));
+      _solution_functions[i]->interpolate(expression[i]);
+      _linear_form->set_coefficient(_variables[i], _solution_functions[i]);
+    }
+    _bilinear_form->set_coefficient(_variables[0], _solution_functions[0]);
+    _bilinear_form->set_coefficient(_variables[1], _solution_functions[1]);
+
+  }
+  else {
+    printf("Dimension mismatch!!\n");
+  }
+}
+//--------------------------------------
+void PDE::set_solutions (
+  std::vector<dolfin::Function> new_solutions
+) {
+
+  std::size_t dimension = new_solutions.size();
+
+  if ( (_variables.size() == dimension) && (_solution_functions.size() == dimension) ){
+
+    for (std::size_t i = 0; i < dimension; i++) {
+      _solution_functions[i].reset(new dolfin::Function(_functions_space[i]));
+      _solution_functions[i]->interpolate(new_solutions[i]);
+      _linear_form->set_coefficient(_variables[i], _solution_functions[i]);
+    }
+    _bilinear_form->set_coefficient(_variables[0], _solution_functions[0]);
+    _bilinear_form->set_coefficient(_variables[1], _solution_functions[1]);
+
+  }
+  else {
+    printf("Dimension mismatch!!\n");
+  }
+}
+//--------------------------------------
+void PDE::set_solutions (
+  std::vector<std::shared_ptr<dolfin::Function>> new_solutions
+) {
+
+  std::size_t dimension = new_solutions.size();
+
+  if ( (_variables.size() == dimension) && (_solution_functions.size() == dimension) ){
+
+    for (std::size_t i = 0; i < dimension; i++) {
+      _solution_functions[i].reset(new dolfin::Function(_functions_space[i]));
+      _solution_functions[i]->interpolate(*(new_solutions[i]));
+      _linear_form->set_coefficient(_variables[i], _solution_functions[i]);
+    }
+    _bilinear_form->set_coefficient(_variables[0], _solution_functions[0]);
+    _bilinear_form->set_coefficient(_variables[1], _solution_functions[1]);
+
+  }
+  else {
+    printf("Dimension mismatch!!\n");
+  }
 }
 //--------------------------------------
 void PDE::set_solution (
@@ -174,17 +266,20 @@ void PDE::set_solution (
     _solution_function->interpolate(*constant_fn);
   }
 
-  _bilinear_form->set_coefficient("uu", _solution_function);
-  _linear_form->set_coefficient("uu", _solution_function);
+  _bilinear_form->set_coefficient(_variable, _solution_function);
+  _linear_form->set_coefficient(_variable, _solution_function);
 }
 //--------------------------------------
 dolfin::Function PDE::get_solution () {
   return *(_solution_function);
 }
 //--------------------------------------
-
-
-
+std::vector<dolfin::Function> PDE::get_solutions () {
+  std::vector<dolfin::Function> solutions;
+  for (int i=0;i<_solution_functions.size();i++)
+    solutions.push_back( *(_solution_functions[i]) );
+  return solutions;
+}
 //--------------------------------------
 void PDE::print_coefficients () {
 
@@ -233,6 +328,28 @@ void PDE::set_coefficients (
     _linear_form->set_coefficient(lc->first, constant_fn);
     _linear_coefficient.emplace(lc->first, constant_fn);
   }
+
+}
+//--------------------------------------
+void PDE::set_coefficients (
+  std::map<std::string, std::vector<double>> coefficients ) {
+  std::shared_ptr<dolfin::Constant> constant_fn;
+
+  std::map<std::string, std::vector<double>>::iterator bc;
+  for (bc = coefficients.begin(); bc != coefficients.end(); ++bc) {
+    if (coefficients.find(bc->first)->second.size() == 1) {
+      constant_fn.reset( new dolfin::Constant(coefficients.find(bc->first)->second[0]) );
+    } else {
+      constant_fn.reset( new dolfin::Constant(coefficients.find(bc->first)->second) );
+    }
+
+    _bilinear_form->set_coefficient(bc->first, constant_fn);
+    _linear_form->set_coefficient(bc->first, constant_fn);
+
+    _bilinear_coefficient.emplace(bc->first, constant_fn);
+    _linear_coefficient.emplace(bc->first, constant_fn);
+  }
+
 }
 //--------------------------------------
 void PDE::set_coefficients (
@@ -409,8 +526,8 @@ dolfin::Function PDE::dolfin_solve () {
   dolfin::solve(equation, solution_update, dirichletBC_vector);
   *(_solution_function->vector()) += *(solution_update.vector());
 
-  _bilinear_form->set_coefficient("uu", _solution_function);
-  _linear_form->set_coefficient("uu", _solution_function);
+  _bilinear_form->set_coefficient(_variable, _solution_function);
+  _linear_form->set_coefficient(_variable, _solution_function);
 
   return *_solution_function;
 }
@@ -442,11 +559,10 @@ dolfin::Function PDE::_convert_EigenVector_to_Function (
 ) {
   dolfin::Function fn(_function_space);
 
-  if (eigen_vector.size() != _solution_function->vector()->size()) {
-    printf("Cannot convert EigenVector to Function...\n");
-    printf("\tincompatible dimensions!\n");
-  }
-
+  // if (eigen_vector.size() != _solution_function->vector()->size()) {
+  //   printf("Cannot convert EigenVector to Function...\n");
+  //   printf("\tincompatible dimensions!\n");
+  // }
   dolfin::la_index dof_index;
   for (std::size_t component = 0; component < _dof_map.size(); component++) {
     for (std::size_t index = 0; index < _dof_map[component].size(); index++) {
@@ -512,6 +628,40 @@ void PDE::EigenMatrix_to_dCSRmat (
   dCSR_matrix->JA = JA;
   dCSR_matrix->val = val;
 }
+
+//--------------------------------------
+void PDE::EigenMatrix_to_dCSRmat(const dolfin::EigenMatrix* mat_A, dCSRmat* dCSR_A)
+{
+  // dimensions of matrix
+  int nrows = mat_A->size(0);
+  int ncols = mat_A->size(1);
+  int nnz = mat_A->nnz();
+  // check for uninitialized EigenMatrix
+  if ( nrows<1 || ncols<1 || nnz<1 ) {
+    fasp_chkerr(ERROR_INPUT_PAR, "EigenMatrix_to_dCSRmat");
+  }
+
+  // point to JA array
+  int* JA;
+  JA = (int*) std::get<1>(mat_A->data());
+
+  int *IA;
+  IA = (int*) std::get<0>(mat_A->data());
+
+  // point to values array
+  double* vals;
+  vals = (double*) std::get<2>(mat_A->data());
+
+  // assign to dCSRmat
+  dCSR_A->nnz = nnz;
+  dCSR_A->row = nrows;
+  dCSR_A->col = ncols;
+  dCSR_A->IA = IA;
+  dCSR_A->JA = JA;
+  dCSR_A->val = vals;
+}
+
+
 //--------------------------------------
 void PDE::EigenVector_to_dvector (
   std::shared_ptr<const dolfin::EigenVector> eigen_vector,
