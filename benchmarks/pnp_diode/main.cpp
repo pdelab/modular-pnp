@@ -95,7 +95,7 @@ int main (int argc, char** argv) {
 
     // parameters for mesh adaptivity
     double growth_factor = 1.2;
-    double entropy_per_cell = 5.0e-3;
+    double entropy_per_cell = 1.0e-4;
     std::size_t max_refine_depth = 4;
     std::size_t max_elements = 250000;
     Mesh_Refiner mesh_adapt(
@@ -155,7 +155,7 @@ int main (int argc, char** argv) {
     }
 
 
-    printf("\nCompleted adaptivity loop for %eV with induced current %emA\n\n", voltage_drop, induced_current);
+    printf("\nCompleted adaptivity loop for %5.3eV with induced current %5.3emA\n\n\n\n", voltage_drop, induced_current);
     accepted_solution_file << *adaptive_solution;
   }
 

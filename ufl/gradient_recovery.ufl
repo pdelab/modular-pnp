@@ -7,8 +7,6 @@ entropy = TrialFunction(vector)
 v = TestFunction(vector)
 
 potential = Coefficient(element)
-log_weight = Coefficient(element)
-diffusivity = Coefficient(element)
 
 a = inner(entropy, v) * dx
-L = inner(diffusivity * exp(log_weight) * grad(potential), v) * dx
+L = inner(grad(potential), v) * dx

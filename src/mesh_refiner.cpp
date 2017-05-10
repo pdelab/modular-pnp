@@ -215,13 +215,13 @@ dolfin::EigenVector Mesh_Refiner::compute_entropy_error_vector (
       dolfin::adapt(*(entropy_log_weight_vector[comp]->function_space()), _mesh)
     );
     log_weight_interpolant->interpolate( *(entropy_log_weight_vector[comp]) );;
-    gradient_form.log_weight = log_weight_interpolant;
+    // gradient_form.log_weight = log_weight_interpolant;
 
     auto diffusivity_interpolant = std::make_shared<dolfin::Function>(
       dolfin::adapt(*(diffusivity_vector[comp]->function_space()), _mesh)
     );
     diffusivity_interpolant->interpolate( *(diffusivity_vector[comp]) );
-    gradient_form.diffusivity = diffusivity_interpolant;
+    // gradient_form.diffusivity = diffusivity_interpolant;
 
     auto recovery_matrix = std::make_shared<dolfin::EigenMatrix>();
     dolfin::assemble(*recovery_matrix, bilinear_lumping);
@@ -239,6 +239,8 @@ dolfin::EigenVector Mesh_Refiner::compute_entropy_error_vector (
     poisson_cell_marker::LinearForm error_form(DG);
     error_form.entropy_potential = potential_interpolant;
     error_form.entropy = entropy;
+    error_form.diffusivity = diffusivity_interpolant;
+    error_form.log_weight = log_weight_interpolant;
 
     if (error_vector.size() < 1) {
       dolfin::assemble(error_vector, error_form);
