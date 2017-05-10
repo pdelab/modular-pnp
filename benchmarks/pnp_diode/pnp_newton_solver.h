@@ -130,9 +130,6 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   //-------------------------
   std::string path(output_dir + "adapt_");
   path += std::to_string(adaptivity_iteration);
-  dolfin::File solution_file0(path + "_1solution.pvd");
-  dolfin::File solution_file1(path + "_2solution.pvd");
-  dolfin::File solution_file2(path + "_3solution.pvd");
   dolfin::File total_charge_file(path + "_total_charge.pvd");
   dolfin::File total_solution_file(path + "_total_solution.pvd");
 
@@ -154,9 +151,6 @@ std::shared_ptr<dolfin::Function> solve_pnp (
 
   // output to file
   initial_guess_function = pnp_problem.get_solution();
-  solution_file0 << initial_guess_function[0];
-  solution_file1 << initial_guess_function[1];
-  solution_file2 << initial_guess_function[2];
   total_solution_file << initial_guess_function;
   total_charge_file << pnp_problem.get_total_charge();
   printf("\n");
@@ -244,9 +238,6 @@ std::shared_ptr<dolfin::Function> solve_pnp (
     printf("\tmaximum residual :  %10.5e\n", newton.max_residual);
     printf("\trelative residual : %10.5e\n", newton.relative_residual);
     printf("\toutput solution to file...\n");
-    solution_file0 << computed_solution[0];
-    solution_file1 << computed_solution[1];
-    solution_file2 << computed_solution[2];
     total_solution_file << computed_solution;
     total_charge_file << pnp_problem.get_total_charge();
     printf("\n");
