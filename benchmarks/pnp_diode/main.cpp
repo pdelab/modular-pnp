@@ -145,6 +145,7 @@ int main (int argc, char** argv) {
       );
 
       // compute current / entropy terms
+      printf("Computing diode current\n");
       auto diffusivity = get_diode_diffusivity(computed_solution->function_space());
       auto entropy_potential = compute_entropy_potential(computed_solution);
       auto log_densities = extract_log_densities(computed_solution);
@@ -254,9 +255,6 @@ double computeCurrentFlux(
   cross_section_facets.set_all(0);
   cross_section.mark(cross_section_facets, 1);
 
-  dolfin::File cross_section_file("./benchmarks/pnp_diode/output/cross_section.pvd");
-  cross_section_file << cross_section_facets;
-
   // compute average current flux through the surface
   cross_section_surface_area_forms::Functional surface_area_form(mesh_ptr);
   const dolfin::Constant area_scale(1.0);
@@ -284,6 +282,6 @@ double computeCurrentFlux(
   const double reference_density = 1.5e+22; // mM = 1 / m^3
   const double microamp_scale_factor = 1.0e+6 * elementary_charge * reference_diffusivity * reference_density * reference_length;
 
-  printf("current flux: %5.3e mA\n", microamp_scale_factor * current / surface_area);
+  printf("\tcurrent flux: %5.3e mA\n", microamp_scale_factor * current / surface_area);
   return microamp_scale_factor * current / surface_area;
 }
