@@ -37,10 +37,8 @@ find_package(Boost COMPONENTS system filesystem REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 # Set FASP directories and libraries
-# set(FASP_DIR /usr/local/faspsolver)     # must be set for each new build
-# set(FASP4NS_DIR /usr/local/fasp4ns)     # must be set for each new build
-set(FASP_DIR /Users/maximilianmetti/faspsolver)     # must be set for each new build
-set(FASP4NS_DIR /Users/maximilianmetti/fasp4ns)     # must be set for each new build
+set(FASP_DIR /usr/local/faspsolver)     # must be set for each new build
+set(FASP4NS_DIR /usr/local/fasp4ns)     # must be set for each new build
 set(FASP_LIB ${FASP_DIR}/lib/libfasp.a)
 set(FASP4NS_LIB ${FASP4NS_DIR}/lib/libfasp4ns.a)
 
