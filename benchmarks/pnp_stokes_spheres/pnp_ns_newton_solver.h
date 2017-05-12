@@ -23,6 +23,9 @@ extern "C" {
 #include "vector_linear_pnp_ns_forms.h"
 #include "linear_pnp_ns.h"
 
+#include "spheres.h"
+
+
 using namespace std;
 
 
@@ -76,9 +79,9 @@ std::vector<dolfin::Function> solve_pnp_stokes (
 
 
   // set PDE coefficients
-  printf("\tInitialize coefficients\n");
+  printf("Initialize coefficients\n");
   std::map<std::string, std::vector<double>> coefficients = {
-    {"permittivity", {1.0}},
+    {"permittivity", {1E-3}},
     {"diffusivity0", {1.0}},
     {"diffusivity1", {1.0}},
     {"valency0", {1.0}},
@@ -89,7 +92,8 @@ std::vector<dolfin::Function> solve_pnp_stokes (
   };
 
   std::map<std::string, std::vector<double>> sources = {
-    {"g", {1.0}}
+    {"g1", {0.0}},
+    {"g2", {0.1}}
   };
 
   const std::vector<std::string> variables = {"cc","uu","pp"};
@@ -129,8 +133,18 @@ std::vector<dolfin::Function> solve_pnp_stokes (
   pnp_ns_problem.set_solutions(initial_guess);
   printf("\n");
 
+
+  auto vec1=std::make_shared<dolfin::Constant>(-2.30258509299,0.0,1.0);
+  auto vec2=std::make_shared<dolfin::Constant>(0.0,0.0,0.0);
   std::vector<dolfin::Function> solutionFn;
   solutionFn = pnp_ns_problem.get_solutions();
+  auto sp_domain = std::make_shared<SpheresSubDomain>();
+  dolfin::DirichletBC bc_sp0(pnp_ns_problem._functions_space[0],vec1,sp_domain);
+  dolfin::DirichletBC bc_sp1(pnp_ns_problem._functions_space[1],vec2,sp_domain);
+  bc_sp0.apply(*solutionFn[0].vector());
+  bc_sp1.apply(*solutionFn[1].vector());
+  pnp_ns_problem.set_solutions(solutionFn);
+
   solution_file0 << solutionFn[0][0];
   solution_file1 << solutionFn[0][1];
   solution_file2 << solutionFn[0][2];

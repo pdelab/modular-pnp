@@ -3,7 +3,7 @@
 % domain and mesh          %
 %--------------------------%
 
-mesh_output    = ./benchmarks/PNP/output/mesh.pvd
+mesh_output    = ./benchmarks/pnp_stokes_spheres/output/mesh.pvd
 
 mesh_file      = none  %./mesh/gramA_channel.xml
 surface_file   = none  %./mesh/gramA_channel_facet_region.xml
@@ -11,10 +11,10 @@ subdomain_file = none  %./mesh/gramA_channel_physical_region.xml
 
 ref_length = 1.0e-9
 
-length_x = 10.0
-length_y = 1.0
-length_z = 1.0
+length_x = 2.2
+length_y = 2.2
+length_z = 2.2
 
-grid_x = 50
-grid_y = 5
-grid_z = 5
+grid_x = 10
+grid_y = 10
+grid_z = 10

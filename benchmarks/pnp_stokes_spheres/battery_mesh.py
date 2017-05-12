@@ -52,26 +52,30 @@ for row in data:
     for l in range(len(line)):
          if line[l]!='':
              if i==0:
-                 xc.append(float(line[l])-25.0)
+                 xc.append((float(line[l])-25.0)/36.0)
                  i+=1
              elif i==1:
-                 yc.append(float(line[l])-25.0)
+                 yc.append((float(line[l])-25.0)/36.0)
                  i+=1
              elif i==2:
-                 zc.append(float(line[l])-25.0)
+                 zc.append((float(line[l])-25.0)/36.0)
                  i+=1
              elif i==3:
-                 rc.append(float(line[l]))
+                 rc.append((float(line[l]))/36.0)
                  i+=1
 
-Num_cells=50
-Lx=72.0
-Ly=72.0
-Lz=72.0
+print np.max(xc)
+print np.max(rc)
+
+
+Num_cells=20
+Lx=2.2
+Ly=2.2
+Lz=2.2
 domain = Box(Point(-Lx/2.0,-Ly/2.0,-Lz/2.0),Point(Lx/2.0,Ly/2.0,Lz/2.0))
 print "Generating the domain..."
 ## The range can be at most len(x)=86
-Numb_spheres=20
+Numb_spheres=5
 for i in range(Numb_spheres):
     domain = domain - Sphere(Point(xc[i],yc[i],zc[i]), rc[i])
 

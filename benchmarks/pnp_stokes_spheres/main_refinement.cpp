@@ -42,17 +42,18 @@ int main (int argc, char** argv) {
   dolfin::parameters["allow_extrapolation"] = true;
 
   // Deleting the folders:
-  boost::filesystem::remove_all("./benchmarks/pnp_stokes/output");
+  boost::filesystem::remove_all("./benchmarks/pnp_stokes_spheres/output");
 
   // read in parameters
   printf("Reading parameters from files...\n");
-  char domain_param_filename[] = "./benchmarks/pnp_stokes/domain.dat";
+  char domain_param_filename[] = "./benchmarks/pnp_stokes_spheres/domain.dat";
   printf("domain... %s\n", domain_param_filename);
   domain_param domain;
   domain_param_input(domain_param_filename, &domain);
   std::shared_ptr<dolfin::Mesh> initial_mesh;
   initial_mesh.reset(new dolfin::Mesh);
-  *initial_mesh = domain_build(domain);
+  *initial_mesh = dolfin::Mesh("./benchmarks/pnp_stokes_spheres/mesh.xml.gz");
+  // *initial_mesh = domain_build(domain);
   // print_domain_param(&domain);
 
 
@@ -62,7 +63,7 @@ int main (int argc, char** argv) {
   itsolver_param itpar;
   AMG_param amgpar;
   ILU_param ilupar;
-  char fasp_params[] = "./benchmarks/pnp_stokes/bcsr.dat";
+  char fasp_params[] = "./benchmarks/pnp_stokes_spheres/bcsr.dat";
   fasp_param_input(fasp_params, &inpar);
   fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
   INT status = FASP_SUCCESS;
@@ -75,7 +76,7 @@ int main (int argc, char** argv) {
   AMG_param  pnp_amgpar;
   ILU_param pnp_ilupar;
   Schwarz_param pnp_schpar;
-  char fasp_pnp_params[] = "./benchmarks/pnp_stokes/bsr.dat";
+  char fasp_pnp_params[] = "./benchmarks/pnp_stokes_spheres/bsr.dat";
   fasp_param_input(fasp_pnp_params, &pnp_inpar);
   fasp_param_init(&pnp_inpar, &pnp_itpar, &pnp_amgpar, &pnp_ilupar, &pnp_schpar);
   printf("done\n"); fflush(stdout);
@@ -87,7 +88,7 @@ int main (int argc, char** argv) {
   AMG_ns_param  ns_amgpar;
   ILU_param ns_ilupar;
   Schwarz_param ns_schpar;
-  char fasp_ns_params[] = "./benchmarks/pnp_stokes/ns.dat";
+  char fasp_ns_params[] = "./benchmarks/pnp_stokes_spheres/ns.dat";
   fasp_ns_param_input(fasp_ns_params, &ns_inpar);
   fasp_ns_param_init(&ns_inpar, &ns_itpar, &ns_amgpar, &ns_ilupar, &ns_schpar);
   printf("done\n"); fflush(stdout);
@@ -142,11 +143,11 @@ int main (int argc, char** argv) {
   adaptive_solution[2].reset(new dolfin::Function(std::make_shared<vector_linear_pnp_ns_forms::CoefficientSpace_pp>(mesh_adapt.get_mesh())));
   adaptive_solution[2]->interpolate(InitialGuess[2]);
 
-  dolfin::File initial_guess_file0("./benchmarks/pnp_stokes/output/initial_cation.pvd");
-  dolfin::File initial_guess_file1("./benchmarks/pnp_stokes/output/initial_anion.pvd");
-  dolfin::File initial_guess_file2("./benchmarks/pnp_stokes/output/initial_potential.pvd");
-  dolfin::File initial_guess_file3("./benchmarks/pnp_stokes/output/initial_velocity.pvd");
-  dolfin::File initial_guess_file4("./benchmarks/pnp_stokes/output/initial_pressure.pvd");
+  dolfin::File initial_guess_file0("./benchmarks/pnp_stokes_spheres/output/initial_cation.pvd");
+  dolfin::File initial_guess_file1("./benchmarks/pnp_stokes_spheres/output/initial_anion.pvd");
+  dolfin::File initial_guess_file2("./benchmarks/pnp_stokes_spheres/output/initial_potential.pvd");
+  dolfin::File initial_guess_file3("./benchmarks/pnp_stokes_spheres/output/initial_velocity.pvd");
+  dolfin::File initial_guess_file4("./benchmarks/pnp_stokes_spheres/output/initial_pressure.pvd");
 
   while (mesh_adapt.needs_to_solve) {
     auto mesh = mesh_adapt.get_mesh();
@@ -171,7 +172,7 @@ int main (int argc, char** argv) {
       pnp_amgpar,
       ns_itpar,
       ns_amgpar,
-      "./benchmarks/pnp_stokes/output/"
+      "./benchmarks/pnp_stokes_spheres/output/"
     );
 
     adaptive_solution[0]->interpolate(computed_solution[0]);

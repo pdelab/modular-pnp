@@ -20,9 +20,9 @@ extern "C" {
 #include "vector_linear_pnp_ns_forms.h"
 #include "linear_pnp_ns.h"
 
+#include "spheres.h"
+
 using namespace std;
-
-
 
 int main (int argc, char** argv) {
   printf("\n");
@@ -36,17 +36,17 @@ int main (int argc, char** argv) {
   dolfin::parameters["allow_extrapolation"] = true;
 
   // Deleting the folders:
-  boost::filesystem::remove_all("./benchmarks/pnp_stokes/output");
+  boost::filesystem::remove_all("./benchmarks/pnp_stokes_spheres/output");
 
   // read in parameters
   printf("Reading parameters from files...\n");
-  char domain_param_filename[] = "./benchmarks/pnp_stokes/domain.dat";
+  char domain_param_filename[] = "./benchmarks/pnp_stokes_spheres/domain.dat";
   printf("\tdomain... %s\n", domain_param_filename);
   domain_param domain;
   domain_param_input(domain_param_filename, &domain);
   std::shared_ptr<dolfin::Mesh> mesh;
   mesh.reset(new dolfin::Mesh);
-  *mesh = domain_build(domain);
+  *mesh = dolfin::Mesh("./benchmarks/pnp_stokes_spheres/mesh.xml.gz");
   // print_domain_param(&domain);
 
 
@@ -56,7 +56,7 @@ int main (int argc, char** argv) {
   itsolver_param itpar;
   AMG_param amgpar;
   ILU_param ilupar;
-  char fasp_params[] = "./benchmarks/pnp_stokes/bcsr.dat";
+  char fasp_params[] = "./benchmarks/pnp_stokes_spheres/bcsr.dat";
   fasp_param_input(fasp_params, &inpar);
   fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
   INT status = FASP_SUCCESS;
@@ -69,7 +69,7 @@ int main (int argc, char** argv) {
   AMG_param  pnp_amgpar;
   ILU_param pnp_ilupar;
   Schwarz_param pnp_schpar;
-  char fasp_pnp_params[] = "./benchmarks/pnp_stokes/bsr.dat";
+  char fasp_pnp_params[] = "./benchmarks/pnp_stokes_spheres/bsr.dat";
   fasp_param_input(fasp_pnp_params, &pnp_inpar);
   fasp_param_init(&pnp_inpar, &pnp_itpar, &pnp_amgpar, &pnp_ilupar, &pnp_schpar);
   printf("done\n"); fflush(stdout);
@@ -81,7 +81,7 @@ int main (int argc, char** argv) {
   AMG_ns_param  ns_amgpar;
   ILU_param ns_ilupar;
   Schwarz_param ns_schpar;
-  char fasp_ns_params[] = "./benchmarks/pnp_stokes/ns.dat";
+  char fasp_ns_params[] = "./benchmarks/pnp_stokes_spheres/ns.dat";
   fasp_ns_param_input(fasp_ns_params, &ns_inpar);
   fasp_ns_param_init(&ns_inpar, &ns_itpar, &ns_amgpar, &ns_ilupar, &ns_schpar);
   printf("done\n"); fflush(stdout);
@@ -121,7 +121,7 @@ int main (int argc, char** argv) {
   // set PDE coefficients
   printf("Initialize coefficients\n");
   std::map<std::string, std::vector<double>> coefficients = {
-    {"permittivity", {1.0}},
+    {"permittivity", {1E-3}},
     {"diffusivity0", {1.0}},
     {"diffusivity1", {1.0}},
     {"valency0", {1.0}},
@@ -132,7 +132,8 @@ int main (int argc, char** argv) {
   };
 
   std::map<std::string, std::vector<double>> sources = {
-    {"g", {0.0}}
+    {"g1", {0.0}},
+    {"g2", {0.1}}
   };
 
   const std::vector<std::string> variables = {"cc","uu","pp"};
@@ -157,10 +158,10 @@ int main (int argc, char** argv) {
   //-------------------------
   // Print various solutions
   //-------------------------
-  dolfin::File solution_file0("./benchmarks/pnp_stokes/output/cation_solution.pvd");
-  dolfin::File solution_file1("./benchmarks/pnp_stokes/output/anion_solution.pvd");
-  dolfin::File solution_file2("./benchmarks/pnp_stokes/output/potential_solution.pvd");
-  dolfin::File solution_file3("./benchmarks/pnp_stokes/output/velocity_solution.pvd");
+  dolfin::File solution_file0("./benchmarks/pnp_stokes_spheres/output/cation_solution.pvd");
+  dolfin::File solution_file1("./benchmarks/pnp_stokes_spheres/output/anion_solution.pvd");
+  dolfin::File solution_file2("./benchmarks/pnp_stokes_spheres/output/potential_solution.pvd");
+  dolfin::File solution_file3("./benchmarks/pnp_stokes_spheres/output/velocity_solution.pvd");
 
   // initial guess for prescibed Dirichlet
   printf("Initialize Dirichlet BCs & Initial Guess\n");
@@ -179,8 +180,17 @@ int main (int argc, char** argv) {
   pnp_ns_problem.set_solutions(InitialGuess);
   printf("\n");
 
+  auto vec1=std::make_shared<dolfin::Constant>(-2.30258509299,0.0,1.0);
+  auto vec2=std::make_shared<dolfin::Constant>(0.0,0.0,0.0);
   std::vector<dolfin::Function> solutionFn;
   solutionFn = pnp_ns_problem.get_solutions();
+  auto sp_domain = std::make_shared<SpheresSubDomain>();
+  dolfin::DirichletBC bc_sp0(pnp_ns_problem._functions_space[0],vec1,sp_domain);
+  dolfin::DirichletBC bc_sp1(pnp_ns_problem._functions_space[1],vec2,sp_domain);
+  bc_sp0.apply(*solutionFn[0].vector());
+  bc_sp1.apply(*solutionFn[1].vector());
+  pnp_ns_problem.set_solutions(solutionFn);
+
   solution_file0 << solutionFn[0][0];
   solution_file1 << solutionFn[0][1];
   solution_file2 << solutionFn[0][2];
