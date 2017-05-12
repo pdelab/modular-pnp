@@ -86,7 +86,7 @@ int main (int argc, char** argv) {
   // Mesh Adaptivity Loop
   //-------------------------
 
-  double max_volts = 0.1;
+  double max_volts = 0.5;
   double delta_volts = 0.1;
   dolfin::File accepted_solution_file("./benchmarks/pnp_diode/output/accepted_solution.pvd");
 
@@ -99,7 +99,7 @@ int main (int argc, char** argv) {
 
     // parameters for mesh adaptivity
     double growth_factor = 1.2;
-    double entropy_per_cell = 1.0e-4;
+    double entropy_per_cell = 5.0e-4;
     std::size_t max_refine_depth = 4;
     std::size_t max_elements = 250000;
     Mesh_Refiner mesh_adapt(
@@ -110,7 +110,7 @@ int main (int argc, char** argv) {
     );
 
     // parameters for PNP Newton solver
-    const std::size_t max_newton = 50;
+    const std::size_t max_newton = 25;
     const double max_residual_tol = 1.0e-10;
     const double relative_residual_tol = 1.0e-4;
     const bool use_eafe_approximation = true;
