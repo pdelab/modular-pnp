@@ -15,6 +15,6 @@ length_x = 2.0e-0
 length_y = 4.0e-1
 length_z = 4.0e-1
 
-grid_x = 40
+grid_x = 40            % must be a multiple of four
 grid_y = 8
 grid_z = 8

@@ -37,11 +37,13 @@ class Mesh_Refiner {
 
     /// refine mesh recursively
     std::shared_ptr<const dolfin::Mesh> multilevel_refinement (
+      std::vector<std::shared_ptr<const dolfin::Function>> diffusivity_vector,
       std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
       std::vector<std::shared_ptr<const dolfin::Function>> entropy_weight_vector
     );
 
     std::shared_ptr<const dolfin::Mesh> recursive_refinement (
+      std::vector<std::shared_ptr<const dolfin::Function>> diffusivity_vector,
       std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
       std::vector<std::shared_ptr<const dolfin::Function>> entropy_weight_vector,
       double entropy_tolerance,
@@ -50,6 +52,7 @@ class Mesh_Refiner {
 
     /// mark for refinement
     std::size_t mark_for_refinement (
+      std::vector<std::shared_ptr<const dolfin::Function>> diffusivity_vector,
       std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
       std::vector<std::shared_ptr<const dolfin::Function>> entropy_weight_vector,
       double entropy_tolerance
@@ -57,6 +60,7 @@ class Mesh_Refiner {
 
     /// refine to get close to target size
     std::size_t mark_for_refinement_with_target_size (
+      std::vector<std::shared_ptr<const dolfin::Function>> diffusivity_vector,
       std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
       std::vector<std::shared_ptr<const dolfin::Function>> entropy_log_weight_vector,
       std::size_t target_size
@@ -64,6 +68,7 @@ class Mesh_Refiner {
 
     /// compute interpolation error of entropy function
     dolfin::EigenVector compute_entropy_error_vector (
+      std::vector<std::shared_ptr<const dolfin::Function>> diffusivity_vector,
       std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
       std::vector<std::shared_ptr<const dolfin::Function>> entropy_log_weight_vector
     );

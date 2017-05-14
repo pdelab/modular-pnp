@@ -20,22 +20,21 @@
 //   representation:                 'auto'
 //   split:                          False
 
-#ifndef __POISSON_CELL_MARKER_H
-#define __POISSON_CELL_MARKER_H
-#include <cmath>
+#ifndef __CROSS_SECTION_SURFACE_AREA_FORMS_H
+#define __CROSS_SECTION_SURFACE_AREA_FORMS_H
 #include <stdexcept>
 #include <ufc.h>
 
-class poisson_cell_marker_finite_element_0: public ufc::finite_element
+class cross_section_surface_area_forms_finite_element_0: public ufc::finite_element
 {
 public:
 
-  poisson_cell_marker_finite_element_0() : ufc::finite_element()
+  cross_section_surface_area_forms_finite_element_0() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~poisson_cell_marker_finite_element_0() override
+  ~cross_section_surface_area_forms_finite_element_0() override
   {
     // Do nothing
   }
@@ -1252,22 +1251,22 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new poisson_cell_marker_finite_element_0();
+    return new cross_section_surface_area_forms_finite_element_0();
   }
 
 };
 
 
-class poisson_cell_marker_finite_element_1: public ufc::finite_element
+class cross_section_surface_area_forms_finite_element_1: public ufc::finite_element
 {
 public:
 
-  poisson_cell_marker_finite_element_1() : ufc::finite_element()
+  cross_section_surface_area_forms_finite_element_1() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~poisson_cell_marker_finite_element_1() override
+  ~cross_section_surface_area_forms_finite_element_1() override
   {
     // Do nothing
   }
@@ -4148,17 +4147,17 @@ public:
     {
     case 0:
       {
-        return new poisson_cell_marker_finite_element_0();
+        return new cross_section_surface_area_forms_finite_element_0();
         break;
       }
     case 1:
       {
-        return new poisson_cell_marker_finite_element_0();
+        return new cross_section_surface_area_forms_finite_element_0();
         break;
       }
     case 2:
       {
-        return new poisson_cell_marker_finite_element_0();
+        return new cross_section_surface_area_forms_finite_element_0();
         break;
       }
     }
@@ -4168,29 +4167,29 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new poisson_cell_marker_finite_element_1();
+    return new cross_section_surface_area_forms_finite_element_1();
   }
 
 };
 
 
-class poisson_cell_marker_finite_element_2: public ufc::finite_element
+class cross_section_surface_area_forms_finite_element_2: public ufc::finite_element
 {
 public:
 
-  poisson_cell_marker_finite_element_2() : ufc::finite_element()
+  cross_section_surface_area_forms_finite_element_2() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~poisson_cell_marker_finite_element_2() override
+  ~cross_section_surface_area_forms_finite_element_2() override
   {
     // Do nothing
   }
 
   const char * signature() const final override
   {
-    return "FiniteElement('Discontinuous Lagrange', tetrahedron, 0)";
+    return "FiniteElement('Real', tetrahedron, 0)";
   }
 
   ufc::shape cell_shape() const final override
@@ -4250,7 +4249,7 @@ public:
 
   const char * family() const final override
   {
-    return "Discontinuous Lagrange";
+    return "Real";
   }
 
   static void _evaluate_basis(std::size_t i,
@@ -4467,22 +4466,22 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new poisson_cell_marker_finite_element_2();
+    return new cross_section_surface_area_forms_finite_element_2();
   }
 
 };
 
 
-class poisson_cell_marker_dofmap_0: public ufc::dofmap
+class cross_section_surface_area_forms_dofmap_0: public ufc::dofmap
 {
 public:
 
-  poisson_cell_marker_dofmap_0() : ufc::dofmap()
+  cross_section_surface_area_forms_dofmap_0() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~poisson_cell_marker_dofmap_0() override
+  ~cross_section_surface_area_forms_dofmap_0() override
   {
     // Do nothing
   }
@@ -4693,22 +4692,22 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new poisson_cell_marker_dofmap_0();
+    return new cross_section_surface_area_forms_dofmap_0();
   }
 
 };
 
 
-class poisson_cell_marker_dofmap_1: public ufc::dofmap
+class cross_section_surface_area_forms_dofmap_1: public ufc::dofmap
 {
 public:
 
-  poisson_cell_marker_dofmap_1() : ufc::dofmap()
+  cross_section_surface_area_forms_dofmap_1() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~poisson_cell_marker_dofmap_1() override
+  ~cross_section_surface_area_forms_dofmap_1() override
   {
     // Do nothing
   }
@@ -4962,17 +4961,17 @@ public:
     {
     case 0:
       {
-        return new poisson_cell_marker_dofmap_0();
+        return new cross_section_surface_area_forms_dofmap_0();
         break;
       }
     case 1:
       {
-        return new poisson_cell_marker_dofmap_0();
+        return new cross_section_surface_area_forms_dofmap_0();
         break;
       }
     case 2:
       {
-        return new poisson_cell_marker_dofmap_0();
+        return new cross_section_surface_area_forms_dofmap_0();
         break;
       }
     }
@@ -4982,29 +4981,29 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new poisson_cell_marker_dofmap_1();
+    return new cross_section_surface_area_forms_dofmap_1();
   }
 
 };
 
 
-class poisson_cell_marker_dofmap_2: public ufc::dofmap
+class cross_section_surface_area_forms_dofmap_2: public ufc::dofmap
 {
 public:
 
-  poisson_cell_marker_dofmap_2() : ufc::dofmap()
+  cross_section_surface_area_forms_dofmap_2() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~poisson_cell_marker_dofmap_2() override
+  ~cross_section_surface_area_forms_dofmap_2() override
   {
     // Do nothing
   }
 
   const char * signature() const final override
   {
-    return "FFC dofmap for FiniteElement('Discontinuous Lagrange', tetrahedron, 0)";
+    return "FFC dofmap for FiniteElement('Real', tetrahedron, 0)";
   }
 
   bool needs_mesh_entities(std::size_t d) const final override
@@ -5028,7 +5027,7 @@ public:
       }
     case 3:
       {
-        return true;
+        return false;
         break;
       }
     }
@@ -5044,7 +5043,7 @@ public:
   std::size_t global_dimension(const std::vector<std::size_t>&
                                num_global_entities) const final override
   {
-    return num_global_entities[3];
+    return 1;
   }
 
   std::size_t num_element_dofs() const final override
@@ -5090,7 +5089,7 @@ public:
                      const std::vector<std::size_t>& num_global_entities,
                      const std::vector<std::vector<std::size_t>>& entity_indices) const final override
   {
-    dofs[0] = entity_indices[3][0];
+    dofs[0] = 0;
   }
 
   void tabulate_facet_dofs(std::size_t * dofs,
@@ -5174,247 +5173,249 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new poisson_cell_marker_dofmap_2();
+    return new cross_section_surface_area_forms_dofmap_2();
   }
 
 };
 
 
-class poisson_cell_marker_cell_integral_0_otherwise: public ufc::cell_integral
+class cross_section_surface_area_forms_interior_facet_integral_0_1: public ufc::interior_facet_integral
 {
 public:
 
-  poisson_cell_marker_cell_integral_0_otherwise() : ufc::cell_integral()
+  cross_section_surface_area_forms_interior_facet_integral_0_1() : ufc::interior_facet_integral()
   {
     
   }
 
-  ~poisson_cell_marker_cell_integral_0_otherwise() override
+  ~cross_section_surface_area_forms_interior_facet_integral_0_1() override
   {
     
   }
 
   const std::vector<bool> & enabled_coefficients() const final override
   {
-    static const std::vector<bool> enabled({true, true, true, true});
+    static const std::vector<bool> enabled({true});
     return enabled;
   }
 
   void tabulate_tensor(double * A,
                        const double * const * w,
-                       const double * coordinate_dofs,
-                       int cell_orientation) const final override
+                       const double * coordinate_dofs_0,
+                       const double * coordinate_dofs_1,
+                       std::size_t facet_0,
+                       std::size_t facet_1,
+                       int cell_orientation_0,
+                       int cell_orientation_1) const final override
   {
+    // Number of operations (multiply-add pairs) for Jacobian data:      61
+    // Number of operations (multiply-add pairs) for geometry tensor:    1
+    // Number of operations (multiply-add pairs) for tensor contraction: 8
+    // Total number of operations (multiply-add pairs):                  70
+    
     // Compute Jacobian
-    double J[9];
-    compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
+    double J_0[9];
+    compute_jacobian_tetrahedron_3d(J_0, coordinate_dofs_0);
     
     // Compute Jacobian inverse and determinant
-    double K[9];
-    double detJ;
-    compute_jacobian_inverse_tetrahedron_3d(K, detJ, J);
+    double K_0[9];
+    double detJ_0;
+    compute_jacobian_inverse_tetrahedron_3d(K_0, detJ_0, J_0);
     
-    // Set scale factor
-    const double det = std::abs(detJ);
+    // Compute Jacobian
+    double J_1[9];
+    compute_jacobian_tetrahedron_3d(J_1, coordinate_dofs_1);
     
-    // Compute cell volume
+    // Compute Jacobian inverse and determinant
+    double K_1[9];
+    double detJ_1;
+    compute_jacobian_inverse_tetrahedron_3d(K_1, detJ_1, J_1);
+    
+    // Get vertices on face
+    static unsigned int face_vertices[4][3] = {{1, 2, 3}, {0, 2, 3}, {0, 1, 3}, {0, 1, 2}};
+    const unsigned int v0 = face_vertices[facet_0][0];
+    const unsigned int v1 = face_vertices[facet_0][1];
+    const unsigned int v2 = face_vertices[facet_0][2];
+    
+    // Compute scale factor (area of face scaled by area of reference triangle)
+    const double a0 = (coordinate_dofs_0[3*v0 + 1]*coordinate_dofs_0[3*v1 + 2]  + coordinate_dofs_0[3*v0 + 2]*coordinate_dofs_0[3*v2 + 1]  + coordinate_dofs_0[3*v1 + 1]*coordinate_dofs_0[3*v2 + 2]) - (coordinate_dofs_0[3*v2 + 1]*coordinate_dofs_0[3*v1 + 2] + coordinate_dofs_0[3*v2 + 2]*coordinate_dofs_0[3*v0 + 1] + coordinate_dofs_0[3*v1 + 1]*coordinate_dofs_0[3*v0 + 2]);
+    
+    const double a1 = (coordinate_dofs_0[3*v0 + 2]*coordinate_dofs_0[3*v1 + 0]  + coordinate_dofs_0[3*v0 + 0]*coordinate_dofs_0[3*v2 + 2] + coordinate_dofs_0[3*v1 + 2]*coordinate_dofs_0[3*v2 + 0]) - (coordinate_dofs_0[3*v2 + 2]*coordinate_dofs_0[3*v1 + 0]  + coordinate_dofs_0[3*v2 + 0]*coordinate_dofs_0[3*v0 + 2] + coordinate_dofs_0[3*v1 + 2]*coordinate_dofs_0[3*v0 + 0]);
+    
+    const double a2 = (coordinate_dofs_0[3*v0 + 0]*coordinate_dofs_0[3*v1 + 1]  + coordinate_dofs_0[3*v0 + 1]*coordinate_dofs_0[3*v2 + 0]  + coordinate_dofs_0[3*v1 + 0]*coordinate_dofs_0[3*v2 + 1]) - (coordinate_dofs_0[3*v2 + 0]*coordinate_dofs_0[3*v1 + 1]  + coordinate_dofs_0[3*v2 + 1]*coordinate_dofs_0[3*v0 + 0]  + coordinate_dofs_0[3*v1 + 0]*coordinate_dofs_0[3*v0 + 1]);
+    
+    const double det = std::sqrt(a0*a0 + a1*a1 + a2*a2);
     
     
-    // Compute circumradius
     
+    // Compute geometry tensor
+    const double G0_0 = det*w[0][0]*(1.0);
     
-    // Array of quadrature weights.
-    static const double W24[24] = {0.00665379170969465, 0.00665379170969465, 0.00665379170969465, 0.00665379170969465, 0.00167953517588678, 0.00167953517588678, 0.00167953517588678, 0.00167953517588678, 0.0092261969239424, 0.0092261969239424, 0.0092261969239424, 0.0092261969239424, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428};
-    // Quadrature points on the UFC reference element: (0.356191386222545, 0.214602871259152, 0.214602871259152), (0.214602871259152, 0.214602871259152, 0.214602871259152), (0.214602871259152, 0.214602871259152, 0.356191386222545), (0.214602871259152, 0.356191386222545, 0.214602871259152), (0.877978124396166, 0.0406739585346113, 0.0406739585346113), (0.0406739585346113, 0.0406739585346113, 0.0406739585346113), (0.0406739585346113, 0.0406739585346113, 0.877978124396166), (0.0406739585346113, 0.877978124396166, 0.0406739585346113), (0.0329863295731731, 0.322337890142276, 0.322337890142276), (0.322337890142276, 0.322337890142276, 0.322337890142276), (0.322337890142276, 0.322337890142276, 0.0329863295731731), (0.322337890142276, 0.0329863295731731, 0.322337890142276), (0.269672331458316, 0.0636610018750175, 0.0636610018750175), (0.0636610018750175, 0.269672331458316, 0.0636610018750175), (0.0636610018750175, 0.0636610018750175, 0.269672331458316), (0.603005664791649, 0.0636610018750175, 0.0636610018750175), (0.0636610018750175, 0.603005664791649, 0.0636610018750175), (0.0636610018750175, 0.0636610018750175, 0.603005664791649), (0.0636610018750175, 0.269672331458316, 0.603005664791649), (0.269672331458316, 0.603005664791649, 0.0636610018750175), (0.603005664791649, 0.0636610018750175, 0.269672331458316), (0.0636610018750175, 0.603005664791649, 0.269672331458316), (0.269672331458316, 0.0636610018750175, 0.603005664791649), (0.603005664791649, 0.269672331458316, 0.0636610018750175)
-    
-    // Values of basis functions at quadrature points.
-    static const double FE0[24][4] = \
-    {{0.214602871259152, 0.356191386222545, 0.214602871259152, 0.214602871259152},
-    {0.356191386222545, 0.214602871259152, 0.214602871259152, 0.214602871259152},
-    {0.214602871259152, 0.214602871259152, 0.214602871259152, 0.356191386222545},
-    {0.214602871259152, 0.214602871259152, 0.356191386222545, 0.214602871259152},
-    {0.0406739585346115, 0.877978124396166, 0.0406739585346114, 0.0406739585346113},
-    {0.877978124396166, 0.0406739585346112, 0.0406739585346114, 0.0406739585346113},
-    {0.0406739585346115, 0.0406739585346113, 0.0406739585346113, 0.877978124396166},
-    {0.0406739585346115, 0.0406739585346113, 0.877978124396166, 0.0406739585346113},
-    {0.322337890142276, 0.0329863295731731, 0.322337890142276, 0.322337890142276},
-    {0.0329863295731729, 0.322337890142276, 0.322337890142276, 0.322337890142276},
-    {0.322337890142276, 0.322337890142276, 0.322337890142276, 0.0329863295731731},
-    {0.322337890142276, 0.322337890142276, 0.0329863295731731, 0.322337890142276},
-    {0.603005664791649, 0.269672331458316, 0.0636610018750175, 0.0636610018750175},
-    {0.603005664791649, 0.0636610018750174, 0.269672331458316, 0.0636610018750175},
-    {0.603005664791649, 0.0636610018750175, 0.0636610018750175, 0.269672331458316},
-    {0.269672331458316, 0.603005664791649, 0.0636610018750175, 0.0636610018750175},
-    {0.269672331458316, 0.0636610018750175, 0.603005664791649, 0.0636610018750175},
-    {0.269672331458316, 0.0636610018750175, 0.0636610018750175, 0.603005664791649},
-    {0.0636610018750176, 0.0636610018750175, 0.269672331458316, 0.603005664791649},
-    {0.0636610018750176, 0.269672331458316, 0.603005664791649, 0.0636610018750175},
-    {0.0636610018750177, 0.603005664791649, 0.0636610018750175, 0.269672331458316},
-    {0.0636610018750176, 0.0636610018750175, 0.603005664791649, 0.269672331458316},
-    {0.0636610018750176, 0.269672331458316, 0.0636610018750175, 0.603005664791649},
-    {0.0636610018750177, 0.603005664791649, 0.269672331458316, 0.0636610018750175}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc3[4] = {0, 1, 2, 3};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc7[4] = {4, 5, 6, 7};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc11[4] = {8, 9, 10, 11};
-    
-    static const double FE0_D001[24][2] = \
-    {{-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc0[2] = {0, 3};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc1[2] = {0, 2};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc2[2] = {0, 1};
-    
-    // Reset values in the element tensor.
-    for (unsigned int r = 0; r < 1; r++)
+    // Compute element tensor
+    switch (facet_0)
     {
-      A[r] = 0.0;
-    } // end loop over 'r'
-    // Number of operations to compute geometry constants: 57.
-    double G[15];
-    G[0] = -2.0*K[0]*det;
-    G[1] = -2.0*K[3]*det;
-    G[2] = -2.0*K[6]*det;
-    G[3] = det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[4] = 2.0*det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[5] = 2.0*det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[6] = -2.0*K[1]*det;
-    G[7] = -2.0*K[2]*det;
-    G[8] = det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[9] = 2.0*det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[10] = -2.0*K[4]*det;
-    G[11] = -2.0*K[5]*det;
-    G[12] = det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[13] = -2.0*K[7]*det;
-    G[14] = -2.0*K[8]*det;
-    
-    // Compute element tensor using UFL quadrature representation
-    // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
-    
-    // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 2304
-    for (unsigned int ip = 0; ip < 24; ip++)
-    {
-      
-      // Coefficient declarations.
-      double F0 = 0.0;
-      double F1 = 0.0;
-      double F2 = 0.0;
-      double F3 = 0.0;
-      double F4 = 0.0;
-      double F5 = 0.0;
-      double F6 = 0.0;
-      double F7 = 0.0;
-      
-      // Total number of operations to compute function values = 12
-      for (unsigned int r = 0; r < 2; r++)
+    case 0:
       {
-        F3 += FE0_D001[ip][r]*w[0][nzc2[r]];
-        F4 += FE0_D001[ip][r]*w[0][nzc1[r]];
-        F5 += FE0_D001[ip][r]*w[0][nzc0[r]];
-      } // end loop over 'r'
-      
-      // Total number of operations to compute function values = 40
-      for (unsigned int r = 0; r < 4; r++)
+        switch (facet_1)
       {
-        F0 += FE0[ip][r]*w[3][r];
-        F1 += FE0[ip][r]*w[2][r];
-        F2 += FE0[ip][r]*w[1][nzc3[r]];
-        F6 += FE0[ip][r]*w[1][nzc7[r]];
-        F7 += FE0[ip][r]*w[1][nzc11[r]];
-      } // end loop over 'r'
+      case 0:
+        {
+          A[0] = 0.5*G0_0;
+          break;
+        }
+      case 1:
+        {
+          A[0] = 0.5*G0_0;
+          break;
+        }
+      case 2:
+        {
+          A[0] = 0.5*G0_0;
+          break;
+        }
+      case 3:
+        {
+          A[0] = 0.5*G0_0;
+          break;
+        }
+      }
       
-      // Number of operations to compute ip constants: 43
-      double I[1];
-      // Number of operations: 43
-      I[0] = F0*W24[ip]*std::exp(F1)*(F3*(F2*G[0] + F3*G[3] + F6*G[6] + F7*G[7]) + F4*(F2*G[1] + F3*G[4] + F4*G[8] + F6*G[10] + F7*G[11]) + F5*(F2*G[2] + F3*G[5] + F4*G[9] + F5*G[12] + F6*G[13] + F7*G[14]) + det*(F2*F2 + F6*F6 + F7*F7));
+        break;
+      }
+    case 1:
+      {
+        switch (facet_1)
+      {
+      case 0:
+        {
+          A[0] = 0.5*G0_0;
+          break;
+        }
+      case 1:
+        {
+          A[0] = 0.5*G0_0;
+          break;
+        }
+      case 2:
+        {
+          A[0] = 0.5*G0_0;
+          break;
+        }
+      case 3:
+        {
+          A[0] = 0.5*G0_0;
+          break;
+        }
+      }
       
+        break;
+      }
+    case 2:
+      {
+        switch (facet_1)
+      {
+      case 0:
+        {
+          A[0] = 0.5*G0_0;
+          break;
+        }
+      case 1:
+        {
+          A[0] = 0.5*G0_0;
+          break;
+        }
+      case 2:
+        {
+          A[0] = 0.5*G0_0;
+          break;
+        }
+      case 3:
+        {
+          A[0] = 0.5*G0_0;
+          break;
+        }
+      }
       
-      // Number of operations for primary indices: 1
-      // Number of operations to compute entry: 1
-      A[0] += I[0];
-    } // end loop over 'ip'
+        break;
+      }
+    case 3:
+      {
+        switch (facet_1)
+      {
+      case 0:
+        {
+          A[0] = 0.5*G0_0;
+          break;
+        }
+      case 1:
+        {
+          A[0] = 0.5*G0_0;
+          break;
+        }
+      case 2:
+        {
+          A[0] = 0.5*G0_0;
+          break;
+        }
+      case 3:
+        {
+          A[0] = 0.5*G0_0;
+          break;
+        }
+      }
+      
+        break;
+      }
+    }
+    
   }
 
 };
 
 
-class poisson_cell_marker_form_0: public ufc::form
+class cross_section_surface_area_forms_form_0: public ufc::form
 {
 public:
 
-  poisson_cell_marker_form_0() : ufc::form()
+  cross_section_surface_area_forms_form_0() : ufc::form()
   {
     // Do nothing
   }
 
-  ~poisson_cell_marker_form_0() override
+  ~cross_section_surface_area_forms_form_0() override
   {
     // Do nothing
   }
 
   const char * signature() const final override
   {
-    return "87cd8b036d23bf06f5cf5cea16aac70fb312fef7dcc3535d10380daebb385577c42ca811df2fdfd7ea2642da782e9ff11b536f213b7b1c775f59e4e04b106a21";
+    return "5f9d74a8c390a378e43a1567752b2a00795d868f27e4b45e3065076b7a0ba36dcd226eb9b20b7ceaffb7baa93fb96572b242769938092a62c7da97ca769507d5";
   }
 
   std::size_t rank() const final override
   {
-    return 1;
+    return 0;
   }
 
   std::size_t num_coefficients() const final override
   {
-    return 4;
+    return 1;
   }
 
   std::size_t original_coefficient_position(std::size_t i) const final override
   {
-    static const std::vector<std::size_t> position({0, 1, 2, 3});
+    static const std::vector<std::size_t> position({0});
     return position[i];
   }
 
   ufc::finite_element * create_coordinate_finite_element() const final override
   {
-    return new poisson_cell_marker_finite_element_1();
+    return new cross_section_surface_area_forms_finite_element_1();
   }
 
   ufc::dofmap * create_coordinate_dofmap() const final override
   {
-    return new poisson_cell_marker_dofmap_1();
+    return new cross_section_surface_area_forms_dofmap_1();
    }
 
   ufc::coordinate_mapping * create_coordinate_mapping() const final override
@@ -5428,27 +5429,7 @@ public:
     {
     case 0:
       {
-        return new poisson_cell_marker_finite_element_2();
-        break;
-      }
-    case 1:
-      {
-        return new poisson_cell_marker_finite_element_0();
-        break;
-      }
-    case 2:
-      {
-        return new poisson_cell_marker_finite_element_1();
-        break;
-      }
-    case 3:
-      {
-        return new poisson_cell_marker_finite_element_0();
-        break;
-      }
-    case 4:
-      {
-        return new poisson_cell_marker_finite_element_0();
+        return new cross_section_surface_area_forms_finite_element_2();
         break;
       }
     }
@@ -5462,27 +5443,7 @@ public:
     {
     case 0:
       {
-        return new poisson_cell_marker_dofmap_2();
-        break;
-      }
-    case 1:
-      {
-        return new poisson_cell_marker_dofmap_0();
-        break;
-      }
-    case 2:
-      {
-        return new poisson_cell_marker_dofmap_1();
-        break;
-      }
-    case 3:
-      {
-        return new poisson_cell_marker_dofmap_0();
-        break;
-      }
-    case 4:
-      {
-        return new poisson_cell_marker_dofmap_0();
+        return new cross_section_surface_area_forms_dofmap_2();
         break;
       }
     }
@@ -5502,7 +5463,7 @@ public:
 
   std::size_t max_interior_facet_subdomain_id() const final override
   {
-    return 0;
+    return 2;
   }
 
   std::size_t max_vertex_subdomain_id() const final override
@@ -5532,7 +5493,7 @@ public:
 
   bool has_cell_integrals() const final override
   {
-    return true;
+    return false;
   }
 
   bool has_exterior_facet_integrals() const final override
@@ -5542,7 +5503,7 @@ public:
 
   bool has_interior_facet_integrals() const final override
   {
-    return false;
+    return true;
   }
 
   bool has_vertex_integrals() const final override
@@ -5582,6 +5543,15 @@ public:
 
   ufc::interior_facet_integral * create_interior_facet_integral(std::size_t subdomain_id) const final override
   {
+    switch (subdomain_id)
+    {
+    case 1:
+      {
+        return new cross_section_surface_area_forms_interior_facet_integral_0_1();
+        break;
+      }
+    }
+    
     return 0;
   }
 
@@ -5612,7 +5582,7 @@ public:
 
   ufc::cell_integral * create_default_cell_integral() const final override
   {
-    return new poisson_cell_marker_cell_integral_0_otherwise();
+    return 0;
   }
 
   ufc::exterior_facet_integral * create_default_exterior_facet_integral() const final override
@@ -5674,199 +5644,66 @@ public:
 #include <dolfin/adaptivity/GoalFunctional.h>
 #include <dolfin/la/GenericVector.h>
 
-namespace poisson_cell_marker
+namespace cross_section_surface_area_forms
 {
 
-class CoefficientSpace_diffusivity: public dolfin::FunctionSpace
+class CoefficientSpace_scale: public dolfin::FunctionSpace
 {
 public:
 
   // Constructor for standard function space
-  CoefficientSpace_diffusivity(std::shared_ptr<const dolfin::Mesh> mesh):
+  CoefficientSpace_scale(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_0>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<cross_section_surface_area_forms_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<cross_section_surface_area_forms_dofmap_2>(), *mesh))
   {
     // Do nothing
   }
 
   // Constructor for constrained function space
-  CoefficientSpace_diffusivity(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+  CoefficientSpace_scale(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_0>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<cross_section_surface_area_forms_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<cross_section_surface_area_forms_dofmap_2>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
 
 };
 
-class CoefficientSpace_entropy: public dolfin::FunctionSpace
-{
-public:
+typedef CoefficientSpace_scale Form_M_FunctionSpace_0;
 
-  // Constructor for standard function space
-  CoefficientSpace_entropy(std::shared_ptr<const dolfin::Mesh> mesh):
-    dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_1>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_1>(), *mesh))
-  {
-    // Do nothing
-  }
-
-  // Constructor for constrained function space
-  CoefficientSpace_entropy(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
-    dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_1>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_1>(), *mesh, constrained_domain))
-  {
-    // Do nothing
-  }
-
-};
-
-class CoefficientSpace_entropy_potential: public dolfin::FunctionSpace
-{
-public:
-
-  // Constructor for standard function space
-  CoefficientSpace_entropy_potential(std::shared_ptr<const dolfin::Mesh> mesh):
-    dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_0>(), *mesh))
-  {
-    // Do nothing
-  }
-
-  // Constructor for constrained function space
-  CoefficientSpace_entropy_potential(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
-    dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_0>(), *mesh, constrained_domain))
-  {
-    // Do nothing
-  }
-
-};
-
-class CoefficientSpace_log_weight: public dolfin::FunctionSpace
-{
-public:
-
-  // Constructor for standard function space
-  CoefficientSpace_log_weight(std::shared_ptr<const dolfin::Mesh> mesh):
-    dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_0>(), *mesh))
-  {
-    // Do nothing
-  }
-
-  // Constructor for constrained function space
-  CoefficientSpace_log_weight(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
-    dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_0>(), *mesh, constrained_domain))
-  {
-    // Do nothing
-  }
-
-};
-
-class Form_L_FunctionSpace_0: public dolfin::FunctionSpace
-{
-public:
-
-  // Constructor for standard function space
-  Form_L_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh):
-    dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_2>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_2>(), *mesh))
-  {
-    // Do nothing
-  }
-
-  // Constructor for constrained function space
-  Form_L_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
-    dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_2>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_2>(), *mesh, constrained_domain))
-  {
-    // Do nothing
-  }
-
-};
-
-class Form_L_MultiMeshFunctionSpace_0: public dolfin::MultiMeshFunctionSpace
-{
-public:
-
-  // Constructor for multimesh function space
-  Form_L_MultiMeshFunctionSpace_0(std::shared_ptr<const dolfin::MultiMesh> multimesh): dolfin::MultiMeshFunctionSpace(multimesh)
-  {
-    // Create and add standard function spaces
-    for (std::size_t part = 0; part < multimesh->num_parts(); part++)
-    {
-      std::shared_ptr<const dolfin::FunctionSpace> V(new Form_L_FunctionSpace_0(multimesh->part(part)));
-      add(V);
-    }
-
-    // Build multimesh function space
-    build();
-  }
-
-};
-
-typedef CoefficientSpace_entropy_potential Form_L_FunctionSpace_1;
-
-typedef CoefficientSpace_entropy Form_L_FunctionSpace_2;
-
-typedef CoefficientSpace_log_weight Form_L_FunctionSpace_3;
-
-typedef CoefficientSpace_diffusivity Form_L_FunctionSpace_4;
-
-class Form_L: public dolfin::Form
+class Form_M: public dolfin::Form
 {
 public:
 
   // Constructor
-  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0):
-    dolfin::Form(1, 4), entropy_potential(*this, 0), entropy(*this, 1), log_weight(*this, 2), diffusivity(*this, 3)
+  Form_M(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::Form(0, 1), scale(*this, 0)
   {
-    _function_spaces[0] = V0;
-
-    _ufc_form = std::make_shared<const poisson_cell_marker_form_0>();
+    _mesh = mesh;
+    _ufc_form = std::make_shared<const cross_section_surface_area_forms_form_0>();
   }
 
   // Constructor
-  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> entropy_potential, std::shared_ptr<const dolfin::GenericFunction> entropy, std::shared_ptr<const dolfin::GenericFunction> log_weight, std::shared_ptr<const dolfin::GenericFunction> diffusivity):
-    dolfin::Form(1, 4), entropy_potential(*this, 0), entropy(*this, 1), log_weight(*this, 2), diffusivity(*this, 3)
+  Form_M(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::GenericFunction> scale):
+    dolfin::Form(0, 1), scale(*this, 0)
   {
-    _function_spaces[0] = V0;
+    _mesh = mesh;
+    this->scale = scale;
 
-    this->entropy_potential = entropy_potential;
-    this->entropy = entropy;
-    this->log_weight = log_weight;
-    this->diffusivity = diffusivity;
-
-    _ufc_form = std::make_shared<const poisson_cell_marker_form_0>();
+    _ufc_form = std::make_shared<const cross_section_surface_area_forms_form_0>();
   }
 
   // Destructor
-  ~Form_L()
+  ~Form_M()
   {}
 
   /// Return the number of the coefficient with this name
   virtual std::size_t coefficient_number(const std::string& name) const
   {
-    if (name == "entropy_potential")
+    if (name == "scale")
       return 0;
-    else if (name == "entropy")
-      return 1;
-    else if (name == "log_weight")
-      return 2;
-    else if (name == "diffusivity")
-      return 3;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -5880,13 +5717,7 @@ public:
     switch (i)
     {
     case 0:
-      return "entropy_potential";
-    case 1:
-      return "entropy";
-    case 2:
-      return "log_weight";
-    case 3:
-      return "diffusivity";
+      return "scale";
     }
 
     dolfin::dolfin_error("generated code for class Form",
@@ -5896,81 +5727,43 @@ public:
   }
 
   // Typedefs
-  typedef Form_L_FunctionSpace_0 TestSpace;
-  typedef Form_L_MultiMeshFunctionSpace_0 MultiMeshTestSpace;
-  typedef Form_L_FunctionSpace_1 CoefficientSpace_entropy_potential;
-  typedef Form_L_FunctionSpace_2 CoefficientSpace_entropy;
-  typedef Form_L_FunctionSpace_3 CoefficientSpace_log_weight;
-  typedef Form_L_FunctionSpace_4 CoefficientSpace_diffusivity;
+  typedef Form_M_FunctionSpace_0 CoefficientSpace_scale;
 
   // Coefficients
-  dolfin::CoefficientAssigner entropy_potential;
-  dolfin::CoefficientAssigner entropy;
-  dolfin::CoefficientAssigner log_weight;
-  dolfin::CoefficientAssigner diffusivity;
+  dolfin::CoefficientAssigner scale;
 };
 
-class MultiMeshForm_L: public dolfin::MultiMeshForm
+class MultiMeshForm_M: public dolfin::MultiMeshForm
 {
 public:
 
   // Constructor
-  MultiMeshForm_L(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0):
-    dolfin::MultiMeshForm(V0), entropy_potential(*this, 0), entropy(*this, 1), log_weight(*this, 2), diffusivity(*this, 3)
+  MultiMeshForm_M(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::MultiMeshForm(), scale(*this, 0)
   {
-    // Create and add standard forms
-    std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
-    for (std::size_t part = 0; part < num_parts; part++)
-    {
-      std::shared_ptr<const dolfin::Form> a(new Form_L(V0->part(part)));
-      add(a);
-    }
-
-    // Build multimesh form
-    build();
 
     /// Assign coefficients
 
   }
 
   // Constructor
-  MultiMeshForm_L(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> entropy_potential, std::shared_ptr<const dolfin::GenericFunction> entropy, std::shared_ptr<const dolfin::GenericFunction> log_weight, std::shared_ptr<const dolfin::GenericFunction> diffusivity):
-    dolfin::MultiMeshForm(V0), entropy_potential(*this, 0), entropy(*this, 1), log_weight(*this, 2), diffusivity(*this, 3)
+  MultiMeshForm_M(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::GenericFunction> scale):
+    dolfin::MultiMeshForm(), scale(*this, 0)
   {
-    // Create and add standard forms
-    std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
-    for (std::size_t part = 0; part < num_parts; part++)
-    {
-      std::shared_ptr<const dolfin::Form> a(new Form_L(V0->part(part)));
-      add(a);
-    }
 
-    // Build multimesh form
-    build();
-
-    /// Assign coefficients
-    this->entropy_potential = entropy_potential;
-    this->entropy = entropy;
-    this->log_weight = log_weight;
-    this->diffusivity = diffusivity;
+    /// Assign coefficients    this->scale = scale;
 
   }
 
   // Destructor
-  ~MultiMeshForm_L()
+  ~MultiMeshForm_M()
   {}
 
   /// Return the number of the coefficient with this name
   virtual std::size_t coefficient_number(const std::string& name) const
   {
-    if (name == "entropy_potential")
+    if (name == "scale")
       return 0;
-    else if (name == "entropy")
-      return 1;
-    else if (name == "log_weight")
-      return 2;
-    else if (name == "diffusivity")
-      return 3;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -5984,13 +5777,7 @@ public:
     switch (i)
     {
     case 0:
-      return "entropy_potential";
-    case 1:
-      return "entropy";
-    case 2:
-      return "log_weight";
-    case 3:
-      return "diffusivity";
+      return "scale";
     }
 
     dolfin::dolfin_error("generated code for class Form",
@@ -6000,27 +5787,15 @@ public:
   }
 
   // Typedefs
-  typedef Form_L_FunctionSpace_0 TestSpace;
-  typedef Form_L_MultiMeshFunctionSpace_0 MultiMeshTestSpace;
-  typedef Form_L_FunctionSpace_1 CoefficientSpace_entropy_potential;
-  typedef Form_L_FunctionSpace_2 CoefficientSpace_entropy;
-  typedef Form_L_FunctionSpace_3 CoefficientSpace_log_weight;
-  typedef Form_L_FunctionSpace_4 CoefficientSpace_diffusivity;
+  typedef Form_M_FunctionSpace_0 CoefficientSpace_scale;
 
   // Coefficients
-  dolfin::MultiMeshCoefficientAssigner entropy_potential;
-  dolfin::MultiMeshCoefficientAssigner entropy;
-  dolfin::MultiMeshCoefficientAssigner log_weight;
-  dolfin::MultiMeshCoefficientAssigner diffusivity;
+  dolfin::MultiMeshCoefficientAssigner scale;
 };
 
 // Class typedefs
-typedef Form_L LinearForm;
-typedef MultiMeshForm_L MultiMeshLinearForm;
-typedef Form_L ResidualForm;
-typedef MultiMeshForm_L MultiMeshResidualForm;
-typedef Form_L::TestSpace FunctionSpace;
-typedef Form_L::MultiMeshTestSpace MultiMeshFunctionSpace;
+typedef Form_M Functional;
+typedef MultiMeshForm_M MultiMeshFunctional;
 
 }
 

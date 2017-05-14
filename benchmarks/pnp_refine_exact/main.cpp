@@ -161,6 +161,10 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   AMG_param amg
 );
 
+std::vector<std::shared_ptr<const dolfin::Function>> get_diffusivity(
+  std::shared_ptr<const dolfin::FunctionSpace> function_space
+);
+
 std::vector<std::shared_ptr<const dolfin::Function>> extract_log_densities (
   std::shared_ptr<dolfin::Function> solution
 );
@@ -214,6 +218,7 @@ int main (int argc, char** argv) {
   //-------------------------
   bool use_eafe_approximation = true;
 
+  double growth_factor = 1.2;
   std::size_t max_elements = 25000;
   std::size_t max_refine_depth = 3;
   double entropy_per_cell = 1.0e-6;
@@ -237,6 +242,9 @@ int main (int argc, char** argv) {
   while (mesh_adapt.needs_to_solve) {
     // compute solution on current mesh
     auto mesh = mesh_adapt.get_mesh();
+
+    initial_guess_file << *adaptive_solution;
+
     auto computed_solution = solve_pnp(
       mesh_adapt.iteration++,
       mesh,
@@ -250,18 +258,42 @@ int main (int argc, char** argv) {
     print_error(*computed_solution);
 
     // compute entropy terms
+    auto diffusivity = get_diffusivity(computed_solution->function_space());
     auto entropy_potential = compute_entropy_potential(computed_solution);
     auto log_densities = extract_log_densities(computed_solution);
-    mesh_adapt.multilevel_refinement(entropy_potential, log_densities);
 
-    // update solution
-    adaptive_solution.reset( new dolfin::Function(computed_solution->function_space()) );
-    adaptive_solution->interpolate(*computed_solution);
-    initial_guess_file << *adaptive_solution;
+    // adapt computed solutions
+    mesh_adapt.max_elements = (std::size_t) std::floor(growth_factor * mesh->num_cells());
+    mesh_adapt.multilevel_refinement(diffusivity, entropy_potential, log_densities);
+    adaptive_solution = adapt( *computed_solution, mesh_adapt.get_mesh() );
   }
 
   printf("\nCompleted adaptivity loop\n\n");
   return 0;
+}
+
+/// Get diffusivity
+std::vector<std::shared_ptr<const dolfin::Function>> get_diffusivity(
+  std::shared_ptr<const dolfin::FunctionSpace> function_space
+) {
+  // get analytic diffusivity
+  dolfin::Function diffusivity(function_space);
+  Diffusivity_Expression diff_expr;
+  diffusivity.interpolate(diff_expr);
+
+  // transfer to vector of functions
+  std::size_t component_count = function_space->element()->num_sub_elements();
+  std::vector<std::shared_ptr<const dolfin::Function>> function_vec;
+  for (std::size_t comp = 1; comp < component_count; comp++) {
+    auto subfunction_space = diffusivity[comp].function_space()->collapse();
+    dolfin::Function diffusivity_comp(subfunction_space);
+    diffusivity_comp.interpolate(diffusivity[comp]);
+
+    auto const_diffusivity_ptr = std::make_shared<const dolfin::Function>(diffusivity_comp);
+    function_vec.push_back(const_diffusivity_ptr);
+  }
+
+  return function_vec;
 }
 
 /// Extract log-densities from computed solution

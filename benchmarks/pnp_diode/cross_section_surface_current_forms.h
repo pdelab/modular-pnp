@@ -20,22 +20,808 @@
 //   representation:                 'auto'
 //   split:                          False
 
-#ifndef __POISSON_CELL_MARKER_H
-#define __POISSON_CELL_MARKER_H
+#ifndef __CROSS_SECTION_SURFACE_CURRENT_FORMS_H
+#define __CROSS_SECTION_SURFACE_CURRENT_FORMS_H
 #include <cmath>
 #include <stdexcept>
 #include <ufc.h>
 
-class poisson_cell_marker_finite_element_0: public ufc::finite_element
+class cross_section_surface_current_forms_finite_element_0: public ufc::finite_element
 {
 public:
 
-  poisson_cell_marker_finite_element_0() : ufc::finite_element()
+  cross_section_surface_current_forms_finite_element_0() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~poisson_cell_marker_finite_element_0() override
+  ~cross_section_surface_current_forms_finite_element_0() override
+  {
+    // Do nothing
+  }
+
+  const char * signature() const final override
+  {
+    return "FiniteElement('Real', tetrahedron, 0)";
+  }
+
+  ufc::shape cell_shape() const final override
+  {
+    return ufc::shape::tetrahedron;
+  }
+
+  std::size_t topological_dimension() const final override
+  {
+    return 3;
+  }
+
+  std::size_t geometric_dimension() const final override
+  {
+    return 3;
+  }
+
+  std::size_t space_dimension() const final override
+  {
+    return 1;
+  }
+
+  std::size_t value_rank() const final override
+  {
+    return 0;
+  }
+
+  std::size_t value_dimension(std::size_t i) const final override
+  {
+    return 1;
+  }
+
+  std::size_t value_size() const final override
+  {
+    return 1;
+  }
+
+  std::size_t reference_value_rank() const final override
+  {
+    return 0;
+  }
+
+  std::size_t reference_value_dimension(std::size_t i) const final override
+  {
+    return 1;
+  }
+
+  std::size_t reference_value_size() const final override
+  {
+    return 1;
+  }
+
+  std::size_t degree() const final override
+  {
+    return 0;
+  }
+
+  const char * family() const final override
+  {
+    return "Real";
+  }
+
+  static void _evaluate_basis(std::size_t i,
+                              double * values,
+                              const double * x,
+                              const double * coordinate_dofs,
+                              int cell_orientation)
+  {
+    // Compute Jacobian
+    double J[9];
+    compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
+    
+    // Compute Jacobian inverse and determinant
+    double K[9];
+    double detJ;
+    compute_jacobian_inverse_tetrahedron_3d(K, detJ, J);
+    
+    
+    // Compute constants
+    
+    // Compute subdeterminants
+    
+    // Get coordinates and map to the reference (FIAT) element
+    
+    
+    // Reset values
+    *values = 0.0;
+    
+    // Array of basisvalues
+    double basisvalues[1] = {0.0};
+    
+    // Declare helper variables
+    
+    // Compute basisvalues
+    basisvalues[0] = 1.0;
+    
+    // Table(s) of coefficients
+    static const double coefficients0[1] = \
+    {1.0};
+    
+    // Compute value(s)
+    for (unsigned int r = 0; r < 1; r++)
+    {
+      *values += coefficients0[r]*basisvalues[r];
+    } // end loop over 'r'
+  }
+
+  void evaluate_basis(std::size_t i,
+                      double * values,
+                      const double * x,
+                      const double * coordinate_dofs,
+                      int cell_orientation) const final override
+  {
+    _evaluate_basis(i, values, x, coordinate_dofs, cell_orientation);
+  }
+
+  static void _evaluate_basis_all(double * values,
+                                  const double * x,
+                                  const double * coordinate_dofs,
+                                  int cell_orientation)
+  {
+    // Element is constant, calling evaluate_basis.
+    _evaluate_basis(0, values, x, coordinate_dofs, cell_orientation);
+  }
+
+  void evaluate_basis_all(double * values,
+                          const double * x,
+                          const double * coordinate_dofs,
+                          int cell_orientation) const final override
+  {
+    _evaluate_basis_all(values, x, coordinate_dofs, cell_orientation);
+  }
+
+  static void _evaluate_basis_derivatives(std::size_t i,
+                                          std::size_t n,
+                                          double * values,
+                                          const double * x,
+                                          const double * coordinate_dofs,
+                                          int cell_orientation)
+  {
+    
+    // Compute number of derivatives.
+    unsigned int num_derivatives = 1;
+    for (unsigned int r = 0; r < n; r++)
+    {
+      num_derivatives *= 3;
+    } // end loop over 'r'
+    
+    // Reset values. Assuming that values is always an array.
+    for (unsigned int r = 0; r < num_derivatives; r++)
+    {
+      values[r] = 0.0;
+    } // end loop over 'r'
+    
+    // Call evaluate_basis if order of derivatives is equal to zero.
+    if (n == 0)
+    {
+      _evaluate_basis(i, values, x, coordinate_dofs, cell_orientation);
+      return ;
+    }
+    
+    // If order of derivatives is greater than the maximum polynomial degree, return zeros.
+    if (n > 0)
+    {
+    return ;
+    }
+    
+  }
+
+  void evaluate_basis_derivatives(std::size_t i,
+                                  std::size_t n,
+                                  double * values,
+                                  const double * x,
+                                  const double * coordinate_dofs,
+                                  int cell_orientation) const final override
+  {
+    _evaluate_basis_derivatives(i, n, values, x, coordinate_dofs, cell_orientation);
+  }
+
+  static void _evaluate_basis_derivatives_all(std::size_t n,
+                                              double * values,
+                                              const double * x,
+                                              const double * coordinate_dofs,
+                                              int cell_orientation)
+  {
+    // Element is constant, calling evaluate_basis_derivatives.
+    _evaluate_basis_derivatives(0, n, values, x, coordinate_dofs, cell_orientation);
+  }
+
+  void evaluate_basis_derivatives_all(std::size_t n,
+                                      double * values,
+                                      const double * x,
+                                      const double * coordinate_dofs,
+                                      int cell_orientation) const final override
+  {
+    _evaluate_basis_derivatives_all(n, values, x, coordinate_dofs, cell_orientation);
+  }
+
+  double evaluate_dof(std::size_t i,
+                      const ufc::function& f,
+                      const double * coordinate_dofs,
+                      int cell_orientation,
+                      const ufc::cell& c) const final override
+  {
+    // Declare variables for result of evaluation
+    double vals[1];
+    
+    // Declare variable for physical coordinates
+    double y[3];
+    switch (i)
+    {
+    case 0:
+      {
+        y[0] = 0.25*coordinate_dofs[0] + 0.25*coordinate_dofs[3] + 0.25*coordinate_dofs[6] + 0.25*coordinate_dofs[9];
+      y[1] = 0.25*coordinate_dofs[1] + 0.25*coordinate_dofs[4] + 0.25*coordinate_dofs[7] + 0.25*coordinate_dofs[10];
+      y[2] = 0.25*coordinate_dofs[2] + 0.25*coordinate_dofs[5] + 0.25*coordinate_dofs[8] + 0.25*coordinate_dofs[11];
+      f.evaluate(vals, y, c);
+      return vals[0];
+        break;
+      }
+    }
+    
+    return 0.0;
+  }
+
+  void evaluate_dofs(double * values,
+                             const ufc::function& f,
+                             const double * coordinate_dofs,
+                             int cell_orientation,
+                             const ufc::cell& c) const final override
+  {
+    // Declare variables for result of evaluation
+    double vals[1];
+    
+    // Declare variable for physical coordinates
+    double y[3];
+    y[0] = 0.25*coordinate_dofs[0] + 0.25*coordinate_dofs[3] + 0.25*coordinate_dofs[6] + 0.25*coordinate_dofs[9];
+    y[1] = 0.25*coordinate_dofs[1] + 0.25*coordinate_dofs[4] + 0.25*coordinate_dofs[7] + 0.25*coordinate_dofs[10];
+    y[2] = 0.25*coordinate_dofs[2] + 0.25*coordinate_dofs[5] + 0.25*coordinate_dofs[8] + 0.25*coordinate_dofs[11];
+    f.evaluate(vals, y, c);
+    values[0] = vals[0];
+  }
+
+  void interpolate_vertex_values(double * vertex_values,
+                                 const double * dof_values,
+                                 const double * coordinate_dofs,
+                                 int cell_orientation,
+                                 const ufc::cell& c) const final override
+  {
+    // Evaluate function and change variables
+    vertex_values[0] = dof_values[0];
+    vertex_values[1] = dof_values[0];
+    vertex_values[2] = dof_values[0];
+    vertex_values[3] = dof_values[0];
+  }
+
+  void tabulate_dof_coordinates(double * dof_coordinates,
+                                const double * coordinate_dofs) const final override
+  {
+    dof_coordinates[0] = 0.25*coordinate_dofs[0] + 0.25*coordinate_dofs[3] + 0.25*coordinate_dofs[6] + 0.25*coordinate_dofs[9];
+    dof_coordinates[1] = 0.25*coordinate_dofs[1] + 0.25*coordinate_dofs[4] + 0.25*coordinate_dofs[7] + 0.25*coordinate_dofs[10];
+    dof_coordinates[2] = 0.25*coordinate_dofs[2] + 0.25*coordinate_dofs[5] + 0.25*coordinate_dofs[8] + 0.25*coordinate_dofs[11];
+  }
+
+  std::size_t num_sub_elements() const final override
+  {
+    return 0;
+  }
+
+  ufc::finite_element * create_sub_element(std::size_t i) const final override
+  {
+    return 0;
+  }
+
+  ufc::finite_element * create() const final override
+  {
+    return new cross_section_surface_current_forms_finite_element_0();
+  }
+
+};
+
+
+class cross_section_surface_current_forms_finite_element_1: public ufc::finite_element
+{
+public:
+
+  cross_section_surface_current_forms_finite_element_1() : ufc::finite_element()
+  {
+    // Do nothing
+  }
+
+  ~cross_section_surface_current_forms_finite_element_1() override
+  {
+    // Do nothing
+  }
+
+  const char * signature() const final override
+  {
+    return "VectorElement(FiniteElement('Real', tetrahedron, 0), dim=3)";
+  }
+
+  ufc::shape cell_shape() const final override
+  {
+    return ufc::shape::tetrahedron;
+  }
+
+  std::size_t topological_dimension() const final override
+  {
+    return 3;
+  }
+
+  std::size_t geometric_dimension() const final override
+  {
+    return 3;
+  }
+
+  std::size_t space_dimension() const final override
+  {
+    return 3;
+  }
+
+  std::size_t value_rank() const final override
+  {
+    return 1;
+  }
+
+  std::size_t value_dimension(std::size_t i) const final override
+  {
+    switch (i)
+    {
+    case 0:
+      {
+        return 3;
+        break;
+      }
+    }
+    
+    return 0;
+  }
+
+  std::size_t value_size() const final override
+  {
+    return 3;
+  }
+
+  std::size_t reference_value_rank() const final override
+  {
+    return 1;
+  }
+
+  std::size_t reference_value_dimension(std::size_t i) const final override
+  {
+    switch (i)
+    {
+    case 0:
+      {
+        return 3;
+        break;
+      }
+    }
+    
+    return 0;
+  }
+
+  std::size_t reference_value_size() const final override
+  {
+    return 3;
+  }
+
+  std::size_t degree() const final override
+  {
+    return 0;
+  }
+
+  const char * family() const final override
+  {
+    return "Real";
+  }
+
+  static void _evaluate_basis(std::size_t i,
+                              double * values,
+                              const double * x,
+                              const double * coordinate_dofs,
+                              int cell_orientation)
+  {
+    // Compute Jacobian
+    double J[9];
+    compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
+    
+    // Compute Jacobian inverse and determinant
+    double K[9];
+    double detJ;
+    compute_jacobian_inverse_tetrahedron_3d(K, detJ, J);
+    
+    
+    // Compute constants
+    
+    // Compute subdeterminants
+    
+    // Get coordinates and map to the reference (FIAT) element
+    
+    
+    // Reset values
+    values[0] = 0.0;
+    values[1] = 0.0;
+    values[2] = 0.0;
+    switch (i)
+    {
+    case 0:
+      {
+        
+      // Array of basisvalues
+      double basisvalues[1] = {0.0};
+      
+      // Declare helper variables
+      
+      // Compute basisvalues
+      basisvalues[0] = 1.0;
+      
+      // Table(s) of coefficients
+      static const double coefficients0[1] = \
+      {1.0};
+      
+      // Compute value(s)
+      for (unsigned int r = 0; r < 1; r++)
+      {
+        values[0] += coefficients0[r]*basisvalues[r];
+      } // end loop over 'r'
+        break;
+      }
+    case 1:
+      {
+        
+      // Array of basisvalues
+      double basisvalues[1] = {0.0};
+      
+      // Declare helper variables
+      
+      // Compute basisvalues
+      basisvalues[0] = 1.0;
+      
+      // Table(s) of coefficients
+      static const double coefficients0[1] = \
+      {1.0};
+      
+      // Compute value(s)
+      for (unsigned int r = 0; r < 1; r++)
+      {
+        values[1] += coefficients0[r]*basisvalues[r];
+      } // end loop over 'r'
+        break;
+      }
+    case 2:
+      {
+        
+      // Array of basisvalues
+      double basisvalues[1] = {0.0};
+      
+      // Declare helper variables
+      
+      // Compute basisvalues
+      basisvalues[0] = 1.0;
+      
+      // Table(s) of coefficients
+      static const double coefficients0[1] = \
+      {1.0};
+      
+      // Compute value(s)
+      for (unsigned int r = 0; r < 1; r++)
+      {
+        values[2] += coefficients0[r]*basisvalues[r];
+      } // end loop over 'r'
+        break;
+      }
+    }
+    
+  }
+
+  void evaluate_basis(std::size_t i,
+                      double * values,
+                      const double * x,
+                      const double * coordinate_dofs,
+                      int cell_orientation) const final override
+  {
+    _evaluate_basis(i, values, x, coordinate_dofs, cell_orientation);
+  }
+
+  static void _evaluate_basis_all(double * values,
+                                  const double * x,
+                                  const double * coordinate_dofs,
+                                  int cell_orientation)
+  {
+    // Helper variable to hold values of a single dof.
+    double dof_values[3] = {0.0, 0.0, 0.0};
+    
+    // Loop dofs and call evaluate_basis
+    for (unsigned int r = 0; r < 3; r++)
+    {
+      _evaluate_basis(r, dof_values, x, coordinate_dofs, cell_orientation);
+      for (unsigned int s = 0; s < 3; s++)
+      {
+        values[r*3 + s] = dof_values[s];
+      } // end loop over 's'
+    } // end loop over 'r'
+  }
+
+  void evaluate_basis_all(double * values,
+                          const double * x,
+                          const double * coordinate_dofs,
+                          int cell_orientation) const final override
+  {
+    _evaluate_basis_all(values, x, coordinate_dofs, cell_orientation);
+  }
+
+  static void _evaluate_basis_derivatives(std::size_t i,
+                                          std::size_t n,
+                                          double * values,
+                                          const double * x,
+                                          const double * coordinate_dofs,
+                                          int cell_orientation)
+  {
+    
+    // Compute number of derivatives.
+    unsigned int num_derivatives = 1;
+    for (unsigned int r = 0; r < n; r++)
+    {
+      num_derivatives *= 3;
+    } // end loop over 'r'
+    
+    // Reset values. Assuming that values is always an array.
+    for (unsigned int r = 0; r < 3*num_derivatives; r++)
+    {
+      values[r] = 0.0;
+    } // end loop over 'r'
+    
+    // Call evaluate_basis if order of derivatives is equal to zero.
+    if (n == 0)
+    {
+      _evaluate_basis(i, values, x, coordinate_dofs, cell_orientation);
+      return ;
+    }
+    
+    // If order of derivatives is greater than the maximum polynomial degree, return zeros.
+    if (n > 0)
+    {
+    return ;
+    }
+    
+  }
+
+  void evaluate_basis_derivatives(std::size_t i,
+                                  std::size_t n,
+                                  double * values,
+                                  const double * x,
+                                  const double * coordinate_dofs,
+                                  int cell_orientation) const final override
+  {
+    _evaluate_basis_derivatives(i, n, values, x, coordinate_dofs, cell_orientation);
+  }
+
+  static void _evaluate_basis_derivatives_all(std::size_t n,
+                                              double * values,
+                                              const double * x,
+                                              const double * coordinate_dofs,
+                                              int cell_orientation)
+  {
+    // Call evaluate_basis_all if order of derivatives is equal to zero.
+    if (n == 0)
+    {
+      _evaluate_basis_all(values, x, coordinate_dofs, cell_orientation);
+      return ;
+    }
+    
+    // Compute number of derivatives.
+    unsigned int num_derivatives = 1;
+    for (unsigned int r = 0; r < n; r++)
+    {
+      num_derivatives *= 3;
+    } // end loop over 'r'
+    
+    // Set values equal to zero.
+    for (unsigned int r = 0; r < 3; r++)
+    {
+      for (unsigned int s = 0; s < 3*num_derivatives; s++)
+      {
+        values[r*3*num_derivatives + s] = 0.0;
+      } // end loop over 's'
+    } // end loop over 'r'
+    
+    // If order of derivatives is greater than the maximum polynomial degree, return zeros.
+    if (n > 0)
+    {
+      return ;
+    }
+    
+    // Helper variable to hold values of a single dof.
+    double dof_values[3];
+    for (unsigned int r = 0; r < 3; r++)
+    {
+      dof_values[r] = 0.0;
+    } // end loop over 'r'
+    
+    // Loop dofs and call evaluate_basis_derivatives.
+    for (unsigned int r = 0; r < 3; r++)
+    {
+      _evaluate_basis_derivatives(r, n, dof_values, x, coordinate_dofs, cell_orientation);
+      for (unsigned int s = 0; s < 3*num_derivatives; s++)
+      {
+        values[r*3*num_derivatives + s] = dof_values[s];
+      } // end loop over 's'
+    } // end loop over 'r'
+  }
+
+  void evaluate_basis_derivatives_all(std::size_t n,
+                                      double * values,
+                                      const double * x,
+                                      const double * coordinate_dofs,
+                                      int cell_orientation) const final override
+  {
+    _evaluate_basis_derivatives_all(n, values, x, coordinate_dofs, cell_orientation);
+  }
+
+  double evaluate_dof(std::size_t i,
+                      const ufc::function& f,
+                      const double * coordinate_dofs,
+                      int cell_orientation,
+                      const ufc::cell& c) const final override
+  {
+    // Declare variables for result of evaluation
+    double vals[3];
+    
+    // Declare variable for physical coordinates
+    double y[3];
+    switch (i)
+    {
+    case 0:
+      {
+        y[0] = 0.25*coordinate_dofs[0] + 0.25*coordinate_dofs[3] + 0.25*coordinate_dofs[6] + 0.25*coordinate_dofs[9];
+      y[1] = 0.25*coordinate_dofs[1] + 0.25*coordinate_dofs[4] + 0.25*coordinate_dofs[7] + 0.25*coordinate_dofs[10];
+      y[2] = 0.25*coordinate_dofs[2] + 0.25*coordinate_dofs[5] + 0.25*coordinate_dofs[8] + 0.25*coordinate_dofs[11];
+      f.evaluate(vals, y, c);
+      return vals[0];
+        break;
+      }
+    case 1:
+      {
+        y[0] = 0.25*coordinate_dofs[0] + 0.25*coordinate_dofs[3] + 0.25*coordinate_dofs[6] + 0.25*coordinate_dofs[9];
+      y[1] = 0.25*coordinate_dofs[1] + 0.25*coordinate_dofs[4] + 0.25*coordinate_dofs[7] + 0.25*coordinate_dofs[10];
+      y[2] = 0.25*coordinate_dofs[2] + 0.25*coordinate_dofs[5] + 0.25*coordinate_dofs[8] + 0.25*coordinate_dofs[11];
+      f.evaluate(vals, y, c);
+      return vals[1];
+        break;
+      }
+    case 2:
+      {
+        y[0] = 0.25*coordinate_dofs[0] + 0.25*coordinate_dofs[3] + 0.25*coordinate_dofs[6] + 0.25*coordinate_dofs[9];
+      y[1] = 0.25*coordinate_dofs[1] + 0.25*coordinate_dofs[4] + 0.25*coordinate_dofs[7] + 0.25*coordinate_dofs[10];
+      y[2] = 0.25*coordinate_dofs[2] + 0.25*coordinate_dofs[5] + 0.25*coordinate_dofs[8] + 0.25*coordinate_dofs[11];
+      f.evaluate(vals, y, c);
+      return vals[2];
+        break;
+      }
+    }
+    
+    return 0.0;
+  }
+
+  void evaluate_dofs(double * values,
+                             const ufc::function& f,
+                             const double * coordinate_dofs,
+                             int cell_orientation,
+                             const ufc::cell& c) const final override
+  {
+    // Declare variables for result of evaluation
+    double vals[3];
+    
+    // Declare variable for physical coordinates
+    double y[3];
+    y[0] = 0.25*coordinate_dofs[0] + 0.25*coordinate_dofs[3] + 0.25*coordinate_dofs[6] + 0.25*coordinate_dofs[9];
+    y[1] = 0.25*coordinate_dofs[1] + 0.25*coordinate_dofs[4] + 0.25*coordinate_dofs[7] + 0.25*coordinate_dofs[10];
+    y[2] = 0.25*coordinate_dofs[2] + 0.25*coordinate_dofs[5] + 0.25*coordinate_dofs[8] + 0.25*coordinate_dofs[11];
+    f.evaluate(vals, y, c);
+    values[0] = vals[0];
+    y[0] = 0.25*coordinate_dofs[0] + 0.25*coordinate_dofs[3] + 0.25*coordinate_dofs[6] + 0.25*coordinate_dofs[9];
+    y[1] = 0.25*coordinate_dofs[1] + 0.25*coordinate_dofs[4] + 0.25*coordinate_dofs[7] + 0.25*coordinate_dofs[10];
+    y[2] = 0.25*coordinate_dofs[2] + 0.25*coordinate_dofs[5] + 0.25*coordinate_dofs[8] + 0.25*coordinate_dofs[11];
+    f.evaluate(vals, y, c);
+    values[1] = vals[1];
+    y[0] = 0.25*coordinate_dofs[0] + 0.25*coordinate_dofs[3] + 0.25*coordinate_dofs[6] + 0.25*coordinate_dofs[9];
+    y[1] = 0.25*coordinate_dofs[1] + 0.25*coordinate_dofs[4] + 0.25*coordinate_dofs[7] + 0.25*coordinate_dofs[10];
+    y[2] = 0.25*coordinate_dofs[2] + 0.25*coordinate_dofs[5] + 0.25*coordinate_dofs[8] + 0.25*coordinate_dofs[11];
+    f.evaluate(vals, y, c);
+    values[2] = vals[2];
+  }
+
+  void interpolate_vertex_values(double * vertex_values,
+                                 const double * dof_values,
+                                 const double * coordinate_dofs,
+                                 int cell_orientation,
+                                 const ufc::cell& c) const final override
+  {
+    // Evaluate function and change variables
+    vertex_values[0] = dof_values[0];
+    vertex_values[3] = dof_values[0];
+    vertex_values[6] = dof_values[0];
+    vertex_values[9] = dof_values[0];
+    // Evaluate function and change variables
+    vertex_values[1] = dof_values[1];
+    vertex_values[4] = dof_values[1];
+    vertex_values[7] = dof_values[1];
+    vertex_values[10] = dof_values[1];
+    // Evaluate function and change variables
+    vertex_values[2] = dof_values[2];
+    vertex_values[5] = dof_values[2];
+    vertex_values[8] = dof_values[2];
+    vertex_values[11] = dof_values[2];
+  }
+
+  void tabulate_dof_coordinates(double * dof_coordinates,
+                                const double * coordinate_dofs) const final override
+  {
+    dof_coordinates[0] = 0.25*coordinate_dofs[0] + 0.25*coordinate_dofs[3] + 0.25*coordinate_dofs[6] + 0.25*coordinate_dofs[9];
+    dof_coordinates[1] = 0.25*coordinate_dofs[1] + 0.25*coordinate_dofs[4] + 0.25*coordinate_dofs[7] + 0.25*coordinate_dofs[10];
+    dof_coordinates[2] = 0.25*coordinate_dofs[2] + 0.25*coordinate_dofs[5] + 0.25*coordinate_dofs[8] + 0.25*coordinate_dofs[11];
+    dof_coordinates[3] = 0.25*coordinate_dofs[0] + 0.25*coordinate_dofs[3] + 0.25*coordinate_dofs[6] + 0.25*coordinate_dofs[9];
+    dof_coordinates[4] = 0.25*coordinate_dofs[1] + 0.25*coordinate_dofs[4] + 0.25*coordinate_dofs[7] + 0.25*coordinate_dofs[10];
+    dof_coordinates[5] = 0.25*coordinate_dofs[2] + 0.25*coordinate_dofs[5] + 0.25*coordinate_dofs[8] + 0.25*coordinate_dofs[11];
+    dof_coordinates[6] = 0.25*coordinate_dofs[0] + 0.25*coordinate_dofs[3] + 0.25*coordinate_dofs[6] + 0.25*coordinate_dofs[9];
+    dof_coordinates[7] = 0.25*coordinate_dofs[1] + 0.25*coordinate_dofs[4] + 0.25*coordinate_dofs[7] + 0.25*coordinate_dofs[10];
+    dof_coordinates[8] = 0.25*coordinate_dofs[2] + 0.25*coordinate_dofs[5] + 0.25*coordinate_dofs[8] + 0.25*coordinate_dofs[11];
+  }
+
+  std::size_t num_sub_elements() const final override
+  {
+    return 3;
+  }
+
+  ufc::finite_element * create_sub_element(std::size_t i) const final override
+  {
+    switch (i)
+    {
+    case 0:
+      {
+        return new cross_section_surface_current_forms_finite_element_0();
+        break;
+      }
+    case 1:
+      {
+        return new cross_section_surface_current_forms_finite_element_0();
+        break;
+      }
+    case 2:
+      {
+        return new cross_section_surface_current_forms_finite_element_0();
+        break;
+      }
+    }
+    
+    return 0;
+  }
+
+  ufc::finite_element * create() const final override
+  {
+    return new cross_section_surface_current_forms_finite_element_1();
+  }
+
+};
+
+
+class cross_section_surface_current_forms_finite_element_2: public ufc::finite_element
+{
+public:
+
+  cross_section_surface_current_forms_finite_element_2() : ufc::finite_element()
+  {
+    // Do nothing
+  }
+
+  ~cross_section_surface_current_forms_finite_element_2() override
   {
     // Do nothing
   }
@@ -1252,22 +2038,22 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new poisson_cell_marker_finite_element_0();
+    return new cross_section_surface_current_forms_finite_element_2();
   }
 
 };
 
 
-class poisson_cell_marker_finite_element_1: public ufc::finite_element
+class cross_section_surface_current_forms_finite_element_3: public ufc::finite_element
 {
 public:
 
-  poisson_cell_marker_finite_element_1() : ufc::finite_element()
+  cross_section_surface_current_forms_finite_element_3() : ufc::finite_element()
   {
     // Do nothing
   }
 
-  ~poisson_cell_marker_finite_element_1() override
+  ~cross_section_surface_current_forms_finite_element_3() override
   {
     // Do nothing
   }
@@ -4148,17 +4934,17 @@ public:
     {
     case 0:
       {
-        return new poisson_cell_marker_finite_element_0();
+        return new cross_section_surface_current_forms_finite_element_2();
         break;
       }
     case 1:
       {
-        return new poisson_cell_marker_finite_element_0();
+        return new cross_section_surface_current_forms_finite_element_2();
         break;
       }
     case 2:
       {
-        return new poisson_cell_marker_finite_element_0();
+        return new cross_section_surface_current_forms_finite_element_2();
         break;
       }
     }
@@ -4168,34 +4954,58 @@ public:
 
   ufc::finite_element * create() const final override
   {
-    return new poisson_cell_marker_finite_element_1();
+    return new cross_section_surface_current_forms_finite_element_3();
   }
 
 };
 
 
-class poisson_cell_marker_finite_element_2: public ufc::finite_element
+class cross_section_surface_current_forms_dofmap_0: public ufc::dofmap
 {
 public:
 
-  poisson_cell_marker_finite_element_2() : ufc::finite_element()
+  cross_section_surface_current_forms_dofmap_0() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~poisson_cell_marker_finite_element_2() override
+  ~cross_section_surface_current_forms_dofmap_0() override
   {
     // Do nothing
   }
 
   const char * signature() const final override
   {
-    return "FiniteElement('Discontinuous Lagrange', tetrahedron, 0)";
+    return "FFC dofmap for FiniteElement('Real', tetrahedron, 0)";
   }
 
-  ufc::shape cell_shape() const final override
+  bool needs_mesh_entities(std::size_t d) const final override
   {
-    return ufc::shape::tetrahedron;
+    switch (d)
+    {
+    case 0:
+      {
+        return false;
+        break;
+      }
+    case 1:
+      {
+        return false;
+        break;
+      }
+    case 2:
+      {
+        return false;
+        break;
+      }
+    case 3:
+      {
+        return false;
+        break;
+      }
+    }
+    
+    return false;
   }
 
   std::size_t topological_dimension() const final override
@@ -4203,286 +5013,374 @@ public:
     return 3;
   }
 
-  std::size_t geometric_dimension() const final override
-  {
-    return 3;
-  }
-
-  std::size_t space_dimension() const final override
+  std::size_t global_dimension(const std::vector<std::size_t>&
+                               num_global_entities) const final override
   {
     return 1;
   }
 
-  std::size_t value_rank() const final override
+  std::size_t num_element_dofs() const final override
+  {
+    return 1;
+  }
+
+  std::size_t num_facet_dofs() const final override
   {
     return 0;
   }
 
-  std::size_t value_dimension(std::size_t i) const final override
+  std::size_t num_entity_dofs(std::size_t d) const final override
   {
-    return 1;
-  }
-
-  std::size_t value_size() const final override
-  {
-    return 1;
-  }
-
-  std::size_t reference_value_rank() const final override
-  {
-    return 0;
-  }
-
-  std::size_t reference_value_dimension(std::size_t i) const final override
-  {
-    return 1;
-  }
-
-  std::size_t reference_value_size() const final override
-  {
-    return 1;
-  }
-
-  std::size_t degree() const final override
-  {
-    return 0;
-  }
-
-  const char * family() const final override
-  {
-    return "Discontinuous Lagrange";
-  }
-
-  static void _evaluate_basis(std::size_t i,
-                              double * values,
-                              const double * x,
-                              const double * coordinate_dofs,
-                              int cell_orientation)
-  {
-    // Compute Jacobian
-    double J[9];
-    compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
-    
-    // Compute Jacobian inverse and determinant
-    double K[9];
-    double detJ;
-    compute_jacobian_inverse_tetrahedron_3d(K, detJ, J);
-    
-    
-    // Compute constants
-    
-    // Compute subdeterminants
-    
-    // Get coordinates and map to the reference (FIAT) element
-    
-    
-    // Reset values
-    *values = 0.0;
-    
-    // Array of basisvalues
-    double basisvalues[1] = {0.0};
-    
-    // Declare helper variables
-    
-    // Compute basisvalues
-    basisvalues[0] = 1.0;
-    
-    // Table(s) of coefficients
-    static const double coefficients0[1] = \
-    {1.0};
-    
-    // Compute value(s)
-    for (unsigned int r = 0; r < 1; r++)
-    {
-      *values += coefficients0[r]*basisvalues[r];
-    } // end loop over 'r'
-  }
-
-  void evaluate_basis(std::size_t i,
-                      double * values,
-                      const double * x,
-                      const double * coordinate_dofs,
-                      int cell_orientation) const final override
-  {
-    _evaluate_basis(i, values, x, coordinate_dofs, cell_orientation);
-  }
-
-  static void _evaluate_basis_all(double * values,
-                                  const double * x,
-                                  const double * coordinate_dofs,
-                                  int cell_orientation)
-  {
-    // Element is constant, calling evaluate_basis.
-    _evaluate_basis(0, values, x, coordinate_dofs, cell_orientation);
-  }
-
-  void evaluate_basis_all(double * values,
-                          const double * x,
-                          const double * coordinate_dofs,
-                          int cell_orientation) const final override
-  {
-    _evaluate_basis_all(values, x, coordinate_dofs, cell_orientation);
-  }
-
-  static void _evaluate_basis_derivatives(std::size_t i,
-                                          std::size_t n,
-                                          double * values,
-                                          const double * x,
-                                          const double * coordinate_dofs,
-                                          int cell_orientation)
-  {
-    
-    // Compute number of derivatives.
-    unsigned int num_derivatives = 1;
-    for (unsigned int r = 0; r < n; r++)
-    {
-      num_derivatives *= 3;
-    } // end loop over 'r'
-    
-    // Reset values. Assuming that values is always an array.
-    for (unsigned int r = 0; r < num_derivatives; r++)
-    {
-      values[r] = 0.0;
-    } // end loop over 'r'
-    
-    // Call evaluate_basis if order of derivatives is equal to zero.
-    if (n == 0)
-    {
-      _evaluate_basis(i, values, x, coordinate_dofs, cell_orientation);
-      return ;
-    }
-    
-    // If order of derivatives is greater than the maximum polynomial degree, return zeros.
-    if (n > 0)
-    {
-    return ;
-    }
-    
-  }
-
-  void evaluate_basis_derivatives(std::size_t i,
-                                  std::size_t n,
-                                  double * values,
-                                  const double * x,
-                                  const double * coordinate_dofs,
-                                  int cell_orientation) const final override
-  {
-    _evaluate_basis_derivatives(i, n, values, x, coordinate_dofs, cell_orientation);
-  }
-
-  static void _evaluate_basis_derivatives_all(std::size_t n,
-                                              double * values,
-                                              const double * x,
-                                              const double * coordinate_dofs,
-                                              int cell_orientation)
-  {
-    // Element is constant, calling evaluate_basis_derivatives.
-    _evaluate_basis_derivatives(0, n, values, x, coordinate_dofs, cell_orientation);
-  }
-
-  void evaluate_basis_derivatives_all(std::size_t n,
-                                      double * values,
-                                      const double * x,
-                                      const double * coordinate_dofs,
-                                      int cell_orientation) const final override
-  {
-    _evaluate_basis_derivatives_all(n, values, x, coordinate_dofs, cell_orientation);
-  }
-
-  double evaluate_dof(std::size_t i,
-                      const ufc::function& f,
-                      const double * coordinate_dofs,
-                      int cell_orientation,
-                      const ufc::cell& c) const final override
-  {
-    // Declare variables for result of evaluation
-    double vals[1];
-    
-    // Declare variable for physical coordinates
-    double y[3];
-    switch (i)
+    switch (d)
     {
     case 0:
       {
-        y[0] = 0.25*coordinate_dofs[0] + 0.25*coordinate_dofs[3] + 0.25*coordinate_dofs[6] + 0.25*coordinate_dofs[9];
-      y[1] = 0.25*coordinate_dofs[1] + 0.25*coordinate_dofs[4] + 0.25*coordinate_dofs[7] + 0.25*coordinate_dofs[10];
-      y[2] = 0.25*coordinate_dofs[2] + 0.25*coordinate_dofs[5] + 0.25*coordinate_dofs[8] + 0.25*coordinate_dofs[11];
-      f.evaluate(vals, y, c);
-      return vals[0];
+        return 0;
+        break;
+      }
+    case 1:
+      {
+        return 0;
+        break;
+      }
+    case 2:
+      {
+        return 0;
+        break;
+      }
+    case 3:
+      {
+        return 1;
         break;
       }
     }
     
-    return 0.0;
+    return 0;
   }
 
-  void evaluate_dofs(double * values,
-                             const ufc::function& f,
-                             const double * coordinate_dofs,
-                             int cell_orientation,
-                             const ufc::cell& c) const final override
+  void tabulate_dofs(std::size_t * dofs,
+                     const std::vector<std::size_t>& num_global_entities,
+                     const std::vector<std::vector<std::size_t>>& entity_indices) const final override
   {
-    // Declare variables for result of evaluation
-    double vals[1];
+    dofs[0] = 0;
+  }
+
+  void tabulate_facet_dofs(std::size_t * dofs,
+                           std::size_t facet) const final override
+  {
+    switch (facet)
+    {
+    case 0:
+      {
+        
+        break;
+      }
+    case 1:
+      {
+        
+        break;
+      }
+    case 2:
+      {
+        
+        break;
+      }
+    case 3:
+      {
+        
+        break;
+      }
+    }
     
-    // Declare variable for physical coordinates
-    double y[3];
-    y[0] = 0.25*coordinate_dofs[0] + 0.25*coordinate_dofs[3] + 0.25*coordinate_dofs[6] + 0.25*coordinate_dofs[9];
-    y[1] = 0.25*coordinate_dofs[1] + 0.25*coordinate_dofs[4] + 0.25*coordinate_dofs[7] + 0.25*coordinate_dofs[10];
-    y[2] = 0.25*coordinate_dofs[2] + 0.25*coordinate_dofs[5] + 0.25*coordinate_dofs[8] + 0.25*coordinate_dofs[11];
-    f.evaluate(vals, y, c);
-    values[0] = vals[0];
   }
 
-  void interpolate_vertex_values(double * vertex_values,
-                                 const double * dof_values,
-                                 const double * coordinate_dofs,
-                                 int cell_orientation,
-                                 const ufc::cell& c) const final override
+  void tabulate_entity_dofs(std::size_t * dofs,
+                            std::size_t d, std::size_t i) const final override
   {
-    // Evaluate function and change variables
-    vertex_values[0] = dof_values[0];
-    vertex_values[1] = dof_values[0];
-    vertex_values[2] = dof_values[0];
-    vertex_values[3] = dof_values[0];
+    if (d > 3)
+    {
+    throw std::runtime_error("d is larger than dimension (3)");
+    }
+    
+    switch (d)
+    {
+    case 0:
+      {
+        
+        break;
+      }
+    case 1:
+      {
+        
+        break;
+      }
+    case 2:
+      {
+        
+        break;
+      }
+    case 3:
+      {
+        if (i > 0)
+      {
+      throw std::runtime_error("i is larger than number of entities (0)");
+      }
+      
+      dofs[0] = 0;
+        break;
+      }
+    }
+    
   }
 
-  void tabulate_dof_coordinates(double * dof_coordinates,
-                                const double * coordinate_dofs) const final override
-  {
-    dof_coordinates[0] = 0.25*coordinate_dofs[0] + 0.25*coordinate_dofs[3] + 0.25*coordinate_dofs[6] + 0.25*coordinate_dofs[9];
-    dof_coordinates[1] = 0.25*coordinate_dofs[1] + 0.25*coordinate_dofs[4] + 0.25*coordinate_dofs[7] + 0.25*coordinate_dofs[10];
-    dof_coordinates[2] = 0.25*coordinate_dofs[2] + 0.25*coordinate_dofs[5] + 0.25*coordinate_dofs[8] + 0.25*coordinate_dofs[11];
-  }
 
-  std::size_t num_sub_elements() const final override
+  std::size_t num_sub_dofmaps() const final override
   {
     return 0;
   }
 
-  ufc::finite_element * create_sub_element(std::size_t i) const final override
+  ufc::dofmap * create_sub_dofmap(std::size_t i) const final override
   {
     return 0;
   }
 
-  ufc::finite_element * create() const final override
+  ufc::dofmap * create() const final override
   {
-    return new poisson_cell_marker_finite_element_2();
+    return new cross_section_surface_current_forms_dofmap_0();
   }
 
 };
 
 
-class poisson_cell_marker_dofmap_0: public ufc::dofmap
+class cross_section_surface_current_forms_dofmap_1: public ufc::dofmap
 {
 public:
 
-  poisson_cell_marker_dofmap_0() : ufc::dofmap()
+  cross_section_surface_current_forms_dofmap_1() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~poisson_cell_marker_dofmap_0() override
+  ~cross_section_surface_current_forms_dofmap_1() override
+  {
+    // Do nothing
+  }
+
+  const char * signature() const final override
+  {
+    return "FFC dofmap for VectorElement(FiniteElement('Real', tetrahedron, 0), dim=3)";
+  }
+
+  bool needs_mesh_entities(std::size_t d) const final override
+  {
+    switch (d)
+    {
+    case 0:
+      {
+        return false;
+        break;
+      }
+    case 1:
+      {
+        return false;
+        break;
+      }
+    case 2:
+      {
+        return false;
+        break;
+      }
+    case 3:
+      {
+        return true;
+        break;
+      }
+    }
+    
+    return false;
+  }
+
+  std::size_t topological_dimension() const final override
+  {
+    return 3;
+  }
+
+  std::size_t global_dimension(const std::vector<std::size_t>&
+                               num_global_entities) const final override
+  {
+    return 3;
+  }
+
+  std::size_t num_element_dofs() const final override
+  {
+    return 3;
+  }
+
+  std::size_t num_facet_dofs() const final override
+  {
+    return 0;
+  }
+
+  std::size_t num_entity_dofs(std::size_t d) const final override
+  {
+    switch (d)
+    {
+    case 0:
+      {
+        return 0;
+        break;
+      }
+    case 1:
+      {
+        return 0;
+        break;
+      }
+    case 2:
+      {
+        return 0;
+        break;
+      }
+    case 3:
+      {
+        return 3;
+        break;
+      }
+    }
+    
+    return 0;
+  }
+
+  void tabulate_dofs(std::size_t * dofs,
+                     const std::vector<std::size_t>& num_global_entities,
+                     const std::vector<std::vector<std::size_t>>& entity_indices) const final override
+  {
+    unsigned int offset = 0;
+    dofs[0] = offset;
+    offset += 1;
+    dofs[1] = offset;
+    offset += 1;
+    dofs[2] = offset;
+    offset += 1;
+  }
+
+  void tabulate_facet_dofs(std::size_t * dofs,
+                           std::size_t facet) const final override
+  {
+    switch (facet)
+    {
+    case 0:
+      {
+        
+        break;
+      }
+    case 1:
+      {
+        
+        break;
+      }
+    case 2:
+      {
+        
+        break;
+      }
+    case 3:
+      {
+        
+        break;
+      }
+    }
+    
+  }
+
+  void tabulate_entity_dofs(std::size_t * dofs,
+                            std::size_t d, std::size_t i) const final override
+  {
+    if (d > 3)
+    {
+    throw std::runtime_error("d is larger than dimension (3)");
+    }
+    
+    switch (d)
+    {
+    case 0:
+      {
+        
+        break;
+      }
+    case 1:
+      {
+        
+        break;
+      }
+    case 2:
+      {
+        
+        break;
+      }
+    case 3:
+      {
+        if (i > 0)
+      {
+      throw std::runtime_error("i is larger than number of entities (0)");
+      }
+      
+      dofs[0] = 0;
+      dofs[1] = 1;
+      dofs[2] = 2;
+        break;
+      }
+    }
+    
+  }
+
+
+  std::size_t num_sub_dofmaps() const final override
+  {
+    return 3;
+  }
+
+  ufc::dofmap * create_sub_dofmap(std::size_t i) const final override
+  {
+    switch (i)
+    {
+    case 0:
+      {
+        return new cross_section_surface_current_forms_dofmap_0();
+        break;
+      }
+    case 1:
+      {
+        return new cross_section_surface_current_forms_dofmap_0();
+        break;
+      }
+    case 2:
+      {
+        return new cross_section_surface_current_forms_dofmap_0();
+        break;
+      }
+    }
+    
+    return 0;
+  }
+
+  ufc::dofmap * create() const final override
+  {
+    return new cross_section_surface_current_forms_dofmap_1();
+  }
+
+};
+
+
+class cross_section_surface_current_forms_dofmap_2: public ufc::dofmap
+{
+public:
+
+  cross_section_surface_current_forms_dofmap_2() : ufc::dofmap()
+  {
+    // Do nothing
+  }
+
+  ~cross_section_surface_current_forms_dofmap_2() override
   {
     // Do nothing
   }
@@ -4693,22 +5591,22 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new poisson_cell_marker_dofmap_0();
+    return new cross_section_surface_current_forms_dofmap_2();
   }
 
 };
 
 
-class poisson_cell_marker_dofmap_1: public ufc::dofmap
+class cross_section_surface_current_forms_dofmap_3: public ufc::dofmap
 {
 public:
 
-  poisson_cell_marker_dofmap_1() : ufc::dofmap()
+  cross_section_surface_current_forms_dofmap_3() : ufc::dofmap()
   {
     // Do nothing
   }
 
-  ~poisson_cell_marker_dofmap_1() override
+  ~cross_section_surface_current_forms_dofmap_3() override
   {
     // Do nothing
   }
@@ -4962,17 +5860,17 @@ public:
     {
     case 0:
       {
-        return new poisson_cell_marker_dofmap_0();
+        return new cross_section_surface_current_forms_dofmap_2();
         break;
       }
     case 1:
       {
-        return new poisson_cell_marker_dofmap_0();
+        return new cross_section_surface_current_forms_dofmap_2();
         break;
       }
     case 2:
       {
-        return new poisson_cell_marker_dofmap_0();
+        return new cross_section_surface_current_forms_dofmap_2();
         break;
       }
     }
@@ -4982,307 +5880,126 @@ public:
 
   ufc::dofmap * create() const final override
   {
-    return new poisson_cell_marker_dofmap_1();
+    return new cross_section_surface_current_forms_dofmap_3();
   }
 
 };
 
 
-class poisson_cell_marker_dofmap_2: public ufc::dofmap
+class cross_section_surface_current_forms_interior_facet_integral_0_1: public ufc::interior_facet_integral
 {
 public:
 
-  poisson_cell_marker_dofmap_2() : ufc::dofmap()
-  {
-    // Do nothing
-  }
-
-  ~poisson_cell_marker_dofmap_2() override
-  {
-    // Do nothing
-  }
-
-  const char * signature() const final override
-  {
-    return "FFC dofmap for FiniteElement('Discontinuous Lagrange', tetrahedron, 0)";
-  }
-
-  bool needs_mesh_entities(std::size_t d) const final override
-  {
-    switch (d)
-    {
-    case 0:
-      {
-        return false;
-        break;
-      }
-    case 1:
-      {
-        return false;
-        break;
-      }
-    case 2:
-      {
-        return false;
-        break;
-      }
-    case 3:
-      {
-        return true;
-        break;
-      }
-    }
-    
-    return false;
-  }
-
-  std::size_t topological_dimension() const final override
-  {
-    return 3;
-  }
-
-  std::size_t global_dimension(const std::vector<std::size_t>&
-                               num_global_entities) const final override
-  {
-    return num_global_entities[3];
-  }
-
-  std::size_t num_element_dofs() const final override
-  {
-    return 1;
-  }
-
-  std::size_t num_facet_dofs() const final override
-  {
-    return 0;
-  }
-
-  std::size_t num_entity_dofs(std::size_t d) const final override
-  {
-    switch (d)
-    {
-    case 0:
-      {
-        return 0;
-        break;
-      }
-    case 1:
-      {
-        return 0;
-        break;
-      }
-    case 2:
-      {
-        return 0;
-        break;
-      }
-    case 3:
-      {
-        return 1;
-        break;
-      }
-    }
-    
-    return 0;
-  }
-
-  void tabulate_dofs(std::size_t * dofs,
-                     const std::vector<std::size_t>& num_global_entities,
-                     const std::vector<std::vector<std::size_t>>& entity_indices) const final override
-  {
-    dofs[0] = entity_indices[3][0];
-  }
-
-  void tabulate_facet_dofs(std::size_t * dofs,
-                           std::size_t facet) const final override
-  {
-    switch (facet)
-    {
-    case 0:
-      {
-        
-        break;
-      }
-    case 1:
-      {
-        
-        break;
-      }
-    case 2:
-      {
-        
-        break;
-      }
-    case 3:
-      {
-        
-        break;
-      }
-    }
-    
-  }
-
-  void tabulate_entity_dofs(std::size_t * dofs,
-                            std::size_t d, std::size_t i) const final override
-  {
-    if (d > 3)
-    {
-    throw std::runtime_error("d is larger than dimension (3)");
-    }
-    
-    switch (d)
-    {
-    case 0:
-      {
-        
-        break;
-      }
-    case 1:
-      {
-        
-        break;
-      }
-    case 2:
-      {
-        
-        break;
-      }
-    case 3:
-      {
-        if (i > 0)
-      {
-      throw std::runtime_error("i is larger than number of entities (0)");
-      }
-      
-      dofs[0] = 0;
-        break;
-      }
-    }
-    
-  }
-
-
-  std::size_t num_sub_dofmaps() const final override
-  {
-    return 0;
-  }
-
-  ufc::dofmap * create_sub_dofmap(std::size_t i) const final override
-  {
-    return 0;
-  }
-
-  ufc::dofmap * create() const final override
-  {
-    return new poisson_cell_marker_dofmap_2();
-  }
-
-};
-
-
-class poisson_cell_marker_cell_integral_0_otherwise: public ufc::cell_integral
-{
-public:
-
-  poisson_cell_marker_cell_integral_0_otherwise() : ufc::cell_integral()
+  cross_section_surface_current_forms_interior_facet_integral_0_1() : ufc::interior_facet_integral()
   {
     
   }
 
-  ~poisson_cell_marker_cell_integral_0_otherwise() override
+  ~cross_section_surface_current_forms_interior_facet_integral_0_1() override
   {
     
   }
 
   const std::vector<bool> & enabled_coefficients() const final override
   {
-    static const std::vector<bool> enabled({true, true, true, true});
+    static const std::vector<bool> enabled({true, true, true, true, true, true, true});
     return enabled;
   }
 
   void tabulate_tensor(double * A,
                        const double * const * w,
-                       const double * coordinate_dofs,
-                       int cell_orientation) const final override
+                       const double * coordinate_dofs_0,
+                       const double * coordinate_dofs_1,
+                       std::size_t facet_0,
+                       std::size_t facet_1,
+                       int cell_orientation_0,
+                       int cell_orientation_1) const final override
   {
     // Compute Jacobian
-    double J[9];
-    compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
+    double J_0[9];
+    compute_jacobian_tetrahedron_3d(J_0, coordinate_dofs_0);
     
     // Compute Jacobian inverse and determinant
-    double K[9];
-    double detJ;
-    compute_jacobian_inverse_tetrahedron_3d(K, detJ, J);
+    double K_0[9];
+    double detJ_0;
+    compute_jacobian_inverse_tetrahedron_3d(K_0, detJ_0, J_0);
     
-    // Set scale factor
-    const double det = std::abs(detJ);
+    // Compute Jacobian
+    double J_1[9];
+    compute_jacobian_tetrahedron_3d(J_1, coordinate_dofs_1);
     
+    // Compute Jacobian inverse and determinant
+    double K_1[9];
+    double detJ_1;
+    compute_jacobian_inverse_tetrahedron_3d(K_1, detJ_1, J_1);
+    
+    
+    
+    // Get vertices on face
+    static unsigned int face_vertices[4][3] = {{1, 2, 3}, {0, 2, 3}, {0, 1, 3}, {0, 1, 2}};
+    const unsigned int v0 = face_vertices[facet_0][0];
+    const unsigned int v1 = face_vertices[facet_0][1];
+    const unsigned int v2 = face_vertices[facet_0][2];
+    
+    // Compute scale factor (area of face scaled by area of reference triangle)
+    const double a0 = (coordinate_dofs_0[3*v0 + 1]*coordinate_dofs_0[3*v1 + 2]  + coordinate_dofs_0[3*v0 + 2]*coordinate_dofs_0[3*v2 + 1]  + coordinate_dofs_0[3*v1 + 1]*coordinate_dofs_0[3*v2 + 2]) - (coordinate_dofs_0[3*v2 + 1]*coordinate_dofs_0[3*v1 + 2] + coordinate_dofs_0[3*v2 + 2]*coordinate_dofs_0[3*v0 + 1] + coordinate_dofs_0[3*v1 + 1]*coordinate_dofs_0[3*v0 + 2]);
+    
+    const double a1 = (coordinate_dofs_0[3*v0 + 2]*coordinate_dofs_0[3*v1 + 0]  + coordinate_dofs_0[3*v0 + 0]*coordinate_dofs_0[3*v2 + 2] + coordinate_dofs_0[3*v1 + 2]*coordinate_dofs_0[3*v2 + 0]) - (coordinate_dofs_0[3*v2 + 2]*coordinate_dofs_0[3*v1 + 0]  + coordinate_dofs_0[3*v2 + 0]*coordinate_dofs_0[3*v0 + 2] + coordinate_dofs_0[3*v1 + 2]*coordinate_dofs_0[3*v0 + 0]);
+    
+    const double a2 = (coordinate_dofs_0[3*v0 + 0]*coordinate_dofs_0[3*v1 + 1]  + coordinate_dofs_0[3*v0 + 1]*coordinate_dofs_0[3*v2 + 0]  + coordinate_dofs_0[3*v1 + 0]*coordinate_dofs_0[3*v2 + 1]) - (coordinate_dofs_0[3*v2 + 0]*coordinate_dofs_0[3*v1 + 1]  + coordinate_dofs_0[3*v2 + 1]*coordinate_dofs_0[3*v0 + 0]  + coordinate_dofs_0[3*v1 + 0]*coordinate_dofs_0[3*v0 + 1]);
+    
+    const double det = std::sqrt(a0*a0 + a1*a1 + a2*a2);
+    
+    
+    
+    
+    // Facet area (divide by two because 'det' is scaled by area of reference triangle)
+    
+    // Min edge length of facet
+    double min_facet_edge_length;
+    compute_min_facet_edge_length_tetrahedron_3d(min_facet_edge_length, facet_0, coordinate_dofs_0);
+    
+    
+    // Max edge length of facet
+    double max_facet_edge_length;
+    compute_max_facet_edge_length_tetrahedron_3d(max_facet_edge_length, facet_0, coordinate_dofs_0);
+    
+    
+    // Compute cell volume
     // Compute cell volume
     
     
     // Compute circumradius
+    // Compute circumradius
     
     
     // Array of quadrature weights.
-    static const double W24[24] = {0.00665379170969465, 0.00665379170969465, 0.00665379170969465, 0.00665379170969465, 0.00167953517588678, 0.00167953517588678, 0.00167953517588678, 0.00167953517588678, 0.0092261969239424, 0.0092261969239424, 0.0092261969239424, 0.0092261969239424, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428, 0.00803571428571428};
-    // Quadrature points on the UFC reference element: (0.356191386222545, 0.214602871259152, 0.214602871259152), (0.214602871259152, 0.214602871259152, 0.214602871259152), (0.214602871259152, 0.214602871259152, 0.356191386222545), (0.214602871259152, 0.356191386222545, 0.214602871259152), (0.877978124396166, 0.0406739585346113, 0.0406739585346113), (0.0406739585346113, 0.0406739585346113, 0.0406739585346113), (0.0406739585346113, 0.0406739585346113, 0.877978124396166), (0.0406739585346113, 0.877978124396166, 0.0406739585346113), (0.0329863295731731, 0.322337890142276, 0.322337890142276), (0.322337890142276, 0.322337890142276, 0.322337890142276), (0.322337890142276, 0.322337890142276, 0.0329863295731731), (0.322337890142276, 0.0329863295731731, 0.322337890142276), (0.269672331458316, 0.0636610018750175, 0.0636610018750175), (0.0636610018750175, 0.269672331458316, 0.0636610018750175), (0.0636610018750175, 0.0636610018750175, 0.269672331458316), (0.603005664791649, 0.0636610018750175, 0.0636610018750175), (0.0636610018750175, 0.603005664791649, 0.0636610018750175), (0.0636610018750175, 0.0636610018750175, 0.603005664791649), (0.0636610018750175, 0.269672331458316, 0.603005664791649), (0.269672331458316, 0.603005664791649, 0.0636610018750175), (0.603005664791649, 0.0636610018750175, 0.269672331458316), (0.0636610018750175, 0.603005664791649, 0.269672331458316), (0.269672331458316, 0.0636610018750175, 0.603005664791649), (0.603005664791649, 0.269672331458316, 0.0636610018750175)
+    static const double W6[6] = {0.054975871827661, 0.054975871827661, 0.054975871827661, 0.111690794839005, 0.111690794839005, 0.111690794839005};
+    // Quadrature points on the UFC reference element: (0.816847572980459, 0.091576213509771), (0.091576213509771, 0.816847572980459), (0.091576213509771, 0.091576213509771), (0.10810301816807, 0.445948490915965), (0.445948490915965, 0.10810301816807), (0.445948490915965, 0.445948490915965)
     
     // Values of basis functions at quadrature points.
-    static const double FE0[24][4] = \
-    {{0.214602871259152, 0.356191386222545, 0.214602871259152, 0.214602871259152},
-    {0.356191386222545, 0.214602871259152, 0.214602871259152, 0.214602871259152},
-    {0.214602871259152, 0.214602871259152, 0.214602871259152, 0.356191386222545},
-    {0.214602871259152, 0.214602871259152, 0.356191386222545, 0.214602871259152},
-    {0.0406739585346115, 0.877978124396166, 0.0406739585346114, 0.0406739585346113},
-    {0.877978124396166, 0.0406739585346112, 0.0406739585346114, 0.0406739585346113},
-    {0.0406739585346115, 0.0406739585346113, 0.0406739585346113, 0.877978124396166},
-    {0.0406739585346115, 0.0406739585346113, 0.877978124396166, 0.0406739585346113},
-    {0.322337890142276, 0.0329863295731731, 0.322337890142276, 0.322337890142276},
-    {0.0329863295731729, 0.322337890142276, 0.322337890142276, 0.322337890142276},
-    {0.322337890142276, 0.322337890142276, 0.322337890142276, 0.0329863295731731},
-    {0.322337890142276, 0.322337890142276, 0.0329863295731731, 0.322337890142276},
-    {0.603005664791649, 0.269672331458316, 0.0636610018750175, 0.0636610018750175},
-    {0.603005664791649, 0.0636610018750174, 0.269672331458316, 0.0636610018750175},
-    {0.603005664791649, 0.0636610018750175, 0.0636610018750175, 0.269672331458316},
-    {0.269672331458316, 0.603005664791649, 0.0636610018750175, 0.0636610018750175},
-    {0.269672331458316, 0.0636610018750175, 0.603005664791649, 0.0636610018750175},
-    {0.269672331458316, 0.0636610018750175, 0.0636610018750175, 0.603005664791649},
-    {0.0636610018750176, 0.0636610018750175, 0.269672331458316, 0.603005664791649},
-    {0.0636610018750176, 0.269672331458316, 0.603005664791649, 0.0636610018750175},
-    {0.0636610018750177, 0.603005664791649, 0.0636610018750175, 0.269672331458316},
-    {0.0636610018750176, 0.0636610018750175, 0.603005664791649, 0.269672331458316},
-    {0.0636610018750176, 0.269672331458316, 0.0636610018750175, 0.603005664791649},
-    {0.0636610018750177, 0.603005664791649, 0.269672331458316, 0.0636610018750175}};
+    static const double FE0_f0[6][3] = \
+    {{0.09157621350977, 0.816847572980459, 0.091576213509771},
+    {0.0915762135097701, 0.091576213509771, 0.816847572980459},
+    {0.816847572980458, 0.091576213509771, 0.091576213509771},
+    {0.445948490915965, 0.10810301816807, 0.445948490915965},
+    {0.445948490915965, 0.445948490915965, 0.10810301816807},
+    {0.10810301816807, 0.445948490915965, 0.445948490915965}};
     
     // Array of non-zero columns
-    static const unsigned int nzc3[4] = {0, 1, 2, 3};
+    static const unsigned int nzc0[3] = {1, 2, 3};
     
     // Array of non-zero columns
-    static const unsigned int nzc7[4] = {4, 5, 6, 7};
+    static const unsigned int nzc4[3] = {0, 2, 3};
     
     // Array of non-zero columns
-    static const unsigned int nzc11[4] = {8, 9, 10, 11};
+    static const unsigned int nzc5[3] = {0, 1, 3};
     
-    static const double FE0_D001[24][2] = \
+    // Array of non-zero columns
+    static const unsigned int nzc6[3] = {0, 1, 2};
+    
+    static const double FE0_f0_D001[6][2] = \
     {{-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
-    {-1.0, 1.0},
     {-1.0, 1.0},
     {-1.0, 1.0},
     {-1.0, 1.0},
@@ -5290,131 +6007,1157 @@ public:
     {-1.0, 1.0}};
     
     // Array of non-zero columns
-    static const unsigned int nzc0[2] = {0, 3};
+    static const unsigned int nzc1[2] = {0, 3};
     
     // Array of non-zero columns
-    static const unsigned int nzc1[2] = {0, 2};
+    static const unsigned int nzc2[2] = {0, 2};
     
     // Array of non-zero columns
-    static const unsigned int nzc2[2] = {0, 1};
+    static const unsigned int nzc3[2] = {0, 1};
     
     // Reset values in the element tensor.
-    for (unsigned int r = 0; r < 1; r++)
-    {
-      A[r] = 0.0;
-    } // end loop over 'r'
-    // Number of operations to compute geometry constants: 57.
-    double G[15];
-    G[0] = -2.0*K[0]*det;
-    G[1] = -2.0*K[3]*det;
-    G[2] = -2.0*K[6]*det;
-    G[3] = det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[4] = 2.0*det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[5] = 2.0*det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[6] = -2.0*K[1]*det;
-    G[7] = -2.0*K[2]*det;
-    G[8] = det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[9] = 2.0*det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[10] = -2.0*K[4]*det;
-    G[11] = -2.0*K[5]*det;
-    G[12] = det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[13] = -2.0*K[7]*det;
-    G[14] = -2.0*K[8]*det;
+    A[0] = 0.0;
+    // Number of operations to compute geometry constants: 84.
+    double G[12];
+    G[0] = -0.5*det*(K_0[0]*w[0][0] + K_0[1]*w[0][1] + K_0[2]*w[0][2]);
+    G[1] = -0.5*det*(K_0[3]*w[0][0] + K_0[4]*w[0][1] + K_0[5]*w[0][2]);
+    G[2] = -0.5*det*(K_0[6]*w[0][0] + K_0[7]*w[0][1] + K_0[8]*w[0][2]);
+    G[3] = -0.5*det*(K_1[0]*w[0][0] + K_1[1]*w[0][1] + K_1[2]*w[0][2]);
+    G[4] = -0.5*det*(K_1[3]*w[0][0] + K_1[4]*w[0][1] + K_1[5]*w[0][2]);
+    G[5] = -0.5*det*(K_1[6]*w[0][0] + K_1[7]*w[0][1] + K_1[8]*w[0][2]);
+    G[6] = 0.5*det*(K_0[0]*w[0][0] + K_0[1]*w[0][1] + K_0[2]*w[0][2]);
+    G[7] = 0.5*det*(K_0[3]*w[0][0] + K_0[4]*w[0][1] + K_0[5]*w[0][2]);
+    G[8] = 0.5*det*(K_0[6]*w[0][0] + K_0[7]*w[0][1] + K_0[8]*w[0][2]);
+    G[9] = 0.5*det*(K_1[0]*w[0][0] + K_1[1]*w[0][1] + K_1[2]*w[0][2]);
+    G[10] = 0.5*det*(K_1[3]*w[0][0] + K_1[4]*w[0][1] + K_1[5]*w[0][2]);
+    G[11] = 0.5*det*(K_1[6]*w[0][0] + K_1[7]*w[0][1] + K_1[8]*w[0][2]);
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
-    
-    // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 2304
-    for (unsigned int ip = 0; ip < 24; ip++)
+    switch (facet_0)
     {
-      
-      // Coefficient declarations.
-      double F0 = 0.0;
-      double F1 = 0.0;
-      double F2 = 0.0;
-      double F3 = 0.0;
-      double F4 = 0.0;
-      double F5 = 0.0;
-      double F6 = 0.0;
-      double F7 = 0.0;
-      
-      // Total number of operations to compute function values = 12
-      for (unsigned int r = 0; r < 2; r++)
+    case 0:
       {
-        F3 += FE0_D001[ip][r]*w[0][nzc2[r]];
-        F4 += FE0_D001[ip][r]*w[0][nzc1[r]];
-        F5 += FE0_D001[ip][r]*w[0][nzc0[r]];
-      } // end loop over 'r'
-      
-      // Total number of operations to compute function values = 40
-      for (unsigned int r = 0; r < 4; r++)
+        switch (facet_1)
       {
-        F0 += FE0[ip][r]*w[3][r];
-        F1 += FE0[ip][r]*w[2][r];
-        F2 += FE0[ip][r]*w[1][nzc3[r]];
-        F6 += FE0[ip][r]*w[1][nzc7[r]];
-        F7 += FE0[ip][r]*w[1][nzc11[r]];
-      } // end loop over 'r'
+      case 0:
+        {
+          // Total number of operations to compute element tensor (from this point): 618
+        
+        // Loop quadrature points for integral.
+        // Number of operations to compute element tensor for following IP loop = 618
+        for (unsigned int ip = 0; ip < 6; ip++)
+        {
+          
+          // Coefficient declarations.
+          double F0 = 0.0;
+          double F1 = 0.0;
+          double F2 = 0.0;
+          double F3 = 0.0;
+          double F4 = 0.0;
+          double F5 = 0.0;
+          double F6 = 0.0;
+          double F7 = 0.0;
+          double F8 = 0.0;
+          double F9 = 0.0;
+          double F10 = 0.0;
+          double F11 = 0.0;
+          double F12 = 0.0;
+          double F13 = 0.0;
+          double F14 = 0.0;
+          double F15 = 0.0;
+          
+          // Total number of operations to compute function values = 48
+          for (unsigned int r = 0; r < 2; r++)
+          {
+            F2 += FE0_f0_D001[ip][r]*w[6][nzc3[r]];
+            F3 += FE0_f0_D001[ip][r]*w[6][nzc2[r]];
+            F4 += FE0_f0_D001[ip][r]*w[6][nzc1[r]];
+            F5 += FE0_f0_D001[ip][r]*w[6][nzc3[r] + 4];
+            F6 += FE0_f0_D001[ip][r]*w[6][nzc2[r] + 4];
+            F7 += FE0_f0_D001[ip][r]*w[6][nzc1[r] + 4];
+            F10 += FE0_f0_D001[ip][r]*w[5][nzc3[r]];
+            F11 += FE0_f0_D001[ip][r]*w[5][nzc2[r]];
+            F12 += FE0_f0_D001[ip][r]*w[5][nzc1[r]];
+            F13 += FE0_f0_D001[ip][r]*w[5][nzc3[r] + 4];
+            F14 += FE0_f0_D001[ip][r]*w[5][nzc2[r] + 4];
+            F15 += FE0_f0_D001[ip][r]*w[5][nzc1[r] + 4];
+          } // end loop over 'r'
+          
+          // Total number of operations to compute function values = 24
+          for (unsigned int r = 0; r < 3; r++)
+          {
+            F0 += FE0_f0[ip][r]*w[2][nzc0[r]];
+            F1 += FE0_f0[ip][r]*w[4][nzc0[r]];
+            F8 += FE0_f0[ip][r]*w[1][nzc0[r]];
+            F9 += FE0_f0[ip][r]*w[3][nzc0[r]];
+          } // end loop over 'r'
+          
+          // Number of operations to compute ip constants: 30
+          double I[1];
+          // Number of operations: 30
+          I[0] = W6[ip]*(F0*std::exp(F1)*(F2*G[0] + F3*G[1] + F4*G[2] + F5*G[3] + F6*G[4] + F7*G[5]) + F8*std::exp(F9)*(F10*G[6] + F11*G[7] + F12*G[8] + F13*G[9] + F14*G[10] + F15*G[11]));
+          
+          
+          // Number of operations for primary indices: 1
+          // Number of operations to compute entry: 1
+          A[0] += I[0];
+        } // end loop over 'ip'
+          break;
+        }
+      case 1:
+        {
+          // Total number of operations to compute element tensor (from this point): 618
+        
+        // Loop quadrature points for integral.
+        // Number of operations to compute element tensor for following IP loop = 618
+        for (unsigned int ip = 0; ip < 6; ip++)
+        {
+          
+          // Coefficient declarations.
+          double F0 = 0.0;
+          double F1 = 0.0;
+          double F2 = 0.0;
+          double F3 = 0.0;
+          double F4 = 0.0;
+          double F5 = 0.0;
+          double F6 = 0.0;
+          double F7 = 0.0;
+          double F8 = 0.0;
+          double F9 = 0.0;
+          double F10 = 0.0;
+          double F11 = 0.0;
+          double F12 = 0.0;
+          double F13 = 0.0;
+          double F14 = 0.0;
+          double F15 = 0.0;
+          
+          // Total number of operations to compute function values = 48
+          for (unsigned int r = 0; r < 2; r++)
+          {
+            F2 += FE0_f0_D001[ip][r]*w[6][nzc3[r]];
+            F3 += FE0_f0_D001[ip][r]*w[6][nzc2[r]];
+            F4 += FE0_f0_D001[ip][r]*w[6][nzc1[r]];
+            F5 += FE0_f0_D001[ip][r]*w[6][nzc3[r] + 4];
+            F6 += FE0_f0_D001[ip][r]*w[6][nzc2[r] + 4];
+            F7 += FE0_f0_D001[ip][r]*w[6][nzc1[r] + 4];
+            F10 += FE0_f0_D001[ip][r]*w[5][nzc3[r]];
+            F11 += FE0_f0_D001[ip][r]*w[5][nzc2[r]];
+            F12 += FE0_f0_D001[ip][r]*w[5][nzc1[r]];
+            F13 += FE0_f0_D001[ip][r]*w[5][nzc3[r] + 4];
+            F14 += FE0_f0_D001[ip][r]*w[5][nzc2[r] + 4];
+            F15 += FE0_f0_D001[ip][r]*w[5][nzc1[r] + 4];
+          } // end loop over 'r'
+          
+          // Total number of operations to compute function values = 24
+          for (unsigned int r = 0; r < 3; r++)
+          {
+            F0 += FE0_f0[ip][r]*w[2][nzc0[r]];
+            F1 += FE0_f0[ip][r]*w[4][nzc0[r]];
+            F8 += FE0_f0[ip][r]*w[1][nzc0[r]];
+            F9 += FE0_f0[ip][r]*w[3][nzc0[r]];
+          } // end loop over 'r'
+          
+          // Number of operations to compute ip constants: 30
+          double I[1];
+          // Number of operations: 30
+          I[0] = W6[ip]*(F0*std::exp(F1)*(F2*G[0] + F3*G[1] + F4*G[2] + F5*G[3] + F6*G[4] + F7*G[5]) + F8*std::exp(F9)*(F10*G[6] + F11*G[7] + F12*G[8] + F13*G[9] + F14*G[10] + F15*G[11]));
+          
+          
+          // Number of operations for primary indices: 1
+          // Number of operations to compute entry: 1
+          A[0] += I[0];
+        } // end loop over 'ip'
+          break;
+        }
+      case 2:
+        {
+          // Total number of operations to compute element tensor (from this point): 618
+        
+        // Loop quadrature points for integral.
+        // Number of operations to compute element tensor for following IP loop = 618
+        for (unsigned int ip = 0; ip < 6; ip++)
+        {
+          
+          // Coefficient declarations.
+          double F0 = 0.0;
+          double F1 = 0.0;
+          double F2 = 0.0;
+          double F3 = 0.0;
+          double F4 = 0.0;
+          double F5 = 0.0;
+          double F6 = 0.0;
+          double F7 = 0.0;
+          double F8 = 0.0;
+          double F9 = 0.0;
+          double F10 = 0.0;
+          double F11 = 0.0;
+          double F12 = 0.0;
+          double F13 = 0.0;
+          double F14 = 0.0;
+          double F15 = 0.0;
+          
+          // Total number of operations to compute function values = 48
+          for (unsigned int r = 0; r < 2; r++)
+          {
+            F2 += FE0_f0_D001[ip][r]*w[6][nzc3[r]];
+            F3 += FE0_f0_D001[ip][r]*w[6][nzc2[r]];
+            F4 += FE0_f0_D001[ip][r]*w[6][nzc1[r]];
+            F5 += FE0_f0_D001[ip][r]*w[6][nzc3[r] + 4];
+            F6 += FE0_f0_D001[ip][r]*w[6][nzc2[r] + 4];
+            F7 += FE0_f0_D001[ip][r]*w[6][nzc1[r] + 4];
+            F10 += FE0_f0_D001[ip][r]*w[5][nzc3[r]];
+            F11 += FE0_f0_D001[ip][r]*w[5][nzc2[r]];
+            F12 += FE0_f0_D001[ip][r]*w[5][nzc1[r]];
+            F13 += FE0_f0_D001[ip][r]*w[5][nzc3[r] + 4];
+            F14 += FE0_f0_D001[ip][r]*w[5][nzc2[r] + 4];
+            F15 += FE0_f0_D001[ip][r]*w[5][nzc1[r] + 4];
+          } // end loop over 'r'
+          
+          // Total number of operations to compute function values = 24
+          for (unsigned int r = 0; r < 3; r++)
+          {
+            F0 += FE0_f0[ip][r]*w[2][nzc0[r]];
+            F1 += FE0_f0[ip][r]*w[4][nzc0[r]];
+            F8 += FE0_f0[ip][r]*w[1][nzc0[r]];
+            F9 += FE0_f0[ip][r]*w[3][nzc0[r]];
+          } // end loop over 'r'
+          
+          // Number of operations to compute ip constants: 30
+          double I[1];
+          // Number of operations: 30
+          I[0] = W6[ip]*(F0*std::exp(F1)*(F2*G[0] + F3*G[1] + F4*G[2] + F5*G[3] + F6*G[4] + F7*G[5]) + F8*std::exp(F9)*(F10*G[6] + F11*G[7] + F12*G[8] + F13*G[9] + F14*G[10] + F15*G[11]));
+          
+          
+          // Number of operations for primary indices: 1
+          // Number of operations to compute entry: 1
+          A[0] += I[0];
+        } // end loop over 'ip'
+          break;
+        }
+      case 3:
+        {
+          // Total number of operations to compute element tensor (from this point): 618
+        
+        // Loop quadrature points for integral.
+        // Number of operations to compute element tensor for following IP loop = 618
+        for (unsigned int ip = 0; ip < 6; ip++)
+        {
+          
+          // Coefficient declarations.
+          double F0 = 0.0;
+          double F1 = 0.0;
+          double F2 = 0.0;
+          double F3 = 0.0;
+          double F4 = 0.0;
+          double F5 = 0.0;
+          double F6 = 0.0;
+          double F7 = 0.0;
+          double F8 = 0.0;
+          double F9 = 0.0;
+          double F10 = 0.0;
+          double F11 = 0.0;
+          double F12 = 0.0;
+          double F13 = 0.0;
+          double F14 = 0.0;
+          double F15 = 0.0;
+          
+          // Total number of operations to compute function values = 48
+          for (unsigned int r = 0; r < 2; r++)
+          {
+            F2 += FE0_f0_D001[ip][r]*w[6][nzc3[r]];
+            F3 += FE0_f0_D001[ip][r]*w[6][nzc2[r]];
+            F4 += FE0_f0_D001[ip][r]*w[6][nzc1[r]];
+            F5 += FE0_f0_D001[ip][r]*w[6][nzc3[r] + 4];
+            F6 += FE0_f0_D001[ip][r]*w[6][nzc2[r] + 4];
+            F7 += FE0_f0_D001[ip][r]*w[6][nzc1[r] + 4];
+            F10 += FE0_f0_D001[ip][r]*w[5][nzc3[r]];
+            F11 += FE0_f0_D001[ip][r]*w[5][nzc2[r]];
+            F12 += FE0_f0_D001[ip][r]*w[5][nzc1[r]];
+            F13 += FE0_f0_D001[ip][r]*w[5][nzc3[r] + 4];
+            F14 += FE0_f0_D001[ip][r]*w[5][nzc2[r] + 4];
+            F15 += FE0_f0_D001[ip][r]*w[5][nzc1[r] + 4];
+          } // end loop over 'r'
+          
+          // Total number of operations to compute function values = 24
+          for (unsigned int r = 0; r < 3; r++)
+          {
+            F0 += FE0_f0[ip][r]*w[2][nzc0[r]];
+            F1 += FE0_f0[ip][r]*w[4][nzc0[r]];
+            F8 += FE0_f0[ip][r]*w[1][nzc0[r]];
+            F9 += FE0_f0[ip][r]*w[3][nzc0[r]];
+          } // end loop over 'r'
+          
+          // Number of operations to compute ip constants: 30
+          double I[1];
+          // Number of operations: 30
+          I[0] = W6[ip]*(F0*std::exp(F1)*(F2*G[0] + F3*G[1] + F4*G[2] + F5*G[3] + F6*G[4] + F7*G[5]) + F8*std::exp(F9)*(F10*G[6] + F11*G[7] + F12*G[8] + F13*G[9] + F14*G[10] + F15*G[11]));
+          
+          
+          // Number of operations for primary indices: 1
+          // Number of operations to compute entry: 1
+          A[0] += I[0];
+        } // end loop over 'ip'
+          break;
+        }
+      }
       
-      // Number of operations to compute ip constants: 43
-      double I[1];
-      // Number of operations: 43
-      I[0] = F0*W24[ip]*std::exp(F1)*(F3*(F2*G[0] + F3*G[3] + F6*G[6] + F7*G[7]) + F4*(F2*G[1] + F3*G[4] + F4*G[8] + F6*G[10] + F7*G[11]) + F5*(F2*G[2] + F3*G[5] + F4*G[9] + F5*G[12] + F6*G[13] + F7*G[14]) + det*(F2*F2 + F6*F6 + F7*F7));
+        break;
+      }
+    case 1:
+      {
+        switch (facet_1)
+      {
+      case 0:
+        {
+          // Total number of operations to compute element tensor (from this point): 618
+        
+        // Loop quadrature points for integral.
+        // Number of operations to compute element tensor for following IP loop = 618
+        for (unsigned int ip = 0; ip < 6; ip++)
+        {
+          
+          // Coefficient declarations.
+          double F0 = 0.0;
+          double F1 = 0.0;
+          double F2 = 0.0;
+          double F3 = 0.0;
+          double F4 = 0.0;
+          double F5 = 0.0;
+          double F6 = 0.0;
+          double F7 = 0.0;
+          double F8 = 0.0;
+          double F9 = 0.0;
+          double F10 = 0.0;
+          double F11 = 0.0;
+          double F12 = 0.0;
+          double F13 = 0.0;
+          double F14 = 0.0;
+          double F15 = 0.0;
+          
+          // Total number of operations to compute function values = 48
+          for (unsigned int r = 0; r < 2; r++)
+          {
+            F2 += FE0_f0_D001[ip][r]*w[6][nzc3[r]];
+            F3 += FE0_f0_D001[ip][r]*w[6][nzc2[r]];
+            F4 += FE0_f0_D001[ip][r]*w[6][nzc1[r]];
+            F5 += FE0_f0_D001[ip][r]*w[6][nzc3[r] + 4];
+            F6 += FE0_f0_D001[ip][r]*w[6][nzc2[r] + 4];
+            F7 += FE0_f0_D001[ip][r]*w[6][nzc1[r] + 4];
+            F10 += FE0_f0_D001[ip][r]*w[5][nzc3[r]];
+            F11 += FE0_f0_D001[ip][r]*w[5][nzc2[r]];
+            F12 += FE0_f0_D001[ip][r]*w[5][nzc1[r]];
+            F13 += FE0_f0_D001[ip][r]*w[5][nzc3[r] + 4];
+            F14 += FE0_f0_D001[ip][r]*w[5][nzc2[r] + 4];
+            F15 += FE0_f0_D001[ip][r]*w[5][nzc1[r] + 4];
+          } // end loop over 'r'
+          
+          // Total number of operations to compute function values = 24
+          for (unsigned int r = 0; r < 3; r++)
+          {
+            F0 += FE0_f0[ip][r]*w[2][nzc4[r]];
+            F1 += FE0_f0[ip][r]*w[4][nzc4[r]];
+            F8 += FE0_f0[ip][r]*w[1][nzc4[r]];
+            F9 += FE0_f0[ip][r]*w[3][nzc4[r]];
+          } // end loop over 'r'
+          
+          // Number of operations to compute ip constants: 30
+          double I[1];
+          // Number of operations: 30
+          I[0] = W6[ip]*(F0*std::exp(F1)*(F2*G[0] + F3*G[1] + F4*G[2] + F5*G[3] + F6*G[4] + F7*G[5]) + F8*std::exp(F9)*(F10*G[6] + F11*G[7] + F12*G[8] + F13*G[9] + F14*G[10] + F15*G[11]));
+          
+          
+          // Number of operations for primary indices: 1
+          // Number of operations to compute entry: 1
+          A[0] += I[0];
+        } // end loop over 'ip'
+          break;
+        }
+      case 1:
+        {
+          // Total number of operations to compute element tensor (from this point): 618
+        
+        // Loop quadrature points for integral.
+        // Number of operations to compute element tensor for following IP loop = 618
+        for (unsigned int ip = 0; ip < 6; ip++)
+        {
+          
+          // Coefficient declarations.
+          double F0 = 0.0;
+          double F1 = 0.0;
+          double F2 = 0.0;
+          double F3 = 0.0;
+          double F4 = 0.0;
+          double F5 = 0.0;
+          double F6 = 0.0;
+          double F7 = 0.0;
+          double F8 = 0.0;
+          double F9 = 0.0;
+          double F10 = 0.0;
+          double F11 = 0.0;
+          double F12 = 0.0;
+          double F13 = 0.0;
+          double F14 = 0.0;
+          double F15 = 0.0;
+          
+          // Total number of operations to compute function values = 48
+          for (unsigned int r = 0; r < 2; r++)
+          {
+            F2 += FE0_f0_D001[ip][r]*w[6][nzc3[r]];
+            F3 += FE0_f0_D001[ip][r]*w[6][nzc2[r]];
+            F4 += FE0_f0_D001[ip][r]*w[6][nzc1[r]];
+            F5 += FE0_f0_D001[ip][r]*w[6][nzc3[r] + 4];
+            F6 += FE0_f0_D001[ip][r]*w[6][nzc2[r] + 4];
+            F7 += FE0_f0_D001[ip][r]*w[6][nzc1[r] + 4];
+            F10 += FE0_f0_D001[ip][r]*w[5][nzc3[r]];
+            F11 += FE0_f0_D001[ip][r]*w[5][nzc2[r]];
+            F12 += FE0_f0_D001[ip][r]*w[5][nzc1[r]];
+            F13 += FE0_f0_D001[ip][r]*w[5][nzc3[r] + 4];
+            F14 += FE0_f0_D001[ip][r]*w[5][nzc2[r] + 4];
+            F15 += FE0_f0_D001[ip][r]*w[5][nzc1[r] + 4];
+          } // end loop over 'r'
+          
+          // Total number of operations to compute function values = 24
+          for (unsigned int r = 0; r < 3; r++)
+          {
+            F0 += FE0_f0[ip][r]*w[2][nzc4[r]];
+            F1 += FE0_f0[ip][r]*w[4][nzc4[r]];
+            F8 += FE0_f0[ip][r]*w[1][nzc4[r]];
+            F9 += FE0_f0[ip][r]*w[3][nzc4[r]];
+          } // end loop over 'r'
+          
+          // Number of operations to compute ip constants: 30
+          double I[1];
+          // Number of operations: 30
+          I[0] = W6[ip]*(F0*std::exp(F1)*(F2*G[0] + F3*G[1] + F4*G[2] + F5*G[3] + F6*G[4] + F7*G[5]) + F8*std::exp(F9)*(F10*G[6] + F11*G[7] + F12*G[8] + F13*G[9] + F14*G[10] + F15*G[11]));
+          
+          
+          // Number of operations for primary indices: 1
+          // Number of operations to compute entry: 1
+          A[0] += I[0];
+        } // end loop over 'ip'
+          break;
+        }
+      case 2:
+        {
+          // Total number of operations to compute element tensor (from this point): 618
+        
+        // Loop quadrature points for integral.
+        // Number of operations to compute element tensor for following IP loop = 618
+        for (unsigned int ip = 0; ip < 6; ip++)
+        {
+          
+          // Coefficient declarations.
+          double F0 = 0.0;
+          double F1 = 0.0;
+          double F2 = 0.0;
+          double F3 = 0.0;
+          double F4 = 0.0;
+          double F5 = 0.0;
+          double F6 = 0.0;
+          double F7 = 0.0;
+          double F8 = 0.0;
+          double F9 = 0.0;
+          double F10 = 0.0;
+          double F11 = 0.0;
+          double F12 = 0.0;
+          double F13 = 0.0;
+          double F14 = 0.0;
+          double F15 = 0.0;
+          
+          // Total number of operations to compute function values = 48
+          for (unsigned int r = 0; r < 2; r++)
+          {
+            F2 += FE0_f0_D001[ip][r]*w[6][nzc3[r]];
+            F3 += FE0_f0_D001[ip][r]*w[6][nzc2[r]];
+            F4 += FE0_f0_D001[ip][r]*w[6][nzc1[r]];
+            F5 += FE0_f0_D001[ip][r]*w[6][nzc3[r] + 4];
+            F6 += FE0_f0_D001[ip][r]*w[6][nzc2[r] + 4];
+            F7 += FE0_f0_D001[ip][r]*w[6][nzc1[r] + 4];
+            F10 += FE0_f0_D001[ip][r]*w[5][nzc3[r]];
+            F11 += FE0_f0_D001[ip][r]*w[5][nzc2[r]];
+            F12 += FE0_f0_D001[ip][r]*w[5][nzc1[r]];
+            F13 += FE0_f0_D001[ip][r]*w[5][nzc3[r] + 4];
+            F14 += FE0_f0_D001[ip][r]*w[5][nzc2[r] + 4];
+            F15 += FE0_f0_D001[ip][r]*w[5][nzc1[r] + 4];
+          } // end loop over 'r'
+          
+          // Total number of operations to compute function values = 24
+          for (unsigned int r = 0; r < 3; r++)
+          {
+            F0 += FE0_f0[ip][r]*w[2][nzc4[r]];
+            F1 += FE0_f0[ip][r]*w[4][nzc4[r]];
+            F8 += FE0_f0[ip][r]*w[1][nzc4[r]];
+            F9 += FE0_f0[ip][r]*w[3][nzc4[r]];
+          } // end loop over 'r'
+          
+          // Number of operations to compute ip constants: 30
+          double I[1];
+          // Number of operations: 30
+          I[0] = W6[ip]*(F0*std::exp(F1)*(F2*G[0] + F3*G[1] + F4*G[2] + F5*G[3] + F6*G[4] + F7*G[5]) + F8*std::exp(F9)*(F10*G[6] + F11*G[7] + F12*G[8] + F13*G[9] + F14*G[10] + F15*G[11]));
+          
+          
+          // Number of operations for primary indices: 1
+          // Number of operations to compute entry: 1
+          A[0] += I[0];
+        } // end loop over 'ip'
+          break;
+        }
+      case 3:
+        {
+          // Total number of operations to compute element tensor (from this point): 618
+        
+        // Loop quadrature points for integral.
+        // Number of operations to compute element tensor for following IP loop = 618
+        for (unsigned int ip = 0; ip < 6; ip++)
+        {
+          
+          // Coefficient declarations.
+          double F0 = 0.0;
+          double F1 = 0.0;
+          double F2 = 0.0;
+          double F3 = 0.0;
+          double F4 = 0.0;
+          double F5 = 0.0;
+          double F6 = 0.0;
+          double F7 = 0.0;
+          double F8 = 0.0;
+          double F9 = 0.0;
+          double F10 = 0.0;
+          double F11 = 0.0;
+          double F12 = 0.0;
+          double F13 = 0.0;
+          double F14 = 0.0;
+          double F15 = 0.0;
+          
+          // Total number of operations to compute function values = 48
+          for (unsigned int r = 0; r < 2; r++)
+          {
+            F2 += FE0_f0_D001[ip][r]*w[6][nzc3[r]];
+            F3 += FE0_f0_D001[ip][r]*w[6][nzc2[r]];
+            F4 += FE0_f0_D001[ip][r]*w[6][nzc1[r]];
+            F5 += FE0_f0_D001[ip][r]*w[6][nzc3[r] + 4];
+            F6 += FE0_f0_D001[ip][r]*w[6][nzc2[r] + 4];
+            F7 += FE0_f0_D001[ip][r]*w[6][nzc1[r] + 4];
+            F10 += FE0_f0_D001[ip][r]*w[5][nzc3[r]];
+            F11 += FE0_f0_D001[ip][r]*w[5][nzc2[r]];
+            F12 += FE0_f0_D001[ip][r]*w[5][nzc1[r]];
+            F13 += FE0_f0_D001[ip][r]*w[5][nzc3[r] + 4];
+            F14 += FE0_f0_D001[ip][r]*w[5][nzc2[r] + 4];
+            F15 += FE0_f0_D001[ip][r]*w[5][nzc1[r] + 4];
+          } // end loop over 'r'
+          
+          // Total number of operations to compute function values = 24
+          for (unsigned int r = 0; r < 3; r++)
+          {
+            F0 += FE0_f0[ip][r]*w[2][nzc4[r]];
+            F1 += FE0_f0[ip][r]*w[4][nzc4[r]];
+            F8 += FE0_f0[ip][r]*w[1][nzc4[r]];
+            F9 += FE0_f0[ip][r]*w[3][nzc4[r]];
+          } // end loop over 'r'
+          
+          // Number of operations to compute ip constants: 30
+          double I[1];
+          // Number of operations: 30
+          I[0] = W6[ip]*(F0*std::exp(F1)*(F2*G[0] + F3*G[1] + F4*G[2] + F5*G[3] + F6*G[4] + F7*G[5]) + F8*std::exp(F9)*(F10*G[6] + F11*G[7] + F12*G[8] + F13*G[9] + F14*G[10] + F15*G[11]));
+          
+          
+          // Number of operations for primary indices: 1
+          // Number of operations to compute entry: 1
+          A[0] += I[0];
+        } // end loop over 'ip'
+          break;
+        }
+      }
       
+        break;
+      }
+    case 2:
+      {
+        switch (facet_1)
+      {
+      case 0:
+        {
+          // Total number of operations to compute element tensor (from this point): 618
+        
+        // Loop quadrature points for integral.
+        // Number of operations to compute element tensor for following IP loop = 618
+        for (unsigned int ip = 0; ip < 6; ip++)
+        {
+          
+          // Coefficient declarations.
+          double F0 = 0.0;
+          double F1 = 0.0;
+          double F2 = 0.0;
+          double F3 = 0.0;
+          double F4 = 0.0;
+          double F5 = 0.0;
+          double F6 = 0.0;
+          double F7 = 0.0;
+          double F8 = 0.0;
+          double F9 = 0.0;
+          double F10 = 0.0;
+          double F11 = 0.0;
+          double F12 = 0.0;
+          double F13 = 0.0;
+          double F14 = 0.0;
+          double F15 = 0.0;
+          
+          // Total number of operations to compute function values = 48
+          for (unsigned int r = 0; r < 2; r++)
+          {
+            F2 += FE0_f0_D001[ip][r]*w[6][nzc3[r]];
+            F3 += FE0_f0_D001[ip][r]*w[6][nzc2[r]];
+            F4 += FE0_f0_D001[ip][r]*w[6][nzc1[r]];
+            F5 += FE0_f0_D001[ip][r]*w[6][nzc3[r] + 4];
+            F6 += FE0_f0_D001[ip][r]*w[6][nzc2[r] + 4];
+            F7 += FE0_f0_D001[ip][r]*w[6][nzc1[r] + 4];
+            F10 += FE0_f0_D001[ip][r]*w[5][nzc3[r]];
+            F11 += FE0_f0_D001[ip][r]*w[5][nzc2[r]];
+            F12 += FE0_f0_D001[ip][r]*w[5][nzc1[r]];
+            F13 += FE0_f0_D001[ip][r]*w[5][nzc3[r] + 4];
+            F14 += FE0_f0_D001[ip][r]*w[5][nzc2[r] + 4];
+            F15 += FE0_f0_D001[ip][r]*w[5][nzc1[r] + 4];
+          } // end loop over 'r'
+          
+          // Total number of operations to compute function values = 24
+          for (unsigned int r = 0; r < 3; r++)
+          {
+            F0 += FE0_f0[ip][r]*w[2][nzc5[r]];
+            F1 += FE0_f0[ip][r]*w[4][nzc5[r]];
+            F8 += FE0_f0[ip][r]*w[1][nzc5[r]];
+            F9 += FE0_f0[ip][r]*w[3][nzc5[r]];
+          } // end loop over 'r'
+          
+          // Number of operations to compute ip constants: 30
+          double I[1];
+          // Number of operations: 30
+          I[0] = W6[ip]*(F0*std::exp(F1)*(F2*G[0] + F3*G[1] + F4*G[2] + F5*G[3] + F6*G[4] + F7*G[5]) + F8*std::exp(F9)*(F10*G[6] + F11*G[7] + F12*G[8] + F13*G[9] + F14*G[10] + F15*G[11]));
+          
+          
+          // Number of operations for primary indices: 1
+          // Number of operations to compute entry: 1
+          A[0] += I[0];
+        } // end loop over 'ip'
+          break;
+        }
+      case 1:
+        {
+          // Total number of operations to compute element tensor (from this point): 618
+        
+        // Loop quadrature points for integral.
+        // Number of operations to compute element tensor for following IP loop = 618
+        for (unsigned int ip = 0; ip < 6; ip++)
+        {
+          
+          // Coefficient declarations.
+          double F0 = 0.0;
+          double F1 = 0.0;
+          double F2 = 0.0;
+          double F3 = 0.0;
+          double F4 = 0.0;
+          double F5 = 0.0;
+          double F6 = 0.0;
+          double F7 = 0.0;
+          double F8 = 0.0;
+          double F9 = 0.0;
+          double F10 = 0.0;
+          double F11 = 0.0;
+          double F12 = 0.0;
+          double F13 = 0.0;
+          double F14 = 0.0;
+          double F15 = 0.0;
+          
+          // Total number of operations to compute function values = 48
+          for (unsigned int r = 0; r < 2; r++)
+          {
+            F2 += FE0_f0_D001[ip][r]*w[6][nzc3[r]];
+            F3 += FE0_f0_D001[ip][r]*w[6][nzc2[r]];
+            F4 += FE0_f0_D001[ip][r]*w[6][nzc1[r]];
+            F5 += FE0_f0_D001[ip][r]*w[6][nzc3[r] + 4];
+            F6 += FE0_f0_D001[ip][r]*w[6][nzc2[r] + 4];
+            F7 += FE0_f0_D001[ip][r]*w[6][nzc1[r] + 4];
+            F10 += FE0_f0_D001[ip][r]*w[5][nzc3[r]];
+            F11 += FE0_f0_D001[ip][r]*w[5][nzc2[r]];
+            F12 += FE0_f0_D001[ip][r]*w[5][nzc1[r]];
+            F13 += FE0_f0_D001[ip][r]*w[5][nzc3[r] + 4];
+            F14 += FE0_f0_D001[ip][r]*w[5][nzc2[r] + 4];
+            F15 += FE0_f0_D001[ip][r]*w[5][nzc1[r] + 4];
+          } // end loop over 'r'
+          
+          // Total number of operations to compute function values = 24
+          for (unsigned int r = 0; r < 3; r++)
+          {
+            F0 += FE0_f0[ip][r]*w[2][nzc5[r]];
+            F1 += FE0_f0[ip][r]*w[4][nzc5[r]];
+            F8 += FE0_f0[ip][r]*w[1][nzc5[r]];
+            F9 += FE0_f0[ip][r]*w[3][nzc5[r]];
+          } // end loop over 'r'
+          
+          // Number of operations to compute ip constants: 30
+          double I[1];
+          // Number of operations: 30
+          I[0] = W6[ip]*(F0*std::exp(F1)*(F2*G[0] + F3*G[1] + F4*G[2] + F5*G[3] + F6*G[4] + F7*G[5]) + F8*std::exp(F9)*(F10*G[6] + F11*G[7] + F12*G[8] + F13*G[9] + F14*G[10] + F15*G[11]));
+          
+          
+          // Number of operations for primary indices: 1
+          // Number of operations to compute entry: 1
+          A[0] += I[0];
+        } // end loop over 'ip'
+          break;
+        }
+      case 2:
+        {
+          // Total number of operations to compute element tensor (from this point): 618
+        
+        // Loop quadrature points for integral.
+        // Number of operations to compute element tensor for following IP loop = 618
+        for (unsigned int ip = 0; ip < 6; ip++)
+        {
+          
+          // Coefficient declarations.
+          double F0 = 0.0;
+          double F1 = 0.0;
+          double F2 = 0.0;
+          double F3 = 0.0;
+          double F4 = 0.0;
+          double F5 = 0.0;
+          double F6 = 0.0;
+          double F7 = 0.0;
+          double F8 = 0.0;
+          double F9 = 0.0;
+          double F10 = 0.0;
+          double F11 = 0.0;
+          double F12 = 0.0;
+          double F13 = 0.0;
+          double F14 = 0.0;
+          double F15 = 0.0;
+          
+          // Total number of operations to compute function values = 48
+          for (unsigned int r = 0; r < 2; r++)
+          {
+            F2 += FE0_f0_D001[ip][r]*w[6][nzc3[r]];
+            F3 += FE0_f0_D001[ip][r]*w[6][nzc2[r]];
+            F4 += FE0_f0_D001[ip][r]*w[6][nzc1[r]];
+            F5 += FE0_f0_D001[ip][r]*w[6][nzc3[r] + 4];
+            F6 += FE0_f0_D001[ip][r]*w[6][nzc2[r] + 4];
+            F7 += FE0_f0_D001[ip][r]*w[6][nzc1[r] + 4];
+            F10 += FE0_f0_D001[ip][r]*w[5][nzc3[r]];
+            F11 += FE0_f0_D001[ip][r]*w[5][nzc2[r]];
+            F12 += FE0_f0_D001[ip][r]*w[5][nzc1[r]];
+            F13 += FE0_f0_D001[ip][r]*w[5][nzc3[r] + 4];
+            F14 += FE0_f0_D001[ip][r]*w[5][nzc2[r] + 4];
+            F15 += FE0_f0_D001[ip][r]*w[5][nzc1[r] + 4];
+          } // end loop over 'r'
+          
+          // Total number of operations to compute function values = 24
+          for (unsigned int r = 0; r < 3; r++)
+          {
+            F0 += FE0_f0[ip][r]*w[2][nzc5[r]];
+            F1 += FE0_f0[ip][r]*w[4][nzc5[r]];
+            F8 += FE0_f0[ip][r]*w[1][nzc5[r]];
+            F9 += FE0_f0[ip][r]*w[3][nzc5[r]];
+          } // end loop over 'r'
+          
+          // Number of operations to compute ip constants: 30
+          double I[1];
+          // Number of operations: 30
+          I[0] = W6[ip]*(F0*std::exp(F1)*(F2*G[0] + F3*G[1] + F4*G[2] + F5*G[3] + F6*G[4] + F7*G[5]) + F8*std::exp(F9)*(F10*G[6] + F11*G[7] + F12*G[8] + F13*G[9] + F14*G[10] + F15*G[11]));
+          
+          
+          // Number of operations for primary indices: 1
+          // Number of operations to compute entry: 1
+          A[0] += I[0];
+        } // end loop over 'ip'
+          break;
+        }
+      case 3:
+        {
+          // Total number of operations to compute element tensor (from this point): 618
+        
+        // Loop quadrature points for integral.
+        // Number of operations to compute element tensor for following IP loop = 618
+        for (unsigned int ip = 0; ip < 6; ip++)
+        {
+          
+          // Coefficient declarations.
+          double F0 = 0.0;
+          double F1 = 0.0;
+          double F2 = 0.0;
+          double F3 = 0.0;
+          double F4 = 0.0;
+          double F5 = 0.0;
+          double F6 = 0.0;
+          double F7 = 0.0;
+          double F8 = 0.0;
+          double F9 = 0.0;
+          double F10 = 0.0;
+          double F11 = 0.0;
+          double F12 = 0.0;
+          double F13 = 0.0;
+          double F14 = 0.0;
+          double F15 = 0.0;
+          
+          // Total number of operations to compute function values = 48
+          for (unsigned int r = 0; r < 2; r++)
+          {
+            F2 += FE0_f0_D001[ip][r]*w[6][nzc3[r]];
+            F3 += FE0_f0_D001[ip][r]*w[6][nzc2[r]];
+            F4 += FE0_f0_D001[ip][r]*w[6][nzc1[r]];
+            F5 += FE0_f0_D001[ip][r]*w[6][nzc3[r] + 4];
+            F6 += FE0_f0_D001[ip][r]*w[6][nzc2[r] + 4];
+            F7 += FE0_f0_D001[ip][r]*w[6][nzc1[r] + 4];
+            F10 += FE0_f0_D001[ip][r]*w[5][nzc3[r]];
+            F11 += FE0_f0_D001[ip][r]*w[5][nzc2[r]];
+            F12 += FE0_f0_D001[ip][r]*w[5][nzc1[r]];
+            F13 += FE0_f0_D001[ip][r]*w[5][nzc3[r] + 4];
+            F14 += FE0_f0_D001[ip][r]*w[5][nzc2[r] + 4];
+            F15 += FE0_f0_D001[ip][r]*w[5][nzc1[r] + 4];
+          } // end loop over 'r'
+          
+          // Total number of operations to compute function values = 24
+          for (unsigned int r = 0; r < 3; r++)
+          {
+            F0 += FE0_f0[ip][r]*w[2][nzc5[r]];
+            F1 += FE0_f0[ip][r]*w[4][nzc5[r]];
+            F8 += FE0_f0[ip][r]*w[1][nzc5[r]];
+            F9 += FE0_f0[ip][r]*w[3][nzc5[r]];
+          } // end loop over 'r'
+          
+          // Number of operations to compute ip constants: 30
+          double I[1];
+          // Number of operations: 30
+          I[0] = W6[ip]*(F0*std::exp(F1)*(F2*G[0] + F3*G[1] + F4*G[2] + F5*G[3] + F6*G[4] + F7*G[5]) + F8*std::exp(F9)*(F10*G[6] + F11*G[7] + F12*G[8] + F13*G[9] + F14*G[10] + F15*G[11]));
+          
+          
+          // Number of operations for primary indices: 1
+          // Number of operations to compute entry: 1
+          A[0] += I[0];
+        } // end loop over 'ip'
+          break;
+        }
+      }
       
-      // Number of operations for primary indices: 1
-      // Number of operations to compute entry: 1
-      A[0] += I[0];
-    } // end loop over 'ip'
+        break;
+      }
+    case 3:
+      {
+        switch (facet_1)
+      {
+      case 0:
+        {
+          // Total number of operations to compute element tensor (from this point): 618
+        
+        // Loop quadrature points for integral.
+        // Number of operations to compute element tensor for following IP loop = 618
+        for (unsigned int ip = 0; ip < 6; ip++)
+        {
+          
+          // Coefficient declarations.
+          double F0 = 0.0;
+          double F1 = 0.0;
+          double F2 = 0.0;
+          double F3 = 0.0;
+          double F4 = 0.0;
+          double F5 = 0.0;
+          double F6 = 0.0;
+          double F7 = 0.0;
+          double F8 = 0.0;
+          double F9 = 0.0;
+          double F10 = 0.0;
+          double F11 = 0.0;
+          double F12 = 0.0;
+          double F13 = 0.0;
+          double F14 = 0.0;
+          double F15 = 0.0;
+          
+          // Total number of operations to compute function values = 48
+          for (unsigned int r = 0; r < 2; r++)
+          {
+            F2 += FE0_f0_D001[ip][r]*w[6][nzc3[r]];
+            F3 += FE0_f0_D001[ip][r]*w[6][nzc2[r]];
+            F4 += FE0_f0_D001[ip][r]*w[6][nzc1[r]];
+            F5 += FE0_f0_D001[ip][r]*w[6][nzc3[r] + 4];
+            F6 += FE0_f0_D001[ip][r]*w[6][nzc2[r] + 4];
+            F7 += FE0_f0_D001[ip][r]*w[6][nzc1[r] + 4];
+            F10 += FE0_f0_D001[ip][r]*w[5][nzc3[r]];
+            F11 += FE0_f0_D001[ip][r]*w[5][nzc2[r]];
+            F12 += FE0_f0_D001[ip][r]*w[5][nzc1[r]];
+            F13 += FE0_f0_D001[ip][r]*w[5][nzc3[r] + 4];
+            F14 += FE0_f0_D001[ip][r]*w[5][nzc2[r] + 4];
+            F15 += FE0_f0_D001[ip][r]*w[5][nzc1[r] + 4];
+          } // end loop over 'r'
+          
+          // Total number of operations to compute function values = 24
+          for (unsigned int r = 0; r < 3; r++)
+          {
+            F0 += FE0_f0[ip][r]*w[2][nzc6[r]];
+            F1 += FE0_f0[ip][r]*w[4][nzc6[r]];
+            F8 += FE0_f0[ip][r]*w[1][nzc6[r]];
+            F9 += FE0_f0[ip][r]*w[3][nzc6[r]];
+          } // end loop over 'r'
+          
+          // Number of operations to compute ip constants: 30
+          double I[1];
+          // Number of operations: 30
+          I[0] = W6[ip]*(F0*std::exp(F1)*(F2*G[0] + F3*G[1] + F4*G[2] + F5*G[3] + F6*G[4] + F7*G[5]) + F8*std::exp(F9)*(F10*G[6] + F11*G[7] + F12*G[8] + F13*G[9] + F14*G[10] + F15*G[11]));
+          
+          
+          // Number of operations for primary indices: 1
+          // Number of operations to compute entry: 1
+          A[0] += I[0];
+        } // end loop over 'ip'
+          break;
+        }
+      case 1:
+        {
+          // Total number of operations to compute element tensor (from this point): 618
+        
+        // Loop quadrature points for integral.
+        // Number of operations to compute element tensor for following IP loop = 618
+        for (unsigned int ip = 0; ip < 6; ip++)
+        {
+          
+          // Coefficient declarations.
+          double F0 = 0.0;
+          double F1 = 0.0;
+          double F2 = 0.0;
+          double F3 = 0.0;
+          double F4 = 0.0;
+          double F5 = 0.0;
+          double F6 = 0.0;
+          double F7 = 0.0;
+          double F8 = 0.0;
+          double F9 = 0.0;
+          double F10 = 0.0;
+          double F11 = 0.0;
+          double F12 = 0.0;
+          double F13 = 0.0;
+          double F14 = 0.0;
+          double F15 = 0.0;
+          
+          // Total number of operations to compute function values = 48
+          for (unsigned int r = 0; r < 2; r++)
+          {
+            F2 += FE0_f0_D001[ip][r]*w[6][nzc3[r]];
+            F3 += FE0_f0_D001[ip][r]*w[6][nzc2[r]];
+            F4 += FE0_f0_D001[ip][r]*w[6][nzc1[r]];
+            F5 += FE0_f0_D001[ip][r]*w[6][nzc3[r] + 4];
+            F6 += FE0_f0_D001[ip][r]*w[6][nzc2[r] + 4];
+            F7 += FE0_f0_D001[ip][r]*w[6][nzc1[r] + 4];
+            F10 += FE0_f0_D001[ip][r]*w[5][nzc3[r]];
+            F11 += FE0_f0_D001[ip][r]*w[5][nzc2[r]];
+            F12 += FE0_f0_D001[ip][r]*w[5][nzc1[r]];
+            F13 += FE0_f0_D001[ip][r]*w[5][nzc3[r] + 4];
+            F14 += FE0_f0_D001[ip][r]*w[5][nzc2[r] + 4];
+            F15 += FE0_f0_D001[ip][r]*w[5][nzc1[r] + 4];
+          } // end loop over 'r'
+          
+          // Total number of operations to compute function values = 24
+          for (unsigned int r = 0; r < 3; r++)
+          {
+            F0 += FE0_f0[ip][r]*w[2][nzc6[r]];
+            F1 += FE0_f0[ip][r]*w[4][nzc6[r]];
+            F8 += FE0_f0[ip][r]*w[1][nzc6[r]];
+            F9 += FE0_f0[ip][r]*w[3][nzc6[r]];
+          } // end loop over 'r'
+          
+          // Number of operations to compute ip constants: 30
+          double I[1];
+          // Number of operations: 30
+          I[0] = W6[ip]*(F0*std::exp(F1)*(F2*G[0] + F3*G[1] + F4*G[2] + F5*G[3] + F6*G[4] + F7*G[5]) + F8*std::exp(F9)*(F10*G[6] + F11*G[7] + F12*G[8] + F13*G[9] + F14*G[10] + F15*G[11]));
+          
+          
+          // Number of operations for primary indices: 1
+          // Number of operations to compute entry: 1
+          A[0] += I[0];
+        } // end loop over 'ip'
+          break;
+        }
+      case 2:
+        {
+          // Total number of operations to compute element tensor (from this point): 618
+        
+        // Loop quadrature points for integral.
+        // Number of operations to compute element tensor for following IP loop = 618
+        for (unsigned int ip = 0; ip < 6; ip++)
+        {
+          
+          // Coefficient declarations.
+          double F0 = 0.0;
+          double F1 = 0.0;
+          double F2 = 0.0;
+          double F3 = 0.0;
+          double F4 = 0.0;
+          double F5 = 0.0;
+          double F6 = 0.0;
+          double F7 = 0.0;
+          double F8 = 0.0;
+          double F9 = 0.0;
+          double F10 = 0.0;
+          double F11 = 0.0;
+          double F12 = 0.0;
+          double F13 = 0.0;
+          double F14 = 0.0;
+          double F15 = 0.0;
+          
+          // Total number of operations to compute function values = 48
+          for (unsigned int r = 0; r < 2; r++)
+          {
+            F2 += FE0_f0_D001[ip][r]*w[6][nzc3[r]];
+            F3 += FE0_f0_D001[ip][r]*w[6][nzc2[r]];
+            F4 += FE0_f0_D001[ip][r]*w[6][nzc1[r]];
+            F5 += FE0_f0_D001[ip][r]*w[6][nzc3[r] + 4];
+            F6 += FE0_f0_D001[ip][r]*w[6][nzc2[r] + 4];
+            F7 += FE0_f0_D001[ip][r]*w[6][nzc1[r] + 4];
+            F10 += FE0_f0_D001[ip][r]*w[5][nzc3[r]];
+            F11 += FE0_f0_D001[ip][r]*w[5][nzc2[r]];
+            F12 += FE0_f0_D001[ip][r]*w[5][nzc1[r]];
+            F13 += FE0_f0_D001[ip][r]*w[5][nzc3[r] + 4];
+            F14 += FE0_f0_D001[ip][r]*w[5][nzc2[r] + 4];
+            F15 += FE0_f0_D001[ip][r]*w[5][nzc1[r] + 4];
+          } // end loop over 'r'
+          
+          // Total number of operations to compute function values = 24
+          for (unsigned int r = 0; r < 3; r++)
+          {
+            F0 += FE0_f0[ip][r]*w[2][nzc6[r]];
+            F1 += FE0_f0[ip][r]*w[4][nzc6[r]];
+            F8 += FE0_f0[ip][r]*w[1][nzc6[r]];
+            F9 += FE0_f0[ip][r]*w[3][nzc6[r]];
+          } // end loop over 'r'
+          
+          // Number of operations to compute ip constants: 30
+          double I[1];
+          // Number of operations: 30
+          I[0] = W6[ip]*(F0*std::exp(F1)*(F2*G[0] + F3*G[1] + F4*G[2] + F5*G[3] + F6*G[4] + F7*G[5]) + F8*std::exp(F9)*(F10*G[6] + F11*G[7] + F12*G[8] + F13*G[9] + F14*G[10] + F15*G[11]));
+          
+          
+          // Number of operations for primary indices: 1
+          // Number of operations to compute entry: 1
+          A[0] += I[0];
+        } // end loop over 'ip'
+          break;
+        }
+      case 3:
+        {
+          // Total number of operations to compute element tensor (from this point): 618
+        
+        // Loop quadrature points for integral.
+        // Number of operations to compute element tensor for following IP loop = 618
+        for (unsigned int ip = 0; ip < 6; ip++)
+        {
+          
+          // Coefficient declarations.
+          double F0 = 0.0;
+          double F1 = 0.0;
+          double F2 = 0.0;
+          double F3 = 0.0;
+          double F4 = 0.0;
+          double F5 = 0.0;
+          double F6 = 0.0;
+          double F7 = 0.0;
+          double F8 = 0.0;
+          double F9 = 0.0;
+          double F10 = 0.0;
+          double F11 = 0.0;
+          double F12 = 0.0;
+          double F13 = 0.0;
+          double F14 = 0.0;
+          double F15 = 0.0;
+          
+          // Total number of operations to compute function values = 48
+          for (unsigned int r = 0; r < 2; r++)
+          {
+            F2 += FE0_f0_D001[ip][r]*w[6][nzc3[r]];
+            F3 += FE0_f0_D001[ip][r]*w[6][nzc2[r]];
+            F4 += FE0_f0_D001[ip][r]*w[6][nzc1[r]];
+            F5 += FE0_f0_D001[ip][r]*w[6][nzc3[r] + 4];
+            F6 += FE0_f0_D001[ip][r]*w[6][nzc2[r] + 4];
+            F7 += FE0_f0_D001[ip][r]*w[6][nzc1[r] + 4];
+            F10 += FE0_f0_D001[ip][r]*w[5][nzc3[r]];
+            F11 += FE0_f0_D001[ip][r]*w[5][nzc2[r]];
+            F12 += FE0_f0_D001[ip][r]*w[5][nzc1[r]];
+            F13 += FE0_f0_D001[ip][r]*w[5][nzc3[r] + 4];
+            F14 += FE0_f0_D001[ip][r]*w[5][nzc2[r] + 4];
+            F15 += FE0_f0_D001[ip][r]*w[5][nzc1[r] + 4];
+          } // end loop over 'r'
+          
+          // Total number of operations to compute function values = 24
+          for (unsigned int r = 0; r < 3; r++)
+          {
+            F0 += FE0_f0[ip][r]*w[2][nzc6[r]];
+            F1 += FE0_f0[ip][r]*w[4][nzc6[r]];
+            F8 += FE0_f0[ip][r]*w[1][nzc6[r]];
+            F9 += FE0_f0[ip][r]*w[3][nzc6[r]];
+          } // end loop over 'r'
+          
+          // Number of operations to compute ip constants: 30
+          double I[1];
+          // Number of operations: 30
+          I[0] = W6[ip]*(F0*std::exp(F1)*(F2*G[0] + F3*G[1] + F4*G[2] + F5*G[3] + F6*G[4] + F7*G[5]) + F8*std::exp(F9)*(F10*G[6] + F11*G[7] + F12*G[8] + F13*G[9] + F14*G[10] + F15*G[11]));
+          
+          
+          // Number of operations for primary indices: 1
+          // Number of operations to compute entry: 1
+          A[0] += I[0];
+        } // end loop over 'ip'
+          break;
+        }
+      }
+      
+        break;
+      }
+    }
+    
   }
 
 };
 
 
-class poisson_cell_marker_form_0: public ufc::form
+class cross_section_surface_current_forms_form_0: public ufc::form
 {
 public:
 
-  poisson_cell_marker_form_0() : ufc::form()
+  cross_section_surface_current_forms_form_0() : ufc::form()
   {
     // Do nothing
   }
 
-  ~poisson_cell_marker_form_0() override
+  ~cross_section_surface_current_forms_form_0() override
   {
     // Do nothing
   }
 
   const char * signature() const final override
   {
-    return "87cd8b036d23bf06f5cf5cea16aac70fb312fef7dcc3535d10380daebb385577c42ca811df2fdfd7ea2642da782e9ff11b536f213b7b1c775f59e4e04b106a21";
+    return "46dc6f0a263d7b444fbcbe81fde3eb324f8c08090772f74749178611ab5ed55da8c49c135a6928008c573de63a74907fb2359730e59103cfdc474f42fcd99831";
   }
 
   std::size_t rank() const final override
   {
-    return 1;
+    return 0;
   }
 
   std::size_t num_coefficients() const final override
   {
-    return 4;
+    return 7;
   }
 
   std::size_t original_coefficient_position(std::size_t i) const final override
   {
-    static const std::vector<std::size_t> position({0, 1, 2, 3});
+    static const std::vector<std::size_t> position({0, 1, 2, 3, 4, 5, 6});
     return position[i];
   }
 
   ufc::finite_element * create_coordinate_finite_element() const final override
   {
-    return new poisson_cell_marker_finite_element_1();
+    return new cross_section_surface_current_forms_finite_element_3();
   }
 
   ufc::dofmap * create_coordinate_dofmap() const final override
   {
-    return new poisson_cell_marker_dofmap_1();
+    return new cross_section_surface_current_forms_dofmap_3();
    }
 
   ufc::coordinate_mapping * create_coordinate_mapping() const final override
@@ -5428,27 +7171,37 @@ public:
     {
     case 0:
       {
-        return new poisson_cell_marker_finite_element_2();
+        return new cross_section_surface_current_forms_finite_element_1();
         break;
       }
     case 1:
       {
-        return new poisson_cell_marker_finite_element_0();
+        return new cross_section_surface_current_forms_finite_element_2();
         break;
       }
     case 2:
       {
-        return new poisson_cell_marker_finite_element_1();
+        return new cross_section_surface_current_forms_finite_element_2();
         break;
       }
     case 3:
       {
-        return new poisson_cell_marker_finite_element_0();
+        return new cross_section_surface_current_forms_finite_element_2();
         break;
       }
     case 4:
       {
-        return new poisson_cell_marker_finite_element_0();
+        return new cross_section_surface_current_forms_finite_element_2();
+        break;
+      }
+    case 5:
+      {
+        return new cross_section_surface_current_forms_finite_element_2();
+        break;
+      }
+    case 6:
+      {
+        return new cross_section_surface_current_forms_finite_element_2();
         break;
       }
     }
@@ -5462,27 +7215,37 @@ public:
     {
     case 0:
       {
-        return new poisson_cell_marker_dofmap_2();
+        return new cross_section_surface_current_forms_dofmap_1();
         break;
       }
     case 1:
       {
-        return new poisson_cell_marker_dofmap_0();
+        return new cross_section_surface_current_forms_dofmap_2();
         break;
       }
     case 2:
       {
-        return new poisson_cell_marker_dofmap_1();
+        return new cross_section_surface_current_forms_dofmap_2();
         break;
       }
     case 3:
       {
-        return new poisson_cell_marker_dofmap_0();
+        return new cross_section_surface_current_forms_dofmap_2();
         break;
       }
     case 4:
       {
-        return new poisson_cell_marker_dofmap_0();
+        return new cross_section_surface_current_forms_dofmap_2();
+        break;
+      }
+    case 5:
+      {
+        return new cross_section_surface_current_forms_dofmap_2();
+        break;
+      }
+    case 6:
+      {
+        return new cross_section_surface_current_forms_dofmap_2();
         break;
       }
     }
@@ -5502,7 +7265,7 @@ public:
 
   std::size_t max_interior_facet_subdomain_id() const final override
   {
-    return 0;
+    return 2;
   }
 
   std::size_t max_vertex_subdomain_id() const final override
@@ -5532,7 +7295,7 @@ public:
 
   bool has_cell_integrals() const final override
   {
-    return true;
+    return false;
   }
 
   bool has_exterior_facet_integrals() const final override
@@ -5542,7 +7305,7 @@ public:
 
   bool has_interior_facet_integrals() const final override
   {
-    return false;
+    return true;
   }
 
   bool has_vertex_integrals() const final override
@@ -5582,6 +7345,15 @@ public:
 
   ufc::interior_facet_integral * create_interior_facet_integral(std::size_t subdomain_id) const final override
   {
+    switch (subdomain_id)
+    {
+    case 1:
+      {
+        return new cross_section_surface_current_forms_interior_facet_integral_0_1();
+        break;
+      }
+    }
+    
     return 0;
   }
 
@@ -5612,7 +7384,7 @@ public:
 
   ufc::cell_integral * create_default_cell_integral() const final override
   {
-    return new poisson_cell_marker_cell_integral_0_otherwise();
+    return 0;
   }
 
   ufc::exterior_facet_integral * create_default_exterior_facet_integral() const final override
@@ -5674,199 +7446,240 @@ public:
 #include <dolfin/adaptivity/GoalFunctional.h>
 #include <dolfin/la/GenericVector.h>
 
-namespace poisson_cell_marker
+namespace cross_section_surface_current_forms
 {
 
-class CoefficientSpace_diffusivity: public dolfin::FunctionSpace
+class CoefficientSpace_anion_diff: public dolfin::FunctionSpace
 {
 public:
 
   // Constructor for standard function space
-  CoefficientSpace_diffusivity(std::shared_ptr<const dolfin::Mesh> mesh):
+  CoefficientSpace_anion_diff(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_0>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<cross_section_surface_current_forms_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<cross_section_surface_current_forms_dofmap_2>(), *mesh))
   {
     // Do nothing
   }
 
   // Constructor for constrained function space
-  CoefficientSpace_diffusivity(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+  CoefficientSpace_anion_diff(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_0>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<cross_section_surface_current_forms_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<cross_section_surface_current_forms_dofmap_2>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
 
 };
 
-class CoefficientSpace_entropy: public dolfin::FunctionSpace
+class CoefficientSpace_anion_flux: public dolfin::FunctionSpace
 {
 public:
 
   // Constructor for standard function space
-  CoefficientSpace_entropy(std::shared_ptr<const dolfin::Mesh> mesh):
+  CoefficientSpace_anion_flux(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_1>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_1>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<cross_section_surface_current_forms_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<cross_section_surface_current_forms_dofmap_2>(), *mesh))
   {
     // Do nothing
   }
 
   // Constructor for constrained function space
-  CoefficientSpace_entropy(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+  CoefficientSpace_anion_flux(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_1>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_1>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<cross_section_surface_current_forms_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<cross_section_surface_current_forms_dofmap_2>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
 
 };
 
-class CoefficientSpace_entropy_potential: public dolfin::FunctionSpace
+class CoefficientSpace_cation_diff: public dolfin::FunctionSpace
 {
 public:
 
   // Constructor for standard function space
-  CoefficientSpace_entropy_potential(std::shared_ptr<const dolfin::Mesh> mesh):
+  CoefficientSpace_cation_diff(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_0>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<cross_section_surface_current_forms_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<cross_section_surface_current_forms_dofmap_2>(), *mesh))
   {
     // Do nothing
   }
 
   // Constructor for constrained function space
-  CoefficientSpace_entropy_potential(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+  CoefficientSpace_cation_diff(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_0>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<cross_section_surface_current_forms_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<cross_section_surface_current_forms_dofmap_2>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
 
 };
 
-class CoefficientSpace_log_weight: public dolfin::FunctionSpace
+class CoefficientSpace_cation_flux: public dolfin::FunctionSpace
 {
 public:
 
   // Constructor for standard function space
-  CoefficientSpace_log_weight(std::shared_ptr<const dolfin::Mesh> mesh):
+  CoefficientSpace_cation_flux(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_0>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<cross_section_surface_current_forms_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<cross_section_surface_current_forms_dofmap_2>(), *mesh))
   {
     // Do nothing
   }
 
   // Constructor for constrained function space
-  CoefficientSpace_log_weight(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+  CoefficientSpace_cation_flux(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_0>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_0>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<cross_section_surface_current_forms_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<cross_section_surface_current_forms_dofmap_2>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
 
 };
 
-class Form_L_FunctionSpace_0: public dolfin::FunctionSpace
+class CoefficientSpace_log_anion: public dolfin::FunctionSpace
 {
 public:
 
   // Constructor for standard function space
-  Form_L_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh):
+  CoefficientSpace_log_anion(std::shared_ptr<const dolfin::Mesh> mesh):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_2>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_2>(), *mesh))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<cross_section_surface_current_forms_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<cross_section_surface_current_forms_dofmap_2>(), *mesh))
   {
     // Do nothing
   }
 
   // Constructor for constrained function space
-  Form_L_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+  CoefficientSpace_log_anion(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_2>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_2>(), *mesh, constrained_domain))
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<cross_section_surface_current_forms_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<cross_section_surface_current_forms_dofmap_2>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
 
 };
 
-class Form_L_MultiMeshFunctionSpace_0: public dolfin::MultiMeshFunctionSpace
+class CoefficientSpace_log_cation: public dolfin::FunctionSpace
 {
 public:
 
-  // Constructor for multimesh function space
-  Form_L_MultiMeshFunctionSpace_0(std::shared_ptr<const dolfin::MultiMesh> multimesh): dolfin::MultiMeshFunctionSpace(multimesh)
+  // Constructor for standard function space
+  CoefficientSpace_log_cation(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<cross_section_surface_current_forms_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<cross_section_surface_current_forms_dofmap_2>(), *mesh))
   {
-    // Create and add standard function spaces
-    for (std::size_t part = 0; part < multimesh->num_parts(); part++)
-    {
-      std::shared_ptr<const dolfin::FunctionSpace> V(new Form_L_FunctionSpace_0(multimesh->part(part)));
-      add(V);
-    }
+    // Do nothing
+  }
 
-    // Build multimesh function space
-    build();
+  // Constructor for constrained function space
+  CoefficientSpace_log_cation(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<cross_section_surface_current_forms_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<cross_section_surface_current_forms_dofmap_2>(), *mesh, constrained_domain))
+  {
+    // Do nothing
   }
 
 };
 
-typedef CoefficientSpace_entropy_potential Form_L_FunctionSpace_1;
+class CoefficientSpace_normal_vector: public dolfin::FunctionSpace
+{
+public:
 
-typedef CoefficientSpace_entropy Form_L_FunctionSpace_2;
+  // Constructor for standard function space
+  CoefficientSpace_normal_vector(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<cross_section_surface_current_forms_finite_element_1>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<cross_section_surface_current_forms_dofmap_1>(), *mesh))
+  {
+    // Do nothing
+  }
 
-typedef CoefficientSpace_log_weight Form_L_FunctionSpace_3;
+  // Constructor for constrained function space
+  CoefficientSpace_normal_vector(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<cross_section_surface_current_forms_finite_element_1>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<cross_section_surface_current_forms_dofmap_1>(), *mesh, constrained_domain))
+  {
+    // Do nothing
+  }
 
-typedef CoefficientSpace_diffusivity Form_L_FunctionSpace_4;
+};
 
-class Form_L: public dolfin::Form
+typedef CoefficientSpace_normal_vector Form_M_FunctionSpace_0;
+
+typedef CoefficientSpace_cation_diff Form_M_FunctionSpace_1;
+
+typedef CoefficientSpace_anion_diff Form_M_FunctionSpace_2;
+
+typedef CoefficientSpace_log_cation Form_M_FunctionSpace_3;
+
+typedef CoefficientSpace_log_anion Form_M_FunctionSpace_4;
+
+typedef CoefficientSpace_cation_flux Form_M_FunctionSpace_5;
+
+typedef CoefficientSpace_anion_flux Form_M_FunctionSpace_6;
+
+class Form_M: public dolfin::Form
 {
 public:
 
   // Constructor
-  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0):
-    dolfin::Form(1, 4), entropy_potential(*this, 0), entropy(*this, 1), log_weight(*this, 2), diffusivity(*this, 3)
+  Form_M(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::Form(0, 7), normal_vector(*this, 0), cation_diff(*this, 1), anion_diff(*this, 2), log_cation(*this, 3), log_anion(*this, 4), cation_flux(*this, 5), anion_flux(*this, 6)
   {
-    _function_spaces[0] = V0;
-
-    _ufc_form = std::make_shared<const poisson_cell_marker_form_0>();
+    _mesh = mesh;
+    _ufc_form = std::make_shared<const cross_section_surface_current_forms_form_0>();
   }
 
   // Constructor
-  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> entropy_potential, std::shared_ptr<const dolfin::GenericFunction> entropy, std::shared_ptr<const dolfin::GenericFunction> log_weight, std::shared_ptr<const dolfin::GenericFunction> diffusivity):
-    dolfin::Form(1, 4), entropy_potential(*this, 0), entropy(*this, 1), log_weight(*this, 2), diffusivity(*this, 3)
+  Form_M(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::GenericFunction> normal_vector, std::shared_ptr<const dolfin::GenericFunction> cation_diff, std::shared_ptr<const dolfin::GenericFunction> anion_diff, std::shared_ptr<const dolfin::GenericFunction> log_cation, std::shared_ptr<const dolfin::GenericFunction> log_anion, std::shared_ptr<const dolfin::GenericFunction> cation_flux, std::shared_ptr<const dolfin::GenericFunction> anion_flux):
+    dolfin::Form(0, 7), normal_vector(*this, 0), cation_diff(*this, 1), anion_diff(*this, 2), log_cation(*this, 3), log_anion(*this, 4), cation_flux(*this, 5), anion_flux(*this, 6)
   {
-    _function_spaces[0] = V0;
+    _mesh = mesh;
+    this->normal_vector = normal_vector;
+    this->cation_diff = cation_diff;
+    this->anion_diff = anion_diff;
+    this->log_cation = log_cation;
+    this->log_anion = log_anion;
+    this->cation_flux = cation_flux;
+    this->anion_flux = anion_flux;
 
-    this->entropy_potential = entropy_potential;
-    this->entropy = entropy;
-    this->log_weight = log_weight;
-    this->diffusivity = diffusivity;
-
-    _ufc_form = std::make_shared<const poisson_cell_marker_form_0>();
+    _ufc_form = std::make_shared<const cross_section_surface_current_forms_form_0>();
   }
 
   // Destructor
-  ~Form_L()
+  ~Form_M()
   {}
 
   /// Return the number of the coefficient with this name
   virtual std::size_t coefficient_number(const std::string& name) const
   {
-    if (name == "entropy_potential")
+    if (name == "normal_vector")
       return 0;
-    else if (name == "entropy")
+    else if (name == "cation_diff")
       return 1;
-    else if (name == "log_weight")
+    else if (name == "anion_diff")
       return 2;
-    else if (name == "diffusivity")
+    else if (name == "log_cation")
       return 3;
+    else if (name == "log_anion")
+      return 4;
+    else if (name == "cation_flux")
+      return 5;
+    else if (name == "anion_flux")
+      return 6;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -5880,13 +7693,19 @@ public:
     switch (i)
     {
     case 0:
-      return "entropy_potential";
+      return "normal_vector";
     case 1:
-      return "entropy";
+      return "cation_diff";
     case 2:
-      return "log_weight";
+      return "anion_diff";
     case 3:
-      return "diffusivity";
+      return "log_cation";
+    case 4:
+      return "log_anion";
+    case 5:
+      return "cation_flux";
+    case 6:
+      return "anion_flux";
     }
 
     dolfin::dolfin_error("generated code for class Form",
@@ -5896,81 +7715,73 @@ public:
   }
 
   // Typedefs
-  typedef Form_L_FunctionSpace_0 TestSpace;
-  typedef Form_L_MultiMeshFunctionSpace_0 MultiMeshTestSpace;
-  typedef Form_L_FunctionSpace_1 CoefficientSpace_entropy_potential;
-  typedef Form_L_FunctionSpace_2 CoefficientSpace_entropy;
-  typedef Form_L_FunctionSpace_3 CoefficientSpace_log_weight;
-  typedef Form_L_FunctionSpace_4 CoefficientSpace_diffusivity;
+  typedef Form_M_FunctionSpace_0 CoefficientSpace_normal_vector;
+  typedef Form_M_FunctionSpace_1 CoefficientSpace_cation_diff;
+  typedef Form_M_FunctionSpace_2 CoefficientSpace_anion_diff;
+  typedef Form_M_FunctionSpace_3 CoefficientSpace_log_cation;
+  typedef Form_M_FunctionSpace_4 CoefficientSpace_log_anion;
+  typedef Form_M_FunctionSpace_5 CoefficientSpace_cation_flux;
+  typedef Form_M_FunctionSpace_6 CoefficientSpace_anion_flux;
 
   // Coefficients
-  dolfin::CoefficientAssigner entropy_potential;
-  dolfin::CoefficientAssigner entropy;
-  dolfin::CoefficientAssigner log_weight;
-  dolfin::CoefficientAssigner diffusivity;
+  dolfin::CoefficientAssigner normal_vector;
+  dolfin::CoefficientAssigner cation_diff;
+  dolfin::CoefficientAssigner anion_diff;
+  dolfin::CoefficientAssigner log_cation;
+  dolfin::CoefficientAssigner log_anion;
+  dolfin::CoefficientAssigner cation_flux;
+  dolfin::CoefficientAssigner anion_flux;
 };
 
-class MultiMeshForm_L: public dolfin::MultiMeshForm
+class MultiMeshForm_M: public dolfin::MultiMeshForm
 {
 public:
 
   // Constructor
-  MultiMeshForm_L(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0):
-    dolfin::MultiMeshForm(V0), entropy_potential(*this, 0), entropy(*this, 1), log_weight(*this, 2), diffusivity(*this, 3)
+  MultiMeshForm_M(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::MultiMeshForm(), normal_vector(*this, 0), cation_diff(*this, 1), anion_diff(*this, 2), log_cation(*this, 3), log_anion(*this, 4), cation_flux(*this, 5), anion_flux(*this, 6)
   {
-    // Create and add standard forms
-    std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
-    for (std::size_t part = 0; part < num_parts; part++)
-    {
-      std::shared_ptr<const dolfin::Form> a(new Form_L(V0->part(part)));
-      add(a);
-    }
-
-    // Build multimesh form
-    build();
 
     /// Assign coefficients
 
   }
 
   // Constructor
-  MultiMeshForm_L(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> entropy_potential, std::shared_ptr<const dolfin::GenericFunction> entropy, std::shared_ptr<const dolfin::GenericFunction> log_weight, std::shared_ptr<const dolfin::GenericFunction> diffusivity):
-    dolfin::MultiMeshForm(V0), entropy_potential(*this, 0), entropy(*this, 1), log_weight(*this, 2), diffusivity(*this, 3)
+  MultiMeshForm_M(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::GenericFunction> normal_vector, std::shared_ptr<const dolfin::GenericFunction> cation_diff, std::shared_ptr<const dolfin::GenericFunction> anion_diff, std::shared_ptr<const dolfin::GenericFunction> log_cation, std::shared_ptr<const dolfin::GenericFunction> log_anion, std::shared_ptr<const dolfin::GenericFunction> cation_flux, std::shared_ptr<const dolfin::GenericFunction> anion_flux):
+    dolfin::MultiMeshForm(), normal_vector(*this, 0), cation_diff(*this, 1), anion_diff(*this, 2), log_cation(*this, 3), log_anion(*this, 4), cation_flux(*this, 5), anion_flux(*this, 6)
   {
-    // Create and add standard forms
-    std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
-    for (std::size_t part = 0; part < num_parts; part++)
-    {
-      std::shared_ptr<const dolfin::Form> a(new Form_L(V0->part(part)));
-      add(a);
-    }
 
-    // Build multimesh form
-    build();
-
-    /// Assign coefficients
-    this->entropy_potential = entropy_potential;
-    this->entropy = entropy;
-    this->log_weight = log_weight;
-    this->diffusivity = diffusivity;
+    /// Assign coefficients    this->normal_vector = normal_vector;
+    this->cation_diff = cation_diff;
+    this->anion_diff = anion_diff;
+    this->log_cation = log_cation;
+    this->log_anion = log_anion;
+    this->cation_flux = cation_flux;
+    this->anion_flux = anion_flux;
 
   }
 
   // Destructor
-  ~MultiMeshForm_L()
+  ~MultiMeshForm_M()
   {}
 
   /// Return the number of the coefficient with this name
   virtual std::size_t coefficient_number(const std::string& name) const
   {
-    if (name == "entropy_potential")
+    if (name == "normal_vector")
       return 0;
-    else if (name == "entropy")
+    else if (name == "cation_diff")
       return 1;
-    else if (name == "log_weight")
+    else if (name == "anion_diff")
       return 2;
-    else if (name == "diffusivity")
+    else if (name == "log_cation")
       return 3;
+    else if (name == "log_anion")
+      return 4;
+    else if (name == "cation_flux")
+      return 5;
+    else if (name == "anion_flux")
+      return 6;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -5984,13 +7795,19 @@ public:
     switch (i)
     {
     case 0:
-      return "entropy_potential";
+      return "normal_vector";
     case 1:
-      return "entropy";
+      return "cation_diff";
     case 2:
-      return "log_weight";
+      return "anion_diff";
     case 3:
-      return "diffusivity";
+      return "log_cation";
+    case 4:
+      return "log_anion";
+    case 5:
+      return "cation_flux";
+    case 6:
+      return "anion_flux";
     }
 
     dolfin::dolfin_error("generated code for class Form",
@@ -6000,27 +7817,27 @@ public:
   }
 
   // Typedefs
-  typedef Form_L_FunctionSpace_0 TestSpace;
-  typedef Form_L_MultiMeshFunctionSpace_0 MultiMeshTestSpace;
-  typedef Form_L_FunctionSpace_1 CoefficientSpace_entropy_potential;
-  typedef Form_L_FunctionSpace_2 CoefficientSpace_entropy;
-  typedef Form_L_FunctionSpace_3 CoefficientSpace_log_weight;
-  typedef Form_L_FunctionSpace_4 CoefficientSpace_diffusivity;
+  typedef Form_M_FunctionSpace_0 CoefficientSpace_normal_vector;
+  typedef Form_M_FunctionSpace_1 CoefficientSpace_cation_diff;
+  typedef Form_M_FunctionSpace_2 CoefficientSpace_anion_diff;
+  typedef Form_M_FunctionSpace_3 CoefficientSpace_log_cation;
+  typedef Form_M_FunctionSpace_4 CoefficientSpace_log_anion;
+  typedef Form_M_FunctionSpace_5 CoefficientSpace_cation_flux;
+  typedef Form_M_FunctionSpace_6 CoefficientSpace_anion_flux;
 
   // Coefficients
-  dolfin::MultiMeshCoefficientAssigner entropy_potential;
-  dolfin::MultiMeshCoefficientAssigner entropy;
-  dolfin::MultiMeshCoefficientAssigner log_weight;
-  dolfin::MultiMeshCoefficientAssigner diffusivity;
+  dolfin::MultiMeshCoefficientAssigner normal_vector;
+  dolfin::MultiMeshCoefficientAssigner cation_diff;
+  dolfin::MultiMeshCoefficientAssigner anion_diff;
+  dolfin::MultiMeshCoefficientAssigner log_cation;
+  dolfin::MultiMeshCoefficientAssigner log_anion;
+  dolfin::MultiMeshCoefficientAssigner cation_flux;
+  dolfin::MultiMeshCoefficientAssigner anion_flux;
 };
 
 // Class typedefs
-typedef Form_L LinearForm;
-typedef MultiMeshForm_L MultiMeshLinearForm;
-typedef Form_L ResidualForm;
-typedef MultiMeshForm_L MultiMeshResidualForm;
-typedef Form_L::TestSpace FunctionSpace;
-typedef Form_L::MultiMeshTestSpace MultiMeshFunctionSpace;
+typedef Form_M Functional;
+typedef MultiMeshForm_M MultiMeshFunctional;
 
 }
 

@@ -1,0 +1,2 @@
+scale = Constant(tetrahedron)
+M = ( scale('+') ) * dS(1)
