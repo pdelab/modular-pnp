@@ -86,9 +86,30 @@ int main (int argc, char** argv) {
   // Mesh Adaptivity Loop
   //-------------------------
 
-  double max_volts = 0.5;
-  double delta_volts = 0.1;
   dolfin::File accepted_solution_file("./benchmarks/pnp_diode/output/accepted_solution.pvd");
+
+  // i-v curve
+  const double max_volts = 0.1;
+  const double delta_volts = 0.1;
+
+  // mesh adaptivity
+  const double growth_factor = 1.2;
+  const double entropy_per_cell = 1.0e-4;
+  const std::size_t max_refine_depth = 4;
+  const std::size_t max_elements = 250000;
+
+  // parameters for PNP Newton solver
+  const std::size_t max_newton = 50;
+  const double max_residual_tol = 1.0e-10;
+  const double relative_residual_tol = 1.0e-7;
+  const bool use_eafe_approximation = true;
+
+  ofstream output_file;
+  output_file.precision(3);
+  output_file << std::scientific;
+  output_file.open("./benchmarks/pnp_diode/output/iv.txt");
+  output_file << "IV curves for voltage [ " << (-max_volts) << ", " << max_volts << " ] ";
+  output_file << "with voltage increments " << delta_volts << ".\n\n";
 
   for (double voltage_drop = -max_volts; voltage_drop < max_volts + 1.e-5; voltage_drop += delta_volts) {
     printf("Solving for voltage drop : %5.2e\n\n", voltage_drop);
@@ -97,11 +118,6 @@ int main (int argc, char** argv) {
     output_path += std::to_string(voltage_drop);
     output_path += "/";
 
-    // parameters for mesh adaptivity
-    double growth_factor = 1.2;
-    double entropy_per_cell = 5.0e-4;
-    std::size_t max_refine_depth = 4;
-    std::size_t max_elements = 250000;
     Mesh_Refiner mesh_adapt(
       initial_mesh,
       max_elements,
@@ -109,11 +125,6 @@ int main (int argc, char** argv) {
       entropy_per_cell
     );
 
-    // parameters for PNP Newton solver
-    const std::size_t max_newton = 25;
-    const double max_residual_tol = 1.0e-10;
-    const double relative_residual_tol = 1.0e-4;
-    const bool use_eafe_approximation = true;
     std::shared_ptr<double> initial_residual_ptr = std::make_shared<double>(-1.0);
 
     // construct initial guess
@@ -162,7 +173,11 @@ int main (int argc, char** argv) {
 
     printf("\nCompleted adaptivity loop for %5.3eV with induced current %5.3emA\n\n\n\n", voltage_drop, induced_current);
     accepted_solution_file << *adaptive_solution;
+
+    output_file << "\nCompleted adaptivity loop for " << voltage_drop << "V with induced current " << induced_current << "mA\n";
   }
+
+  output_file.close();
 
   return 0;
 }

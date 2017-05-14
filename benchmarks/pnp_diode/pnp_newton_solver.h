@@ -139,8 +139,8 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   std::vector<std::size_t> components = {0, 0, 0};
   std::vector<std::vector<double>> bcs;
 
-  std::vector<double> left(left_contact(-1.0));
-  std::vector<double> right(right_contact(+1.0));
+  std::vector<double> left(left_contact(-1.0, 0.0)); // placeholder voltage 0.0
+  std::vector<double> right(right_contact(+1.0, 0.0)); // placeholder voltage 0.0
   bcs.push_back({left[0], right[0]});
   bcs.push_back({left[1], right[1]});
   bcs.push_back({left[2], right[2]});
