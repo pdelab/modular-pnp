@@ -180,6 +180,10 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   printf("\n");
 
   newton.update_max_residual(initial_max_residual);
+
+  // avoid updates that cause more than than 5% growth in the solution
+  double increase_tolerance = 5E-2;
+
   while (newton.needs_to_iterate()) {
     // solve
     printf("Solving for Newton iterate %lu \n", newton.iteration);
@@ -201,8 +205,6 @@ std::shared_ptr<dolfin::Function> solve_pnp (
     double min_dof = computed_solution.vector()->min();
     double range = max_dof - min_dof;
 
-    // avoid updates that cause more than than 1% growth in the solution
-    double increase_tolerance = 1E-1;
     if (range > (1.0 + increase_tolerance) * prev_range) {
       printf("\tupdate causes too much growth in solution : %e / %e = %e\n", range, prev_range, range / prev_range);
       dolfin::Function newton_update(computed_solution.function_space());
@@ -212,6 +214,20 @@ std::shared_ptr<dolfin::Function> solve_pnp (
       double min_update = newton_update.vector()->min();
       double growth_factor = increase_tolerance * prev_range / (max_update - min_update + 1E-12);
       newton_update = newton_update * growth_factor;
+
+      double backtrack_max_update = newton_update.vector()->max();
+      double backtrack_min_update = newton_update.vector()->min();
+      if (backtrack_max_update > backtrack_min_update + increase_tolerance * prev_range) {
+        double shrink_factor = (backtrack_max_update - backtrack_min_update) * increase_tolerance * 1E-4;
+        newton_update = newton_update * shrink_factor;
+
+        printf("\teven after backtracking, the solution grew too much!\n");
+        printf("\tgrowth should be bounded by %5.3e but is %5.3e\n",
+          increase_tolerance * prev_range,
+          (max_update - min_update) * growth_factor
+        );
+        printf("\tfurther reducing the update by a factor of %5.3e\n", shrink_factor);
+      }
 
       computed_solution = previous_solution + newton_update;
     }

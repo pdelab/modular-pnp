@@ -41,6 +41,10 @@ double computeCurrentFlux(
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential
 );
 
+std::vector<std::shared_ptr<const dolfin::Function>> get_physical_functions (
+  std::shared_ptr<const dolfin::Function> solution
+);
+
 class CrossSection : public dolfin::SubDomain {
   bool inside(const dolfin::Array<double>& x, bool on_boundary) const {
     return (fabs(x[0] - 0.5) < 1.0e-8) or (fabs(x[0] + 0.5) < 1.0e-8);
@@ -89,13 +93,13 @@ int main (int argc, char** argv) {
   dolfin::File accepted_solution_file("./benchmarks/pnp_diode/output/accepted_solution.pvd");
 
   // i-v curve
-  const double max_volts = 0.1;
-  const double delta_volts = 0.1;
+  const double max_volts = 0.5;
+  const double delta_volts = 0.05;
 
   // mesh adaptivity
-  const double growth_factor = 1.2;
-  const double entropy_per_cell = 1.0e-4;
-  const std::size_t max_refine_depth = 4;
+  const double growth_factor = 1.05;
+  const double entropy_error_per_cell = 5.0e-4;
+  const std::size_t max_refine_depth = 3;
   const std::size_t max_elements = 250000;
 
   // parameters for PNP Newton solver
@@ -122,7 +126,7 @@ int main (int argc, char** argv) {
       initial_mesh,
       max_elements,
       max_refine_depth,
-      entropy_per_cell
+      entropy_error_per_cell
     );
 
     std::shared_ptr<double> initial_residual_ptr = std::make_shared<double>(-1.0);
@@ -136,6 +140,7 @@ int main (int argc, char** argv) {
     adaptive_solution->interpolate(initial_guess_expression);
 
     dolfin::File initial_guess_file("./benchmarks/pnp_diode/output/initial_guess.pvd");
+    dolfin::File physical_output_file(output_path + "physical.pvd");
     while (mesh_adapt.needs_to_solve) {
       auto mesh = mesh_adapt.get_mesh();
 
@@ -154,6 +159,14 @@ int main (int argc, char** argv) {
         amg,
         output_path
       );
+
+      // output physically relevant quantities
+      printf("Extracting physically relevant quantities\n");
+      auto physical_functions = get_physical_functions(computed_solution);
+      physical_output_file << *(physical_functions[0]);
+      physical_output_file << *(physical_functions[1]);
+      physical_output_file << *(physical_functions[2]);
+      physical_output_file << *(physical_functions[3]);
 
       // compute current / entropy terms
       printf("Computing diode current\n");
@@ -299,4 +312,42 @@ double computeCurrentFlux(
 
   printf("\tcurrent flux: %5.3e mA\n", microamp_scale_factor * current / surface_area);
   return microamp_scale_factor * current / surface_area;
+}
+
+//-------------------------------------
+std::vector<std::shared_ptr<const dolfin::Function>> get_physical_functions (
+  std::shared_ptr<const dolfin::Function> solution
+) {
+  std::vector<std::shared_ptr<const dolfin::Function>> output_wrapper;
+  auto scalar_space = (*solution)[0].function_space()->collapse();
+
+  dolfin::Function potential(scalar_space);
+  potential.interpolate((*solution)[0]);
+  output_wrapper.push_back(std::make_shared<const dolfin::Function>(potential));
+
+  double value;
+  dolfin::Function cation_density(scalar_space);
+  cation_density.interpolate((*solution)[1]);
+  for (std::size_t index = 0; index < cation_density.vector()->size(); index++) {
+    value = std::exp( (*(cation_density.vector()))[index] );
+    cation_density.vector()->setitem(index, value);
+  }
+  output_wrapper.push_back(std::make_shared<const dolfin::Function>(cation_density));
+
+  dolfin::Function anion_density(scalar_space);
+  anion_density.interpolate((*solution)[2]);
+  for (std::size_t index = 0; index < anion_density.vector()->size(); index++) {
+    value = std::exp( (*(anion_density.vector()))[index] );
+    anion_density.vector()->setitem(index, value);
+  }
+  output_wrapper.push_back(std::make_shared<const dolfin::Function>(anion_density));
+
+  dolfin::Function total_charge(scalar_space);
+  Fixed_Charged_Expression fixed_charge_expression;
+  total_charge.interpolate(fixed_charge_expression);
+  total_charge = total_charge + cation_density;
+  total_charge = total_charge - anion_density;
+  output_wrapper.push_back(std::make_shared<const dolfin::Function>(total_charge));
+
+  return output_wrapper;
 }
