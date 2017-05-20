@@ -78,10 +78,10 @@ class Initial_Guess : public dolfin::Expression {
       std::vector<double> left(left_contact(-1.0, volt));
       std::vector<double> right(right_contact(+1.0, volt));
       values[0] = 0.5 * (left[0] * (1.0 - x[0]) + right[0] * (x[0] + 1.0));
-      values[1] = 0.5 * (left[1] * (1.0 - x[0]) + right[1] * (x[0] + 1.0));
-      values[2] = 0.5 * (left[2] * (1.0 - x[0]) + right[2] * (x[0] + 1.0));
-      // values[1] = x[0] < 0.0 ? left[1] : right[1];
-      // values[2] = x[0] < 0.0 ? left[2] : right[2];
+      // values[1] = 0.5 * (left[1] * (1.0 - x[0]) + right[1] * (x[0] + 1.0));
+      // values[2] = 0.5 * (left[2] * (1.0 - x[0]) + right[2] * (x[0] + 1.0));
+      values[1] = x[0] < 0.0 ? left[1] : right[1];
+      values[2] = x[0] < 0.0 ? left[2] : right[2];
     }
   private:
     double volt;

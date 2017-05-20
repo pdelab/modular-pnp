@@ -4,10 +4,12 @@ element = FiniteElement("Lagrange", tetrahedron, 1)
 vector  = VectorElement("Lagrange", tetrahedron, 1)
 DG = FiniteElement("DG", tetrahedron, 0)
 
+u = TrialFunction(DG)
 v = TestFunction(DG)
 entropy_potential = Coefficient(element)
 entropy = Coefficient(vector)
 log_weight = Coefficient(element)
 diffusivity = Coefficient(element)
 
+a = u * v * dx
 L = diffusivity * exp(log_weight) * inner(grad(entropy_potential) - entropy, grad(entropy_potential) - entropy) * v * dx

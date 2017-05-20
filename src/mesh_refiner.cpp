@@ -136,7 +136,7 @@ std::size_t Mesh_Refiner::mark_for_refinement_with_target_size (
   );
 
   // sort errors and estimate corresponding entropy_tolerance
-  std::size_t permissible_cells = (std::size_t) std::round(((double) target_size) * 0.125);
+  std::size_t permissible_cells = (std::size_t) std::round(((double) target_size) * 0.05);
   std::vector<double> error_vector;
   for (std::size_t i = 0; i < error_eigenvector.size(); i++) {
     error_vector.push_back(error_eigenvector[i]);
@@ -204,6 +204,8 @@ dolfin::EigenVector Mesh_Refiner::compute_entropy_error_vector (
   dolfin::EigenVector error_vector;
   std::size_t component_count = entropy_potential_vector.size();
 
+  dolfin::File entropy_error_file("./entropy_error.pvd");
+
   for (std::size_t comp = 0; comp < component_count; comp++) {
     auto potential_interpolant = std::make_shared<dolfin::Function>(
       dolfin::adapt(*(entropy_potential_vector[comp]->function_space()), _mesh)
@@ -236,18 +238,26 @@ dolfin::EigenVector Mesh_Refiner::compute_entropy_error_vector (
 
     // compute entropic error
     auto DG = std::make_shared<poisson_cell_marker::FunctionSpace>(_mesh);
-    poisson_cell_marker::LinearForm error_form(DG);
-    error_form.entropy_potential = potential_interpolant;
-    error_form.entropy = entropy;
-    error_form.diffusivity = diffusivity_interpolant;
-    error_form.log_weight = log_weight_interpolant;
+    poisson_cell_marker::BilinearForm error_bilinear_form(DG, DG);
+    poisson_cell_marker::LinearForm error_linear_form(DG);
+    error_linear_form.entropy_potential = potential_interpolant;
+
+    // <<< test out using only the entropy and not the entropy error
+    dolfin::Constant zeros(0.0, 0.0, 0.0);
+    auto zeros_ptr = std::make_shared<dolfin::Constant>(zeros);
+    error_linear_form.entropy = zeros_ptr;
+    // error_linear_form.entropy = entropy;
+    error_linear_form.diffusivity = diffusivity_interpolant;
+    error_linear_form.log_weight = log_weight_interpolant;
 
     if (error_vector.size() < 1) {
-      dolfin::assemble(error_vector, error_form);
+      dolfin::assemble(error_vector, error_linear_form);
+      entropy_error_file << Mesh_Refiner::as_function(DG, error_vector);
     } else {
       dolfin::EigenVector local_error_vector;
-      dolfin::assemble(local_error_vector, error_form);
+      dolfin::assemble(local_error_vector, error_linear_form);
       error_vector += local_error_vector;
+      entropy_error_file << Mesh_Refiner::as_function(DG, local_error_vector);
     }
   }
 
@@ -317,3 +327,19 @@ void Mesh_Refiner::mass_lumping_solver (
   solution->vector()->set_local(soln_vals);
 }
 //--------------------------------
+dolfin::Function Mesh_Refiner::as_function(
+  std::shared_ptr<dolfin::FunctionSpace> function_space,
+  dolfin::EigenVector vec
+) {
+  double* values;
+  values = vec.data();
+  std::vector<double> std_vec;
+  std_vec.reserve(vec.size());
+  for (uint i = 0; i < vec.size(); i++)
+    std_vec[i] = values[i];
+
+  dolfin::Function function(function_space);
+  function.vector()->set_local(std_vec);
+
+  return function;
+}

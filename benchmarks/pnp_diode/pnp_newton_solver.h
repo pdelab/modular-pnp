@@ -34,6 +34,7 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   bool use_eafe_approximation,
   itsolver_param itsolver,
   AMG_param amg,
+  ILU_param ilu,
   std::string output_dir
 ) {
   // setup function spaces and forms
@@ -75,6 +76,7 @@ std::shared_ptr<dolfin::Function> solve_pnp (
     pnp_sources,
     itsolver,
     amg,
+    ilu,
     "uu"
   );
 
@@ -164,8 +166,11 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   printf("Initializing nonlinear solver\n");
 
   // set nonlinear solver parameters
+  double mesh_initial_residual = pnp_problem.compute_residual("l2");
+  const double dof_size = pnp_problem._eigen_vector->size();
+  mesh_initial_residual /= dof_size;
   if (*initial_residual_ptr < 0.0) {
-    *initial_residual_ptr = pnp_problem.compute_residual("l2");
+    *initial_residual_ptr = mesh_initial_residual;
   }
   const double initial_max_residual = pnp_problem.compute_residual("max");
   Newton_Status newton(
@@ -187,14 +192,19 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   while (newton.needs_to_iterate()) {
     // solve
     printf("Solving for Newton iterate %lu \n", newton.iteration);
-    const double previous_residual = pnp_problem.compute_residual("l2");
+    const double previous_residual = pnp_problem.compute_residual("l2") / dof_size;
+    if (newton.iteration > 50 && previous_residual > 0.99 * mesh_initial_residual) {
+      printf("After 20 Newton iterations, the solution has not moved enough... ");
+      printf("refining\n");
+      break;
+    }
+
     const dolfin::Function previous_solution = pnp_problem.get_solution();
     dolfin::Function computed_solution(pnp_problem.fasp_solve());
 
     // update newton measurements with backtracking
     printf("Newton measurements for iteration :\n");
-    double residual_check = pnp_problem.compute_residual("l2");
-    std::size_t backtrack_count = 0;
+    double residual_check = pnp_problem.compute_residual("l2") / dof_size;
 
     // ensure L_infinity norm has bounded growth at each iteration
     double prev_max_dof = previous_solution.vector()->max();
@@ -233,6 +243,7 @@ std::shared_ptr<dolfin::Function> solve_pnp (
     }
 
     // dolfin::File backFile(output_dir + "backtrack.pvd");
+    std::size_t backtrack_count = 0;
     while (residual_check > previous_residual || isnan(residual_check)) {
       printf("\trelative residual increased : %e < %e\n", previous_residual, residual_check);
       dolfin::Function backtrack(computed_solution.function_space());
@@ -243,10 +254,10 @@ std::shared_ptr<dolfin::Function> solve_pnp (
       backtrack_solution = computed_solution + backtrack;
       // backFile << backtrack_solution;
       pnp_problem.set_solution(backtrack_solution);
-      residual_check = pnp_problem.compute_residual("l2");
+      residual_check = pnp_problem.compute_residual("l2") / dof_size;
     }
     printf("\trelative residual decreased : %e > %e\n", previous_residual, residual_check);
-    double residual = pnp_problem.compute_residual("l2");
+    double residual = pnp_problem.compute_residual("l2") / dof_size;
     double max_residual = pnp_problem.compute_residual("max");
     newton.update_residuals(residual, max_residual);
     newton.update_iteration();

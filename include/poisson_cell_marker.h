@@ -5196,6 +5196,58 @@ public:
 
   const std::vector<bool> & enabled_coefficients() const final override
   {
+    static const std::vector<bool> enabled({});
+    return enabled;
+  }
+
+  void tabulate_tensor(double * A,
+                       const double * const * w,
+                       const double * coordinate_dofs,
+                       int cell_orientation) const final override
+  {
+    // Number of operations (multiply-add pairs) for Jacobian data:      3
+    // Number of operations (multiply-add pairs) for geometry tensor:    0
+    // Number of operations (multiply-add pairs) for tensor contraction: 0
+    // Total number of operations (multiply-add pairs):                  3
+    
+    // Compute Jacobian
+    double J[9];
+    compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
+    
+    // Compute Jacobian inverse and determinant
+    double K[9];
+    double detJ;
+    compute_jacobian_inverse_tetrahedron_3d(K, detJ, J);
+    
+    // Set scale factor
+    const double det = std::abs(detJ);
+    
+    // Compute geometry tensor
+    const double G0_ = det;
+    
+    // Compute element tensor
+    A[0] = 0.166666666666667*G0_;
+  }
+
+};
+
+
+class poisson_cell_marker_cell_integral_1_otherwise: public ufc::cell_integral
+{
+public:
+
+  poisson_cell_marker_cell_integral_1_otherwise() : ufc::cell_integral()
+  {
+    
+  }
+
+  ~poisson_cell_marker_cell_integral_1_otherwise() override
+  {
+    
+  }
+
+  const std::vector<bool> & enabled_coefficients() const final override
+  {
     static const std::vector<bool> enabled({true, true, true, true});
     return enabled;
   }
@@ -5382,6 +5434,257 @@ public:
   }
 
   ~poisson_cell_marker_form_0() override
+  {
+    // Do nothing
+  }
+
+  const char * signature() const final override
+  {
+    return "9d6c3270f3a03cdd9a4f78b2aabc50d9e569c340874abfdcc6631d1e1387793b84bf80cf97e813d6e8c8faaa5d40a73596a5c48d29f29cd7c8ba7180feb7c8f9";
+  }
+
+  std::size_t rank() const final override
+  {
+    return 2;
+  }
+
+  std::size_t num_coefficients() const final override
+  {
+    return 0;
+  }
+
+  std::size_t original_coefficient_position(std::size_t i) const final override
+  {
+    static const std::vector<std::size_t> position({});
+    return position[i];
+  }
+
+  ufc::finite_element * create_coordinate_finite_element() const final override
+  {
+    return new poisson_cell_marker_finite_element_1();
+  }
+
+  ufc::dofmap * create_coordinate_dofmap() const final override
+  {
+    return new poisson_cell_marker_dofmap_1();
+   }
+
+  ufc::coordinate_mapping * create_coordinate_mapping() const final override
+  {
+    return nullptr;
+  }
+
+  ufc::finite_element * create_finite_element(std::size_t i) const final override
+  {
+    switch (i)
+    {
+    case 0:
+      {
+        return new poisson_cell_marker_finite_element_2();
+        break;
+      }
+    case 1:
+      {
+        return new poisson_cell_marker_finite_element_2();
+        break;
+      }
+    }
+    
+    return 0;
+  }
+
+  ufc::dofmap * create_dofmap(std::size_t i) const final override
+  {
+    switch (i)
+    {
+    case 0:
+      {
+        return new poisson_cell_marker_dofmap_2();
+        break;
+      }
+    case 1:
+      {
+        return new poisson_cell_marker_dofmap_2();
+        break;
+      }
+    }
+    
+    return 0;
+  }
+
+  std::size_t max_cell_subdomain_id() const final override
+  {
+    return 0;
+  }
+
+  std::size_t max_exterior_facet_subdomain_id() const final override
+  {
+    return 0;
+  }
+
+  std::size_t max_interior_facet_subdomain_id() const final override
+  {
+    return 0;
+  }
+
+  std::size_t max_vertex_subdomain_id() const final override
+  {
+    return 0;
+  }
+
+  std::size_t max_custom_subdomain_id() const final override
+  {
+    return 0;
+  }
+
+  std::size_t max_cutcell_subdomain_id() const final override
+  {
+    return 0;
+  }
+
+  std::size_t max_interface_subdomain_id() const final override
+  {
+    return 0;
+  }
+
+  std::size_t max_overlap_subdomain_id() const final override
+  {
+    return 0;
+  }
+
+  bool has_cell_integrals() const final override
+  {
+    return true;
+  }
+
+  bool has_exterior_facet_integrals() const final override
+  {
+    return false;
+  }
+
+  bool has_interior_facet_integrals() const final override
+  {
+    return false;
+  }
+
+  bool has_vertex_integrals() const final override
+  {
+    return false;
+  }
+
+  bool has_custom_integrals() const final override
+  {
+    return false;
+  }
+
+  bool has_cutcell_integrals() const final override
+  {
+    return false;
+  }
+
+  bool has_interface_integrals() const final override
+  {
+    return false;
+  }
+
+  bool has_overlap_integrals() const final override
+  {
+    return false;
+  }
+
+  ufc::cell_integral * create_cell_integral(std::size_t subdomain_id) const final override
+  {
+    return 0;
+  }
+
+  ufc::exterior_facet_integral * create_exterior_facet_integral(std::size_t subdomain_id) const final override
+  {
+    return 0;
+  }
+
+  ufc::interior_facet_integral * create_interior_facet_integral(std::size_t subdomain_id) const final override
+  {
+    return 0;
+  }
+
+  ufc::vertex_integral * create_vertex_integral(std::size_t subdomain_id) const final override
+  {
+    return 0;
+  }
+
+  ufc::custom_integral * create_custom_integral(std::size_t subdomain_id) const final override
+  {
+    return 0;
+  }
+
+  ufc::cutcell_integral * create_cutcell_integral(std::size_t subdomain_id) const final override
+  {
+    return 0;
+  }
+
+  ufc::interface_integral * create_interface_integral(std::size_t subdomain_id) const final override
+  {
+    return 0;
+  }
+
+  ufc::overlap_integral * create_overlap_integral(std::size_t subdomain_id) const final override
+  {
+    return 0;
+  }
+
+  ufc::cell_integral * create_default_cell_integral() const final override
+  {
+    return new poisson_cell_marker_cell_integral_0_otherwise();
+  }
+
+  ufc::exterior_facet_integral * create_default_exterior_facet_integral() const final override
+  {
+    return 0;
+  }
+
+  ufc::interior_facet_integral * create_default_interior_facet_integral() const final override
+  {
+    return 0;
+  }
+
+  ufc::vertex_integral * create_default_vertex_integral() const final override
+  {
+    return 0;
+  }
+
+  ufc::custom_integral * create_default_custom_integral() const final override
+  {
+    return 0;
+  }
+
+  ufc::cutcell_integral * create_default_cutcell_integral() const final override
+  {
+    return 0;
+  }
+
+  ufc::interface_integral * create_default_interface_integral() const final override
+  {
+    return 0;
+  }
+
+  ufc::overlap_integral * create_default_overlap_integral() const final override
+  {
+    return 0;
+  }
+
+};
+
+
+class poisson_cell_marker_form_1: public ufc::form
+{
+public:
+
+  poisson_cell_marker_form_1() : ufc::form()
+  {
+    // Do nothing
+  }
+
+  ~poisson_cell_marker_form_1() override
   {
     // Do nothing
   }
@@ -5612,7 +5915,7 @@ public:
 
   ufc::cell_integral * create_default_cell_integral() const final override
   {
-    return new poisson_cell_marker_cell_integral_0_otherwise();
+    return new poisson_cell_marker_cell_integral_1_otherwise();
   }
 
   ufc::exterior_facet_integral * create_default_exterior_facet_integral() const final override
@@ -5773,6 +6076,197 @@ public:
 
 };
 
+class Form_a_FunctionSpace_0: public dolfin::FunctionSpace
+{
+public:
+
+  // Constructor for standard function space
+  Form_a_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_2>(), *mesh))
+  {
+    // Do nothing
+  }
+
+  // Constructor for constrained function space
+  Form_a_FunctionSpace_0(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_2>(), *mesh, constrained_domain))
+  {
+    // Do nothing
+  }
+
+};
+
+class Form_a_FunctionSpace_1: public dolfin::FunctionSpace
+{
+public:
+
+  // Constructor for standard function space
+  Form_a_FunctionSpace_1(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_2>(), *mesh))
+  {
+    // Do nothing
+  }
+
+  // Constructor for constrained function space
+  Form_a_FunctionSpace_1(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<poisson_cell_marker_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<poisson_cell_marker_dofmap_2>(), *mesh, constrained_domain))
+  {
+    // Do nothing
+  }
+
+};
+
+class Form_a_MultiMeshFunctionSpace_0: public dolfin::MultiMeshFunctionSpace
+{
+public:
+
+  // Constructor for multimesh function space
+  Form_a_MultiMeshFunctionSpace_0(std::shared_ptr<const dolfin::MultiMesh> multimesh): dolfin::MultiMeshFunctionSpace(multimesh)
+  {
+    // Create and add standard function spaces
+    for (std::size_t part = 0; part < multimesh->num_parts(); part++)
+    {
+      std::shared_ptr<const dolfin::FunctionSpace> V(new Form_a_FunctionSpace_0(multimesh->part(part)));
+      add(V);
+    }
+
+    // Build multimesh function space
+    build();
+  }
+
+};
+
+class Form_a_MultiMeshFunctionSpace_1: public dolfin::MultiMeshFunctionSpace
+{
+public:
+
+  // Constructor for multimesh function space
+  Form_a_MultiMeshFunctionSpace_1(std::shared_ptr<const dolfin::MultiMesh> multimesh): dolfin::MultiMeshFunctionSpace(multimesh)
+  {
+    // Create and add standard function spaces
+    for (std::size_t part = 0; part < multimesh->num_parts(); part++)
+    {
+      std::shared_ptr<const dolfin::FunctionSpace> V(new Form_a_FunctionSpace_1(multimesh->part(part)));
+      add(V);
+    }
+
+    // Build multimesh function space
+    build();
+  }
+
+};
+
+class Form_a: public dolfin::Form
+{
+public:
+
+  // Constructor
+  Form_a(std::shared_ptr<const dolfin::FunctionSpace> V1, std::shared_ptr<const dolfin::FunctionSpace> V0):
+    dolfin::Form(2, 0)
+  {
+    _function_spaces[0] = V0;
+    _function_spaces[1] = V1;
+
+    _ufc_form = std::make_shared<const poisson_cell_marker_form_0>();
+  }
+
+  // Destructor
+  ~Form_a()
+  {}
+
+  /// Return the number of the coefficient with this name
+  virtual std::size_t coefficient_number(const std::string& name) const
+  {
+
+    dolfin::dolfin_error("generated code for class Form",
+                         "access coefficient data",
+                         "There are no coefficients");
+    return 0;
+  }
+
+  /// Return the name of the coefficient with this number
+  virtual std::string coefficient_name(std::size_t i) const
+  {
+
+    dolfin::dolfin_error("generated code for class Form",
+                         "access coefficient data",
+                         "There are no coefficients");
+    return "unnamed";
+  }
+
+  // Typedefs
+  typedef Form_a_FunctionSpace_0 TestSpace;
+  typedef Form_a_FunctionSpace_1 TrialSpace;
+  typedef Form_a_MultiMeshFunctionSpace_0 MultiMeshTestSpace;
+  typedef Form_a_MultiMeshFunctionSpace_1 MultiMeshTrialSpace;
+
+  // Coefficients
+};
+
+class MultiMeshForm_a: public dolfin::MultiMeshForm
+{
+public:
+
+  // Constructor
+  MultiMeshForm_a(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V1, std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0):
+    dolfin::MultiMeshForm(V1, V0)
+  {
+    // Create and add standard forms
+    std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
+    for (std::size_t part = 0; part < num_parts; part++)
+    {
+      std::shared_ptr<const dolfin::Form> a(new Form_a(V1->part(part), V0->part(part)));
+      add(a);
+    }
+
+    // Build multimesh form
+    build();
+
+    /// Assign coefficients
+
+  }
+
+  // Destructor
+  ~MultiMeshForm_a()
+  {}
+
+  /// Return the number of the coefficient with this name
+  virtual std::size_t coefficient_number(const std::string& name) const
+  {
+
+    dolfin::dolfin_error("generated code for class Form",
+                         "access coefficient data",
+                         "There are no coefficients");
+    return 0;
+  }
+
+  /// Return the name of the coefficient with this number
+  virtual std::string coefficient_name(std::size_t i) const
+  {
+
+    dolfin::dolfin_error("generated code for class Form",
+                         "access coefficient data",
+                         "There are no coefficients");
+    return "unnamed";
+  }
+
+  // Typedefs
+  typedef Form_a_FunctionSpace_0 TestSpace;
+  typedef Form_a_FunctionSpace_1 TrialSpace;
+  typedef Form_a_MultiMeshFunctionSpace_0 MultiMeshTestSpace;
+  typedef Form_a_MultiMeshFunctionSpace_1 MultiMeshTrialSpace;
+
+  // Coefficients
+};
+
 class Form_L_FunctionSpace_0: public dolfin::FunctionSpace
 {
 public:
@@ -5835,7 +6329,7 @@ public:
   {
     _function_spaces[0] = V0;
 
-    _ufc_form = std::make_shared<const poisson_cell_marker_form_0>();
+    _ufc_form = std::make_shared<const poisson_cell_marker_form_1>();
   }
 
   // Constructor
@@ -5849,7 +6343,7 @@ public:
     this->log_weight = log_weight;
     this->diffusivity = diffusivity;
 
-    _ufc_form = std::make_shared<const poisson_cell_marker_form_0>();
+    _ufc_form = std::make_shared<const poisson_cell_marker_form_1>();
   }
 
   // Destructor
@@ -6015,12 +6509,16 @@ public:
 };
 
 // Class typedefs
+typedef Form_a BilinearForm;
+typedef MultiMeshForm_a MultiMeshBilinearForm;
+typedef Form_a JacobianForm;
+typedef MultiMeshForm_a MultiMeshJacobianForm;
 typedef Form_L LinearForm;
 typedef MultiMeshForm_L MultiMeshLinearForm;
 typedef Form_L ResidualForm;
 typedef MultiMeshForm_L MultiMeshResidualForm;
-typedef Form_L::TestSpace FunctionSpace;
-typedef Form_L::MultiMeshTestSpace MultiMeshFunctionSpace;
+typedef Form_a::TestSpace FunctionSpace;
+typedef Form_a::MultiMeshTestSpace MultiMeshFunctionSpace;
 
 }
 

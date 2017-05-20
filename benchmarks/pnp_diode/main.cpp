@@ -74,6 +74,7 @@ int main (int argc, char** argv) {
   domain_param_input(domain_param_filename, &domain);
   std::shared_ptr<dolfin::Mesh> initial_mesh;
   initial_mesh.reset(new dolfin::Mesh(domain_build(domain)));
+  // initial_mesh.reset(new dolfin::Mesh("./diode_mesh-seg-fault.pvd"));
   // print_domain_param(&domain);
 
   // set parameters for FASP solver
@@ -93,29 +94,24 @@ int main (int argc, char** argv) {
   dolfin::File accepted_solution_file("./benchmarks/pnp_diode/output/accepted_solution.pvd");
 
   // i-v curve
+  const double min_volts = -0.5;
   const double max_volts = 0.5;
-  const double delta_volts = 0.05;
+  const double delta_volts = 0.1;
 
   // mesh adaptivity
   const double growth_factor = 1.05;
-  const double entropy_error_per_cell = 5.0e-4;
-  const std::size_t max_refine_depth = 3;
+  const double entropy_error_per_cell = 5.0e-5;
+  const std::size_t max_refine_depth = 4;
   const std::size_t max_elements = 250000;
 
   // parameters for PNP Newton solver
-  const std::size_t max_newton = 50;
+  const std::size_t max_newton = 100;
   const double max_residual_tol = 1.0e-10;
   const double relative_residual_tol = 1.0e-7;
   const bool use_eafe_approximation = true;
 
-  ofstream output_file;
-  output_file.precision(3);
-  output_file << std::scientific;
-  output_file.open("./benchmarks/pnp_diode/output/iv.txt");
-  output_file << "IV curves for voltage [ " << (-max_volts) << ", " << max_volts << " ] ";
-  output_file << "with voltage increments " << delta_volts << ".\n\n";
 
-  for (double voltage_drop = -max_volts; voltage_drop < max_volts + 1.e-5; voltage_drop += delta_volts) {
+  for (double voltage_drop = min_volts; voltage_drop < max_volts + 1.e-5; voltage_drop += delta_volts) {
     printf("Solving for voltage drop : %5.2e\n\n", voltage_drop);
 
     std::string output_path("./benchmarks/pnp_diode/output/voltage_");
@@ -157,6 +153,7 @@ int main (int argc, char** argv) {
         use_eafe_approximation,
         itsolver,
         amg,
+        ilu,
         output_path
       );
 
@@ -178,6 +175,8 @@ int main (int argc, char** argv) {
       induced_current = computeCurrentFlux(diffusivity, log_densities, entropy_potential);
 
       // adapt computed solutions
+      dolfin::File mesh_file("./diode_mesh.pvd");
+      mesh_file << *mesh;
       mesh_adapt.max_elements = (std::size_t) std::floor(growth_factor * mesh->num_cells());
       mesh_adapt.multilevel_refinement(diffusivity, entropy_potential, log_densities);
       adaptive_solution = adapt( *computed_solution, mesh_adapt.get_mesh() );
@@ -187,10 +186,18 @@ int main (int argc, char** argv) {
     printf("\nCompleted adaptivity loop for %5.3eV with induced current %5.3emA\n\n\n\n", voltage_drop, induced_current);
     accepted_solution_file << *adaptive_solution;
 
-    output_file << "\nCompleted adaptivity loop for " << voltage_drop << "V with induced current " << induced_current << "mA\n";
+    std::string of_name = "./benchmarks/pnp_diode/output/iv_";
+    of_name += std::to_string(voltage_drop);
+    of_name += ".txt";
+    ofstream output_file;
+    output_file.precision(3);
+    output_file << std::scientific;
+    output_file.open(of_name);
+    // output_file << "IV curves for voltage [ " << (-max_volts) << ", " << max_volts << " ] ";
+    // output_file << "with voltage increments " << delta_volts << ".\n\n";
+    output_file << "Completed adaptivity loop for " << voltage_drop << "V with induced current " << induced_current << "mA\n";
+    output_file.close();
   }
-
-  output_file.close();
 
   return 0;
 }
