@@ -117,10 +117,12 @@ dolfin::Function Linear_PNP::fasp_solve () {
 
   if (status < 0) {
     printf("\n### WARNING: FASP solver failed! Exit status = %d.\n", status);
+    Linear_PNP::fasp_failed = true;
     fflush(stdout);
   }
   else {
     printf("Successfully solved the linear system\n");
+    Linear_PNP::fasp_failed = false;
     fflush(stdout);
   }
 

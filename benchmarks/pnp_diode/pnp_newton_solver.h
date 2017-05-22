@@ -24,6 +24,7 @@ extern "C" {
 /// compute solution to PNP equation
 /// using a Newton solver on the given mesh
 std::shared_ptr<dolfin::Function> solve_pnp (
+  double voltage_drop,
   std::size_t adaptivity_iteration,
   std::shared_ptr<const dolfin::Mesh> mesh,
   std::shared_ptr<dolfin::Function> initial_guess,
@@ -187,20 +188,31 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   newton.update_max_residual(initial_max_residual);
 
   // avoid updates that cause more than than 5% growth in the solution
-  double increase_tolerance = 5E-2;
+  bool fasp_reset = false;
+  uint fasp_fail_count = 0;
+  double increase_tolerance = 1E-1;
 
   while (newton.needs_to_iterate()) {
     // solve
     printf("Solving for Newton iterate %lu \n", newton.iteration);
     const double previous_residual = pnp_problem.compute_residual("l2") / dof_size;
-    if (newton.iteration > 50 && previous_residual > 0.99 * mesh_initial_residual) {
-      printf("After 20 Newton iterations, the solution has not moved enough... ");
-      printf("refining\n");
-      break;
-    }
-
     const dolfin::Function previous_solution = pnp_problem.get_solution();
     dolfin::Function computed_solution(pnp_problem.fasp_solve());
+    if (pnp_problem.fasp_failed) {
+      printf("\tFASP solver has failed %u times\n", ++fasp_fail_count);
+      if (fasp_fail_count > 10) {
+        printf("Linear solver has failed more than 10 times...\n");
+        printf("\treset solution to initial guess\n\n");
+        Initial_Guess initial_guess_expression(voltage_drop);
+        dolfin::Function reset_solution = pnp_problem.get_solution();
+        reset_solution.interpolate(initial_guess_expression);
+        pnp_problem.set_solution(reset_solution);
+        fasp_fail_count = 0;
+        if (fasp_reset) break;
+        fasp_reset = true;
+        continue;
+      }
+    }
 
     // update newton measurements with backtracking
     printf("Newton measurements for iteration :\n");
@@ -244,7 +256,7 @@ std::shared_ptr<dolfin::Function> solve_pnp (
 
     // dolfin::File backFile(output_dir + "backtrack.pvd");
     std::size_t backtrack_count = 0;
-    while (residual_check > previous_residual || isnan(residual_check)) {
+    while (backtrack_count < 50 && (residual_check > 1.00001 * previous_residual || isnan(residual_check))) {
       printf("\trelative residual increased : %e < %e\n", previous_residual, residual_check);
       dolfin::Function backtrack(computed_solution.function_space());
       backtrack = previous_solution - computed_solution;

@@ -70,6 +70,8 @@ class Linear_PNP : public PDE {
 
     dolfin::Function get_total_charge ();
 
+    bool fasp_failed = false;
+
 
     std::shared_ptr<dolfin::FunctionSpace> diffusivity_space;
     std::shared_ptr<dolfin::FunctionSpace> reaction_space;

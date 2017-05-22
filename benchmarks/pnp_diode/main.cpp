@@ -74,7 +74,7 @@ int main (int argc, char** argv) {
   domain_param_input(domain_param_filename, &domain);
   std::shared_ptr<dolfin::Mesh> initial_mesh;
   initial_mesh.reset(new dolfin::Mesh(domain_build(domain)));
-  // initial_mesh.reset(new dolfin::Mesh("./diode_mesh-seg-fault.pvd"));
+  // initial_mesh.reset(new dolfin::Mesh("./diode_mesh_V-0.500000_level_3.xml"));
   // print_domain_param(&domain);
 
   // set parameters for FASP solver
@@ -90,22 +90,21 @@ int main (int argc, char** argv) {
   //-------------------------
   // Mesh Adaptivity Loop
   //-------------------------
-
   dolfin::File accepted_solution_file("./benchmarks/pnp_diode/output/accepted_solution.pvd");
 
   // i-v curve
-  const double min_volts = -0.5;
+  const double min_volts = -0.3;
   const double max_volts = 0.5;
   const double delta_volts = 0.1;
 
   // mesh adaptivity
   const double growth_factor = 1.05;
-  const double entropy_error_per_cell = 5.0e-5;
-  const std::size_t max_refine_depth = 4;
+  const double entropy_error_per_cell = 1.0e-2;
+  const std::size_t max_refine_depth = 2;
   const std::size_t max_elements = 250000;
 
   // parameters for PNP Newton solver
-  const std::size_t max_newton = 100;
+  const std::size_t max_newton = 250;
   const double max_residual_tol = 1.0e-10;
   const double relative_residual_tol = 1.0e-7;
   const bool use_eafe_approximation = true;
@@ -143,6 +142,7 @@ int main (int argc, char** argv) {
       initial_guess_file << *adaptive_solution;
 
       auto computed_solution = solve_pnp(
+        voltage_drop,
         mesh_adapt.iteration++,
         mesh,
         adaptive_solution,
@@ -175,11 +175,17 @@ int main (int argc, char** argv) {
       induced_current = computeCurrentFlux(diffusivity, log_densities, entropy_potential);
 
       // adapt computed solutions
-      dolfin::File mesh_file("./diode_mesh.pvd");
-      mesh_file << *mesh;
       mesh_adapt.max_elements = (std::size_t) std::floor(growth_factor * mesh->num_cells());
       mesh_adapt.multilevel_refinement(diffusivity, entropy_potential, log_densities);
       adaptive_solution = adapt( *computed_solution, mesh_adapt.get_mesh() );
+
+      std::string mesh_output = "./diode_mesh_V";
+      mesh_output += std::to_string(voltage_drop);
+      mesh_output += "_level_";
+      mesh_output += std::to_string(mesh_adapt.iteration);
+      mesh_output += ".xml.gz";
+      dolfin::File mesh_file(mesh_output);
+      mesh_file << *(mesh_adapt.get_mesh());
     }
 
 
@@ -312,13 +318,13 @@ double computeCurrentFlux(
 
   // scaling
   const double elementary_charge = 1.60217662e-19; // C
-  const double reference_length = 1e-6; // m
+  const double reference_length = 1e-5; // m
   const double reference_diffusivity = 2.87e-3; // m^2 / s
   const double reference_density = 1.5e+22; // mM = 1 / m^3
-  const double microamp_scale_factor = 1.0e+6 * elementary_charge * reference_diffusivity * reference_density * reference_length;
+  const double milliamp_scale_factor = 1.0e+3 * elementary_charge * reference_diffusivity * reference_density * reference_length;
 
-  printf("\tcurrent flux: %5.3e mA\n", microamp_scale_factor * current / surface_area);
-  return microamp_scale_factor * current / surface_area;
+  printf("\tcurrent flux: %5.3e mA\n", milliamp_scale_factor * current / surface_area);
+  return milliamp_scale_factor * current / surface_area;
 }
 
 //-------------------------------------
