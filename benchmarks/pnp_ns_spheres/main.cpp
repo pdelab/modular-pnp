@@ -119,14 +119,15 @@ int main (int argc, char** argv) {
 
 
   // set PDE coefficients
+  // L = 10 nm, T = 298K
   printf("Initialize coefficients\n");
   std::map<std::string, std::vector<double>> coefficients = {
-    {"permittivity", {1E-3}},
+    {"permittivity", {0.019044}},
     {"diffusivity0", {1.0}},
-    {"diffusivity1", {1.0}},
+    {"diffusivity1", {1.334/2.032}},
     {"valency0", {1.0}},
     {"valency1", {-1.0}},
-    {"mu", {0.1}},
+    {"mu", {1.0}},
     {"penalty1", {1.0}},
     {"penalty2", {1.0}},
     {"Re", {0.01}},
@@ -248,6 +249,13 @@ int main (int argc, char** argv) {
   } else {
     newton.print_status();
   }
+
+  dolfin::File xml_mesh("./benchmarks/pnp_ns_spheres/output/mesh.xml");
+  dolfin::File xml_file0("./benchmarks/pnp_ns_spheres/output/pnp_solution.xml");
+  dolfin::File xml_file1("./benchmarks/pnp_ns_spheres/output/velocity_solution.xml");
+  xml_mesh << *mesh;
+  xml_file0 << solutionFn[0];
+  xml_file1 << solutionFn[1];
 
   printf("Solver exiting\n"); fflush(stdout);
   return 0;
