@@ -245,7 +245,7 @@ void Linear_PNP::apply_eafe () {
 
     if (_valency_double[eqn_idx] != 0.0) {
       *(phi->vector()) *= _valency_double[eqn_idx];
-      *beta = *beta + *phi;
+      *beta->vector() += *phi->vector();
     }
 
     _eafe_bilinear_form->alpha = _split_diffusivity[eqn_idx];
@@ -344,7 +344,7 @@ dolfin::Function Linear_PNP::get_total_charge () {
       solution_charge->vector()->setitem(index, value);
     }
 
-    total_charge = total_charge + (*solution_charge);
+    *total_charge.vector() += (*solution_charge->vector());
   }
 
   return total_charge;
