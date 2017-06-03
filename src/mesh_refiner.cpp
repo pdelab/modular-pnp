@@ -135,6 +135,8 @@ std::size_t Mesh_Refiner::mark_for_refinement_with_target_size (
     entropy_log_weight_vector
   );
 
+  double alpha = 1.0;
+
   // sort errors and estimate corresponding entropy_tolerance
   std::size_t permissible_cells = (std::size_t) std::round(((double) target_size) * 0.125);
   std::vector<double> error_vector;
@@ -151,9 +153,17 @@ std::size_t Mesh_Refiner::mark_for_refinement_with_target_size (
   _cell_marker.reset( new dolfin::MeshFunction<bool>(_mesh, _mesh->topology().dim(), false) );
 
   for (std::size_t index = 0; index < error_eigenvector.size(); index++) {
-    if (error_eigenvector[index] > entropy_tolerance) {
+    if (error_eigenvector[index] > alpha*entropy_tolerance) {
       _cell_marker->set_value(index, true);
       marked_count++;
+    }
+    if (Mesh_Refiner::_mesh->num_cells()+7*marked_count > Mesh_Refiner::max_elements)
+    {
+      index=0;
+      alpha *=2.0;
+      _cell_marker->set_all(false);
+      marked_count=0;
+      printf("Increasing tolerance to %f, Number of cells is %zu \n",entropy_tolerance*alpha,_mesh->num_cells());fflush(stdout);
     }
   }
 
