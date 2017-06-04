@@ -219,7 +219,7 @@ int main (int argc, char** argv) {
   bool use_eafe_approximation = true;
 
   double growth_factor = 1.2;
-  std::size_t max_elements = 25000;
+  std::size_t max_elements = 20000;
   std::size_t max_refine_depth = 3;
   double entropy_per_cell = 1.0e-6;
   Mesh_Refiner mesh_adapt(
@@ -330,7 +330,7 @@ std::vector<std::shared_ptr<const dolfin::Function>> compute_entropy_potential (
     potential.interpolate((*solution)[0]);
     entropy_potential.interpolate((*solution)[comp]);
     *(potential.vector()) *= valencies[comp];
-    entropy_potential = entropy_potential + potential;
+    *entropy_potential.vector() += *potential.vector();
 
     auto const_entropy_potential = std::make_shared<const dolfin::Function>(entropy_potential);
     function_vec.push_back(const_entropy_potential);
