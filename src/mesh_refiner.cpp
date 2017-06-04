@@ -157,10 +157,11 @@ std::size_t Mesh_Refiner::mark_for_refinement_with_target_size (
       _cell_marker->set_value(index, true);
       marked_count++;
     }
-    if (Mesh_Refiner::_mesh->num_cells()+7*marked_count > Mesh_Refiner::max_elements)
+    if (Mesh_Refiner::_mesh->num_cells()+2*marked_count > Mesh_Refiner::max_elements)
     {
       index=0;
-      alpha *=2.0;
+      alpha *=1.5;
+      Mesh_Refiner::entropy_tolerance_per_cell*=1.5;
       _cell_marker->set_all(false);
       marked_count=0;
       printf("Increasing tolerance to %f, Number of cells is %zu \n",entropy_tolerance*alpha,_mesh->num_cells());fflush(stdout);
@@ -194,10 +195,11 @@ std::size_t Mesh_Refiner::mark_for_refinement (
       _cell_marker->set_value(index, true);
       marked_count++;
     }
-    if (Mesh_Refiner::_mesh->num_cells()+5*marked_count > Mesh_Refiner::max_elements)
+    if (Mesh_Refiner::_mesh->num_cells()+2*marked_count > Mesh_Refiner::max_elements)
     {
       index=0;
-      entropy_tolerance *=2.0;
+      entropy_tolerance *=1.5;
+      Mesh_Refiner::entropy_tolerance_per_cell*=2.0;
       _cell_marker->set_all(false);
       marked_count=0;
       printf("Increasing tolerance to %f, Number of cells is %zu \n",entropy_tolerance,_mesh->num_cells());fflush(stdout);
