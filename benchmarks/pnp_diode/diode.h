@@ -85,27 +85,32 @@ class Initial_Guess : public dolfin::Expression {
     void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
       std::vector<double> left(left_contact(-1.0, volt));
       std::vector<double> right(right_contact(+1.0, volt));
-      values[0] = 0.5 * (left[0] * (1.0 - x[0]) + right[0] * (x[0] + 1.0));
-      values[1] = 0.5 * (left[1] * (1.0 - x[0]) + right[1] * (x[0] + 1.0));
-      values[2] = 0.5 * (left[2] * (1.0 - x[0]) + right[2] * (x[0] + 1.0));
+      // values[0] = 0.5 * (left[0] * (1.0 - x[0]) + right[0] * (x[0] + 1.0));
+      // values[1] = 0.5 * (left[1] * (1.0 - x[0]) + right[1] * (x[0] + 1.0));
+      // values[2] = 0.5 * (left[2] * (1.0 - x[0]) + right[2] * (x[0] + 1.0));
 
-      values[1] *= 0.5;
-      values[2] *= 0.5;
-      if (fabs(x[0]) < 0.05) {
-        values[1] += 0.5 * (left[1] + 10.0 * (x[0] + 0.05) * (right[1] - left[1]));
-        values[2] += 0.5 * (left[2] + 10.0 * (x[0] + 0.05) * (right[2] - left[2]));
-      } else {
-        values[1] += 0.5 * (x[0] < 0.0 ? left[1] : right[1]);
-        values[2] += 0.5 * (x[0] < 0.0 ? left[2] : right[2]);
-      }
-
+      // values[0] *= 0.5;
+      // values[1] *= 0.5;
+      // values[2] *= 0.5;
       // if (fabs(x[0]) < 0.05) {
-      //   values[1] = left[1] + 10.0 * (x[0] + 0.05) * (right[1] - left[1]);
-      //   values[2] = left[2] + 10.0 * (x[0] + 0.05) * (right[2] - left[2]);
+      //   values[0] += 0.5 * (left[0] + 10.0 * (x[0] + 0.05) * (right[0] - left[0]));
+      //   values[1] += 0.5 * (left[1] + 10.0 * (x[0] + 0.05) * (right[1] - left[1]));
+      //   values[2] += 0.5 * (left[2] + 10.0 * (x[0] + 0.05) * (right[2] - left[2]));
       // } else {
-      //   values[1] = x[0] < 0.0 ? left[1] : right[1];
-      //   values[2] = x[0] < 0.0 ? left[2] : right[2];
+      //   values[0] += 0.5 * (x[0] < 0.0 ? left[0] : right[0]);
+      //   values[1] += 0.5 * (x[0] < 0.0 ? left[1] : right[1]);
+      //   values[2] += 0.5 * (x[0] < 0.0 ? left[2] : right[2]);
       // }
+
+      if (fabs(x[0]) < 0.05) {
+        values[0] = left[0] + 10.0 * (x[0] + 0.05) * (right[0] - left[0]);
+        values[1] = left[1] + 10.0 * (x[0] + 0.05) * (right[1] - left[1]);
+        values[2] = left[2] + 10.0 * (x[0] + 0.05) * (right[2] - left[2]);
+      } else {
+        values[0] = x[0] < 0.0 ? left[0] : right[0];
+        values[1] = x[0] < 0.0 ? left[1] : right[1];
+        values[2] = x[0] < 0.0 ? left[2] : right[2];
+      }
     }
   private:
     double volt;

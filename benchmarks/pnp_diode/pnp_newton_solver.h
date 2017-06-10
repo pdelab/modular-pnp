@@ -148,7 +148,19 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   bcs.push_back({left[1], right[1]});
   bcs.push_back({left[2], right[2]});
 
+
+  // Apply boundary conditions and compute residual for initial guess
   pnp_problem.set_DirichletBC(components, bcs);
+  Initial_Guess initial_guess_expression(voltage_drop);
+  dolfin::Function initial_residual = pnp_problem.get_solution();
+  initial_residual.interpolate(initial_guess_expression);
+  pnp_problem.set_solution(initial_residual);
+  double mesh_initial_residual = pnp_problem.compute_residual("l2");
+  const double dof_size = pnp_problem._eigen_vector->size();
+  mesh_initial_residual /= dof_size;
+
+
+  // update initial guess
   dolfin::Function initial_guess_function = pnp_problem.get_solution();
   initial_guess_function.interpolate(*initial_guess);
   pnp_problem.set_solution(initial_guess_function);
@@ -167,16 +179,13 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   printf("Initializing nonlinear solver\n");
 
   // set nonlinear solver parameters
-  double mesh_initial_residual = pnp_problem.compute_residual("l2");
-  const double dof_size = pnp_problem._eigen_vector->size();
-  mesh_initial_residual /= dof_size;
   if (*initial_residual_ptr < 0.0) {
     *initial_residual_ptr = mesh_initial_residual;
   }
   const double initial_max_residual = pnp_problem.compute_residual("max");
   Newton_Status newton(
     max_newton,
-    *initial_residual_ptr,
+    mesh_initial_residual,
     relative_residual_tol,
     max_residual_tol
   );

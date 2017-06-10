@@ -8603,9 +8603,9 @@ public:
       } // end loop over 'r'
       double C[2];
       // Compute conditional, operations: 2.
-      C[0] = ((F1 > -50.0)) ? std::exp(F1) : 0.0;
+      C[0] = ((F1 > -100.0)) ? std::exp(F1) : 0.0;
       // Compute conditional, operations: 2.
-      C[1] = ((F3 > -50.0)) ? std::exp(F3) : 0.0;
+      C[1] = ((F3 > -100.0)) ? std::exp(F3) : 0.0;
       
       // Number of operations to compute ip constants: 224
       double I[38];
@@ -9158,7 +9158,7 @@ public:
 
   const char * signature() const final override
   {
-    return "ef2957ed3d92acb9f803bc941f81ffca108c062102ab99f9e425200f6b15a85e33161cf660e9c71be54cede053fa656ad4ddeae3b13099d83e9c8a14ae8dfd88";
+    return "9d8ddd67ebbe9cd0d65430ce35aa0c2d59a26cd8655f84bbc0fd0ad7e335603cb30004091d87a1899cdef58d9c9ab85c5f3c0d812954e8472b52e4554a5418af";
   }
 
   std::size_t rank() const final override

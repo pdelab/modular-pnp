@@ -93,8 +93,8 @@ int main (int argc, char** argv) {
   dolfin::File accepted_solution_file("./benchmarks/pnp_diode/output/accepted_solution.pvd");
 
   // i-v curve
-  const double min_volts = -0.3;
-  const double max_volts = 0.5;
+  const double min_volts = -0.5;
+  const double max_volts = -0.45;
   const double delta_volts = 0.1;
 
   // mesh adaptivity
