@@ -220,7 +220,7 @@ int main (int argc, char** argv) {
 
   double growth_factor = 1.2;
   std::size_t max_elements = 25000;
-  std::size_t max_refine_depth = 3;
+  std::size_t max_refine_depth = 2;
   double entropy_per_cell = 1.0e-6;
   Mesh_Refiner mesh_adapt(
     initial_mesh,
@@ -263,7 +263,6 @@ int main (int argc, char** argv) {
     auto log_densities = extract_log_densities(computed_solution);
 
     // adapt computed solutions
-    mesh_adapt.max_elements = (std::size_t) std::floor(growth_factor * mesh->num_cells());
     mesh_adapt.multilevel_refinement(diffusivity, entropy_potential, log_densities);
     adaptive_solution = adapt( *computed_solution, mesh_adapt.get_mesh() );
   }
