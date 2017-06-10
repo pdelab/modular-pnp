@@ -9,12 +9,12 @@ mesh_file      = none  %./mesh/gramA_channel.xml
 surface_file   = none  %./mesh/gramA_channel_facet_region.xml
 subdomain_file = none  %./mesh/gramA_channel_physical_region.xml
 
-ref_length = 1.0e-6    % meters
+ref_length = 1.0e-5    % meters
 
 length_x = 2.0e-0
-length_y = 4.0e-1
-length_z = 4.0e-1
+length_y = 2.0e-1
+length_z = 2.0e-1
 
 grid_x = 40            % must be a multiple of four
-grid_y = 8
-grid_z = 8
+grid_y = 4
+grid_z = 4

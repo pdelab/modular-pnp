@@ -41,6 +41,10 @@ double computeCurrentFlux(
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential
 );
 
+std::vector<std::shared_ptr<const dolfin::Function>> get_physical_functions (
+  std::shared_ptr<const dolfin::Function> solution
+);
+
 class CrossSection : public dolfin::SubDomain {
   bool inside(const dolfin::Array<double>& x, bool on_boundary) const {
     return (fabs(x[0] - 0.5) < 1.0e-8) or (fabs(x[0] + 0.5) < 1.0e-8);
@@ -70,6 +74,7 @@ int main (int argc, char** argv) {
   domain_param_input(domain_param_filename, &domain);
   std::shared_ptr<dolfin::Mesh> initial_mesh;
   initial_mesh.reset(new dolfin::Mesh(domain_build(domain)));
+  // initial_mesh.reset(new dolfin::Mesh("./diode_mesh_V-0.500000_level_3.xml"));
   // print_domain_param(&domain);
 
   // set parameters for FASP solver
@@ -85,33 +90,27 @@ int main (int argc, char** argv) {
   //-------------------------
   // Mesh Adaptivity Loop
   //-------------------------
-
   dolfin::File accepted_solution_file("./benchmarks/pnp_diode/output/accepted_solution.pvd");
 
   // i-v curve
-  const double max_volts = 0.1;
+  const double min_volts = -0.3;
+  const double max_volts = 0.5;
   const double delta_volts = 0.1;
 
   // mesh adaptivity
-  const double growth_factor = 1.2;
-  const double entropy_per_cell = 1.0e-4;
-  const std::size_t max_refine_depth = 4;
+  const double growth_factor = 1.05;
+  const double entropy_error_per_cell = 1.0e-2;
+  const std::size_t max_refine_depth = 2;
   const std::size_t max_elements = 250000;
 
   // parameters for PNP Newton solver
-  const std::size_t max_newton = 50;
+  const std::size_t max_newton = 250;
   const double max_residual_tol = 1.0e-10;
   const double relative_residual_tol = 1.0e-7;
   const bool use_eafe_approximation = true;
 
-  ofstream output_file;
-  output_file.precision(3);
-  output_file << std::scientific;
-  output_file.open("./benchmarks/pnp_diode/output/iv.txt");
-  output_file << "IV curves for voltage [ " << (-max_volts) << ", " << max_volts << " ] ";
-  output_file << "with voltage increments " << delta_volts << ".\n\n";
 
-  for (double voltage_drop = -max_volts; voltage_drop < max_volts + 1.e-5; voltage_drop += delta_volts) {
+  for (double voltage_drop = min_volts; voltage_drop < max_volts + 1.e-5; voltage_drop += delta_volts) {
     printf("Solving for voltage drop : %5.2e\n\n", voltage_drop);
 
     std::string output_path("./benchmarks/pnp_diode/output/voltage_");
@@ -122,7 +121,7 @@ int main (int argc, char** argv) {
       initial_mesh,
       max_elements,
       max_refine_depth,
-      entropy_per_cell
+      entropy_error_per_cell
     );
 
     std::shared_ptr<double> initial_residual_ptr = std::make_shared<double>(-1.0);
@@ -136,12 +135,14 @@ int main (int argc, char** argv) {
     adaptive_solution->interpolate(initial_guess_expression);
 
     dolfin::File initial_guess_file("./benchmarks/pnp_diode/output/initial_guess.pvd");
+    dolfin::File physical_output_file(output_path + "physical.pvd");
     while (mesh_adapt.needs_to_solve) {
       auto mesh = mesh_adapt.get_mesh();
 
       initial_guess_file << *adaptive_solution;
 
       auto computed_solution = solve_pnp(
+        voltage_drop,
         mesh_adapt.iteration++,
         mesh,
         adaptive_solution,
@@ -152,8 +153,17 @@ int main (int argc, char** argv) {
         use_eafe_approximation,
         itsolver,
         amg,
+        ilu,
         output_path
       );
+
+      // output physically relevant quantities
+      printf("Extracting physically relevant quantities\n");
+      auto physical_functions = get_physical_functions(computed_solution);
+      physical_output_file << *(physical_functions[0]);
+      physical_output_file << *(physical_functions[1]);
+      physical_output_file << *(physical_functions[2]);
+      physical_output_file << *(physical_functions[3]);
 
       // compute current / entropy terms
       printf("Computing diode current\n");
@@ -168,16 +178,32 @@ int main (int argc, char** argv) {
       mesh_adapt.max_elements = (std::size_t) std::floor(growth_factor * mesh->num_cells());
       mesh_adapt.multilevel_refinement(diffusivity, entropy_potential, log_densities);
       adaptive_solution = adapt( *computed_solution, mesh_adapt.get_mesh() );
+
+      std::string mesh_output = "./diode_mesh_V";
+      mesh_output += std::to_string(voltage_drop);
+      mesh_output += "_level_";
+      mesh_output += std::to_string(mesh_adapt.iteration);
+      mesh_output += ".xml.gz";
+      dolfin::File mesh_file(mesh_output);
+      mesh_file << *(mesh_adapt.get_mesh());
     }
 
 
     printf("\nCompleted adaptivity loop for %5.3eV with induced current %5.3emA\n\n\n\n", voltage_drop, induced_current);
     accepted_solution_file << *adaptive_solution;
 
-    output_file << "\nCompleted adaptivity loop for " << voltage_drop << "V with induced current " << induced_current << "mA\n";
+    std::string of_name = "./benchmarks/pnp_diode/output/iv_";
+    of_name += std::to_string(voltage_drop);
+    of_name += ".txt";
+    ofstream output_file;
+    output_file.precision(3);
+    output_file << std::scientific;
+    output_file.open(of_name);
+    // output_file << "IV curves for voltage [ " << (-max_volts) << ", " << max_volts << " ] ";
+    // output_file << "with voltage increments " << delta_volts << ".\n\n";
+    output_file << "Completed adaptivity loop for " << voltage_drop << "V with induced current " << induced_current << "mA\n";
+    output_file.close();
   }
-
-  output_file.close();
 
   return 0;
 }
@@ -292,11 +318,49 @@ double computeCurrentFlux(
 
   // scaling
   const double elementary_charge = 1.60217662e-19; // C
-  const double reference_length = 1e-6; // m
+  const double reference_length = 1e-5; // m
   const double reference_diffusivity = 2.87e-3; // m^2 / s
   const double reference_density = 1.5e+22; // mM = 1 / m^3
-  const double microamp_scale_factor = 1.0e+6 * elementary_charge * reference_diffusivity * reference_density * reference_length;
+  const double milliamp_scale_factor = 1.0e+3 * elementary_charge * reference_diffusivity * reference_density * reference_length;
 
-  printf("\tcurrent flux: %5.3e mA\n", microamp_scale_factor * current / surface_area);
-  return microamp_scale_factor * current / surface_area;
+  printf("\tcurrent flux: %5.3e mA\n", milliamp_scale_factor * current / surface_area);
+  return milliamp_scale_factor * current / surface_area;
+}
+
+//-------------------------------------
+std::vector<std::shared_ptr<const dolfin::Function>> get_physical_functions (
+  std::shared_ptr<const dolfin::Function> solution
+) {
+  std::vector<std::shared_ptr<const dolfin::Function>> output_wrapper;
+  auto scalar_space = (*solution)[0].function_space()->collapse();
+
+  dolfin::Function potential(scalar_space);
+  potential.interpolate((*solution)[0]);
+  output_wrapper.push_back(std::make_shared<const dolfin::Function>(potential));
+
+  double value;
+  dolfin::Function cation_density(scalar_space);
+  cation_density.interpolate((*solution)[1]);
+  for (std::size_t index = 0; index < cation_density.vector()->size(); index++) {
+    value = std::exp( (*(cation_density.vector()))[index] );
+    cation_density.vector()->setitem(index, value);
+  }
+  output_wrapper.push_back(std::make_shared<const dolfin::Function>(cation_density));
+
+  dolfin::Function anion_density(scalar_space);
+  anion_density.interpolate((*solution)[2]);
+  for (std::size_t index = 0; index < anion_density.vector()->size(); index++) {
+    value = std::exp( (*(anion_density.vector()))[index] );
+    anion_density.vector()->setitem(index, value);
+  }
+  output_wrapper.push_back(std::make_shared<const dolfin::Function>(anion_density));
+
+  dolfin::Function total_charge(scalar_space);
+  Fixed_Charged_Expression fixed_charge_expression;
+  total_charge.interpolate(fixed_charge_expression);
+  total_charge = total_charge + cation_density;
+  total_charge = total_charge - anion_density;
+  output_wrapper.push_back(std::make_shared<const dolfin::Function>(total_charge));
+
+  return output_wrapper;
 }

@@ -24,6 +24,7 @@ extern "C" {
 /// compute solution to PNP equation
 /// using a Newton solver on the given mesh
 std::shared_ptr<dolfin::Function> solve_pnp (
+  double voltage_drop,
   std::size_t adaptivity_iteration,
   std::shared_ptr<const dolfin::Mesh> mesh,
   std::shared_ptr<dolfin::Function> initial_guess,
@@ -34,6 +35,7 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   bool use_eafe_approximation,
   itsolver_param itsolver,
   AMG_param amg,
+  ILU_param ilu,
   std::string output_dir
 ) {
   // setup function spaces and forms
@@ -75,6 +77,7 @@ std::shared_ptr<dolfin::Function> solve_pnp (
     pnp_sources,
     itsolver,
     amg,
+    ilu,
     "uu"
   );
 
@@ -164,8 +167,11 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   printf("Initializing nonlinear solver\n");
 
   // set nonlinear solver parameters
+  double mesh_initial_residual = pnp_problem.compute_residual("l2");
+  const double dof_size = pnp_problem._eigen_vector->size();
+  mesh_initial_residual /= dof_size;
   if (*initial_residual_ptr < 0.0) {
-    *initial_residual_ptr = pnp_problem.compute_residual("l2");
+    *initial_residual_ptr = mesh_initial_residual;
   }
   const double initial_max_residual = pnp_problem.compute_residual("max");
   Newton_Status newton(
@@ -180,17 +186,37 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   printf("\n");
 
   newton.update_max_residual(initial_max_residual);
+
+  // avoid updates that cause more than than 5% growth in the solution
+  bool fasp_reset = false;
+  uint fasp_fail_count = 0;
+  double increase_tolerance = 1E-1;
+
   while (newton.needs_to_iterate()) {
     // solve
     printf("Solving for Newton iterate %lu \n", newton.iteration);
-    const double previous_residual = pnp_problem.compute_residual("l2");
+    const double previous_residual = pnp_problem.compute_residual("l2") / dof_size;
     const dolfin::Function previous_solution = pnp_problem.get_solution();
     dolfin::Function computed_solution(pnp_problem.fasp_solve());
+    if (pnp_problem.fasp_failed) {
+      printf("\tFASP solver has failed %u times\n", ++fasp_fail_count);
+      if (fasp_fail_count > 10) {
+        printf("Linear solver has failed more than 10 times...\n");
+        printf("\treset solution to initial guess\n\n");
+        Initial_Guess initial_guess_expression(voltage_drop);
+        dolfin::Function reset_solution = pnp_problem.get_solution();
+        reset_solution.interpolate(initial_guess_expression);
+        pnp_problem.set_solution(reset_solution);
+        fasp_fail_count = 0;
+        if (fasp_reset) break;
+        fasp_reset = true;
+        continue;
+      }
+    }
 
     // update newton measurements with backtracking
     printf("Newton measurements for iteration :\n");
-    double residual_check = pnp_problem.compute_residual("l2");
-    std::size_t backtrack_count = 0;
+    double residual_check = pnp_problem.compute_residual("l2") / dof_size;
 
     // ensure L_infinity norm has bounded growth at each iteration
     double prev_max_dof = previous_solution.vector()->max();
@@ -201,8 +227,6 @@ std::shared_ptr<dolfin::Function> solve_pnp (
     double min_dof = computed_solution.vector()->min();
     double range = max_dof - min_dof;
 
-    // avoid updates that cause more than than 1% growth in the solution
-    double increase_tolerance = 1E-1;
     if (range > (1.0 + increase_tolerance) * prev_range) {
       printf("\tupdate causes too much growth in solution : %e / %e = %e\n", range, prev_range, range / prev_range);
       dolfin::Function newton_update(computed_solution.function_space());
@@ -213,11 +237,26 @@ std::shared_ptr<dolfin::Function> solve_pnp (
       double growth_factor = increase_tolerance * prev_range / (max_update - min_update + 1E-12);
       newton_update = newton_update * growth_factor;
 
+      double backtrack_max_update = newton_update.vector()->max();
+      double backtrack_min_update = newton_update.vector()->min();
+      if (backtrack_max_update > backtrack_min_update + increase_tolerance * prev_range) {
+        double shrink_factor = (backtrack_max_update - backtrack_min_update) * increase_tolerance * 1E-4;
+        newton_update = newton_update * shrink_factor;
+
+        printf("\teven after backtracking, the solution grew too much!\n");
+        printf("\tgrowth should be bounded by %5.3e but is %5.3e\n",
+          increase_tolerance * prev_range,
+          (max_update - min_update) * growth_factor
+        );
+        printf("\tfurther reducing the update by a factor of %5.3e\n", shrink_factor);
+      }
+
       computed_solution = previous_solution + newton_update;
     }
 
     // dolfin::File backFile(output_dir + "backtrack.pvd");
-    while (residual_check > previous_residual || isnan(residual_check)) {
+    std::size_t backtrack_count = 0;
+    while (backtrack_count < 50 && (residual_check > 1.00001 * previous_residual || isnan(residual_check))) {
       printf("\trelative residual increased : %e < %e\n", previous_residual, residual_check);
       dolfin::Function backtrack(computed_solution.function_space());
       backtrack = previous_solution - computed_solution;
@@ -227,10 +266,10 @@ std::shared_ptr<dolfin::Function> solve_pnp (
       backtrack_solution = computed_solution + backtrack;
       // backFile << backtrack_solution;
       pnp_problem.set_solution(backtrack_solution);
-      residual_check = pnp_problem.compute_residual("l2");
+      residual_check = pnp_problem.compute_residual("l2") / dof_size;
     }
     printf("\trelative residual decreased : %e > %e\n", previous_residual, residual_check);
-    double residual = pnp_problem.compute_residual("l2");
+    double residual = pnp_problem.compute_residual("l2") / dof_size;
     double max_residual = pnp_problem.compute_residual("max");
     newton.update_residuals(residual, max_residual);
     newton.update_iteration();

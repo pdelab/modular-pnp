@@ -17,7 +17,7 @@ const double temperature = 3e+2; // K
 const double thermodynamic_beta = elementary_charge / (temperature * boltzmann); // V
 const double vacuum_permittivity = 8.854187817e-12; // C / V
 
-const double reference_length = 1e-6; // m
+const double reference_length = 1e-5; // m
 const double reference_density = 1.5e+22; // mM = 1 / m^3
 const double reference_diffusivity = 2.87e+1; // cm^2 / s
 const double reference_relative_permittivity = 1.17e+1; // dimensionless
@@ -39,14 +39,22 @@ const double minority_carrier = 6.6e+9; // mM = 1 / m^3
 std::vector<double> valencies = { 0.0, 1.0, -1.0 }; // potential "valency" is at valencies[0] and should be zero
 std::vector<double> reactions (double x) { return { 0.0, 0.0, 0.0 }; };
 std::vector<double> diffusivities (double x) {
-  return {
-    0.0,
-    x < 0.0 ? scale_diffusivity(1.07e+1) : scale_diffusivity(1.09e+1), // cm^2 / s
-    x < 0.0 ? scale_diffusivity(2.69e+1) : scale_diffusivity(2.87e+1) // cm^2 / s
-  };
+  double cation_diffusivity = x < 0.0 ? scale_diffusivity(1.07e+1) : scale_diffusivity(1.09e+1); // cm^2 / s
+  double anion_diffusivity = x < 0.0 ? scale_diffusivity(2.69e+1) : scale_diffusivity(2.87e+1); // cm^2 / s
+
+  if (fabs(x) < 0.05) {
+    cation_diffusivity = scale_diffusivity(1.07e+1 + 10.0 * (x + 0.05) * (1.09e+1 - 1.07e+1));
+    anion_diffusivity = scale_diffusivity(2.69e+1 + 10.0 * (x + 0.05) * (2.87e+1 - 2.69e+1));
+  }
+
+  return { 0.0, cation_diffusivity, anion_diffusivity };
 };
 double relative_permittivity (double x) { return scale_rel_permittivity(1.17e+1); }; // dimensionless
 double fixed (double x) {
+  if (fabs(x) < 0.05) {
+    return scale_density(majority_carrier + 10.0 * (x + 0.05) * (-2.0 * majority_carrier));
+  }
+
   return x < 0.0 ? scale_density(majority_carrier) : -scale_density(majority_carrier); // mM = 1 / m^3
 };
 
@@ -80,8 +88,24 @@ class Initial_Guess : public dolfin::Expression {
       values[0] = 0.5 * (left[0] * (1.0 - x[0]) + right[0] * (x[0] + 1.0));
       values[1] = 0.5 * (left[1] * (1.0 - x[0]) + right[1] * (x[0] + 1.0));
       values[2] = 0.5 * (left[2] * (1.0 - x[0]) + right[2] * (x[0] + 1.0));
-      // values[1] = x[0] < 0.0 ? left[1] : right[1];
-      // values[2] = x[0] < 0.0 ? left[2] : right[2];
+
+      values[1] *= 0.5;
+      values[2] *= 0.5;
+      if (fabs(x[0]) < 0.05) {
+        values[1] += 0.5 * (left[1] + 10.0 * (x[0] + 0.05) * (right[1] - left[1]));
+        values[2] += 0.5 * (left[2] + 10.0 * (x[0] + 0.05) * (right[2] - left[2]));
+      } else {
+        values[1] += 0.5 * (x[0] < 0.0 ? left[1] : right[1]);
+        values[2] += 0.5 * (x[0] < 0.0 ? left[2] : right[2]);
+      }
+
+      // if (fabs(x[0]) < 0.05) {
+      //   values[1] = left[1] + 10.0 * (x[0] + 0.05) * (right[1] - left[1]);
+      //   values[2] = left[2] + 10.0 * (x[0] + 0.05) * (right[2] - left[2]);
+      // } else {
+      //   values[1] = x[0] < 0.0 ? left[1] : right[1];
+      //   values[2] = x[0] < 0.0 ? left[2] : right[2];
+      // }
     }
   private:
     double volt;

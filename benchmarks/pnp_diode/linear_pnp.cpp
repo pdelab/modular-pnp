@@ -27,6 +27,7 @@ Linear_PNP::Linear_PNP (
   const std::map<std::string, std::vector<double>> sources,
   const itsolver_param &itsolver,
   const AMG_param &amg,
+  const ILU_param &ilu,
   const std::string variable
 ) : PDE (
   mesh,
@@ -60,6 +61,7 @@ Linear_PNP::Linear_PNP (
 
   _itsolver = itsolver;
   _amg = amg;
+  _ilu = ilu;
 }
 //--------------------------------------
 Linear_PNP::~Linear_PNP () {}
@@ -98,20 +100,29 @@ dolfin::Function Linear_PNP::fasp_solve () {
   dolfin::Function solution(Linear_PNP::get_solution());
 
   printf("Solving linear system using FASP solver...\n"); fflush(stdout);
-  INT status = fasp_solver_dbsr_krylov_amg (
+  INT status = fasp_solver_dbsr_krylov_ilu (
     &_fasp_bsr_matrix,
     &_fasp_vector,
     &_fasp_soln,
     &_itsolver,
-    &_amg
+    &_ilu
   );
+  // INT status = fasp_solver_dbsr_krylov_amg (
+  //   &_fasp_bsr_matrix,
+  //   &_fasp_vector,
+  //   &_fasp_soln,
+  //   &_itsolver,
+  //   &_amg
+  // );
 
   if (status < 0) {
     printf("\n### WARNING: FASP solver failed! Exit status = %d.\n", status);
+    Linear_PNP::fasp_failed = true;
     fflush(stdout);
   }
   else {
     printf("Successfully solved the linear system\n");
+    Linear_PNP::fasp_failed = false;
     fflush(stdout);
   }
 

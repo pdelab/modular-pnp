@@ -84,6 +84,11 @@ class Mesh_Refiner {
       std::shared_ptr<dolfin::Function> solution
     );
 
+    dolfin::Function as_function(
+      std::shared_ptr<dolfin::FunctionSpace> function_space,
+      dolfin::EigenVector vec
+    );
+
     /// iteration count
     std::size_t iteration;
 

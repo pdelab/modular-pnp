@@ -42,6 +42,7 @@ class Linear_PNP : public PDE {
       const std::map<std::string, std::vector<double>> sources,
       const itsolver_param &itsolver,
       const AMG_param &amg,
+      const ILU_param &ilu,
       const std::string variable
     );
 
@@ -69,6 +70,8 @@ class Linear_PNP : public PDE {
 
     dolfin::Function get_total_charge ();
 
+    bool fasp_failed = false;
+
 
     std::shared_ptr<dolfin::FunctionSpace> diffusivity_space;
     std::shared_ptr<dolfin::FunctionSpace> reaction_space;
@@ -80,6 +83,7 @@ class Linear_PNP : public PDE {
     // FASP
     itsolver_param _itsolver;
     AMG_param _amg;
+    ILU_param _ilu;
     dCSRmat _fasp_matrix;
     dBSRmat _fasp_bsr_matrix;
     dvector _fasp_vector;
