@@ -8540,7 +8540,7 @@ public:
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
     
     // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 27168
+    // Number of operations to compute element tensor for following IP loop = 27264
     for (unsigned int ip = 0; ip < 24; ip++)
     {
       
@@ -8602,10 +8602,10 @@ public:
         F13 += FE0[ip][r]*w[0][nzc0[r]];
       } // end loop over 'r'
       double C[2];
-      // Compute conditional, operations: 2.
-      C[0] = ((F1 > -100.0)) ? std::exp(F1) : 0.0;
-      // Compute conditional, operations: 2.
-      C[1] = ((F3 > -100.0)) ? std::exp(F3) : 0.0;
+      // Compute conditional, operations: 4.
+      C[0] = ((F1 > -5.0)) ? std::exp(F1) : 0.00673794699908547/(-4.0 - F1);
+      // Compute conditional, operations: 4.
+      C[1] = ((F3 > -5.0)) ? std::exp(F3) : 0.00673794699908547/(-4.0 - F3);
       
       // Number of operations to compute ip constants: 224
       double I[38];
@@ -9158,7 +9158,7 @@ public:
 
   const char * signature() const final override
   {
-    return "9d8ddd67ebbe9cd0d65430ce35aa0c2d59a26cd8655f84bbc0fd0ad7e335603cb30004091d87a1899cdef58d9c9ab85c5f3c0d812954e8472b52e4554a5418af";
+    return "e3ebc982d8d465987204549d6c38dd2dd35bb9f3ff5c82c04fcda72c060344e7b592fb67ff97979cf6bd5e7d95822644b91933704d7c464ac564f325b4b6159e";
   }
 
   std::size_t rank() const final override

@@ -144,9 +144,9 @@ std::shared_ptr<dolfin::Function> solve_pnp (
 
   std::vector<double> left(left_contact(-1.0, 0.0)); // placeholder voltage 0.0
   std::vector<double> right(right_contact(+1.0, 0.0)); // placeholder voltage 0.0
-  bcs.push_back({left[0], right[0]});
-  bcs.push_back({left[1], right[1]});
-  bcs.push_back({left[2], right[2]});
+  bcs.push_back({ left[0], right[0] });
+  bcs.push_back({ std::log(left[1]), std::log(right[1]) });
+  bcs.push_back({ std::log(left[2]), std::log(right[2]) });
 
 
   // Apply boundary conditions and compute residual for initial guess
@@ -302,7 +302,7 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   printf("\nSolver exiting\n"); fflush(stdout);
 
   // plot coefficients if requested
-  bool plot_coefficients = false;
+  bool plot_coefficients = true;
   if (plot_coefficients) {
     printf("\toutput coefficients to file\n");
     dolfin::File permittivity_file(output_dir + "permittivity.pvd");

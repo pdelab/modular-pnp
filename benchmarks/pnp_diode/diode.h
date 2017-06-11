@@ -11,6 +11,7 @@
 /**
  * dimensional analysis
  */
+const double HALF_PI = 1.57079632679;
 const double elementary_charge = 1.60217662e-19; // C
 const double boltzmann = 1.38064852e-23; // J / K
 const double temperature = 3e+2; // K
@@ -30,6 +31,16 @@ double scale_potential (double phi) { return (phi) * thermodynamic_beta; };
 double scale_diffusivity (double diff) { return diff / reference_diffusivity; };
 double scale_rel_permittivity (double rel_perm) { return rel_perm / reference_relative_permittivity; };
 
+double material_property (double x, double left_val, double right_val) {
+  const double transition = 0.05;
+  if (fabs(x) < transition) {
+    const double difference = right_val - left_val;
+    const double sum = right_val + left_val;
+    return 0.5 * (sum + difference * std::sin(x * HALF_PI / transition));
+  }
+
+  return x < 0.0 ? left_val : right_val;
+};
 
 /**
  * define coefficients
@@ -39,23 +50,15 @@ const double minority_carrier = 6.6e+9; // mM = 1 / m^3
 std::vector<double> valencies = { 0.0, 1.0, -1.0 }; // potential "valency" is at valencies[0] and should be zero
 std::vector<double> reactions (double x) { return { 0.0, 0.0, 0.0 }; };
 std::vector<double> diffusivities (double x) {
-  double cation_diffusivity = x < 0.0 ? scale_diffusivity(1.07e+1) : scale_diffusivity(1.09e+1); // cm^2 / s
-  double anion_diffusivity = x < 0.0 ? scale_diffusivity(2.69e+1) : scale_diffusivity(2.87e+1); // cm^2 / s
-
-  if (fabs(x) < 0.05) {
-    cation_diffusivity = scale_diffusivity(1.07e+1 + 10.0 * (x + 0.05) * (1.09e+1 - 1.07e+1));
-    anion_diffusivity = scale_diffusivity(2.69e+1 + 10.0 * (x + 0.05) * (2.87e+1 - 2.69e+1));
-  }
-
-  return { 0.0, cation_diffusivity, anion_diffusivity };
+  return {
+    0.0,
+    scale_diffusivity( material_property(x, 1.07e+1, 1.09e+1) ), // cm^2 / s
+    scale_diffusivity( material_property(x, 2.69e+1, 2.87e+1) ) // cm^2 / s
+  };
 };
 double relative_permittivity (double x) { return scale_rel_permittivity(1.17e+1); }; // dimensionless
 double fixed (double x) {
-  if (fabs(x) < 0.05) {
-    return scale_density(majority_carrier + 10.0 * (x + 0.05) * (-2.0 * majority_carrier));
-  }
-
-  return x < 0.0 ? scale_density(majority_carrier) : -scale_density(majority_carrier); // mM = 1 / m^3
+  return scale_density( material_property(x, majority_carrier, -majority_carrier) );
 };
 
 /**
@@ -64,15 +67,15 @@ double fixed (double x) {
 std::vector<double> left_contact (double x, double voltage_drop) {
   return {
     0.5 * scale_potential(voltage_drop), // V
-    std::log(scale_density(minority_carrier)), // log(mM)
-    std::log(scale_density(majority_carrier)) // log(mM)
+    scale_density(minority_carrier), // mM
+    scale_density(majority_carrier) // mM
   };
 };
 std::vector<double> right_contact (double x, double voltage_drop) {
   return {
     -0.5 * scale_potential(voltage_drop), // V
-    std::log(scale_density(majority_carrier)), // log(mM)
-    std::log(scale_density(minority_carrier)) // log(mM)
+    scale_density(majority_carrier), // mM
+    scale_density(minority_carrier) // mM
   };
 };
 
@@ -83,34 +86,12 @@ class Initial_Guess : public dolfin::Expression {
   public:
     Initial_Guess (double voltage_drop) : dolfin::Expression(3), volt(voltage_drop) {}
     void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
-      std::vector<double> left(left_contact(-1.0, volt));
-      std::vector<double> right(right_contact(+1.0, volt));
-      // values[0] = 0.5 * (left[0] * (1.0 - x[0]) + right[0] * (x[0] + 1.0));
-      // values[1] = 0.5 * (left[1] * (1.0 - x[0]) + right[1] * (x[0] + 1.0));
-      // values[2] = 0.5 * (left[2] * (1.0 - x[0]) + right[2] * (x[0] + 1.0));
+      std::vector<double> left( left_contact(-1.0, volt) );
+      std::vector<double> right( right_contact(+1.0, volt) );
 
-      // values[0] *= 0.5;
-      // values[1] *= 0.5;
-      // values[2] *= 0.5;
-      // if (fabs(x[0]) < 0.05) {
-      //   values[0] += 0.5 * (left[0] + 10.0 * (x[0] + 0.05) * (right[0] - left[0]));
-      //   values[1] += 0.5 * (left[1] + 10.0 * (x[0] + 0.05) * (right[1] - left[1]));
-      //   values[2] += 0.5 * (left[2] + 10.0 * (x[0] + 0.05) * (right[2] - left[2]));
-      // } else {
-      //   values[0] += 0.5 * (x[0] < 0.0 ? left[0] : right[0]);
-      //   values[1] += 0.5 * (x[0] < 0.0 ? left[1] : right[1]);
-      //   values[2] += 0.5 * (x[0] < 0.0 ? left[2] : right[2]);
-      // }
-
-      if (fabs(x[0]) < 0.05) {
-        values[0] = left[0] + 10.0 * (x[0] + 0.05) * (right[0] - left[0]);
-        values[1] = left[1] + 10.0 * (x[0] + 0.05) * (right[1] - left[1]);
-        values[2] = left[2] + 10.0 * (x[0] + 0.05) * (right[2] - left[2]);
-      } else {
-        values[0] = x[0] < 0.0 ? left[0] : right[0];
-        values[1] = x[0] < 0.0 ? left[1] : right[1];
-        values[2] = x[0] < 0.0 ? left[2] : right[2];
-      }
+      values[0] = material_property(x[0], left[0], right[0]);
+      values[1] = std::log( material_property(x[0], left[1], right[1]) );
+      values[2] = std::log( material_property(x[0], left[2], right[2]) );
     }
   private:
     double volt;

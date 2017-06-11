@@ -24,7 +24,7 @@ diffusivity = Coefficient(V)
 valency = Coefficient(V)
 reaction = Coefficient(V)
 
-cutoff = -100.0
+cutoff = -5.0
 def conc(w):
   return conditional(gt(w, cutoff), exp(w), exp(cutoff) / (1 - w + cutoff))
 
