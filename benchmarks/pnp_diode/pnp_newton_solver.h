@@ -54,16 +54,17 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   );
 
   // set initializer for PDE coefficients
+
   printf("Initialize coefficients\n");
   std::map<std::string, std::vector<double>> pnp_coefficients = {
     {"permittivity", {1.0}},
-    {"poisson_scale", {permittivity_factor}},
+    {"poisson_scale", {1.0}},
     {"diffusivity", {0.0, 2.0, 2.0}},
     {"valency", {0.0, 1.0, -1.0}}
   };
   std::map<std::string, std::vector<double>> pnp_sources = {
     {"fixed_charge", {1.0}},
-    {"poisson_scale", {permittivity_factor}},
+    {"poisson_scale", {1.0}},
     {"reaction", {0.0, 0.0, 0.0}}
   };
 
@@ -83,7 +84,7 @@ std::shared_ptr<dolfin::Function> solve_pnp (
 
   // set eafe flag
   if (use_eafe_approximation) {
-  printf("Setting solver to use EAFE approximation\n");
+    printf("Setting solver to use EAFE approximation\n");
     pnp_problem.use_eafe();
   }
 
@@ -142,8 +143,8 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   std::vector<std::size_t> components = {0, 0, 0};
   std::vector<std::vector<double>> bcs;
 
-  std::vector<double> left(left_contact(-1.0, 0.0)); // placeholder voltage 0.0
-  std::vector<double> right(right_contact(+1.0, 0.0)); // placeholder voltage 0.0
+  std::vector<double> left(left_contact(0.0)); // placeholder voltage 0.0
+  std::vector<double> right(right_contact(0.0)); // placeholder voltage 0.0
   bcs.push_back({ left[0], right[0] });
   bcs.push_back({ std::log(left[1]), std::log(right[1]) });
   bcs.push_back({ std::log(left[2]), std::log(right[2]) });
@@ -306,11 +307,13 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   if (plot_coefficients) {
     printf("\toutput coefficients to file\n");
     dolfin::File permittivity_file(output_dir + "permittivity.pvd");
+    dolfin::File poisson_scale_file(output_dir + "poisson_scale.pvd");
     dolfin::File charges_file(output_dir + "charges.pvd");
     dolfin::File diffusivity_file(output_dir + "diffusivity.pvd");
     dolfin::File reaction_file(output_dir + "reaction.pvd");
     dolfin::File valency_file(output_dir + "valency.pvd");
     permittivity_file << permittivity;
+    poisson_scale_file << poisson_scale;
     charges_file << charges;
     diffusivity_file << diffusivity[1];
     diffusivity_file << diffusivity[2];

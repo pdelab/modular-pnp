@@ -175,7 +175,6 @@ int main (int argc, char** argv) {
       induced_current = computeCurrentFlux(diffusivity, log_densities, entropy_potential);
 
       // adapt computed solutions
-      mesh_adapt.max_elements = (std::size_t) std::floor(growth_factor * mesh->num_cells());
       mesh_adapt.multilevel_refinement(diffusivity, entropy_potential, log_densities);
       adaptive_solution = adapt( *computed_solution, mesh_adapt.get_mesh() );
 
