@@ -294,14 +294,11 @@ void Linear_PNP_NS::free_fasp () {
 
 //--------------------------------------
 void Linear_PNP_NS::init_BC (std::size_t component, double L) {
-  std::vector<std::size_t> v1 = {component};
-  std::vector<double> v2 = {-L/2.0};
-  std::vector<double> v3 = {L/2.0};
+
+  std::vector<std::size_t> v1 = {0,1,2};
+  std::vector<double> v2 = {-L/2.0,-L/2.0,-L/2.0};
+  std::vector<double> v3 = { L/2.0,L/2.0,L/2.0};
   auto BCdomain = std::make_shared<Dirichlet_Subdomain>(v1,v2,v3,1E-5);
-  std::vector<std::size_t> v1yz = {1,2};
-  std::vector<double> v2yz = {-L/2.0,-L/2.0};
-  std::vector<double> v3yz = { L/2.0,L/2.0};
-  auto BCdomain_yz = std::make_shared<Dirichlet_Subdomain>(v1yz,v2yz,v3yz,1E-5);
   // // Dirichlet_Subdomain BCdomain({component},{-5.0},{5.0},1E-5);
   auto sp_domain = std::make_shared<SpheresSubDomain>();
 
@@ -311,17 +308,13 @@ void Linear_PNP_NS::init_BC (std::size_t component, double L) {
   auto BC1 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(0),zero,sp_domain);
   auto BC2 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(1),zero,sp_domain);
   auto BC3 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(2),zero,sp_domain);
-  // auto BC1 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(0),zero,BCdomain);
-  // auto BC2 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(1),zero,BCdomain);
-  // auto BC3 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(2),zero,BCdomain);
-  // auto BC4 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(3),zero_vec,BCdomain_yz);
   auto BC4 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(3),zero_vec,sp_domain);
-  // auto BC4b = std::make_shared<dolfin::DirichletBC>(_function_space->sub(3),zero_vec,BCdomain);
+  auto BC4b = std::make_shared<dolfin::DirichletBC>(_function_space->sub(3),zero_vec,BCdomain);
   _dirichletBC.push_back(BC1);
   _dirichletBC.push_back(BC2);
   _dirichletBC.push_back(BC3);
   _dirichletBC.push_back(BC4);
-  // _dirichletBC.push_back(BC4b);
+  _dirichletBC.push_back(BC4b);
 
 
   std:shared_ptr<const dolfin::Mesh> mesh = _function_space->mesh();

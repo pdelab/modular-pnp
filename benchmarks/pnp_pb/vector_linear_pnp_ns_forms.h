@@ -16368,7 +16368,7 @@ public:
 
   const std::vector<bool> & enabled_coefficients() const final override
   {
-    static const std::vector<bool> enabled({true, true, true, true, true, true, true, true, false, false});
+    static const std::vector<bool> enabled({true, true, true, true, true, true, true, true, true, false, false});
     return enabled;
   }
 
@@ -16603,8 +16603,8 @@ public:
     {
       A[r] = 0.0;
     } // end loop over 'r'
-    // Number of operations to compute geometry constants: 696.
-    double G[62];
+    // Number of operations to compute geometry constants: 1317.
+    double G[71];
     G[0] = det*w[3][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
     G[1] = det*w[3][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
     G[2] = det*w[3][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
@@ -16665,14 +16665,23 @@ public:
     G[57] = det*w[6][0]*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
     G[58] =  - det*w[4][0];
     G[59] =  - det*w[6][0];
-    G[60] = det*w[7][0]*(2.0*(J[0]*J[0]*K[0]*K[0] + J[3]*K[1]*(J[0]*K[0] + J[3]*K[1]) + J[6]*K[2]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2]) + K[3]*(J[0]*(J[4]*K[1] + J[7]*K[2]) + J[1]*J[1]*K[3] + K[0]*(J[3]*J[4] + J[6]*J[7])) + K[4]*(J[1]*(J[0]*K[1] + J[3]*K[0] + J[4]*K[3]) + J[4]*J[4]*K[4] + J[7]*(J[3]*K[2] + J[6]*K[1])) + K[5]*(J[6]*(J[1]*K[0] + J[4]*K[1]) + J[7]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5]) + K[2]*(J[0]*J[1] + J[3]*J[4])) + K[6]*(J[2]*J[2]*K[6] + J[5]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3]) + J[8]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3])) + K[7]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[5]*J[5]*K[7] + J[8]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4])) + K[8]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[8]*J[8]*K[8])) + 4.0*(J[0]*J[1]*K[0]*K[3] + J[2]*K[6]*(J[0]*K[0] + J[1]*K[3]) + J[3]*J[4]*K[1]*K[4] + J[5]*K[7]*(J[3]*K[1] + J[4]*K[4]) + J[6]*J[7]*K[2]*K[5] + J[8]*K[8]*(J[6]*K[2] + J[7]*K[5])) + K[0]*K[0]*(J[3]*J[3] + J[6]*J[6]) + K[1]*K[1]*(J[0]*J[0] + J[6]*J[6]) + K[2]*K[2]*(J[0]*J[0] + J[3]*J[3]) + K[3]*K[3]*(J[4]*J[4] + J[7]*J[7]) + K[4]*K[4]*(J[1]*J[1] + J[7]*J[7]) + K[5]*K[5]*(J[1]*J[1] + J[4]*J[4]) + K[6]*K[6]*(J[5]*J[5] + J[8]*J[8]) + K[7]*K[7]*(J[2]*J[2] + J[8]*J[8]) + K[8]*K[8]*(J[2]*J[2] + J[5]*J[5]))/(detJ*detJ);
-    G[61] = det*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
+    G[60] = det*w[7][0]*(J[0]*J[0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + J[3]*(J[0]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[3]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + J[6]*(J[0]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[3]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[6]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[61] = det*w[7][0]*(J[1]*(J[0]*J[1]*K[3] + K[0]*(J[0]*J[0] + J[3]*J[3] + J[6]*J[6]) + K[6]*(J[0]*J[2] + J[3]*J[5] + J[6]*J[8])) + J[4]*(J[0]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7]) + J[3]*(J[1]*K[3] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + J[6]*(J[6]*K[1] + J[8]*K[7])) + J[7]*(J[0]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8]) + J[3]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8]) + J[6]*(J[1]*K[3] + J[4]*K[4] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[62] = det*w[7][0]*(J[2]*(J[0]*J[2]*K[6] + K[0]*(J[0]*J[0] + J[3]*J[3] + J[6]*J[6]) + K[3]*(J[0]*J[1] + J[3]*J[4] + J[6]*J[7])) + J[5]*(J[0]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7]) + J[3]*(J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + J[6]*(J[6]*K[1] + J[7]*K[4])) + J[8]*(J[0]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8]) + J[3]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8]) + J[6]*(J[2]*K[6] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[63] = det*w[8][0]*(2.0*(J[0]*J[0]*K[0]*K[0] + J[3]*K[1]*(J[0]*K[0] + J[3]*K[1]) + J[6]*K[2]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2]) + K[3]*(J[0]*(J[4]*K[1] + J[7]*K[2]) + J[1]*J[1]*K[3] + K[0]*(J[3]*J[4] + J[6]*J[7])) + K[4]*(J[1]*(J[0]*K[1] + J[3]*K[0] + J[4]*K[3]) + J[4]*J[4]*K[4] + J[7]*(J[3]*K[2] + J[6]*K[1])) + K[5]*(J[6]*(J[1]*K[0] + J[4]*K[1]) + J[7]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5]) + K[2]*(J[0]*J[1] + J[3]*J[4])) + K[6]*(J[2]*J[2]*K[6] + J[5]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3]) + J[8]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3])) + K[7]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[5]*J[5]*K[7] + J[8]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4])) + K[8]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[8]*J[8]*K[8])) + 4.0*(J[0]*J[1]*K[0]*K[3] + J[2]*K[6]*(J[0]*K[0] + J[1]*K[3]) + J[3]*J[4]*K[1]*K[4] + J[5]*K[7]*(J[3]*K[1] + J[4]*K[4]) + J[6]*J[7]*K[2]*K[5] + J[8]*K[8]*(J[6]*K[2] + J[7]*K[5])) + K[0]*K[0]*(J[3]*J[3] + J[6]*J[6]) + K[1]*K[1]*(J[0]*J[0] + J[6]*J[6]) + K[2]*K[2]*(J[0]*J[0] + J[3]*J[3]) + K[3]*K[3]*(J[4]*J[4] + J[7]*J[7]) + K[4]*K[4]*(J[1]*J[1] + J[7]*J[7]) + K[5]*K[5]*(J[1]*J[1] + J[4]*J[4]) + K[6]*K[6]*(J[5]*J[5] + J[8]*J[8]) + K[7]*K[7]*(J[2]*J[2] + J[8]*J[8]) + K[8]*K[8]*(J[2]*J[2] + J[5]*J[5]))/(detJ*detJ);
+    G[64] = det*w[7][0]*(J[0]*(J[0]*J[1]*K[0] + K[3]*(J[1]*J[1] + J[4]*J[4] + J[7]*J[7]) + K[6]*(J[1]*J[2] + J[4]*J[5] + J[7]*J[8])) + J[3]*(J[1]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7]) + J[4]*(J[0]*K[0] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + J[7]*(J[7]*K[4] + J[8]*K[7])) + J[6]*(J[1]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8]) + J[4]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8]) + J[7]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[65] = det*w[7][0]*(J[1]*J[1]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + J[4]*(J[1]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[4]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + J[7]*(J[1]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[4]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[7]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[66] = det*w[7][0]*(J[2]*(J[1]*J[2]*K[6] + K[0]*(J[0]*J[1] + J[3]*J[4] + J[6]*J[7]) + K[3]*(J[1]*J[1] + J[4]*J[4] + J[7]*J[7])) + J[5]*(J[1]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7]) + J[4]*(J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + J[7]*(J[6]*K[1] + J[7]*K[4])) + J[8]*(J[1]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8]) + J[4]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8]) + J[7]*(J[2]*K[6] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[67] = det*w[7][0]*(J[0]*(J[0]*J[2]*K[0] + K[3]*(J[1]*J[2] + J[4]*J[5] + J[7]*J[8]) + K[6]*(J[2]*J[2] + J[5]*J[5] + J[8]*J[8])) + J[3]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7]) + J[5]*(J[0]*K[0] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + J[8]*(J[7]*K[4] + J[8]*K[7])) + J[6]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8]) + J[8]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[68] = det*w[7][0]*(J[1]*(J[1]*J[2]*K[3] + K[0]*(J[0]*J[2] + J[3]*J[5] + J[6]*J[8]) + K[6]*(J[2]*J[2] + J[5]*J[5] + J[8]*J[8])) + J[4]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7]) + J[5]*(J[1]*K[3] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + J[8]*(J[6]*K[1] + J[8]*K[7])) + J[7]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8]) + J[8]*(J[1]*K[3] + J[4]*K[4] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[69] = det*w[7][0]*(J[2]*J[2]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + J[5]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[5]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + J[8]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[8]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[70] = det*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
     
     // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 33285
+    // Number of operations to compute element tensor for following IP loop = 42585
     for (unsigned int ip = 0; ip < 15; ip++)
     {
       
@@ -16691,6 +16700,7 @@ public:
       double F11 = 0.0;
       double F12 = 0.0;
       double F13 = 0.0;
+      double F14 = 0.0;
       
       // Total number of operations to compute function values = 36
       for (unsigned int r = 0; r < 2; r++)
@@ -16706,7 +16716,7 @@ public:
         F13 += FE0_C0_D001[ip][r]*w[0][nzc5[r]];
       } // end loop over 'r'
       
-      // Total number of operations to compute function values = 40
+      // Total number of operations to compute function values = 48
       for (unsigned int r = 0; r < 4; r++)
       {
         F0 += FE0_C0[ip][r]*w[0][nzc0[r]];
@@ -16714,10 +16724,11 @@ public:
         F2 += FE1_C3[ip][r]*w[1][r];
         F3 += FE1_C4[ip][r]*w[1][r];
         F4 += FE1_C5[ip][r]*w[1][r];
+        F14 += FE1_C3_D100[ip][r]*w[1][r];
       } // end loop over 'r'
       
-      // Number of operations to compute ip constants: 363
-      double I[74];
+      // Number of operations to compute ip constants: 399
+      double I[86];
       // Number of operations: 3
       I[0] = G[0]*W15[ip]*std::exp(F0);
       
@@ -16922,23 +16933,59 @@ public:
       // Number of operations: 8
       I[67] = W15[ip]*std::exp(F1)*(F10*G[41] + F8*G[45] + F9*G[43]);
       
-      // Number of operations: 1
-      I[68] = G[60]*W15[ip];
+      // Number of operations: 2
+      I[68] = F14*G[60]*W15[ip];
       
-      // Number of operations: 8
-      I[69] = W15[ip]*std::exp(F0)*(F10*G[46] + F8*G[50] + F9*G[48]);
+      // Number of operations: 6
+      I[69] = W15[ip]*(F2*G[60] + F3*G[61] + F4*G[62]);
       
-      // Number of operations: 8
-      I[70] = W15[ip]*std::exp(F1)*(F10*G[47] + F8*G[51] + F9*G[49]);
+      // Number of operations: 2
+      I[70] = F14*G[61]*W15[ip];
       
-      // Number of operations: 8
-      I[71] = W15[ip]*std::exp(F0)*(F10*G[52] + F8*G[56] + F9*G[54]);
-      
-      // Number of operations: 8
-      I[72] = W15[ip]*std::exp(F1)*(F10*G[53] + F8*G[57] + F9*G[55]);
+      // Number of operations: 2
+      I[71] = F14*G[62]*W15[ip];
       
       // Number of operations: 1
-      I[73] = G[61]*W15[ip];
+      I[72] = G[63]*W15[ip];
+      
+      // Number of operations: 8
+      I[73] = W15[ip]*std::exp(F0)*(F10*G[46] + F8*G[50] + F9*G[48]);
+      
+      // Number of operations: 8
+      I[74] = W15[ip]*std::exp(F1)*(F10*G[47] + F8*G[51] + F9*G[49]);
+      
+      // Number of operations: 2
+      I[75] = F14*G[64]*W15[ip];
+      
+      // Number of operations: 6
+      I[76] = W15[ip]*(F2*G[64] + F3*G[65] + F4*G[66]);
+      
+      // Number of operations: 2
+      I[77] = F14*G[65]*W15[ip];
+      
+      // Number of operations: 2
+      I[78] = F14*G[66]*W15[ip];
+      
+      // Number of operations: 8
+      I[79] = W15[ip]*std::exp(F0)*(F10*G[52] + F8*G[56] + F9*G[54]);
+      
+      // Number of operations: 8
+      I[80] = W15[ip]*std::exp(F1)*(F10*G[53] + F8*G[57] + F9*G[55]);
+      
+      // Number of operations: 2
+      I[81] = F14*G[67]*W15[ip];
+      
+      // Number of operations: 6
+      I[82] = W15[ip]*(F2*G[67] + F3*G[68] + F4*G[69]);
+      
+      // Number of operations: 2
+      I[83] = F14*G[68]*W15[ip];
+      
+      // Number of operations: 2
+      I[84] = F14*G[69]*W15[ip];
+      
+      // Number of operations: 1
+      I[85] = G[70]*W15[ip];
       
       
       // Number of operations for primary indices: 540
@@ -17128,7 +17175,7 @@ public:
         } // end loop over 'k'
       } // end loop over 'j'
       
-      // Number of operations for primary indices: 432
+      // Number of operations for primary indices: 1008
       for (unsigned int j = 0; j < 4; j++)
       {
         for (unsigned int k = 0; k < 4; k++)
@@ -17142,15 +17189,39 @@ public:
           // Number of operations to compute entry: 3
           A[nzc24[j]*17 + nzc16[k]] += FE0_C0[ip][k]*FE1_C3[ip][j]*I[67];
           // Number of operations to compute entry: 3
-          A[nzc25[j]*17 + nzc25[k]] += FE1_C3_D100[ip][j]*FE1_C3_D100[ip][k]*I[68];
+          A[nzc24[j]*17 + nzc24[k]] += FE1_C3[ip][j]*FE1_C3[ip][k]*I[68];
           // Number of operations to compute entry: 3
-          A[nzc26[j]*17 + nzc12[k]] += FE0_C0[ip][k]*FE1_C4[ip][j]*I[69];
+          A[nzc24[j]*17 + nzc25[k]] += FE1_C3[ip][j]*FE1_C3_D100[ip][k]*I[69];
           // Number of operations to compute entry: 3
-          A[nzc26[j]*17 + nzc16[k]] += FE0_C0[ip][k]*FE1_C4[ip][j]*I[70];
+          A[nzc24[j]*17 + nzc26[k]] += FE1_C3[ip][j]*FE1_C4[ip][k]*I[70];
           // Number of operations to compute entry: 3
-          A[nzc27[j]*17 + nzc12[k]] += FE0_C0[ip][k]*FE1_C5[ip][j]*I[71];
+          A[nzc24[j]*17 + nzc27[k]] += FE1_C3[ip][j]*FE1_C5[ip][k]*I[71];
           // Number of operations to compute entry: 3
-          A[nzc27[j]*17 + nzc16[k]] += FE0_C0[ip][k]*FE1_C5[ip][j]*I[72];
+          A[nzc25[j]*17 + nzc25[k]] += FE1_C3_D100[ip][j]*FE1_C3_D100[ip][k]*I[72];
+          // Number of operations to compute entry: 3
+          A[nzc26[j]*17 + nzc12[k]] += FE0_C0[ip][k]*FE1_C4[ip][j]*I[73];
+          // Number of operations to compute entry: 3
+          A[nzc26[j]*17 + nzc16[k]] += FE0_C0[ip][k]*FE1_C4[ip][j]*I[74];
+          // Number of operations to compute entry: 3
+          A[nzc26[j]*17 + nzc24[k]] += FE1_C3[ip][k]*FE1_C4[ip][j]*I[75];
+          // Number of operations to compute entry: 3
+          A[nzc26[j]*17 + nzc25[k]] += FE1_C3_D100[ip][k]*FE1_C4[ip][j]*I[76];
+          // Number of operations to compute entry: 3
+          A[nzc26[j]*17 + nzc26[k]] += FE1_C4[ip][j]*FE1_C4[ip][k]*I[77];
+          // Number of operations to compute entry: 3
+          A[nzc26[j]*17 + nzc27[k]] += FE1_C4[ip][j]*FE1_C5[ip][k]*I[78];
+          // Number of operations to compute entry: 3
+          A[nzc27[j]*17 + nzc12[k]] += FE0_C0[ip][k]*FE1_C5[ip][j]*I[79];
+          // Number of operations to compute entry: 3
+          A[nzc27[j]*17 + nzc16[k]] += FE0_C0[ip][k]*FE1_C5[ip][j]*I[80];
+          // Number of operations to compute entry: 3
+          A[nzc27[j]*17 + nzc24[k]] += FE1_C3[ip][k]*FE1_C5[ip][j]*I[81];
+          // Number of operations to compute entry: 3
+          A[nzc27[j]*17 + nzc25[k]] += FE1_C3_D100[ip][k]*FE1_C5[ip][j]*I[82];
+          // Number of operations to compute entry: 3
+          A[nzc27[j]*17 + nzc26[k]] += FE1_C4[ip][k]*FE1_C5[ip][j]*I[83];
+          // Number of operations to compute entry: 3
+          A[nzc27[j]*17 + nzc27[k]] += FE1_C5[ip][j]*FE1_C5[ip][k]*I[84];
         } // end loop over 'k'
       } // end loop over 'j'
       
@@ -17158,487 +17229,9 @@ public:
       for (unsigned int k = 0; k < 4; k++)
       {
         // Number of operations to compute entry: 2
-        A[16*17 + nzc25[k]] += FE1_C3_D100[ip][k]*I[73];
+        A[16*17 + nzc25[k]] += FE1_C3_D100[ip][k]*I[85];
       } // end loop over 'k'
     } // end loop over 'ip'
-  }
-
-};
-
-
-class vector_linear_pnp_ns_forms_exterior_facet_integral_0_otherwise: public ufc::exterior_facet_integral
-{
-public:
-
-  vector_linear_pnp_ns_forms_exterior_facet_integral_0_otherwise() : ufc::exterior_facet_integral()
-  {
-    
-  }
-
-  ~vector_linear_pnp_ns_forms_exterior_facet_integral_0_otherwise() override
-  {
-    
-  }
-
-  const std::vector<bool> & enabled_coefficients() const final override
-  {
-    static const std::vector<bool> enabled({false, false, false, false, false, false, false, true, false, true});
-    return enabled;
-  }
-
-  void tabulate_tensor(double * A,
-                       const double * const * w,
-                       const double * coordinate_dofs,
-                       std::size_t facet,
-                       int cell_orientation) const final override
-  {
-    // This function was generated using 'quadrature' representation
-    // with the following integrals metadata:
-    // 
-    //   num_cells:         None
-    //   quadrature_degree: 2
-    //   quadrature_rule:   'default'
-    //   representation:    'quadrature'
-    // 
-    // and the following integral 0 metadata:
-    // 
-    //   estimated_polynomial_degree: 2
-    //   quadrature_degree:           2
-    //   quadrature_rule:             'default'
-    //   representation:              'quadrature'
-    
-    // Compute Jacobian
-    double J[9];
-    compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
-    
-    // Compute Jacobian inverse and determinant
-    double K[9];
-    double detJ;
-    compute_jacobian_inverse_tetrahedron_3d(K, detJ, J);
-    
-    
-    
-    // Get vertices on face
-    static unsigned int face_vertices[4][3] = {{1, 2, 3}, {0, 2, 3}, {0, 1, 3}, {0, 1, 2}};
-    const unsigned int v0 = face_vertices[facet][0];
-    const unsigned int v1 = face_vertices[facet][1];
-    const unsigned int v2 = face_vertices[facet][2];
-    
-    // Compute scale factor (area of face scaled by area of reference triangle)
-    const double a0 = (coordinate_dofs[3*v0 + 1]*coordinate_dofs[3*v1 + 2]  + coordinate_dofs[3*v0 + 2]*coordinate_dofs[3*v2 + 1]  + coordinate_dofs[3*v1 + 1]*coordinate_dofs[3*v2 + 2]) - (coordinate_dofs[3*v2 + 1]*coordinate_dofs[3*v1 + 2] + coordinate_dofs[3*v2 + 2]*coordinate_dofs[3*v0 + 1] + coordinate_dofs[3*v1 + 1]*coordinate_dofs[3*v0 + 2]);
-    
-    const double a1 = (coordinate_dofs[3*v0 + 2]*coordinate_dofs[3*v1 + 0]  + coordinate_dofs[3*v0 + 0]*coordinate_dofs[3*v2 + 2] + coordinate_dofs[3*v1 + 2]*coordinate_dofs[3*v2 + 0]) - (coordinate_dofs[3*v2 + 2]*coordinate_dofs[3*v1 + 0]  + coordinate_dofs[3*v2 + 0]*coordinate_dofs[3*v0 + 2] + coordinate_dofs[3*v1 + 2]*coordinate_dofs[3*v0 + 0]);
-    
-    const double a2 = (coordinate_dofs[3*v0 + 0]*coordinate_dofs[3*v1 + 1]  + coordinate_dofs[3*v0 + 1]*coordinate_dofs[3*v2 + 0]  + coordinate_dofs[3*v1 + 0]*coordinate_dofs[3*v2 + 1]) - (coordinate_dofs[3*v2 + 0]*coordinate_dofs[3*v1 + 1]  + coordinate_dofs[3*v2 + 1]*coordinate_dofs[3*v0 + 0]  + coordinate_dofs[3*v1 + 0]*coordinate_dofs[3*v0 + 1]);
-    
-    const double det = std::sqrt(a0*a0 + a1*a1 + a2*a2);
-    
-    
-    const bool direction = a0*(coordinate_dofs[3*facet] - coordinate_dofs[3*v0]) + a1*(coordinate_dofs[3*facet + 1] - coordinate_dofs[3*v0 + 1])  + a2*(coordinate_dofs[3*facet + 2] - coordinate_dofs[3*v0 + 2]) < 0;
-    
-    const double n0 = direction ? a0 / det : -a0 / det;
-    const double n1 = direction ? a1 / det : -a1 / det;
-    const double n2 = direction ? a2 / det : -a2 / det;
-    
-    // Facet area (divide by two because 'det' is scaled by area of reference triangle)
-    
-    // Min edge length of facet
-    double min_facet_edge_length;
-    compute_min_facet_edge_length_tetrahedron_3d(min_facet_edge_length, facet, coordinate_dofs);
-    
-    
-    // Max edge length of facet
-    double max_facet_edge_length;
-    compute_max_facet_edge_length_tetrahedron_3d(max_facet_edge_length, facet, coordinate_dofs);
-    
-    
-    // Compute cell volume
-    const double volume = std::abs(detJ)/6.0;
-    
-    
-    // Compute circumradius
-    const double v1v2  = std::sqrt( (coordinate_dofs[6] - coordinate_dofs[3])*(coordinate_dofs[6] - coordinate_dofs[3]) + (coordinate_dofs[7] - coordinate_dofs[4])*(coordinate_dofs[7] - coordinate_dofs[4]) + (coordinate_dofs[8] - coordinate_dofs[5])*(coordinate_dofs[8] - coordinate_dofs[5]) );
-    const double v0v2  = std::sqrt(J[1]*J[1] + J[4]*J[4] + J[7]*J[7]);
-    const double v0v1  = std::sqrt(J[0]*J[0] + J[3]*J[3] + J[6]*J[6]);
-    const double v0v3  = std::sqrt(J[2]*J[2] + J[5]*J[5] + J[8]*J[8]);
-    const double v1v3  = std::sqrt( (coordinate_dofs[9] - coordinate_dofs[3])*(coordinate_dofs[9] - coordinate_dofs[3]) + (coordinate_dofs[10] - coordinate_dofs[4])*(coordinate_dofs[10] - coordinate_dofs[4]) + (coordinate_dofs[11] - coordinate_dofs[5])*(coordinate_dofs[11] - coordinate_dofs[5]) );
-    const double v2v3  = std::sqrt( (coordinate_dofs[9] - coordinate_dofs[6])*(coordinate_dofs[9] - coordinate_dofs[6]) + (coordinate_dofs[10] - coordinate_dofs[7])*(coordinate_dofs[10] - coordinate_dofs[7]) + (coordinate_dofs[11] - coordinate_dofs[8])*(coordinate_dofs[11] - coordinate_dofs[8]) );
-    const  double la   = v1v2*v0v3;
-    const  double lb   = v0v2*v1v3;
-    const  double lc   = v0v1*v2v3;
-    const  double s    = 0.5*(la+lb+lc);
-    const  double area = std::sqrt(s*(s-la)*(s-lb)*(s-lc));
-    const double circumradius = area / ( 6.0*volume );
-    
-    
-    // Array of quadrature weights.
-    static const double W3[3] = {0.166666666666667, 0.166666666666667, 0.166666666666667};
-    // Quadrature points on the UFC reference element: (0.166666666666667, 0.166666666666667), (0.166666666666667, 0.666666666666667), (0.666666666666667, 0.166666666666667)
-    
-    // Values of basis functions at quadrature points.
-    static const double FE0_f0_C3[3][4] = \
-    {{-0.666666666666667, -0.333333333333333, -0.666666666666667, 0.666666666666667},
-    {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
-    {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc3[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f0_C4[3][4] = \
-    {{-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666666}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc4[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f0_C5[3][4] = \
-    {{-0.166666666666667, 0.166666666666667, -0.166666666666667, -0.833333333333333},
-    {-0.666666666666666, 0.666666666666666, -0.666666666666666, -0.333333333333334},
-    {-0.166666666666667, 0.166666666666667, -0.166666666666667, -0.833333333333333}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc5[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f1_C3[3][1] = \
-    {{-1.0},
-    {-1.0},
-    {-1.0}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc10[1] = {13};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc20[1] = {15};
-    
-    static const double FE0_f2_C3[3][4] = \
-    {{-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
-    {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
-    {-0.666666666666667, -0.333333333333333, -0.666666666666667, 0.666666666666667}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc14[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f3_C4[3][4] = \
-    {{-0.166666666666667, 0.166666666666666, 0.833333333333333, 0.166666666666666},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666666},
-    {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc19[4] = {12, 13, 14, 15};
-    
-    // Reset values in the element tensor.
-    for (unsigned int r = 0; r < 289; r++)
-    {
-      A[r] = 0.0;
-    } // end loop over 'r'
-    // Number of operations to compute geometry constants: 168.
-    double G[6];
-    G[0] = det*w[7][0]*w[9][0]*(J[0]*J[0]*n0*n0 + J[3]*n1*(2.0*J[0]*n0 + J[3]*n1) + J[6]*n2*(2.0*(J[0]*n0 + J[3]*n1) + J[6]*n2))/(circumradius*detJ*detJ);
-    G[1] = det*w[7][0]*w[9][0]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[2] = det*w[7][0]*w[9][0]*(J[0]*J[2]*n0*n0 + n1*(J[3]*J[5]*n1 + n0*(J[0]*J[5] + J[2]*J[3])) + n2*(J[6]*(J[2]*n0 + J[5]*n1) + J[8]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[3] = det*w[7][0]*w[9][0]*(J[1]*J[1]*n0*n0 + J[4]*n1*(2.0*J[1]*n0 + J[4]*n1) + J[7]*n2*(2.0*(J[1]*n0 + J[4]*n1) + J[7]*n2))/(circumradius*detJ*detJ);
-    G[4] = det*w[7][0]*w[9][0]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
-    G[5] = det*w[7][0]*w[9][0]*(J[2]*J[2]*n0*n0 + J[5]*n1*(2.0*J[2]*n0 + J[5]*n1) + J[8]*n2*(2.0*(J[2]*n0 + J[5]*n1) + J[8]*n2))/(circumradius*detJ*detJ);
-    
-    // Compute element tensor using UFL quadrature representation
-    // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
-    switch (facet)
-    {
-    case 0:
-      {
-        // Total number of operations to compute element tensor (from this point): 1314
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 1314
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Number of operations to compute ip constants: 6
-        double I[6];
-        // Number of operations: 1
-        I[0] = G[0]*W3[ip];
-        
-        // Number of operations: 1
-        I[1] = G[1]*W3[ip];
-        
-        // Number of operations: 1
-        I[2] = G[2]*W3[ip];
-        
-        // Number of operations: 1
-        I[3] = G[3]*W3[ip];
-        
-        // Number of operations: 1
-        I[4] = G[4]*W3[ip];
-        
-        // Number of operations: 1
-        I[5] = G[5]*W3[ip];
-        
-        
-        // Number of operations for primary indices: 432
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          for (unsigned int k = 0; k < 4; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc3[j]*17 + nzc3[k]] += FE0_f0_C3[ip][j]*FE0_f0_C3[ip][k]*I[0];
-            // Number of operations to compute entry: 3
-            A[nzc3[j]*17 + nzc4[k]] += FE0_f0_C3[ip][j]*FE0_f0_C4[ip][k]*I[1];
-            // Number of operations to compute entry: 3
-            A[nzc3[j]*17 + nzc5[k]] += FE0_f0_C3[ip][j]*FE0_f0_C5[ip][k]*I[2];
-            // Number of operations to compute entry: 3
-            A[nzc4[j]*17 + nzc3[k]] += FE0_f0_C3[ip][k]*FE0_f0_C4[ip][j]*I[1];
-            // Number of operations to compute entry: 3
-            A[nzc4[j]*17 + nzc4[k]] += FE0_f0_C4[ip][j]*FE0_f0_C4[ip][k]*I[3];
-            // Number of operations to compute entry: 3
-            A[nzc4[j]*17 + nzc5[k]] += FE0_f0_C4[ip][j]*FE0_f0_C5[ip][k]*I[4];
-            // Number of operations to compute entry: 3
-            A[nzc5[j]*17 + nzc3[k]] += FE0_f0_C3[ip][k]*FE0_f0_C5[ip][j]*I[2];
-            // Number of operations to compute entry: 3
-            A[nzc5[j]*17 + nzc4[k]] += FE0_f0_C4[ip][k]*FE0_f0_C5[ip][j]*I[4];
-            // Number of operations to compute entry: 3
-            A[nzc5[j]*17 + nzc5[k]] += FE0_f0_C5[ip][j]*FE0_f0_C5[ip][k]*I[5];
-          } // end loop over 'k'
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    case 1:
-      {
-        // Total number of operations to compute element tensor (from this point): 747
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 747
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Number of operations to compute ip constants: 6
-        double I[6];
-        // Number of operations: 1
-        I[0] = G[0]*W3[ip];
-        
-        // Number of operations: 1
-        I[1] = G[1]*W3[ip];
-        
-        // Number of operations: 1
-        I[2] = G[2]*W3[ip];
-        
-        // Number of operations: 1
-        I[3] = G[3]*W3[ip];
-        
-        // Number of operations: 1
-        I[4] = G[4]*W3[ip];
-        
-        // Number of operations: 1
-        I[5] = G[5]*W3[ip];
-        
-        
-        // Number of operations for primary indices: 3
-        for (unsigned int j = 0; j < 1; j++)
-        {
-          for (unsigned int k = 0; k < 1; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc10[j]*17 + nzc10[k]] += FE0_f1_C3[ip][j]*FE0_f1_C3[ip][k]*I[0];
-          } // end loop over 'k'
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 24
-        for (unsigned int j = 0; j < 1; j++)
-        {
-          for (unsigned int k = 0; k < 4; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc10[j]*17 + nzc4[k]] += FE0_f0_C4[ip][k]*FE0_f1_C3[ip][j]*I[1];
-            // Number of operations to compute entry: 3
-            A[nzc10[j]*17 + nzc5[k]] += FE0_f0_C5[ip][k]*FE0_f1_C3[ip][j]*I[2];
-          } // end loop over 'k'
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 24
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          for (unsigned int k = 0; k < 1; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc4[j]*17 + nzc10[k]] += FE0_f0_C4[ip][j]*FE0_f1_C3[ip][k]*I[1];
-            // Number of operations to compute entry: 3
-            A[nzc5[j]*17 + nzc10[k]] += FE0_f0_C5[ip][j]*FE0_f1_C3[ip][k]*I[2];
-          } // end loop over 'k'
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 192
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          for (unsigned int k = 0; k < 4; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc4[j]*17 + nzc4[k]] += FE0_f0_C4[ip][j]*FE0_f0_C4[ip][k]*I[3];
-            // Number of operations to compute entry: 3
-            A[nzc4[j]*17 + nzc5[k]] += FE0_f0_C4[ip][j]*FE0_f0_C5[ip][k]*I[4];
-            // Number of operations to compute entry: 3
-            A[nzc5[j]*17 + nzc4[k]] += FE0_f0_C4[ip][k]*FE0_f0_C5[ip][j]*I[4];
-            // Number of operations to compute entry: 3
-            A[nzc5[j]*17 + nzc5[k]] += FE0_f0_C5[ip][j]*FE0_f0_C5[ip][k]*I[5];
-          } // end loop over 'k'
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    case 2:
-      {
-        // Total number of operations to compute element tensor (from this point): 693
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 693
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Number of operations to compute ip constants: 6
-        double I[6];
-        // Number of operations: 1
-        I[0] = G[3]*W3[ip];
-        
-        // Number of operations: 1
-        I[1] = G[1]*W3[ip];
-        
-        // Number of operations: 1
-        I[2] = G[4]*W3[ip];
-        
-        // Number of operations: 1
-        I[3] = G[0]*W3[ip];
-        
-        // Number of operations: 1
-        I[4] = G[2]*W3[ip];
-        
-        // Number of operations: 1
-        I[5] = G[5]*W3[ip];
-        
-        
-        // Number of operations for primary indices: 1
-        // Number of operations to compute entry: 1
-        A[252] += I[0];
-        
-        // Number of operations for primary indices: 16
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc14[j]*17 + 14] += FE0_f2_C3[ip][j]*I[1];
-          // Number of operations to compute entry: 2
-          A[nzc5[j]*17 + 14] += FE0_f0_C5[ip][j]*I[2];
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 192
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          for (unsigned int k = 0; k < 4; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc14[j]*17 + nzc14[k]] += FE0_f2_C3[ip][j]*FE0_f2_C3[ip][k]*I[3];
-            // Number of operations to compute entry: 3
-            A[nzc14[j]*17 + nzc5[k]] += FE0_f0_C5[ip][k]*FE0_f2_C3[ip][j]*I[4];
-            // Number of operations to compute entry: 3
-            A[nzc5[j]*17 + nzc14[k]] += FE0_f0_C5[ip][j]*FE0_f2_C3[ip][k]*I[4];
-            // Number of operations to compute entry: 3
-            A[nzc5[j]*17 + nzc5[k]] += FE0_f0_C5[ip][j]*FE0_f0_C5[ip][k]*I[5];
-          } // end loop over 'k'
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 16
-        for (unsigned int k = 0; k < 4; k++)
-        {
-          // Number of operations to compute entry: 2
-          A[14*17 + nzc14[k]] += FE0_f2_C3[ip][k]*I[1];
-          // Number of operations to compute entry: 2
-          A[14*17 + nzc5[k]] += FE0_f0_C5[ip][k]*I[2];
-        } // end loop over 'k'
-      } // end loop over 'ip'
-        break;
-      }
-    case 3:
-      {
-        // Total number of operations to compute element tensor (from this point): 747
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 747
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Number of operations to compute ip constants: 6
-        double I[6];
-        // Number of operations: 1
-        I[0] = G[5]*W3[ip];
-        
-        // Number of operations: 1
-        I[1] = G[2]*W3[ip];
-        
-        // Number of operations: 1
-        I[2] = G[4]*W3[ip];
-        
-        // Number of operations: 1
-        I[3] = G[0]*W3[ip];
-        
-        // Number of operations: 1
-        I[4] = G[1]*W3[ip];
-        
-        // Number of operations: 1
-        I[5] = G[3]*W3[ip];
-        
-        
-        // Number of operations for primary indices: 3
-        for (unsigned int j = 0; j < 1; j++)
-        {
-          for (unsigned int k = 0; k < 1; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc20[j]*17 + nzc20[k]] += FE0_f1_C3[ip][j]*FE0_f1_C3[ip][k]*I[0];
-          } // end loop over 'k'
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 24
-        for (unsigned int j = 0; j < 1; j++)
-        {
-          for (unsigned int k = 0; k < 4; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc20[j]*17 + nzc14[k]] += FE0_f1_C3[ip][j]*FE0_f2_C3[ip][k]*I[1];
-            // Number of operations to compute entry: 3
-            A[nzc20[j]*17 + nzc19[k]] += FE0_f1_C3[ip][j]*FE0_f3_C4[ip][k]*I[2];
-          } // end loop over 'k'
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 24
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          for (unsigned int k = 0; k < 1; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc14[j]*17 + nzc20[k]] += FE0_f1_C3[ip][k]*FE0_f2_C3[ip][j]*I[1];
-            // Number of operations to compute entry: 3
-            A[nzc19[j]*17 + nzc20[k]] += FE0_f1_C3[ip][k]*FE0_f3_C4[ip][j]*I[2];
-          } // end loop over 'k'
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 192
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          for (unsigned int k = 0; k < 4; k++)
-          {
-            // Number of operations to compute entry: 3
-            A[nzc14[j]*17 + nzc14[k]] += FE0_f2_C3[ip][j]*FE0_f2_C3[ip][k]*I[3];
-            // Number of operations to compute entry: 3
-            A[nzc14[j]*17 + nzc19[k]] += FE0_f2_C3[ip][j]*FE0_f3_C4[ip][k]*I[4];
-            // Number of operations to compute entry: 3
-            A[nzc19[j]*17 + nzc14[k]] += FE0_f2_C3[ip][k]*FE0_f3_C4[ip][j]*I[4];
-            // Number of operations to compute entry: 3
-            A[nzc19[j]*17 + nzc19[k]] += FE0_f3_C4[ip][j]*FE0_f3_C4[ip][k]*I[5];
-          } // end loop over 'k'
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    }
-    
   }
 
 };
@@ -17660,7 +17253,7 @@ public:
 
   const std::vector<bool> & enabled_coefficients() const final override
   {
-    static const std::vector<bool> enabled({false, false, false, false, false, false, false, true, true, true});
+    static const std::vector<bool> enabled({false, false, false, false, false, false, false, false, true, true, true});
     return enabled;
   }
 
@@ -17847,39 +17440,39 @@ public:
     } // end loop over 'r'
     // Number of operations to compute geometry constants: 1605.
     double G[33];
-    G[0] = 2.0*det*w[7][0]*w[9][0]*(J_1[0]*J_1[0] + J_1[3]*J_1[3] + J_1[6]*J_1[6])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[1] = det*w[7][0]*w[8][0]*(-0.5*(J_1[0]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + J_1[3]*(J_1[0]*K_1[0]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + J_1[6]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[0]*K_1[0] + J_1[3]*K_1[1]))) - (J_1[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_1*detJ_1);
-    G[2] = 2.0*det*w[7][0]*w[9][0]*(J_1[0]*J_1[1] + J_1[3]*J_1[4] + J_1[6]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[3] = 2.0*det*w[7][0]*w[9][0]*(J_1[0]*J_1[2] + J_1[3]*J_1[5] + J_1[6]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[4] = -2.0*det*w[7][0]*w[9][0]*(J_0[0]*J_1[0] + J_0[3]*J_1[3] + J_0[6]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[5] = det*w[7][0]*w[8][0]*(-0.5*(n_00*(J_1[3]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[0]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[0]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[3]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) - (J_1[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_1);
-    G[6] = -2.0*det*w[7][0]*w[9][0]*(J_0[1]*J_1[0] + J_0[4]*J_1[3] + J_0[7]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[7] = -2.0*det*w[7][0]*w[9][0]*(J_0[2]*J_1[0] + J_0[5]*J_1[3] + J_0[8]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[8] = det*w[7][0]*w[8][0]*(-0.5*(J_1[1]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[8]*K_1[6])) + J_1[4]*(J_1[1]*K_1[3]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[8]*K_1[7])) + J_1[7]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[1]*K_1[3] + J_1[4]*K_1[4]))) - (J_1[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_1*detJ_1);
-    G[9] = det*w[7][0]*w[8][0]*(-0.5*(J_1[2]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3])) + J_1[5]*(J_1[2]*K_1[6]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4])) + J_1[8]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[2]*K_1[6] + J_1[5]*K_1[7]))) - (J_1[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_1*detJ_1);
-    G[10] = det*w[7][0]*w[8][0]*(0.5*(n_00*(J_0[3]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[0]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[0]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[3]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) + J_0[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_0*detJ_1);
-    G[11] = det*w[7][0]*w[8][0]*(0.5*(n_00*(J_0[4]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[1]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[1]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[4]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) + J_0[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_0*detJ_1);
-    G[12] = det*w[7][0]*w[8][0]*(0.5*(n_00*(J_0[5]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[2]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[2]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[5]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) + J_0[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_0*detJ_1);
-    G[13] = 2.0*det*w[7][0]*w[9][0]*(J_1[1]*J_1[1] + J_1[4]*J_1[4] + J_1[7]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[14] = 2.0*det*w[7][0]*w[9][0]*(J_1[1]*J_1[2] + J_1[4]*J_1[5] + J_1[7]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[15] = -2.0*det*w[7][0]*w[9][0]*(J_0[0]*J_1[1] + J_0[3]*J_1[4] + J_0[6]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[16] = det*w[7][0]*w[8][0]*(-0.5*(n_00*(J_1[4]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[1]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[1]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[4]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) - (J_1[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_1);
-    G[17] = -2.0*det*w[7][0]*w[9][0]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[18] = -2.0*det*w[7][0]*w[9][0]*(J_0[2]*J_1[1] + J_0[5]*J_1[4] + J_0[8]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[19] = 2.0*det*w[7][0]*w[9][0]*(J_1[2]*J_1[2] + J_1[5]*J_1[5] + J_1[8]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[20] = -2.0*det*w[7][0]*w[9][0]*(J_0[0]*J_1[2] + J_0[3]*J_1[5] + J_0[6]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[21] = det*w[7][0]*w[8][0]*(-0.5*(n_00*(J_1[5]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[2]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[2]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[5]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) - (J_1[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_1);
-    G[22] = -2.0*det*w[7][0]*w[9][0]*(J_0[1]*J_1[2] + J_0[4]*J_1[5] + J_0[7]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[23] = -2.0*det*w[7][0]*w[9][0]*(J_0[2]*J_1[2] + J_0[5]*J_1[5] + J_0[8]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[24] = 2.0*det*w[7][0]*w[9][0]*(J_0[0]*J_0[0] + J_0[3]*J_0[3] + J_0[6]*J_0[6])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[25] = det*w[7][0]*w[8][0]*(0.5*(J_0[0]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + J_0[3]*(J_0[0]*K_0[0]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + J_0[6]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[0]*K_0[0] + J_0[3]*K_0[1]))) + J_0[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_0);
-    G[26] = 2.0*det*w[7][0]*w[9][0]*(J_0[0]*J_0[1] + J_0[3]*J_0[4] + J_0[6]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[27] = 2.0*det*w[7][0]*w[9][0]*(J_0[0]*J_0[2] + J_0[3]*J_0[5] + J_0[6]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[28] = det*w[7][0]*w[8][0]*(0.5*(J_0[1]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[8]*K_0[6])) + J_0[4]*(J_0[1]*K_0[3]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[8]*K_0[7])) + J_0[7]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[1]*K_0[3] + J_0[4]*K_0[4]))) + J_0[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_0);
-    G[29] = det*w[7][0]*w[8][0]*(0.5*(J_0[2]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3])) + J_0[5]*(J_0[2]*K_0[6]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4])) + J_0[8]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[2]*K_0[6] + J_0[5]*K_0[7]))) + J_0[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_0);
-    G[30] = 2.0*det*w[7][0]*w[9][0]*(J_0[1]*J_0[1] + J_0[4]*J_0[4] + J_0[7]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[31] = 2.0*det*w[7][0]*w[9][0]*(J_0[1]*J_0[2] + J_0[4]*J_0[5] + J_0[7]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[32] = 2.0*det*w[7][0]*w[9][0]*(J_0[2]*J_0[2] + J_0[5]*J_0[5] + J_0[8]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[0] = 2.0*det*w[10][0]*w[8][0]*(J_1[0]*J_1[0] + J_1[3]*J_1[3] + J_1[6]*J_1[6])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[1] = det*w[8][0]*w[9][0]*(-0.5*(J_1[0]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + J_1[3]*(J_1[0]*K_1[0]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + J_1[6]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[0]*K_1[0] + J_1[3]*K_1[1]))) - (J_1[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_1*detJ_1);
+    G[2] = 2.0*det*w[10][0]*w[8][0]*(J_1[0]*J_1[1] + J_1[3]*J_1[4] + J_1[6]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[3] = 2.0*det*w[10][0]*w[8][0]*(J_1[0]*J_1[2] + J_1[3]*J_1[5] + J_1[6]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[4] = -2.0*det*w[10][0]*w[8][0]*(J_0[0]*J_1[0] + J_0[3]*J_1[3] + J_0[6]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[5] = det*w[8][0]*w[9][0]*(-0.5*(n_00*(J_1[3]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[0]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[0]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[3]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) - (J_1[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_1);
+    G[6] = -2.0*det*w[10][0]*w[8][0]*(J_0[1]*J_1[0] + J_0[4]*J_1[3] + J_0[7]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[7] = -2.0*det*w[10][0]*w[8][0]*(J_0[2]*J_1[0] + J_0[5]*J_1[3] + J_0[8]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[8] = det*w[8][0]*w[9][0]*(-0.5*(J_1[1]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[8]*K_1[6])) + J_1[4]*(J_1[1]*K_1[3]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[8]*K_1[7])) + J_1[7]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[1]*K_1[3] + J_1[4]*K_1[4]))) - (J_1[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_1*detJ_1);
+    G[9] = det*w[8][0]*w[9][0]*(-0.5*(J_1[2]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3])) + J_1[5]*(J_1[2]*K_1[6]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4])) + J_1[8]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[2]*K_1[6] + J_1[5]*K_1[7]))) - (J_1[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_1*detJ_1);
+    G[10] = det*w[8][0]*w[9][0]*(0.5*(n_00*(J_0[3]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[0]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[0]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[3]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) + J_0[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_0*detJ_1);
+    G[11] = det*w[8][0]*w[9][0]*(0.5*(n_00*(J_0[4]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[1]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[1]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[4]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) + J_0[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_0*detJ_1);
+    G[12] = det*w[8][0]*w[9][0]*(0.5*(n_00*(J_0[5]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[2]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[2]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[5]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) + J_0[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_0*detJ_1);
+    G[13] = 2.0*det*w[10][0]*w[8][0]*(J_1[1]*J_1[1] + J_1[4]*J_1[4] + J_1[7]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[14] = 2.0*det*w[10][0]*w[8][0]*(J_1[1]*J_1[2] + J_1[4]*J_1[5] + J_1[7]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[15] = -2.0*det*w[10][0]*w[8][0]*(J_0[0]*J_1[1] + J_0[3]*J_1[4] + J_0[6]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[16] = det*w[8][0]*w[9][0]*(-0.5*(n_00*(J_1[4]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[1]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[1]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[4]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) - (J_1[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_1);
+    G[17] = -2.0*det*w[10][0]*w[8][0]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[18] = -2.0*det*w[10][0]*w[8][0]*(J_0[2]*J_1[1] + J_0[5]*J_1[4] + J_0[8]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[19] = 2.0*det*w[10][0]*w[8][0]*(J_1[2]*J_1[2] + J_1[5]*J_1[5] + J_1[8]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[20] = -2.0*det*w[10][0]*w[8][0]*(J_0[0]*J_1[2] + J_0[3]*J_1[5] + J_0[6]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[21] = det*w[8][0]*w[9][0]*(-0.5*(n_00*(J_1[5]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[2]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[2]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[5]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) - (J_1[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_1);
+    G[22] = -2.0*det*w[10][0]*w[8][0]*(J_0[1]*J_1[2] + J_0[4]*J_1[5] + J_0[7]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[23] = -2.0*det*w[10][0]*w[8][0]*(J_0[2]*J_1[2] + J_0[5]*J_1[5] + J_0[8]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[24] = 2.0*det*w[10][0]*w[8][0]*(J_0[0]*J_0[0] + J_0[3]*J_0[3] + J_0[6]*J_0[6])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[25] = det*w[8][0]*w[9][0]*(0.5*(J_0[0]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + J_0[3]*(J_0[0]*K_0[0]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + J_0[6]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[0]*K_0[0] + J_0[3]*K_0[1]))) + J_0[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_0);
+    G[26] = 2.0*det*w[10][0]*w[8][0]*(J_0[0]*J_0[1] + J_0[3]*J_0[4] + J_0[6]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[27] = 2.0*det*w[10][0]*w[8][0]*(J_0[0]*J_0[2] + J_0[3]*J_0[5] + J_0[6]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[28] = det*w[8][0]*w[9][0]*(0.5*(J_0[1]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[8]*K_0[6])) + J_0[4]*(J_0[1]*K_0[3]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[8]*K_0[7])) + J_0[7]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[1]*K_0[3] + J_0[4]*K_0[4]))) + J_0[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_0);
+    G[29] = det*w[8][0]*w[9][0]*(0.5*(J_0[2]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3])) + J_0[5]*(J_0[2]*K_0[6]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4])) + J_0[8]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[2]*K_0[6] + J_0[5]*K_0[7]))) + J_0[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_0);
+    G[30] = 2.0*det*w[10][0]*w[8][0]*(J_0[1]*J_0[1] + J_0[4]*J_0[4] + J_0[7]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[31] = 2.0*det*w[10][0]*w[8][0]*(J_0[1]*J_0[2] + J_0[4]*J_0[5] + J_0[7]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[32] = 2.0*det*w[10][0]*w[8][0]*(J_0[2]*J_0[2] + J_0[5]*J_0[5] + J_0[8]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
@@ -22208,7 +21801,7 @@ public:
 
   const std::vector<bool> & enabled_coefficients() const final override
   {
-    static const std::vector<bool> enabled({true, true, true, true, true, true, true, true, false, false, true, false, false});
+    static const std::vector<bool> enabled({true, true, true, true, true, true, true, true, true, true, true, true, false, false});
     return enabled;
   }
 
@@ -22255,7 +21848,7 @@ public:
     // Quadrature points on the UFC reference element: (0.0, 0.5, 0.5), (0.5, 0.0, 0.5), (0.5, 0.5, 0.0), (0.5, 0.0, 0.0), (0.0, 0.5, 0.0), (0.0, 0.0, 0.5), (0.698419704324387, 0.100526765225204, 0.100526765225204), (0.100526765225204, 0.100526765225204, 0.100526765225204), (0.100526765225204, 0.100526765225204, 0.698419704324387), (0.100526765225204, 0.698419704324387, 0.100526765225204), (0.0568813795204234, 0.314372873493192, 0.314372873493192), (0.314372873493192, 0.314372873493192, 0.314372873493192), (0.314372873493192, 0.314372873493192, 0.0568813795204234), (0.314372873493192, 0.0568813795204234, 0.314372873493192)
     
     // Values of basis functions at quadrature points.
-    static const double FE1_C0[14][4] = \
+    static const double FE0[14][4] = \
     {{0.0, 0.0, 0.5, 0.5},
     {0.0, 0.5, 0.0, 0.5},
     {0.0, 0.5, 0.5, 0.0},
@@ -22272,15 +21865,15 @@ public:
     {0.314372873493192, 0.314372873493192, 0.0568813795204235, 0.314372873493192}};
     
     // Array of non-zero columns
-    static const unsigned int nzc0[4] = {0, 1, 2, 3};
+    static const unsigned int nzc3[4] = {0, 1, 2, 3};
     
     // Array of non-zero columns
-    static const unsigned int nzc4[4] = {4, 5, 6, 7};
+    static const unsigned int nzc7[4] = {4, 5, 6, 7};
     
     // Array of non-zero columns
-    static const unsigned int nzc20[4] = {8, 9, 10, 11};
+    static const unsigned int nzc23[4] = {8, 9, 10, 11};
     
-    static const double FE1_C0_D001[14][2] = \
+    static const double FE0_D001[14][2] = \
     {{-1.0, 1.0},
     {-1.0, 1.0},
     {-1.0, 1.0},
@@ -22297,60 +21890,69 @@ public:
     {-1.0, 1.0}};
     
     // Array of non-zero columns
-    static const unsigned int nzc1[2] = {0, 3};
+    static const unsigned int nzc0[2] = {0, 3};
     
     // Array of non-zero columns
-    static const unsigned int nzc2[2] = {0, 2};
+    static const unsigned int nzc1[2] = {0, 2};
     
     // Array of non-zero columns
-    static const unsigned int nzc3[2] = {0, 1};
+    static const unsigned int nzc2[2] = {0, 1};
     
     // Array of non-zero columns
-    static const unsigned int nzc5[2] = {4, 7};
+    static const unsigned int nzc4[2] = {0, 3};
     
     // Array of non-zero columns
-    static const unsigned int nzc6[2] = {4, 6};
+    static const unsigned int nzc5[2] = {0, 2};
     
     // Array of non-zero columns
-    static const unsigned int nzc7[2] = {4, 5};
+    static const unsigned int nzc6[2] = {0, 1};
     
     // Array of non-zero columns
-    static const unsigned int nzc9[2] = {8, 11};
+    static const unsigned int nzc8[2] = {4, 7};
     
     // Array of non-zero columns
-    static const unsigned int nzc10[2] = {8, 10};
+    static const unsigned int nzc9[2] = {4, 6};
     
     // Array of non-zero columns
-    static const unsigned int nzc11[2] = {8, 9};
+    static const unsigned int nzc10[2] = {4, 5};
     
     // Array of non-zero columns
-    static const unsigned int nzc13[2] = {0, 3};
+    static const unsigned int nzc12[2] = {8, 11};
     
     // Array of non-zero columns
-    static const unsigned int nzc14[2] = {0, 2};
+    static const unsigned int nzc13[2] = {8, 10};
     
     // Array of non-zero columns
-    static const unsigned int nzc15[2] = {0, 1};
+    static const unsigned int nzc14[2] = {8, 9};
     
     // Array of non-zero columns
-    static const unsigned int nzc17[2] = {4, 7};
+    static const unsigned int nzc16[2] = {0, 3};
     
     // Array of non-zero columns
-    static const unsigned int nzc18[2] = {4, 6};
+    static const unsigned int nzc17[2] = {0, 2};
     
     // Array of non-zero columns
-    static const unsigned int nzc19[2] = {4, 5};
+    static const unsigned int nzc18[2] = {0, 1};
     
     // Array of non-zero columns
-    static const unsigned int nzc21[2] = {8, 11};
+    static const unsigned int nzc20[2] = {4, 7};
     
     // Array of non-zero columns
-    static const unsigned int nzc22[2] = {8, 10};
+    static const unsigned int nzc21[2] = {4, 6};
     
     // Array of non-zero columns
-    static const unsigned int nzc23[2] = {8, 9};
+    static const unsigned int nzc22[2] = {4, 5};
     
-    static const double FE2_C3[14][4] = \
+    // Array of non-zero columns
+    static const unsigned int nzc24[2] = {8, 11};
+    
+    // Array of non-zero columns
+    static const unsigned int nzc25[2] = {8, 10};
+    
+    // Array of non-zero columns
+    static const unsigned int nzc26[2] = {8, 9};
+    
+    static const double FE3_C3[14][4] = \
     {{0.0, -1.0, 0.0, 0.0},
     {-0.5, -0.5, -0.5, 0.5},
     {-0.5, -0.5, -0.5, 0.5},
@@ -22367,9 +21969,9 @@ public:
     {-0.314372873493192, -0.685627126506808, -0.314372873493192, 0.314372873493192}};
     
     // Array of non-zero columns
-    static const unsigned int nzc24[4] = {12, 13, 14, 15};
+    static const unsigned int nzc27[4] = {12, 13, 14, 15};
     
-    static const double FE2_C3_D100[14][4] = \
+    static const double FE3_C3_D100[14][4] = \
     {{-1.0, 1.0, -1.0, 1.0},
     {-1.0, 1.0, -1.0, 1.0},
     {-1.0, 1.0, -1.0, 1.0},
@@ -22386,9 +21988,9 @@ public:
     {-1.0, 1.0, -1.0, 1.0}};
     
     // Array of non-zero columns
-    static const unsigned int nzc25[4] = {12, 13, 14, 15};
+    static const unsigned int nzc28[4] = {12, 13, 14, 15};
     
-    static const double FE2_C4[14][4] = \
+    static const double FE3_C4[14][4] = \
     {{-0.5, 0.5, 0.5, 0.5},
     {0.0, 0.0, 1.0, 0.0},
     {-0.5, 0.5, 0.5, 0.5},
@@ -22405,9 +22007,9 @@ public:
     {-0.0568813795204235, 0.0568813795204235, 0.943118620479576, 0.0568813795204235}};
     
     // Array of non-zero columns
-    static const unsigned int nzc26[4] = {12, 13, 14, 15};
+    static const unsigned int nzc29[4] = {12, 13, 14, 15};
     
-    static const double FE2_C5[14][4] = \
+    static const double FE3_C5[14][4] = \
     {{-0.5, 0.5, -0.5, -0.5},
     {-0.5, 0.5, -0.5, -0.5},
     {0.0, 0.0, 0.0, -1.0},
@@ -22424,83 +22026,117 @@ public:
     {-0.314372873493192, 0.314372873493192, -0.314372873493192, -0.685627126506808}};
     
     // Array of non-zero columns
-    static const unsigned int nzc27[4] = {12, 13, 14, 15};
+    static const unsigned int nzc30[4] = {12, 13, 14, 15};
     
     // Reset values in the element tensor.
     for (unsigned int r = 0; r < 17; r++)
     {
       A[r] = 0.0;
     } // end loop over 'r'
-    // Number of operations to compute geometry constants: 697.
-    double G[62];
+    // Number of operations to compute geometry constants: 2271.
+    double G[96];
     G[0] =  - det*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
     G[1] = det*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
     G[2] = det*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
     G[3] = det*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
-    G[4] =  - det*w[4][0]*w[5][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[5] =  - det*w[4][0]*w[5][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[6] =  - det*w[4][0]*w[5][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[7] =  - det*w[4][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[8] =  - det*w[4][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[9] =  - det*w[4][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[10] = det*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
-    G[11] = det*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
-    G[12] = det*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
-    G[13] =  - det*w[4][0]*w[5][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[14] =  - det*w[4][0]*w[5][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[15] =  - det*w[4][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[16] =  - det*w[4][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[17] = det*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
-    G[18] = det*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
-    G[19] = det*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
-    G[20] =  - det*w[4][0]*w[5][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[21] =  - det*w[4][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[22] =  - det*w[6][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[23] =  - det*w[6][0]*w[7][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[24] =  - det*w[6][0]*w[7][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[25] =  - det*w[6][0]*w[7][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[26] =  - det*w[6][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[27] =  - det*w[6][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[28] =  - det*w[6][0]*w[7][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[29] =  - det*w[6][0]*w[7][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[30] =  - det*w[6][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[31] =  - det*w[6][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[32] =  - det*w[6][0]*w[7][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[33] =  - det*w[6][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[34] =  - det*w[3][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[35] =  - det*w[3][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[36] =  - det*w[3][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[37] =  - det*w[3][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[38] =  - det*w[3][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[39] =  - det*w[3][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[40] = det*w[5][0];
-    G[41] = det*w[7][0];
-    G[42] =  - det*w[5][0]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
-    G[43] =  - det*w[7][0]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
-    G[44] =  - det*w[5][0]*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
-    G[45] =  - det*w[7][0]*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
-    G[46] =  - det*w[5][0]*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
-    G[47] =  - det*w[7][0]*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
-    G[48] = det*w[2][0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
-    G[49] = det*w[10][0]*( - (K[0]*K[0]*(J[3]*J[3] + J[6]*J[6]) + K[1]*K[1]*(J[0]*J[0] + J[6]*J[6]) + K[2]*K[2]*(J[0]*J[0] + J[3]*J[3]) + K[3]*K[3]*(J[4]*J[4] + J[7]*J[7]) + K[4]*K[4]*(J[1]*J[1] + J[7]*J[7]) + K[5]*K[5]*(J[1]*J[1] + J[4]*J[4]) + K[6]*K[6]*(J[5]*J[5] + J[8]*J[8]) + K[7]*K[7]*(J[2]*J[2] + J[8]*J[8]) + K[8]*K[8]*(J[2]*J[2] + J[5]*J[5]))-2.0*(J[0]*J[0]*K[0]*K[0] + J[3]*K[1]*(J[0]*K[0] + J[3]*K[1]) + J[6]*K[2]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2]) + K[3]*(J[0]*(J[4]*K[1] + J[7]*K[2]) + J[1]*J[1]*K[3] + K[0]*(J[3]*J[4] + J[6]*J[7])) + K[4]*(J[1]*(J[0]*K[1] + J[3]*K[0] + J[4]*K[3]) + J[4]*J[4]*K[4] + J[7]*(J[3]*K[2] + J[6]*K[1])) + K[5]*(J[6]*(J[1]*K[0] + J[4]*K[1]) + J[7]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5]) + K[2]*(J[0]*J[1] + J[3]*J[4])) + K[6]*(J[2]*J[2]*K[6] + J[5]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3]) + J[8]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3])) + K[7]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[5]*J[5]*K[7] + J[8]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4])) + K[8]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[8]*J[8]*K[8]))-4.0*(J[0]*J[1]*K[0]*K[3] + J[2]*K[6]*(J[0]*K[0] + J[1]*K[3]) + J[3]*J[4]*K[1]*K[4] + J[5]*K[7]*(J[3]*K[1] + J[4]*K[4]) + J[6]*J[7]*K[2]*K[5] + J[8]*K[8]*(J[6]*K[2] + J[7]*K[5])))/(detJ*detJ);
-    G[50] =  - det*w[5][0]*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
-    G[51] =  - det*w[7][0]*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
-    G[52] =  - det*w[5][0]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
-    G[53] =  - det*w[7][0]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
-    G[54] =  - det*w[5][0]*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
-    G[55] =  - det*w[7][0]*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
-    G[56] =  - det*w[5][0]*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
-    G[57] =  - det*w[7][0]*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
-    G[58] =  - det*w[5][0]*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
-    G[59] =  - det*w[7][0]*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
-    G[60] =  - det*w[5][0]*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
-    G[61] =  - det*w[7][0]*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
+    G[4] =  - det*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
+    G[5] =  - det*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
+    G[6] =  - det*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
+    G[7] =  - det*w[4][0]*w[5][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[8] =  - det*w[4][0]*w[5][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[9] =  - det*w[4][0]*w[5][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[10] =  - det*w[4][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[11] =  - det*w[4][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[12] =  - det*w[4][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[13] = det*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
+    G[14] = det*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
+    G[15] = det*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
+    G[16] =  - det*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
+    G[17] =  - det*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
+    G[18] =  - det*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
+    G[19] =  - det*w[4][0]*w[5][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[20] =  - det*w[4][0]*w[5][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[21] =  - det*w[4][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[22] =  - det*w[4][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[23] = det*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
+    G[24] = det*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
+    G[25] = det*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
+    G[26] =  - det*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
+    G[27] =  - det*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
+    G[28] =  - det*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
+    G[29] =  - det*w[4][0]*w[5][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[30] =  - det*w[4][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[31] =  - det*w[6][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[32] =  - det*w[6][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[33] =  - det*w[6][0]*w[7][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[34] =  - det*w[6][0]*w[7][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[35] =  - det*w[6][0]*w[7][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[36] =  - det*w[6][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[37] =  - det*w[6][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[38] =  - det*w[6][0]*w[7][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[39] =  - det*w[6][0]*w[7][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[40] =  - det*w[6][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[41] =  - det*w[6][0]*w[7][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[42] =  - det*w[6][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[43] = det*w[3][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[44] = det*w[3][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[45] = det*w[3][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[46] =  - det*w[3][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[47] =  - det*w[3][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[48] =  - det*w[3][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[49] = det*w[3][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[50] = det*w[3][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[51] =  - det*w[3][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[52] =  - det*w[3][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[53] = det*w[3][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[54] =  - det*w[3][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[55] = det*w[5][0];
+    G[56] = det*w[7][0];
+    G[57] =  - det*w[8][0]*(J[0]*J[0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + J[3]*(J[0]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[3]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + J[6]*(J[0]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[3]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[6]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[58] =  - det*w[8][0]*(J[1]*(J[0]*J[1]*K[3] + K[0]*(J[0]*J[0] + J[3]*J[3] + J[6]*J[6]) + K[6]*(J[0]*J[2] + J[3]*J[5] + J[6]*J[8])) + J[4]*(J[0]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7]) + J[3]*(J[1]*K[3] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + J[6]*(J[6]*K[1] + J[8]*K[7])) + J[7]*(J[0]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8]) + J[3]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8]) + J[6]*(J[1]*K[3] + J[4]*K[4] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[59] =  - det*w[8][0]*(J[2]*(J[0]*J[2]*K[6] + K[0]*(J[0]*J[0] + J[3]*J[3] + J[6]*J[6]) + K[3]*(J[0]*J[1] + J[3]*J[4] + J[6]*J[7])) + J[5]*(J[0]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7]) + J[3]*(J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + J[6]*(J[6]*K[1] + J[7]*K[4])) + J[8]*(J[0]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8]) + J[3]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8]) + J[6]*(J[2]*K[6] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[60] = det*w[8][0]*(J[0]*J[0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + J[3]*(J[0]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[3]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + J[6]*(J[0]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[3]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[6]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[61] = det*w[8][0]*(J[1]*(J[0]*J[1]*K[3] + K[0]*(J[0]*J[0] + J[3]*J[3] + J[6]*J[6]) + K[6]*(J[0]*J[2] + J[3]*J[5] + J[6]*J[8])) + J[4]*(J[0]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7]) + J[3]*(J[1]*K[3] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + J[6]*(J[6]*K[1] + J[8]*K[7])) + J[7]*(J[0]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8]) + J[3]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8]) + J[6]*(J[1]*K[3] + J[4]*K[4] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[62] = det*w[8][0]*(J[2]*(J[0]*J[2]*K[6] + K[0]*(J[0]*J[0] + J[3]*J[3] + J[6]*J[6]) + K[3]*(J[0]*J[1] + J[3]*J[4] + J[6]*J[7])) + J[5]*(J[0]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7]) + J[3]*(J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + J[6]*(J[6]*K[1] + J[7]*K[4])) + J[8]*(J[0]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8]) + J[3]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8]) + J[6]*(J[2]*K[6] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[63] =  - det*w[5][0]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
+    G[64] =  - det*w[7][0]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
+    G[65] =  - det*w[5][0]*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
+    G[66] =  - det*w[7][0]*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
+    G[67] =  - det*w[5][0]*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
+    G[68] =  - det*w[7][0]*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
+    G[69] = det*w[2][0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
+    G[70] = det*w[9][0]*( - (K[0]*K[0]*(J[3]*J[3] + J[6]*J[6]) + K[1]*K[1]*(J[0]*J[0] + J[6]*J[6]) + K[2]*K[2]*(J[0]*J[0] + J[3]*J[3]) + K[3]*K[3]*(J[4]*J[4] + J[7]*J[7]) + K[4]*K[4]*(J[1]*J[1] + J[7]*J[7]) + K[5]*K[5]*(J[1]*J[1] + J[4]*J[4]) + K[6]*K[6]*(J[5]*J[5] + J[8]*J[8]) + K[7]*K[7]*(J[2]*J[2] + J[8]*J[8]) + K[8]*K[8]*(J[2]*J[2] + J[5]*J[5]))-2.0*(J[0]*J[0]*K[0]*K[0] + J[3]*K[1]*(J[0]*K[0] + J[3]*K[1]) + J[6]*K[2]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2]) + K[3]*(J[0]*(J[4]*K[1] + J[7]*K[2]) + J[1]*J[1]*K[3] + K[0]*(J[3]*J[4] + J[6]*J[7])) + K[4]*(J[1]*(J[0]*K[1] + J[3]*K[0] + J[4]*K[3]) + J[4]*J[4]*K[4] + J[7]*(J[3]*K[2] + J[6]*K[1])) + K[5]*(J[6]*(J[1]*K[0] + J[4]*K[1]) + J[7]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5]) + K[2]*(J[0]*J[1] + J[3]*J[4])) + K[6]*(J[2]*J[2]*K[6] + J[5]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3]) + J[8]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3])) + K[7]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[5]*J[5]*K[7] + J[8]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4])) + K[8]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[8]*J[8]*K[8]))-4.0*(J[0]*J[1]*K[0]*K[3] + J[2]*K[6]*(J[0]*K[0] + J[1]*K[3]) + J[3]*J[4]*K[1]*K[4] + J[5]*K[7]*(J[3]*K[1] + J[4]*K[4]) + J[6]*J[7]*K[2]*K[5] + J[8]*K[8]*(J[6]*K[2] + J[7]*K[5])))/(detJ*detJ);
+    G[71] = det*w[9][0]*(2.0*(J[0]*J[0]*K[0]*K[0] + J[3]*K[1]*(J[0]*K[0] + J[3]*K[1]) + J[6]*K[2]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2]) + K[3]*(J[0]*(J[4]*K[1] + J[7]*K[2]) + J[1]*J[1]*K[3] + K[0]*(J[3]*J[4] + J[6]*J[7])) + K[4]*(J[1]*(J[0]*K[1] + J[3]*K[0] + J[4]*K[3]) + J[4]*J[4]*K[4] + J[7]*(J[3]*K[2] + J[6]*K[1])) + K[5]*(J[6]*(J[1]*K[0] + J[4]*K[1]) + J[7]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5]) + K[2]*(J[0]*J[1] + J[3]*J[4])) + K[6]*(J[2]*J[2]*K[6] + J[5]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3]) + J[8]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3])) + K[7]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[5]*J[5]*K[7] + J[8]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4])) + K[8]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[8]*J[8]*K[8])) + 4.0*(J[0]*J[1]*K[0]*K[3] + J[2]*K[6]*(J[0]*K[0] + J[1]*K[3]) + J[3]*J[4]*K[1]*K[4] + J[5]*K[7]*(J[3]*K[1] + J[4]*K[4]) + J[6]*J[7]*K[2]*K[5] + J[8]*K[8]*(J[6]*K[2] + J[7]*K[5])) + K[0]*K[0]*(J[3]*J[3] + J[6]*J[6]) + K[1]*K[1]*(J[0]*J[0] + J[6]*J[6]) + K[2]*K[2]*(J[0]*J[0] + J[3]*J[3]) + K[3]*K[3]*(J[4]*J[4] + J[7]*J[7]) + K[4]*K[4]*(J[1]*J[1] + J[7]*J[7]) + K[5]*K[5]*(J[1]*J[1] + J[4]*J[4]) + K[6]*K[6]*(J[5]*J[5] + J[8]*J[8]) + K[7]*K[7]*(J[2]*J[2] + J[8]*J[8]) + K[8]*K[8]*(J[2]*J[2] + J[5]*J[5]))/(detJ*detJ);
+    G[72] =  - det*w[8][0]*(J[0]*(J[0]*J[1]*K[0] + K[3]*(J[1]*J[1] + J[4]*J[4] + J[7]*J[7]) + K[6]*(J[1]*J[2] + J[4]*J[5] + J[7]*J[8])) + J[3]*(J[1]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7]) + J[4]*(J[0]*K[0] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + J[7]*(J[7]*K[4] + J[8]*K[7])) + J[6]*(J[1]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8]) + J[4]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8]) + J[7]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[73] =  - det*w[8][0]*(J[1]*J[1]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + J[4]*(J[1]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[4]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + J[7]*(J[1]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[4]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[7]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[74] =  - det*w[8][0]*(J[2]*(J[1]*J[2]*K[6] + K[0]*(J[0]*J[1] + J[3]*J[4] + J[6]*J[7]) + K[3]*(J[1]*J[1] + J[4]*J[4] + J[7]*J[7])) + J[5]*(J[1]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7]) + J[4]*(J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + J[7]*(J[6]*K[1] + J[7]*K[4])) + J[8]*(J[1]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8]) + J[4]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8]) + J[7]*(J[2]*K[6] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[75] = det*w[8][0]*(J[0]*(J[0]*J[1]*K[0] + K[3]*(J[1]*J[1] + J[4]*J[4] + J[7]*J[7]) + K[6]*(J[1]*J[2] + J[4]*J[5] + J[7]*J[8])) + J[3]*(J[1]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7]) + J[4]*(J[0]*K[0] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + J[7]*(J[7]*K[4] + J[8]*K[7])) + J[6]*(J[1]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8]) + J[4]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8]) + J[7]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[76] = det*w[8][0]*(J[1]*J[1]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + J[4]*(J[1]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[4]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + J[7]*(J[1]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[4]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[7]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[77] = det*w[8][0]*(J[2]*(J[1]*J[2]*K[6] + K[0]*(J[0]*J[1] + J[3]*J[4] + J[6]*J[7]) + K[3]*(J[1]*J[1] + J[4]*J[4] + J[7]*J[7])) + J[5]*(J[1]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7]) + J[4]*(J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + J[7]*(J[6]*K[1] + J[7]*K[4])) + J[8]*(J[1]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8]) + J[4]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8]) + J[7]*(J[2]*K[6] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[78] =  - det*w[5][0]*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
+    G[79] =  - det*w[7][0]*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
+    G[80] =  - det*w[5][0]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
+    G[81] =  - det*w[7][0]*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
+    G[82] =  - det*w[5][0]*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
+    G[83] =  - det*w[7][0]*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
+    G[84] =  - det*w[8][0]*(J[0]*(J[0]*J[2]*K[0] + K[3]*(J[1]*J[2] + J[4]*J[5] + J[7]*J[8]) + K[6]*(J[2]*J[2] + J[5]*J[5] + J[8]*J[8])) + J[3]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7]) + J[5]*(J[0]*K[0] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + J[8]*(J[7]*K[4] + J[8]*K[7])) + J[6]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8]) + J[8]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[85] =  - det*w[8][0]*(J[1]*(J[1]*J[2]*K[3] + K[0]*(J[0]*J[2] + J[3]*J[5] + J[6]*J[8]) + K[6]*(J[2]*J[2] + J[5]*J[5] + J[8]*J[8])) + J[4]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7]) + J[5]*(J[1]*K[3] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + J[8]*(J[6]*K[1] + J[8]*K[7])) + J[7]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8]) + J[8]*(J[1]*K[3] + J[4]*K[4] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[86] =  - det*w[8][0]*(J[2]*J[2]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + J[5]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[5]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + J[8]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[8]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[87] = det*w[8][0]*(J[0]*(J[0]*J[2]*K[0] + K[3]*(J[1]*J[2] + J[4]*J[5] + J[7]*J[8]) + K[6]*(J[2]*J[2] + J[5]*J[5] + J[8]*J[8])) + J[3]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7]) + J[5]*(J[0]*K[0] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + J[8]*(J[7]*K[4] + J[8]*K[7])) + J[6]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8]) + J[8]*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[88] = det*w[8][0]*(J[1]*(J[1]*J[2]*K[3] + K[0]*(J[0]*J[2] + J[3]*J[5] + J[6]*J[8]) + K[6]*(J[2]*J[2] + J[5]*J[5] + J[8]*J[8])) + J[4]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7]) + J[5]*(J[1]*K[3] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7]) + J[8]*(J[6]*K[1] + J[8]*K[7])) + J[7]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8]) + J[8]*(J[1]*K[3] + J[4]*K[4] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[89] = det*w[8][0]*(J[2]*J[2]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + J[5]*(J[2]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[5]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + J[8]*(J[2]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[5]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[8]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
+    G[90] =  - det*w[5][0]*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
+    G[91] =  - det*w[7][0]*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
+    G[92] =  - det*w[5][0]*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
+    G[93] =  - det*w[7][0]*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
+    G[94] =  - det*w[5][0]*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
+    G[95] =  - det*w[7][0]*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
     
     // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 5012
+    // Number of operations to compute element tensor for following IP loop = 7350
     for (unsigned int ip = 0; ip < 14; ip++)
     {
       
@@ -22520,78 +22156,94 @@ public:
       double F12 = 0.0;
       double F13 = 0.0;
       double F14 = 0.0;
-      
-      // Total number of operations to compute function values = 36
-      for (unsigned int r = 0; r < 2; r++)
-      {
-        F2 += FE1_C0_D001[ip][r]*w[0][nzc11[r]];
-        F3 += FE1_C0_D001[ip][r]*w[0][nzc10[r]];
-        F4 += FE1_C0_D001[ip][r]*w[0][nzc9[r]];
-        F5 += FE1_C0_D001[ip][r]*w[0][nzc3[r]];
-        F6 += FE1_C0_D001[ip][r]*w[0][nzc2[r]];
-        F7 += FE1_C0_D001[ip][r]*w[0][nzc1[r]];
-        F8 += FE1_C0_D001[ip][r]*w[0][nzc7[r]];
-        F9 += FE1_C0_D001[ip][r]*w[0][nzc6[r]];
-        F10 += FE1_C0_D001[ip][r]*w[0][nzc5[r]];
-      } // end loop over 'r'
+      double F15 = 0.0;
+      double F16 = 0.0;
+      double F17 = 0.0;
+      double F18 = 0.0;
+      double F19 = 0.0;
+      double F20 = 0.0;
+      double F21 = 0.0;
+      double F22 = 0.0;
       
       // Total number of operations to compute function values = 48
-      for (unsigned int r = 0; r < 4; r++)
+      for (unsigned int r = 0; r < 2; r++)
       {
-        F0 += FE1_C0[ip][r]*w[0][nzc0[r]];
-        F1 += FE1_C0[ip][r]*w[0][nzc4[r]];
-        F11 += FE2_C3_D100[ip][r]*w[1][r];
-        F12 += FE2_C3[ip][r]*w[1][r];
-        F13 += FE2_C4[ip][r]*w[1][r];
-        F14 += FE2_C5[ip][r]*w[1][r];
+        F3 += FE0_D001[ip][r]*w[0][nzc14[r]];
+        F4 += FE0_D001[ip][r]*w[0][nzc13[r]];
+        F5 += FE0_D001[ip][r]*w[0][nzc12[r]];
+        F6 += FE0_D001[ip][r]*w[0][nzc6[r]];
+        F7 += FE0_D001[ip][r]*w[0][nzc5[r]];
+        F8 += FE0_D001[ip][r]*w[0][nzc4[r]];
+        F9 += FE0_D001[ip][r]*w[0][nzc10[r]];
+        F10 += FE0_D001[ip][r]*w[0][nzc9[r]];
+        F11 += FE0_D001[ip][r]*w[0][nzc8[r]];
+        F20 += FE0_D001[ip][r]*w[10][nzc2[r]];
+        F21 += FE0_D001[ip][r]*w[10][nzc1[r]];
+        F22 += FE0_D001[ip][r]*w[10][nzc0[r]];
       } // end loop over 'r'
       
-      // Number of operations to compute ip constants: 197
+      // Total number of operations to compute function values = 88
+      for (unsigned int r = 0; r < 4; r++)
+      {
+        F0 += FE0[ip][r]*w[10][r];
+        F1 += FE0[ip][r]*w[0][nzc3[r]];
+        F2 += FE0[ip][r]*w[0][nzc7[r]];
+        F12 += FE3_C3_D100[ip][r]*w[1][r];
+        F13 += FE3_C3[ip][r]*w[1][r];
+        F14 += FE3_C4[ip][r]*w[1][r];
+        F15 += FE3_C5[ip][r]*w[1][r];
+        F16 += FE3_C3[ip][r]*w[11][r];
+        F17 += FE3_C4[ip][r]*w[11][r];
+        F18 += FE3_C5[ip][r]*w[11][r];
+        F19 += FE3_C3_D100[ip][r]*w[11][r];
+      } // end loop over 'r'
+      
+      // Number of operations to compute ip constants: 312
       double I[15];
       // Number of operations: 2
-      I[0] = F11*G[0]*W14[ip];
+      I[0] = F12*G[0]*W14[ip];
       
-      // Number of operations: 20
-      I[1] = W14[ip]*std::exp(F0)*(F12*G[1] + F13*G[2] + F14*G[3] + F2*G[4] + F3*G[5] + F4*G[6] + F5*G[7] + F6*G[8] + F7*G[9]);
+      // Number of operations: 28
+      I[1] = W14[ip]*(std::exp( - F0)*(F16*G[4] + F17*G[5] + F18*G[6]) + std::exp(F1)*(F13*G[1] + F14*G[2] + F15*G[3] + F3*G[7] + F4*G[8] + F5*G[9] + F6*G[10] + F7*G[11] + F8*G[12]));
       
-      // Number of operations: 20
-      I[2] = W14[ip]*std::exp(F0)*(F12*G[10] + F13*G[11] + F14*G[12] + F2*G[13] + F3*G[14] + F4*G[5] + F5*G[15] + F6*G[16] + F7*G[8]);
+      // Number of operations: 28
+      I[2] = W14[ip]*(std::exp( - F0)*(F16*G[16] + F17*G[17] + F18*G[18]) + std::exp(F1)*(F13*G[13] + F14*G[14] + F15*G[15] + F3*G[19] + F4*G[20] + F5*G[8] + F6*G[21] + F7*G[22] + F8*G[11]));
       
-      // Number of operations: 20
-      I[3] = W14[ip]*std::exp(F0)*(F12*G[17] + F13*G[18] + F14*G[19] + F2*G[20] + F3*G[13] + F4*G[4] + F5*G[21] + F6*G[15] + F7*G[7]);
+      // Number of operations: 28
+      I[3] = W14[ip]*(std::exp( - F0)*(F16*G[26] + F17*G[27] + F18*G[28]) + std::exp(F1)*(F13*G[23] + F14*G[24] + F15*G[25] + F3*G[29] + F4*G[19] + F5*G[7] + F6*G[30] + F7*G[21] + F8*G[10]));
       
-      // Number of operations: 20
-      I[4] = W14[ip]*std::exp(F1)*(F10*G[22] + F12*G[1] + F13*G[2] + F14*G[3] + F2*G[23] + F3*G[24] + F4*G[25] + F8*G[26] + F9*G[27]);
+      // Number of operations: 28
+      I[4] = W14[ip]*(std::exp(F0)*(F16*G[4] + F17*G[5] + F18*G[6]) + std::exp(F2)*(F10*G[31] + F11*G[32] + F13*G[1] + F14*G[2] + F15*G[3] + F3*G[33] + F4*G[34] + F5*G[35] + F9*G[36]));
       
-      // Number of operations: 20
-      I[5] = W14[ip]*std::exp(F1)*(F10*G[27] + F12*G[10] + F13*G[11] + F14*G[12] + F2*G[28] + F3*G[29] + F4*G[24] + F8*G[30] + F9*G[31]);
+      // Number of operations: 28
+      I[5] = W14[ip]*(std::exp(F0)*(F16*G[16] + F17*G[17] + F18*G[18]) + std::exp(F2)*(F10*G[37] + F11*G[31] + F13*G[13] + F14*G[14] + F15*G[15] + F3*G[38] + F4*G[39] + F5*G[34] + F9*G[40]));
       
-      // Number of operations: 20
-      I[6] = W14[ip]*std::exp(F1)*(F10*G[26] + F12*G[17] + F13*G[18] + F14*G[19] + F2*G[32] + F3*G[28] + F4*G[23] + F8*G[33] + F9*G[30]);
+      // Number of operations: 28
+      I[6] = W14[ip]*(std::exp(F0)*(F16*G[26] + F17*G[27] + F18*G[28]) + std::exp(F2)*(F10*G[40] + F11*G[36] + F13*G[23] + F14*G[24] + F15*G[25] + F3*G[41] + F4*G[38] + F5*G[33] + F9*G[42]));
       
-      // Number of operations: 6
-      I[7] = W14[ip]*(F2*G[34] + F3*G[35] + F4*G[36]);
+      // Number of operations: 12
+      I[7] = W14[ip]*(F20*G[43] + F21*G[44] + F22*G[45] + F3*G[46] + F4*G[47] + F5*G[48]);
       
-      // Number of operations: 6
-      I[8] = W14[ip]*(F2*G[37] + F3*G[38] + F4*G[35]);
+      // Number of operations: 12
+      I[8] = W14[ip]*(F20*G[49] + F21*G[50] + F22*G[44] + F3*G[51] + F4*G[52] + F5*G[47]);
       
-      // Number of operations: 6
-      I[9] = W14[ip]*(F2*G[39] + F3*G[37] + F4*G[34]);
+      // Number of operations: 12
+      I[9] = W14[ip]*(F20*G[53] + F21*G[49] + F22*G[43] + F3*G[54] + F4*G[51] + F5*G[46]);
       
-      // Number of operations: 6
-      I[10] = W14[ip]*(G[40]*std::exp(F0) + G[41]*std::exp(F1));
+      // Number of operations: 11
+      I[10] = W14[ip]*(G[55]*std::exp(F1) + G[56]*std::exp(F2) + det*(std::exp(F0) - std::exp( - F0)));
       
-      // Number of operations: 16
-      I[11] = W14[ip]*(std::exp(F0)*(F2*G[42] + F3*G[44] + F4*G[46]) + std::exp(F1)*(F2*G[43] + F3*G[45] + F4*G[47]));
+      // Number of operations: 30
+      I[11] = W14[ip]*(F12*(F13*G[57] + F14*G[58] + F15*G[59]) + F19*(F16*G[60] + F17*G[61] + F18*G[62]) + std::exp(F1)*(F3*G[63] + F4*G[65] + F5*G[67]) + std::exp(F2)*(F3*G[64] + F4*G[66] + F5*G[68]));
       
-      // Number of operations: 3
-      I[12] = W14[ip]*(G[48] + F11*G[49]);
+      // Number of operations: 5
+      I[12] = W14[ip]*(G[69] + F12*G[70] + F19*G[71]);
       
-      // Number of operations: 16
-      I[13] = W14[ip]*(std::exp(F0)*(F2*G[50] + F3*G[52] + F4*G[54]) + std::exp(F1)*(F2*G[51] + F3*G[53] + F4*G[55]));
+      // Number of operations: 30
+      I[13] = W14[ip]*(F12*(F13*G[72] + F14*G[73] + F15*G[74]) + F19*(F16*G[75] + F17*G[76] + F18*G[77]) + std::exp(F1)*(F3*G[78] + F4*G[80] + F5*G[82]) + std::exp(F2)*(F3*G[79] + F4*G[81] + F5*G[83]));
       
-      // Number of operations: 16
-      I[14] = W14[ip]*(std::exp(F0)*(F2*G[56] + F3*G[58] + F4*G[60]) + std::exp(F1)*(F2*G[57] + F3*G[59] + F4*G[61]));
+      // Number of operations: 30
+      I[14] = W14[ip]*(F12*(F13*G[84] + F14*G[85] + F15*G[86]) + F19*(F16*G[87] + F17*G[88] + F18*G[89]) + std::exp(F1)*(F3*G[90] + F4*G[92] + F5*G[94]) + std::exp(F2)*(F3*G[91] + F4*G[93] + F5*G[95]));
       
       
       // Number of operations for primary indices: 1
@@ -22602,1237 +22254,40 @@ public:
       for (unsigned int j = 0; j < 2; j++)
       {
         // Number of operations to compute entry: 2
-        A[nzc13[j]] += FE1_C0_D001[ip][j]*I[1];
+        A[nzc16[j]] += FE0_D001[ip][j]*I[1];
         // Number of operations to compute entry: 2
-        A[nzc14[j]] += FE1_C0_D001[ip][j]*I[2];
+        A[nzc17[j]] += FE0_D001[ip][j]*I[2];
         // Number of operations to compute entry: 2
-        A[nzc15[j]] += FE1_C0_D001[ip][j]*I[3];
+        A[nzc18[j]] += FE0_D001[ip][j]*I[3];
         // Number of operations to compute entry: 2
-        A[nzc17[j]] += FE1_C0_D001[ip][j]*I[4];
+        A[nzc20[j]] += FE0_D001[ip][j]*I[4];
         // Number of operations to compute entry: 2
-        A[nzc18[j]] += FE1_C0_D001[ip][j]*I[5];
+        A[nzc21[j]] += FE0_D001[ip][j]*I[5];
         // Number of operations to compute entry: 2
-        A[nzc19[j]] += FE1_C0_D001[ip][j]*I[6];
+        A[nzc22[j]] += FE0_D001[ip][j]*I[6];
         // Number of operations to compute entry: 2
-        A[nzc21[j]] += FE1_C0_D001[ip][j]*I[7];
+        A[nzc24[j]] += FE0_D001[ip][j]*I[7];
         // Number of operations to compute entry: 2
-        A[nzc22[j]] += FE1_C0_D001[ip][j]*I[8];
+        A[nzc25[j]] += FE0_D001[ip][j]*I[8];
         // Number of operations to compute entry: 2
-        A[nzc23[j]] += FE1_C0_D001[ip][j]*I[9];
+        A[nzc26[j]] += FE0_D001[ip][j]*I[9];
       } // end loop over 'j'
       
       // Number of operations for primary indices: 40
       for (unsigned int j = 0; j < 4; j++)
       {
         // Number of operations to compute entry: 2
-        A[nzc20[j]] += FE1_C0[ip][j]*I[10];
+        A[nzc23[j]] += FE0[ip][j]*I[10];
         // Number of operations to compute entry: 2
-        A[nzc24[j]] += FE2_C3[ip][j]*I[11];
+        A[nzc27[j]] += FE3_C3[ip][j]*I[11];
         // Number of operations to compute entry: 2
-        A[nzc25[j]] += FE2_C3_D100[ip][j]*I[12];
+        A[nzc28[j]] += FE3_C3_D100[ip][j]*I[12];
         // Number of operations to compute entry: 2
-        A[nzc26[j]] += FE2_C4[ip][j]*I[13];
+        A[nzc29[j]] += FE3_C4[ip][j]*I[13];
         // Number of operations to compute entry: 2
-        A[nzc27[j]] += FE2_C5[ip][j]*I[14];
+        A[nzc30[j]] += FE3_C5[ip][j]*I[14];
       } // end loop over 'j'
     } // end loop over 'ip'
-  }
-
-};
-
-
-class vector_linear_pnp_ns_forms_exterior_facet_integral_1_1: public ufc::exterior_facet_integral
-{
-public:
-
-  vector_linear_pnp_ns_forms_exterior_facet_integral_1_1() : ufc::exterior_facet_integral()
-  {
-    
-  }
-
-  ~vector_linear_pnp_ns_forms_exterior_facet_integral_1_1() override
-  {
-    
-  }
-
-  const std::vector<bool> & enabled_coefficients() const final override
-  {
-    static const std::vector<bool> enabled({false, true, false, false, false, false, false, false, true, false, true, false, true});
-    return enabled;
-  }
-
-  void tabulate_tensor(double * A,
-                       const double * const * w,
-                       const double * coordinate_dofs,
-                       std::size_t facet,
-                       int cell_orientation) const final override
-  {
-    // This function was generated using 'quadrature' representation
-    // with the following integrals metadata:
-    // 
-    //   num_cells:         None
-    //   quadrature_degree: 2
-    //   quadrature_rule:   'default'
-    //   representation:    'quadrature'
-    // 
-    // and the following integral 0 metadata:
-    // 
-    //   estimated_polynomial_degree: 2
-    //   quadrature_degree:           2
-    //   quadrature_rule:             'default'
-    //   representation:              'quadrature'
-    
-    // Compute Jacobian
-    double J[9];
-    compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
-    
-    // Compute Jacobian inverse and determinant
-    double K[9];
-    double detJ;
-    compute_jacobian_inverse_tetrahedron_3d(K, detJ, J);
-    
-    
-    
-    // Get vertices on face
-    static unsigned int face_vertices[4][3] = {{1, 2, 3}, {0, 2, 3}, {0, 1, 3}, {0, 1, 2}};
-    const unsigned int v0 = face_vertices[facet][0];
-    const unsigned int v1 = face_vertices[facet][1];
-    const unsigned int v2 = face_vertices[facet][2];
-    
-    // Compute scale factor (area of face scaled by area of reference triangle)
-    const double a0 = (coordinate_dofs[3*v0 + 1]*coordinate_dofs[3*v1 + 2]  + coordinate_dofs[3*v0 + 2]*coordinate_dofs[3*v2 + 1]  + coordinate_dofs[3*v1 + 1]*coordinate_dofs[3*v2 + 2]) - (coordinate_dofs[3*v2 + 1]*coordinate_dofs[3*v1 + 2] + coordinate_dofs[3*v2 + 2]*coordinate_dofs[3*v0 + 1] + coordinate_dofs[3*v1 + 1]*coordinate_dofs[3*v0 + 2]);
-    
-    const double a1 = (coordinate_dofs[3*v0 + 2]*coordinate_dofs[3*v1 + 0]  + coordinate_dofs[3*v0 + 0]*coordinate_dofs[3*v2 + 2] + coordinate_dofs[3*v1 + 2]*coordinate_dofs[3*v2 + 0]) - (coordinate_dofs[3*v2 + 2]*coordinate_dofs[3*v1 + 0]  + coordinate_dofs[3*v2 + 0]*coordinate_dofs[3*v0 + 2] + coordinate_dofs[3*v1 + 2]*coordinate_dofs[3*v0 + 0]);
-    
-    const double a2 = (coordinate_dofs[3*v0 + 0]*coordinate_dofs[3*v1 + 1]  + coordinate_dofs[3*v0 + 1]*coordinate_dofs[3*v2 + 0]  + coordinate_dofs[3*v1 + 0]*coordinate_dofs[3*v2 + 1]) - (coordinate_dofs[3*v2 + 0]*coordinate_dofs[3*v1 + 1]  + coordinate_dofs[3*v2 + 1]*coordinate_dofs[3*v0 + 0]  + coordinate_dofs[3*v1 + 0]*coordinate_dofs[3*v0 + 1]);
-    
-    const double det = std::sqrt(a0*a0 + a1*a1 + a2*a2);
-    
-    
-    const bool direction = a0*(coordinate_dofs[3*facet] - coordinate_dofs[3*v0]) + a1*(coordinate_dofs[3*facet + 1] - coordinate_dofs[3*v0 + 1])  + a2*(coordinate_dofs[3*facet + 2] - coordinate_dofs[3*v0 + 2]) < 0;
-    
-    const double n0 = direction ? a0 / det : -a0 / det;
-    const double n1 = direction ? a1 / det : -a1 / det;
-    const double n2 = direction ? a2 / det : -a2 / det;
-    
-    // Facet area (divide by two because 'det' is scaled by area of reference triangle)
-    
-    // Min edge length of facet
-    double min_facet_edge_length;
-    compute_min_facet_edge_length_tetrahedron_3d(min_facet_edge_length, facet, coordinate_dofs);
-    
-    
-    // Max edge length of facet
-    double max_facet_edge_length;
-    compute_max_facet_edge_length_tetrahedron_3d(max_facet_edge_length, facet, coordinate_dofs);
-    
-    
-    // Compute cell volume
-    const double volume = std::abs(detJ)/6.0;
-    
-    
-    // Compute circumradius
-    const double v1v2  = std::sqrt( (coordinate_dofs[6] - coordinate_dofs[3])*(coordinate_dofs[6] - coordinate_dofs[3]) + (coordinate_dofs[7] - coordinate_dofs[4])*(coordinate_dofs[7] - coordinate_dofs[4]) + (coordinate_dofs[8] - coordinate_dofs[5])*(coordinate_dofs[8] - coordinate_dofs[5]) );
-    const double v0v2  = std::sqrt(J[1]*J[1] + J[4]*J[4] + J[7]*J[7]);
-    const double v0v1  = std::sqrt(J[0]*J[0] + J[3]*J[3] + J[6]*J[6]);
-    const double v0v3  = std::sqrt(J[2]*J[2] + J[5]*J[5] + J[8]*J[8]);
-    const double v1v3  = std::sqrt( (coordinate_dofs[9] - coordinate_dofs[3])*(coordinate_dofs[9] - coordinate_dofs[3]) + (coordinate_dofs[10] - coordinate_dofs[4])*(coordinate_dofs[10] - coordinate_dofs[4]) + (coordinate_dofs[11] - coordinate_dofs[5])*(coordinate_dofs[11] - coordinate_dofs[5]) );
-    const double v2v3  = std::sqrt( (coordinate_dofs[9] - coordinate_dofs[6])*(coordinate_dofs[9] - coordinate_dofs[6]) + (coordinate_dofs[10] - coordinate_dofs[7])*(coordinate_dofs[10] - coordinate_dofs[7]) + (coordinate_dofs[11] - coordinate_dofs[8])*(coordinate_dofs[11] - coordinate_dofs[8]) );
-    const  double la   = v1v2*v0v3;
-    const  double lb   = v0v2*v1v3;
-    const  double lc   = v0v1*v2v3;
-    const  double s    = 0.5*(la+lb+lc);
-    const  double area = std::sqrt(s*(s-la)*(s-lb)*(s-lc));
-    const double circumradius = area / ( 6.0*volume );
-    
-    
-    // Array of quadrature weights.
-    static const double W3[3] = {0.166666666666667, 0.166666666666667, 0.166666666666667};
-    // Quadrature points on the UFC reference element: (0.166666666666667, 0.166666666666667), (0.166666666666667, 0.666666666666667), (0.666666666666667, 0.166666666666667)
-    
-    // Values of basis functions at quadrature points.
-    static const double FE0_f0_C3[3][4] = \
-    {{-0.666666666666667, -0.333333333333333, -0.666666666666667, 0.666666666666667},
-    {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
-    {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc3[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f0_C4[3][4] = \
-    {{-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666666}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc4[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f0_C5[3][4] = \
-    {{-0.166666666666667, 0.166666666666667, -0.166666666666667, -0.833333333333333},
-    {-0.666666666666666, 0.666666666666666, -0.666666666666666, -0.333333333333334},
-    {-0.166666666666667, 0.166666666666667, -0.166666666666667, -0.833333333333333}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc5[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f1_C3[3][1] = \
-    {{-1.0},
-    {-1.0},
-    {-1.0}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc10[1] = {13};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc20[1] = {15};
-    
-    static const double FE0_f2_C3[3][4] = \
-    {{-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
-    {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
-    {-0.666666666666667, -0.333333333333333, -0.666666666666667, 0.666666666666667}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc14[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f3_C4[3][4] = \
-    {{-0.166666666666667, 0.166666666666666, 0.833333333333333, 0.166666666666666},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666666},
-    {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc19[4] = {12, 13, 14, 15};
-    
-    // Reset values in the element tensor.
-    for (unsigned int r = 0; r < 17; r++)
-    {
-      A[r] = 0.0;
-    } // end loop over 'r'
-    // Number of operations to compute geometry constants: 372.
-    double G[12];
-    G[0] = det*w[10][0]*w[12][0]*w[8][0]*(J[0]*n0 + J[3]*n1 + J[6]*n2)/(circumradius*detJ);
-    G[1] = det*w[10][0]*w[12][0]*(J[3]*n1*( - J[3]*n1-2.0*J[0]*n0) + J[6]*n2*( - J[6]*n2-2.0*(J[0]*n0 + J[3]*n1)) - J[0]*J[0]*n0*n0)/(circumradius*detJ*detJ);
-    G[2] =  - det*w[10][0]*w[12][0]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[3] =  - det*w[10][0]*w[12][0]*(J[0]*J[2]*n0*n0 + n1*(J[3]*J[5]*n1 + n0*(J[0]*J[5] + J[2]*J[3])) + n2*(J[6]*(J[2]*n0 + J[5]*n1) + J[8]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[4] = det*w[10][0]*w[12][0]*w[8][0]*(J[1]*n0 + J[4]*n1 + J[7]*n2)/(circumradius*detJ);
-    G[5] = det*w[10][0]*w[12][0]*(J[4]*n1*( - J[4]*n1-2.0*J[1]*n0) + J[7]*n2*( - J[7]*n2-2.0*(J[1]*n0 + J[4]*n1)) - J[1]*J[1]*n0*n0)/(circumradius*detJ*detJ);
-    G[6] =  - det*w[10][0]*w[12][0]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
-    G[7] = det*w[10][0]*w[12][0]*w[8][0]*(J[2]*n0 + J[5]*n1 + J[8]*n2)/(circumradius*detJ);
-    G[8] = det*w[10][0]*w[12][0]*(J[5]*n1*( - J[5]*n1-2.0*J[2]*n0) + J[8]*n2*( - J[8]*n2-2.0*(J[2]*n0 + J[5]*n1)) - J[2]*J[2]*n0*n0)/(circumradius*detJ*detJ);
-    G[9] = det*w[10][0]*w[12][0]*(( - J[1]*J[1]*n0*n0*w[1][2] - J[4]*J[4]*n1*n1*w[1][2] - J[7]*J[7]*n2*n2*w[1][2]-2.0*J[1]*J[4]*n0*n1*w[1][2]-2.0*J[1]*J[7]*n0*n2*w[1][2]-2.0*J[4]*J[7]*n1*n2*w[1][2])/(circumradius*detJ*detJ) + (J[1]*n0*w[8][0] + J[4]*n1*w[8][0] + J[7]*n2*w[8][0])/(circumradius*detJ));
-    G[10] = det*w[10][0]*w[12][0]*(( - J[0]*J[1]*n0*n0*w[1][2] - J[0]*J[4]*n0*n1*w[1][2] - J[0]*J[7]*n0*n2*w[1][2] - J[1]*J[3]*n0*n1*w[1][2] - J[1]*J[6]*n0*n2*w[1][2] - J[3]*J[4]*n1*n1*w[1][2] - J[3]*J[7]*n1*n2*w[1][2] - J[4]*J[6]*n1*n2*w[1][2] - J[6]*J[7]*n2*n2*w[1][2])/(circumradius*detJ*detJ) + (J[0]*n0*w[8][0] + J[3]*n1*w[8][0] + J[6]*n2*w[8][0])/(circumradius*detJ));
-    G[11] = det*w[10][0]*w[12][0]*(( - J[1]*J[2]*n0*n0*w[1][2] - J[1]*J[5]*n0*n1*w[1][2] - J[1]*J[8]*n0*n2*w[1][2] - J[2]*J[4]*n0*n1*w[1][2] - J[2]*J[7]*n0*n2*w[1][2] - J[4]*J[5]*n1*n1*w[1][2] - J[4]*J[8]*n1*n2*w[1][2] - J[5]*J[7]*n1*n2*w[1][2] - J[7]*J[8]*n2*n2*w[1][2])/(circumradius*detJ*detJ) + (J[2]*n0*w[8][0] + J[5]*n1*w[8][0] + J[8]*n2*w[8][0])/(circumradius*detJ));
-    
-    // Compute element tensor using UFL quadrature representation
-    // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
-    switch (facet)
-    {
-    case 0:
-      {
-        // Total number of operations to compute element tensor (from this point): 207
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 207
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Coefficient declarations.
-        double F0 = 0.0;
-        double F1 = 0.0;
-        double F2 = 0.0;
-        
-        // Total number of operations to compute function values = 24
-        for (unsigned int r = 0; r < 4; r++)
-        {
-          F0 += FE0_f0_C3[ip][r]*w[1][r];
-          F1 += FE0_f0_C4[ip][r]*w[1][r];
-          F2 += FE0_f0_C5[ip][r]*w[1][r];
-        } // end loop over 'r'
-        
-        // Number of operations to compute ip constants: 21
-        double I[3];
-        // Number of operations: 7
-        I[0] = W3[ip]*(G[0] + F0*G[1] + F1*G[2] + F2*G[3]);
-        
-        // Number of operations: 7
-        I[1] = W3[ip]*(G[4] + F0*G[2] + F1*G[5] + F2*G[6]);
-        
-        // Number of operations: 7
-        I[2] = W3[ip]*(G[7] + F0*G[3] + F1*G[6] + F2*G[8]);
-        
-        
-        // Number of operations for primary indices: 24
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc3[j]] += FE0_f0_C3[ip][j]*I[0];
-          // Number of operations to compute entry: 2
-          A[nzc4[j]] += FE0_f0_C4[ip][j]*I[1];
-          // Number of operations to compute entry: 2
-          A[nzc5[j]] += FE0_f0_C5[ip][j]*I[2];
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    case 1:
-      {
-        // Total number of operations to compute element tensor (from this point): 171
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 171
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Coefficient declarations.
-        double F0 = 0.0;
-        double F1 = 0.0;
-        double F2 = 0.0;
-        
-        // Total number of operations to compute function values = 2
-        for (unsigned int r = 0; r < 1; r++)
-        {
-          F0 += FE0_f1_C3[ip][0]*w[1][1];
-        } // end loop over 'r'
-        
-        // Total number of operations to compute function values = 16
-        for (unsigned int r = 0; r < 4; r++)
-        {
-          F1 += FE0_f0_C4[ip][r]*w[1][r];
-          F2 += FE0_f0_C5[ip][r]*w[1][r];
-        } // end loop over 'r'
-        
-        // Number of operations to compute ip constants: 21
-        double I[3];
-        // Number of operations: 7
-        I[0] = W3[ip]*(G[0] + F0*G[1] + F1*G[2] + F2*G[3]);
-        
-        // Number of operations: 7
-        I[1] = W3[ip]*(G[4] + F0*G[2] + F1*G[5] + F2*G[6]);
-        
-        // Number of operations: 7
-        I[2] = W3[ip]*(G[7] + F0*G[3] + F1*G[6] + F2*G[8]);
-        
-        
-        // Number of operations for primary indices: 2
-        for (unsigned int j = 0; j < 1; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc10[j]] += FE0_f1_C3[ip][j]*I[0];
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 16
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc4[j]] += FE0_f0_C4[ip][j]*I[1];
-          // Number of operations to compute entry: 2
-          A[nzc5[j]] += FE0_f0_C5[ip][j]*I[2];
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    case 2:
-      {
-        // Total number of operations to compute element tensor (from this point): 144
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 144
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Coefficient declarations.
-        double F0 = 0.0;
-        double F1 = 0.0;
-        
-        // Total number of operations to compute function values = 16
-        for (unsigned int r = 0; r < 4; r++)
-        {
-          F0 += FE0_f2_C3[ip][r]*w[1][r];
-          F1 += FE0_f0_C5[ip][r]*w[1][r];
-        } // end loop over 'r'
-        
-        // Number of operations to compute ip constants: 15
-        double I[3];
-        // Number of operations: 5
-        I[0] = W3[ip]*(G[9] + F0*G[2] + F1*G[6]);
-        
-        // Number of operations: 5
-        I[1] = W3[ip]*(G[10] + F0*G[1] + F1*G[3]);
-        
-        // Number of operations: 5
-        I[2] = W3[ip]*(G[11] + F0*G[3] + F1*G[8]);
-        
-        
-        // Number of operations for primary indices: 1
-        // Number of operations to compute entry: 1
-        A[14] += I[0];
-        
-        // Number of operations for primary indices: 16
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc14[j]] += FE0_f2_C3[ip][j]*I[1];
-          // Number of operations to compute entry: 2
-          A[nzc5[j]] += FE0_f0_C5[ip][j]*I[2];
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    case 3:
-      {
-        // Total number of operations to compute element tensor (from this point): 171
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 171
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Coefficient declarations.
-        double F0 = 0.0;
-        double F1 = 0.0;
-        double F2 = 0.0;
-        
-        // Total number of operations to compute function values = 2
-        for (unsigned int r = 0; r < 1; r++)
-        {
-          F2 += FE0_f1_C3[ip][0]*w[1][3];
-        } // end loop over 'r'
-        
-        // Total number of operations to compute function values = 16
-        for (unsigned int r = 0; r < 4; r++)
-        {
-          F0 += FE0_f2_C3[ip][r]*w[1][r];
-          F1 += FE0_f3_C4[ip][r]*w[1][r];
-        } // end loop over 'r'
-        
-        // Number of operations to compute ip constants: 21
-        double I[3];
-        // Number of operations: 7
-        I[0] = W3[ip]*(G[7] + F0*G[3] + F1*G[6] + F2*G[8]);
-        
-        // Number of operations: 7
-        I[1] = W3[ip]*(G[0] + F0*G[1] + F1*G[2] + F2*G[3]);
-        
-        // Number of operations: 7
-        I[2] = W3[ip]*(G[4] + F0*G[2] + F1*G[5] + F2*G[6]);
-        
-        
-        // Number of operations for primary indices: 2
-        for (unsigned int j = 0; j < 1; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc20[j]] += FE0_f1_C3[ip][j]*I[0];
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 16
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc14[j]] += FE0_f2_C3[ip][j]*I[1];
-          // Number of operations to compute entry: 2
-          A[nzc19[j]] += FE0_f3_C4[ip][j]*I[2];
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    }
-    
-  }
-
-};
-
-
-class vector_linear_pnp_ns_forms_exterior_facet_integral_1_2: public ufc::exterior_facet_integral
-{
-public:
-
-  vector_linear_pnp_ns_forms_exterior_facet_integral_1_2() : ufc::exterior_facet_integral()
-  {
-    
-  }
-
-  ~vector_linear_pnp_ns_forms_exterior_facet_integral_1_2() override
-  {
-    
-  }
-
-  const std::vector<bool> & enabled_coefficients() const final override
-  {
-    static const std::vector<bool> enabled({false, true, false, false, false, false, false, false, false, true, true, false, true});
-    return enabled;
-  }
-
-  void tabulate_tensor(double * A,
-                       const double * const * w,
-                       const double * coordinate_dofs,
-                       std::size_t facet,
-                       int cell_orientation) const final override
-  {
-    // This function was generated using 'quadrature' representation
-    // with the following integrals metadata:
-    // 
-    //   num_cells:         None
-    //   quadrature_degree: 2
-    //   quadrature_rule:   'default'
-    //   representation:    'quadrature'
-    // 
-    // and the following integral 0 metadata:
-    // 
-    //   estimated_polynomial_degree: 2
-    //   quadrature_degree:           2
-    //   quadrature_rule:             'default'
-    //   representation:              'quadrature'
-    
-    // Compute Jacobian
-    double J[9];
-    compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
-    
-    // Compute Jacobian inverse and determinant
-    double K[9];
-    double detJ;
-    compute_jacobian_inverse_tetrahedron_3d(K, detJ, J);
-    
-    
-    
-    // Get vertices on face
-    static unsigned int face_vertices[4][3] = {{1, 2, 3}, {0, 2, 3}, {0, 1, 3}, {0, 1, 2}};
-    const unsigned int v0 = face_vertices[facet][0];
-    const unsigned int v1 = face_vertices[facet][1];
-    const unsigned int v2 = face_vertices[facet][2];
-    
-    // Compute scale factor (area of face scaled by area of reference triangle)
-    const double a0 = (coordinate_dofs[3*v0 + 1]*coordinate_dofs[3*v1 + 2]  + coordinate_dofs[3*v0 + 2]*coordinate_dofs[3*v2 + 1]  + coordinate_dofs[3*v1 + 1]*coordinate_dofs[3*v2 + 2]) - (coordinate_dofs[3*v2 + 1]*coordinate_dofs[3*v1 + 2] + coordinate_dofs[3*v2 + 2]*coordinate_dofs[3*v0 + 1] + coordinate_dofs[3*v1 + 1]*coordinate_dofs[3*v0 + 2]);
-    
-    const double a1 = (coordinate_dofs[3*v0 + 2]*coordinate_dofs[3*v1 + 0]  + coordinate_dofs[3*v0 + 0]*coordinate_dofs[3*v2 + 2] + coordinate_dofs[3*v1 + 2]*coordinate_dofs[3*v2 + 0]) - (coordinate_dofs[3*v2 + 2]*coordinate_dofs[3*v1 + 0]  + coordinate_dofs[3*v2 + 0]*coordinate_dofs[3*v0 + 2] + coordinate_dofs[3*v1 + 2]*coordinate_dofs[3*v0 + 0]);
-    
-    const double a2 = (coordinate_dofs[3*v0 + 0]*coordinate_dofs[3*v1 + 1]  + coordinate_dofs[3*v0 + 1]*coordinate_dofs[3*v2 + 0]  + coordinate_dofs[3*v1 + 0]*coordinate_dofs[3*v2 + 1]) - (coordinate_dofs[3*v2 + 0]*coordinate_dofs[3*v1 + 1]  + coordinate_dofs[3*v2 + 1]*coordinate_dofs[3*v0 + 0]  + coordinate_dofs[3*v1 + 0]*coordinate_dofs[3*v0 + 1]);
-    
-    const double det = std::sqrt(a0*a0 + a1*a1 + a2*a2);
-    
-    
-    const bool direction = a0*(coordinate_dofs[3*facet] - coordinate_dofs[3*v0]) + a1*(coordinate_dofs[3*facet + 1] - coordinate_dofs[3*v0 + 1])  + a2*(coordinate_dofs[3*facet + 2] - coordinate_dofs[3*v0 + 2]) < 0;
-    
-    const double n0 = direction ? a0 / det : -a0 / det;
-    const double n1 = direction ? a1 / det : -a1 / det;
-    const double n2 = direction ? a2 / det : -a2 / det;
-    
-    // Facet area (divide by two because 'det' is scaled by area of reference triangle)
-    
-    // Min edge length of facet
-    double min_facet_edge_length;
-    compute_min_facet_edge_length_tetrahedron_3d(min_facet_edge_length, facet, coordinate_dofs);
-    
-    
-    // Max edge length of facet
-    double max_facet_edge_length;
-    compute_max_facet_edge_length_tetrahedron_3d(max_facet_edge_length, facet, coordinate_dofs);
-    
-    
-    // Compute cell volume
-    const double volume = std::abs(detJ)/6.0;
-    
-    
-    // Compute circumradius
-    const double v1v2  = std::sqrt( (coordinate_dofs[6] - coordinate_dofs[3])*(coordinate_dofs[6] - coordinate_dofs[3]) + (coordinate_dofs[7] - coordinate_dofs[4])*(coordinate_dofs[7] - coordinate_dofs[4]) + (coordinate_dofs[8] - coordinate_dofs[5])*(coordinate_dofs[8] - coordinate_dofs[5]) );
-    const double v0v2  = std::sqrt(J[1]*J[1] + J[4]*J[4] + J[7]*J[7]);
-    const double v0v1  = std::sqrt(J[0]*J[0] + J[3]*J[3] + J[6]*J[6]);
-    const double v0v3  = std::sqrt(J[2]*J[2] + J[5]*J[5] + J[8]*J[8]);
-    const double v1v3  = std::sqrt( (coordinate_dofs[9] - coordinate_dofs[3])*(coordinate_dofs[9] - coordinate_dofs[3]) + (coordinate_dofs[10] - coordinate_dofs[4])*(coordinate_dofs[10] - coordinate_dofs[4]) + (coordinate_dofs[11] - coordinate_dofs[5])*(coordinate_dofs[11] - coordinate_dofs[5]) );
-    const double v2v3  = std::sqrt( (coordinate_dofs[9] - coordinate_dofs[6])*(coordinate_dofs[9] - coordinate_dofs[6]) + (coordinate_dofs[10] - coordinate_dofs[7])*(coordinate_dofs[10] - coordinate_dofs[7]) + (coordinate_dofs[11] - coordinate_dofs[8])*(coordinate_dofs[11] - coordinate_dofs[8]) );
-    const  double la   = v1v2*v0v3;
-    const  double lb   = v0v2*v1v3;
-    const  double lc   = v0v1*v2v3;
-    const  double s    = 0.5*(la+lb+lc);
-    const  double area = std::sqrt(s*(s-la)*(s-lb)*(s-lc));
-    const double circumradius = area / ( 6.0*volume );
-    
-    
-    // Array of quadrature weights.
-    static const double W3[3] = {0.166666666666667, 0.166666666666667, 0.166666666666667};
-    // Quadrature points on the UFC reference element: (0.166666666666667, 0.166666666666667), (0.166666666666667, 0.666666666666667), (0.666666666666667, 0.166666666666667)
-    
-    // Values of basis functions at quadrature points.
-    static const double FE0_f0_C3[3][4] = \
-    {{-0.666666666666667, -0.333333333333333, -0.666666666666667, 0.666666666666667},
-    {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
-    {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc3[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f0_C4[3][4] = \
-    {{-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666666}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc4[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f0_C5[3][4] = \
-    {{-0.166666666666667, 0.166666666666667, -0.166666666666667, -0.833333333333333},
-    {-0.666666666666666, 0.666666666666666, -0.666666666666666, -0.333333333333334},
-    {-0.166666666666667, 0.166666666666667, -0.166666666666667, -0.833333333333333}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc5[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f1_C3[3][1] = \
-    {{-1.0},
-    {-1.0},
-    {-1.0}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc10[1] = {13};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc20[1] = {15};
-    
-    static const double FE0_f2_C3[3][4] = \
-    {{-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
-    {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
-    {-0.666666666666667, -0.333333333333333, -0.666666666666667, 0.666666666666667}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc14[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f3_C4[3][4] = \
-    {{-0.166666666666667, 0.166666666666666, 0.833333333333333, 0.166666666666666},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666666},
-    {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc19[4] = {12, 13, 14, 15};
-    
-    // Reset values in the element tensor.
-    for (unsigned int r = 0; r < 17; r++)
-    {
-      A[r] = 0.0;
-    } // end loop over 'r'
-    // Number of operations to compute geometry constants: 372.
-    double G[12];
-    G[0] = det*w[10][0]*w[12][0]*w[9][0]*(J[0]*n0 + J[3]*n1 + J[6]*n2)/(circumradius*detJ);
-    G[1] = det*w[10][0]*w[12][0]*(J[3]*n1*( - J[3]*n1-2.0*J[0]*n0) + J[6]*n2*( - J[6]*n2-2.0*(J[0]*n0 + J[3]*n1)) - J[0]*J[0]*n0*n0)/(circumradius*detJ*detJ);
-    G[2] =  - det*w[10][0]*w[12][0]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[3] =  - det*w[10][0]*w[12][0]*(J[0]*J[2]*n0*n0 + n1*(J[3]*J[5]*n1 + n0*(J[0]*J[5] + J[2]*J[3])) + n2*(J[6]*(J[2]*n0 + J[5]*n1) + J[8]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[4] = det*w[10][0]*w[12][0]*w[9][0]*(J[1]*n0 + J[4]*n1 + J[7]*n2)/(circumradius*detJ);
-    G[5] = det*w[10][0]*w[12][0]*(J[4]*n1*( - J[4]*n1-2.0*J[1]*n0) + J[7]*n2*( - J[7]*n2-2.0*(J[1]*n0 + J[4]*n1)) - J[1]*J[1]*n0*n0)/(circumradius*detJ*detJ);
-    G[6] =  - det*w[10][0]*w[12][0]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
-    G[7] = det*w[10][0]*w[12][0]*w[9][0]*(J[2]*n0 + J[5]*n1 + J[8]*n2)/(circumradius*detJ);
-    G[8] = det*w[10][0]*w[12][0]*(J[5]*n1*( - J[5]*n1-2.0*J[2]*n0) + J[8]*n2*( - J[8]*n2-2.0*(J[2]*n0 + J[5]*n1)) - J[2]*J[2]*n0*n0)/(circumradius*detJ*detJ);
-    G[9] = det*w[10][0]*w[12][0]*(( - J[1]*J[1]*n0*n0*w[1][2] - J[4]*J[4]*n1*n1*w[1][2] - J[7]*J[7]*n2*n2*w[1][2]-2.0*J[1]*J[4]*n0*n1*w[1][2]-2.0*J[1]*J[7]*n0*n2*w[1][2]-2.0*J[4]*J[7]*n1*n2*w[1][2])/(circumradius*detJ*detJ) + (J[1]*n0*w[9][0] + J[4]*n1*w[9][0] + J[7]*n2*w[9][0])/(circumradius*detJ));
-    G[10] = det*w[10][0]*w[12][0]*(( - J[0]*J[1]*n0*n0*w[1][2] - J[0]*J[4]*n0*n1*w[1][2] - J[0]*J[7]*n0*n2*w[1][2] - J[1]*J[3]*n0*n1*w[1][2] - J[1]*J[6]*n0*n2*w[1][2] - J[3]*J[4]*n1*n1*w[1][2] - J[3]*J[7]*n1*n2*w[1][2] - J[4]*J[6]*n1*n2*w[1][2] - J[6]*J[7]*n2*n2*w[1][2])/(circumradius*detJ*detJ) + (J[0]*n0*w[9][0] + J[3]*n1*w[9][0] + J[6]*n2*w[9][0])/(circumradius*detJ));
-    G[11] = det*w[10][0]*w[12][0]*(( - J[1]*J[2]*n0*n0*w[1][2] - J[1]*J[5]*n0*n1*w[1][2] - J[1]*J[8]*n0*n2*w[1][2] - J[2]*J[4]*n0*n1*w[1][2] - J[2]*J[7]*n0*n2*w[1][2] - J[4]*J[5]*n1*n1*w[1][2] - J[4]*J[8]*n1*n2*w[1][2] - J[5]*J[7]*n1*n2*w[1][2] - J[7]*J[8]*n2*n2*w[1][2])/(circumradius*detJ*detJ) + (J[2]*n0*w[9][0] + J[5]*n1*w[9][0] + J[8]*n2*w[9][0])/(circumradius*detJ));
-    
-    // Compute element tensor using UFL quadrature representation
-    // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
-    switch (facet)
-    {
-    case 0:
-      {
-        // Total number of operations to compute element tensor (from this point): 207
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 207
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Coefficient declarations.
-        double F0 = 0.0;
-        double F1 = 0.0;
-        double F2 = 0.0;
-        
-        // Total number of operations to compute function values = 24
-        for (unsigned int r = 0; r < 4; r++)
-        {
-          F0 += FE0_f0_C3[ip][r]*w[1][r];
-          F1 += FE0_f0_C4[ip][r]*w[1][r];
-          F2 += FE0_f0_C5[ip][r]*w[1][r];
-        } // end loop over 'r'
-        
-        // Number of operations to compute ip constants: 21
-        double I[3];
-        // Number of operations: 7
-        I[0] = W3[ip]*(G[0] + F0*G[1] + F1*G[2] + F2*G[3]);
-        
-        // Number of operations: 7
-        I[1] = W3[ip]*(G[4] + F0*G[2] + F1*G[5] + F2*G[6]);
-        
-        // Number of operations: 7
-        I[2] = W3[ip]*(G[7] + F0*G[3] + F1*G[6] + F2*G[8]);
-        
-        
-        // Number of operations for primary indices: 24
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc3[j]] += FE0_f0_C3[ip][j]*I[0];
-          // Number of operations to compute entry: 2
-          A[nzc4[j]] += FE0_f0_C4[ip][j]*I[1];
-          // Number of operations to compute entry: 2
-          A[nzc5[j]] += FE0_f0_C5[ip][j]*I[2];
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    case 1:
-      {
-        // Total number of operations to compute element tensor (from this point): 171
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 171
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Coefficient declarations.
-        double F0 = 0.0;
-        double F1 = 0.0;
-        double F2 = 0.0;
-        
-        // Total number of operations to compute function values = 2
-        for (unsigned int r = 0; r < 1; r++)
-        {
-          F0 += FE0_f1_C3[ip][0]*w[1][1];
-        } // end loop over 'r'
-        
-        // Total number of operations to compute function values = 16
-        for (unsigned int r = 0; r < 4; r++)
-        {
-          F1 += FE0_f0_C4[ip][r]*w[1][r];
-          F2 += FE0_f0_C5[ip][r]*w[1][r];
-        } // end loop over 'r'
-        
-        // Number of operations to compute ip constants: 21
-        double I[3];
-        // Number of operations: 7
-        I[0] = W3[ip]*(G[0] + F0*G[1] + F1*G[2] + F2*G[3]);
-        
-        // Number of operations: 7
-        I[1] = W3[ip]*(G[4] + F0*G[2] + F1*G[5] + F2*G[6]);
-        
-        // Number of operations: 7
-        I[2] = W3[ip]*(G[7] + F0*G[3] + F1*G[6] + F2*G[8]);
-        
-        
-        // Number of operations for primary indices: 2
-        for (unsigned int j = 0; j < 1; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc10[j]] += FE0_f1_C3[ip][j]*I[0];
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 16
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc4[j]] += FE0_f0_C4[ip][j]*I[1];
-          // Number of operations to compute entry: 2
-          A[nzc5[j]] += FE0_f0_C5[ip][j]*I[2];
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    case 2:
-      {
-        // Total number of operations to compute element tensor (from this point): 144
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 144
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Coefficient declarations.
-        double F0 = 0.0;
-        double F1 = 0.0;
-        
-        // Total number of operations to compute function values = 16
-        for (unsigned int r = 0; r < 4; r++)
-        {
-          F0 += FE0_f2_C3[ip][r]*w[1][r];
-          F1 += FE0_f0_C5[ip][r]*w[1][r];
-        } // end loop over 'r'
-        
-        // Number of operations to compute ip constants: 15
-        double I[3];
-        // Number of operations: 5
-        I[0] = W3[ip]*(G[9] + F0*G[2] + F1*G[6]);
-        
-        // Number of operations: 5
-        I[1] = W3[ip]*(G[10] + F0*G[1] + F1*G[3]);
-        
-        // Number of operations: 5
-        I[2] = W3[ip]*(G[11] + F0*G[3] + F1*G[8]);
-        
-        
-        // Number of operations for primary indices: 1
-        // Number of operations to compute entry: 1
-        A[14] += I[0];
-        
-        // Number of operations for primary indices: 16
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc14[j]] += FE0_f2_C3[ip][j]*I[1];
-          // Number of operations to compute entry: 2
-          A[nzc5[j]] += FE0_f0_C5[ip][j]*I[2];
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    case 3:
-      {
-        // Total number of operations to compute element tensor (from this point): 171
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 171
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Coefficient declarations.
-        double F0 = 0.0;
-        double F1 = 0.0;
-        double F2 = 0.0;
-        
-        // Total number of operations to compute function values = 2
-        for (unsigned int r = 0; r < 1; r++)
-        {
-          F2 += FE0_f1_C3[ip][0]*w[1][3];
-        } // end loop over 'r'
-        
-        // Total number of operations to compute function values = 16
-        for (unsigned int r = 0; r < 4; r++)
-        {
-          F0 += FE0_f2_C3[ip][r]*w[1][r];
-          F1 += FE0_f3_C4[ip][r]*w[1][r];
-        } // end loop over 'r'
-        
-        // Number of operations to compute ip constants: 21
-        double I[3];
-        // Number of operations: 7
-        I[0] = W3[ip]*(G[7] + F0*G[3] + F1*G[6] + F2*G[8]);
-        
-        // Number of operations: 7
-        I[1] = W3[ip]*(G[0] + F0*G[1] + F1*G[2] + F2*G[3]);
-        
-        // Number of operations: 7
-        I[2] = W3[ip]*(G[4] + F0*G[2] + F1*G[5] + F2*G[6]);
-        
-        
-        // Number of operations for primary indices: 2
-        for (unsigned int j = 0; j < 1; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc20[j]] += FE0_f1_C3[ip][j]*I[0];
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 16
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc14[j]] += FE0_f2_C3[ip][j]*I[1];
-          // Number of operations to compute entry: 2
-          A[nzc19[j]] += FE0_f3_C4[ip][j]*I[2];
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    }
-    
-  }
-
-};
-
-
-class vector_linear_pnp_ns_forms_exterior_facet_integral_1_3: public ufc::exterior_facet_integral
-{
-public:
-
-  vector_linear_pnp_ns_forms_exterior_facet_integral_1_3() : ufc::exterior_facet_integral()
-  {
-    
-  }
-
-  ~vector_linear_pnp_ns_forms_exterior_facet_integral_1_3() override
-  {
-    
-  }
-
-  const std::vector<bool> & enabled_coefficients() const final override
-  {
-    static const std::vector<bool> enabled({false, true, false, false, false, false, false, false, false, false, true, false, true});
-    return enabled;
-  }
-
-  void tabulate_tensor(double * A,
-                       const double * const * w,
-                       const double * coordinate_dofs,
-                       std::size_t facet,
-                       int cell_orientation) const final override
-  {
-    // This function was generated using 'quadrature' representation
-    // with the following integrals metadata:
-    // 
-    //   num_cells:         None
-    //   quadrature_degree: 2
-    //   quadrature_rule:   'default'
-    //   representation:    'quadrature'
-    // 
-    // and the following integral 0 metadata:
-    // 
-    //   estimated_polynomial_degree: 2
-    //   quadrature_degree:           2
-    //   quadrature_rule:             'default'
-    //   representation:              'quadrature'
-    
-    // Compute Jacobian
-    double J[9];
-    compute_jacobian_tetrahedron_3d(J, coordinate_dofs);
-    
-    // Compute Jacobian inverse and determinant
-    double K[9];
-    double detJ;
-    compute_jacobian_inverse_tetrahedron_3d(K, detJ, J);
-    
-    
-    
-    // Get vertices on face
-    static unsigned int face_vertices[4][3] = {{1, 2, 3}, {0, 2, 3}, {0, 1, 3}, {0, 1, 2}};
-    const unsigned int v0 = face_vertices[facet][0];
-    const unsigned int v1 = face_vertices[facet][1];
-    const unsigned int v2 = face_vertices[facet][2];
-    
-    // Compute scale factor (area of face scaled by area of reference triangle)
-    const double a0 = (coordinate_dofs[3*v0 + 1]*coordinate_dofs[3*v1 + 2]  + coordinate_dofs[3*v0 + 2]*coordinate_dofs[3*v2 + 1]  + coordinate_dofs[3*v1 + 1]*coordinate_dofs[3*v2 + 2]) - (coordinate_dofs[3*v2 + 1]*coordinate_dofs[3*v1 + 2] + coordinate_dofs[3*v2 + 2]*coordinate_dofs[3*v0 + 1] + coordinate_dofs[3*v1 + 1]*coordinate_dofs[3*v0 + 2]);
-    
-    const double a1 = (coordinate_dofs[3*v0 + 2]*coordinate_dofs[3*v1 + 0]  + coordinate_dofs[3*v0 + 0]*coordinate_dofs[3*v2 + 2] + coordinate_dofs[3*v1 + 2]*coordinate_dofs[3*v2 + 0]) - (coordinate_dofs[3*v2 + 2]*coordinate_dofs[3*v1 + 0]  + coordinate_dofs[3*v2 + 0]*coordinate_dofs[3*v0 + 2] + coordinate_dofs[3*v1 + 2]*coordinate_dofs[3*v0 + 0]);
-    
-    const double a2 = (coordinate_dofs[3*v0 + 0]*coordinate_dofs[3*v1 + 1]  + coordinate_dofs[3*v0 + 1]*coordinate_dofs[3*v2 + 0]  + coordinate_dofs[3*v1 + 0]*coordinate_dofs[3*v2 + 1]) - (coordinate_dofs[3*v2 + 0]*coordinate_dofs[3*v1 + 1]  + coordinate_dofs[3*v2 + 1]*coordinate_dofs[3*v0 + 0]  + coordinate_dofs[3*v1 + 0]*coordinate_dofs[3*v0 + 1]);
-    
-    const double det = std::sqrt(a0*a0 + a1*a1 + a2*a2);
-    
-    
-    const bool direction = a0*(coordinate_dofs[3*facet] - coordinate_dofs[3*v0]) + a1*(coordinate_dofs[3*facet + 1] - coordinate_dofs[3*v0 + 1])  + a2*(coordinate_dofs[3*facet + 2] - coordinate_dofs[3*v0 + 2]) < 0;
-    
-    const double n0 = direction ? a0 / det : -a0 / det;
-    const double n1 = direction ? a1 / det : -a1 / det;
-    const double n2 = direction ? a2 / det : -a2 / det;
-    
-    // Facet area (divide by two because 'det' is scaled by area of reference triangle)
-    
-    // Min edge length of facet
-    double min_facet_edge_length;
-    compute_min_facet_edge_length_tetrahedron_3d(min_facet_edge_length, facet, coordinate_dofs);
-    
-    
-    // Max edge length of facet
-    double max_facet_edge_length;
-    compute_max_facet_edge_length_tetrahedron_3d(max_facet_edge_length, facet, coordinate_dofs);
-    
-    
-    // Compute cell volume
-    const double volume = std::abs(detJ)/6.0;
-    
-    
-    // Compute circumradius
-    const double v1v2  = std::sqrt( (coordinate_dofs[6] - coordinate_dofs[3])*(coordinate_dofs[6] - coordinate_dofs[3]) + (coordinate_dofs[7] - coordinate_dofs[4])*(coordinate_dofs[7] - coordinate_dofs[4]) + (coordinate_dofs[8] - coordinate_dofs[5])*(coordinate_dofs[8] - coordinate_dofs[5]) );
-    const double v0v2  = std::sqrt(J[1]*J[1] + J[4]*J[4] + J[7]*J[7]);
-    const double v0v1  = std::sqrt(J[0]*J[0] + J[3]*J[3] + J[6]*J[6]);
-    const double v0v3  = std::sqrt(J[2]*J[2] + J[5]*J[5] + J[8]*J[8]);
-    const double v1v3  = std::sqrt( (coordinate_dofs[9] - coordinate_dofs[3])*(coordinate_dofs[9] - coordinate_dofs[3]) + (coordinate_dofs[10] - coordinate_dofs[4])*(coordinate_dofs[10] - coordinate_dofs[4]) + (coordinate_dofs[11] - coordinate_dofs[5])*(coordinate_dofs[11] - coordinate_dofs[5]) );
-    const double v2v3  = std::sqrt( (coordinate_dofs[9] - coordinate_dofs[6])*(coordinate_dofs[9] - coordinate_dofs[6]) + (coordinate_dofs[10] - coordinate_dofs[7])*(coordinate_dofs[10] - coordinate_dofs[7]) + (coordinate_dofs[11] - coordinate_dofs[8])*(coordinate_dofs[11] - coordinate_dofs[8]) );
-    const  double la   = v1v2*v0v3;
-    const  double lb   = v0v2*v1v3;
-    const  double lc   = v0v1*v2v3;
-    const  double s    = 0.5*(la+lb+lc);
-    const  double area = std::sqrt(s*(s-la)*(s-lb)*(s-lc));
-    const double circumradius = area / ( 6.0*volume );
-    
-    
-    // Array of quadrature weights.
-    static const double W3[3] = {0.166666666666667, 0.166666666666667, 0.166666666666667};
-    // Quadrature points on the UFC reference element: (0.166666666666667, 0.166666666666667), (0.166666666666667, 0.666666666666667), (0.666666666666667, 0.166666666666667)
-    
-    // Values of basis functions at quadrature points.
-    static const double FE0_f0_C3[3][4] = \
-    {{-0.666666666666667, -0.333333333333333, -0.666666666666667, 0.666666666666667},
-    {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
-    {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc3[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f0_C4[3][4] = \
-    {{-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666666}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc4[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f0_C5[3][4] = \
-    {{-0.166666666666667, 0.166666666666667, -0.166666666666667, -0.833333333333333},
-    {-0.666666666666666, 0.666666666666666, -0.666666666666666, -0.333333333333334},
-    {-0.166666666666667, 0.166666666666667, -0.166666666666667, -0.833333333333333}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc5[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f1_C3[3][1] = \
-    {{-1.0},
-    {-1.0},
-    {-1.0}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc10[1] = {13};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc20[1] = {15};
-    
-    static const double FE0_f2_C3[3][4] = \
-    {{-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
-    {-0.166666666666667, -0.833333333333333, -0.166666666666667, 0.166666666666667},
-    {-0.666666666666667, -0.333333333333333, -0.666666666666667, 0.666666666666667}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc14[4] = {12, 13, 14, 15};
-    
-    static const double FE0_f3_C4[3][4] = \
-    {{-0.166666666666667, 0.166666666666666, 0.833333333333333, 0.166666666666666},
-    {-0.666666666666666, 0.666666666666666, 0.333333333333333, 0.666666666666666},
-    {-0.166666666666667, 0.166666666666667, 0.833333333333333, 0.166666666666667}};
-    
-    // Array of non-zero columns
-    static const unsigned int nzc19[4] = {12, 13, 14, 15};
-    
-    // Reset values in the element tensor.
-    for (unsigned int r = 0; r < 17; r++)
-    {
-      A[r] = 0.0;
-    } // end loop over 'r'
-    // Number of operations to compute geometry constants: 258.
-    double G[9];
-    G[0] = det*w[10][0]*w[12][0]*(J[3]*n1*( - J[3]*n1-2.0*J[0]*n0) + J[6]*n2*( - J[6]*n2-2.0*(J[0]*n0 + J[3]*n1)) - J[0]*J[0]*n0*n0)/(circumradius*detJ*detJ);
-    G[1] =  - det*w[10][0]*w[12][0]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[2] =  - det*w[10][0]*w[12][0]*(J[0]*J[2]*n0*n0 + n1*(J[3]*J[5]*n1 + n0*(J[0]*J[5] + J[2]*J[3])) + n2*(J[6]*(J[2]*n0 + J[5]*n1) + J[8]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[3] = det*w[10][0]*w[12][0]*(J[4]*n1*( - J[4]*n1-2.0*J[1]*n0) + J[7]*n2*( - J[7]*n2-2.0*(J[1]*n0 + J[4]*n1)) - J[1]*J[1]*n0*n0)/(circumradius*detJ*detJ);
-    G[4] =  - det*w[10][0]*w[12][0]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
-    G[5] = det*w[10][0]*w[12][0]*(J[5]*n1*( - J[5]*n1-2.0*J[2]*n0) + J[8]*n2*( - J[8]*n2-2.0*(J[2]*n0 + J[5]*n1)) - J[2]*J[2]*n0*n0)/(circumradius*detJ*detJ);
-    G[6] = det*w[10][0]*w[12][0]*w[1][2]*(J[4]*n1*( - J[4]*n1-2.0*J[1]*n0) + J[7]*n2*( - J[7]*n2-2.0*(J[1]*n0 + J[4]*n1)) - J[1]*J[1]*n0*n0)/(circumradius*detJ*detJ);
-    G[7] =  - det*w[10][0]*w[12][0]*w[1][2]*(J[0]*J[1]*n0*n0 + n1*(J[3]*J[4]*n1 + n0*(J[0]*J[4] + J[1]*J[3])) + n2*(J[6]*(J[1]*n0 + J[4]*n1) + J[7]*(J[0]*n0 + J[3]*n1 + J[6]*n2)))/(circumradius*detJ*detJ);
-    G[8] =  - det*w[10][0]*w[12][0]*w[1][2]*(J[1]*J[2]*n0*n0 + n1*(J[4]*J[5]*n1 + n0*(J[1]*J[5] + J[2]*J[4])) + n2*(J[7]*(J[2]*n0 + J[5]*n1) + J[8]*(J[1]*n0 + J[4]*n1 + J[7]*n2)))/(circumradius*detJ*detJ);
-    
-    // Compute element tensor using UFL quadrature representation
-    // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
-    switch (facet)
-    {
-    case 0:
-      {
-        // Total number of operations to compute element tensor (from this point): 198
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 198
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Coefficient declarations.
-        double F0 = 0.0;
-        double F1 = 0.0;
-        double F2 = 0.0;
-        
-        // Total number of operations to compute function values = 24
-        for (unsigned int r = 0; r < 4; r++)
-        {
-          F0 += FE0_f0_C3[ip][r]*w[1][r];
-          F1 += FE0_f0_C4[ip][r]*w[1][r];
-          F2 += FE0_f0_C5[ip][r]*w[1][r];
-        } // end loop over 'r'
-        
-        // Number of operations to compute ip constants: 18
-        double I[3];
-        // Number of operations: 6
-        I[0] = W3[ip]*(F0*G[0] + F1*G[1] + F2*G[2]);
-        
-        // Number of operations: 6
-        I[1] = W3[ip]*(F0*G[1] + F1*G[3] + F2*G[4]);
-        
-        // Number of operations: 6
-        I[2] = W3[ip]*(F0*G[2] + F1*G[4] + F2*G[5]);
-        
-        
-        // Number of operations for primary indices: 24
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc3[j]] += FE0_f0_C3[ip][j]*I[0];
-          // Number of operations to compute entry: 2
-          A[nzc4[j]] += FE0_f0_C4[ip][j]*I[1];
-          // Number of operations to compute entry: 2
-          A[nzc5[j]] += FE0_f0_C5[ip][j]*I[2];
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    case 1:
-      {
-        // Total number of operations to compute element tensor (from this point): 162
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 162
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Coefficient declarations.
-        double F0 = 0.0;
-        double F1 = 0.0;
-        double F2 = 0.0;
-        
-        // Total number of operations to compute function values = 2
-        for (unsigned int r = 0; r < 1; r++)
-        {
-          F0 += FE0_f1_C3[ip][0]*w[1][1];
-        } // end loop over 'r'
-        
-        // Total number of operations to compute function values = 16
-        for (unsigned int r = 0; r < 4; r++)
-        {
-          F1 += FE0_f0_C4[ip][r]*w[1][r];
-          F2 += FE0_f0_C5[ip][r]*w[1][r];
-        } // end loop over 'r'
-        
-        // Number of operations to compute ip constants: 18
-        double I[3];
-        // Number of operations: 6
-        I[0] = W3[ip]*(F0*G[0] + F1*G[1] + F2*G[2]);
-        
-        // Number of operations: 6
-        I[1] = W3[ip]*(F0*G[1] + F1*G[3] + F2*G[4]);
-        
-        // Number of operations: 6
-        I[2] = W3[ip]*(F0*G[2] + F1*G[4] + F2*G[5]);
-        
-        
-        // Number of operations for primary indices: 2
-        for (unsigned int j = 0; j < 1; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc10[j]] += FE0_f1_C3[ip][j]*I[0];
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 16
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc4[j]] += FE0_f0_C4[ip][j]*I[1];
-          // Number of operations to compute entry: 2
-          A[nzc5[j]] += FE0_f0_C5[ip][j]*I[2];
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    case 2:
-      {
-        // Total number of operations to compute element tensor (from this point): 144
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 144
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Coefficient declarations.
-        double F0 = 0.0;
-        double F1 = 0.0;
-        
-        // Total number of operations to compute function values = 16
-        for (unsigned int r = 0; r < 4; r++)
-        {
-          F0 += FE0_f2_C3[ip][r]*w[1][r];
-          F1 += FE0_f0_C5[ip][r]*w[1][r];
-        } // end loop over 'r'
-        
-        // Number of operations to compute ip constants: 15
-        double I[3];
-        // Number of operations: 5
-        I[0] = W3[ip]*(G[6] + F0*G[1] + F1*G[4]);
-        
-        // Number of operations: 5
-        I[1] = W3[ip]*(G[7] + F0*G[0] + F1*G[2]);
-        
-        // Number of operations: 5
-        I[2] = W3[ip]*(G[8] + F0*G[2] + F1*G[5]);
-        
-        
-        // Number of operations for primary indices: 1
-        // Number of operations to compute entry: 1
-        A[14] += I[0];
-        
-        // Number of operations for primary indices: 16
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc14[j]] += FE0_f2_C3[ip][j]*I[1];
-          // Number of operations to compute entry: 2
-          A[nzc5[j]] += FE0_f0_C5[ip][j]*I[2];
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    case 3:
-      {
-        // Total number of operations to compute element tensor (from this point): 162
-      
-      // Loop quadrature points for integral.
-      // Number of operations to compute element tensor for following IP loop = 162
-      for (unsigned int ip = 0; ip < 3; ip++)
-      {
-        
-        // Coefficient declarations.
-        double F0 = 0.0;
-        double F1 = 0.0;
-        double F2 = 0.0;
-        
-        // Total number of operations to compute function values = 2
-        for (unsigned int r = 0; r < 1; r++)
-        {
-          F2 += FE0_f1_C3[ip][0]*w[1][3];
-        } // end loop over 'r'
-        
-        // Total number of operations to compute function values = 16
-        for (unsigned int r = 0; r < 4; r++)
-        {
-          F0 += FE0_f2_C3[ip][r]*w[1][r];
-          F1 += FE0_f3_C4[ip][r]*w[1][r];
-        } // end loop over 'r'
-        
-        // Number of operations to compute ip constants: 18
-        double I[3];
-        // Number of operations: 6
-        I[0] = W3[ip]*(F0*G[2] + F1*G[4] + F2*G[5]);
-        
-        // Number of operations: 6
-        I[1] = W3[ip]*(F0*G[0] + F1*G[1] + F2*G[2]);
-        
-        // Number of operations: 6
-        I[2] = W3[ip]*(F0*G[1] + F1*G[3] + F2*G[4]);
-        
-        
-        // Number of operations for primary indices: 2
-        for (unsigned int j = 0; j < 1; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc20[j]] += FE0_f1_C3[ip][j]*I[0];
-        } // end loop over 'j'
-        
-        // Number of operations for primary indices: 16
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          // Number of operations to compute entry: 2
-          A[nzc14[j]] += FE0_f2_C3[ip][j]*I[1];
-          // Number of operations to compute entry: 2
-          A[nzc19[j]] += FE0_f3_C4[ip][j]*I[2];
-        } // end loop over 'j'
-      } // end loop over 'ip'
-        break;
-      }
-    }
-    
   }
 
 };
@@ -23854,7 +22309,7 @@ public:
 
   const std::vector<bool> & enabled_coefficients() const final override
   {
-    static const std::vector<bool> enabled({false, true, false, false, false, false, false, false, false, false, true, true, true});
+    static const std::vector<bool> enabled({false, true, false, false, false, false, false, false, false, true, false, false, true, true});
     return enabled;
   }
 
@@ -24041,63 +22496,63 @@ public:
     } // end loop over 'r'
     // Number of operations to compute geometry constants: 3505.
     double G[57];
-    G[0] = -2.0*det*w[10][0]*w[12][0]*(J_1[0]*J_1[0] + J_1[3]*J_1[3] + J_1[6]*J_1[6])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[1] = -2.0*det*w[10][0]*w[12][0]*(J_1[0]*J_1[1] + J_1[3]*J_1[4] + J_1[6]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[2] = -2.0*det*w[10][0]*w[12][0]*(J_1[0]*J_1[2] + J_1[3]*J_1[5] + J_1[6]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[3] = 2.0*det*w[10][0]*w[12][0]*(J_0[0]*J_1[0] + J_0[3]*J_1[3] + J_0[6]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[4] = 2.0*det*w[10][0]*w[12][0]*(J_0[1]*J_1[0] + J_0[4]*J_1[3] + J_0[7]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[5] = 2.0*det*w[10][0]*w[12][0]*(J_0[2]*J_1[0] + J_0[5]*J_1[3] + J_0[8]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[6] = det*w[10][0]*w[11][0]*(0.5*(n_00*(J_1[3]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[0]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[0]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[3]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
-    G[7] = det*w[10][0]*w[11][0]*(0.5*(J_1[0]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + J_1[3]*(J_1[0]*K_1[0]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + J_1[6]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[0]*K_1[0] + J_1[3]*K_1[1]))) + J_1[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
-    G[8] = det*w[10][0]*w[11][0]*(0.5*(J_1[1]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[8]*K_1[6])) + J_1[4]*(J_1[1]*K_1[3]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[8]*K_1[7])) + J_1[7]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[1]*K_1[3] + J_1[4]*K_1[4]))) + J_1[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
-    G[9] = det*w[10][0]*w[11][0]*(0.5*(J_1[2]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3])) + J_1[5]*(J_1[2]*K_1[6]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4])) + J_1[8]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[2]*K_1[6] + J_1[5]*K_1[7]))) + J_1[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
-    G[10] = det*w[10][0]*w[11][0]*(-0.5*(n_00*(J_0[3]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[0]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[0]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[3]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
-    G[11] = det*w[10][0]*w[11][0]*(-0.5*(n_00*(J_0[4]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[1]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[1]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[4]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
-    G[12] = det*w[10][0]*w[11][0]*(-0.5*(n_00*(J_0[5]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[2]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[2]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[5]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
-    G[13] = -2.0*det*w[10][0]*w[12][0]*(J_1[1]*J_1[1] + J_1[4]*J_1[4] + J_1[7]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[14] = -2.0*det*w[10][0]*w[12][0]*(J_1[1]*J_1[2] + J_1[4]*J_1[5] + J_1[7]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[15] = 2.0*det*w[10][0]*w[12][0]*(J_0[0]*J_1[1] + J_0[3]*J_1[4] + J_0[6]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[16] = 2.0*det*w[10][0]*w[12][0]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[17] = 2.0*det*w[10][0]*w[12][0]*(J_0[2]*J_1[1] + J_0[5]*J_1[4] + J_0[8]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[18] = det*w[10][0]*w[11][0]*(0.5*(n_00*(J_1[4]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[1]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[1]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[4]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
-    G[19] = -2.0*det*w[10][0]*w[12][0]*(J_1[2]*J_1[2] + J_1[5]*J_1[5] + J_1[8]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[20] = 2.0*det*w[10][0]*w[12][0]*(J_0[0]*J_1[2] + J_0[3]*J_1[5] + J_0[6]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[21] = 2.0*det*w[10][0]*w[12][0]*(J_0[1]*J_1[2] + J_0[4]*J_1[5] + J_0[7]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[22] = 2.0*det*w[10][0]*w[12][0]*(J_0[2]*J_1[2] + J_0[5]*J_1[5] + J_0[8]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[23] = det*w[10][0]*w[11][0]*(0.5*(n_00*(J_1[5]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[2]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[2]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[5]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
-    G[24] = -2.0*det*w[10][0]*w[12][0]*(J_0[0]*J_0[0] + J_0[3]*J_0[3] + J_0[6]*J_0[6])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[25] = -2.0*det*w[10][0]*w[12][0]*(J_0[0]*J_0[1] + J_0[3]*J_0[4] + J_0[6]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[26] = -2.0*det*w[10][0]*w[12][0]*(J_0[0]*J_0[2] + J_0[3]*J_0[5] + J_0[6]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[27] = det*w[10][0]*w[11][0]*(-0.5*(J_0[0]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + J_0[3]*(J_0[0]*K_0[0]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + J_0[6]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[0]*K_0[0] + J_0[3]*K_0[1]))) - (J_0[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
-    G[28] = det*w[10][0]*w[11][0]*(-0.5*(J_0[1]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[8]*K_0[6])) + J_0[4]*(J_0[1]*K_0[3]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[8]*K_0[7])) + J_0[7]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[1]*K_0[3] + J_0[4]*K_0[4]))) - (J_0[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
-    G[29] = det*w[10][0]*w[11][0]*(-0.5*(J_0[2]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3])) + J_0[5]*(J_0[2]*K_0[6]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4])) + J_0[8]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[2]*K_0[6] + J_0[5]*K_0[7]))) - (J_0[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
-    G[30] = -2.0*det*w[10][0]*w[12][0]*(J_0[1]*J_0[1] + J_0[4]*J_0[4] + J_0[7]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[31] = -2.0*det*w[10][0]*w[12][0]*(J_0[1]*J_0[2] + J_0[4]*J_0[5] + J_0[7]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[32] = -2.0*det*w[10][0]*w[12][0]*(J_0[2]*J_0[2] + J_0[5]*J_0[5] + J_0[8]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[33] = -2.0*det*w[10][0]*w[12][0]*w[1][6]*(J_1[1]*J_1[1] + J_1[4]*J_1[4] + J_1[7]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[34] = det*w[10][0]*w[11][0]*w[1][6]*(0.5*(J_1[1]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[8]*K_1[6])) + J_1[4]*(J_1[1]*K_1[3]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[8]*K_1[7])) + J_1[7]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[1]*K_1[3] + J_1[4]*K_1[4]))) + J_1[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
-    G[35] = -2.0*det*w[10][0]*w[12][0]*w[1][6]*(J_1[1]*J_1[2] + J_1[4]*J_1[5] + J_1[7]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[36] = -2.0*det*w[10][0]*w[12][0]*w[1][6]*(J_1[0]*J_1[1] + J_1[3]*J_1[4] + J_1[6]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
-    G[37] = 2.0*det*w[10][0]*w[12][0]*w[1][6]*(J_0[0]*J_1[1] + J_0[3]*J_1[4] + J_0[6]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[38] = det*w[10][0]*w[11][0]*w[1][6]*(0.5*(n_00*(J_1[4]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[1]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[1]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[4]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
-    G[39] = 2.0*det*w[10][0]*w[12][0]*w[1][6]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[40] = 2.0*det*w[10][0]*w[12][0]*w[1][6]*(J_0[2]*J_1[1] + J_0[5]*J_1[4] + J_0[8]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[41] = -2.0*det*w[10][0]*w[12][0]*w[1][2]*(J_0[1]*J_0[1] + J_0[4]*J_0[4] + J_0[7]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[42] = 2.0*det*w[10][0]*w[12][0]*w[1][2]*(J_0[1]*J_1[0] + J_0[4]*J_1[3] + J_0[7]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[43] = det*w[10][0]*w[11][0]*w[1][2]*(-0.5*(n_00*(J_0[4]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[1]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[1]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[4]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
-    G[44] = 2.0*det*w[10][0]*w[12][0]*w[1][2]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[45] = 2.0*det*w[10][0]*w[12][0]*w[1][2]*(J_0[1]*J_1[2] + J_0[4]*J_1[5] + J_0[7]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
-    G[46] = det*w[10][0]*w[11][0]*w[1][2]*(-0.5*(J_0[1]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[8]*K_0[6])) + J_0[4]*(J_0[1]*K_0[3]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[8]*K_0[7])) + J_0[7]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[1]*K_0[3] + J_0[4]*K_0[4]))) - (J_0[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
-    G[47] = -2.0*det*w[10][0]*w[12][0]*w[1][2]*(J_0[1]*J_0[2] + J_0[4]*J_0[5] + J_0[7]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[48] = -2.0*det*w[10][0]*w[12][0]*w[1][2]*(J_0[0]*J_0[1] + J_0[3]*J_0[4] + J_0[6]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
-    G[49] = det*w[10][0]*w[12][0]*((-2.0*J_0[1]*J_0[1]*w[1][2]-2.0*J_0[4]*J_0[4]*w[1][2]-2.0*J_0[7]*J_0[7]*w[1][2])/(circumradius_0*detJ_0*detJ_0 + circumradius_1*detJ_0*detJ_0) + (2.0*J_0[1]*J_1[1]*w[1][6] + 2.0*J_0[4]*J_1[4]*w[1][6] + 2.0*J_0[7]*J_1[7]*w[1][6])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
-    G[50] = det*w[10][0]*w[12][0]*((-2.0*J_1[1]*J_1[1]*w[1][6]-2.0*J_1[4]*J_1[4]*w[1][6]-2.0*J_1[7]*J_1[7]*w[1][6])/(circumradius_0*detJ_1*detJ_1 + circumradius_1*detJ_1*detJ_1) + (2.0*J_0[1]*J_1[1]*w[1][2] + 2.0*J_0[4]*J_1[4]*w[1][2] + 2.0*J_0[7]*J_1[7]*w[1][2])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
-    G[51] = det*w[10][0]*w[11][0]*((-0.5*J_0[1]*J_1[0]*K_1[1]*n_01*w[1][2]-0.5*J_0[1]*J_1[0]*K_1[2]*n_02*w[1][2]-0.5*J_0[1]*J_1[1]*K_1[4]*n_01*w[1][2]-0.5*J_0[1]*J_1[1]*K_1[5]*n_02*w[1][2]-0.5*J_0[1]*J_1[2]*K_1[7]*n_01*w[1][2]-0.5*J_0[1]*J_1[2]*K_1[8]*n_02*w[1][2]-0.5*J_0[1]*J_1[3]*K_1[0]*n_01*w[1][2]-0.5*J_0[1]*J_1[4]*K_1[3]*n_01*w[1][2]-0.5*J_0[1]*J_1[5]*K_1[6]*n_01*w[1][2]-0.5*J_0[1]*J_1[6]*K_1[0]*n_02*w[1][2]-0.5*J_0[1]*J_1[7]*K_1[3]*n_02*w[1][2]-0.5*J_0[1]*J_1[8]*K_1[6]*n_02*w[1][2]-0.5*J_0[4]*J_1[0]*K_1[1]*n_00*w[1][2]-0.5*J_0[4]*J_1[1]*K_1[4]*n_00*w[1][2]-0.5*J_0[4]*J_1[2]*K_1[7]*n_00*w[1][2]-0.5*J_0[4]*J_1[3]*K_1[0]*n_00*w[1][2]-0.5*J_0[4]*J_1[3]*K_1[2]*n_02*w[1][2]-0.5*J_0[4]*J_1[4]*K_1[3]*n_00*w[1][2]-0.5*J_0[4]*J_1[4]*K_1[5]*n_02*w[1][2]-0.5*J_0[4]*J_1[5]*K_1[6]*n_00*w[1][2]-0.5*J_0[4]*J_1[5]*K_1[8]*n_02*w[1][2]-0.5*J_0[4]*J_1[6]*K_1[1]*n_02*w[1][2]-0.5*J_0[4]*J_1[7]*K_1[4]*n_02*w[1][2]-0.5*J_0[4]*J_1[8]*K_1[7]*n_02*w[1][2]-0.5*J_0[7]*J_1[0]*K_1[2]*n_00*w[1][2]-0.5*J_0[7]*J_1[1]*K_1[5]*n_00*w[1][2]-0.5*J_0[7]*J_1[2]*K_1[8]*n_00*w[1][2]-0.5*J_0[7]*J_1[3]*K_1[2]*n_01*w[1][2]-0.5*J_0[7]*J_1[4]*K_1[5]*n_01*w[1][2]-0.5*J_0[7]*J_1[5]*K_1[8]*n_01*w[1][2]-0.5*J_0[7]*J_1[6]*K_1[0]*n_00*w[1][2]-0.5*J_0[7]*J_1[6]*K_1[1]*n_01*w[1][2]-0.5*J_0[7]*J_1[7]*K_1[3]*n_00*w[1][2]-0.5*J_0[7]*J_1[7]*K_1[4]*n_01*w[1][2]-0.5*J_0[7]*J_1[8]*K_1[6]*n_00*w[1][2]-0.5*J_0[7]*J_1[8]*K_1[7]*n_01*w[1][2] - J_0[1]*J_1[0]*K_1[0]*n_00*w[1][2] - J_0[1]*J_1[1]*K_1[3]*n_00*w[1][2] - J_0[1]*J_1[2]*K_1[6]*n_00*w[1][2] - J_0[4]*J_1[3]*K_1[1]*n_01*w[1][2] - J_0[4]*J_1[4]*K_1[4]*n_01*w[1][2] - J_0[4]*J_1[5]*K_1[7]*n_01*w[1][2] - J_0[7]*J_1[6]*K_1[2]*n_02*w[1][2] - J_0[7]*J_1[7]*K_1[5]*n_02*w[1][2] - J_0[7]*J_1[8]*K_1[8]*n_02*w[1][2])/(detJ_0*detJ_1) + (0.5*J_1[0]*J_1[1]*K_1[1]*n_01*w[1][6] + 0.5*J_1[0]*J_1[1]*K_1[2]*n_02*w[1][6] + 0.5*J_1[0]*J_1[4]*K_1[1]*n_00*w[1][6] + 0.5*J_1[0]*J_1[7]*K_1[2]*n_00*w[1][6] + 0.5*J_1[1]*J_1[1]*K_1[4]*n_01*w[1][6] + 0.5*J_1[1]*J_1[1]*K_1[5]*n_02*w[1][6] + 0.5*J_1[1]*J_1[2]*K_1[7]*n_01*w[1][6] + 0.5*J_1[1]*J_1[2]*K_1[8]*n_02*w[1][6] + 0.5*J_1[1]*J_1[3]*K_1[0]*n_01*w[1][6] + 0.5*J_1[1]*J_1[4]*K_1[3]*n_01*w[1][6] + 0.5*J_1[1]*J_1[4]*K_1[4]*n_00*w[1][6] + 0.5*J_1[1]*J_1[5]*K_1[6]*n_01*w[1][6] + 0.5*J_1[1]*J_1[6]*K_1[0]*n_02*w[1][6] + 0.5*J_1[1]*J_1[7]*K_1[3]*n_02*w[1][6] + 0.5*J_1[1]*J_1[7]*K_1[5]*n_00*w[1][6] + 0.5*J_1[1]*J_1[8]*K_1[6]*n_02*w[1][6] + 0.5*J_1[2]*J_1[4]*K_1[7]*n_00*w[1][6] + 0.5*J_1[2]*J_1[7]*K_1[8]*n_00*w[1][6] + 0.5*J_1[3]*J_1[4]*K_1[0]*n_00*w[1][6] + 0.5*J_1[3]*J_1[4]*K_1[2]*n_02*w[1][6] + 0.5*J_1[3]*J_1[7]*K_1[2]*n_01*w[1][6] + 0.5*J_1[4]*J_1[4]*K_1[3]*n_00*w[1][6] + 0.5*J_1[4]*J_1[4]*K_1[5]*n_02*w[1][6] + 0.5*J_1[4]*J_1[5]*K_1[6]*n_00*w[1][6] + 0.5*J_1[4]*J_1[5]*K_1[8]*n_02*w[1][6] + 0.5*J_1[4]*J_1[6]*K_1[1]*n_02*w[1][6] + 0.5*J_1[4]*J_1[7]*K_1[4]*n_02*w[1][6] + 0.5*J_1[4]*J_1[7]*K_1[5]*n_01*w[1][6] + 0.5*J_1[4]*J_1[8]*K_1[7]*n_02*w[1][6] + 0.5*J_1[5]*J_1[7]*K_1[8]*n_01*w[1][6] + 0.5*J_1[6]*J_1[7]*K_1[0]*n_00*w[1][6] + 0.5*J_1[6]*J_1[7]*K_1[1]*n_01*w[1][6] + 0.5*J_1[7]*J_1[7]*K_1[3]*n_00*w[1][6] + 0.5*J_1[7]*J_1[7]*K_1[4]*n_01*w[1][6] + 0.5*J_1[7]*J_1[8]*K_1[6]*n_00*w[1][6] + 0.5*J_1[7]*J_1[8]*K_1[7]*n_01*w[1][6] + J_1[0]*J_1[1]*K_1[0]*n_00*w[1][6] + J_1[1]*J_1[1]*K_1[3]*n_00*w[1][6] + J_1[1]*J_1[2]*K_1[6]*n_00*w[1][6] + J_1[3]*J_1[4]*K_1[1]*n_01*w[1][6] + J_1[4]*J_1[4]*K_1[4]*n_01*w[1][6] + J_1[4]*J_1[5]*K_1[7]*n_01*w[1][6] + J_1[6]*J_1[7]*K_1[2]*n_02*w[1][6] + J_1[7]*J_1[7]*K_1[5]*n_02*w[1][6] + J_1[7]*J_1[8]*K_1[8]*n_02*w[1][6])/(detJ_1*detJ_1));
-    G[52] = det*w[10][0]*w[12][0]*((-2.0*J_1[1]*J_1[2]*w[1][6]-2.0*J_1[4]*J_1[5]*w[1][6]-2.0*J_1[7]*J_1[8]*w[1][6])/(circumradius_0*detJ_1*detJ_1 + circumradius_1*detJ_1*detJ_1) + (2.0*J_0[1]*J_1[2]*w[1][2] + 2.0*J_0[4]*J_1[5]*w[1][2] + 2.0*J_0[7]*J_1[8]*w[1][2])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
-    G[53] = det*w[10][0]*w[12][0]*((-2.0*J_1[0]*J_1[1]*w[1][6]-2.0*J_1[3]*J_1[4]*w[1][6]-2.0*J_1[6]*J_1[7]*w[1][6])/(circumradius_0*detJ_1*detJ_1 + circumradius_1*detJ_1*detJ_1) + (2.0*J_0[1]*J_1[0]*w[1][2] + 2.0*J_0[4]*J_1[3]*w[1][2] + 2.0*J_0[7]*J_1[6]*w[1][2])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
-    G[54] = det*w[10][0]*w[11][0]*((-0.5*J_0[0]*J_0[1]*K_0[1]*n_01*w[1][2]-0.5*J_0[0]*J_0[1]*K_0[2]*n_02*w[1][2]-0.5*J_0[0]*J_0[4]*K_0[1]*n_00*w[1][2]-0.5*J_0[0]*J_0[7]*K_0[2]*n_00*w[1][2]-0.5*J_0[1]*J_0[1]*K_0[4]*n_01*w[1][2]-0.5*J_0[1]*J_0[1]*K_0[5]*n_02*w[1][2]-0.5*J_0[1]*J_0[2]*K_0[7]*n_01*w[1][2]-0.5*J_0[1]*J_0[2]*K_0[8]*n_02*w[1][2]-0.5*J_0[1]*J_0[3]*K_0[0]*n_01*w[1][2]-0.5*J_0[1]*J_0[4]*K_0[3]*n_01*w[1][2]-0.5*J_0[1]*J_0[4]*K_0[4]*n_00*w[1][2]-0.5*J_0[1]*J_0[5]*K_0[6]*n_01*w[1][2]-0.5*J_0[1]*J_0[6]*K_0[0]*n_02*w[1][2]-0.5*J_0[1]*J_0[7]*K_0[3]*n_02*w[1][2]-0.5*J_0[1]*J_0[7]*K_0[5]*n_00*w[1][2]-0.5*J_0[1]*J_0[8]*K_0[6]*n_02*w[1][2]-0.5*J_0[2]*J_0[4]*K_0[7]*n_00*w[1][2]-0.5*J_0[2]*J_0[7]*K_0[8]*n_00*w[1][2]-0.5*J_0[3]*J_0[4]*K_0[0]*n_00*w[1][2]-0.5*J_0[3]*J_0[4]*K_0[2]*n_02*w[1][2]-0.5*J_0[3]*J_0[7]*K_0[2]*n_01*w[1][2]-0.5*J_0[4]*J_0[4]*K_0[3]*n_00*w[1][2]-0.5*J_0[4]*J_0[4]*K_0[5]*n_02*w[1][2]-0.5*J_0[4]*J_0[5]*K_0[6]*n_00*w[1][2]-0.5*J_0[4]*J_0[5]*K_0[8]*n_02*w[1][2]-0.5*J_0[4]*J_0[6]*K_0[1]*n_02*w[1][2]-0.5*J_0[4]*J_0[7]*K_0[4]*n_02*w[1][2]-0.5*J_0[4]*J_0[7]*K_0[5]*n_01*w[1][2]-0.5*J_0[4]*J_0[8]*K_0[7]*n_02*w[1][2]-0.5*J_0[5]*J_0[7]*K_0[8]*n_01*w[1][2]-0.5*J_0[6]*J_0[7]*K_0[0]*n_00*w[1][2]-0.5*J_0[6]*J_0[7]*K_0[1]*n_01*w[1][2]-0.5*J_0[7]*J_0[7]*K_0[3]*n_00*w[1][2]-0.5*J_0[7]*J_0[7]*K_0[4]*n_01*w[1][2]-0.5*J_0[7]*J_0[8]*K_0[6]*n_00*w[1][2]-0.5*J_0[7]*J_0[8]*K_0[7]*n_01*w[1][2] - J_0[0]*J_0[1]*K_0[0]*n_00*w[1][2] - J_0[1]*J_0[1]*K_0[3]*n_00*w[1][2] - J_0[1]*J_0[2]*K_0[6]*n_00*w[1][2] - J_0[3]*J_0[4]*K_0[1]*n_01*w[1][2] - J_0[4]*J_0[4]*K_0[4]*n_01*w[1][2] - J_0[4]*J_0[5]*K_0[7]*n_01*w[1][2] - J_0[6]*J_0[7]*K_0[2]*n_02*w[1][2] - J_0[7]*J_0[7]*K_0[5]*n_02*w[1][2] - J_0[7]*J_0[8]*K_0[8]*n_02*w[1][2])/(detJ_0*detJ_0) + (0.5*J_0[0]*J_1[1]*K_0[1]*n_01*w[1][6] + 0.5*J_0[0]*J_1[1]*K_0[2]*n_02*w[1][6] + 0.5*J_0[0]*J_1[4]*K_0[1]*n_00*w[1][6] + 0.5*J_0[0]*J_1[7]*K_0[2]*n_00*w[1][6] + 0.5*J_0[1]*J_1[1]*K_0[4]*n_01*w[1][6] + 0.5*J_0[1]*J_1[1]*K_0[5]*n_02*w[1][6] + 0.5*J_0[1]*J_1[4]*K_0[4]*n_00*w[1][6] + 0.5*J_0[1]*J_1[7]*K_0[5]*n_00*w[1][6] + 0.5*J_0[2]*J_1[1]*K_0[7]*n_01*w[1][6] + 0.5*J_0[2]*J_1[1]*K_0[8]*n_02*w[1][6] + 0.5*J_0[2]*J_1[4]*K_0[7]*n_00*w[1][6] + 0.5*J_0[2]*J_1[7]*K_0[8]*n_00*w[1][6] + 0.5*J_0[3]*J_1[1]*K_0[0]*n_01*w[1][6] + 0.5*J_0[3]*J_1[4]*K_0[0]*n_00*w[1][6] + 0.5*J_0[3]*J_1[4]*K_0[2]*n_02*w[1][6] + 0.5*J_0[3]*J_1[7]*K_0[2]*n_01*w[1][6] + 0.5*J_0[4]*J_1[1]*K_0[3]*n_01*w[1][6] + 0.5*J_0[4]*J_1[4]*K_0[3]*n_00*w[1][6] + 0.5*J_0[4]*J_1[4]*K_0[5]*n_02*w[1][6] + 0.5*J_0[4]*J_1[7]*K_0[5]*n_01*w[1][6] + 0.5*J_0[5]*J_1[1]*K_0[6]*n_01*w[1][6] + 0.5*J_0[5]*J_1[4]*K_0[6]*n_00*w[1][6] + 0.5*J_0[5]*J_1[4]*K_0[8]*n_02*w[1][6] + 0.5*J_0[5]*J_1[7]*K_0[8]*n_01*w[1][6] + 0.5*J_0[6]*J_1[1]*K_0[0]*n_02*w[1][6] + 0.5*J_0[6]*J_1[4]*K_0[1]*n_02*w[1][6] + 0.5*J_0[6]*J_1[7]*K_0[0]*n_00*w[1][6] + 0.5*J_0[6]*J_1[7]*K_0[1]*n_01*w[1][6] + 0.5*J_0[7]*J_1[1]*K_0[3]*n_02*w[1][6] + 0.5*J_0[7]*J_1[4]*K_0[4]*n_02*w[1][6] + 0.5*J_0[7]*J_1[7]*K_0[3]*n_00*w[1][6] + 0.5*J_0[7]*J_1[7]*K_0[4]*n_01*w[1][6] + 0.5*J_0[8]*J_1[1]*K_0[6]*n_02*w[1][6] + 0.5*J_0[8]*J_1[4]*K_0[7]*n_02*w[1][6] + 0.5*J_0[8]*J_1[7]*K_0[6]*n_00*w[1][6] + 0.5*J_0[8]*J_1[7]*K_0[7]*n_01*w[1][6] + J_0[0]*J_1[1]*K_0[0]*n_00*w[1][6] + J_0[1]*J_1[1]*K_0[3]*n_00*w[1][6] + J_0[2]*J_1[1]*K_0[6]*n_00*w[1][6] + J_0[3]*J_1[4]*K_0[1]*n_01*w[1][6] + J_0[4]*J_1[4]*K_0[4]*n_01*w[1][6] + J_0[5]*J_1[4]*K_0[7]*n_01*w[1][6] + J_0[6]*J_1[7]*K_0[2]*n_02*w[1][6] + J_0[7]*J_1[7]*K_0[5]*n_02*w[1][6] + J_0[8]*J_1[7]*K_0[8]*n_02*w[1][6])/(detJ_0*detJ_1));
-    G[55] = det*w[10][0]*w[12][0]*((-2.0*J_0[1]*J_0[2]*w[1][2]-2.0*J_0[4]*J_0[5]*w[1][2]-2.0*J_0[7]*J_0[8]*w[1][2])/(circumradius_0*detJ_0*detJ_0 + circumradius_1*detJ_0*detJ_0) + (2.0*J_0[2]*J_1[1]*w[1][6] + 2.0*J_0[5]*J_1[4]*w[1][6] + 2.0*J_0[8]*J_1[7]*w[1][6])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
-    G[56] = det*w[10][0]*w[12][0]*((-2.0*J_0[0]*J_0[1]*w[1][2]-2.0*J_0[3]*J_0[4]*w[1][2]-2.0*J_0[6]*J_0[7]*w[1][2])/(circumradius_0*detJ_0*detJ_0 + circumradius_1*detJ_0*detJ_0) + (2.0*J_0[0]*J_1[1]*w[1][6] + 2.0*J_0[3]*J_1[4]*w[1][6] + 2.0*J_0[6]*J_1[7]*w[1][6])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
+    G[0] = -2.0*det*w[13][0]*w[9][0]*(J_1[0]*J_1[0] + J_1[3]*J_1[3] + J_1[6]*J_1[6])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[1] = -2.0*det*w[13][0]*w[9][0]*(J_1[0]*J_1[1] + J_1[3]*J_1[4] + J_1[6]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[2] = -2.0*det*w[13][0]*w[9][0]*(J_1[0]*J_1[2] + J_1[3]*J_1[5] + J_1[6]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[3] = 2.0*det*w[13][0]*w[9][0]*(J_0[0]*J_1[0] + J_0[3]*J_1[3] + J_0[6]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[4] = 2.0*det*w[13][0]*w[9][0]*(J_0[1]*J_1[0] + J_0[4]*J_1[3] + J_0[7]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[5] = 2.0*det*w[13][0]*w[9][0]*(J_0[2]*J_1[0] + J_0[5]*J_1[3] + J_0[8]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[6] = det*w[12][0]*w[9][0]*(0.5*(n_00*(J_1[3]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[0]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[6]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[0]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[3]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
+    G[7] = det*w[12][0]*w[9][0]*(0.5*(J_1[0]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + J_1[3]*(J_1[0]*K_1[0]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + J_1[6]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[0]*K_1[0] + J_1[3]*K_1[1]))) + J_1[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
+    G[8] = det*w[12][0]*w[9][0]*(0.5*(J_1[1]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[8]*K_1[6])) + J_1[4]*(J_1[1]*K_1[3]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[8]*K_1[7])) + J_1[7]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[1]*K_1[3] + J_1[4]*K_1[4]))) + J_1[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
+    G[9] = det*w[12][0]*w[9][0]*(0.5*(J_1[2]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3])) + J_1[5]*(J_1[2]*K_1[6]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4])) + J_1[8]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[2]*K_1[6] + J_1[5]*K_1[7]))) + J_1[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
+    G[10] = det*w[12][0]*w[9][0]*(-0.5*(n_00*(J_0[3]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[0]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[6]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[0]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[3]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[0]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[3]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[6]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
+    G[11] = det*w[12][0]*w[9][0]*(-0.5*(n_00*(J_0[4]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[1]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[1]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[4]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
+    G[12] = det*w[12][0]*w[9][0]*(-0.5*(n_00*(J_0[5]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[2]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[8]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[2]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[5]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[2]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[5]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[8]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
+    G[13] = -2.0*det*w[13][0]*w[9][0]*(J_1[1]*J_1[1] + J_1[4]*J_1[4] + J_1[7]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[14] = -2.0*det*w[13][0]*w[9][0]*(J_1[1]*J_1[2] + J_1[4]*J_1[5] + J_1[7]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[15] = 2.0*det*w[13][0]*w[9][0]*(J_0[0]*J_1[1] + J_0[3]*J_1[4] + J_0[6]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[16] = 2.0*det*w[13][0]*w[9][0]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[17] = 2.0*det*w[13][0]*w[9][0]*(J_0[2]*J_1[1] + J_0[5]*J_1[4] + J_0[8]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[18] = det*w[12][0]*w[9][0]*(0.5*(n_00*(J_1[4]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[1]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[1]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[4]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
+    G[19] = -2.0*det*w[13][0]*w[9][0]*(J_1[2]*J_1[2] + J_1[5]*J_1[5] + J_1[8]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[20] = 2.0*det*w[13][0]*w[9][0]*(J_0[0]*J_1[2] + J_0[3]*J_1[5] + J_0[6]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[21] = 2.0*det*w[13][0]*w[9][0]*(J_0[1]*J_1[2] + J_0[4]*J_1[5] + J_0[7]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[22] = 2.0*det*w[13][0]*w[9][0]*(J_0[2]*J_1[2] + J_0[5]*J_1[5] + J_0[8]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[23] = det*w[12][0]*w[9][0]*(0.5*(n_00*(J_1[5]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[2]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[8]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[2]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[5]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
+    G[24] = -2.0*det*w[13][0]*w[9][0]*(J_0[0]*J_0[0] + J_0[3]*J_0[3] + J_0[6]*J_0[6])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[25] = -2.0*det*w[13][0]*w[9][0]*(J_0[0]*J_0[1] + J_0[3]*J_0[4] + J_0[6]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[26] = -2.0*det*w[13][0]*w[9][0]*(J_0[0]*J_0[2] + J_0[3]*J_0[5] + J_0[6]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[27] = det*w[12][0]*w[9][0]*(-0.5*(J_0[0]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + J_0[3]*(J_0[0]*K_0[0]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + J_0[6]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[0]*K_0[0] + J_0[3]*K_0[1]))) - (J_0[0]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[3]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[6]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
+    G[28] = det*w[12][0]*w[9][0]*(-0.5*(J_0[1]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[8]*K_0[6])) + J_0[4]*(J_0[1]*K_0[3]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[8]*K_0[7])) + J_0[7]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[1]*K_0[3] + J_0[4]*K_0[4]))) - (J_0[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
+    G[29] = det*w[12][0]*w[9][0]*(-0.5*(J_0[2]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3])) + J_0[5]*(J_0[2]*K_0[6]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4])) + J_0[8]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[2]*K_0[6] + J_0[5]*K_0[7]))) - (J_0[2]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[5]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[8]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
+    G[30] = -2.0*det*w[13][0]*w[9][0]*(J_0[1]*J_0[1] + J_0[4]*J_0[4] + J_0[7]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[31] = -2.0*det*w[13][0]*w[9][0]*(J_0[1]*J_0[2] + J_0[4]*J_0[5] + J_0[7]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[32] = -2.0*det*w[13][0]*w[9][0]*(J_0[2]*J_0[2] + J_0[5]*J_0[5] + J_0[8]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[33] = -2.0*det*w[13][0]*w[1][6]*w[9][0]*(J_1[1]*J_1[1] + J_1[4]*J_1[4] + J_1[7]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[34] = det*w[12][0]*w[1][6]*w[9][0]*(0.5*(J_1[1]*(n_01*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[5]*K_1[6]) + n_02*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[8]*K_1[6])) + J_1[4]*(J_1[1]*K_1[3]*n_01 + n_00*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + n_02*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[8]*K_1[7])) + J_1[7]*(n_00*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + n_01*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]) + n_02*(J_1[1]*K_1[3] + J_1[4]*K_1[4]))) + J_1[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_1[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_1[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8]))/(detJ_1*detJ_1);
+    G[35] = -2.0*det*w[13][0]*w[1][6]*w[9][0]*(J_1[1]*J_1[2] + J_1[4]*J_1[5] + J_1[7]*J_1[8])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[36] = -2.0*det*w[13][0]*w[1][6]*w[9][0]*(J_1[0]*J_1[1] + J_1[3]*J_1[4] + J_1[6]*J_1[7])/(detJ_1*detJ_1*(circumradius_0 + circumradius_1));
+    G[37] = 2.0*det*w[13][0]*w[1][6]*w[9][0]*(J_0[0]*J_1[1] + J_0[3]*J_1[4] + J_0[6]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[38] = det*w[12][0]*w[1][6]*w[9][0]*(0.5*(n_00*(J_1[4]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6])) + n_01*(J_1[1]*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + J_1[7]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7])) + n_02*(J_1[1]*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + J_1[4]*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]))) + J_1[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_1[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_1[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8]))/(detJ_0*detJ_1);
+    G[39] = 2.0*det*w[13][0]*w[1][6]*w[9][0]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[40] = 2.0*det*w[13][0]*w[1][6]*w[9][0]*(J_0[2]*J_1[1] + J_0[5]*J_1[4] + J_0[8]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[41] = -2.0*det*w[13][0]*w[1][2]*w[9][0]*(J_0[1]*J_0[1] + J_0[4]*J_0[4] + J_0[7]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[42] = 2.0*det*w[13][0]*w[1][2]*w[9][0]*(J_0[1]*J_1[0] + J_0[4]*J_1[3] + J_0[7]*J_1[6])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[43] = det*w[12][0]*w[1][2]*w[9][0]*(-0.5*(n_00*(J_0[4]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6])) + n_01*(J_0[1]*(J_1[0]*K_1[1] + J_1[1]*K_1[4] + J_1[2]*K_1[7] + J_1[3]*K_1[0] + J_1[4]*K_1[3] + J_1[5]*K_1[6]) + J_0[7]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7])) + n_02*(J_0[1]*(J_1[0]*K_1[2] + J_1[1]*K_1[5] + J_1[2]*K_1[8] + J_1[6]*K_1[0] + J_1[7]*K_1[3] + J_1[8]*K_1[6]) + J_0[4]*(J_1[3]*K_1[2] + J_1[4]*K_1[5] + J_1[5]*K_1[8] + J_1[6]*K_1[1] + J_1[7]*K_1[4] + J_1[8]*K_1[7]))) - (J_0[1]*n_00*(J_1[0]*K_1[0] + J_1[1]*K_1[3] + J_1[2]*K_1[6]) + J_0[4]*n_01*(J_1[3]*K_1[1] + J_1[4]*K_1[4] + J_1[5]*K_1[7]) + J_0[7]*n_02*(J_1[6]*K_1[2] + J_1[7]*K_1[5] + J_1[8]*K_1[8])))/(detJ_0*detJ_1);
+    G[44] = 2.0*det*w[13][0]*w[1][2]*w[9][0]*(J_0[1]*J_1[1] + J_0[4]*J_1[4] + J_0[7]*J_1[7])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[45] = 2.0*det*w[13][0]*w[1][2]*w[9][0]*(J_0[1]*J_1[2] + J_0[4]*J_1[5] + J_0[7]*J_1[8])/(detJ_0*detJ_1*(circumradius_0 + circumradius_1));
+    G[46] = det*w[12][0]*w[1][2]*w[9][0]*(-0.5*(J_0[1]*(n_01*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[5]*K_0[6]) + n_02*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[8]*K_0[6])) + J_0[4]*(J_0[1]*K_0[3]*n_01 + n_00*(J_0[0]*K_0[1] + J_0[1]*K_0[4] + J_0[2]*K_0[7] + J_0[3]*K_0[0] + J_0[4]*K_0[3] + J_0[5]*K_0[6]) + n_02*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[8]*K_0[7])) + J_0[7]*(n_00*(J_0[0]*K_0[2] + J_0[1]*K_0[5] + J_0[2]*K_0[8] + J_0[6]*K_0[0] + J_0[7]*K_0[3] + J_0[8]*K_0[6]) + n_01*(J_0[3]*K_0[2] + J_0[4]*K_0[5] + J_0[5]*K_0[8] + J_0[6]*K_0[1] + J_0[7]*K_0[4] + J_0[8]*K_0[7]) + n_02*(J_0[1]*K_0[3] + J_0[4]*K_0[4]))) - (J_0[1]*n_00*(J_0[0]*K_0[0] + J_0[1]*K_0[3] + J_0[2]*K_0[6]) + J_0[4]*n_01*(J_0[3]*K_0[1] + J_0[4]*K_0[4] + J_0[5]*K_0[7]) + J_0[7]*n_02*(J_0[6]*K_0[2] + J_0[7]*K_0[5] + J_0[8]*K_0[8])))/(detJ_0*detJ_0);
+    G[47] = -2.0*det*w[13][0]*w[1][2]*w[9][0]*(J_0[1]*J_0[2] + J_0[4]*J_0[5] + J_0[7]*J_0[8])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[48] = -2.0*det*w[13][0]*w[1][2]*w[9][0]*(J_0[0]*J_0[1] + J_0[3]*J_0[4] + J_0[6]*J_0[7])/(detJ_0*detJ_0*(circumradius_0 + circumradius_1));
+    G[49] = det*w[13][0]*w[9][0]*((-2.0*J_0[1]*J_0[1]*w[1][2]-2.0*J_0[4]*J_0[4]*w[1][2]-2.0*J_0[7]*J_0[7]*w[1][2])/(circumradius_0*detJ_0*detJ_0 + circumradius_1*detJ_0*detJ_0) + (2.0*J_0[1]*J_1[1]*w[1][6] + 2.0*J_0[4]*J_1[4]*w[1][6] + 2.0*J_0[7]*J_1[7]*w[1][6])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
+    G[50] = det*w[13][0]*w[9][0]*((-2.0*J_1[1]*J_1[1]*w[1][6]-2.0*J_1[4]*J_1[4]*w[1][6]-2.0*J_1[7]*J_1[7]*w[1][6])/(circumradius_0*detJ_1*detJ_1 + circumradius_1*detJ_1*detJ_1) + (2.0*J_0[1]*J_1[1]*w[1][2] + 2.0*J_0[4]*J_1[4]*w[1][2] + 2.0*J_0[7]*J_1[7]*w[1][2])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
+    G[51] = det*w[12][0]*w[9][0]*((-0.5*J_0[1]*J_1[0]*K_1[1]*n_01*w[1][2]-0.5*J_0[1]*J_1[0]*K_1[2]*n_02*w[1][2]-0.5*J_0[1]*J_1[1]*K_1[4]*n_01*w[1][2]-0.5*J_0[1]*J_1[1]*K_1[5]*n_02*w[1][2]-0.5*J_0[1]*J_1[2]*K_1[7]*n_01*w[1][2]-0.5*J_0[1]*J_1[2]*K_1[8]*n_02*w[1][2]-0.5*J_0[1]*J_1[3]*K_1[0]*n_01*w[1][2]-0.5*J_0[1]*J_1[4]*K_1[3]*n_01*w[1][2]-0.5*J_0[1]*J_1[5]*K_1[6]*n_01*w[1][2]-0.5*J_0[1]*J_1[6]*K_1[0]*n_02*w[1][2]-0.5*J_0[1]*J_1[7]*K_1[3]*n_02*w[1][2]-0.5*J_0[1]*J_1[8]*K_1[6]*n_02*w[1][2]-0.5*J_0[4]*J_1[0]*K_1[1]*n_00*w[1][2]-0.5*J_0[4]*J_1[1]*K_1[4]*n_00*w[1][2]-0.5*J_0[4]*J_1[2]*K_1[7]*n_00*w[1][2]-0.5*J_0[4]*J_1[3]*K_1[0]*n_00*w[1][2]-0.5*J_0[4]*J_1[3]*K_1[2]*n_02*w[1][2]-0.5*J_0[4]*J_1[4]*K_1[3]*n_00*w[1][2]-0.5*J_0[4]*J_1[4]*K_1[5]*n_02*w[1][2]-0.5*J_0[4]*J_1[5]*K_1[6]*n_00*w[1][2]-0.5*J_0[4]*J_1[5]*K_1[8]*n_02*w[1][2]-0.5*J_0[4]*J_1[6]*K_1[1]*n_02*w[1][2]-0.5*J_0[4]*J_1[7]*K_1[4]*n_02*w[1][2]-0.5*J_0[4]*J_1[8]*K_1[7]*n_02*w[1][2]-0.5*J_0[7]*J_1[0]*K_1[2]*n_00*w[1][2]-0.5*J_0[7]*J_1[1]*K_1[5]*n_00*w[1][2]-0.5*J_0[7]*J_1[2]*K_1[8]*n_00*w[1][2]-0.5*J_0[7]*J_1[3]*K_1[2]*n_01*w[1][2]-0.5*J_0[7]*J_1[4]*K_1[5]*n_01*w[1][2]-0.5*J_0[7]*J_1[5]*K_1[8]*n_01*w[1][2]-0.5*J_0[7]*J_1[6]*K_1[0]*n_00*w[1][2]-0.5*J_0[7]*J_1[6]*K_1[1]*n_01*w[1][2]-0.5*J_0[7]*J_1[7]*K_1[3]*n_00*w[1][2]-0.5*J_0[7]*J_1[7]*K_1[4]*n_01*w[1][2]-0.5*J_0[7]*J_1[8]*K_1[6]*n_00*w[1][2]-0.5*J_0[7]*J_1[8]*K_1[7]*n_01*w[1][2] - J_0[1]*J_1[0]*K_1[0]*n_00*w[1][2] - J_0[1]*J_1[1]*K_1[3]*n_00*w[1][2] - J_0[1]*J_1[2]*K_1[6]*n_00*w[1][2] - J_0[4]*J_1[3]*K_1[1]*n_01*w[1][2] - J_0[4]*J_1[4]*K_1[4]*n_01*w[1][2] - J_0[4]*J_1[5]*K_1[7]*n_01*w[1][2] - J_0[7]*J_1[6]*K_1[2]*n_02*w[1][2] - J_0[7]*J_1[7]*K_1[5]*n_02*w[1][2] - J_0[7]*J_1[8]*K_1[8]*n_02*w[1][2])/(detJ_0*detJ_1) + (0.5*J_1[0]*J_1[1]*K_1[1]*n_01*w[1][6] + 0.5*J_1[0]*J_1[1]*K_1[2]*n_02*w[1][6] + 0.5*J_1[0]*J_1[4]*K_1[1]*n_00*w[1][6] + 0.5*J_1[0]*J_1[7]*K_1[2]*n_00*w[1][6] + 0.5*J_1[1]*J_1[1]*K_1[4]*n_01*w[1][6] + 0.5*J_1[1]*J_1[1]*K_1[5]*n_02*w[1][6] + 0.5*J_1[1]*J_1[2]*K_1[7]*n_01*w[1][6] + 0.5*J_1[1]*J_1[2]*K_1[8]*n_02*w[1][6] + 0.5*J_1[1]*J_1[3]*K_1[0]*n_01*w[1][6] + 0.5*J_1[1]*J_1[4]*K_1[3]*n_01*w[1][6] + 0.5*J_1[1]*J_1[4]*K_1[4]*n_00*w[1][6] + 0.5*J_1[1]*J_1[5]*K_1[6]*n_01*w[1][6] + 0.5*J_1[1]*J_1[6]*K_1[0]*n_02*w[1][6] + 0.5*J_1[1]*J_1[7]*K_1[3]*n_02*w[1][6] + 0.5*J_1[1]*J_1[7]*K_1[5]*n_00*w[1][6] + 0.5*J_1[1]*J_1[8]*K_1[6]*n_02*w[1][6] + 0.5*J_1[2]*J_1[4]*K_1[7]*n_00*w[1][6] + 0.5*J_1[2]*J_1[7]*K_1[8]*n_00*w[1][6] + 0.5*J_1[3]*J_1[4]*K_1[0]*n_00*w[1][6] + 0.5*J_1[3]*J_1[4]*K_1[2]*n_02*w[1][6] + 0.5*J_1[3]*J_1[7]*K_1[2]*n_01*w[1][6] + 0.5*J_1[4]*J_1[4]*K_1[3]*n_00*w[1][6] + 0.5*J_1[4]*J_1[4]*K_1[5]*n_02*w[1][6] + 0.5*J_1[4]*J_1[5]*K_1[6]*n_00*w[1][6] + 0.5*J_1[4]*J_1[5]*K_1[8]*n_02*w[1][6] + 0.5*J_1[4]*J_1[6]*K_1[1]*n_02*w[1][6] + 0.5*J_1[4]*J_1[7]*K_1[4]*n_02*w[1][6] + 0.5*J_1[4]*J_1[7]*K_1[5]*n_01*w[1][6] + 0.5*J_1[4]*J_1[8]*K_1[7]*n_02*w[1][6] + 0.5*J_1[5]*J_1[7]*K_1[8]*n_01*w[1][6] + 0.5*J_1[6]*J_1[7]*K_1[0]*n_00*w[1][6] + 0.5*J_1[6]*J_1[7]*K_1[1]*n_01*w[1][6] + 0.5*J_1[7]*J_1[7]*K_1[3]*n_00*w[1][6] + 0.5*J_1[7]*J_1[7]*K_1[4]*n_01*w[1][6] + 0.5*J_1[7]*J_1[8]*K_1[6]*n_00*w[1][6] + 0.5*J_1[7]*J_1[8]*K_1[7]*n_01*w[1][6] + J_1[0]*J_1[1]*K_1[0]*n_00*w[1][6] + J_1[1]*J_1[1]*K_1[3]*n_00*w[1][6] + J_1[1]*J_1[2]*K_1[6]*n_00*w[1][6] + J_1[3]*J_1[4]*K_1[1]*n_01*w[1][6] + J_1[4]*J_1[4]*K_1[4]*n_01*w[1][6] + J_1[4]*J_1[5]*K_1[7]*n_01*w[1][6] + J_1[6]*J_1[7]*K_1[2]*n_02*w[1][6] + J_1[7]*J_1[7]*K_1[5]*n_02*w[1][6] + J_1[7]*J_1[8]*K_1[8]*n_02*w[1][6])/(detJ_1*detJ_1));
+    G[52] = det*w[13][0]*w[9][0]*((-2.0*J_1[1]*J_1[2]*w[1][6]-2.0*J_1[4]*J_1[5]*w[1][6]-2.0*J_1[7]*J_1[8]*w[1][6])/(circumradius_0*detJ_1*detJ_1 + circumradius_1*detJ_1*detJ_1) + (2.0*J_0[1]*J_1[2]*w[1][2] + 2.0*J_0[4]*J_1[5]*w[1][2] + 2.0*J_0[7]*J_1[8]*w[1][2])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
+    G[53] = det*w[13][0]*w[9][0]*((-2.0*J_1[0]*J_1[1]*w[1][6]-2.0*J_1[3]*J_1[4]*w[1][6]-2.0*J_1[6]*J_1[7]*w[1][6])/(circumradius_0*detJ_1*detJ_1 + circumradius_1*detJ_1*detJ_1) + (2.0*J_0[1]*J_1[0]*w[1][2] + 2.0*J_0[4]*J_1[3]*w[1][2] + 2.0*J_0[7]*J_1[6]*w[1][2])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
+    G[54] = det*w[12][0]*w[9][0]*((-0.5*J_0[0]*J_0[1]*K_0[1]*n_01*w[1][2]-0.5*J_0[0]*J_0[1]*K_0[2]*n_02*w[1][2]-0.5*J_0[0]*J_0[4]*K_0[1]*n_00*w[1][2]-0.5*J_0[0]*J_0[7]*K_0[2]*n_00*w[1][2]-0.5*J_0[1]*J_0[1]*K_0[4]*n_01*w[1][2]-0.5*J_0[1]*J_0[1]*K_0[5]*n_02*w[1][2]-0.5*J_0[1]*J_0[2]*K_0[7]*n_01*w[1][2]-0.5*J_0[1]*J_0[2]*K_0[8]*n_02*w[1][2]-0.5*J_0[1]*J_0[3]*K_0[0]*n_01*w[1][2]-0.5*J_0[1]*J_0[4]*K_0[3]*n_01*w[1][2]-0.5*J_0[1]*J_0[4]*K_0[4]*n_00*w[1][2]-0.5*J_0[1]*J_0[5]*K_0[6]*n_01*w[1][2]-0.5*J_0[1]*J_0[6]*K_0[0]*n_02*w[1][2]-0.5*J_0[1]*J_0[7]*K_0[3]*n_02*w[1][2]-0.5*J_0[1]*J_0[7]*K_0[5]*n_00*w[1][2]-0.5*J_0[1]*J_0[8]*K_0[6]*n_02*w[1][2]-0.5*J_0[2]*J_0[4]*K_0[7]*n_00*w[1][2]-0.5*J_0[2]*J_0[7]*K_0[8]*n_00*w[1][2]-0.5*J_0[3]*J_0[4]*K_0[0]*n_00*w[1][2]-0.5*J_0[3]*J_0[4]*K_0[2]*n_02*w[1][2]-0.5*J_0[3]*J_0[7]*K_0[2]*n_01*w[1][2]-0.5*J_0[4]*J_0[4]*K_0[3]*n_00*w[1][2]-0.5*J_0[4]*J_0[4]*K_0[5]*n_02*w[1][2]-0.5*J_0[4]*J_0[5]*K_0[6]*n_00*w[1][2]-0.5*J_0[4]*J_0[5]*K_0[8]*n_02*w[1][2]-0.5*J_0[4]*J_0[6]*K_0[1]*n_02*w[1][2]-0.5*J_0[4]*J_0[7]*K_0[4]*n_02*w[1][2]-0.5*J_0[4]*J_0[7]*K_0[5]*n_01*w[1][2]-0.5*J_0[4]*J_0[8]*K_0[7]*n_02*w[1][2]-0.5*J_0[5]*J_0[7]*K_0[8]*n_01*w[1][2]-0.5*J_0[6]*J_0[7]*K_0[0]*n_00*w[1][2]-0.5*J_0[6]*J_0[7]*K_0[1]*n_01*w[1][2]-0.5*J_0[7]*J_0[7]*K_0[3]*n_00*w[1][2]-0.5*J_0[7]*J_0[7]*K_0[4]*n_01*w[1][2]-0.5*J_0[7]*J_0[8]*K_0[6]*n_00*w[1][2]-0.5*J_0[7]*J_0[8]*K_0[7]*n_01*w[1][2] - J_0[0]*J_0[1]*K_0[0]*n_00*w[1][2] - J_0[1]*J_0[1]*K_0[3]*n_00*w[1][2] - J_0[1]*J_0[2]*K_0[6]*n_00*w[1][2] - J_0[3]*J_0[4]*K_0[1]*n_01*w[1][2] - J_0[4]*J_0[4]*K_0[4]*n_01*w[1][2] - J_0[4]*J_0[5]*K_0[7]*n_01*w[1][2] - J_0[6]*J_0[7]*K_0[2]*n_02*w[1][2] - J_0[7]*J_0[7]*K_0[5]*n_02*w[1][2] - J_0[7]*J_0[8]*K_0[8]*n_02*w[1][2])/(detJ_0*detJ_0) + (0.5*J_0[0]*J_1[1]*K_0[1]*n_01*w[1][6] + 0.5*J_0[0]*J_1[1]*K_0[2]*n_02*w[1][6] + 0.5*J_0[0]*J_1[4]*K_0[1]*n_00*w[1][6] + 0.5*J_0[0]*J_1[7]*K_0[2]*n_00*w[1][6] + 0.5*J_0[1]*J_1[1]*K_0[4]*n_01*w[1][6] + 0.5*J_0[1]*J_1[1]*K_0[5]*n_02*w[1][6] + 0.5*J_0[1]*J_1[4]*K_0[4]*n_00*w[1][6] + 0.5*J_0[1]*J_1[7]*K_0[5]*n_00*w[1][6] + 0.5*J_0[2]*J_1[1]*K_0[7]*n_01*w[1][6] + 0.5*J_0[2]*J_1[1]*K_0[8]*n_02*w[1][6] + 0.5*J_0[2]*J_1[4]*K_0[7]*n_00*w[1][6] + 0.5*J_0[2]*J_1[7]*K_0[8]*n_00*w[1][6] + 0.5*J_0[3]*J_1[1]*K_0[0]*n_01*w[1][6] + 0.5*J_0[3]*J_1[4]*K_0[0]*n_00*w[1][6] + 0.5*J_0[3]*J_1[4]*K_0[2]*n_02*w[1][6] + 0.5*J_0[3]*J_1[7]*K_0[2]*n_01*w[1][6] + 0.5*J_0[4]*J_1[1]*K_0[3]*n_01*w[1][6] + 0.5*J_0[4]*J_1[4]*K_0[3]*n_00*w[1][6] + 0.5*J_0[4]*J_1[4]*K_0[5]*n_02*w[1][6] + 0.5*J_0[4]*J_1[7]*K_0[5]*n_01*w[1][6] + 0.5*J_0[5]*J_1[1]*K_0[6]*n_01*w[1][6] + 0.5*J_0[5]*J_1[4]*K_0[6]*n_00*w[1][6] + 0.5*J_0[5]*J_1[4]*K_0[8]*n_02*w[1][6] + 0.5*J_0[5]*J_1[7]*K_0[8]*n_01*w[1][6] + 0.5*J_0[6]*J_1[1]*K_0[0]*n_02*w[1][6] + 0.5*J_0[6]*J_1[4]*K_0[1]*n_02*w[1][6] + 0.5*J_0[6]*J_1[7]*K_0[0]*n_00*w[1][6] + 0.5*J_0[6]*J_1[7]*K_0[1]*n_01*w[1][6] + 0.5*J_0[7]*J_1[1]*K_0[3]*n_02*w[1][6] + 0.5*J_0[7]*J_1[4]*K_0[4]*n_02*w[1][6] + 0.5*J_0[7]*J_1[7]*K_0[3]*n_00*w[1][6] + 0.5*J_0[7]*J_1[7]*K_0[4]*n_01*w[1][6] + 0.5*J_0[8]*J_1[1]*K_0[6]*n_02*w[1][6] + 0.5*J_0[8]*J_1[4]*K_0[7]*n_02*w[1][6] + 0.5*J_0[8]*J_1[7]*K_0[6]*n_00*w[1][6] + 0.5*J_0[8]*J_1[7]*K_0[7]*n_01*w[1][6] + J_0[0]*J_1[1]*K_0[0]*n_00*w[1][6] + J_0[1]*J_1[1]*K_0[3]*n_00*w[1][6] + J_0[2]*J_1[1]*K_0[6]*n_00*w[1][6] + J_0[3]*J_1[4]*K_0[1]*n_01*w[1][6] + J_0[4]*J_1[4]*K_0[4]*n_01*w[1][6] + J_0[5]*J_1[4]*K_0[7]*n_01*w[1][6] + J_0[6]*J_1[7]*K_0[2]*n_02*w[1][6] + J_0[7]*J_1[7]*K_0[5]*n_02*w[1][6] + J_0[8]*J_1[7]*K_0[8]*n_02*w[1][6])/(detJ_0*detJ_1));
+    G[55] = det*w[13][0]*w[9][0]*((-2.0*J_0[1]*J_0[2]*w[1][2]-2.0*J_0[4]*J_0[5]*w[1][2]-2.0*J_0[7]*J_0[8]*w[1][2])/(circumradius_0*detJ_0*detJ_0 + circumradius_1*detJ_0*detJ_0) + (2.0*J_0[2]*J_1[1]*w[1][6] + 2.0*J_0[5]*J_1[4]*w[1][6] + 2.0*J_0[8]*J_1[7]*w[1][6])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
+    G[56] = det*w[13][0]*w[9][0]*((-2.0*J_0[0]*J_0[1]*w[1][2]-2.0*J_0[3]*J_0[4]*w[1][2]-2.0*J_0[6]*J_0[7]*w[1][2])/(circumradius_0*detJ_0*detJ_0 + circumradius_1*detJ_0*detJ_0) + (2.0*J_0[0]*J_1[1]*w[1][6] + 2.0*J_0[3]*J_1[4]*w[1][6] + 2.0*J_0[6]*J_1[7]*w[1][6])/(circumradius_0*detJ_0*detJ_1 + circumradius_1*detJ_0*detJ_1));
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
@@ -25588,7 +24043,7 @@ public:
 
   const char * signature() const final override
   {
-    return "e866b80fc56c1c8052411764accc35a1d76e59c537176012874f536784e21bd8901fb28ebf4a11b5ba8920516e9c9abbf1133c05a78e0856664ee6047a7f01c4";
+    return "5c795361cdea483e60d7e8e03d6ea2e569c84fc4f3e6618acc8583bdf42c2c21844ed7c56d39daab61408a7b0c75c04f2465de32f7439d089688572df8877cd1";
   }
 
   std::size_t rank() const final override
@@ -25598,12 +24053,12 @@ public:
 
   std::size_t num_coefficients() const final override
   {
-    return 10;
+    return 11;
   }
 
   std::size_t original_coefficient_position(std::size_t i) const final override
   {
-    static const std::vector<std::size_t> position({0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+    static const std::vector<std::size_t> position({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
     return position[i];
   }
 
@@ -25686,6 +24141,11 @@ public:
         return new vector_linear_pnp_ns_forms_finite_element_6();
         break;
       }
+    case 12:
+      {
+        return new vector_linear_pnp_ns_forms_finite_element_6();
+        break;
+      }
     }
     
     return 0;
@@ -25755,6 +24215,11 @@ public:
         return new vector_linear_pnp_ns_forms_dofmap_6();
         break;
       }
+    case 12:
+      {
+        return new vector_linear_pnp_ns_forms_dofmap_6();
+        break;
+      }
     }
     
     return 0;
@@ -25807,7 +24272,7 @@ public:
 
   bool has_exterior_facet_integrals() const final override
   {
-    return true;
+    return false;
   }
 
   bool has_interior_facet_integrals() const final override
@@ -25887,7 +24352,7 @@ public:
 
   ufc::exterior_facet_integral * create_default_exterior_facet_integral() const final override
   {
-    return new vector_linear_pnp_ns_forms_exterior_facet_integral_0_otherwise();
+    return 0;
   }
 
   ufc::interior_facet_integral * create_default_interior_facet_integral() const final override
@@ -25939,7 +24404,7 @@ public:
 
   const char * signature() const final override
   {
-    return "07a6f2d50a886eda988f07b62fc2fbe79167689a2cb6d70fd7c2e2426bbe06b8f6ae0bcd17c67eb4558d4c2bc40931584a3d43e1e2eda1cb2f3999f41046fcd0";
+    return "2a2b2698f166bb988be5d4c8cf8459b47e0b53b14a1742a73635c4485af3904622545c842f429da1f73446033871fb9c2a09fe1c3c1b3852e1e8e69f1edc2eb8";
   }
 
   std::size_t rank() const final override
@@ -25949,12 +24414,12 @@ public:
 
   std::size_t num_coefficients() const final override
   {
-    return 13;
+    return 14;
   }
 
   std::size_t original_coefficient_position(std::size_t i) const final override
   {
-    static const std::vector<std::size_t> position({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
+    static const std::vector<std::size_t> position({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13});
     return position[i];
   }
 
@@ -26034,15 +24499,20 @@ public:
       }
     case 11:
       {
-        return new vector_linear_pnp_ns_forms_finite_element_6();
+        return new vector_linear_pnp_ns_forms_finite_element_0();
         break;
       }
     case 12:
       {
-        return new vector_linear_pnp_ns_forms_finite_element_6();
+        return new vector_linear_pnp_ns_forms_finite_element_2();
         break;
       }
     case 13:
+      {
+        return new vector_linear_pnp_ns_forms_finite_element_6();
+        break;
+      }
+    case 14:
       {
         return new vector_linear_pnp_ns_forms_finite_element_6();
         break;
@@ -26113,15 +24583,20 @@ public:
       }
     case 11:
       {
-        return new vector_linear_pnp_ns_forms_dofmap_6();
+        return new vector_linear_pnp_ns_forms_dofmap_0();
         break;
       }
     case 12:
       {
-        return new vector_linear_pnp_ns_forms_dofmap_6();
+        return new vector_linear_pnp_ns_forms_dofmap_2();
         break;
       }
     case 13:
+      {
+        return new vector_linear_pnp_ns_forms_dofmap_6();
+        break;
+      }
+    case 14:
       {
         return new vector_linear_pnp_ns_forms_dofmap_6();
         break;
@@ -26138,7 +24613,7 @@ public:
 
   std::size_t max_exterior_facet_subdomain_id() const final override
   {
-    return 4;
+    return 0;
   }
 
   std::size_t max_interior_facet_subdomain_id() const final override
@@ -26178,7 +24653,7 @@ public:
 
   bool has_exterior_facet_integrals() const final override
   {
-    return true;
+    return false;
   }
 
   bool has_interior_facet_integrals() const final override
@@ -26218,25 +24693,6 @@ public:
 
   ufc::exterior_facet_integral * create_exterior_facet_integral(std::size_t subdomain_id) const final override
   {
-    switch (subdomain_id)
-    {
-    case 1:
-      {
-        return new vector_linear_pnp_ns_forms_exterior_facet_integral_1_1();
-        break;
-      }
-    case 2:
-      {
-        return new vector_linear_pnp_ns_forms_exterior_facet_integral_1_2();
-        break;
-      }
-    case 3:
-      {
-        return new vector_linear_pnp_ns_forms_exterior_facet_integral_1_3();
-        break;
-      }
-    }
-    
     return 0;
   }
 
@@ -26337,6 +24793,30 @@ public:
 namespace vector_linear_pnp_ns_forms
 {
 
+class CoefficientSpace_Re: public dolfin::FunctionSpace
+{
+public:
+
+  // Constructor for standard function space
+  CoefficientSpace_Re(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<vector_linear_pnp_ns_forms_finite_element_6>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<vector_linear_pnp_ns_forms_dofmap_6>(), *mesh))
+  {
+    // Do nothing
+  }
+
+  // Constructor for constrained function space
+  CoefficientSpace_Re(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<vector_linear_pnp_ns_forms_finite_element_6>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<vector_linear_pnp_ns_forms_dofmap_6>(), *mesh, constrained_domain))
+  {
+    // Do nothing
+  }
+
+};
+
 class CoefficientSpace_cc: public dolfin::FunctionSpace
 {
 public:
@@ -26400,54 +24880,6 @@ public:
 
   // Constructor for constrained function space
   CoefficientSpace_diffusivity1(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
-    dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<vector_linear_pnp_ns_forms_finite_element_6>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<vector_linear_pnp_ns_forms_dofmap_6>(), *mesh, constrained_domain))
-  {
-    // Do nothing
-  }
-
-};
-
-class CoefficientSpace_g1: public dolfin::FunctionSpace
-{
-public:
-
-  // Constructor for standard function space
-  CoefficientSpace_g1(std::shared_ptr<const dolfin::Mesh> mesh):
-    dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<vector_linear_pnp_ns_forms_finite_element_6>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<vector_linear_pnp_ns_forms_dofmap_6>(), *mesh))
-  {
-    // Do nothing
-  }
-
-  // Constructor for constrained function space
-  CoefficientSpace_g1(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
-    dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<vector_linear_pnp_ns_forms_finite_element_6>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<vector_linear_pnp_ns_forms_dofmap_6>(), *mesh, constrained_domain))
-  {
-    // Do nothing
-  }
-
-};
-
-class CoefficientSpace_g2: public dolfin::FunctionSpace
-{
-public:
-
-  // Constructor for standard function space
-  CoefficientSpace_g2(std::shared_ptr<const dolfin::Mesh> mesh):
-    dolfin::FunctionSpace(mesh,
-                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<vector_linear_pnp_ns_forms_finite_element_6>()),
-                          std::make_shared<const dolfin::DofMap>(std::make_shared<vector_linear_pnp_ns_forms_dofmap_6>(), *mesh))
-  {
-    // Do nothing
-  }
-
-  // Constructor for constrained function space
-  CoefficientSpace_g2(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
     dolfin::FunctionSpace(mesh,
                           std::make_shared<const dolfin::FiniteElement>(std::make_shared<vector_linear_pnp_ns_forms_finite_element_6>()),
                           std::make_shared<const dolfin::DofMap>(std::make_shared<vector_linear_pnp_ns_forms_dofmap_6>(), *mesh, constrained_domain))
@@ -26553,6 +24985,30 @@ public:
 
 };
 
+class CoefficientSpace_phib: public dolfin::FunctionSpace
+{
+public:
+
+  // Constructor for standard function space
+  CoefficientSpace_phib(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<vector_linear_pnp_ns_forms_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<vector_linear_pnp_ns_forms_dofmap_0>(), *mesh))
+  {
+    // Do nothing
+  }
+
+  // Constructor for constrained function space
+  CoefficientSpace_phib(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<vector_linear_pnp_ns_forms_finite_element_0>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<vector_linear_pnp_ns_forms_dofmap_0>(), *mesh, constrained_domain))
+  {
+    // Do nothing
+  }
+
+};
+
 class CoefficientSpace_pp: public dolfin::FunctionSpace
 {
 public:
@@ -26571,6 +25027,30 @@ public:
     dolfin::FunctionSpace(mesh,
                           std::make_shared<const dolfin::FiniteElement>(std::make_shared<vector_linear_pnp_ns_forms_finite_element_3>()),
                           std::make_shared<const dolfin::DofMap>(std::make_shared<vector_linear_pnp_ns_forms_dofmap_3>(), *mesh, constrained_domain))
+  {
+    // Do nothing
+  }
+
+};
+
+class CoefficientSpace_ub: public dolfin::FunctionSpace
+{
+public:
+
+  // Constructor for standard function space
+  CoefficientSpace_ub(std::shared_ptr<const dolfin::Mesh> mesh):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<vector_linear_pnp_ns_forms_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<vector_linear_pnp_ns_forms_dofmap_2>(), *mesh))
+  {
+    // Do nothing
+  }
+
+  // Constructor for constrained function space
+  CoefficientSpace_ub(std::shared_ptr<const dolfin::Mesh> mesh, std::shared_ptr<const dolfin::SubDomain> constrained_domain):
+    dolfin::FunctionSpace(mesh,
+                          std::make_shared<const dolfin::FiniteElement>(std::make_shared<vector_linear_pnp_ns_forms_finite_element_2>()),
+                          std::make_shared<const dolfin::DofMap>(std::make_shared<vector_linear_pnp_ns_forms_dofmap_2>(), *mesh, constrained_domain))
   {
     // Do nothing
   }
@@ -26751,11 +25231,13 @@ typedef CoefficientSpace_diffusivity1 Form_a_FunctionSpace_7;
 
 typedef CoefficientSpace_valency1 Form_a_FunctionSpace_8;
 
-typedef CoefficientSpace_mu Form_a_FunctionSpace_9;
+typedef CoefficientSpace_Re Form_a_FunctionSpace_9;
 
-typedef CoefficientSpace_penalty1 Form_a_FunctionSpace_10;
+typedef CoefficientSpace_mu Form_a_FunctionSpace_10;
 
-typedef CoefficientSpace_penalty2 Form_a_FunctionSpace_11;
+typedef CoefficientSpace_penalty1 Form_a_FunctionSpace_11;
+
+typedef CoefficientSpace_penalty2 Form_a_FunctionSpace_12;
 
 class Form_a: public dolfin::Form
 {
@@ -26763,7 +25245,7 @@ public:
 
   // Constructor
   Form_a(std::shared_ptr<const dolfin::FunctionSpace> V1, std::shared_ptr<const dolfin::FunctionSpace> V0):
-    dolfin::Form(2, 10), cc(*this, 0), uu(*this, 1), permittivity(*this, 2), diffusivity0(*this, 3), valency0(*this, 4), diffusivity1(*this, 5), valency1(*this, 6), mu(*this, 7), penalty1(*this, 8), penalty2(*this, 9)
+    dolfin::Form(2, 11), cc(*this, 0), uu(*this, 1), permittivity(*this, 2), diffusivity0(*this, 3), valency0(*this, 4), diffusivity1(*this, 5), valency1(*this, 6), Re(*this, 7), mu(*this, 8), penalty1(*this, 9), penalty2(*this, 10)
   {
     _function_spaces[0] = V0;
     _function_spaces[1] = V1;
@@ -26772,8 +25254,8 @@ public:
   }
 
   // Constructor
-  Form_a(std::shared_ptr<const dolfin::FunctionSpace> V1, std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> cc, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> permittivity, std::shared_ptr<const dolfin::GenericFunction> diffusivity0, std::shared_ptr<const dolfin::GenericFunction> valency0, std::shared_ptr<const dolfin::GenericFunction> diffusivity1, std::shared_ptr<const dolfin::GenericFunction> valency1, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> penalty1, std::shared_ptr<const dolfin::GenericFunction> penalty2):
-    dolfin::Form(2, 10), cc(*this, 0), uu(*this, 1), permittivity(*this, 2), diffusivity0(*this, 3), valency0(*this, 4), diffusivity1(*this, 5), valency1(*this, 6), mu(*this, 7), penalty1(*this, 8), penalty2(*this, 9)
+  Form_a(std::shared_ptr<const dolfin::FunctionSpace> V1, std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> cc, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> permittivity, std::shared_ptr<const dolfin::GenericFunction> diffusivity0, std::shared_ptr<const dolfin::GenericFunction> valency0, std::shared_ptr<const dolfin::GenericFunction> diffusivity1, std::shared_ptr<const dolfin::GenericFunction> valency1, std::shared_ptr<const dolfin::GenericFunction> Re, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> penalty1, std::shared_ptr<const dolfin::GenericFunction> penalty2):
+    dolfin::Form(2, 11), cc(*this, 0), uu(*this, 1), permittivity(*this, 2), diffusivity0(*this, 3), valency0(*this, 4), diffusivity1(*this, 5), valency1(*this, 6), Re(*this, 7), mu(*this, 8), penalty1(*this, 9), penalty2(*this, 10)
   {
     _function_spaces[0] = V0;
     _function_spaces[1] = V1;
@@ -26785,6 +25267,7 @@ public:
     this->valency0 = valency0;
     this->diffusivity1 = diffusivity1;
     this->valency1 = valency1;
+    this->Re = Re;
     this->mu = mu;
     this->penalty1 = penalty1;
     this->penalty2 = penalty2;
@@ -26813,12 +25296,14 @@ public:
       return 5;
     else if (name == "valency1")
       return 6;
-    else if (name == "mu")
+    else if (name == "Re")
       return 7;
-    else if (name == "penalty1")
+    else if (name == "mu")
       return 8;
-    else if (name == "penalty2")
+    else if (name == "penalty1")
       return 9;
+    else if (name == "penalty2")
+      return 10;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -26846,10 +25331,12 @@ public:
     case 6:
       return "valency1";
     case 7:
-      return "mu";
+      return "Re";
     case 8:
-      return "penalty1";
+      return "mu";
     case 9:
+      return "penalty1";
+    case 10:
       return "penalty2";
     }
 
@@ -26871,9 +25358,10 @@ public:
   typedef Form_a_FunctionSpace_6 CoefficientSpace_valency0;
   typedef Form_a_FunctionSpace_7 CoefficientSpace_diffusivity1;
   typedef Form_a_FunctionSpace_8 CoefficientSpace_valency1;
-  typedef Form_a_FunctionSpace_9 CoefficientSpace_mu;
-  typedef Form_a_FunctionSpace_10 CoefficientSpace_penalty1;
-  typedef Form_a_FunctionSpace_11 CoefficientSpace_penalty2;
+  typedef Form_a_FunctionSpace_9 CoefficientSpace_Re;
+  typedef Form_a_FunctionSpace_10 CoefficientSpace_mu;
+  typedef Form_a_FunctionSpace_11 CoefficientSpace_penalty1;
+  typedef Form_a_FunctionSpace_12 CoefficientSpace_penalty2;
 
   // Coefficients
   dolfin::CoefficientAssigner cc;
@@ -26883,6 +25371,7 @@ public:
   dolfin::CoefficientAssigner valency0;
   dolfin::CoefficientAssigner diffusivity1;
   dolfin::CoefficientAssigner valency1;
+  dolfin::CoefficientAssigner Re;
   dolfin::CoefficientAssigner mu;
   dolfin::CoefficientAssigner penalty1;
   dolfin::CoefficientAssigner penalty2;
@@ -26894,7 +25383,7 @@ public:
 
   // Constructor
   MultiMeshForm_a(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V1, std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0):
-    dolfin::MultiMeshForm(V1, V0), cc(*this, 0), uu(*this, 1), permittivity(*this, 2), diffusivity0(*this, 3), valency0(*this, 4), diffusivity1(*this, 5), valency1(*this, 6), mu(*this, 7), penalty1(*this, 8), penalty2(*this, 9)
+    dolfin::MultiMeshForm(V1, V0), cc(*this, 0), uu(*this, 1), permittivity(*this, 2), diffusivity0(*this, 3), valency0(*this, 4), diffusivity1(*this, 5), valency1(*this, 6), Re(*this, 7), mu(*this, 8), penalty1(*this, 9), penalty2(*this, 10)
   {
     // Create and add standard forms
     std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
@@ -26912,8 +25401,8 @@ public:
   }
 
   // Constructor
-  MultiMeshForm_a(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V1, std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> cc, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> permittivity, std::shared_ptr<const dolfin::GenericFunction> diffusivity0, std::shared_ptr<const dolfin::GenericFunction> valency0, std::shared_ptr<const dolfin::GenericFunction> diffusivity1, std::shared_ptr<const dolfin::GenericFunction> valency1, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> penalty1, std::shared_ptr<const dolfin::GenericFunction> penalty2):
-    dolfin::MultiMeshForm(V1, V0), cc(*this, 0), uu(*this, 1), permittivity(*this, 2), diffusivity0(*this, 3), valency0(*this, 4), diffusivity1(*this, 5), valency1(*this, 6), mu(*this, 7), penalty1(*this, 8), penalty2(*this, 9)
+  MultiMeshForm_a(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V1, std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> cc, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> permittivity, std::shared_ptr<const dolfin::GenericFunction> diffusivity0, std::shared_ptr<const dolfin::GenericFunction> valency0, std::shared_ptr<const dolfin::GenericFunction> diffusivity1, std::shared_ptr<const dolfin::GenericFunction> valency1, std::shared_ptr<const dolfin::GenericFunction> Re, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> penalty1, std::shared_ptr<const dolfin::GenericFunction> penalty2):
+    dolfin::MultiMeshForm(V1, V0), cc(*this, 0), uu(*this, 1), permittivity(*this, 2), diffusivity0(*this, 3), valency0(*this, 4), diffusivity1(*this, 5), valency1(*this, 6), Re(*this, 7), mu(*this, 8), penalty1(*this, 9), penalty2(*this, 10)
   {
     // Create and add standard forms
     std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
@@ -26934,6 +25423,7 @@ public:
     this->valency0 = valency0;
     this->diffusivity1 = diffusivity1;
     this->valency1 = valency1;
+    this->Re = Re;
     this->mu = mu;
     this->penalty1 = penalty1;
     this->penalty2 = penalty2;
@@ -26961,12 +25451,14 @@ public:
       return 5;
     else if (name == "valency1")
       return 6;
-    else if (name == "mu")
+    else if (name == "Re")
       return 7;
-    else if (name == "penalty1")
+    else if (name == "mu")
       return 8;
-    else if (name == "penalty2")
+    else if (name == "penalty1")
       return 9;
+    else if (name == "penalty2")
+      return 10;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -26994,10 +25486,12 @@ public:
     case 6:
       return "valency1";
     case 7:
-      return "mu";
+      return "Re";
     case 8:
-      return "penalty1";
+      return "mu";
     case 9:
+      return "penalty1";
+    case 10:
       return "penalty2";
     }
 
@@ -27019,9 +25513,10 @@ public:
   typedef Form_a_FunctionSpace_6 CoefficientSpace_valency0;
   typedef Form_a_FunctionSpace_7 CoefficientSpace_diffusivity1;
   typedef Form_a_FunctionSpace_8 CoefficientSpace_valency1;
-  typedef Form_a_FunctionSpace_9 CoefficientSpace_mu;
-  typedef Form_a_FunctionSpace_10 CoefficientSpace_penalty1;
-  typedef Form_a_FunctionSpace_11 CoefficientSpace_penalty2;
+  typedef Form_a_FunctionSpace_9 CoefficientSpace_Re;
+  typedef Form_a_FunctionSpace_10 CoefficientSpace_mu;
+  typedef Form_a_FunctionSpace_11 CoefficientSpace_penalty1;
+  typedef Form_a_FunctionSpace_12 CoefficientSpace_penalty2;
 
   // Coefficients
   dolfin::MultiMeshCoefficientAssigner cc;
@@ -27031,6 +25526,7 @@ public:
   dolfin::MultiMeshCoefficientAssigner valency0;
   dolfin::MultiMeshCoefficientAssigner diffusivity1;
   dolfin::MultiMeshCoefficientAssigner valency1;
+  dolfin::MultiMeshCoefficientAssigner Re;
   dolfin::MultiMeshCoefficientAssigner mu;
   dolfin::MultiMeshCoefficientAssigner penalty1;
   dolfin::MultiMeshCoefficientAssigner penalty2;
@@ -27096,15 +25592,17 @@ typedef CoefficientSpace_diffusivity1 Form_L_FunctionSpace_7;
 
 typedef CoefficientSpace_valency1 Form_L_FunctionSpace_8;
 
-typedef CoefficientSpace_g1 Form_L_FunctionSpace_9;
+typedef CoefficientSpace_Re Form_L_FunctionSpace_9;
 
-typedef CoefficientSpace_g2 Form_L_FunctionSpace_10;
+typedef CoefficientSpace_mu Form_L_FunctionSpace_10;
 
-typedef CoefficientSpace_mu Form_L_FunctionSpace_11;
+typedef CoefficientSpace_phib Form_L_FunctionSpace_11;
 
-typedef CoefficientSpace_penalty1 Form_L_FunctionSpace_12;
+typedef CoefficientSpace_ub Form_L_FunctionSpace_12;
 
-typedef CoefficientSpace_penalty2 Form_L_FunctionSpace_13;
+typedef CoefficientSpace_penalty1 Form_L_FunctionSpace_13;
+
+typedef CoefficientSpace_penalty2 Form_L_FunctionSpace_14;
 
 class Form_L: public dolfin::Form
 {
@@ -27112,7 +25610,7 @@ public:
 
   // Constructor
   Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0):
-    dolfin::Form(1, 13), cc(*this, 0), uu(*this, 1), pp(*this, 2), permittivity(*this, 3), diffusivity0(*this, 4), valency0(*this, 5), diffusivity1(*this, 6), valency1(*this, 7), g1(*this, 8), g2(*this, 9), mu(*this, 10), penalty1(*this, 11), penalty2(*this, 12)
+    dolfin::Form(1, 14), cc(*this, 0), uu(*this, 1), pp(*this, 2), permittivity(*this, 3), diffusivity0(*this, 4), valency0(*this, 5), diffusivity1(*this, 6), valency1(*this, 7), Re(*this, 8), mu(*this, 9), phib(*this, 10), ub(*this, 11), penalty1(*this, 12), penalty2(*this, 13)
   {
     _function_spaces[0] = V0;
 
@@ -27120,8 +25618,8 @@ public:
   }
 
   // Constructor
-  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> cc, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> pp, std::shared_ptr<const dolfin::GenericFunction> permittivity, std::shared_ptr<const dolfin::GenericFunction> diffusivity0, std::shared_ptr<const dolfin::GenericFunction> valency0, std::shared_ptr<const dolfin::GenericFunction> diffusivity1, std::shared_ptr<const dolfin::GenericFunction> valency1, std::shared_ptr<const dolfin::GenericFunction> g1, std::shared_ptr<const dolfin::GenericFunction> g2, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> penalty1, std::shared_ptr<const dolfin::GenericFunction> penalty2):
-    dolfin::Form(1, 13), cc(*this, 0), uu(*this, 1), pp(*this, 2), permittivity(*this, 3), diffusivity0(*this, 4), valency0(*this, 5), diffusivity1(*this, 6), valency1(*this, 7), g1(*this, 8), g2(*this, 9), mu(*this, 10), penalty1(*this, 11), penalty2(*this, 12)
+  Form_L(std::shared_ptr<const dolfin::FunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> cc, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> pp, std::shared_ptr<const dolfin::GenericFunction> permittivity, std::shared_ptr<const dolfin::GenericFunction> diffusivity0, std::shared_ptr<const dolfin::GenericFunction> valency0, std::shared_ptr<const dolfin::GenericFunction> diffusivity1, std::shared_ptr<const dolfin::GenericFunction> valency1, std::shared_ptr<const dolfin::GenericFunction> Re, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> phib, std::shared_ptr<const dolfin::GenericFunction> ub, std::shared_ptr<const dolfin::GenericFunction> penalty1, std::shared_ptr<const dolfin::GenericFunction> penalty2):
+    dolfin::Form(1, 14), cc(*this, 0), uu(*this, 1), pp(*this, 2), permittivity(*this, 3), diffusivity0(*this, 4), valency0(*this, 5), diffusivity1(*this, 6), valency1(*this, 7), Re(*this, 8), mu(*this, 9), phib(*this, 10), ub(*this, 11), penalty1(*this, 12), penalty2(*this, 13)
   {
     _function_spaces[0] = V0;
 
@@ -27133,9 +25631,10 @@ public:
     this->valency0 = valency0;
     this->diffusivity1 = diffusivity1;
     this->valency1 = valency1;
-    this->g1 = g1;
-    this->g2 = g2;
+    this->Re = Re;
     this->mu = mu;
+    this->phib = phib;
+    this->ub = ub;
     this->penalty1 = penalty1;
     this->penalty2 = penalty2;
 
@@ -27165,16 +25664,18 @@ public:
       return 6;
     else if (name == "valency1")
       return 7;
-    else if (name == "g1")
+    else if (name == "Re")
       return 8;
-    else if (name == "g2")
-      return 9;
     else if (name == "mu")
+      return 9;
+    else if (name == "phib")
       return 10;
-    else if (name == "penalty1")
+    else if (name == "ub")
       return 11;
-    else if (name == "penalty2")
+    else if (name == "penalty1")
       return 12;
+    else if (name == "penalty2")
+      return 13;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -27204,14 +25705,16 @@ public:
     case 7:
       return "valency1";
     case 8:
-      return "g1";
+      return "Re";
     case 9:
-      return "g2";
-    case 10:
       return "mu";
+    case 10:
+      return "phib";
     case 11:
-      return "penalty1";
+      return "ub";
     case 12:
+      return "penalty1";
+    case 13:
       return "penalty2";
     }
 
@@ -27232,11 +25735,12 @@ public:
   typedef Form_L_FunctionSpace_6 CoefficientSpace_valency0;
   typedef Form_L_FunctionSpace_7 CoefficientSpace_diffusivity1;
   typedef Form_L_FunctionSpace_8 CoefficientSpace_valency1;
-  typedef Form_L_FunctionSpace_9 CoefficientSpace_g1;
-  typedef Form_L_FunctionSpace_10 CoefficientSpace_g2;
-  typedef Form_L_FunctionSpace_11 CoefficientSpace_mu;
-  typedef Form_L_FunctionSpace_12 CoefficientSpace_penalty1;
-  typedef Form_L_FunctionSpace_13 CoefficientSpace_penalty2;
+  typedef Form_L_FunctionSpace_9 CoefficientSpace_Re;
+  typedef Form_L_FunctionSpace_10 CoefficientSpace_mu;
+  typedef Form_L_FunctionSpace_11 CoefficientSpace_phib;
+  typedef Form_L_FunctionSpace_12 CoefficientSpace_ub;
+  typedef Form_L_FunctionSpace_13 CoefficientSpace_penalty1;
+  typedef Form_L_FunctionSpace_14 CoefficientSpace_penalty2;
 
   // Coefficients
   dolfin::CoefficientAssigner cc;
@@ -27247,9 +25751,10 @@ public:
   dolfin::CoefficientAssigner valency0;
   dolfin::CoefficientAssigner diffusivity1;
   dolfin::CoefficientAssigner valency1;
-  dolfin::CoefficientAssigner g1;
-  dolfin::CoefficientAssigner g2;
+  dolfin::CoefficientAssigner Re;
   dolfin::CoefficientAssigner mu;
+  dolfin::CoefficientAssigner phib;
+  dolfin::CoefficientAssigner ub;
   dolfin::CoefficientAssigner penalty1;
   dolfin::CoefficientAssigner penalty2;
 };
@@ -27260,7 +25765,7 @@ public:
 
   // Constructor
   MultiMeshForm_L(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0):
-    dolfin::MultiMeshForm(V0), cc(*this, 0), uu(*this, 1), pp(*this, 2), permittivity(*this, 3), diffusivity0(*this, 4), valency0(*this, 5), diffusivity1(*this, 6), valency1(*this, 7), g1(*this, 8), g2(*this, 9), mu(*this, 10), penalty1(*this, 11), penalty2(*this, 12)
+    dolfin::MultiMeshForm(V0), cc(*this, 0), uu(*this, 1), pp(*this, 2), permittivity(*this, 3), diffusivity0(*this, 4), valency0(*this, 5), diffusivity1(*this, 6), valency1(*this, 7), Re(*this, 8), mu(*this, 9), phib(*this, 10), ub(*this, 11), penalty1(*this, 12), penalty2(*this, 13)
   {
     // Create and add standard forms
     std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
@@ -27278,8 +25783,8 @@ public:
   }
 
   // Constructor
-  MultiMeshForm_L(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> cc, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> pp, std::shared_ptr<const dolfin::GenericFunction> permittivity, std::shared_ptr<const dolfin::GenericFunction> diffusivity0, std::shared_ptr<const dolfin::GenericFunction> valency0, std::shared_ptr<const dolfin::GenericFunction> diffusivity1, std::shared_ptr<const dolfin::GenericFunction> valency1, std::shared_ptr<const dolfin::GenericFunction> g1, std::shared_ptr<const dolfin::GenericFunction> g2, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> penalty1, std::shared_ptr<const dolfin::GenericFunction> penalty2):
-    dolfin::MultiMeshForm(V0), cc(*this, 0), uu(*this, 1), pp(*this, 2), permittivity(*this, 3), diffusivity0(*this, 4), valency0(*this, 5), diffusivity1(*this, 6), valency1(*this, 7), g1(*this, 8), g2(*this, 9), mu(*this, 10), penalty1(*this, 11), penalty2(*this, 12)
+  MultiMeshForm_L(std::shared_ptr<const dolfin::MultiMeshFunctionSpace> V0, std::shared_ptr<const dolfin::GenericFunction> cc, std::shared_ptr<const dolfin::GenericFunction> uu, std::shared_ptr<const dolfin::GenericFunction> pp, std::shared_ptr<const dolfin::GenericFunction> permittivity, std::shared_ptr<const dolfin::GenericFunction> diffusivity0, std::shared_ptr<const dolfin::GenericFunction> valency0, std::shared_ptr<const dolfin::GenericFunction> diffusivity1, std::shared_ptr<const dolfin::GenericFunction> valency1, std::shared_ptr<const dolfin::GenericFunction> Re, std::shared_ptr<const dolfin::GenericFunction> mu, std::shared_ptr<const dolfin::GenericFunction> phib, std::shared_ptr<const dolfin::GenericFunction> ub, std::shared_ptr<const dolfin::GenericFunction> penalty1, std::shared_ptr<const dolfin::GenericFunction> penalty2):
+    dolfin::MultiMeshForm(V0), cc(*this, 0), uu(*this, 1), pp(*this, 2), permittivity(*this, 3), diffusivity0(*this, 4), valency0(*this, 5), diffusivity1(*this, 6), valency1(*this, 7), Re(*this, 8), mu(*this, 9), phib(*this, 10), ub(*this, 11), penalty1(*this, 12), penalty2(*this, 13)
   {
     // Create and add standard forms
     std::size_t num_parts = V0->num_parts(); // assume all equal and pick first
@@ -27301,9 +25806,10 @@ public:
     this->valency0 = valency0;
     this->diffusivity1 = diffusivity1;
     this->valency1 = valency1;
-    this->g1 = g1;
-    this->g2 = g2;
+    this->Re = Re;
     this->mu = mu;
+    this->phib = phib;
+    this->ub = ub;
     this->penalty1 = penalty1;
     this->penalty2 = penalty2;
 
@@ -27332,16 +25838,18 @@ public:
       return 6;
     else if (name == "valency1")
       return 7;
-    else if (name == "g1")
+    else if (name == "Re")
       return 8;
-    else if (name == "g2")
-      return 9;
     else if (name == "mu")
+      return 9;
+    else if (name == "phib")
       return 10;
-    else if (name == "penalty1")
+    else if (name == "ub")
       return 11;
-    else if (name == "penalty2")
+    else if (name == "penalty1")
       return 12;
+    else if (name == "penalty2")
+      return 13;
 
     dolfin::dolfin_error("generated code for class Form",
                          "access coefficient data",
@@ -27371,14 +25879,16 @@ public:
     case 7:
       return "valency1";
     case 8:
-      return "g1";
+      return "Re";
     case 9:
-      return "g2";
-    case 10:
       return "mu";
+    case 10:
+      return "phib";
     case 11:
-      return "penalty1";
+      return "ub";
     case 12:
+      return "penalty1";
+    case 13:
       return "penalty2";
     }
 
@@ -27399,11 +25909,12 @@ public:
   typedef Form_L_FunctionSpace_6 CoefficientSpace_valency0;
   typedef Form_L_FunctionSpace_7 CoefficientSpace_diffusivity1;
   typedef Form_L_FunctionSpace_8 CoefficientSpace_valency1;
-  typedef Form_L_FunctionSpace_9 CoefficientSpace_g1;
-  typedef Form_L_FunctionSpace_10 CoefficientSpace_g2;
-  typedef Form_L_FunctionSpace_11 CoefficientSpace_mu;
-  typedef Form_L_FunctionSpace_12 CoefficientSpace_penalty1;
-  typedef Form_L_FunctionSpace_13 CoefficientSpace_penalty2;
+  typedef Form_L_FunctionSpace_9 CoefficientSpace_Re;
+  typedef Form_L_FunctionSpace_10 CoefficientSpace_mu;
+  typedef Form_L_FunctionSpace_11 CoefficientSpace_phib;
+  typedef Form_L_FunctionSpace_12 CoefficientSpace_ub;
+  typedef Form_L_FunctionSpace_13 CoefficientSpace_penalty1;
+  typedef Form_L_FunctionSpace_14 CoefficientSpace_penalty2;
 
   // Coefficients
   dolfin::MultiMeshCoefficientAssigner cc;
@@ -27414,9 +25925,10 @@ public:
   dolfin::MultiMeshCoefficientAssigner valency0;
   dolfin::MultiMeshCoefficientAssigner diffusivity1;
   dolfin::MultiMeshCoefficientAssigner valency1;
-  dolfin::MultiMeshCoefficientAssigner g1;
-  dolfin::MultiMeshCoefficientAssigner g2;
+  dolfin::MultiMeshCoefficientAssigner Re;
   dolfin::MultiMeshCoefficientAssigner mu;
+  dolfin::MultiMeshCoefficientAssigner phib;
+  dolfin::MultiMeshCoefficientAssigner ub;
   dolfin::MultiMeshCoefficientAssigner penalty1;
   dolfin::MultiMeshCoefficientAssigner penalty2;
 };

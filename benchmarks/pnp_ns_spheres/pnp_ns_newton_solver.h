@@ -79,22 +79,21 @@ std::vector<dolfin::Function> solve_pnp_stokes (
 
 
   // set PDE coefficients
+  // L = 10 nm, T = 298K
   printf("Initialize coefficients\n");
   std::map<std::string, std::vector<double>> coefficients = {
-    {"permittivity", {1E-3}},
+    {"permittivity", {0.019044}},
     {"diffusivity0", {1.0}},
-    {"diffusivity1", {1.0}},
+    {"diffusivity1", {1.334/2.032}},
     {"valency0", {1.0}},
     {"valency1", {-1.0}},
-    {"mu", {0.1}},
+    {"mu", {1.0}},
     {"penalty1", {1.0}},
     {"penalty2", {1.0}},
+    {"Re", {0.01}},
   };
 
-  std::map<std::string, std::vector<double>> sources = {
-    {"g1", {0.0}},
-    {"g2", {0.1}}
-  };
+  std::map<std::string, std::vector<double>> sources = {};
 
   const std::vector<std::string> variables = {"cc","uu","pp"};
 
@@ -128,7 +127,6 @@ std::vector<dolfin::Function> solve_pnp_stokes (
   pnp_ns_problem.get_dofs();
   pnp_ns_problem.get_dofs_fasp({0,1,2},{3,4});
 
-  pnp_ns_problem.init_measure(mesh,Lx,Ly,Lz);
   pnp_ns_problem.init_BC(0.0,Lx);
   pnp_ns_problem.set_solutions(initial_guess);
   printf("\n");
@@ -191,6 +189,12 @@ std::vector<dolfin::Function> solve_pnp_stokes (
     printf("\n");
   }
 
+  dolfin::File xml_mesh(output_dir+"mesh.xml");
+  dolfin::File xml_file0(output_dir+"pnp_solution.xml");
+  dolfin::File xml_file1(output_dir+"velocity_solution.xml");
+  xml_mesh << *mesh;
+  xml_file0 << solutionFn[0];
+  xml_file1 << solutionFn[1];
 
   // check status of nonlinear solve
   if (newton.converged()) {

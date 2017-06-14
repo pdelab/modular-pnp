@@ -68,14 +68,14 @@ print np.max(xc)
 print np.max(rc)
 
 
-Num_cells=20
+Num_cells=15
 Lx=2.2
 Ly=2.2
 Lz=2.2
 domain = Box(Point(-Lx/2.0,-Ly/2.0,-Lz/2.0),Point(Lx/2.0,Ly/2.0,Lz/2.0))
 print "Generating the domain..."
 ## The range can be at most len(x)=86
-Numb_spheres=5
+Numb_spheres=3
 for i in range(Numb_spheres):
     domain = domain - Sphere(Point(xc[i],yc[i],zc[i]), rc[i])
 

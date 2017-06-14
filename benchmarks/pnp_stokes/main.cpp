@@ -131,9 +131,7 @@ int main (int argc, char** argv) {
     {"penalty2", {1.0}},
   };
 
-  std::map<std::string, std::vector<double>> sources = {
-    {"g", {0.0}}
-  };
+  std::map<std::string, std::vector<double>> sources = {};
 
   const std::vector<std::string> variables = {"cc","uu","pp"};
 
@@ -167,11 +165,11 @@ int main (int argc, char** argv) {
   pnp_ns_problem.get_dofs();
   pnp_ns_problem.get_dofs_fasp({0,1,2},{3,4});
 
-  pnp_ns_problem.init_measure(mesh,domain.length_x,domain.length_y,domain.length_z);
-  pnp_ns_problem.init_BC(0.0,domain.length_x);
+  // pnp_ns_problem.init_measure(mesh,domain.length_x,domain.length_y,domain.length_z);
+  pnp_ns_problem.init_BC(domain.length_x,domain.length_y, domain.length_z);
   std::vector<Linear_Function> InitialGuess;
   Linear_Function PNP(0,-5.0,5.0,{0.0,-2.30258509299,1.0},{-2.30258509299,0.0,-1.0});
-  Linear_Function Vel(0,-5.0,5.0,{0.0,0.0,0.0},{0.0,0.0,0.0});
+  Linear_Function Vel(0,-5.0,5.0,{1.0,0.0,0.0},{1.0,0.0,0.0});
   Linear_Function Pres(0,-5.0,5.0,0.0,0.0);
   InitialGuess.push_back(PNP);
   InitialGuess.push_back(Vel);

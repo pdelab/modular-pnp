@@ -290,20 +290,26 @@ void Linear_PNP_NS::free_fasp () {
 //--------------------------------------
 
 //--------------------------------------
-void Linear_PNP_NS::init_BC (std::size_t component, double L) {
-  std::vector<std::size_t> v1 = {component};
-  std::vector<double> v2 = {-L/2.0};
-  std::vector<double> v3 = {L/2.0};
-  auto BCdomain = std::make_shared<Dirichlet_Subdomain>(v1,v2,v3,1E-5);
+void Linear_PNP_NS::init_BC (double Lx, double Ly, double Lz) {
+  std::vector<std::size_t> v1 = {0};
+  std::vector<double> v2 = {-Lx/2.0};
+  std::vector<double> v3 = {Lx/2.0};
+  auto BCdomainx = std::make_shared<Dirichlet_Subdomain>(v1,v2,v3,1E-5);
   // Dirichlet_Subdomain BCdomain({component},{-5.0},{5.0},1E-5);
+
+
+  std::vector<std::size_t> v4 = {0,1,2};
+  std::vector<double> v5 = {-Lx/2.0,-Ly/2.0,-Lz/2.0};
+  std::vector<double> v6 = {-Lx/2.0,-Ly/2.0,-Lz/2.0};
+  auto BCdomainxyz = std::make_shared<Dirichlet_Subdomain>(v4,v5,v6,1E-5);
 
   auto zero=std::make_shared<dolfin::Constant>(0.0);
   auto zero_vec=std::make_shared<dolfin::Constant>(0.0, 0.0, 0.0);
 
-  auto BC1 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(0),zero,BCdomain);
-  auto BC2 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(1),zero,BCdomain);
-  auto BC3 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(2),zero,BCdomain);
-  auto BC4 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(3),zero_vec,BCdomain);
+  auto BC1 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(0),zero,BCdomainx);
+  auto BC2 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(1),zero,BCdomainx);
+  auto BC3 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(2),zero,BCdomainx);
+  auto BC4 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(3),zero_vec,BCdomainxyz);
   _dirichletBC.push_back(BC1);
   _dirichletBC.push_back(BC2);
   _dirichletBC.push_back(BC3);
@@ -326,7 +332,7 @@ void Linear_PNP_NS::init_measure (std::shared_ptr<const dolfin::Mesh> mesh,
   double Lx, double Ly, double Lz) {
   auto markers = std::make_shared<dolfin::FacetFunction<std::size_t>>(mesh, 1);
   markers->set_all(0);
-  
+
   // X Boundaries
   std::vector<std::size_t> v1x = {0};
   std::vector<double> v2x = {-Lx/2.0};

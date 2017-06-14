@@ -88,9 +88,7 @@ std::vector<dolfin::Function> solve_pnp_stokes (
     {"penalty2", {1.0}},
   };
 
-  std::map<std::string, std::vector<double>> sources = {
-    {"g", {1.0}}
-  };
+  std::map<std::string, std::vector<double>> sources = {};
 
   const std::vector<std::string> variables = {"cc","uu","pp"};
 
@@ -124,8 +122,7 @@ std::vector<dolfin::Function> solve_pnp_stokes (
   pnp_ns_problem.get_dofs();
   pnp_ns_problem.get_dofs_fasp({0,1,2},{3,4});
 
-  pnp_ns_problem.init_measure(mesh,Lx,Ly,Lz);
-  pnp_ns_problem.init_BC(0.0,Lx);
+  pnp_ns_problem.init_BC(domain.length_x,domain.length_y, domain.length_z);
   pnp_ns_problem.set_solutions(initial_guess);
   printf("\n");
 

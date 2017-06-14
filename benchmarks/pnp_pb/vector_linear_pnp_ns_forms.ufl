@@ -32,9 +32,12 @@ diffusivity1 = Constant(tetrahedron)
 valency1 = Constant(tetrahedron)
 g1  = Constant(tetrahedron)
 g2  = Constant(tetrahedron)
+Re  = Constant(tetrahedron)
 
 ##  Coefficients
 mu  = Constant(tetrahedron)
+phib=Coefficient(CG)
+ub = Coefficient(Vit)
 
 ##  DG-terms
 penalty1 = Constant(tetrahedron)
@@ -54,11 +57,12 @@ a   = ( diffusivity0*exp(cc[0]) * ( inner(grad(Cat),grad(cat)) + inner(grad(cc[0
     - ( exp(cc[1])   *An*(inner(uu,grad(an)))  )*dx \
     - ( exp(cc[0])*(inner(u,grad(cat))) )*dx \
     - ( exp(cc[1])*(inner(u,grad(an)))  )*dx \
+    + Re*inner(grad(u)*uu,v)*dx \
+    + Re*inner(grad(uu)*u,v)*dx \
     + ( 2.0*mu* inner( sym(grad(u)), sym(grad(v)) ) )*dx    -    ( p*div(v) )*dx   +   ( div(u)*q )*dx \
     + ( 2.0*mu*(penalty1)* inner( avg(sym(grad(u))), sym(outer(v('+'),n_vec('+')) + outer(v('-'),n_vec('-'))) ) )*dS \
     + ( 2.0*mu*(penalty1)* inner( sym(outer(u('+'),n_vec('+')) + outer(u('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
     + ( 2.0*mu*(penalty2/h_avg)* inner( jump(u),jump(v) ) )*dS \
-    + ( 2.0*mu*(penalty2/h)*(inner(u,n_vec)*inner(v,n_vec) ) )*ds \
     + ( (valency0*Cat*exp(cc[0])+valency1*An*exp(cc[1]))*inner(grad(cc[2]),v) )*dx \
     + ( (valency0*exp(cc[0])+valency1*exp(cc[1]))*inner(grad(Phi),v) )*dx
     
@@ -69,11 +73,14 @@ L   = - ( diffusivity0*exp(cc[0])* (inner(grad(cc[0]),grad(cat)) + valency0*inne
     - ( -(valency0*exp(cc[0]) + valency1*exp(cc[1]))*phi )*dx \
     + ( exp(cc[0])*(inner(uu,grad(cat))) )*dx \
     + ( exp(cc[1])*(inner(uu,grad(an)))  )*dx \
+    - Re*inner(grad(uu)*uu,v)*dx \
     - ( 2.0*mu* inner( sym(grad(uu)), sym(grad(v)) ) )*dx   +   ( pp*div(v) )*dx   -   ( div(uu)*q )*dx \
     - ( 2.0*mu*(penalty1)* inner( avg(sym(grad(uu))),  sym(outer(v('+'),n_vec('+')) + outer(v('-'),n_vec('-'))) ) )*dS \
     - ( 2.0*mu*(penalty1)* inner( sym(outer(uu('+'),n_vec('+')) + outer(uu('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
     - ( 2.0*mu*(penalty2/h_avg)* inner( jump(uu),jump(v) ) )*dS \
-    - ( 2.0*mu*(penalty2/h)*((inner(uu,n_vec)-g1)*inner(v,n_vec) ) )*ds(1) \
-    - ( 2.0*mu*(penalty2/h)*((inner(uu,n_vec)-g2)*inner(v,n_vec) ) )*ds(2) \
-    - ( 2.0*mu*(penalty2/h)*(inner(uu,n_vec)*inner(v,n_vec) ) )*ds(3) \
-    - ( (valency0*exp(cc[0])+valency1*exp(cc[1]))*inner(grad(cc[2]),v) )*dx
+    - ( (valency0*exp(cc[0])+valency1*exp(cc[1]))*inner(grad(cc[2]),v) )*dx \
+    + permittivity*inner(grad(phib),grad(phi))*dx -(exp(-phib)-exp(phib))*phi*dx \
+    - ( exp(-phib)*(inner(ub,grad(cat))) )*dx \
+    - ( exp(phib)*(inner(ub,grad(an)))  )*dx \
+    + Re*inner(grad(ub)*ub,v)*dx \
+    + ( 2.0*mu* inner( sym(grad(ub)), sym(grad(v)) ) )*dx

@@ -7,7 +7,7 @@
 
 ##  Finite Element Space
 CG = FiniteElement("Lagrange", tetrahedron, 1)
-V  = MixedElement([CG, CG, CG, CG])
+V  = MixedElement([CG, CG, CG])
 
 
 u = TrialFunction(V)
@@ -21,25 +21,27 @@ permittivity = Coefficient(CG)
 fixed_charge = Coefficient(CG)
 diffusivity = Coefficient(V)
 valency = Coefficient(V)
+phib=Coefficient(CG)
+n_vec = FacetNormal(tetrahedron)
 
 a = \
   + ( permittivity * inner(grad(u[0]), grad(v[0])) ) * dx \
   + ( -valency[1] * exp(uu[1]) * u[1] * v[0] ) * dx \
   + ( -valency[2] * exp(uu[2]) * u[2] * v[0] ) * dx \
-  + ( -valency[3] * exp(uu[3]) * u[3] * v[0] ) * dx \
   + ( diffusivity[1] * exp(uu[1]) * inner(grad(u[1]) + grad(uu[1] + valency[1] * uu[0]) * u[1], grad(v[1])) ) * dx \
   + ( valency[1] * diffusivity[1] * exp(uu[1]) * inner(grad(u[0]), grad(v[1])) ) * dx \
   + ( diffusivity[2] * exp(uu[2]) * inner(grad(u[2]) + grad(uu[2] + valency[2] * uu[0]) * u[2], grad(v[2])) ) * dx \
-  + ( valency[2] * diffusivity[2] * exp(uu[2]) * inner(grad(u[0]), grad(v[2])) ) * dx \
-  + ( diffusivity[3] * exp(uu[3]) * inner(grad(u[3]) + grad(uu[3] + valency[3] * uu[0]) * u[3], grad(v[3])) ) * dx \
-  + ( valency[3] * diffusivity[3] * exp(uu[3]) * inner(grad(u[0]), grad(v[3])) ) * dx
+  + ( valency[2] * diffusivity[2] * exp(uu[2]) * inner(grad(u[0]), grad(v[2])) ) * dx
 
 L = \
   + ( fixed_charge * v[0] ) * dx \
   - ( permittivity * inner(grad(uu[0]), grad(v[0])) ) * dx \
   - ( -valency[1] * exp(uu[1]) * v[0] ) * dx \
   - ( -valency[2] * exp(uu[2]) * v[0] ) * dx \
-  - ( -valency[3] * exp(uu[3]) * v[0] ) * dx \
   - ( diffusivity[1] * exp(uu[1]) * inner(grad(uu[1] + valency[1] * uu[0]), grad(v[1])) ) * dx \
   - ( diffusivity[2] * exp(uu[2]) * inner(grad(uu[2] + valency[2] * uu[0]), grad(v[2])) ) * dx \
-  - ( diffusivity[3] * exp(uu[3]) * inner(grad(uu[3] + valency[3] * uu[0]), grad(v[3])) ) * dx
+  + permittivity*inner(grad(phib),grad(v[0]))*dx -(exp(-phib)-exp(phib))*v[0]*dx
+
+#  + permittivity*inner(grad(phib),n_vec)*v[0]*ds(1) \
+# Eps(r) = C1 - 3*ln(r)
+

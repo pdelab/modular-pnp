@@ -76,9 +76,6 @@ target_link_libraries(pnp_experiment ${PNP_LIBRARY})
 add_executable(pnp_exact ./benchmarks/pnp_exact_solution/main.cpp ./benchmarks/pnp_exact_solution/linear_pnp.cpp ${SRC_DIR})
 target_link_libraries(pnp_exact ${PNP_LIBRARY})
 
-add_executable(pnp_spheres ./benchmarks/pnp_spheres/main.cpp ./benchmarks/pnp_spheres/linear_pnp.cpp ${SRC_DIR})
-target_link_libraries(pnp_spheres ${PNP_LIBRARY})
-
 add_executable(pnp_stokes_tensor ./benchmarks/pnp_stokes_tensor/main.cpp ./benchmarks/pnp_stokes_tensor/linear_pnp_ns.cpp ${SRC_DIR})
 target_link_libraries(pnp_stokes_tensor ${PNP_STOKES_LIBRARY})
 
@@ -91,17 +88,17 @@ target_link_libraries(pnp_refine ${PNP_LIBRARY})
 add_executable(pnp_diode ./benchmarks/pnp_diode/main.cpp ./benchmarks/pnp_diode/linear_pnp.cpp ${SRC_DIR})
 target_link_libraries(pnp_diode ${PNP_LIBRARY})
 
+add_executable(pnp_ns_pb ./benchmarks/pnp_pb/main_ns.cpp ./benchmarks/pnp_pb/linear_pnp_ns.cpp ${SRC_DIR})
+target_link_libraries(pnp_ns_pb ${PNP_STOKES_LIBRARY})
+
+add_executable(pnp_pb ./benchmarks/pnp_pb/main.cpp ./benchmarks/pnp_pb/linear_pnp.cpp ${SRC_DIR})
+target_link_libraries(pnp_pb ${PNP_LIBRARY})
+
 add_executable(pnp_stokes ./benchmarks/pnp_stokes/main.cpp ./benchmarks/pnp_stokes/linear_pnp_ns.cpp ${SRC_DIR})
 target_link_libraries(pnp_stokes ${PNP_STOKES_LIBRARY})
 
 add_executable(pnp_stokes_refine ./benchmarks/pnp_stokes/main_refinement.cpp ./benchmarks/pnp_stokes/linear_pnp_ns.cpp ${SRC_DIR})
 target_link_libraries(pnp_stokes_refine ${PNP_STOKES_LIBRARY})
-
-add_executable(spheres ./benchmarks/pnp_stokes_spheres/main.cpp ./benchmarks/pnp_stokes_spheres/linear_pnp_ns.cpp ${SRC_DIR})
-target_link_libraries(spheres ${PNP_STOKES_LIBRARY})
-
-add_executable(spheres_refinement ./benchmarks/pnp_stokes_spheres/main_refinement.cpp ./benchmarks/pnp_stokes_spheres/linear_pnp_ns.cpp ${SRC_DIR})
-target_link_libraries(spheres_refinement ${PNP_STOKES_LIBRARY})
 
 add_executable(ns_spheres ./benchmarks/pnp_ns_spheres/main.cpp ./benchmarks/pnp_ns_spheres/linear_pnp_ns.cpp ${SRC_DIR})
 target_link_libraries(ns_spheres ${PNP_STOKES_LIBRARY})

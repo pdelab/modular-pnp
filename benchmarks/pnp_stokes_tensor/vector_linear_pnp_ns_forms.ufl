@@ -57,7 +57,6 @@ a   = ( diffusivity0*exp(cc[0]) * ( inner(grad(Cat),grad(cat)) + inner(grad(cc[0
     + ( 2.0*mu*(penalty1)* inner( avg(sym(grad(u))), sym(outer(v('+'),n_vec('+')) + outer(v('-'),n_vec('-'))) ) )*dS \
     + ( 2.0*mu*(penalty1)* inner( sym(outer(u('+'),n_vec('+')) + outer(u('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
     + ( 2.0*mu*(penalty2/h_avg)* inner( jump(u),jump(v) ) )*dS \
-    + ( 2.0*mu*(penalty2/h)*(inner(u,n_vec)*inner(v,n_vec) ) )*ds \
     + permittivity*inner( 2*outer(grad(Phi),grad(cc[2])) , grad(v) )*dx
     
 
@@ -71,6 +70,4 @@ L   = - ( diffusivity0*exp(cc[0])* (inner(grad(cc[0]),grad(cat)) + valency0*inne
     - ( 2.0*mu*(penalty1)* inner( avg(sym(grad(uu))),  sym(outer(v('+'),n_vec('+')) + outer(v('-'),n_vec('-'))) ) )*dS \
     - ( 2.0*mu*(penalty1)* inner( sym(outer(uu('+'),n_vec('+')) + outer(uu('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
     - ( 2.0*mu*(penalty2/h_avg)* inner( jump(uu),jump(v) ) )*dS \
-    - ( 2.0*mu*(penalty2/h)*((inner(uu,n_vec)-g)*inner(v,n_vec) ) )*ds(1) \
-    - ( 2.0*mu*(penalty2/h)*(inner(uu,n_vec)*inner(v,n_vec) ) )*ds(2) \
     - permittivity*inner( outer(grad(cc[2]),grad(cc[2])) , grad(v) )*dx
