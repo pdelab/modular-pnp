@@ -21,18 +21,6 @@ extern "C" {
 
 using namespace std;
 
-class PBSolutions : public dolfin::Expression {
-  public:
-    PBSolutions() : dolfin::Expression (3) {}
-    void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
-      double Eps=1.0;
-      double r = std::sqrt(x[0]*x[0]+x[1]*x[1]+x[2]*x[2])-rc;
-      double g =  -std::exp(0.0)*( std::exp(1.0/2.0) - 1.0 )/( std::exp(1.0/2.0) + 1.0 );
-      values[0] = -2.0*std::log( (1.0-g*std::exp(-r/std::sqrt(Eps))) / (1.0+g*std::exp(-r/std::sqrt(Eps))) );
-      values[1] = -values[0];
-      values[2] = values[0];
-    }
-};
 
 int main (int argc, char** argv) {
   printf("\n");
@@ -95,10 +83,10 @@ int main (int argc, char** argv) {
 
 
   // set PDE coefficients
-  double Eps = 1.0;
+  double Eps = 0.01;
   printf("Initialize coefficients\n");
   std::map<std::string, std::vector<double>> pnp_coefficients = {
-    {"permittivity", {1.0}},
+    {"permittivity", {Eps}},
     {"diffusivity", {0.0, 1.0, 1.0}},
     {"valency", {0.0, 1.0, -1.0}}
   };

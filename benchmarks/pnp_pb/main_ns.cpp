@@ -115,10 +115,10 @@ int main (int argc, char** argv) {
 
 
   // set PDE coefficients
-    double Eps = 1.0;
+  double Eps = 0.01;
   printf("Initialize coefficients\n");
   std::map<std::string, std::vector<double>> coefficients = {
-    {"permittivity", {1.0}},
+    {"permittivity", {Eps}},
     {"diffusivity0", {1.0}},
     {"diffusivity1", {1.0}},
     {"valency0", {1.0}},

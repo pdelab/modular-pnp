@@ -146,7 +146,6 @@ class PhibExpression : public dolfin::Expression {
   public:
     PhibExpression(double Eps) : dolfin::Expression(),K(std::sqrt(2.0/Eps))  {};
     void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
-      double K=1.0; // K = sqrt(2/Eps)
       double r = std::sqrt(x[0]*x[0]+x[1]*x[1]+x[2]*x[2])-rc;
       double g =  std::exp(0.0)*( std::exp(1.0/2.0) - 1.0 )/( std::exp(1.0/2.0) + 1.0 );
       values[0] = 2.0*std::log( (1.0-g*std::exp(-r*K)) / (1.0+g*std::exp(-r*K)) );

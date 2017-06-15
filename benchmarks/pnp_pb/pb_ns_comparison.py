@@ -31,12 +31,12 @@ parameters["allow_extrapolation"] = False
 
 # Load mesh and define function space
 mesh = Mesh("mesh1.xml.gz");
-V = FunctionSpace(mesh, "CG", 1)
-V2 = FunctionSpace(mesh, "CG", 2)
-# P1 = FiniteElement("Lagrange", mesh.ufl_cell(), 1)
-# V = FunctionSpace(mesh, P1*P1*P1)
-phi = Function(V,"./output/solution_phi.xml")
-phipb = Function(V2,"./output/solution_phipb.xml")
+
+P1 = FiniteElement("Lagrange", mesh.ufl_cell(), 1)
+V = FunctionSpace(mesh, P1*P1*P1)
+V2 = FunctionSpace(mesh, "RT", 1)
+pnp = Function(V,"./output/pnp_solution.xml")
+vel = Function(V2,"./output/velocity_solution.xml")
 
 xc=0.0
 yc=0.0
@@ -70,15 +70,15 @@ x_coord2[0]=xc; x_coord2[1]=yc-rc; x_coord2[2]=zc;
 x_coord3[0]=xc; x_coord3[1]=yc; x_coord3[2]=zc-rc;
 x_coord4[0]=xc; x_coord4[1]=yc+rc; x_coord4[2]=zc;
 for j in range(N):
-    phi.eval(vphi_t,x_coord1);
+    pnp.eval(vphi_t,x_coord1);
     # print x_coord1
-    vphi1[j]=vphi_t[0]
-    phi.eval(vphi_t,x_coord2);
-    vphi2[j]=vphi_t[0]
-    phi.eval(vphi_t,x_coord3);
-    vphi3[j]=vphi_t[0]
-    phipb.eval(vphi_t,x_coord4);
-    vphi4[j]=vphi_t[0]
+    vphi1[j]=vphi_t[2]
+    pnp.eval(vphi_t,x_coord2);
+    vphi2[j]=vphi_t[2]
+    pnp.eval(vphi_t,x_coord3);
+    vphi3[j]=vphi_t[2]
+    pnp.eval(vphi_t,x_coord4);
+    vphi4[j]=vphi_t[2]
     x_coord1[2]+=dx;
     x_coord2[1]-=dx;
     x_coord3[2]-=dx;
@@ -92,6 +92,6 @@ plt.plot(x, vphi2,'*')
 plt.plot(x, vphi3)
 plt.plot(x, vphi4,'--')
 plt.plot(x, pb,'--')
-plt.legend(('PNP','PNP','PNP','PB C','PB Python'),loc=4)
+plt.legend(('PNP','PNP','PNP','PNP','PB Python'),loc=4)
 plt.savefig("potential_cut.eps")
 plt.close()
