@@ -77,8 +77,6 @@ class Linear_PNP_NS : public PDE {
     void use_eafe ();
     void no_eafe ();
     void init_BC (double Lx,double Ly,double Lz);
-    void init_measure (std::shared_ptr<const dolfin::Mesh> mesh,
-      double Lx, double Ly, double Lz);
 
     std::vector<std::shared_ptr<dolfin::Function>> split_mixed_function (
       std::shared_ptr<const dolfin::Function> mixed_function
@@ -91,6 +89,8 @@ class Linear_PNP_NS : public PDE {
     std::shared_ptr<dolfin::FunctionSpace> valency_space;
     std::shared_ptr<dolfin::FunctionSpace> permittivity_space;
     std::shared_ptr<dolfin::FunctionSpace> fixed_charge_space;
+    std::shared_ptr<dolfin::FunctionSpace> phib_space;
+    std::shared_ptr<dolfin::FunctionSpace> ub_space;
 
     ivector _velocity_dofs;
     ivector _pressure_dofs;
@@ -126,6 +126,56 @@ class Linear_PNP_NS : public PDE {
     std::shared_ptr<dolfin::Function> eafe_beta, eafe_eta;
     std::shared_ptr<dolfin::EigenMatrix> _eafe_matrix;
 
+};
+
+static double rc = 0.4;
+
+class SphereSubDomain : public dolfin::SubDomain
+{
+public:
+    bool inside(const dolfin::Array<double>& x, bool on_boundary) const
+    {
+      return (on_boundary &&
+        (std::pow(x[0]-0.0,2) +
+        std::pow(x[1]-0.0,2) +
+        std::pow(x[2]-0.0,2) < std::pow(rc,2)+1E-5) );
+    }
+};
+
+class PhibExpression : public dolfin::Expression {
+  public:
+    PhibExpression(double Eps) : dolfin::Expression(),K(std::sqrt(2.0/Eps))  {};
+    void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
+      double r = std::sqrt(x[0]*x[0]+x[1]*x[1]+x[2]*x[2])-rc;
+      double g =  std::exp(0.0)*( std::exp(1.0/2.0) - 1.0 )/( std::exp(1.0/2.0) + 1.0 );
+      values[0] = 2.0*std::log( (1.0-g*std::exp(-r*K)) / (1.0+g*std::exp(-r*K)) );
+    }
+  private:
+    double K;
+};
+
+class VelExpression : public dolfin::Expression {
+public:
+  VelExpression() : dolfin::Expression(3) {}
+  void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
+  values[0] = -x[1];
+  values[1] = x[0];
+  values[2] = 0.0;
+  };
+};
+
+class ExactExpression : public dolfin::Expression {
+  public:
+    ExactExpression(double Eps) : dolfin::Expression(3),K(std::sqrt(2.0/Eps)) {}
+    void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
+      double r = std::sqrt(x[0]*x[0]+x[1]*x[1]+x[2]*x[2])-rc;
+      double g =  std::exp(0.0)*( std::exp(1.0/2.0) - 1.0 )/( std::exp(1.0/2.0) + 1.0 );
+      values[0] = 2.0*std::log( (1.0-g*std::exp(-r*K)) / (1.0+g*std::exp(-r*K)) );
+      values[1] = -values[0];
+      values[2] = values[0];
+    }
+  private:
+    double K;
 };
 
 #endif

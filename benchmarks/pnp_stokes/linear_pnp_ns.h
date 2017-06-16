@@ -76,7 +76,7 @@ class Linear_PNP_NS : public PDE {
     void apply_eafe ();
     void use_eafe ();
     void no_eafe ();
-    void init_BC (std::size_t component, double L);
+    void init_BC (double Lx, double Ly, double Lz);
     void init_measure (std::shared_ptr<const dolfin::Mesh> mesh,
       double Lx, double Ly, double Lz);
 

@@ -26,14 +26,17 @@ Linear_PNP::Linear_PNP (
   const std::map<std::string, std::vector<double>> coefficients,
   const std::map<std::string, std::vector<double>> sources,
   const itsolver_param &itsolver,
-  const AMG_param &amg
+  const AMG_param &amg,
+  const ILU_param &ilu,
+  const std::string variable
 ) : PDE (
   mesh,
   function_space,
   bilinear_form,
   linear_form,
   coefficients,
-  sources
+  sources,
+  variable
 ) {
 
   diffusivity_space.reset(
@@ -48,12 +51,18 @@ Linear_PNP::Linear_PNP (
     new vector_linear_pnp_forms::CoefficientSpace_fixed_charge(mesh)
   );
 
+  phib_space.reset(
+    new vector_linear_pnp_forms::CoefficientSpace_phib(mesh)
+  );
+
   permittivity_space.reset(
     new vector_linear_pnp_forms::CoefficientSpace_permittivity(mesh)
   );
 
   _itsolver = itsolver;
   _amg = amg;
+  _ilu = ilu;
+
 }
 //--------------------------------------
 Linear_PNP::~Linear_PNP () {}
@@ -92,12 +101,19 @@ dolfin::Function Linear_PNP::fasp_solve () {
   dolfin::Function solution(Linear_PNP::get_solution());
 
   printf("Solving linear system using FASP solver...\n"); fflush(stdout);
-  INT status = fasp_solver_dbsr_krylov_amg (
+  // INT status = fasp_solver_dbsr_krylov_amg (
+  //   &_fasp_bsr_matrix,
+  //   &_fasp_vector,
+  //   &_fasp_soln,
+  //   &_itsolver,
+  //   &_amg
+  // );
+  INT status = fasp_solver_dbsr_krylov_ilu (
     &_fasp_bsr_matrix,
     &_fasp_vector,
     &_fasp_soln,
     &_itsolver,
-    &_amg
+    &_ilu
   );
 
   if (status < 0) {
@@ -111,7 +127,6 @@ dolfin::Function Linear_PNP::fasp_solve () {
     dolfin::EigenVector solution_vector(_eigen_vector->mpi_comm(),_eigen_vector->size());
     double* array = solution_vector.data();
     for (std::size_t i = 0; i < _fasp_soln.row; ++i) {
-      // printf(" i = %d",i);fflush(stdout);
       array[i] = _fasp_soln.val[i];
     }
 
@@ -133,7 +148,7 @@ dolfin::EigenVector Linear_PNP::fasp_test_solver (
 
   printf("Compute RHS...\n"); fflush(stdout);
   std::shared_ptr<dolfin::EigenVector> rhs_vector;
-  rhs_vector.reset( new dolfin::EigenVector(target_vector.mpi_comm(), target_vector.size()) );
+  rhs_vector.reset( new dolfin::EigenVector(target_vector.mpi_comm(),target_vector.size()) );
 
 
   _eigen_matrix->mult(target_vector, *rhs_vector);
@@ -142,12 +157,19 @@ dolfin::EigenVector Linear_PNP::fasp_test_solver (
   dolfin::Function solution(Linear_PNP::get_solution());
 
   printf("Solving linear system using FASP solver...\n"); fflush(stdout);
-  INT status = fasp_solver_dbsr_krylov_amg (
+  // INT status = fasp_solver_dbsr_krylov_amg (
+  //   &_fasp_bsr_matrix,
+  //   &_fasp_vector,
+  //   &_fasp_soln,
+  //   &_itsolver,
+  //   &_amg
+  // );
+  INT status = fasp_solver_dbsr_krylov_ilu (
     &_fasp_bsr_matrix,
     &_fasp_vector,
     &_fasp_soln,
     &_itsolver,
-    &_amg
+    &_ilu
   );
 
   if (status < 0) {
@@ -223,7 +245,7 @@ void Linear_PNP::apply_eafe () {
   solution_ptr.reset( new dolfin::Function(solution_function.function_space()) );
   *solution_ptr = solution_function;
 
-  auto zero = std::make_shared<const dolfin::Constant>(0.0);
+  auto zero= std::make_shared<const dolfin::Constant>(0.0);
   std::vector<std::shared_ptr<dolfin::Function>> solution_vector;
   solution_vector = Linear_PNP::split_mixed_function(solution_ptr);
   std::shared_ptr<dolfin::Function> beta, eta, phi;
@@ -240,10 +262,10 @@ void Linear_PNP::apply_eafe () {
 
     if (_valency_double[eqn_idx] != 0.0) {
       *(phi->vector()) *= _valency_double[eqn_idx];
-      *beta = *beta + *phi;
+      *beta->vector() += *phi->vector();
     }
 
-    _eafe_bilinear_form->alpha = (_split_diffusivity[eqn_idx]);
+    _eafe_bilinear_form->alpha = _split_diffusivity[eqn_idx];
     _eafe_bilinear_form->beta = beta;
     _eafe_bilinear_form->eta = eta;
     _eafe_bilinear_form->gamma = zero;
@@ -339,8 +361,27 @@ dolfin::Function Linear_PNP::get_total_charge () {
       solution_charge->vector()->setitem(index, value);
     }
 
-    total_charge = total_charge + (*solution_charge);
+    *total_charge.vector() += *solution_charge->vector();
   }
 
   return total_charge;
 }
+
+//--------------------------------------
+void Linear_PNP::init_BC ()
+{
+
+  // // Dirichlet_Subdomain BCdomain({component},{-5.0},{5.0},1E-5);
+  auto sp_domain = std::make_shared<SphereSubDomain>();
+
+  auto zero=std::make_shared<dolfin::Constant>(0.0);
+
+  auto BC1 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(0),zero,sp_domain);
+  auto BC2 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(1),zero,sp_domain);
+  auto BC3 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(2),zero,sp_domain);
+  _dirichletBC.push_back(BC1);
+  _dirichletBC.push_back(BC2);
+  _dirichletBC.push_back(BC3);
+
+}
+//--------------------------------------
