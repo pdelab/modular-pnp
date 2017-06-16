@@ -7,7 +7,7 @@ import numpy as np
 
 rc=0.4
 
-Num_cells=50
+Num_cells=25
 Lx=2.0
 Ly=2.0
 Lz=2.0
