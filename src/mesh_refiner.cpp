@@ -78,7 +78,7 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
   double entropy_tolerance,
   std::size_t depth
 ) {
-  std::size_t grown_mesh_size = (std::size_t) (1.2 * ((double) _mesh->num_cells()));
+  std::size_t grown_mesh_size = 5 * _mesh->num_cells();
   std::size_t max_element_iterate = std::min(grown_mesh_size, Mesh_Refiner::max_elements);
 
   if (depth > Mesh_Refiner::max_refine_depth || _mesh->num_cells() > max_element_iterate) {
@@ -122,10 +122,7 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
   printf("\tmesh refinement is too aggressive... ");
   printf("mark elements to have proportional refinement\n");
   auto conservative_mesh = std::make_shared<dolfin::Mesh>(*_mesh);
-  std::size_t target_size = std::min(
-    (std::size_t) std::round(1.5 * ((double) _mesh->num_cells())),
-    max_element_iterate
-  );
+  std::size_t target_size = max_element_iterate;
 
   while (!accept_refinement) {
     // decrement target size of mesh

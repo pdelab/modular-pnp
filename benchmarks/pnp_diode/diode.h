@@ -21,14 +21,14 @@ const double relative_permittivity = 1.17e+1; // for silicon
 
 // maj * min = intrinsic carrier density = 1e+16 / m^3
 // maj - min = - doping level
-// const double majority_carrier = 1.5e+22; // 1 / m^3
-// const double minority_carrier = 6.66667e+9; // 1 / m^3
+const double majority_carrier = 1.5e+22; // 1 / m^3
+const double minority_carrier = 6.66667e+9; // 1 / m^3
 
 // const double majority_carrier = 5.0e+20;
 // const double minority_carrier = 2.0e+10;
 
-const double majority_carrier = 1.0e+19;
-const double minority_carrier = 9.999990000020e+11;
+// const double majority_carrier = 1.0e+19;
+// const double minority_carrier = 9.999990000020e+11;
 
 
 // n-doped Si (phospherus)

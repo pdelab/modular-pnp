@@ -94,7 +94,7 @@ int main (int argc, char** argv) {
 
   // i-v curve
   const double min_volts = -0.5;
-  const double max_volts = -0.45;
+  const double max_volts = 0.5;
   const double delta_volts = 0.1;
 
   // mesh adaptivity
@@ -322,7 +322,9 @@ double computeCurrentFlux(
   const double reference_density = 1.5e+22; // mM = 1 / m^3
   const double milliamp_scale_factor = 1.0e+3 * elementary_charge * reference_diffusivity * reference_density * reference_length;
 
-  printf("\tcurrent flux: %5.3e mA\n", milliamp_scale_factor * current / surface_area);
+  printf("<<<<<<<<<<< NEED TO RESCALE ACCORDING TO DIODE.H\n");
+  printf("\tcurrent flux: %e mA\n", milliamp_scale_factor * current / surface_area);
+  printf("\t\tscale factor is %e\n", milliamp_scale_factor);
   return milliamp_scale_factor * current / surface_area;
 }
 
