@@ -185,7 +185,6 @@ int main (int argc, char** argv) {
   dolfin::Function u_init(pnp_ns_problem._functions_space[1]);
   dolfin::Function p_init(pnp_ns_problem._functions_space[2]);
 
-  printf("TOTO\n");fflush(stdout);
   pnp_init.interpolate(*initpnp);
   u_init.interpolate(*initvel);
   p_init.interpolate(*initp);
@@ -199,7 +198,6 @@ int main (int argc, char** argv) {
   bc_sp1.apply(*u_init.vector());
   bc_sp2.apply(*u_init.vector());
 
-  printf("TOTO\n");fflush(stdout);
   solutionFn.push_back(pnp_init);
   solutionFn.push_back(u_init);
   solutionFn.push_back(p_init);
