@@ -173,7 +173,7 @@ std::size_t Mesh_Refiner::mark_for_refinement_with_target_size (
   std::sort(error_vector.begin(), error_vector.end());
   int toleranceIndex = error_vector.size() - permissible_cells;
   toleranceIndex = toleranceIndex < 0 ? 0 : toleranceIndex;
-  const double entropy_tolerance = std::min(error_vector[toleranceIndex], Mesh_Refiner::entropy_tolerance_per_cell);
+  const double entropy_tolerance = std::max(error_vector[toleranceIndex], Mesh_Refiner::entropy_tolerance_per_cell);
 
   // mark cells according to entropic error
   std::size_t marked_count = 0;
