@@ -77,7 +77,7 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
   double entropy_tolerance,
   std::size_t depth
 ) {
-  std::size_t grown_mesh_size = (std::size_t) (1.2 * ((double) _mesh->num_cells()));
+  std::size_t grown_mesh_size = 5 * _mesh->num_cells();
   std::size_t max_element_iterate = std::min(grown_mesh_size, Mesh_Refiner::max_elements);
 
   if (depth > Mesh_Refiner::max_refine_depth || _mesh->num_cells() > max_element_iterate) {
@@ -121,15 +121,13 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
   printf("\tmesh refinement is too aggressive... ");
   printf("mark elements to have proportional refinement\n");
   auto conservative_mesh = std::make_shared<dolfin::Mesh>(*_mesh);
-  std::size_t target_size = std::min(
-    (std::size_t) std::round(1.5 * ((double) _mesh->num_cells())),
-    max_element_iterate
-  );
+  std::size_t target_size = max_element_iterate;
 
   while (!accept_refinement) {
-    // decrement target size of mesh
-    target_size = (std::size_t) std::round(0.95 * ((double) target_size));
-    if (target_size < _mesh->num_cells() + 1) { break; }
+    target_size = (std::size_t) std::round(0.8 * ((double) target_size));
+    if (target_size < _mesh->num_cells() + 1) {
+      accept_refinement = true;
+    }
 
     Mesh_Refiner::mark_for_refinement_with_target_size(
       diffusivity_vector,
@@ -140,7 +138,7 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
 
     dolfin::Mesh conservative_temp_mesh(*_mesh);
     conservative_mesh = dolfin::adapt(conservative_temp_mesh, *_cell_marker);
-    accept_refinement = conservative_mesh->num_cells() < (max_element_iterate + 1);
+    accept_refinement = accept_refinement ? accept_refinement : conservative_mesh->num_cells() < (max_element_iterate + 1);
   }
 
   _mesh.reset(new dolfin::Mesh(*conservative_mesh));
@@ -155,8 +153,10 @@ std::size_t Mesh_Refiner::mark_for_refinement_with_target_size (
   std::size_t target_size
 ) {
   // set target cell count
-  std::size_t permissible_cells_to_add = target_size - _mesh->num_cells();
-  std::size_t permissible_cells = std::round(((double) permissible_cells_to_add) / 6.0);
+  if (_mesh->num_cells() > target_size) {
+    _cell_marker.reset( new dolfin::MeshFunction<bool>(_mesh, _mesh->topology().dim(), false) );
+    return 0;
+  }
 
   // compute error vector of interpolant
   dolfin::EigenVector error_eigenvector = Mesh_Refiner::compute_entropy_error_vector(
@@ -164,6 +164,7 @@ std::size_t Mesh_Refiner::mark_for_refinement_with_target_size (
     entropy_potential_vector,
     entropy_log_weight_vector
   );
+  printf("\tmaximum entropy value is %e\n", error_eigenvector.max()); fflush(stdout);
 
   // sort errors and estimate corresponding entropy_tolerance
   std::vector<double> error_vector;
@@ -171,14 +172,14 @@ std::size_t Mesh_Refiner::mark_for_refinement_with_target_size (
     error_vector.push_back(error_eigenvector[i]);
   }
   std::sort(error_vector.begin(), error_vector.end());
-  int toleranceIndex = error_vector.size() - permissible_cells;
-  toleranceIndex = toleranceIndex < 0 ? 0 : toleranceIndex;
+
+  std::size_t permissible_cells = target_size - _mesh->num_cells();
+  std::size_t toleranceIndex = error_vector.size() - permissible_cells;
   const double entropy_tolerance = std::max(error_vector[toleranceIndex], Mesh_Refiner::entropy_tolerance_per_cell);
 
   // mark cells according to entropic error
   std::size_t marked_count = 0;
   _cell_marker.reset( new dolfin::MeshFunction<bool>(_mesh, _mesh->topology().dim(), false) );
-
   for (std::size_t index = 0; index < error_eigenvector.size(); index++) {
     if (error_eigenvector[index] > entropy_tolerance) {
       _cell_marker->set_value(index, true);
