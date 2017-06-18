@@ -15,7 +15,6 @@ extern "C" {
 
 #include "L2Error.h"
 #include "SemiH1error.h"
-#include "gradient_recovery.h"
 #include "poisson_cell_marker.h"
 
 class Mesh_Refiner {
