@@ -59,9 +59,8 @@ class Mesh_Refiner {
 
     /// refine to get close to target size
     std::size_t mark_for_refinement_with_target_size (
-      std::vector<std::shared_ptr<const dolfin::Function>> diffusivity_vector,
-      std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential_vector,
-      std::vector<std::shared_ptr<const dolfin::Function>> entropy_log_weight_vector,
+      dolfin::EigenVector entropy_vector,
+      std::vector<double> error_vector,
       std::size_t target_size
     );
 

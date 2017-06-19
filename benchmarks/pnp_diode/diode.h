@@ -16,11 +16,10 @@ const double VACUUM_PERMITTIVITY = 8.854187817e-12; // C / V*m
 
 // device
 const double temperature = 3e+2; // K
-const double thermodynamic_beta = ELEMENTARY_CHARGE / (temperature * BOLTZMANN); // C/J = 1/V
 const double relative_permittivity = 1.17e+1; // for silicon
 
 // maj * min = intrinsic carrier density = 1e+16 / m^3
-// maj - min = - doping level
+// min - maj = doping level
 const double majority_carrier = 1.5e+22; // 1 / m^3
 const double minority_carrier = 6.66667e+9; // 1 / m^3
 
@@ -28,7 +27,7 @@ const double minority_carrier = 6.66667e+9; // 1 / m^3
 // const double minority_carrier = 2.0e+10;
 
 // const double majority_carrier = 1.0e+19;
-// const double minority_carrier = 9.999990000020e+11;
+// const double minority_carrier = 1.0e+12;
 
 
 // n-doped Si (phospherus)
@@ -48,7 +47,7 @@ const double p_electron_boundary_value = minority_carrier;
 
 // reference values
 const double reference_length = 1e-5; // m
-const double reference_potential = 1.0 / thermodynamic_beta; // V
+const double reference_potential = temperature * BOLTZMANN / ELEMENTARY_CHARGE; // J/C = V
 const double reference_density = std::max(
   p_hole_boundary_value,
   n_electron_boundary_value
@@ -61,7 +60,7 @@ const double reference_diffusivity = std::max(
   )
 ); // m^2 / s
 const double reference_permittivity = reference_density * reference_length * reference_length *
-  ELEMENTARY_CHARGE * ELEMENTARY_CHARGE / (temperature * BOLTZMANN); // F / m
+  ELEMENTARY_CHARGE / reference_potential; // F / m
 
 double scale_density (double density) { return density / reference_density; };
 double scale_potential (double phi) { return phi / reference_potential; };
@@ -80,7 +79,11 @@ double material_property (double x, double left_val, double right_val) {
 };
 
 /// define coefficients
-std::vector<double> valencies = { 0.0, 1.0, -1.0 }; // e_c: potential "valency" is at valencies[0] and should be zero
+std::vector<double> valencies = {
+  0.0,
+  1.0,
+  -1.0
+}; // e_c: potential "valency" is at valencies[0] and should be zero
 std::vector<double> reactions (double x) { return { 0.0, 0.0, 0.0 }; };
 std::vector<double> diffusivities (double x) {
   return {

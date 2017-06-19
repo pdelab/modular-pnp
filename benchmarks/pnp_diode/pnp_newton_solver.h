@@ -139,10 +139,11 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   dolfin::File total_solution_file(path + "_total_solution.pvd");
 
   // initial guess for prescibed Dirichlet
-  printf("Record interpolant for given Dirichlet BCs (initial guess for solution)\n");
+  printf("Record interpolant for given Dirichlet BCs (initial guess for solution)\n"); fflush(stdout);
   std::vector<std::size_t> components = {0, 0, 0};
   std::vector<std::vector<double>> bcs;
 
+  printf("get contact values;\n"); fflush(stdout);
   std::vector<double> left(left_contact(0.0)); // placeholder voltage 0.0
   std::vector<double> right(right_contact(0.0)); // placeholder voltage 0.0
   bcs.push_back({ left[0], right[0] });
@@ -151,6 +152,7 @@ std::shared_ptr<dolfin::Function> solve_pnp (
 
 
   // Apply boundary conditions and compute residual for initial guess
+  printf("pnp_problem.set_DirichletBC(components, bcs);\n"); fflush(stdout);
   pnp_problem.set_DirichletBC(components, bcs);
   Initial_Guess initial_guess_expression(voltage_drop);
   dolfin::Function initial_residual = pnp_problem.get_solution();
@@ -162,11 +164,16 @@ std::shared_ptr<dolfin::Function> solve_pnp (
 
 
   // update initial guess
+  printf("0dolfin::Function initial_guess_function = pnp_problem.get_solution();\n"); fflush(stdout);
   dolfin::Function initial_guess_function = pnp_problem.get_solution();
+  printf("1dolfin::Function initial_guess_function = pnp_problem.get_solution();\n"); fflush(stdout);
   initial_guess_function.interpolate(*initial_guess);
+  printf("2dolfin::Function initial_guess_function = pnp_problem.get_solution();\n"); fflush(stdout);
   pnp_problem.set_solution(initial_guess_function);
+  printf("3dolfin::Function initial_guess_function = pnp_problem.get_solution();\n"); fflush(stdout);
 
   // output to file
+  printf("output to file\n"); fflush(stdout);
   initial_guess_function = pnp_problem.get_solution();
   total_solution_file << initial_guess_function;
   total_charge_file << pnp_problem.get_total_charge();
@@ -177,7 +184,7 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   //------------------------
   // Start nonlinear solver
   //------------------------
-  printf("Initializing nonlinear solver\n");
+  printf("Initializing nonlinear solver\n"); fflush(stdout);
 
   // set nonlinear solver parameters
   if (*initial_residual_ptr < 0.0) {

@@ -36,6 +36,7 @@ std::vector<std::shared_ptr<const dolfin::Function>> compute_entropy_potential(
 
 // cross-section for estimating the current
 double computeCurrentFlux(
+  double voltage_drop,
   std::vector<std::shared_ptr<const dolfin::Function>> diffusivity,
   std::vector<std::shared_ptr<const dolfin::Function>> log_density,
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential
@@ -98,13 +99,12 @@ int main (int argc, char** argv) {
   const double delta_volts = 0.1;
 
   // mesh adaptivity
-  const double growth_factor = 1.05;
-  const double entropy_error_per_cell = 1.0e-2;
   const std::size_t max_refine_depth = 2;
-  const std::size_t max_elements = 250000;
+  const std::size_t max_elements = 3000000;
+  const double entropy_error_per_cell = 1.0e-0;
 
   // parameters for PNP Newton solver
-  const std::size_t max_newton = 250;
+  const std::size_t max_newton = 25;
   const double max_residual_tol = 1.0e-10;
   const double relative_residual_tol = 1.0e-7;
   const bool use_eafe_approximation = true;
@@ -172,7 +172,7 @@ int main (int argc, char** argv) {
       auto log_densities = extract_log_densities(computed_solution);
 
       // Compute current flux through cross section
-      induced_current = computeCurrentFlux(diffusivity, log_densities, entropy_potential);
+      induced_current = computeCurrentFlux(voltage_drop, diffusivity, log_densities, entropy_potential);
 
       // adapt computed solutions
       mesh_adapt.multilevel_refinement(diffusivity, entropy_potential, log_densities);
@@ -283,6 +283,7 @@ std::vector<std::shared_ptr<const dolfin::Function>> compute_entropy_potential (
  * Compute the current determined by the finite element solution
  */
 double computeCurrentFlux(
+  double voltage_drop,
   std::vector<std::shared_ptr<const dolfin::Function>> diffusivity,
   std::vector<std::shared_ptr<const dolfin::Function>> log_density,
   std::vector<std::shared_ptr<const dolfin::Function>> entropy_potential
@@ -318,12 +319,13 @@ double computeCurrentFlux(
   // scaling
   const double elementary_charge = 1.60217662e-19; // C
   const double reference_length = 1e-5; // m
-  const double reference_diffusivity = 2.87e-3; // m^2 / s
-  const double reference_density = 1.5e+22; // mM = 1 / m^3
+  const double reference_diffusivity = 28.74e-4; // m^2 / s
+  const double reference_density = 1.5e+22; // 1 / m^3
+  // const double reference_density = 5.0e+20; // 1 / m^3
+  // const double reference_density = 1.0e+19; // 1 / m^3
   const double milliamp_scale_factor = 1.0e+3 * elementary_charge * reference_diffusivity * reference_density * reference_length;
 
-  printf("<<<<<<<<<<< NEED TO RESCALE ACCORDING TO DIODE.H\n");
-  printf("\tcurrent flux: %e mA\n", milliamp_scale_factor * current / surface_area);
+  printf("\tcurrent flux at %eV: %e mA\n", voltage_drop, milliamp_scale_factor * current / surface_area);
   printf("\t\tscale factor is %e\n", milliamp_scale_factor);
   return milliamp_scale_factor * current / surface_area;
 }
