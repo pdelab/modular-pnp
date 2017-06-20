@@ -178,13 +178,13 @@ int main (int argc, char** argv) {
       mesh_adapt.multilevel_refinement(diffusivity, entropy_potential, log_densities);
       adaptive_solution = adapt( *computed_solution, mesh_adapt.get_mesh() );
 
-      std::string mesh_output = "./diode_mesh_V";
-      mesh_output += std::to_string(voltage_drop);
-      mesh_output += "_level_";
-      mesh_output += std::to_string(mesh_adapt.iteration);
-      mesh_output += ".xml.gz";
-      dolfin::File mesh_file(mesh_output);
-      mesh_file << *(mesh_adapt.get_mesh());
+      // std::string mesh_output = "./diode_mesh_V";
+      // mesh_output += std::to_string(voltage_drop);
+      // mesh_output += "_level_";
+      // mesh_output += std::to_string(mesh_adapt.iteration);
+      // mesh_output += ".xml.gz";
+      // dolfin::File mesh_file(mesh_output);
+      // mesh_file << *(mesh_adapt.get_mesh());
     }
 
 
