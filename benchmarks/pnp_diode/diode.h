@@ -135,9 +135,14 @@ class Initial_Guess : public dolfin::Expression {
     double volt;
 };
 
+bool PRINT = TRUE;
 class Permittivity_Expression : public dolfin::Expression {
   public:
     void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
+      if(PRINT) {
+        PRINT = FALSE;
+        printf("permittivity: %e \n", permittivity(x[0]));
+      }
       values[0] = permittivity(x[0]);
     }
 };
@@ -145,7 +150,7 @@ class Permittivity_Expression : public dolfin::Expression {
 class Poisson_Scale_Expression : public dolfin::Expression {
   public:
     void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
-      values[0] = 1.0;
+      values[0] = 1.0 / permittivity(x[0]);
     }
 };
 
