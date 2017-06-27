@@ -263,7 +263,7 @@ std::vector<std::shared_ptr<const dolfin::Function>> compute_entropy_potential (
 
   for (std::size_t comp = 1; comp < component_count; comp++) {
     auto subfunction_space = (*solution)[comp].function_space()->collapse();
-    dolfin::Function potential(subfunction_space);
+  dolfin::Function potential(subfunction_space);
     dolfin::Function entropy_potential(subfunction_space);
 
     potential.interpolate((*solution)[0]);
@@ -363,8 +363,10 @@ std::vector<std::shared_ptr<const dolfin::Function>> get_physical_functions (
   dolfin::Function total_charge(scalar_space);
   Fixed_Charged_Expression fixed_charge_expression;
   total_charge.interpolate(fixed_charge_expression);
-  total_charge = total_charge + cation_density;
-  total_charge = total_charge - anion_density;
+  // total_charge = total_charge + cation_density;
+  // total_charge = total_charge - anion_density;
+  *total_charge.vector() += *cation_density.vector() ;
+  *total_charge.vector()  -= *anion_density.vector() ;
   output_wrapper.push_back(std::make_shared<const dolfin::Function>(total_charge));
 
   return output_wrapper;
