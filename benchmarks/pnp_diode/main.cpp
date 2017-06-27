@@ -269,7 +269,9 @@ std::vector<std::shared_ptr<const dolfin::Function>> compute_entropy_potential (
     potential.interpolate((*solution)[0]);
     entropy_potential.interpolate((*solution)[comp]);
     *(potential.vector()) *= valencies[comp];
-    entropy_potential = entropy_potential + potential;
+    // entropy_potential = entropy_potential + potential;
+    * entropy_potential.vector() *= *entropy_potential.vector() ;
+    * entropy_potential.vector() += *potential.vector();
 
     auto const_entropy_potential = std::make_shared<const dolfin::Function>(entropy_potential);
     function_vec.push_back(const_entropy_potential);

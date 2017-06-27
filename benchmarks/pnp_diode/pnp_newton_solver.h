@@ -247,7 +247,9 @@ std::shared_ptr<dolfin::Function> solve_pnp (
     if (range > (1.0 + increase_tolerance) * prev_range) {
       printf("\tupdate causes too much growth in solution : %e / %e = %e\n", range, prev_range, range / prev_range);
       dolfin::Function newton_update(computed_solution.function_space());
-      newton_update = computed_solution - previous_solution;
+      // newton_update = computed_solution - previous_solution;
+      *newton_update.vector() *= *computed_solution.vector() ;
+      *newton_update.vector() -= *previous_solution.vector();
 
       double max_update = newton_update.vector()->max();
       double min_update = newton_update.vector()->min();
@@ -268,7 +270,9 @@ std::shared_ptr<dolfin::Function> solve_pnp (
         printf("\tfurther reducing the update by a factor of %5.3e\n", shrink_factor);
       }
 
-      computed_solution = previous_solution + newton_update;
+      // computed_solution = computed_solution  + newton_update;
+      *computed_solution .vector() *= *computed_solution .vector() ;
+      *computed_solution .vector() += *newton_update.vector();
     }
 
     // dolfin::File backFile(output_dir + "backtrack.pvd");
@@ -276,11 +280,15 @@ std::shared_ptr<dolfin::Function> solve_pnp (
     while (backtrack_count < 50 && (residual_check > 1.00001 * previous_residual || isnan(residual_check))) {
       printf("\trelative residual increased : %e < %e\n", previous_residual, residual_check);
       dolfin::Function backtrack(computed_solution.function_space());
-      backtrack = previous_solution - computed_solution;
+      // backtrack = previous_solution - computed_solution;
+      * backtrack.vector() *= *previous_solution.vector() ;
+      * backtrack.vector() -= *computed_solution.vector();
       *(backtrack.vector()) *= 1.0 - std::pow(0.5, ++backtrack_count);
 
       dolfin::Function backtrack_solution(computed_solution.function_space());
-      backtrack_solution = computed_solution + backtrack;
+      // backtrack_solution = computed_solution + backtrack;
+      * backtrack_solution.vector() *= *computed_solution.vector() ;
+      * backtrack_solution.vector() += *backtrack.vector();
       // backFile << backtrack_solution;
       pnp_problem.set_solution(backtrack_solution);
       residual_check = pnp_problem.compute_residual("l2") / dof_size;
