@@ -77,6 +77,7 @@ void Linear_PNP::setup_fasp_linear_algebra () {
   Linear_PNP::setup_linear_algebra();
 
   if (_use_eafe) {
+    printf("Adding EAFE...\n"); fflush(stdout);
     Linear_PNP::apply_eafe();
     for (std::size_t i = 0; i < _dirichletBC.size(); i++) {
       _dirichletBC[i]->apply(*_eigen_matrix);

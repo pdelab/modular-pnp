@@ -18,6 +18,7 @@ extern "C" {
 
 #include "vector_linear_pnp_forms.h"
 #include "linear_pnp.h"
+#include "norm_pnp.h"
 
 using namespace std;
 
@@ -31,7 +32,7 @@ int main (int argc, char** argv) {
 
   // Need to use Eigen for linear algebra
   dolfin::parameters["linear_algebra_backend"] = "Eigen";
-  dolfin::parameters["allow_extrapolation"] = true;
+  // dolfin::parameters["allow_extrapolation"] = true;
 
   // Deleting the folders:
   boost::filesystem::remove_all("./benchmarks/pnp_pb/output");
@@ -41,7 +42,8 @@ int main (int argc, char** argv) {
   std::shared_ptr<dolfin::Mesh> mesh;
   mesh.reset(new dolfin::Mesh);
   *mesh = dolfin::Mesh("./benchmarks/pnp_pb/mesh1.xml.gz");
-  double Lx=2.0,Ly=2.0,Lz=2.0;
+  double L=0.2;
+  double Lx=L,Ly=L,Lz=L;
   // print_domain_param(&domain);
 
 
@@ -59,7 +61,7 @@ int main (int argc, char** argv) {
     &ilu,
     NULL
   );
-
+  bool use_eafe_approximation = true;
 
 
   //-------------------------
@@ -83,7 +85,7 @@ int main (int argc, char** argv) {
 
 
   // set PDE coefficients
-  double Eps = 0.01;
+  double Eps = 1E-6;
   printf("Initialize coefficients\n");
   std::map<std::string, std::vector<double>> pnp_coefficients = {
     {"permittivity", {Eps}},
@@ -109,8 +111,12 @@ int main (int argc, char** argv) {
     "uu"
   );
 
+  if (use_eafe_approximation) {
+    printf("Setting solver to use EAFE approximation\n");
+    pnp_problem.use_eafe();
+  }
+
   dolfin::Function phib(pnp_problem.phib_space);
-  // Boundary_Expression bdexpr;
   PhibExpression bdexpr(Eps);
   phib.interpolate(bdexpr);
 
@@ -123,7 +129,11 @@ int main (int argc, char** argv) {
   pnp_problem.set_coefficients(    emptymap,    pnp_source_fns  );
 
   dolfin::File phib_file("./benchmarks/pnp_pb/output/phib.pvd");
+  dolfin::File phib_file_xml("./benchmarks/pnp_pb/output/phib.xml");
   phib_file << phib;
+  phib_file_xml << phib;
+  // std::string ss = phib.str(true);
+  std::cout << "Phib = " << phib.vector()->norm("l2") << phib.vector()->max() << phib.vector()->min() << std::endl;
 
 
   //-------------------------
@@ -134,6 +144,7 @@ int main (int argc, char** argv) {
   dolfin::File solution_file2("./benchmarks/pnp_pb/output/solution_eta2.pvd");
 
   dolfin::File xml_filePhipb("./benchmarks/pnp_pb/output/solution_phipb.xml");
+  dolfin::File xmlSolution("./benchmarks/pnp_pb/output/solution.xml");
   dolfin::File xml_file0("./benchmarks/pnp_pb/output/solution_phi.xml");
   dolfin::File xml_file1("./benchmarks/pnp_pb/output/solution_eta1.xml");
   dolfin::File xml_file2("./benchmarks/pnp_pb/output/solution_eta2.xml");
@@ -145,6 +156,14 @@ int main (int argc, char** argv) {
   pnp_problem.set_solution(initvector);
 
   dolfin::Function solutionFn = pnp_problem.get_solution();
+
+
+  // auto PreviousMesh = std::make_shared<dolfin::Mesh>("./benchmarks/pnp_pb/previous_solution/mesh1.xml.gz");
+  // auto PreviousV=std::make_shared<vector_linear_pnp_forms::FunctionSpace>(PreviousMesh);
+  // dolfin::Function PreviousSolution(PreviousV,"./benchmarks/pnp_pb/previous_solution/solution.xml");
+  // solutionFn.interpolate(PreviousSolution);
+  // pnp_problem.set_solution(solutionFn);
+
   solution_file0 << solutionFn[0];
   solution_file1 << solutionFn[1];
   solution_file2 << solutionFn[2];
@@ -157,7 +176,7 @@ int main (int argc, char** argv) {
   printf("Initializing nonlinear solver\n");
 
   // set nonlinear solver parameters
-  const std::size_t max_newton = 5;
+  const std::size_t max_newton = 10;
   const double max_residual_tol = 1.0e-11;
   const double relative_residual_tol = 1.0e-8;
   const double initial_residual = pnp_problem.compute_residual("l2");
@@ -193,7 +212,7 @@ int main (int argc, char** argv) {
     dolfin::Function phi(solutionFn[0]);
     xml_file0 << phi;
     xml_filePhipb << phib;
-    // xml_file0 << solutionFn;
+    xmlSolution << solutionFn;
     // xml_file1 << solutionFn[1];
     // xml_file2 << solutionFn[2];
     printf("\n");
@@ -213,7 +232,22 @@ int main (int argc, char** argv) {
   ExSol->interpolate(ExExp);
   Error Err(ExSol);
   double L2Err = Err.compute_l2_error(Sol);
-  printf("The L2 Error is %f for mesh size %f\n",L2Err,mesh->hmax()); fflush(stdout);
+  double H1Err = Err.compute_semi_h1_error(Sol);
+
+  norm_pnp::Functional Fc(mesh);
+  auto sphib = std::make_shared<dolfin::Function>(phib);
+  auto perm = std::make_shared<dolfin::Constant>(Eps);
+  auto diff = std::make_shared<dolfin::Constant>(1.0);
+  auto val = std::make_shared<dolfin::Constant>(1.0);
+  Fc.uu = Sol;
+  Fc.permittivity = perm;
+  Fc.diffusivity = diff;
+  Fc.valency = val;
+  Fc.phib = sphib;
+  double ErrFlux = assemble(Fc);
+
+  printf("L2 Error = %f , semi H1 Error = %f , Flux Error = %f, Mesh size  = %f\n",L2Err,H1Err,ErrFlux,mesh->hmax()); fflush(stdout);
+  printf("%f &  %f & %f & %f \\\\ \n",L2Err,H1Err,ErrFlux,mesh->hmax()); fflush(stdout);
 
   printf("Solver exiting\n"); fflush(stdout);
   return 0;

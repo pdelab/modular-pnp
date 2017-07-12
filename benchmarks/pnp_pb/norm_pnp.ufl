@@ -1,0 +1,25 @@
+# Copyright (C) 2014 CCMA@PSU Maximilian Metti, Arthur Bousquet
+#
+#   Define bilinear and linear forms for 
+#   the linearized Poisson-Nernst-Planck equations
+#
+# Compile this form with FFC: ffc -O -l dolfin vector_linear_pnp_forms.ufl.
+
+##  Finite Element Space
+CG = FiniteElement("Lagrange", tetrahedron, 1)
+CG2 = FiniteElement("Lagrange", tetrahedron, 2)
+V  = MixedElement([CG, CG, CG])
+
+
+##  Previous Iterates
+uu = Coefficient(V)
+
+##  Coefficients
+permittivity = Constant(tetrahedron)
+diffusivity = Constant(tetrahedron)
+valency = Constant(tetrahedron)
+phib=Coefficient(CG2)
+
+M =  inner( diffusivity*exp(uu[1])*grad(uu[1]+valency*uu[0]),diffusivity*exp(uu[1])*grad(uu[1]+valency*uu[0]))*dx \
+   + inner( diffusivity*exp(uu[2])*grad(uu[2]-valency*uu[0]),diffusivity*exp(uu[2])*grad(uu[2]-valency*uu[0]))*dx \
+   + permittivity * inner(grad(uu[0]-phib),grad(uu[0]-phib) ) * dx

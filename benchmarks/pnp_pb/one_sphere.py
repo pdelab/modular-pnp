@@ -5,12 +5,12 @@ from dolfin import *
 from mshr import *
 import numpy as np
 
-rc=0.4
+rc=0.1
 
-Num_cells=25
-Lx=2.0
-Ly=2.0
-Lz=2.0
+Num_cells=100
+Lx=0.4
+Ly=0.4
+Lz=0.4
 domain = Box(Point(-Lx/2.0,-Ly/2.0,-Lz/2.0),Point(Lx/2.0,Ly/2.0,Lz/2.0))
 print "Generating the domain..."
 ## The range can be at most len(x)=86
