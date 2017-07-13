@@ -141,6 +141,7 @@ class PhibExpression : public dolfin::Expression {
         // std::cout << "It's NaN" << r << << K <<  g <<  x[0] << x[1] << x[2] << std::endl;
         // values[0]=0.0;
       // }
+      if (values[0] > 0.0) values[0] = 0.0;
 
     }
   private:
@@ -155,6 +156,7 @@ class ExactExpression : public dolfin::Expression {
       if (r<0)  r=0.0;
       double g =  std::exp(0.0)*( std::exp(1.0/2.0) - 1.0 )/( std::exp(1.0/2.0) + 1.0 );
       values[0] = 2.0*std::log( (1.0-g*std::exp(-r*K)) / (1.0+g*std::exp(-r*K)) );
+      if (values[0] > 0.0) values[0] = 0.0;
       // if (std::isnan(values[0])) values[0]=0.0;
       values[1] = -values[0];
       values[2] = values[0];

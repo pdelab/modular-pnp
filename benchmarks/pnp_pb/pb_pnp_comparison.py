@@ -44,18 +44,20 @@ zc=0.0
 rc=0.1
 
 L=0.4
-N = 100
+N = 50
 dx = (L/2.0-rc)/float(N)
 print dx
 x = np.arange(N)*dx
 p0=1.0
 x0=0.0
-Eps=1E-6
+Eps=1E-5
 g = np.exp(x0)*( np.exp(p0/2.0) - 1.0 )/( np.exp(p0/2.0) + 1.0 )
 K = np.sqrt(2.0/Eps)
 print "K = ",K
 pb=2*np.log( (1-g*np.exp(-x*K)) / (1+g*np.exp(-x*K)) )
 
+print "max = ",max(phi.vector()[:])
+print "max = ",max(phipb.vector()[:])
 
 vphi_t = np.zeros(3);
 vphi1 = np.zeros(N);
