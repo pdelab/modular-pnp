@@ -168,7 +168,7 @@ std::shared_ptr<dolfin::Function> solve_pnp (
 
 
     printf("\tSolver exiting\n"); fflush(stdout);
-    // return pnp_problem.get_solutions();
+    //return pnp_problem.get_solution();
     return std::make_shared<dolfin::Function>(pnp_problem.get_solution());
 }
 

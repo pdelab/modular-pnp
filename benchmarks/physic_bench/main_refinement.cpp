@@ -73,10 +73,13 @@ int main (int argc, char** argv) {
   dolfin::File mesh_xml("./benchmarks/physic_bench/output/accepted_mesh.xml.gz");
   std::string output_path("./benchmarks/physic_bench/output/");
 
+  dolfin::File computed_solution_file("./benchmarks/physic_bench/output/computed_solution.pvd");
+  dolfin::File adapted_solution_file("./benchmarks/physic_bench/output/adapted_solution.pvd");
+
 
   // mesh adaptivity
-  const double growth_factor = 3.0;
-  const double entropy_error_per_cell = 1.0e-2;
+  const double growth_factor = 2.0;
+  const double entropy_error_per_cell = 1.0e-1;
   const std::size_t max_refine_depth = 3;
   const std::size_t max_elements = 50000;
 
@@ -123,6 +126,8 @@ int main (int argc, char** argv) {
         output_path
       );
 
+     //auto computed_solution = std::make_shared<dolfin::Function>(computed_solution2);
+
       // compute current / entropy terms
       printf("Computing current\n");
       auto diffusivity = get_diode_diffusivity(computed_solution->function_space());
@@ -134,6 +139,13 @@ int main (int argc, char** argv) {
       mesh_adapt.max_elements = (std::size_t) std::floor(growth_factor * mesh->num_cells());
       mesh_adapt.multilevel_refinement(diffusivity, entropy_potential, log_densities);
       adaptive_solution = adapt( *computed_solution, mesh_adapt.get_mesh() );
+      adaptive_solution->interpolate(PNP);
+
+     adapted_solution_file << *adaptive_solution;
+     computed_solution_file << *computed_solution;
+     mesh_file << *mesh;
+
+
     }
 
 
