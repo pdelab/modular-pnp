@@ -1,0 +1,86 @@
+# Copyright (C) 2014 CCMA@PSU Maximilian Metti, Xiaozhe Hu
+#
+#   Define bilinear and linear forms for 
+#   the linearized Poisson-Nernst-Planck equations for a MOSFET
+#
+# Compile this form with FFC: ffc -O -l dolfin mosfet.ufl.
+
+##  Finite Element Space
+CG = FiniteElement("Lagrange", tetrahedron, 1)
+Vit = FiniteElement("RT", tetrahedron, 1)
+Pres  = FiniteElement("Discontinuous Lagrange", tetrahedron, 0)
+Vc = MixedElement([CG,CG,CG]) # Concentration + Potential
+Vc2 = MixedElement([CG,CG]) # Just Concentrations
+V = MixedElement([CG,CG,CG,Vit,Pres]) 
+
+(Cat, An, Phi, u, p) = TrialFunctions(V)
+(cat, an, phi, v, q) = TestFunctions(V)
+
+
+##  Previous Iterates
+cc = Coefficient(Vc)
+uu  = Coefficient(Vit)
+pp  = Coefficient(Pres)
+
+
+##  Coefficients
+permittivity = Constant(tetrahedron)
+fixed_charge = Coefficient(CG)
+diffusivity0 = Constant(tetrahedron)
+valency0 = Constant(tetrahedron)
+diffusivity1 = Constant(tetrahedron)
+valency1 = Constant(tetrahedron)
+g1  = Constant(tetrahedron)
+g2  = Constant(tetrahedron)
+Re  = Constant(tetrahedron)
+
+##  Coefficients
+mu  = Constant(tetrahedron)
+phib=Coefficient(CG)
+ub = Coefficient(Vit)
+
+##  DG-terms
+penalty1 = Constant(tetrahedron)
+penalty2 = Constant(tetrahedron)
+h     = 2.0*Circumradius(tetrahedron)
+h_avg = ( h('+')+h('-') )/2.0
+n_vec = FacetNormal(tetrahedron)
+
+
+a   = ( diffusivity0*exp(cc[0]) * ( inner(grad(Cat),grad(cat)) + inner(grad(cc[0])+valency0*grad(cc[2]),grad(cat)) * Cat ) )*dx \
+    + ( valency0*diffusivity0*exp(cc[0]) * inner(grad(Phi),grad(cat)) )*dx \
+    + ( diffusivity1*exp(cc[1]) * ( inner(grad(An),grad(an)) + inner(grad(cc[1])+valency1*grad(cc[2]), grad(an)) * An ) )*dx \
+    + ( valency1*diffusivity1*exp(cc[1]) * inner(grad(Phi),grad(an)) )*dx \
+    + ( permittivity * inner(grad(Phi),grad(phi)) )*dx \
+    + ( -(valency0*exp(cc[0])*Cat + valency1*exp(cc[1])*An)*phi )*dx \
+    - ( exp(cc[0])*Cat*(inner(uu,grad(cat))) )*dx \
+    - ( exp(cc[1])   *An*(inner(uu,grad(an)))  )*dx \
+    - ( exp(cc[0])*(inner(u,grad(cat))) )*dx \
+    - ( exp(cc[1])*(inner(u,grad(an)))  )*dx \
+    + Re*inner(grad(u)*uu,v)*dx \
+    + Re*inner(grad(uu)*u,v)*dx \
+    + ( 2.0*mu* inner( sym(grad(u)), sym(grad(v)) ) )*dx    -    ( p*div(v) )*dx   +   ( div(u)*q )*dx \
+    + ( 2.0*mu*(penalty1)* inner( avg(sym(grad(u))), sym(outer(v('+'),n_vec('+')) + outer(v('-'),n_vec('-'))) ) )*dS \
+    + ( 2.0*mu*(penalty1)* inner( sym(outer(u('+'),n_vec('+')) + outer(u('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
+    + ( 2.0*mu*(penalty2/h_avg)* inner( jump(u),jump(v) ) )*dS \
+    + ( (valency0*Cat*exp(cc[0])+valency1*An*exp(cc[1]))*inner(grad(cc[2]),v) )*dx \
+    + ( (valency0*exp(cc[0])+valency1*exp(cc[1]))*inner(grad(Phi),v) )*dx
+    
+
+L   = - ( diffusivity0*exp(cc[0])* (inner(grad(cc[0]),grad(cat)) + valency0*inner(grad(cc[2]),grad(cat))) )*dx \
+    - ( diffusivity1*exp(cc[1]  )* (inner(grad(cc[1]  ),grad(an )) + valency1*inner(grad(cc[2]), grad(an))) )*dx \
+    - ( permittivity * inner(grad(cc[2]),grad(phi)) )*dx \
+    - ( -(valency0*exp(cc[0]) + valency1*exp(cc[1]))*phi )*dx \
+    + ( exp(cc[0])*(inner(uu,grad(cat))) )*dx \
+    + ( exp(cc[1])*(inner(uu,grad(an)))  )*dx \
+    - Re*inner(grad(uu)*uu,v)*dx \
+    - ( 2.0*mu* inner( sym(grad(uu)), sym(grad(v)) ) )*dx   +   ( pp*div(v) )*dx   -   ( div(uu)*q )*dx \
+    - ( 2.0*mu*(penalty1)* inner( avg(sym(grad(uu))),  sym(outer(v('+'),n_vec('+')) + outer(v('-'),n_vec('-'))) ) )*dS \
+    - ( 2.0*mu*(penalty1)* inner( sym(outer(uu('+'),n_vec('+')) + outer(uu('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
+    - ( 2.0*mu*(penalty2/h_avg)* inner( jump(uu),jump(v) ) )*dS \
+    - ( (valency0*exp(cc[0])+valency1*exp(cc[1]))*inner(grad(cc[2]),v) )*dx \
+    + permittivity*inner(grad(phib),grad(phi))*dx -(exp(-phib)-exp(phib))*phi*dx \
+    - ( exp(-phib)*(inner(ub,grad(cat))) )*dx \
+    - ( exp(phib)*(inner(ub,grad(an)))  )*dx \
+    + Re*inner(grad(ub)*ub,v)*dx \
+    + ( 2.0*mu* inner( sym(grad(ub)), sym(grad(v)) ) )*dx
