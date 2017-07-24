@@ -20,6 +20,7 @@ extern "C" {
 
 #include "vector_linear_pnp_ns_forms.h"
 #include "linear_pnp_ns.h"
+#include "norm_pnp_ns.h"
 
 using namespace std;
 
@@ -42,7 +43,7 @@ int main (int argc, char** argv) {
   std::shared_ptr<dolfin::Mesh> mesh;
   mesh.reset(new dolfin::Mesh);
   *mesh = dolfin::Mesh("./benchmarks/pnp_pb/mesh1.xml.gz");
-  double Lx=2.0,Ly=2.0,Lz=2.0;
+  double Lx=0.32,Ly=0.32,Lz=0.32;
   // print_domain_param(&domain);
 
 
@@ -115,7 +116,7 @@ int main (int argc, char** argv) {
 
 
   // set PDE coefficients
-  double Eps = 0.01;
+  double Eps = 1E-4;
   printf("Initialize coefficients\n");
   std::map<std::string, std::vector<double>> coefficients = {
     {"permittivity", {Eps}},
@@ -203,12 +204,25 @@ int main (int argc, char** argv) {
   solutionFn.push_back(p_init);
   pnp_ns_problem.set_solutions(solutionFn);
 
+  // CASE 2
+  // std::vector<dolfin::Function> solutionFn2;
+  // dolfin::Function pnp_init2(pnp_ns_problem._functions_space[0],"./benchmarks/pnp_pb/DATA/pnp_solution.xml");
+  // dolfin::Function u_init2(pnp_ns_problem._functions_space[1],"./benchmarks/pnp_pb/DATA/velocity_solution.xml");
+  // dolfin::Function p_init2(pnp_ns_problem._functions_space[2],"./benchmarks/pnp_pb/DATA/pressure_solution.xml");
+  // solutionFn2.push_back(pnp_init2);
+  // solutionFn2.push_back(u_init2);
+  // solutionFn2.push_back(p_init2);
+
 
   solution_file0 << solutionFn[0][0];
   solution_file1 << solutionFn[0][1];
   solution_file2 << solutionFn[0][2];
   solution_file3 << solutionFn[1];
   printf("\n");
+
+  dolfin::File xml_pnp("./benchmarks/pnp_pb/DATA/pnp_solution.xml");
+  dolfin::File xml_vel("./benchmarks/pnp_pb/DATA/velocity_solution.xml");
+  dolfin::File xml_pressure("./benchmarks/pnp_pb/DATA/pressure_solution.xml");
 
 
   //------------------------
@@ -219,7 +233,7 @@ int main (int argc, char** argv) {
   // set nonlinear solver parameters
   const std::size_t max_newton = 20;
   const double max_residual_tol = 1.0e-10;
-  const double relative_residual_tol = 1.0e-8;
+  const double relative_residual_tol = 1.0e-10;
   const double initial_residual = pnp_ns_problem.compute_residual("l2");
   Newton_Status newton(
     max_newton,
@@ -230,6 +244,9 @@ int main (int argc, char** argv) {
 
   printf("\tinitial residual : %10.5e\n", newton.initial_residual);
   printf("\n");
+
+  // pnp_ns_problem.set_solutions(solutionFn2);
+
 
   while (newton.needs_to_iterate()) {
     // solve
@@ -252,6 +269,11 @@ int main (int argc, char** argv) {
     solution_file2 << solutionFn[0][2];
     solution_file3 << solutionFn[1];
     printf("\n");
+
+    xml_pnp<< solutionFn[0];
+    xml_vel << solutionFn[1];
+    xml_pressure<< solutionFn[2];
+
   }
 
 
@@ -278,9 +300,30 @@ int main (int argc, char** argv) {
   ExSolU->interpolate(vexpr);
   Error Err(ExSol);
   Error ErrU(ExSol);
-  double L2Err = Err.compute_l2_error(Sol);
-  double L2ErrU = Err.compute_l2_error(SolU);
-  printf("The L2 Errors are %f (PNP) %f (Velocity) for mesh size %f\n",L2Err,L2ErrU,mesh->hmax()); fflush(stdout);
+  double L2Err = std::pow(Err.compute_l2_error(Sol),2)+std::pow(ErrU.compute_l2_error(SolU),2);
+  double H1Err = std::pow(Err.compute_semi_h1_error(Sol),2)+std::pow(ErrU.compute_semi_h1_error(SolU),2);
+
+  norm_pnp_ns::Functional Fc(mesh);
+  auto Re = std::make_shared<dolfin::Constant>(0.01);
+  auto mu = std::make_shared<dolfin::Constant>(1.0);
+  auto perm = std::make_shared<dolfin::Constant>(Eps);
+  auto diff = std::make_shared<dolfin::Constant>(1.0);
+  auto val = std::make_shared<dolfin::Constant>(1.0);
+  Fc.uu = Sol;
+  Fc.vel = SolU;
+  Fc.Re = Re;
+  Fc.mu = mu;
+  Fc.permittivity = perm;
+  Fc.diffusivity = diff;
+  Fc.valency = val;
+  Fc.phib = phib;
+  Fc.ub = ub;
+  double ErrFlux = assemble(Fc);
+
+  printf("The L2 Errors are %f %f\n",Err.compute_l2_error(Sol),ErrU.compute_l2_error(SolU));
+  printf("The H1 Errors are %f %f\n",Err.compute_semi_h1_error(Sol),ErrU.compute_semi_h1_error(SolU));
+  printf("The L2/H1 Errors are %f %f for mesh size %f\n",L2Err,H1Err,mesh->hmax()); fflush(stdout);
+  printf("%f &  %f & %f & %f \\\\ \n",L2Err,H1Err,ErrFlux,mesh->hmax()); fflush(stdout);
 
   printf("Solver exiting\n"); fflush(stdout);
   return 0;

@@ -21,7 +21,7 @@ import matplotlib.tri as tri
 # print c_code
 
 # Fo = "./meshOut_2/"
-Fo = "./output/"
+Fo = "./output_noeafe/"
 
 # Set backend to PETSC
 # parameters['linear_algebra_backend'] = 'Eigen'
@@ -44,13 +44,13 @@ zc=0.0
 rc=0.1
 
 L=0.4
-N = 50
+N = 100
 dx = (L/2.0-rc)/float(N)
 print dx
 x = np.arange(N)*dx
 p0=1.0
 x0=0.0
-Eps=1E-5
+Eps=1E-4
 g = np.exp(x0)*( np.exp(p0/2.0) - 1.0 )/( np.exp(p0/2.0) + 1.0 )
 K = np.sqrt(2.0/Eps)
 print "K = ",K
@@ -80,8 +80,8 @@ for j in range(N):
     vphi2[j]=vphi_t[0]
     phi.eval(vphi_t,x_coord3);
     vphi3[j]=vphi_t[0]
-    phipb.eval(vphi_t,x_coord4);
-    # phi.eval(vphi_t,x_coord4);
+    # phipb.eval(vphi_t,x_coord4);
+    phi.eval(vphi_t,x_coord4);
     vphi4[j]=vphi_t[0]
     x_coord1[2]+=dx;
     x_coord2[1]-=dx;

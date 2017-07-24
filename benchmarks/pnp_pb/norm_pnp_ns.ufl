@@ -1,0 +1,34 @@
+# Copyright (C) 2014 CCMA@PSU Maximilian Metti, Arthur Bousquet
+#
+#   Define bilinear and linear forms for 
+#   the linearized Poisson-Nernst-Planck equations
+#
+# Compile this form with FFC: ffc -O -l dolfin vector_linear_pnp_forms.ufl.
+
+##  Finite Element Space
+Vit = FiniteElement("RT", tetrahedron, 1)
+CG = FiniteElement("Lagrange", tetrahedron, 1)
+CG2 = FiniteElement("Lagrange", tetrahedron, 1)
+V  = MixedElement([CG, CG, CG])
+
+
+##  Previous Iterates
+uu = Coefficient(V)
+vel = Coefficient(Vit)
+ub = Coefficient(Vit)
+
+##  Coefficients
+Re = Constant(tetrahedron)
+mu = Constant(tetrahedron)
+permittivity = Constant(tetrahedron)
+diffusivity = Constant(tetrahedron)
+valency = Constant(tetrahedron)
+phib=Coefficient(CG2)
+
+M =  inner( diffusivity*exp(uu[0])*grad(uu[0]+valency*uu[2]),diffusivity*exp(uu[0])*grad(uu[0]+valency*uu[2]))*dx \
+   + ( (inner(exp(uu[0])*vel-exp(-phib)*ub,exp(uu[0])*vel-exp(-phib)*ub )) )*dx \
+   + inner( diffusivity*exp(uu[1])*grad(uu[1]-valency*uu[2]),diffusivity*exp(uu[1])*grad(uu[1]-valency*uu[2]))*dx \
+   + ( (inner(exp(uu[1])*vel-exp(phib)*ub,exp(uu[1])*vel-exp(phib)*ub )) )*dx \
+   + permittivity * inner(grad(uu[2]-phib),grad(uu[2]-phib) ) * dx \
+   + Re*inner(grad(vel)*vel-grad(ub)*ub,grad(vel)*vel-grad(ub)*ub)*dx \
+   + ( 2.0*mu* inner( sym(grad(vel))-sym(grad(ub)), sym(grad(vel))-sym(grad(ub)) ) )*dx

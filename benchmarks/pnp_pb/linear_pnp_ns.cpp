@@ -311,12 +311,12 @@ void Linear_PNP_NS::init_BC (double Lx,double Ly,double Lz) {
   auto BC2 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(1),zero,sp_domain);
   auto BC3 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(2),zero,sp_domain);
   auto BC4 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(3),zero_vec,sp_domain);
-  auto BC4b = std::make_shared<dolfin::DirichletBC>(_function_space->sub(3),zero_vec,BCdomain_xyz);
+  // auto BC4b = std::make_shared<dolfin::DirichletBC>(_function_space->sub(3),zero_vec,BCdomain_xyz);
   _dirichletBC.push_back(BC1);
   _dirichletBC.push_back(BC2);
   _dirichletBC.push_back(BC3);
   _dirichletBC.push_back(BC4);
-  _dirichletBC.push_back(BC4b);
+  // _dirichletBC.push_back(BC4b);
 
 
   std:shared_ptr<const dolfin::Mesh> mesh = _function_space->mesh();

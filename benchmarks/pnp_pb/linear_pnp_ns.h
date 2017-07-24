@@ -128,7 +128,7 @@ class Linear_PNP_NS : public PDE {
 
 };
 
-static double rc = 0.4;
+static double rc = 0.1;
 
 class SphereSubDomain : public dolfin::SubDomain
 {

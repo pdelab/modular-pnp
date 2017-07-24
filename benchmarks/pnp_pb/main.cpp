@@ -61,7 +61,7 @@ int main (int argc, char** argv) {
     &ilu,
     NULL
   );
-  bool use_eafe_approximation = false;
+  bool use_eafe_approximation = true;
 
 
   //-------------------------
@@ -85,7 +85,7 @@ int main (int argc, char** argv) {
 
 
   // set PDE coefficients
-  double Eps = 1E-6;
+  double Eps = 1E-4;
   printf("Initialize coefficients\n");
   std::map<std::string, std::vector<double>> pnp_coefficients = {
     {"permittivity", {Eps}},
