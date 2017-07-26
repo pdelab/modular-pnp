@@ -78,10 +78,10 @@ int main (int argc, char** argv) {
 
 
   // mesh adaptivity
-  const double growth_factor = 2.0;
-  const double entropy_error_per_cell = 1.0e-1;
+  const double growth_factor = 3.0;
+  const double entropy_error_per_cell = 1.0e-3;
   const std::size_t max_refine_depth = 3;
-  const std::size_t max_elements = 50000;
+  const std::size_t max_elements = 200000;
 
   // parameters for PNP Newton solver
   const std::size_t max_newton = 10;
@@ -99,7 +99,8 @@ int main (int argc, char** argv) {
     std::shared_ptr<double> initial_residual_ptr = std::make_shared<double>(-1.0);
 
     // construct initial guess
-    Linear_Function PNP(0,-Lx/2.0,Lx/2.0,{-1.0,0.0,-2.30258509299},{1.0,-2.30258509299,0.0});
+    Linear_Function PNP(0,-Lx/2.0,Lx/2.0,{-0.01,0.0,0.0},{0.01,0.0,0.0});
+    // Linear_Function PNP(0,-Lx/2.0,Lx/2.0,{-1.0,0.0,-2.30258509299},{1.0,-2.30258509299,0.0});
     auto adaptive_solution = std::make_shared<dolfin::Function>(
       std::make_shared<vector_linear_pnp_forms::FunctionSpace>(mesh_adapt.get_mesh())
     );
@@ -128,6 +129,7 @@ int main (int argc, char** argv) {
 
      //auto computed_solution = std::make_shared<dolfin::Function>(computed_solution2);
 
+     if (mesh->num_cells()<max_elements){
       // compute current / entropy terms
       printf("Computing current\n");
       auto diffusivity = get_diode_diffusivity(computed_solution->function_space());
@@ -144,6 +146,11 @@ int main (int argc, char** argv) {
      adapted_solution_file << *adaptive_solution;
      computed_solution_file << *computed_solution;
      mesh_file << *mesh;
+   }
+   else{
+     adaptive_solution = computed_solution;
+     mesh_adapt.needs_to_solve = false;
+   }
 
 
     }

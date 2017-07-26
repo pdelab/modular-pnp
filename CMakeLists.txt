@@ -117,3 +117,6 @@ target_link_libraries(phys_pnp_ref ${PNP_LIBRARY})
 
 add_executable(phys_ns ./benchmarks/physic_bench/main_ns.cpp ./benchmarks/physic_bench/linear_pnp_ns.cpp ${SRC_DIR})
 target_link_libraries(phys_ns ${PNP_STOKES_LIBRARY})
+
+add_executable(phys_ns_ref ./benchmarks/physic_bench/main_ns_refinement.cpp ./benchmarks/physic_bench/linear_pnp_ns.cpp ${SRC_DIR})
+target_link_libraries(phys_ns_ref ${PNP_STOKES_LIBRARY})

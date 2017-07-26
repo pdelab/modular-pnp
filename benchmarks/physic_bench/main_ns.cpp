@@ -20,7 +20,6 @@ extern "C" {
 
 #include "vector_linear_pnp_ns_forms.h"
 #include "linear_pnp_ns.h"
-#include "norm_pnp_ns.h"
 
 using namespace std;
 
@@ -36,15 +35,14 @@ int main (int argc, char** argv) {
   dolfin::parameters["allow_extrapolation"] = true;
 
   // Deleting the folders:
-  boost::filesystem::remove_all("./benchmarks/pnp_pb/output");
+  boost::filesystem::remove_all("./benchmarks/physic_bench/output");
 
   // read in parameters
   printf("Reading parameters from files...\n");
   std::shared_ptr<dolfin::Mesh> mesh;
   mesh.reset(new dolfin::Mesh);
-  *mesh = dolfin::Mesh("./benchmarks/pnp_pb/mesh1.xml.gz");
-  double Lx=0.32,Ly=0.32,Lz=0.32;
-  // print_domain_param(&domain);
+  *mesh = dolfin::Mesh("./benchmarks/physic_bench/mesh2.xml.gz");
+  double Lx=2.0,Ly=2.0,Lz=2.0;
 
 
   // Setup FASP solver
@@ -53,7 +51,7 @@ int main (int argc, char** argv) {
   itsolver_param itpar;
   AMG_param amgpar;
   ILU_param ilupar;
-  char fasp_params[] = "./benchmarks/pnp_pb/bcsr.dat";
+  char fasp_params[] = "./benchmarks/physic_bench/bcsr.dat";
   fasp_param_input(fasp_params, &inpar);
   fasp_param_init(&inpar, &itpar, &amgpar, &ilupar, NULL);
   INT status = FASP_SUCCESS;
@@ -66,7 +64,7 @@ int main (int argc, char** argv) {
   AMG_param  pnp_amgpar;
   ILU_param pnp_ilupar;
   Schwarz_param pnp_schpar;
-  char fasp_pnp_params[] = "./benchmarks/pnp_pb/bsr.dat";
+  char fasp_pnp_params[] = "./benchmarks/physic_bench/bsr.dat";
   fasp_param_input(fasp_pnp_params, &pnp_inpar);
   fasp_param_init(&pnp_inpar, &pnp_itpar, &pnp_amgpar, &pnp_ilupar, &pnp_schpar);
   printf("done\n"); fflush(stdout);
@@ -78,7 +76,7 @@ int main (int argc, char** argv) {
   AMG_ns_param  ns_amgpar;
   ILU_param ns_ilupar;
   Schwarz_param ns_schpar;
-  char fasp_ns_params[] = "./benchmarks/pnp_pb/ns.dat";
+  char fasp_ns_params[] = "./benchmarks/physic_bench/ns.dat";
   fasp_ns_param_input(fasp_ns_params, &ns_inpar);
   fasp_ns_param_init(&ns_inpar, &ns_itpar, &ns_amgpar, &ns_ilupar, &ns_schpar);
   printf("done\n"); fflush(stdout);
@@ -116,7 +114,7 @@ int main (int argc, char** argv) {
 
 
   // set PDE coefficients
-  double Eps = 1E-4;
+  double Eps = 1E-3;
   printf("Initialize coefficients\n");
   std::map<std::string, std::vector<double>> coefficients = {
     {"permittivity", {Eps}},
@@ -129,7 +127,7 @@ int main (int argc, char** argv) {
     {"penalty2", {1.0}},
     {"Re", {0.01}},
   };
-  std::map<std::string, std::vector<double>> sources = {};
+  std::map<std::string, std::vector<double>> sources = {{"g",{Eps*10.0}}};
 
   const std::vector<std::string> variables = {"cc","uu","pp"};
 
@@ -150,55 +148,65 @@ int main (int argc, char** argv) {
     variables
   );
 
-  auto  phib = std::make_shared<dolfin::Function>(pnp_ns_problem.phib_space);
-  PhibExpression bdexpr(Eps);
-  phib->interpolate(bdexpr);
-  auto ub = std::make_shared<dolfin::Function>(pnp_ns_problem.ub_space);
-  VelExpression vexpr;
-  ub->interpolate(vexpr);
-
-
-  std::map<std::string, dolfin::Function> pnp_source_fns  = { {"phib", *phib.get()}, {"ub", *ub.get()}   };
-  std::map<std::string, dolfin::Function> emptymap = {};
-  pnp_ns_problem.set_coefficients(    emptymap,    pnp_source_fns  );
-
   //-------------------------
   // Print various solutions
   //-------------------------
-  dolfin::File solution_file0("./benchmarks/pnp_pb/output/cation_solution.pvd");
-  dolfin::File solution_file1("./benchmarks/pnp_pb/output/anion_solution.pvd");
-  dolfin::File solution_file2("./benchmarks/pnp_pb/output/potential_solution.pvd");
-  dolfin::File solution_file3("./benchmarks/pnp_pb/output/velocity_solution.pvd");
+  dolfin::File solution_file0("./benchmarks/physic_bench/output/cation_solution.pvd");
+  dolfin::File solution_file1("./benchmarks/physic_bench/output/anion_solution.pvd");
+  dolfin::File solution_file2("./benchmarks/physic_bench/output/potential_solution.pvd");
+  dolfin::File solution_file3("./benchmarks/physic_bench/output/velocity_solution.pvd");
 
   // initial guess for prescibed Dirichlet
   printf("Initialize Dirichlet BCs & Initial Guess\n");
   pnp_ns_problem.get_dofs();
   pnp_ns_problem.get_dofs_fasp({0,1,2},{3,4});
   pnp_ns_problem.init_BC (Lx,Ly,Lz);
+  pnp_ns_problem.init_measure (mesh,Lx,Ly,Lz);
 
-
-  auto initpnp = std::make_shared<dolfin::Constant>(1.0,-1.0,-1.0);
-  auto initvel = std::make_shared<dolfin::Constant>(0.0,0.0,-0.0);
-  auto initp = std::make_shared<dolfin::Constant>(0.0);
-
-  std::vector<dolfin::Function> solutionFn;
+  // From PNP
+  auto mesh_PNP = std::make_shared<dolfin::Mesh>("./benchmarks/physic_bench/output_PNP/accepted_mesh.xml.gz");
+  auto CG = std::make_shared<vector_linear_pnp_ns_forms::CoefficientSpace_cc>(mesh_PNP);
+  // auto RT = std::make_shared<vector_linear_pnp_ns_forms::CoefficientSpace_uu>(mesh_PNP);
+  // auto DG = std::make_shared<vector_linear_pnp_ns_forms::CoefficientSpace_pp>(mesh_PNP);
+  dolfin::Function pnp_solution(CG,"./benchmarks/physic_bench/output_PNP/accepted_solution.xml");
+  //
   dolfin::Function pnp_init(pnp_ns_problem._functions_space[0]);
   dolfin::Function u_init(pnp_ns_problem._functions_space[1]);
   dolfin::Function p_init(pnp_ns_problem._functions_space[2]);
-
-  pnp_init.interpolate(*initpnp);
+  // // VelExpression VelE;
+  // // auto sp_domain = std::make_shared<SphereSubDomain>();
+  // // dolfin::DirichletBC bc_sp1(pnp_ns_problem._functions_space[1],ub,sp_domain);
+  // auto initpnp = std::make_shared<dolfin::Constant>(-1.0,0.0,-2.0);
+  auto initvel = std::make_shared<dolfin::Constant>(0.0,0.0,0.0);
+  auto initp = std::make_shared<dolfin::Constant>(0.0);
+  pnp_init.interpolate(pnp_solution);
   u_init.interpolate(*initvel);
   p_init.interpolate(*initp);
-  auto sp_domain = std::make_shared<SphereSubDomain>();
-  std::vector<std::size_t> v1 = {0,1,2};
-  std::vector<double> v2 = {-Lx/2.0,-Ly/2.0,-Lz/2.0};
-  std::vector<double> v3 = { Lx/2.0,Ly/2.0,Lz/2.0};
-  auto BCdomain_xyz = std::make_shared<Dirichlet_Subdomain>(v1,v2,v3,1E-5);
-  dolfin::DirichletBC bc_sp1(pnp_ns_problem._functions_space[1],ub,sp_domain);
-  dolfin::DirichletBC bc_sp2(pnp_ns_problem._functions_space[1],ub,BCdomain_xyz);
-  bc_sp1.apply(*u_init.vector());
-  bc_sp2.apply(*u_init.vector());
 
+
+  // Previous case
+  // auto initpnp = std::make_shared<dolfin::Constant>(1.0,-1.0,-1.0);
+  // auto initvel = std::make_shared<dolfin::Constant>(0.0,0.0,-0.0);
+  // auto initp = std::make_shared<dolfin::Constant>(0.0);
+  //
+  // dolfin::Function pnp_init(pnp_ns_problem._functions_space[0]);
+  // dolfin::Function u_init(pnp_ns_problem._functions_space[1]);
+  // dolfin::Function p_init(pnp_ns_problem._functions_space[2]);
+  //
+  // pnp_init.interpolate(*initpnp);
+  // u_init.interpolate(*initvel);
+  // p_init.interpolate(*initp);
+  // auto sp_domain = std::make_shared<SphereSubDomain>();
+  // std::vector<std::size_t> v1 = {0,1,2};
+  // std::vector<double> v2 = {-Lx/2.0,-Ly/2.0,-Lz/2.0};
+  // std::vector<double> v3 = { Lx/2.0,Ly/2.0,Lz/2.0};
+  // auto BCdomain_xyz = std::make_shared<Dirichlet_Subdomain>(v1,v2,v3,1E-5);
+  // dolfin::DirichletBC bc_sp1(pnp_ns_problem._functions_space[1],ub,sp_domain);
+  // dolfin::DirichletBC bc_sp2(pnp_ns_problem._functions_space[1],ub,BCdomain_xyz);
+  // bc_sp1.apply(*u_init.vector());
+  // bc_sp2.apply(*u_init.vector());
+
+  std::vector<dolfin::Function> solutionFn;
   solutionFn.push_back(pnp_init);
   solutionFn.push_back(u_init);
   solutionFn.push_back(p_init);
@@ -206,9 +214,9 @@ int main (int argc, char** argv) {
 
   // CASE 2
   // std::vector<dolfin::Function> solutionFn2;
-  // dolfin::Function pnp_init2(pnp_ns_problem._functions_space[0],"./benchmarks/pnp_pb/DATA/pnp_solution.xml");
-  // dolfin::Function u_init2(pnp_ns_problem._functions_space[1],"./benchmarks/pnp_pb/DATA/velocity_solution.xml");
-  // dolfin::Function p_init2(pnp_ns_problem._functions_space[2],"./benchmarks/pnp_pb/DATA/pressure_solution.xml");
+  // dolfin::Function pnp_init2(pnp_ns_problem._functions_space[0],"./benchmarks/physic_bench/DATA/pnp_solution.xml");
+  // dolfin::Function u_init2(pnp_ns_problem._functions_space[1],"./benchmarks/physic_bench/DATA/velocity_solution.xml");
+  // dolfin::Function p_init2(pnp_ns_problem._functions_space[2],"./benchmarks/physic_bench/DATA/pressure_solution.xml");
   // solutionFn2.push_back(pnp_init2);
   // solutionFn2.push_back(u_init2);
   // solutionFn2.push_back(p_init2);
@@ -220,9 +228,9 @@ int main (int argc, char** argv) {
   solution_file3 << solutionFn[1];
   printf("\n");
 
-  dolfin::File xml_pnp("./benchmarks/pnp_pb/DATA/pnp_solution.xml");
-  dolfin::File xml_vel("./benchmarks/pnp_pb/DATA/velocity_solution.xml");
-  dolfin::File xml_pressure("./benchmarks/pnp_pb/DATA/pressure_solution.xml");
+  dolfin::File xml_pnp("./benchmarks/physic_bench/DATA/pnp_solution.xml");
+  dolfin::File xml_vel("./benchmarks/physic_bench/DATA/velocity_solution.xml");
+  dolfin::File xml_pressure("./benchmarks/physic_bench/DATA/pressure_solution.xml");
 
 
   //------------------------
@@ -270,9 +278,9 @@ int main (int argc, char** argv) {
     solution_file3 << solutionFn[1];
     printf("\n");
 
-    xml_pnp<< solutionFn[0];
-    xml_vel << solutionFn[1];
-    xml_pressure<< solutionFn[2];
+    // xml_pnp<< solutionFn[0];
+    // xml_vel << solutionFn[1];
+    // xml_pressure<< solutionFn[2];
 
   }
 
@@ -284,46 +292,13 @@ int main (int argc, char** argv) {
     newton.print_status();
   }
 
-  dolfin::File xml_mesh("./benchmarks/pnp_pb/output/mesh.xml");
-  dolfin::File xml_file0("./benchmarks/pnp_pb/output/pnp_solution.xml");
-  dolfin::File xml_file1("./benchmarks/pnp_pb/output/velocity_solution.xml");
+  dolfin::File xml_mesh("./benchmarks/physic_bench/output/mesh.xml");
+  dolfin::File xml_file0("./benchmarks/physic_bench/output/pnp_solution.xml");
+  dolfin::File xml_file1("./benchmarks/physic_bench/output/velocity_solution.xml");
   xml_mesh << *mesh;
   xml_file0 << solutionFn[0];
   xml_file1 << solutionFn[1];
 
-  ExactExpression ExExp(Eps);
-  auto ExSol = std::make_shared<dolfin::Function>(solutionFn[0]);
-  auto Sol = std::make_shared<dolfin::Function>(solutionFn[0]);
-  auto ExSolU = std::make_shared<dolfin::Function>(solutionFn[1]);
-  auto SolU = std::make_shared<dolfin::Function>(solutionFn[1]);
-  ExSol->interpolate(ExExp);
-  ExSolU->interpolate(vexpr);
-  Error Err(ExSol);
-  Error ErrU(ExSol);
-  double L2Err = std::pow(Err.compute_l2_error(Sol),2)+std::pow(ErrU.compute_l2_error(SolU),2);
-  double H1Err = std::pow(Err.compute_semi_h1_error(Sol),2)+std::pow(ErrU.compute_semi_h1_error(SolU),2);
-
-  norm_pnp_ns::Functional Fc(mesh);
-  auto Re = std::make_shared<dolfin::Constant>(0.01);
-  auto mu = std::make_shared<dolfin::Constant>(1.0);
-  auto perm = std::make_shared<dolfin::Constant>(Eps);
-  auto diff = std::make_shared<dolfin::Constant>(1.0);
-  auto val = std::make_shared<dolfin::Constant>(1.0);
-  Fc.uu = Sol;
-  Fc.vel = SolU;
-  Fc.Re = Re;
-  Fc.mu = mu;
-  Fc.permittivity = perm;
-  Fc.diffusivity = diff;
-  Fc.valency = val;
-  Fc.phib = phib;
-  Fc.ub = ub;
-  double ErrFlux = assemble(Fc);
-
-  printf("The L2 Errors are %f %f\n",Err.compute_l2_error(Sol),ErrU.compute_l2_error(SolU));
-  printf("The H1 Errors are %f %f\n",Err.compute_semi_h1_error(Sol),ErrU.compute_semi_h1_error(SolU));
-  printf("The L2/H1 Errors are %f %f for mesh size %f\n",L2Err,H1Err,mesh->hmax()); fflush(stdout);
-  printf("%f &  %f & %f & %f \\\\ \n",L2Err,H1Err,ErrFlux,mesh->hmax()); fflush(stdout);
 
   printf("Solver exiting\n"); fflush(stdout);
   return 0;

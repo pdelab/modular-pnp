@@ -62,7 +62,7 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   };
   std::map<std::string, std::vector<double>> pnp_sources = {
     {"fixed_charge", {0.0}},
-    {"g", {100.0*Eps}}
+    {"g", {10.0*Eps}}
   };
 
   // build problem

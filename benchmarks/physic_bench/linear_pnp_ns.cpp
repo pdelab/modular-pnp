@@ -46,16 +46,10 @@ Linear_PNP_NS::Linear_PNP_NS (
 ) {
 
 
-  // g_space.reset(
-  //   new vector_linear_pnp_ns_forms::CoefficientSpace_penalty1(mesh)
-  // );
+  g_space.reset(
+    new vector_linear_pnp_ns_forms::CoefficientSpace_penalty1(mesh)
+  );
 
-  phib_space.reset(
-    new vector_linear_pnp_ns_forms::CoefficientSpace_phib(mesh)
-  );
-  ub_space.reset(
-    new vector_linear_pnp_ns_forms::CoefficientSpace_ub(mesh)
-  );
 
 
   _itsolver = itsolver;
@@ -298,18 +292,25 @@ void Linear_PNP_NS::free_fasp () {
 
 //--------------------------------------
 void Linear_PNP_NS::init_BC (double Lx,double Ly,double Lz) {
+
   std::vector<std::size_t> v1 = {0,1,2};
-  std::vector<double> v2 = {-Lx/2.0,-Ly/2.0,-Lz/2.0};
-  std::vector<double> v3 = { Lx/2.0,Ly/2.0,Lz/2.0};
+  std::vector<double> v2 = {-Lx/3.0,-Ly/2.0,-Lz/2.0};
+  std::vector<double> v3 = {Lx/2.0,Ly/2.0,Lz/2.0};
   auto BCdomain_xyz = std::make_shared<Dirichlet_Subdomain>(v1,v2,v3,1E-5);
+
+
+  std::vector<std::size_t> v1x = {0};
+  std::vector<double> v2x = {-Lx/2.0};
+  std::vector<double> v3x = {Lx/2.0};
+  auto BCdomain_x = std::make_shared<Dirichlet_Subdomain>(v1x,v2x,v3x,1E-5);
   auto sp_domain = std::make_shared<SphereSubDomain>();
 
   auto zero=std::make_shared<dolfin::Constant>(0.0);
   auto zero_vec=std::make_shared<dolfin::Constant>(0.0, 0.0, 0.0);
 
-  auto BC1 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(0),zero,sp_domain);
-  auto BC2 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(1),zero,sp_domain);
-  auto BC3 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(2),zero,sp_domain);
+  auto BC1 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(0),zero,BCdomain_x);
+  auto BC2 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(1),zero,BCdomain_x);
+  auto BC3 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(2),zero,BCdomain_x);
   auto BC4 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(3),zero_vec,sp_domain);
   // auto BC4b = std::make_shared<dolfin::DirichletBC>(_function_space->sub(3),zero_vec,BCdomain_xyz);
   _dirichletBC.push_back(BC1);
@@ -326,5 +327,19 @@ void Linear_PNP_NS::init_BC (double Lx,double Ly,double Lz) {
   sub_domains->set_value(0, 1);
   auto BC5 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(4),zero,sub_domains,1);
   _dirichletBC.push_back(BC5);
+}
+//--------------------------------------
+
+//--------------------------------------
+void Linear_PNP_NS::init_measure (std::shared_ptr<const dolfin::Mesh> mesh,
+  double Lx, double Ly, double Lz) {
+  auto markers = std::make_shared<dolfin::FacetFunction<std::size_t>>(mesh, 1);
+  markers->set_all(0);
+
+  // Spheres
+  SphereSubDomain sp_domain;
+  sp_domain.mark(*markers,1);
+
+  _linear_form->set_exterior_facet_domains(markers);
 }
 //--------------------------------------

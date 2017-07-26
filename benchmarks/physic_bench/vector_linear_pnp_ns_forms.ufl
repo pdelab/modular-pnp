@@ -36,8 +36,7 @@ Re  = Constant(tetrahedron)
 
 ##  Coefficients
 mu  = Constant(tetrahedron)
-phib=Coefficient(CG)
-ub = Coefficient(Vit)
+g = Coefficient(CG)
 
 ##  DG-terms
 penalty1 = Constant(tetrahedron)
@@ -79,8 +78,4 @@ L   = - ( diffusivity0*exp(cc[0])* (inner(grad(cc[0]),grad(cat)) + valency0*inne
     - ( 2.0*mu*(penalty1)* inner( sym(outer(uu('+'),n_vec('+')) + outer(uu('-'),n_vec('-'))), avg(sym(grad(v))) ) )*dS \
     - ( 2.0*mu*(penalty2/h_avg)* inner( jump(uu),jump(v) ) )*dS \
     - ( (valency0*exp(cc[0])+valency1*exp(cc[1]))*inner(grad(cc[2]),v) )*dx \
-    + permittivity*inner(grad(phib),grad(phi))*dx -(exp(-phib)-exp(phib))*phi*dx \
-    - ( exp(-phib)*(inner(ub,grad(cat))) )*dx \
-    - ( exp(phib)*(inner(ub,grad(an)))  )*dx \
-    + Re*inner(grad(ub)*ub,v)*dx \
-    + ( 2.0*mu* inner( sym(grad(ub)), sym(grad(v)) ) )*dx
+    + g*phi*ds(1)
