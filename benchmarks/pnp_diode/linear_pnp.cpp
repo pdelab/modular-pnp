@@ -159,13 +159,20 @@ dolfin::EigenVector Linear_PNP::fasp_test_solver (
   dolfin::Function solution(Linear_PNP::get_solution());
 
   printf("Solving linear system using FASP solver...\n"); fflush(stdout);
-  INT status = fasp_solver_dbsr_krylov_amg (
+  INT status = fasp_solver_dbsr_krylov_ilu (
     &_fasp_bsr_matrix,
     &_fasp_vector,
     &_fasp_soln,
     &_itsolver,
-    &_amg
+    &_ilu
   );
+  // INT status = fasp_solver_dbsr_krylov_amg (
+  //   &_fasp_bsr_matrix,
+  //   &_fasp_vector,
+  //   &_fasp_soln,
+  //   &_itsolver,
+  //   &_amg
+  // );
 
   if (status < 0) {
     printf("\n### WARNING: FASP solver failed! Exit status = %d.\n", status);

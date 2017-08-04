@@ -8526,21 +8526,27 @@ public:
     {
       A[r] = 0.0;
     } // end loop over 'r'
-    // Number of operations to compute geometry constants: 37.
-    double G[7];
+    // Number of operations to compute geometry constants: 79.
+    double G[13];
     G[0] = det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
     G[1] = det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
     G[2] = det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
     G[3] = det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
     G[4] = det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[5] = det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[6] =  - det*w[2][0];
+    G[5] = det*w[2][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[6] = det*w[2][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[7] = det*w[2][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[8] = det*w[2][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[9] = det*w[2][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[10] = det*w[2][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[11] = det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[12] =  - det*w[2][0];
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
     
     // Loop quadrature points for integral.
-    // Number of operations to compute element tensor for following IP loop = 27168
+    // Number of operations to compute element tensor for following IP loop = 27264
     for (unsigned int ip = 0; ip < 24; ip++)
     {
       
@@ -8602,10 +8608,10 @@ public:
         F13 += FE0[ip][r]*w[0][nzc0[r]];
       } // end loop over 'r'
       double C[2];
-      // Compute conditional, operations: 2.
-      C[0] = ((F1 > -50.0)) ? std::exp(F1) : 0.0;
-      // Compute conditional, operations: 2.
-      C[1] = ((F3 > -50.0)) ? std::exp(F3) : 0.0;
+      // Compute conditional, operations: 4.
+      C[0] = ((F1 > -5.0)) ? std::exp(F1) : 0.00673794699908547/(-4.0 - F1);
+      // Compute conditional, operations: 4.
+      C[1] = ((F3 > -5.0)) ? std::exp(F3) : 0.00673794699908547/(-4.0 - F3);
       
       // Number of operations to compute ip constants: 224
       double I[38];
@@ -8643,22 +8649,22 @@ public:
       I[10] = F4*G[5]*W24[ip];
       
       // Number of operations: 2
-      I[11] = F4*G[2]*W24[ip];
+      I[11] = F4*G[6]*W24[ip];
       
       // Number of operations: 2
-      I[12] = F4*G[4]*W24[ip];
+      I[12] = F4*G[7]*W24[ip];
       
       // Number of operations: 2
-      I[13] = F4*G[0]*W24[ip];
+      I[13] = F4*G[8]*W24[ip];
       
       // Number of operations: 2
-      I[14] = F4*G[1]*W24[ip];
+      I[14] = F4*G[9]*W24[ip];
       
       // Number of operations: 2
-      I[15] = F4*G[3]*W24[ip];
+      I[15] = F4*G[10]*W24[ip];
       
       // Number of operations: 4
-      I[16] = C[0]*F0*F5*G[5]*W24[ip];
+      I[16] = C[0]*F0*F5*G[11]*W24[ip];
       
       // Number of operations: 4
       I[17] = C[0]*F0*F5*G[2]*W24[ip];
@@ -8667,7 +8673,7 @@ public:
       I[18] = C[0]*F0*F5*G[4]*W24[ip];
       
       // Number of operations: 3
-      I[19] = C[0]*F5*G[5]*W24[ip];
+      I[19] = C[0]*F5*G[11]*W24[ip];
       
       // Number of operations: 3
       I[20] = C[0]*F5*G[2]*W24[ip];
@@ -8694,10 +8700,10 @@ public:
       I[27] = C[0]*F5*G[3]*W24[ip];
       
       // Number of operations: 4
-      I[28] = C[1]*F2*F6*G[5]*W24[ip];
+      I[28] = C[1]*F2*F6*G[11]*W24[ip];
       
       // Number of operations: 3
-      I[29] = C[1]*F6*G[5]*W24[ip];
+      I[29] = C[1]*F6*G[11]*W24[ip];
       
       // Number of operations: 20
       I[30] = C[1]*F6*W24[ip]*(G[0]*(F18 + F11*F2 + F13*F21) + G[1]*(F17 + F10*F2 + F13*F20) + G[2]*(F19 + F12*F2 + F13*F22));
@@ -8706,7 +8712,7 @@ public:
       I[31] = C[1]*F6*W24[ip]*(G[1]*(F18 + F11*F2 + F13*F21) + G[3]*(F17 + F10*F2 + F13*F20) + G[4]*(F19 + F12*F2 + F13*F22));
       
       // Number of operations: 20
-      I[32] = C[0]*F5*W24[ip]*(G[2]*(F8 + F0*F11 + F13*F15) + G[4]*(F7 + F0*F10 + F13*F14) + G[5]*(F9 + F0*F12 + F13*F16));
+      I[32] = C[0]*F5*W24[ip]*(G[11]*(F9 + F0*F12 + F13*F16) + G[2]*(F8 + F0*F11 + F13*F15) + G[4]*(F7 + F0*F10 + F13*F14));
       
       // Number of operations: 20
       I[33] = C[0]*F5*W24[ip]*(G[0]*(F8 + F0*F11 + F13*F15) + G[1]*(F7 + F0*F10 + F13*F14) + G[2]*(F9 + F0*F12 + F13*F16));
@@ -8715,13 +8721,13 @@ public:
       I[34] = C[0]*F5*W24[ip]*(G[1]*(F8 + F0*F11 + F13*F15) + G[3]*(F7 + F0*F10 + F13*F14) + G[4]*(F9 + F0*F12 + F13*F16));
       
       // Number of operations: 20
-      I[35] = C[1]*F6*W24[ip]*(G[2]*(F18 + F11*F2 + F13*F21) + G[4]*(F17 + F10*F2 + F13*F20) + G[5]*(F19 + F12*F2 + F13*F22));
+      I[35] = C[1]*F6*W24[ip]*(G[11]*(F19 + F12*F2 + F13*F22) + G[2]*(F18 + F11*F2 + F13*F21) + G[4]*(F17 + F10*F2 + F13*F20));
       
       // Number of operations: 4
-      I[36] = F0*G[6]*W24[ip]*std::exp(F1);
+      I[36] = F0*G[12]*W24[ip]*std::exp(F1);
       
       // Number of operations: 4
-      I[37] = F2*G[6]*W24[ip]*std::exp(F3);
+      I[37] = F2*G[12]*W24[ip]*std::exp(F3);
       
       
       // Number of operations for primary indices: 540
@@ -8982,15 +8988,21 @@ public:
     {
       A[r] = 0.0;
     } // end loop over 'r'
-    // Number of operations to compute geometry constants: 37.
-    double G[7];
+    // Number of operations to compute geometry constants: 79.
+    double G[13];
     G[0] =  - det*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
     G[1] =  - det*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
     G[2] =  - det*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
     G[3] =  - det*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
     G[4] =  - det*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[5] =  - det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[6] = det*w[2][0];
+    G[5] =  - det*w[2][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[6] =  - det*w[2][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[7] =  - det*w[2][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[8] =  - det*w[2][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[9] =  - det*w[2][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[10] =  - det*w[2][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[11] =  - det*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[12] = det*w[2][0];
     
     // Compute element tensor using UFL quadrature representation
     // Optimisations: ('eliminate zeros', True), ('ignore ones', True), ('ignore zero tables', True), ('optimisation', 'simplify_expressions'), ('remove zero terms', True)
@@ -9073,16 +9085,16 @@ public:
       I[1] = F19*W15[ip]*std::exp(F6)*(G[1]*(F21 + F15*F24 + F5*F9) + G[3]*(F22 + F10*F5 + F15*F25) + G[4]*(F20 + F15*F23 + F5*F8));
       
       // Number of operations: 7
-      I[2] = F7*W15[ip]*(F10*G[5] + F8*G[3] + F9*G[0]);
+      I[2] = F7*W15[ip]*(F10*G[5] + F8*G[6] + F9*G[7]);
       
       // Number of operations: 7
-      I[3] = F7*W15[ip]*(F10*G[0] + F8*G[1] + F9*G[2]);
+      I[3] = F7*W15[ip]*(F10*G[7] + F8*G[8] + F9*G[9]);
       
       // Number of operations: 7
-      I[4] = F7*W15[ip]*(F10*G[3] + F8*G[4] + F9*G[1]);
+      I[4] = F7*W15[ip]*(F10*G[6] + F8*G[10] + F9*G[8]);
       
       // Number of operations: 21
-      I[5] = F11*W15[ip]*std::exp(F4)*(G[0]*(F13 + F15*F17 + F3*F9) + G[3]*(F12 + F15*F16 + F3*F8) + G[5]*(F14 + F10*F3 + F15*F18));
+      I[5] = F11*W15[ip]*std::exp(F4)*(G[0]*(F13 + F15*F17 + F3*F9) + G[11]*(F14 + F10*F3 + F15*F18) + G[3]*(F12 + F15*F16 + F3*F8));
       
       // Number of operations: 21
       I[6] = F11*W15[ip]*std::exp(F4)*(G[0]*(F14 + F10*F3 + F15*F18) + G[1]*(F12 + F15*F16 + F3*F8) + G[2]*(F13 + F15*F17 + F3*F9));
@@ -9091,10 +9103,10 @@ public:
       I[7] = F11*W15[ip]*std::exp(F4)*(G[1]*(F13 + F15*F17 + F3*F9) + G[3]*(F14 + F10*F3 + F15*F18) + G[4]*(F12 + F15*F16 + F3*F8));
       
       // Number of operations: 21
-      I[8] = F19*W15[ip]*std::exp(F6)*(G[0]*(F21 + F15*F24 + F5*F9) + G[3]*(F20 + F15*F23 + F5*F8) + G[5]*(F22 + F10*F5 + F15*F25));
+      I[8] = F19*W15[ip]*std::exp(F6)*(G[0]*(F21 + F15*F24 + F5*F9) + G[11]*(F22 + F10*F5 + F15*F25) + G[3]*(F20 + F15*F23 + F5*F8));
       
       // Number of operations: 8
-      I[9] = G[6]*W15[ip]*(F2 + F3*std::exp(F4) + F5*std::exp(F6));
+      I[9] = G[12]*W15[ip]*(F2 + F3*std::exp(F4) + F5*std::exp(F6));
       
       // Number of operations: 2
       I[10] = F0*W15[ip]*det;
@@ -9158,7 +9170,7 @@ public:
 
   const char * signature() const final override
   {
-    return "ef2957ed3d92acb9f803bc941f81ffca108c062102ab99f9e425200f6b15a85e33161cf660e9c71be54cede053fa656ad4ddeae3b13099d83e9c8a14ae8dfd88";
+    return "6c7b89602f5281918bfd5b12efb6a5a855e3b5fc6f49b502f73872216f47eaabd477da02d6f476d166768492ae97dc09cab99628cffad9d986a082680c39d2e9";
   }
 
   std::size_t rank() const final override
@@ -9459,7 +9471,7 @@ public:
 
   const char * signature() const final override
   {
-    return "e75e84e94ac1c854d4e5f716ece184d6cb7095cbdc4a0278ae906d44fe4b98b2558e6f6730b11e48ccb3bc183ffbbaa09f1f467d7759f1c52be695ea7a4f2705";
+    return "306847be3feec087ae99ca86070a744efda5f90a5d7a759fd413ea2b7ae6b0f5974ebd521f2be62eb70e092c276e0a62dde5e84d635bc9e75c72fa4190e97e6b";
   }
 
   std::size_t rank() const final override

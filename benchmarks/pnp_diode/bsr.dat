@@ -10,7 +10,7 @@ workdir = ./data/  % work directory, no more than 128 characters
 % problem, solver, and output type             %
 %----------------------------------------------%
 problem_num              = 10     % test problem number 
-print_level              = 10     % how much information to print out 
+print_level              = 4     % how much information to print out 
 output_type              = 0      % 0 to screen | 1 to file
 solver_type              = 6      % 1 CG | 2 BiCGstab | 3 MinRes | 4 GMRes |
                                   % 5 vGMRes | 6 vFGMRes | 7 GCG |
@@ -22,8 +22,8 @@ solver_type              = 6      % 1 CG | 2 BiCGstab | 3 MinRes | 4 GMRes |
 %----------------------------------------------%
 
 precond_type             = 4      % 0 None | 1 Diag | 2 AMG | 3 FMG | 4 ILU | 5 Schwarz
-itsolver_tol             = 1e-6   % solver tolerance
-itsolver_maxit           = 500    % maximal iteration number 
+itsolver_tol             = 1e-5   % solver tolerance
+itsolver_maxit           = 300    % maximal iteration number 
 stop_type                = 1      % 1 ||r||/||b|| | 2 ||r||_B/||b||_B | 3 ||r||/||x||  
 itsolver_restart         = 30     % restart number for GMRES
 
@@ -31,8 +31,8 @@ itsolver_restart         = 30     % restart number for GMRES
 % parameters for ILU preconditioners           %
 %----------------------------------------------%
 
-ILU_type                 = 2      % 1 ILUk | 2 ILUt | 3 ILUtp 
-ILU_lfil                 = 2      % level of fill-in for ILUk
+ILU_type                 = 3      % 1 ILUk | 2 ILUt | 3 ILUtp 
+ILU_lfil                 = 1      % level of fill-in for ILUk
 ILU_droptol              = 0.01   % ILU drop tolerance
 ILU_permtol              = 0.001  % permutation toleration for ILUtp
 ILU_relax                = 0.9    % add dropped entries to diagonal with relaxation
