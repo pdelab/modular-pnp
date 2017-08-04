@@ -35,13 +35,13 @@ int main (int argc, char** argv) {
   dolfin::parameters["allow_extrapolation"] = true;
 
   // Deleting the folders:
-  boost::filesystem::remove_all("./benchmarks/physic_bench/output");
+  boost::filesystem::remove_all("./benchmarks/physic_bench/output_NS");
 
   // read in parameters
   printf("Reading parameters from files...\n");
   std::shared_ptr<dolfin::Mesh> mesh;
   mesh.reset(new dolfin::Mesh);
-  *mesh = dolfin::Mesh("./benchmarks/physic_bench/mesh2.xml.gz");
+  *mesh = dolfin::Mesh("./benchmarks/physic_bench/mesh3.xml.gz");
   double Lx=2.0,Ly=2.0,Lz=2.0;
 
 
@@ -114,12 +114,12 @@ int main (int argc, char** argv) {
 
 
   // set PDE coefficients
-  double Eps = 1E-3;
+  double Eps = .019044;
   printf("Initialize coefficients\n");
   std::map<std::string, std::vector<double>> coefficients = {
     {"permittivity", {Eps}},
     {"diffusivity0", {1.0}},
-    {"diffusivity1", {1.0}},
+    {"diffusivity1", {1.334/2.032}},
     {"valency0", {1.0}},
     {"valency1", {-1.0}},
     {"mu", {1.0}},
@@ -151,10 +151,10 @@ int main (int argc, char** argv) {
   //-------------------------
   // Print various solutions
   //-------------------------
-  dolfin::File solution_file0("./benchmarks/physic_bench/output/cation_solution.pvd");
-  dolfin::File solution_file1("./benchmarks/physic_bench/output/anion_solution.pvd");
-  dolfin::File solution_file2("./benchmarks/physic_bench/output/potential_solution.pvd");
-  dolfin::File solution_file3("./benchmarks/physic_bench/output/velocity_solution.pvd");
+  dolfin::File solution_file0("./benchmarks/physic_bench/output_NS/potential_solution.pvd");
+  dolfin::File solution_file1("./benchmarks/physic_bench/output_NS/cation_solution.pvd");
+  dolfin::File solution_file2("./benchmarks/physic_bench/output_NS/anion_solution.pvd");
+  dolfin::File solution_file3("./benchmarks/physic_bench/output_NS/velocity_solution.pvd");
 
   // initial guess for prescibed Dirichlet
   printf("Initialize Dirichlet BCs & Initial Guess\n");
@@ -164,11 +164,11 @@ int main (int argc, char** argv) {
   pnp_ns_problem.init_measure (mesh,Lx,Ly,Lz);
 
   // From PNP
-  auto mesh_PNP = std::make_shared<dolfin::Mesh>("./benchmarks/physic_bench/output_PNP/accepted_mesh.xml.gz");
+  auto mesh_PNP = std::make_shared<dolfin::Mesh>("./benchmarks/physic_bench/output_PNP_2.0/accepted_mesh.xml.gz");
   auto CG = std::make_shared<vector_linear_pnp_ns_forms::CoefficientSpace_cc>(mesh_PNP);
   // auto RT = std::make_shared<vector_linear_pnp_ns_forms::CoefficientSpace_uu>(mesh_PNP);
   // auto DG = std::make_shared<vector_linear_pnp_ns_forms::CoefficientSpace_pp>(mesh_PNP);
-  dolfin::Function pnp_solution(CG,"./benchmarks/physic_bench/output_PNP/accepted_solution.xml");
+  dolfin::Function pnp_solution(CG,"./benchmarks/physic_bench/output_PNP_2.0/accepted_solution.xml");
   //
   dolfin::Function pnp_init(pnp_ns_problem._functions_space[0]);
   dolfin::Function u_init(pnp_ns_problem._functions_space[1]);
@@ -240,8 +240,8 @@ int main (int argc, char** argv) {
 
   // set nonlinear solver parameters
   const std::size_t max_newton = 20;
-  const double max_residual_tol = 1.0e-10;
-  const double relative_residual_tol = 1.0e-10;
+  const double max_residual_tol = 1.0e-8;
+  const double relative_residual_tol = 1.0e-8;
   const double initial_residual = pnp_ns_problem.compute_residual("l2");
   Newton_Status newton(
     max_newton,
@@ -278,9 +278,9 @@ int main (int argc, char** argv) {
     solution_file3 << solutionFn[1];
     printf("\n");
 
-    // xml_pnp<< solutionFn[0];
-    // xml_vel << solutionFn[1];
-    // xml_pressure<< solutionFn[2];
+    xml_pnp << solutionFn[0];
+    xml_vel << solutionFn[1];
+    xml_pressure<< solutionFn[2];
 
   }
 
@@ -292,9 +292,9 @@ int main (int argc, char** argv) {
     newton.print_status();
   }
 
-  dolfin::File xml_mesh("./benchmarks/physic_bench/output/mesh.xml");
-  dolfin::File xml_file0("./benchmarks/physic_bench/output/pnp_solution.xml");
-  dolfin::File xml_file1("./benchmarks/physic_bench/output/velocity_solution.xml");
+  dolfin::File xml_mesh("./benchmarks/physic_bench/output_NS/mesh.xml");
+  dolfin::File xml_file0("./benchmarks/physic_bench/output_NS/pnp_solution.xml");
+  dolfin::File xml_file1("./benchmarks/physic_bench/output_NS/velocity_solution.xml");
   xml_mesh << *mesh;
   xml_file0 << solutionFn[0];
   xml_file1 << solutionFn[1];

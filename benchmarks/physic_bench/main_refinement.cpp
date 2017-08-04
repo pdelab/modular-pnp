@@ -45,7 +45,7 @@ int main (int argc, char** argv) {
   dolfin::parameters["allow_extrapolation"] = true;
 
   // Deleting the folders:
-  boost::filesystem::remove_all("./benchmarks/physic_bench/output");
+  boost::filesystem::remove_all("./benchmarks/physic_bench/output_PNP");
 
   // read in parameters
   printf("Reading parameters from files...\n");
@@ -67,19 +67,19 @@ int main (int argc, char** argv) {
   //-------------------------``
   // Mesh Adaptivity Loop
   //-------------------------
-  dolfin::File accepted_solution_file("./benchmarks/physic_bench/output/accepted_solution.pvd");
-  dolfin::File accepted_solution_xml("./benchmarks/physic_bench/output/accepted_solution.xml");
-  dolfin::File mesh_file("./benchmarks/physic_bench/output/accepted_mesh.pvd");
-  dolfin::File mesh_xml("./benchmarks/physic_bench/output/accepted_mesh.xml.gz");
-  std::string output_path("./benchmarks/physic_bench/output/");
+  dolfin::File accepted_solution_file("./benchmarks/physic_bench/output_PNP/accepted_solution.pvd");
+  dolfin::File accepted_solution_xml("./benchmarks/physic_bench/output_PNP/accepted_solution.xml");
+  dolfin::File mesh_file("./benchmarks/physic_bench/output_PNP/accepted_mesh.pvd");
+  dolfin::File mesh_xml("./benchmarks/physic_bench/output_PNP/accepted_mesh.xml.gz");
+  std::string output_path("./benchmarks/physic_bench/output_PNP/");
 
-  dolfin::File computed_solution_file("./benchmarks/physic_bench/output/computed_solution.pvd");
-  dolfin::File adapted_solution_file("./benchmarks/physic_bench/output/adapted_solution.pvd");
+  dolfin::File computed_solution_file("./benchmarks/physic_bench/output_PNP/computed_solution.pvd");
+  dolfin::File adapted_solution_file("./benchmarks/physic_bench/output_PNP/adapted_solution.pvd");
 
 
   // mesh adaptivity
   const double growth_factor = 3.0;
-  const double entropy_error_per_cell = 1.0e-3;
+  const double entropy_error_per_cell = 1.0e-4;
   const std::size_t max_refine_depth = 3;
   const std::size_t max_elements = 200000;
 
@@ -99,14 +99,14 @@ int main (int argc, char** argv) {
     std::shared_ptr<double> initial_residual_ptr = std::make_shared<double>(-1.0);
 
     // construct initial guess
-    Linear_Function PNP(0,-Lx/2.0,Lx/2.0,{-0.01,0.0,0.0},{0.01,0.0,0.0});
+    Linear_Function PNP(0,-Lx/2.0,Lx/2.0,{-5.0,0.0,0.0},{5.0,0.0,0.0});
     // Linear_Function PNP(0,-Lx/2.0,Lx/2.0,{-1.0,0.0,-2.30258509299},{1.0,-2.30258509299,0.0});
     auto adaptive_solution = std::make_shared<dolfin::Function>(
       std::make_shared<vector_linear_pnp_forms::FunctionSpace>(mesh_adapt.get_mesh())
     );
     adaptive_solution->interpolate(PNP);
 
-    dolfin::File initial_guess_file("./benchmarks/physic_bench/output/initial_guess.pvd");
+    dolfin::File initial_guess_file("./benchmarks/physic_bench/output_PNP/initial_guess.pvd");
     while (mesh_adapt.needs_to_solve) {
       auto mesh = mesh_adapt.get_mesh();
 
@@ -141,7 +141,7 @@ int main (int argc, char** argv) {
       mesh_adapt.max_elements = (std::size_t) std::floor(growth_factor * mesh->num_cells());
       mesh_adapt.multilevel_refinement(diffusivity, entropy_potential, log_densities);
       adaptive_solution = adapt( *computed_solution, mesh_adapt.get_mesh() );
-      adaptive_solution->interpolate(PNP);
+      // adaptive_solution->interpolate(PNP);
 
      adapted_solution_file << *adaptive_solution;
      computed_solution_file << *computed_solution;
@@ -172,7 +172,7 @@ std::vector<std::shared_ptr<const dolfin::Function>> get_diode_diffusivity(
 ) {
   // get analytic diffusivity
   dolfin::Function diffusivity(function_space);
-  dolfin::Constant ones(0.0, 1.0, 1.0);
+  dolfin::Constant ones(0.0, 1.0, 1.334/2.032);
   diffusivity.interpolate(ones);
 
   // transfer to vector of functions

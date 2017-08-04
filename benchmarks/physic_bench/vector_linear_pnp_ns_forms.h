@@ -16433,10 +16433,10 @@ public:
     {0.0665501535736643, 0.433449846426336, 0.433449846426336, 0.0665501535736643}};
     
     // Array of non-zero columns
-    static const unsigned int nzc0[4] = {0, 1, 2, 3};
+    static const unsigned int nzc4[4] = {4, 5, 6, 7};
     
     // Array of non-zero columns
-    static const unsigned int nzc4[4] = {4, 5, 6, 7};
+    static const unsigned int nzc8[4] = {8, 9, 10, 11};
     
     // Array of non-zero columns
     static const unsigned int nzc12[4] = {0, 1, 2, 3};
@@ -16605,36 +16605,36 @@ public:
     } // end loop over 'r'
     // Number of operations to compute geometry constants: 1317.
     double G[71];
-    G[0] = det*w[3][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[1] = det*w[3][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[2] = det*w[3][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[3] = det*w[3][0]*w[4][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[4] = det*w[3][0]*w[4][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[5] = det*w[3][0]*w[4][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[6] = det*w[3][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[7] = det*w[3][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[8] = det*w[3][0]*w[4][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[9] = det*w[3][0]*w[4][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[10] = det*w[3][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[11] = det*w[3][0]*w[4][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[12] = det*w[5][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[13] = det*w[5][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[14] = det*w[5][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[15] = det*w[5][0]*w[6][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[16] = det*w[5][0]*w[6][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[17] = det*w[5][0]*w[6][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[18] = det*w[5][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[19] = det*w[5][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[20] = det*w[5][0]*w[6][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[21] = det*w[5][0]*w[6][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[22] = det*w[5][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[23] = det*w[5][0]*w[6][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[24] = det*w[2][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[25] = det*w[2][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[26] = det*w[2][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[27] = det*w[2][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[28] = det*w[2][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[29] = det*w[2][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[0] = det*w[2][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[1] = det*w[2][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[2] = det*w[2][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[3] = det*w[2][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[4] = det*w[2][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[5] = det*w[2][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[6] = det*w[3][0]*w[4][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[7] = det*w[3][0]*w[4][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[8] = det*w[3][0]*w[4][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[9] = det*w[3][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[10] = det*w[3][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[11] = det*w[3][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[12] = det*w[3][0]*w[4][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[13] = det*w[3][0]*w[4][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[14] = det*w[3][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[15] = det*w[3][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[16] = det*w[3][0]*w[4][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[17] = det*w[3][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[18] = det*w[5][0]*w[6][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[19] = det*w[5][0]*w[6][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[20] = det*w[5][0]*w[6][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[21] = det*w[5][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[22] = det*w[5][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[23] = det*w[5][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[24] = det*w[5][0]*w[6][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[25] = det*w[5][0]*w[6][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[26] = det*w[5][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[27] = det*w[5][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[28] = det*w[5][0]*w[6][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[29] = det*w[5][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
     G[30] =  - det*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
     G[31] =  - det*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
     G[32] =  - det*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
@@ -16705,22 +16705,22 @@ public:
       // Total number of operations to compute function values = 36
       for (unsigned int r = 0; r < 2; r++)
       {
-        F5 += FE0_C0_D001[ip][r]*w[0][nzc3[r]];
-        F6 += FE0_C0_D001[ip][r]*w[0][nzc2[r]];
-        F7 += FE0_C0_D001[ip][r]*w[0][nzc1[r]];
-        F8 += FE0_C0_D001[ip][r]*w[0][nzc11[r]];
-        F9 += FE0_C0_D001[ip][r]*w[0][nzc10[r]];
-        F10 += FE0_C0_D001[ip][r]*w[0][nzc9[r]];
-        F11 += FE0_C0_D001[ip][r]*w[0][nzc7[r]];
-        F12 += FE0_C0_D001[ip][r]*w[0][nzc6[r]];
-        F13 += FE0_C0_D001[ip][r]*w[0][nzc5[r]];
+        F5 += FE0_C0_D001[ip][r]*w[0][nzc7[r]];
+        F6 += FE0_C0_D001[ip][r]*w[0][nzc6[r]];
+        F7 += FE0_C0_D001[ip][r]*w[0][nzc5[r]];
+        F8 += FE0_C0_D001[ip][r]*w[0][nzc3[r]];
+        F9 += FE0_C0_D001[ip][r]*w[0][nzc2[r]];
+        F10 += FE0_C0_D001[ip][r]*w[0][nzc1[r]];
+        F11 += FE0_C0_D001[ip][r]*w[0][nzc11[r]];
+        F12 += FE0_C0_D001[ip][r]*w[0][nzc10[r]];
+        F13 += FE0_C0_D001[ip][r]*w[0][nzc9[r]];
       } // end loop over 'r'
       
       // Total number of operations to compute function values = 48
       for (unsigned int r = 0; r < 4; r++)
       {
-        F0 += FE0_C0[ip][r]*w[0][nzc0[r]];
-        F1 += FE0_C0[ip][r]*w[0][nzc4[r]];
+        F0 += FE0_C0[ip][r]*w[0][nzc4[r]];
+        F1 += FE0_C0[ip][r]*w[0][nzc8[r]];
         F2 += FE1_C3[ip][r]*w[1][r];
         F3 += FE1_C4[ip][r]*w[1][r];
         F4 += FE1_C5[ip][r]*w[1][r];
@@ -16729,23 +16729,23 @@ public:
       
       // Number of operations to compute ip constants: 399
       double I[86];
-      // Number of operations: 3
-      I[0] = G[0]*W15[ip]*std::exp(F0);
+      // Number of operations: 1
+      I[0] = G[0]*W15[ip];
       
-      // Number of operations: 3
-      I[1] = G[1]*W15[ip]*std::exp(F0);
+      // Number of operations: 1
+      I[1] = G[1]*W15[ip];
       
-      // Number of operations: 3
-      I[2] = G[2]*W15[ip]*std::exp(F0);
+      // Number of operations: 1
+      I[2] = G[2]*W15[ip];
       
-      // Number of operations: 3
-      I[3] = G[3]*W15[ip]*std::exp(F0);
+      // Number of operations: 1
+      I[3] = G[3]*W15[ip];
       
-      // Number of operations: 3
-      I[4] = G[4]*W15[ip]*std::exp(F0);
+      // Number of operations: 1
+      I[4] = G[4]*W15[ip];
       
-      // Number of operations: 3
-      I[5] = G[5]*W15[ip]*std::exp(F0);
+      // Number of operations: 1
+      I[5] = G[5]*W15[ip];
       
       // Number of operations: 3
       I[6] = G[6]*W15[ip]*std::exp(F0);
@@ -16766,22 +16766,22 @@ public:
       I[11] = G[11]*W15[ip]*std::exp(F0);
       
       // Number of operations: 3
-      I[12] = G[12]*W15[ip]*std::exp(F1);
+      I[12] = G[12]*W15[ip]*std::exp(F0);
       
       // Number of operations: 3
-      I[13] = G[13]*W15[ip]*std::exp(F1);
+      I[13] = G[13]*W15[ip]*std::exp(F0);
       
       // Number of operations: 3
-      I[14] = G[14]*W15[ip]*std::exp(F1);
+      I[14] = G[14]*W15[ip]*std::exp(F0);
       
       // Number of operations: 3
-      I[15] = G[15]*W15[ip]*std::exp(F1);
+      I[15] = G[15]*W15[ip]*std::exp(F0);
       
       // Number of operations: 3
-      I[16] = G[16]*W15[ip]*std::exp(F1);
+      I[16] = G[16]*W15[ip]*std::exp(F0);
       
       // Number of operations: 3
-      I[17] = G[17]*W15[ip]*std::exp(F1);
+      I[17] = G[17]*W15[ip]*std::exp(F0);
       
       // Number of operations: 3
       I[18] = G[18]*W15[ip]*std::exp(F1);
@@ -16801,26 +16801,26 @@ public:
       // Number of operations: 3
       I[23] = G[23]*W15[ip]*std::exp(F1);
       
-      // Number of operations: 1
-      I[24] = G[24]*W15[ip];
+      // Number of operations: 3
+      I[24] = G[24]*W15[ip]*std::exp(F1);
       
-      // Number of operations: 1
-      I[25] = G[25]*W15[ip];
+      // Number of operations: 3
+      I[25] = G[25]*W15[ip]*std::exp(F1);
       
-      // Number of operations: 1
-      I[26] = G[26]*W15[ip];
+      // Number of operations: 3
+      I[26] = G[26]*W15[ip]*std::exp(F1);
       
-      // Number of operations: 1
-      I[27] = G[27]*W15[ip];
+      // Number of operations: 3
+      I[27] = G[27]*W15[ip]*std::exp(F1);
       
-      // Number of operations: 1
-      I[28] = G[28]*W15[ip];
+      // Number of operations: 3
+      I[28] = G[28]*W15[ip]*std::exp(F1);
       
-      // Number of operations: 1
-      I[29] = G[29]*W15[ip];
+      // Number of operations: 3
+      I[29] = G[29]*W15[ip]*std::exp(F1);
       
       // Number of operations: 20
-      I[30] = W15[ip]*std::exp(F0)*(F10*G[3] + F2*G[30] + F3*G[31] + F4*G[32] + F5*G[2] + F6*G[1] + F7*G[0] + F8*G[5] + F9*G[4]);
+      I[30] = W15[ip]*std::exp(F0)*(F10*G[6] + F2*G[30] + F3*G[31] + F4*G[32] + F5*G[11] + F6*G[10] + F7*G[9] + F8*G[8] + F9*G[7]);
       
       // Number of operations: 3
       I[31] = G[30]*W15[ip]*std::exp(F0);
@@ -16832,7 +16832,7 @@ public:
       I[33] = G[32]*W15[ip]*std::exp(F0);
       
       // Number of operations: 20
-      I[34] = W15[ip]*std::exp(F0)*(F10*G[4] + F2*G[33] + F3*G[34] + F4*G[35] + F5*G[7] + F6*G[6] + F7*G[1] + F8*G[9] + F9*G[8]);
+      I[34] = W15[ip]*std::exp(F0)*(F10*G[7] + F2*G[33] + F3*G[34] + F4*G[35] + F5*G[15] + F6*G[14] + F7*G[10] + F8*G[13] + F9*G[12]);
       
       // Number of operations: 3
       I[35] = G[33]*W15[ip]*std::exp(F0);
@@ -16844,7 +16844,7 @@ public:
       I[37] = G[35]*W15[ip]*std::exp(F0);
       
       // Number of operations: 20
-      I[38] = W15[ip]*std::exp(F0)*(F10*G[5] + F2*G[36] + F3*G[37] + F4*G[38] + F5*G[10] + F6*G[7] + F7*G[2] + F8*G[11] + F9*G[9]);
+      I[38] = W15[ip]*std::exp(F0)*(F10*G[8] + F2*G[36] + F3*G[37] + F4*G[38] + F5*G[17] + F6*G[15] + F7*G[11] + F8*G[16] + F9*G[13]);
       
       // Number of operations: 3
       I[39] = G[36]*W15[ip]*std::exp(F0);
@@ -16856,7 +16856,7 @@ public:
       I[41] = G[38]*W15[ip]*std::exp(F0);
       
       // Number of operations: 20
-      I[42] = W15[ip]*std::exp(F1)*(F10*G[15] + F11*G[14] + F12*G[13] + F13*G[12] + F2*G[30] + F3*G[31] + F4*G[32] + F8*G[17] + F9*G[16]);
+      I[42] = W15[ip]*std::exp(F1)*(F10*G[18] + F11*G[23] + F12*G[22] + F13*G[21] + F2*G[30] + F3*G[31] + F4*G[32] + F8*G[20] + F9*G[19]);
       
       // Number of operations: 3
       I[43] = G[30]*W15[ip]*std::exp(F1);
@@ -16868,7 +16868,7 @@ public:
       I[45] = G[32]*W15[ip]*std::exp(F1);
       
       // Number of operations: 20
-      I[46] = W15[ip]*std::exp(F1)*(F10*G[16] + F11*G[19] + F12*G[18] + F13*G[13] + F2*G[33] + F3*G[34] + F4*G[35] + F8*G[21] + F9*G[20]);
+      I[46] = W15[ip]*std::exp(F1)*(F10*G[19] + F11*G[27] + F12*G[26] + F13*G[22] + F2*G[33] + F3*G[34] + F4*G[35] + F8*G[25] + F9*G[24]);
       
       // Number of operations: 3
       I[47] = G[33]*W15[ip]*std::exp(F1);
@@ -16880,7 +16880,7 @@ public:
       I[49] = G[35]*W15[ip]*std::exp(F1);
       
       // Number of operations: 20
-      I[50] = W15[ip]*std::exp(F1)*(F10*G[17] + F11*G[22] + F12*G[19] + F13*G[14] + F2*G[36] + F3*G[37] + F4*G[38] + F8*G[23] + F9*G[21]);
+      I[50] = W15[ip]*std::exp(F1)*(F10*G[20] + F11*G[29] + F12*G[27] + F13*G[23] + F2*G[36] + F3*G[37] + F4*G[38] + F8*G[28] + F9*G[25]);
       
       // Number of operations: 3
       I[51] = G[36]*W15[ip]*std::exp(F1);
@@ -17000,87 +17000,87 @@ public:
           // Number of operations to compute entry: 3
           A[nzc13[j]*17 + nzc15[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[2];
           // Number of operations to compute entry: 3
-          A[nzc13[j]*17 + nzc21[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[3];
-          // Number of operations to compute entry: 3
-          A[nzc13[j]*17 + nzc22[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[4];
-          // Number of operations to compute entry: 3
-          A[nzc13[j]*17 + nzc23[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[5];
-          // Number of operations to compute entry: 3
           A[nzc14[j]*17 + nzc13[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[1];
           // Number of operations to compute entry: 3
-          A[nzc14[j]*17 + nzc14[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[6];
+          A[nzc14[j]*17 + nzc14[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[3];
           // Number of operations to compute entry: 3
-          A[nzc14[j]*17 + nzc15[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[7];
-          // Number of operations to compute entry: 3
-          A[nzc14[j]*17 + nzc21[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[4];
-          // Number of operations to compute entry: 3
-          A[nzc14[j]*17 + nzc22[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[8];
-          // Number of operations to compute entry: 3
-          A[nzc14[j]*17 + nzc23[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[9];
+          A[nzc14[j]*17 + nzc15[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[4];
           // Number of operations to compute entry: 3
           A[nzc15[j]*17 + nzc13[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[2];
           // Number of operations to compute entry: 3
-          A[nzc15[j]*17 + nzc14[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[7];
+          A[nzc15[j]*17 + nzc14[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[4];
           // Number of operations to compute entry: 3
-          A[nzc15[j]*17 + nzc15[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[10];
+          A[nzc15[j]*17 + nzc15[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[5];
           // Number of operations to compute entry: 3
-          A[nzc15[j]*17 + nzc21[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[5];
+          A[nzc17[j]*17 + nzc13[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[6];
           // Number of operations to compute entry: 3
-          A[nzc15[j]*17 + nzc22[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[9];
+          A[nzc17[j]*17 + nzc14[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[7];
           // Number of operations to compute entry: 3
-          A[nzc15[j]*17 + nzc23[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[11];
+          A[nzc17[j]*17 + nzc15[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[8];
           // Number of operations to compute entry: 3
-          A[nzc17[j]*17 + nzc17[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[12];
+          A[nzc17[j]*17 + nzc17[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[9];
           // Number of operations to compute entry: 3
-          A[nzc17[j]*17 + nzc18[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[13];
+          A[nzc17[j]*17 + nzc18[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[10];
           // Number of operations to compute entry: 3
-          A[nzc17[j]*17 + nzc19[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[14];
+          A[nzc17[j]*17 + nzc19[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[11];
           // Number of operations to compute entry: 3
-          A[nzc17[j]*17 + nzc21[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[15];
+          A[nzc18[j]*17 + nzc13[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[7];
           // Number of operations to compute entry: 3
-          A[nzc17[j]*17 + nzc22[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[16];
+          A[nzc18[j]*17 + nzc14[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[12];
           // Number of operations to compute entry: 3
-          A[nzc17[j]*17 + nzc23[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[17];
+          A[nzc18[j]*17 + nzc15[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[13];
           // Number of operations to compute entry: 3
-          A[nzc18[j]*17 + nzc17[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[13];
+          A[nzc18[j]*17 + nzc17[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[10];
           // Number of operations to compute entry: 3
-          A[nzc18[j]*17 + nzc18[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[18];
+          A[nzc18[j]*17 + nzc18[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[14];
           // Number of operations to compute entry: 3
-          A[nzc18[j]*17 + nzc19[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[19];
+          A[nzc18[j]*17 + nzc19[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[15];
           // Number of operations to compute entry: 3
-          A[nzc18[j]*17 + nzc21[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[16];
+          A[nzc19[j]*17 + nzc13[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[8];
           // Number of operations to compute entry: 3
-          A[nzc18[j]*17 + nzc22[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[20];
+          A[nzc19[j]*17 + nzc14[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[13];
           // Number of operations to compute entry: 3
-          A[nzc18[j]*17 + nzc23[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[21];
+          A[nzc19[j]*17 + nzc15[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[16];
           // Number of operations to compute entry: 3
-          A[nzc19[j]*17 + nzc17[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[14];
+          A[nzc19[j]*17 + nzc17[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[11];
           // Number of operations to compute entry: 3
-          A[nzc19[j]*17 + nzc18[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[19];
+          A[nzc19[j]*17 + nzc18[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[15];
           // Number of operations to compute entry: 3
-          A[nzc19[j]*17 + nzc19[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[22];
+          A[nzc19[j]*17 + nzc19[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[17];
           // Number of operations to compute entry: 3
-          A[nzc19[j]*17 + nzc21[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[17];
+          A[nzc21[j]*17 + nzc13[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[18];
           // Number of operations to compute entry: 3
-          A[nzc19[j]*17 + nzc22[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[21];
+          A[nzc21[j]*17 + nzc14[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[19];
           // Number of operations to compute entry: 3
-          A[nzc19[j]*17 + nzc23[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[23];
+          A[nzc21[j]*17 + nzc15[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[20];
           // Number of operations to compute entry: 3
-          A[nzc21[j]*17 + nzc21[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[24];
+          A[nzc21[j]*17 + nzc21[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[21];
           // Number of operations to compute entry: 3
-          A[nzc21[j]*17 + nzc22[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[25];
+          A[nzc21[j]*17 + nzc22[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[22];
           // Number of operations to compute entry: 3
-          A[nzc21[j]*17 + nzc23[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[26];
+          A[nzc21[j]*17 + nzc23[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[23];
           // Number of operations to compute entry: 3
-          A[nzc22[j]*17 + nzc21[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[25];
+          A[nzc22[j]*17 + nzc13[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[19];
           // Number of operations to compute entry: 3
-          A[nzc22[j]*17 + nzc22[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[27];
+          A[nzc22[j]*17 + nzc14[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[24];
           // Number of operations to compute entry: 3
-          A[nzc22[j]*17 + nzc23[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[28];
+          A[nzc22[j]*17 + nzc15[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[25];
           // Number of operations to compute entry: 3
-          A[nzc23[j]*17 + nzc21[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[26];
+          A[nzc22[j]*17 + nzc21[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[22];
           // Number of operations to compute entry: 3
-          A[nzc23[j]*17 + nzc22[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[28];
+          A[nzc22[j]*17 + nzc22[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[26];
+          // Number of operations to compute entry: 3
+          A[nzc22[j]*17 + nzc23[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[27];
+          // Number of operations to compute entry: 3
+          A[nzc23[j]*17 + nzc13[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[20];
+          // Number of operations to compute entry: 3
+          A[nzc23[j]*17 + nzc14[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[25];
+          // Number of operations to compute entry: 3
+          A[nzc23[j]*17 + nzc15[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[28];
+          // Number of operations to compute entry: 3
+          A[nzc23[j]*17 + nzc21[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[23];
+          // Number of operations to compute entry: 3
+          A[nzc23[j]*17 + nzc22[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[27];
           // Number of operations to compute entry: 3
           A[nzc23[j]*17 + nzc23[k]] += FE0_C0_D001[ip][j]*FE0_C0_D001[ip][k]*I[29];
         } // end loop over 'k'
@@ -17092,53 +17092,53 @@ public:
         for (unsigned int k = 0; k < 4; k++)
         {
           // Number of operations to compute entry: 3
-          A[nzc13[j]*17 + nzc12[k]] += FE0_C0[ip][k]*FE0_C0_D001[ip][j]*I[30];
+          A[nzc17[j]*17 + nzc16[k]] += FE0_C0[ip][k]*FE0_C0_D001[ip][j]*I[30];
           // Number of operations to compute entry: 3
-          A[nzc13[j]*17 + nzc24[k]] += FE0_C0_D001[ip][j]*FE1_C3[ip][k]*I[31];
+          A[nzc17[j]*17 + nzc24[k]] += FE0_C0_D001[ip][j]*FE1_C3[ip][k]*I[31];
           // Number of operations to compute entry: 3
-          A[nzc13[j]*17 + nzc26[k]] += FE0_C0_D001[ip][j]*FE1_C4[ip][k]*I[32];
+          A[nzc17[j]*17 + nzc26[k]] += FE0_C0_D001[ip][j]*FE1_C4[ip][k]*I[32];
           // Number of operations to compute entry: 3
-          A[nzc13[j]*17 + nzc27[k]] += FE0_C0_D001[ip][j]*FE1_C5[ip][k]*I[33];
+          A[nzc17[j]*17 + nzc27[k]] += FE0_C0_D001[ip][j]*FE1_C5[ip][k]*I[33];
           // Number of operations to compute entry: 3
-          A[nzc14[j]*17 + nzc12[k]] += FE0_C0[ip][k]*FE0_C0_D001[ip][j]*I[34];
+          A[nzc18[j]*17 + nzc16[k]] += FE0_C0[ip][k]*FE0_C0_D001[ip][j]*I[34];
           // Number of operations to compute entry: 3
-          A[nzc14[j]*17 + nzc24[k]] += FE0_C0_D001[ip][j]*FE1_C3[ip][k]*I[35];
+          A[nzc18[j]*17 + nzc24[k]] += FE0_C0_D001[ip][j]*FE1_C3[ip][k]*I[35];
           // Number of operations to compute entry: 3
-          A[nzc14[j]*17 + nzc26[k]] += FE0_C0_D001[ip][j]*FE1_C4[ip][k]*I[36];
+          A[nzc18[j]*17 + nzc26[k]] += FE0_C0_D001[ip][j]*FE1_C4[ip][k]*I[36];
           // Number of operations to compute entry: 3
-          A[nzc14[j]*17 + nzc27[k]] += FE0_C0_D001[ip][j]*FE1_C5[ip][k]*I[37];
+          A[nzc18[j]*17 + nzc27[k]] += FE0_C0_D001[ip][j]*FE1_C5[ip][k]*I[37];
           // Number of operations to compute entry: 3
-          A[nzc15[j]*17 + nzc12[k]] += FE0_C0[ip][k]*FE0_C0_D001[ip][j]*I[38];
+          A[nzc19[j]*17 + nzc16[k]] += FE0_C0[ip][k]*FE0_C0_D001[ip][j]*I[38];
           // Number of operations to compute entry: 3
-          A[nzc15[j]*17 + nzc24[k]] += FE0_C0_D001[ip][j]*FE1_C3[ip][k]*I[39];
+          A[nzc19[j]*17 + nzc24[k]] += FE0_C0_D001[ip][j]*FE1_C3[ip][k]*I[39];
           // Number of operations to compute entry: 3
-          A[nzc15[j]*17 + nzc26[k]] += FE0_C0_D001[ip][j]*FE1_C4[ip][k]*I[40];
+          A[nzc19[j]*17 + nzc26[k]] += FE0_C0_D001[ip][j]*FE1_C4[ip][k]*I[40];
           // Number of operations to compute entry: 3
-          A[nzc15[j]*17 + nzc27[k]] += FE0_C0_D001[ip][j]*FE1_C5[ip][k]*I[41];
+          A[nzc19[j]*17 + nzc27[k]] += FE0_C0_D001[ip][j]*FE1_C5[ip][k]*I[41];
           // Number of operations to compute entry: 3
-          A[nzc17[j]*17 + nzc16[k]] += FE0_C0[ip][k]*FE0_C0_D001[ip][j]*I[42];
+          A[nzc21[j]*17 + nzc20[k]] += FE0_C0[ip][k]*FE0_C0_D001[ip][j]*I[42];
           // Number of operations to compute entry: 3
-          A[nzc17[j]*17 + nzc24[k]] += FE0_C0_D001[ip][j]*FE1_C3[ip][k]*I[43];
+          A[nzc21[j]*17 + nzc24[k]] += FE0_C0_D001[ip][j]*FE1_C3[ip][k]*I[43];
           // Number of operations to compute entry: 3
-          A[nzc17[j]*17 + nzc26[k]] += FE0_C0_D001[ip][j]*FE1_C4[ip][k]*I[44];
+          A[nzc21[j]*17 + nzc26[k]] += FE0_C0_D001[ip][j]*FE1_C4[ip][k]*I[44];
           // Number of operations to compute entry: 3
-          A[nzc17[j]*17 + nzc27[k]] += FE0_C0_D001[ip][j]*FE1_C5[ip][k]*I[45];
+          A[nzc21[j]*17 + nzc27[k]] += FE0_C0_D001[ip][j]*FE1_C5[ip][k]*I[45];
           // Number of operations to compute entry: 3
-          A[nzc18[j]*17 + nzc16[k]] += FE0_C0[ip][k]*FE0_C0_D001[ip][j]*I[46];
+          A[nzc22[j]*17 + nzc20[k]] += FE0_C0[ip][k]*FE0_C0_D001[ip][j]*I[46];
           // Number of operations to compute entry: 3
-          A[nzc18[j]*17 + nzc24[k]] += FE0_C0_D001[ip][j]*FE1_C3[ip][k]*I[47];
+          A[nzc22[j]*17 + nzc24[k]] += FE0_C0_D001[ip][j]*FE1_C3[ip][k]*I[47];
           // Number of operations to compute entry: 3
-          A[nzc18[j]*17 + nzc26[k]] += FE0_C0_D001[ip][j]*FE1_C4[ip][k]*I[48];
+          A[nzc22[j]*17 + nzc26[k]] += FE0_C0_D001[ip][j]*FE1_C4[ip][k]*I[48];
           // Number of operations to compute entry: 3
-          A[nzc18[j]*17 + nzc27[k]] += FE0_C0_D001[ip][j]*FE1_C5[ip][k]*I[49];
+          A[nzc22[j]*17 + nzc27[k]] += FE0_C0_D001[ip][j]*FE1_C5[ip][k]*I[49];
           // Number of operations to compute entry: 3
-          A[nzc19[j]*17 + nzc16[k]] += FE0_C0[ip][k]*FE0_C0_D001[ip][j]*I[50];
+          A[nzc23[j]*17 + nzc20[k]] += FE0_C0[ip][k]*FE0_C0_D001[ip][j]*I[50];
           // Number of operations to compute entry: 3
-          A[nzc19[j]*17 + nzc24[k]] += FE0_C0_D001[ip][j]*FE1_C3[ip][k]*I[51];
+          A[nzc23[j]*17 + nzc24[k]] += FE0_C0_D001[ip][j]*FE1_C3[ip][k]*I[51];
           // Number of operations to compute entry: 3
-          A[nzc19[j]*17 + nzc26[k]] += FE0_C0_D001[ip][j]*FE1_C4[ip][k]*I[52];
+          A[nzc23[j]*17 + nzc26[k]] += FE0_C0_D001[ip][j]*FE1_C4[ip][k]*I[52];
           // Number of operations to compute entry: 3
-          A[nzc19[j]*17 + nzc27[k]] += FE0_C0_D001[ip][j]*FE1_C5[ip][k]*I[53];
+          A[nzc23[j]*17 + nzc27[k]] += FE0_C0_D001[ip][j]*FE1_C5[ip][k]*I[53];
         } // end loop over 'k'
       } // end loop over 'j'
       
@@ -17155,23 +17155,23 @@ public:
         for (unsigned int k = 0; k < 2; k++)
         {
           // Number of operations to compute entry: 3
-          A[nzc24[j]*17 + nzc21[k]] += FE0_C0_D001[ip][k]*FE1_C3[ip][j]*I[55];
+          A[nzc24[j]*17 + nzc13[k]] += FE0_C0_D001[ip][k]*FE1_C3[ip][j]*I[55];
           // Number of operations to compute entry: 3
-          A[nzc24[j]*17 + nzc22[k]] += FE0_C0_D001[ip][k]*FE1_C3[ip][j]*I[56];
+          A[nzc24[j]*17 + nzc14[k]] += FE0_C0_D001[ip][k]*FE1_C3[ip][j]*I[56];
           // Number of operations to compute entry: 3
-          A[nzc24[j]*17 + nzc23[k]] += FE0_C0_D001[ip][k]*FE1_C3[ip][j]*I[57];
+          A[nzc24[j]*17 + nzc15[k]] += FE0_C0_D001[ip][k]*FE1_C3[ip][j]*I[57];
           // Number of operations to compute entry: 3
-          A[nzc26[j]*17 + nzc21[k]] += FE0_C0_D001[ip][k]*FE1_C4[ip][j]*I[58];
+          A[nzc26[j]*17 + nzc13[k]] += FE0_C0_D001[ip][k]*FE1_C4[ip][j]*I[58];
           // Number of operations to compute entry: 3
-          A[nzc26[j]*17 + nzc22[k]] += FE0_C0_D001[ip][k]*FE1_C4[ip][j]*I[59];
+          A[nzc26[j]*17 + nzc14[k]] += FE0_C0_D001[ip][k]*FE1_C4[ip][j]*I[59];
           // Number of operations to compute entry: 3
-          A[nzc26[j]*17 + nzc23[k]] += FE0_C0_D001[ip][k]*FE1_C4[ip][j]*I[60];
+          A[nzc26[j]*17 + nzc15[k]] += FE0_C0_D001[ip][k]*FE1_C4[ip][j]*I[60];
           // Number of operations to compute entry: 3
-          A[nzc27[j]*17 + nzc21[k]] += FE0_C0_D001[ip][k]*FE1_C5[ip][j]*I[61];
+          A[nzc27[j]*17 + nzc13[k]] += FE0_C0_D001[ip][k]*FE1_C5[ip][j]*I[61];
           // Number of operations to compute entry: 3
-          A[nzc27[j]*17 + nzc22[k]] += FE0_C0_D001[ip][k]*FE1_C5[ip][j]*I[62];
+          A[nzc27[j]*17 + nzc14[k]] += FE0_C0_D001[ip][k]*FE1_C5[ip][j]*I[62];
           // Number of operations to compute entry: 3
-          A[nzc27[j]*17 + nzc23[k]] += FE0_C0_D001[ip][k]*FE1_C5[ip][j]*I[63];
+          A[nzc27[j]*17 + nzc15[k]] += FE0_C0_D001[ip][k]*FE1_C5[ip][j]*I[63];
         } // end loop over 'k'
       } // end loop over 'j'
       
@@ -17181,13 +17181,13 @@ public:
         for (unsigned int k = 0; k < 4; k++)
         {
           // Number of operations to compute entry: 3
-          A[nzc20[j]*17 + nzc12[k]] += FE0_C0[ip][j]*FE0_C0[ip][k]*I[64];
+          A[nzc12[j]*17 + nzc16[k]] += FE0_C0[ip][j]*FE0_C0[ip][k]*I[64];
           // Number of operations to compute entry: 3
-          A[nzc20[j]*17 + nzc16[k]] += FE0_C0[ip][j]*FE0_C0[ip][k]*I[65];
+          A[nzc12[j]*17 + nzc20[k]] += FE0_C0[ip][j]*FE0_C0[ip][k]*I[65];
           // Number of operations to compute entry: 3
-          A[nzc24[j]*17 + nzc12[k]] += FE0_C0[ip][k]*FE1_C3[ip][j]*I[66];
+          A[nzc24[j]*17 + nzc16[k]] += FE0_C0[ip][k]*FE1_C3[ip][j]*I[66];
           // Number of operations to compute entry: 3
-          A[nzc24[j]*17 + nzc16[k]] += FE0_C0[ip][k]*FE1_C3[ip][j]*I[67];
+          A[nzc24[j]*17 + nzc20[k]] += FE0_C0[ip][k]*FE1_C3[ip][j]*I[67];
           // Number of operations to compute entry: 3
           A[nzc24[j]*17 + nzc24[k]] += FE1_C3[ip][j]*FE1_C3[ip][k]*I[68];
           // Number of operations to compute entry: 3
@@ -17199,9 +17199,9 @@ public:
           // Number of operations to compute entry: 3
           A[nzc25[j]*17 + nzc25[k]] += FE1_C3_D100[ip][j]*FE1_C3_D100[ip][k]*I[72];
           // Number of operations to compute entry: 3
-          A[nzc26[j]*17 + nzc12[k]] += FE0_C0[ip][k]*FE1_C4[ip][j]*I[73];
+          A[nzc26[j]*17 + nzc16[k]] += FE0_C0[ip][k]*FE1_C4[ip][j]*I[73];
           // Number of operations to compute entry: 3
-          A[nzc26[j]*17 + nzc16[k]] += FE0_C0[ip][k]*FE1_C4[ip][j]*I[74];
+          A[nzc26[j]*17 + nzc20[k]] += FE0_C0[ip][k]*FE1_C4[ip][j]*I[74];
           // Number of operations to compute entry: 3
           A[nzc26[j]*17 + nzc24[k]] += FE1_C3[ip][k]*FE1_C4[ip][j]*I[75];
           // Number of operations to compute entry: 3
@@ -17211,9 +17211,9 @@ public:
           // Number of operations to compute entry: 3
           A[nzc26[j]*17 + nzc27[k]] += FE1_C4[ip][j]*FE1_C5[ip][k]*I[78];
           // Number of operations to compute entry: 3
-          A[nzc27[j]*17 + nzc12[k]] += FE0_C0[ip][k]*FE1_C5[ip][j]*I[79];
+          A[nzc27[j]*17 + nzc16[k]] += FE0_C0[ip][k]*FE1_C5[ip][j]*I[79];
           // Number of operations to compute entry: 3
-          A[nzc27[j]*17 + nzc16[k]] += FE0_C0[ip][k]*FE1_C5[ip][j]*I[80];
+          A[nzc27[j]*17 + nzc20[k]] += FE0_C0[ip][k]*FE1_C5[ip][j]*I[80];
           // Number of operations to compute entry: 3
           A[nzc27[j]*17 + nzc24[k]] += FE1_C3[ip][k]*FE1_C5[ip][j]*I[81];
           // Number of operations to compute entry: 3
@@ -21865,13 +21865,13 @@ public:
     {0.314372873493192, 0.314372873493192, 0.0568813795204235, 0.314372873493192}};
     
     // Array of non-zero columns
-    static const unsigned int nzc0[4] = {0, 1, 2, 3};
-    
-    // Array of non-zero columns
     static const unsigned int nzc4[4] = {4, 5, 6, 7};
     
     // Array of non-zero columns
-    static const unsigned int nzc20[4] = {8, 9, 10, 11};
+    static const unsigned int nzc8[4] = {8, 9, 10, 11};
+    
+    // Array of non-zero columns
+    static const unsigned int nzc12[4] = {0, 1, 2, 3};
     
     static const double FE1_C0_D001[14][2] = \
     {{-1.0, 1.0},
@@ -22027,45 +22027,45 @@ public:
     // Number of operations to compute geometry constants: 1318.
     double G[71];
     G[0] =  - det*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6] + J[3]*K[1] + J[4]*K[4] + J[5]*K[7] + J[6]*K[2] + J[7]*K[5] + J[8]*K[8])/detJ;
-    G[1] = det*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
-    G[2] = det*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
-    G[3] = det*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
-    G[4] =  - det*w[4][0]*w[5][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[5] =  - det*w[4][0]*w[5][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[6] =  - det*w[4][0]*w[5][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[7] =  - det*w[4][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[8] =  - det*w[4][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[9] =  - det*w[4][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[10] = det*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
-    G[11] = det*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
-    G[12] = det*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
-    G[13] =  - det*w[4][0]*w[5][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[14] =  - det*w[4][0]*w[5][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[15] =  - det*w[4][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[16] =  - det*w[4][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[17] = det*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
-    G[18] = det*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
-    G[19] = det*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
-    G[20] =  - det*w[4][0]*w[5][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[21] =  - det*w[4][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[22] =  - det*w[6][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[23] =  - det*w[6][0]*w[7][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[24] =  - det*w[6][0]*w[7][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[25] =  - det*w[6][0]*w[7][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[26] =  - det*w[6][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[27] =  - det*w[6][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[28] =  - det*w[6][0]*w[7][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[29] =  - det*w[6][0]*w[7][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[30] =  - det*w[6][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[31] =  - det*w[6][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[32] =  - det*w[6][0]*w[7][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[33] =  - det*w[6][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
-    G[34] =  - det*w[3][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
-    G[35] =  - det*w[3][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
-    G[36] =  - det*w[3][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
-    G[37] =  - det*w[3][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
-    G[38] =  - det*w[3][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
-    G[39] =  - det*w[3][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[1] =  - det*w[3][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[2] =  - det*w[3][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[3] =  - det*w[3][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[4] =  - det*w[3][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[5] =  - det*w[3][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[6] =  - det*w[3][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[7] = det*(J[0]*K[6] + J[3]*K[7] + J[6]*K[8])/detJ;
+    G[8] = det*(J[1]*K[6] + J[4]*K[7] + J[7]*K[8])/detJ;
+    G[9] = det*(J[2]*K[6] + J[5]*K[7] + J[8]*K[8])/detJ;
+    G[10] =  - det*w[4][0]*w[5][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[11] =  - det*w[4][0]*w[5][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[12] =  - det*w[4][0]*w[5][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[13] =  - det*w[4][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[14] =  - det*w[4][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[15] =  - det*w[4][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[16] = det*(J[0]*K[3] + J[3]*K[4] + J[6]*K[5])/detJ;
+    G[17] = det*(J[1]*K[3] + J[4]*K[4] + J[7]*K[5])/detJ;
+    G[18] = det*(J[2]*K[3] + J[5]*K[4] + J[8]*K[5])/detJ;
+    G[19] =  - det*w[4][0]*w[5][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[20] =  - det*w[4][0]*w[5][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[21] =  - det*w[4][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[22] =  - det*w[4][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[23] = det*(J[0]*K[0] + J[3]*K[1] + J[6]*K[2])/detJ;
+    G[24] = det*(J[1]*K[0] + J[4]*K[1] + J[7]*K[2])/detJ;
+    G[25] = det*(J[2]*K[0] + J[5]*K[1] + J[8]*K[2])/detJ;
+    G[26] =  - det*w[4][0]*w[5][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[27] =  - det*w[4][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[28] =  - det*w[6][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[29] =  - det*w[6][0]*w[7][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[30] =  - det*w[6][0]*w[7][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[31] =  - det*w[6][0]*w[7][0]*(K[6]*K[6] + K[7]*K[7] + K[8]*K[8]);
+    G[32] =  - det*w[6][0]*(K[0]*K[6] + K[1]*K[7] + K[2]*K[8]);
+    G[33] =  - det*w[6][0]*(K[3]*K[6] + K[4]*K[7] + K[5]*K[8]);
+    G[34] =  - det*w[6][0]*w[7][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[35] =  - det*w[6][0]*w[7][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[36] =  - det*w[6][0]*(K[0]*K[3] + K[1]*K[4] + K[2]*K[5]);
+    G[37] =  - det*w[6][0]*(K[3]*K[3] + K[4]*K[4] + K[5]*K[5]);
+    G[38] =  - det*w[6][0]*w[7][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
+    G[39] =  - det*w[6][0]*(K[0]*K[0] + K[1]*K[1] + K[2]*K[2]);
     G[40] = det*w[5][0];
     G[41] = det*w[7][0];
     G[42] =  - det*w[8][0]*(J[0]*J[0]*(J[0]*K[0] + J[1]*K[3] + J[2]*K[6]) + J[3]*(J[0]*(J[0]*K[1] + J[1]*K[4] + J[2]*K[7] + J[3]*K[0] + J[4]*K[3] + J[5]*K[6]) + J[3]*(J[3]*K[1] + J[4]*K[4] + J[5]*K[7])) + J[6]*(J[0]*(J[0]*K[2] + J[1]*K[5] + J[2]*K[8] + J[6]*K[0] + J[7]*K[3] + J[8]*K[6]) + J[3]*(J[3]*K[2] + J[4]*K[5] + J[5]*K[8] + J[6]*K[1] + J[7]*K[4] + J[8]*K[7]) + J[6]*(J[6]*K[2] + J[7]*K[5] + J[8]*K[8])))/(detJ*detJ*detJ);
@@ -22126,22 +22126,22 @@ public:
       // Total number of operations to compute function values = 36
       for (unsigned int r = 0; r < 2; r++)
       {
-        F2 += FE1_C0_D001[ip][r]*w[0][nzc11[r]];
-        F3 += FE1_C0_D001[ip][r]*w[0][nzc10[r]];
-        F4 += FE1_C0_D001[ip][r]*w[0][nzc9[r]];
-        F5 += FE1_C0_D001[ip][r]*w[0][nzc3[r]];
-        F6 += FE1_C0_D001[ip][r]*w[0][nzc2[r]];
-        F7 += FE1_C0_D001[ip][r]*w[0][nzc1[r]];
-        F8 += FE1_C0_D001[ip][r]*w[0][nzc7[r]];
-        F9 += FE1_C0_D001[ip][r]*w[0][nzc6[r]];
-        F10 += FE1_C0_D001[ip][r]*w[0][nzc5[r]];
+        F2 += FE1_C0_D001[ip][r]*w[0][nzc3[r]];
+        F3 += FE1_C0_D001[ip][r]*w[0][nzc2[r]];
+        F4 += FE1_C0_D001[ip][r]*w[0][nzc1[r]];
+        F5 += FE1_C0_D001[ip][r]*w[0][nzc7[r]];
+        F6 += FE1_C0_D001[ip][r]*w[0][nzc6[r]];
+        F7 += FE1_C0_D001[ip][r]*w[0][nzc5[r]];
+        F8 += FE1_C0_D001[ip][r]*w[0][nzc11[r]];
+        F9 += FE1_C0_D001[ip][r]*w[0][nzc10[r]];
+        F10 += FE1_C0_D001[ip][r]*w[0][nzc9[r]];
       } // end loop over 'r'
       
       // Total number of operations to compute function values = 48
       for (unsigned int r = 0; r < 4; r++)
       {
-        F0 += FE1_C0[ip][r]*w[0][nzc0[r]];
-        F1 += FE1_C0[ip][r]*w[0][nzc4[r]];
+        F0 += FE1_C0[ip][r]*w[0][nzc4[r]];
+        F1 += FE1_C0[ip][r]*w[0][nzc8[r]];
         F11 += FE2_C3_D100[ip][r]*w[1][r];
         F12 += FE2_C3[ip][r]*w[1][r];
         F13 += FE2_C4[ip][r]*w[1][r];
@@ -22153,32 +22153,32 @@ public:
       // Number of operations: 2
       I[0] = F11*G[0]*W14[ip];
       
-      // Number of operations: 20
-      I[1] = W14[ip]*std::exp(F0)*(F12*G[1] + F13*G[2] + F14*G[3] + F2*G[4] + F3*G[5] + F4*G[6] + F5*G[7] + F6*G[8] + F7*G[9]);
-      
-      // Number of operations: 20
-      I[2] = W14[ip]*std::exp(F0)*(F12*G[10] + F13*G[11] + F14*G[12] + F2*G[13] + F3*G[14] + F4*G[5] + F5*G[15] + F6*G[16] + F7*G[8]);
-      
-      // Number of operations: 20
-      I[3] = W14[ip]*std::exp(F0)*(F12*G[17] + F13*G[18] + F14*G[19] + F2*G[20] + F3*G[13] + F4*G[4] + F5*G[21] + F6*G[15] + F7*G[7]);
-      
-      // Number of operations: 20
-      I[4] = W14[ip]*std::exp(F1)*(F10*G[22] + F12*G[1] + F13*G[2] + F14*G[3] + F2*G[23] + F3*G[24] + F4*G[25] + F8*G[26] + F9*G[27]);
-      
-      // Number of operations: 20
-      I[5] = W14[ip]*std::exp(F1)*(F10*G[27] + F12*G[10] + F13*G[11] + F14*G[12] + F2*G[28] + F3*G[29] + F4*G[24] + F8*G[30] + F9*G[31]);
-      
-      // Number of operations: 20
-      I[6] = W14[ip]*std::exp(F1)*(F10*G[26] + F12*G[17] + F13*G[18] + F14*G[19] + F2*G[32] + F3*G[28] + F4*G[23] + F8*G[33] + F9*G[30]);
+      // Number of operations: 6
+      I[1] = W14[ip]*(F2*G[1] + F3*G[2] + F4*G[3]);
       
       // Number of operations: 6
-      I[7] = W14[ip]*(F2*G[34] + F3*G[35] + F4*G[36]);
+      I[2] = W14[ip]*(F2*G[4] + F3*G[5] + F4*G[2]);
       
       // Number of operations: 6
-      I[8] = W14[ip]*(F2*G[37] + F3*G[38] + F4*G[35]);
+      I[3] = W14[ip]*(F2*G[6] + F3*G[4] + F4*G[1]);
       
-      // Number of operations: 6
-      I[9] = W14[ip]*(F2*G[39] + F3*G[37] + F4*G[34]);
+      // Number of operations: 20
+      I[4] = W14[ip]*std::exp(F0)*(F12*G[7] + F13*G[8] + F14*G[9] + F2*G[10] + F3*G[11] + F4*G[12] + F5*G[13] + F6*G[14] + F7*G[15]);
+      
+      // Number of operations: 20
+      I[5] = W14[ip]*std::exp(F0)*(F12*G[16] + F13*G[17] + F14*G[18] + F2*G[19] + F3*G[20] + F4*G[11] + F5*G[21] + F6*G[22] + F7*G[14]);
+      
+      // Number of operations: 20
+      I[6] = W14[ip]*std::exp(F0)*(F12*G[23] + F13*G[24] + F14*G[25] + F2*G[26] + F3*G[19] + F4*G[10] + F5*G[27] + F6*G[21] + F7*G[13]);
+      
+      // Number of operations: 20
+      I[7] = W14[ip]*std::exp(F1)*(F10*G[28] + F12*G[7] + F13*G[8] + F14*G[9] + F2*G[29] + F3*G[30] + F4*G[31] + F8*G[32] + F9*G[33]);
+      
+      // Number of operations: 20
+      I[8] = W14[ip]*std::exp(F1)*(F10*G[33] + F12*G[16] + F13*G[17] + F14*G[18] + F2*G[34] + F3*G[35] + F4*G[30] + F8*G[36] + F9*G[37]);
+      
+      // Number of operations: 20
+      I[9] = W14[ip]*std::exp(F1)*(F10*G[32] + F12*G[23] + F13*G[24] + F14*G[25] + F2*G[38] + F3*G[34] + F4*G[29] + F8*G[39] + F9*G[36]);
       
       // Number of operations: 6
       I[10] = W14[ip]*(G[40]*std::exp(F0) + G[41]*std::exp(F1));
@@ -22227,7 +22227,7 @@ public:
       for (unsigned int j = 0; j < 4; j++)
       {
         // Number of operations to compute entry: 2
-        A[nzc20[j]] += FE1_C0[ip][j]*I[10];
+        A[nzc12[j]] += FE1_C0[ip][j]*I[10];
         // Number of operations to compute entry: 2
         A[nzc24[j]] += FE2_C3[ip][j]*I[11];
         // Number of operations to compute entry: 2
@@ -22326,17 +22326,17 @@ public:
     case 0:
       {
         A[0] = 0.0;
-      A[1] = 0.0;
-      A[2] = 0.0;
-      A[3] = 0.0;
+      A[1] = 0.0833333333333333*G0_1 + 0.0416666666666667*G0_2 + 0.0416666666666667*G0_3;
+      A[2] = 0.0416666666666667*G0_1 + 0.0833333333333333*G0_2 + 0.0416666666666667*G0_3;
+      A[3] = 0.0416666666666667*G0_1 + 0.0416666666666667*G0_2 + 0.0833333333333333*G0_3;
       A[4] = 0.0;
       A[5] = 0.0;
       A[6] = 0.0;
       A[7] = 0.0;
       A[8] = 0.0;
-      A[9] = 0.0833333333333333*G0_1 + 0.0416666666666667*G0_2 + 0.0416666666666667*G0_3;
-      A[10] = 0.0416666666666667*G0_1 + 0.0833333333333333*G0_2 + 0.0416666666666667*G0_3;
-      A[11] = 0.0416666666666667*G0_1 + 0.0416666666666667*G0_2 + 0.0833333333333333*G0_3;
+      A[9] = 0.0;
+      A[10] = 0.0;
+      A[11] = 0.0;
       A[12] = 0.0;
       A[13] = 0.0;
       A[14] = 0.0;
@@ -22346,18 +22346,18 @@ public:
       }
     case 1:
       {
-        A[0] = 0.0;
+        A[0] = 0.0833333333333334*G0_0 + 0.0416666666666667*G0_2 + 0.0416666666666667*G0_3;
       A[1] = 0.0;
-      A[2] = 0.0;
-      A[3] = 0.0;
+      A[2] = 0.0416666666666667*G0_0 + 0.0833333333333333*G0_2 + 0.0416666666666667*G0_3;
+      A[3] = 0.0416666666666667*G0_0 + 0.0416666666666667*G0_2 + 0.0833333333333333*G0_3;
       A[4] = 0.0;
       A[5] = 0.0;
       A[6] = 0.0;
       A[7] = 0.0;
-      A[8] = 0.0833333333333334*G0_0 + 0.0416666666666667*G0_2 + 0.0416666666666667*G0_3;
+      A[8] = 0.0;
       A[9] = 0.0;
-      A[10] = 0.0416666666666667*G0_0 + 0.0833333333333333*G0_2 + 0.0416666666666667*G0_3;
-      A[11] = 0.0416666666666667*G0_0 + 0.0416666666666667*G0_2 + 0.0833333333333333*G0_3;
+      A[10] = 0.0;
+      A[11] = 0.0;
       A[12] = 0.0;
       A[13] = 0.0;
       A[14] = 0.0;
@@ -22367,18 +22367,18 @@ public:
       }
     case 2:
       {
-        A[0] = 0.0;
-      A[1] = 0.0;
+        A[0] = 0.0833333333333333*G0_0 + 0.0416666666666667*G0_1 + 0.0416666666666667*G0_3;
+      A[1] = 0.0416666666666667*G0_0 + 0.0833333333333333*G0_1 + 0.0416666666666667*G0_3;
       A[2] = 0.0;
-      A[3] = 0.0;
+      A[3] = 0.0416666666666667*G0_0 + 0.0416666666666666*G0_1 + 0.0833333333333333*G0_3;
       A[4] = 0.0;
       A[5] = 0.0;
       A[6] = 0.0;
       A[7] = 0.0;
-      A[8] = 0.0833333333333333*G0_0 + 0.0416666666666667*G0_1 + 0.0416666666666667*G0_3;
-      A[9] = 0.0416666666666667*G0_0 + 0.0833333333333333*G0_1 + 0.0416666666666667*G0_3;
+      A[8] = 0.0;
+      A[9] = 0.0;
       A[10] = 0.0;
-      A[11] = 0.0416666666666667*G0_0 + 0.0416666666666666*G0_1 + 0.0833333333333333*G0_3;
+      A[11] = 0.0;
       A[12] = 0.0;
       A[13] = 0.0;
       A[14] = 0.0;
@@ -22388,17 +22388,17 @@ public:
       }
     case 3:
       {
-        A[0] = 0.0;
-      A[1] = 0.0;
-      A[2] = 0.0;
+        A[0] = 0.0833333333333334*G0_0 + 0.0416666666666667*G0_1 + 0.0416666666666667*G0_2;
+      A[1] = 0.0416666666666667*G0_0 + 0.0833333333333333*G0_1 + 0.0416666666666666*G0_2;
+      A[2] = 0.0416666666666667*G0_0 + 0.0416666666666666*G0_1 + 0.0833333333333333*G0_2;
       A[3] = 0.0;
       A[4] = 0.0;
       A[5] = 0.0;
       A[6] = 0.0;
       A[7] = 0.0;
-      A[8] = 0.0833333333333334*G0_0 + 0.0416666666666667*G0_1 + 0.0416666666666667*G0_2;
-      A[9] = 0.0416666666666667*G0_0 + 0.0833333333333333*G0_1 + 0.0416666666666666*G0_2;
-      A[10] = 0.0416666666666667*G0_0 + 0.0416666666666666*G0_1 + 0.0833333333333333*G0_2;
+      A[8] = 0.0;
+      A[9] = 0.0;
+      A[10] = 0.0;
       A[11] = 0.0;
       A[12] = 0.0;
       A[13] = 0.0;
@@ -24164,7 +24164,7 @@ public:
 
   const char * signature() const final override
   {
-    return "5c795361cdea483e60d7e8e03d6ea2e569c84fc4f3e6618acc8583bdf42c2c21844ed7c56d39daab61408a7b0c75c04f2465de32f7439d089688572df8877cd1";
+    return "40af3af1c8c4bff68860cb41c22e78e143d12a1a316650d559ee8350681d818492bc0494a86b75597d12936dbf2bfebeb6e5a4cc7e44c08a6e1f18d4c59d2e26";
   }
 
   std::size_t rank() const final override
@@ -24525,7 +24525,7 @@ public:
 
   const char * signature() const final override
   {
-    return "a8e5da33bf803b198a0a06b3da9aff06374581a9d26abe43169bde59aa11fb1673c3f4e715b84fcbde9bb17d255cba9c3993a30ca8aff824ad17b0a759a35c8d";
+    return "a08ee273ce38bdbde93adb0a2ef8b3a85ce72642c0c8673004219c4fef3d6828e58d71476c3300041896883fc91ec55e6f08b2786394d484b1188fd205f47ba2";
   }
 
   std::size_t rank() const final override

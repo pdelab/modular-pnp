@@ -89,7 +89,7 @@ std::vector<dolfin::Function> solve_pnp_stokes (
     {"Re", {0.01}},
   };
 
-  std::map<std::string, std::vector<double>> sources = {{"g",{Eps*10.0}}};
+  std::map<std::string, std::vector<double>> sources = {{"g",{0.1}}};
 
   const std::vector<std::string> variables = {"cc","uu","pp"};
 

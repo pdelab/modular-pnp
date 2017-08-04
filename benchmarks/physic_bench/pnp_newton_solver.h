@@ -53,16 +53,16 @@ std::shared_ptr<dolfin::Function> solve_pnp (
   );
 
   // set initializer for PDE coefficients
-  double Eps = 1E-3;
+  double Eps = 0.019044;
   printf("Initialize coefficients\n");
   std::map<std::string, std::vector<double>> pnp_coefficients = {
     {"permittivity", {Eps}},
-    {"diffusivity", {0.0, 1.0, 1.0}},
+    {"diffusivity", {0.0, 1.0, 1.334/2.032}},
     {"valency", {0.0, 1.0, -1.0}}
   };
   std::map<std::string, std::vector<double>> pnp_sources = {
     {"fixed_charge", {0.0}},
-    {"g", {10.0*Eps}}
+    {"g", {0.1}}
   };
 
   // build problem

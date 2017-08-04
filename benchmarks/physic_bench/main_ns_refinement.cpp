@@ -137,8 +137,8 @@ int main (int argc, char** argv) {
   //-------------------------
 
   // parameters for mesh adaptivity
-  double growth_factor = 2.0;
-  double entropy_per_cell = 1.0e-2;
+  double growth_factor = 3.0;
+  double entropy_per_cell = 1.0e-4;
   std::size_t max_refine_depth = 3;
   std::size_t max_elements = 25000;
   Mesh_Refiner mesh_adapt(
@@ -264,7 +264,7 @@ int main (int argc, char** argv) {
  std::vector<std::shared_ptr<const dolfin::Function>> get_diffusivity(
    std::shared_ptr<const dolfin::FunctionSpace> function_space
  ) {
-   dolfin::Constant ones(1.0, 1.0, 1.0);
+   dolfin::Constant ones(1.0, 1.334/2.032, 0.0);
    dolfin::Function diffusivity(function_space);
    diffusivity.interpolate(ones);
 
