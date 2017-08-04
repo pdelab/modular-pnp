@@ -26,7 +26,7 @@ Fo = "./output/"
 # Set backend to PETSC
 # parameters['linear_algebra_backend'] = 'Eigen'
 # parameters["linear_algebra_backend"] = "PETSc"
-parameters["allow_extrapolation"] = False
+parameters["allow_extrapolation"] = True
 
 
 # Load mesh and define function space
@@ -41,15 +41,15 @@ vel = Function(V2,"./output/velocity_solution.xml")
 xc=0.0
 yc=0.0
 zc=0.0
-rc=0.4
+rc=0.1
 
 N = 100
-dx = (1.0-rc)/float(N)
+dx = (0.2-rc)/float(N)
 print dx
 x = np.arange(N)*dx
 p0=1.0
 x0=0.0
-Eps=0.01
+Eps=1e-4
 g = np.exp(x0)*( np.exp(p0/2.0) - 1.0 )/( np.exp(p0/2.0) + 1.0 )
 K = np.sqrt(2.0/Eps)
 print "K = ",K

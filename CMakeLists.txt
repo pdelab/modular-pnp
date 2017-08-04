@@ -94,6 +94,9 @@ target_link_libraries(pnp_ns_pb ${PNP_STOKES_LIBRARY})
 add_executable(pnp_pb ./benchmarks/pnp_pb/main.cpp ./benchmarks/pnp_pb/linear_pnp.cpp ${SRC_DIR})
 target_link_libraries(pnp_pb ${PNP_LIBRARY})
 
+add_executable(pnp_pb_refine ./benchmarks/pnp_pb/main_refinement.cpp ./benchmarks/pnp_pb/linear_pnp.cpp ${SRC_DIR})
+target_link_libraries(pnp_pb_refine ${PNP_LIBRARY})
+
 add_executable(pnp_stokes ./benchmarks/pnp_stokes/main.cpp ./benchmarks/pnp_stokes/linear_pnp_ns.cpp ${SRC_DIR})
 target_link_libraries(pnp_stokes ${PNP_STOKES_LIBRARY})
 
@@ -105,3 +108,15 @@ target_link_libraries(ns_spheres ${PNP_STOKES_LIBRARY})
 
 add_executable(ns_spheres_refinement ./benchmarks/pnp_ns_spheres/main_refinement.cpp ./benchmarks/pnp_ns_spheres/linear_pnp_ns.cpp ${SRC_DIR})
 target_link_libraries(ns_spheres_refinement ${PNP_STOKES_LIBRARY})
+
+add_executable(phys_pnp ./benchmarks/physic_bench/main.cpp ./benchmarks/physic_bench/linear_pnp.cpp ${SRC_DIR})
+target_link_libraries(phys_pnp ${PNP_LIBRARY})
+
+add_executable(phys_pnp_ref ./benchmarks/physic_bench/main_refinement.cpp ./benchmarks/physic_bench/linear_pnp.cpp ${SRC_DIR})
+target_link_libraries(phys_pnp_ref ${PNP_LIBRARY})
+
+add_executable(phys_ns ./benchmarks/physic_bench/main_ns.cpp ./benchmarks/physic_bench/linear_pnp_ns.cpp ${SRC_DIR})
+target_link_libraries(phys_ns ${PNP_STOKES_LIBRARY})
+
+add_executable(phys_ns_ref ./benchmarks/physic_bench/main_ns_refinement.cpp ./benchmarks/physic_bench/linear_pnp_ns.cpp ${SRC_DIR})
+target_link_libraries(phys_ns_ref ${PNP_STOKES_LIBRARY})

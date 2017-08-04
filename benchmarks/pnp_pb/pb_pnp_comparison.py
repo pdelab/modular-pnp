@@ -21,7 +21,7 @@ import matplotlib.tri as tri
 # print c_code
 
 # Fo = "./meshOut_2/"
-Fo = "./output/"
+Fo = "./output_noeafe/"
 
 # Set backend to PETSC
 # parameters['linear_algebra_backend'] = 'Eigen'
@@ -41,20 +41,23 @@ phipb = Function(V2,"./output/solution_phipb.xml")
 xc=0.0
 yc=0.0
 zc=0.0
-rc=0.4
+rc=0.1
 
+L=0.4
 N = 100
-dx = (1.0-rc)/float(N)
+dx = (L/2.0-rc)/float(N)
 print dx
 x = np.arange(N)*dx
 p0=1.0
 x0=0.0
-Eps=0.01
+Eps=1E-4
 g = np.exp(x0)*( np.exp(p0/2.0) - 1.0 )/( np.exp(p0/2.0) + 1.0 )
 K = np.sqrt(2.0/Eps)
 print "K = ",K
 pb=2*np.log( (1-g*np.exp(-x*K)) / (1+g*np.exp(-x*K)) )
 
+print "max = ",max(phi.vector()[:])
+print "max = ",max(phipb.vector()[:])
 
 vphi_t = np.zeros(3);
 vphi1 = np.zeros(N);
@@ -77,7 +80,8 @@ for j in range(N):
     vphi2[j]=vphi_t[0]
     phi.eval(vphi_t,x_coord3);
     vphi3[j]=vphi_t[0]
-    phipb.eval(vphi_t,x_coord4);
+    # phipb.eval(vphi_t,x_coord4);
+    phi.eval(vphi_t,x_coord4);
     vphi4[j]=vphi_t[0]
     x_coord1[2]+=dx;
     x_coord2[1]-=dx;
@@ -92,6 +96,7 @@ plt.plot(x, vphi2,'*')
 plt.plot(x, vphi3)
 plt.plot(x, vphi4,'--')
 plt.plot(x, pb,'--')
-plt.legend(('PNP','PNP','PNP','PB C','PB Python'),loc=4)
-plt.savefig("potential_cut.eps")
+plt.legend(('Direction 1','Direction 2','Direction 3','Direction 4','PB'),loc=4)
+plt.savefig("pnp_pb_cut.png")
+plt.savefig("pnp_pb_cut.eps")
 plt.close()

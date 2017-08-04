@@ -51,10 +51,6 @@ Linear_PNP::Linear_PNP (
     new vector_linear_pnp_forms::CoefficientSpace_fixed_charge(mesh)
   );
 
-  phib_space.reset(
-    new vector_linear_pnp_forms::CoefficientSpace_phib(mesh)
-  );
-
   permittivity_space.reset(
     new vector_linear_pnp_forms::CoefficientSpace_permittivity(mesh)
   );
@@ -124,6 +120,7 @@ dolfin::Function Linear_PNP::fasp_solve () {
   else {
     printf("Successfully solved the linear system\n");
     fflush(stdout);
+  }
 
     dolfin::EigenVector solution_vector(_eigen_vector->mpi_comm(),_eigen_vector->size());
     double* array = solution_vector.data();
@@ -135,7 +132,6 @@ dolfin::Function Linear_PNP::fasp_solve () {
       Linear_PNP::_convert_EigenVector_to_Function(solution_vector)
     );
     *(solution.vector()) += *(update.vector());
-  }
 
   Linear_PNP::set_solution(solution);
 
@@ -369,20 +365,34 @@ dolfin::Function Linear_PNP::get_total_charge () {
 }
 
 //--------------------------------------
-void Linear_PNP::init_BC ()
+void Linear_PNP::init_BC (double Lx, double Ly, double Lz)
 {
 
-  // // Dirichlet_Subdomain BCdomain({component},{-5.0},{5.0},1E-5);
-  auto sp_domain = std::make_shared<SphereSubDomain>();
+  auto zero_vec=std::make_shared<dolfin::Constant>(0.0,0.0,0.0);
 
-  auto zero=std::make_shared<dolfin::Constant>(0.0);
+  std::vector<std::size_t> v1x = {0};
+  std::vector<double> v2x = {-Lx/2.0};
+  std::vector<double> v3x = {Lx/2.0};
+  auto BCdomain_x = std::make_shared<Dirichlet_Subdomain>(v1x,v2x,v3x,1E-5);
 
-  auto BC1 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(0),zero,sp_domain);
-  auto BC2 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(1),zero,sp_domain);
-  auto BC3 = std::make_shared<dolfin::DirichletBC>(_function_space->sub(2),zero,sp_domain);
+  auto BC1 = std::make_shared<dolfin::DirichletBC>(_function_space,zero_vec,BCdomain_x);
   _dirichletBC.push_back(BC1);
-  _dirichletBC.push_back(BC2);
-  _dirichletBC.push_back(BC3);
+  // _dirichletBC.push_back(BC2);
+  // _dirichletBC.push_back(BC3);
 
+}
+//--------------------------------------
+
+//--------------------------------------
+void Linear_PNP::init_measure (std::shared_ptr<const dolfin::Mesh> mesh,
+  double Lx, double Ly, double Lz) {
+  auto markers = std::make_shared<dolfin::FacetFunction<std::size_t>>(mesh, 1);
+  markers->set_all(0);
+
+  // Spheres
+  SphereSubDomain sp_domain;
+  sp_domain.mark(*markers,1);
+
+  _linear_form->set_exterior_facet_domains(markers);
 }
 //--------------------------------------

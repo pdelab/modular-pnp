@@ -144,7 +144,7 @@ std::shared_ptr<const dolfin::Mesh> Mesh_Refiner::recursive_refinement (
 
     dolfin::Mesh conservative_temp_mesh(*_mesh);
     conservative_mesh = dolfin::adapt(conservative_temp_mesh, *_cell_marker);
-    accept_refinement = conservative_mesh->num_cells() < (max_element_iterate + 1);
+    accept_refinement = accept_refinement ? accept_refinement : conservative_mesh->num_cells() < (max_element_iterate + 1);
   }
 
   _mesh.reset(new dolfin::Mesh(*conservative_mesh));

@@ -18,7 +18,6 @@ extern "C" {
 
 #include "vector_linear_pnp_forms.h"
 #include "linear_pnp.h"
-#include "norm_pnp.h"
 
 using namespace std;
 
@@ -35,19 +34,17 @@ int main (int argc, char** argv) {
   // dolfin::parameters["allow_extrapolation"] = true;
 
   // Deleting the folders:
-  boost::filesystem::remove_all("./benchmarks/pnp_pb/output");
+  boost::filesystem::remove_all("./benchmarks/physic_bench/output");
 
   // read in parameters
   printf("Reading parameters from files...\n");
   std::shared_ptr<dolfin::Mesh> mesh;
   mesh.reset(new dolfin::Mesh);
-  *mesh = dolfin::Mesh("./benchmarks/pnp_pb/mesh1.xml.gz");
-  double L=0.2;
-  double Lx=L,Ly=L,Lz=L;
-  // print_domain_param(&domain);
+  *mesh = dolfin::Mesh("./benchmarks/physic_bench/mesh1.xml.gz");
+  double Lx=20.0,Ly=2.0,Lz=2.0;
 
 
-  char fasp_params[] = "./benchmarks/pnp_pb/bsr.dat";
+  char fasp_params[] = "./benchmarks/physic_bench/bsr.dat";
   printf("\tFASP parameters... %s\n", fasp_params);
   input_param input;
   itsolver_param itsolver;
@@ -85,7 +82,7 @@ int main (int argc, char** argv) {
 
 
   // set PDE coefficients
-  double Eps = 1E-4;
+  double Eps = 1E-3;
   printf("Initialize coefficients\n");
   std::map<std::string, std::vector<double>> pnp_coefficients = {
     {"permittivity", {Eps}},
@@ -94,7 +91,7 @@ int main (int argc, char** argv) {
   };
   std::map<std::string, std::vector<double>> pnp_sources = {
     {"fixed_charge", {0.0}},
-    {"phib", {100.0,100.0,100.0}}
+    {"g", {100.0*Eps}}
   };
 
   // build problem
@@ -116,51 +113,47 @@ int main (int argc, char** argv) {
     pnp_problem.use_eafe();
   }
 
-  dolfin::Function phib(pnp_problem.phib_space);
-  PhibExpression bdexpr(Eps);
-  phib.interpolate(bdexpr);
-
   // dolfin::Function charges(pnp_problem.fixed_charge_space);
   // dolfin::Constant fc_expr (0.0);
   // charges.interpolate(fc_expr);
 
-  std::map<std::string, dolfin::Function> pnp_source_fns  = { {"phib", phib}  };
-  std::map<std::string, dolfin::Function> emptymap = {};
-  pnp_problem.set_coefficients(    emptymap,    pnp_source_fns  );
-
-  dolfin::File phib_file("./benchmarks/pnp_pb/output/phib.pvd");
-  dolfin::File phib_file_xml("./benchmarks/pnp_pb/output/phib.xml");
-  phib_file << phib;
-  phib_file_xml << phib;
-  // std::string ss = phib.str(true);
-  std::cout << "Phib = " << phib.vector()->norm("l2") << phib.vector()->max() << phib.vector()->min() << std::endl;
 
 
   //-------------------------
   // Print various solutions
   //-------------------------
-  dolfin::File solution_file0("./benchmarks/pnp_pb/output/solution_phi.pvd");
-  dolfin::File solution_file1("./benchmarks/pnp_pb/output/solution_eta1.pvd");
-  dolfin::File solution_file2("./benchmarks/pnp_pb/output/solution_eta2.pvd");
+  dolfin::File solution_file0("./benchmarks/physic_bench/output/solution_phi.pvd");
+  dolfin::File solution_file1("./benchmarks/physic_bench/output/solution_eta1.pvd");
+  dolfin::File solution_file2("./benchmarks/physic_bench/output/solution_eta2.pvd");
 
-  dolfin::File xml_filePhipb("./benchmarks/pnp_pb/output/solution_phipb.xml");
-  dolfin::File xmlSolution("./benchmarks/pnp_pb/output/solution.xml");
-  dolfin::File xml_file0("./benchmarks/pnp_pb/output/solution_phi.xml");
-  dolfin::File xml_file1("./benchmarks/pnp_pb/output/solution_eta1.xml");
-  dolfin::File xml_file2("./benchmarks/pnp_pb/output/solution_eta2.xml");
+  dolfin::File xml_filePhipb("./benchmarks/physic_bench/output/solution_phipb.xml");
+  dolfin::File xmlSolution("./benchmarks/physic_bench/output/solution.xml");
+  dolfin::File xml_file0("./benchmarks/physic_bench/output/solution_phi.xml");
+  dolfin::File xml_file1("./benchmarks/physic_bench/output/solution_eta1.xml");
+  dolfin::File xml_file2("./benchmarks/physic_bench/output/solution_eta2.xml");
 
   // initial guess for prescibed Dirichlet
   printf("Record interpolant for given Dirichlet BCs (initial guess for solution)\n");
-  pnp_problem.init_BC();
-  std::vector<double> initvector = {-1.0,1.0,-1.0};
-  pnp_problem.set_solution(initvector);
+  pnp_problem.init_BC(Lx,Ly,Lz);
+  pnp_problem.init_measure(mesh,Lx,Ly,Lz);
+  // std::vector<double> initvector = {-1.0,1.0,-1.0};
+
+  Linear_Function Phi(0,-Lx/2.0,Lx/2.0,-1.0,1.0);
+  Linear_Function Eta1(0,-Lx/2.0,Lx/2.0,0.0,-2.30258509299);
+  Linear_Function Eta2(0,-Lx/2.0,Lx/2.0,-2.30258509299,0.0);
+  std::vector <Linear_Function> initial_guess;
+  initial_guess.push_back(Phi);
+  initial_guess.push_back(Eta1);
+  initial_guess.push_back(Eta2);
+
+  pnp_problem.set_solution(initial_guess);
 
   dolfin::Function solutionFn = pnp_problem.get_solution();
 
 
-  // auto PreviousMesh = std::make_shared<dolfin::Mesh>("./benchmarks/pnp_pb/previous_solution/mesh1.xml.gz");
+  // auto PreviousMesh = std::make_shared<dolfin::Mesh>("./benchmarks/physic_bench/previous_solution/mesh1.xml.gz");
   // auto PreviousV=std::make_shared<vector_linear_pnp_forms::FunctionSpace>(PreviousMesh);
-  // dolfin::Function PreviousSolution(PreviousV,"./benchmarks/pnp_pb/previous_solution/solution.xml");
+  // dolfin::Function PreviousSolution(PreviousV,"./benchmarks/physic_bench/previous_solution/solution.xml");
   // solutionFn.interpolate(PreviousSolution);
   // pnp_problem.set_solution(solutionFn);
 
@@ -176,9 +169,9 @@ int main (int argc, char** argv) {
   printf("Initializing nonlinear solver\n");
 
   // set nonlinear solver parameters
-  const std::size_t max_newton = 5;
-  const double max_residual_tol = 1.0e-11;
-  const double relative_residual_tol = 1.0e-8;
+  const std::size_t max_newton = 20;
+  const double max_residual_tol = 1.0e-10;
+  const double relative_residual_tol = 1.0e-10;
   const double initial_residual = pnp_problem.compute_residual("l2");
   Newton_Status newton(
     max_newton,
@@ -209,12 +202,7 @@ int main (int argc, char** argv) {
     solution_file0 << solutionFn[0];
     solution_file1 << solutionFn[1];
     solution_file2 << solutionFn[2];
-    dolfin::Function phi(solutionFn[0]);
-    xml_file0 << phi;
-    xml_filePhipb << phib;
     xmlSolution << solutionFn;
-    // xml_file1 << solutionFn[1];
-    // xml_file2 << solutionFn[2];
     printf("\n");
   }
 
@@ -225,29 +213,6 @@ int main (int argc, char** argv) {
   } else {
     newton.print_status();
   }
-
-  ExactExpression ExExp(Eps);
-  auto ExSol = std::make_shared<dolfin::Function>(solutionFn);
-  auto Sol = std::make_shared<dolfin::Function>(solutionFn);
-  ExSol->interpolate(ExExp);
-  Error Err(ExSol);
-  double L2Err = Err.compute_l2_error(Sol);
-  double H1Err = Err.compute_semi_h1_error(Sol);
-
-  norm_pnp::Functional Fc(mesh);
-  auto sphib = std::make_shared<dolfin::Function>(phib);
-  auto perm = std::make_shared<dolfin::Constant>(Eps);
-  auto diff = std::make_shared<dolfin::Constant>(1.0);
-  auto val = std::make_shared<dolfin::Constant>(1.0);
-  Fc.uu = Sol;
-  Fc.permittivity = perm;
-  Fc.diffusivity = diff;
-  Fc.valency = val;
-  Fc.phib = sphib;
-  double ErrFlux = assemble(Fc);
-
-  printf("L2 Error = %f , semi H1 Error = %f , Flux Error = %f, Mesh size  = %f\n",L2Err,H1Err,ErrFlux,mesh->hmax()); fflush(stdout);
-  printf("%f &  %f & %f & %f \\\\ \n",L2Err,H1Err,ErrFlux,mesh->hmax()); fflush(stdout);
 
   printf("Solver exiting\n"); fflush(stdout);
   return 0;

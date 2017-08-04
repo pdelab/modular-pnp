@@ -103,7 +103,7 @@ class Linear_PNP : public PDE {
 };
 
 
-static double rc = 0.4;
+static double rc = 0.1;
 
 class SphereSubDomain : public dolfin::SubDomain
 {
@@ -121,11 +121,28 @@ class PhibExpression : public dolfin::Expression {
   public:
     PhibExpression(double Eps) : dolfin::Expression()  {
     	K=std::sqrt(2.0/Eps);
+      std::cout << " K = " << K << std::endl;
+      std::cout << " rc*K = " << rc*K << std::endl;
+      std::cout << " g = " << std::exp(0.0)*( std::exp(1.0/2.0) - 1.0 )/( std::exp(1.0/2.0) + 1.0 ) << std::endl;
     };
     void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
       double r = std::sqrt(x[0]*x[0]+x[1]*x[1]+x[2]*x[2])-rc;
+      if (r<0)  r=0.0;
       double g =  std::exp(0.0)*( std::exp(1.0/2.0) - 1.0 )/( std::exp(1.0/2.0) + 1.0 );
+      // if (r*K > 10.0)
+      // {
+      //   values[0] = 0.0;
+      // }
+      // else
       values[0] = 2.0*std::log( (1.0-g*std::exp(-r*K)) / (1.0+g*std::exp(-r*K)) );
+      // if (std::isnan(values[0])){
+        // printf("Is NaN %f %f %f %f %f %f \n",r,K,g,x[0],x[1],x[2]);
+        // printf("Exp = %f %f %f\n",std::exp(-r*K),std::exp(-r*K)*g,(1.0-g*std::exp(-r*K)) / (1.0+g*std::exp(-r*K)));
+        // std::cout << "It's NaN" << r << << K <<  g <<  x[0] << x[1] << x[2] << std::endl;
+        // values[0]=0.0;
+      // }
+      if (values[0] > 0.0) values[0] = 0.0;
+
     }
   private:
     double K;
@@ -136,8 +153,11 @@ class ExactExpression : public dolfin::Expression {
     ExactExpression(double Eps) : dolfin::Expression(3),K(std::sqrt(2.0/Eps)) {}
     void eval(dolfin::Array<double>& values, const dolfin::Array<double>& x) const {
       double r = std::sqrt(x[0]*x[0]+x[1]*x[1]+x[2]*x[2])-rc;
+      if (r<0)  r=0.0;
       double g =  std::exp(0.0)*( std::exp(1.0/2.0) - 1.0 )/( std::exp(1.0/2.0) + 1.0 );
       values[0] = 2.0*std::log( (1.0-g*std::exp(-r*K)) / (1.0+g*std::exp(-r*K)) );
+      if (values[0] > 0.0) values[0] = 0.0;
+      // if (std::isnan(values[0])) values[0]=0.0;
       values[1] = -values[0];
       values[2] = values[0];
     }
