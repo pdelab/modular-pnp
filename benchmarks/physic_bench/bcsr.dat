@@ -25,7 +25,7 @@ precond_type             = 33      % 0 None | 21 block diagonal (exact) | 22 low
 itsolver_tol             = 1e-6    % solver tolerance 
 itsolver_maxit           = 20   % maximal iteration number 
 stop_type                = 1      % 1 ||r||/||b|| | 2 ||r||_B/||b||_B | 3 ||r||/||x||  
-itsolver_restart         = 10     % restart number for GMRES
+itsolver_restart         = 5     % restart number for GMRES
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % below is not use for pap-stokes solver

@@ -7,7 +7,7 @@ import numpy as np
 
 rc=0.4
 
-Num_cells=35
+Num_cells=100
 # Lx=20.0
 Lx=2.0
 Ly=2.0
@@ -22,7 +22,7 @@ domain = domain - Sphere(Point(0.0,0.0,0.0), rc)
 print "Generating the mesh..."
 mesh = generate_mesh(domain,Num_cells,"cgal")
 
-file = File("mesh3.pvd")
-file << mesh
-file = File("mesh3.xml.gz")
+# file = File("mesh25.pvd")
+# file << mesh
+file = File("mesh100.xml.gz")
 file << mesh

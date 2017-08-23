@@ -1,0 +1,19 @@
+# Compile this form with FFC: ffc -O -l dolfin poisson_cell_marker.ufl.
+
+element = FiniteElement("Lagrange", tetrahedron, 1)
+vector  = VectorElement("Lagrange", tetrahedron, 1)
+DG = FiniteElement("DG", tetrahedron, 0)
+Vit = FiniteElement("RT", tetrahedron, 1)
+
+u = TrialFunction(DG)
+v = TestFunction(DG)
+entropy_potential = Coefficient(element)
+entropy = Coefficient(vector)
+log_weight = Coefficient(element)
+diffusivity = Coefficient(element)
+velocity = Coefficient(Vit)
+mu  = Constant(tetrahedron)
+
+a = u * v * dx
+L = mu/2.0* inner( sym(grad(velocity)), sym(grad(velocity)) ) *v*dx \
+    + diffusivity * exp(log_weight) * inner(grad(entropy_potential), grad(entropy_potential)) * v * dx

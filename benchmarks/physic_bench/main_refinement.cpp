@@ -84,7 +84,7 @@ int main (int argc, char** argv) {
   const std::size_t max_elements = 200000;
 
   // parameters for PNP Newton solver
-  const std::size_t max_newton = 10;
+  const std::size_t max_newton = 20;
   const double max_residual_tol = 1.0e-10;
   const double relative_residual_tol = 1.0e-10;
   const bool use_eafe_approximation = false;
@@ -99,7 +99,7 @@ int main (int argc, char** argv) {
     std::shared_ptr<double> initial_residual_ptr = std::make_shared<double>(-1.0);
 
     // construct initial guess
-    Linear_Function PNP(0,-Lx/2.0,Lx/2.0,{-5.0,0.0,0.0},{5.0,0.0,0.0});
+    Linear_Function PNP(0,-Lx/2.0,Lx/2.0,{-4.0,0.0,0.0},{4.0,0.0,0.0});
     // Linear_Function PNP(0,-Lx/2.0,Lx/2.0,{-1.0,0.0,-2.30258509299},{1.0,-2.30258509299,0.0});
     auto adaptive_solution = std::make_shared<dolfin::Function>(
       std::make_shared<vector_linear_pnp_forms::FunctionSpace>(mesh_adapt.get_mesh())

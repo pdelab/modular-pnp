@@ -33,6 +33,7 @@ int main (int argc, char** argv) {
   // Need to use Eigen for linear algebra
   dolfin::parameters["linear_algebra_backend"] = "Eigen";
   dolfin::parameters["allow_extrapolation"] = true;
+  std::vector<double> RelErr;
 
   // Deleting the folders:
   boost::filesystem::remove_all("./benchmarks/physic_bench/output_NS");
@@ -114,20 +115,20 @@ int main (int argc, char** argv) {
 
 
   // set PDE coefficients
-  double Eps = .019044;
+  double Eps = 0.02099601;
   printf("Initialize coefficients\n");
   std::map<std::string, std::vector<double>> coefficients = {
     {"permittivity", {Eps}},
     {"diffusivity0", {1.0}},
-    {"diffusivity1", {1.334/2.032}},
+    {"diffusivity1", {1.0}},
     {"valency0", {1.0}},
     {"valency1", {-1.0}},
-    {"mu", {1.0}},
+    {"mu", {1.03432589}},
     {"penalty1", {1.0}},
     {"penalty2", {1.0}},
-    {"Re", {0.01}},
+    {"Re", {3.5959E-3}},
   };
-  std::map<std::string, std::vector<double>> sources = {{"g",{Eps*10.0}}};
+  std::map<std::string, std::vector<double>> sources = {{"g",{0.1602176621}}};
 
   const std::vector<std::string> variables = {"cc","uu","pp"};
 
@@ -164,11 +165,11 @@ int main (int argc, char** argv) {
   pnp_ns_problem.init_measure (mesh,Lx,Ly,Lz);
 
   // From PNP
-  auto mesh_PNP = std::make_shared<dolfin::Mesh>("./benchmarks/physic_bench/output_PNP_2.0/accepted_mesh.xml.gz");
+  auto mesh_PNP = std::make_shared<dolfin::Mesh>("./benchmarks/physic_bench/output_PNP_6/accepted_mesh.xml.gz");
   auto CG = std::make_shared<vector_linear_pnp_ns_forms::CoefficientSpace_cc>(mesh_PNP);
   // auto RT = std::make_shared<vector_linear_pnp_ns_forms::CoefficientSpace_uu>(mesh_PNP);
   // auto DG = std::make_shared<vector_linear_pnp_ns_forms::CoefficientSpace_pp>(mesh_PNP);
-  dolfin::Function pnp_solution(CG,"./benchmarks/physic_bench/output_PNP_2.0/accepted_solution.xml");
+  dolfin::Function pnp_solution(CG,"./benchmarks/physic_bench/output_PNP_6/accepted_solution.xml");
   //
   dolfin::Function pnp_init(pnp_ns_problem._functions_space[0]);
   dolfin::Function u_init(pnp_ns_problem._functions_space[1]);
@@ -239,7 +240,7 @@ int main (int argc, char** argv) {
   printf("Initializing nonlinear solver\n");
 
   // set nonlinear solver parameters
-  const std::size_t max_newton = 20;
+  const std::size_t max_newton = 5;
   const double max_residual_tol = 1.0e-8;
   const double relative_residual_tol = 1.0e-8;
   const double initial_residual = pnp_ns_problem.compute_residual("l2");
@@ -256,6 +257,7 @@ int main (int argc, char** argv) {
   // pnp_ns_problem.set_solutions(solutionFn2);
 
 
+  // while (newton.iteration<=max_newton) {
   while (newton.needs_to_iterate()) {
     // solve
     printf("Solving for Newton iterate %lu \n", newton.iteration);
@@ -281,6 +283,7 @@ int main (int argc, char** argv) {
     xml_pnp << solutionFn[0];
     xml_vel << solutionFn[1];
     xml_pressure<< solutionFn[2];
+    RelErr.push_back(newton.relative_residual);
 
   }
 
@@ -298,6 +301,12 @@ int main (int argc, char** argv) {
   xml_mesh << *mesh;
   xml_file0 << solutionFn[0];
   xml_file1 << solutionFn[1];
+
+  std::cout << "[";
+  for (std::vector<double>::const_iterator i = RelErr.begin(); i != RelErr.end(); ++i)
+    std::cout << *i  << ",";
+  std::cout << "]";
+  std::cout << std::endl;
 
 
   printf("Solver exiting\n"); fflush(stdout);

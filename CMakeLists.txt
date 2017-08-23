@@ -59,7 +59,7 @@ include_directories(${UMFPACK_INCLUDE_DIRS})
 set(PNP_LIBRARY ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP_LIB} ${OSX_TARGET} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${UMFPACK_LIBRARY})
 set(PNP_STOKES_LIBRARY ${DOLFIN_LIBRARIES} ${DOLFIN_3RD_PARTY_LIBRARIES} ${FASP4NS_LIB} ${FASP_LIB} ${OSX_TARGET} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${UMFPACK_LIBRARY})
 
-set(SRC_DIR ./src/domain.cpp ./src/dirichlet.cpp ./src/pde.cpp ./src/newton_status.cpp ./src/error.cpp ./src/mesh_refiner.cpp)
+set(SRC_DIR ./src/domain.cpp ./src/dirichlet.cpp ./src/pde.cpp ./src/newton_status.cpp ./src/error.cpp ./src/mesh_refiner.cpp ./src/mesh_refinerNS.cpp)
 
 add_executable(test_poisson ./benchmarks/poisson/main.cpp ./benchmarks/poisson/poisson.cpp ${SRC_DIR})
 target_link_libraries(test_poisson ${PNP_LIBRARY})
@@ -90,6 +90,18 @@ target_link_libraries(pnp_diode ${PNP_LIBRARY})
 
 add_executable(pnp_ns_pb ./benchmarks/pnp_pb/main_ns.cpp ./benchmarks/pnp_pb/linear_pnp_ns.cpp ${SRC_DIR})
 target_link_libraries(pnp_ns_pb ${PNP_STOKES_LIBRARY})
+
+add_executable(pnp_ns_pb2 ./benchmarks/pnp_pb/main_ns2.cpp ./benchmarks/pnp_pb/linear_pnp_ns.cpp ${SRC_DIR})
+target_link_libraries(pnp_ns_pb2 ${PNP_STOKES_LIBRARY})
+
+add_executable(pnp_ns_pb_refine ./benchmarks/pnp_pb/main_ns_refinement.cpp ./benchmarks/pnp_pb/linear_pnp_ns.cpp ${SRC_DIR})
+target_link_libraries(pnp_ns_pb_refine ${PNP_STOKES_LIBRARY})
+
+add_executable(linear_pnp_ns_pb ./benchmarks/pnp_pb/main_ns_linear.cpp ./benchmarks/pnp_pb/linear_pnp_ns2.cpp ${SRC_DIR})
+target_link_libraries(linear_pnp_ns_pb  ${PNP_STOKES_LIBRARY})
+
+add_executable(linear_pnp_pb ./benchmarks/pnp_pb/main_linear.cpp ./benchmarks/pnp_pb/linear_pnp2.cpp ${SRC_DIR})
+target_link_libraries(linear_pnp_pb  ${PNP_LIBRARY})
 
 add_executable(pnp_pb ./benchmarks/pnp_pb/main.cpp ./benchmarks/pnp_pb/linear_pnp.cpp ${SRC_DIR})
 target_link_libraries(pnp_pb ${PNP_LIBRARY})
