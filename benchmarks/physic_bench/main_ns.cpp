@@ -165,11 +165,11 @@ int main (int argc, char** argv) {
   pnp_ns_problem.init_measure (mesh,Lx,Ly,Lz);
 
   // From PNP
-  auto mesh_PNP = std::make_shared<dolfin::Mesh>("./benchmarks/physic_bench/output_PNP_6/accepted_mesh.xml.gz");
+  auto mesh_PNP = std::make_shared<dolfin::Mesh>("./benchmarks/physic_bench/output_PNP_250/accepted_mesh.xml.gz");
   auto CG = std::make_shared<vector_linear_pnp_ns_forms::CoefficientSpace_cc>(mesh_PNP);
   // auto RT = std::make_shared<vector_linear_pnp_ns_forms::CoefficientSpace_uu>(mesh_PNP);
   // auto DG = std::make_shared<vector_linear_pnp_ns_forms::CoefficientSpace_pp>(mesh_PNP);
-  dolfin::Function pnp_solution(CG,"./benchmarks/physic_bench/output_PNP_6/accepted_solution.xml");
+  dolfin::Function pnp_solution(CG,"./benchmarks/physic_bench/output_PNP_250/accepted_solution.xml");
   //
   dolfin::Function pnp_init(pnp_ns_problem._functions_space[0]);
   dolfin::Function u_init(pnp_ns_problem._functions_space[1]);
